@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>活动列表</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color:#333;background:#f0f2f5;min-width:1280px;}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:180px;flex-shrink:0;background:#fff;border-right:0.5px solid #e8e8e8;}
+.menu-parent{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:44px;font-size:13px;font-weight:500;background:#e8f0fe;color:#333;}
+.menu-parent .label{display:flex;align-items:center;gap:6px;}
+.menu-icon-box{width:20px;height:20px;border-radius:4px;background:#1677ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.new-badge{font-size:11px;color:#1677ff;font-weight:400;}
+.submenu-item{display:flex;align-items:center;padding:0 14px 0 40px;height:38px;font-size:13px;color:#1677ff;background:#e6f4ff;}
+.right{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{background:#fff;border-bottom:0.5px solid #e8e8e8;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;}
+.top-left{font-size:12px;color:#666;white-space:nowrap;}
+.top-center{display:flex;align-items:center;flex:1;justify-content:center;overflow:hidden;}
+.top-stat{font-size:11px;color:#666;white-space:nowrap;padding:0 6px;}
+.top-stat .num{color:#1677ff;font-weight:500;}
+.top-stat .warn{color:#ff4d4f;font-weight:500;}
+.top-div{width:0.5px;height:12px;background:#e0e0e0;flex-shrink:0;}
+.top-right{display:flex;align-items:center;gap:8px;font-size:13px;color:#555;}
+.bell{width:26px;height:26px;border-radius:50%;border:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:center;}
+.avatar{width:26px;height:26px;border-radius:50%;background:#ff4d4f;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:500;}
+.content-area{flex:1;padding:12px 16px;}
+.bc-bar{font-size:13px;color:#999;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.bc-bar .cur{color:#333;}
+.page-card{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;}
+.tab-bar{display:flex;border-bottom:0.5px solid #e8e8e8;padding:0 16px;}
+.tab{padding:11px 4px;font-size:13px;color:#1677ff;border-bottom:2px solid #1677ff;margin-right:20px;}
+.filter-area{padding:12px 16px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.fl{font-size:13px;color:#333;white-space:nowrap;}
+.fi-input{height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;}
+.fi-input::placeholder{color:#bbb;font-size:12px;}
+.fi-input:focus{border-color:#1677ff;}
+.fi-select{height:32px;border:1px solid #1677ff;border-radius:4px;padding:0 8px;font-size:13px;color:#333;background:#fff;outline:none;}
+.time-range{display:flex;align-items:center;height:32px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;padding:0 10px;gap:6px;}
+.time-range input{border:none;outline:none;font-size:12px;color:#bbb;background:transparent;width:95px;}
+.time-sep{color:#bbb;}
+.btn-search{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;}
+.btn-new{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;}
+.list-area{padding:12px 16px 0;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:1200px;}
+th{background:#fafafa;padding:9px 8px;text-align:left;font-weight:500;color:#888;border-bottom:1px solid #f0f0f0;white-space:nowrap;}
+th.sortable{cursor:pointer;}
+th.sortable:hover{color:#1677ff;}
+.sort-arrows{display:inline-flex;flex-direction:column;margin-left:3px;vertical-align:middle;gap:1px;}
+.arr-up{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:4px solid #ccc;}
+.arr-up.active{border-bottom-color:#1677ff;}
+.arr-dn{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid #ccc;}
+.arr-dn.active{border-top-color:#1677ff;}
+td{padding:11px 8px;border-bottom:0.5px solid #f0f0f0;color:#333;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#fafafa;}
+.status-on{color:#52c41a;font-size:12px;}
+.status-off{color:#999;font-size:12px;}
+.alink{font-size:12px;color:#1677ff;cursor:pointer;background:none;border:none;padding:0;white-space:nowrap;text-decoration:none;}
+.alink:hover{color:#4096ff;}
+.acts-row{display:flex;gap:12px;margin-bottom:4px;}
+.acts-row:last-child{margin-bottom:0;}
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:10px 16px 14px;font-size:13px;color:#666;}
+.pg-btn{width:28px;height:28px;border-radius:4px;border:1px solid #d9d9d9;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;}
+.pg-btn.active{background:#1677ff;color:#fff;border-color:#1677ff;}
+.pg-sel{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:13px;}
+.pg-input{width:40px;height:28px;border:1px solid #d9d9d9;border-radius:4px;text-align:center;font-size:13px;}
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="sidebar">
+    <div class="menu-parent">
+      <div class="label">
+        <div class="menu-icon-box"><svg viewBox="0 0 12 12" fill="none" width="12" height="12"><circle cx="6" cy="6" r="4" stroke="#fff" stroke-width="1.3"/><path d="M4 6h4M6 4v4" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+        <span>活动配置<span class="new-badge">（新）</span></span>
+      </div>
+      <span style="font-size:10px;color:#999;transform:rotate(90deg);display:inline-block;">›</span>
+    </div>
+    <div class="submenu-item">活动列表</div>
+  </div>
+  <div class="right">
+    <div class="topbar">
+      <div class="top-left">当前时间：2026/04/14 10:33:02 +08:00</div>
+      <div class="top-center">
+        <div class="bell"><svg viewBox="0 0 16 16" fill="none" width="13" height="13"><path d="M8 2a5 5 0 0 0-5 5v2l-1 2h12l-1-2V7a5 5 0 0 0-5-5z" stroke="#666" stroke-width="1.2"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0" stroke="#666" stroke-width="1.2"/></svg></div>
+        <div class="top-div" style="margin:0 4px;"></div>
+        <div class="top-stat">在线人数：<span class="num">28</span></div><div class="top-div"></div>
+        <div class="top-stat">当日注册：<span class="num">7</span></div><div class="top-div"></div>
+        <div class="top-stat">实名认证待处理：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">当日充值成功：<span class="num">2</span></div><div class="top-div"></div>
+        <div class="top-stat">充值：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">提款：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">风控审核：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">待处理修改余额审批：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">VIP派奖审核：<span class="warn">1140</span></div>
+      </div>
+      <div class="top-right"><div class="avatar">CN</div>vivianadmin ▾</div>
+    </div>
+    <div class="content-area">
+      <div class="bc-bar">位置 <span>›</span> 活动配置 <span>›</span> <span class="cur">活动列表</span></div>
+      <div class="page-card">
+        <div class="tab-bar"><div class="tab">活动列表</div></div>
+        <div class="filter-area">
+          <span class="fl">活动模板：</span>
+          <select class="fi-select" id="fTmpl"><option value="">预约活动</option></select>
+          <span class="fl">活动ID：</span>
+          <input type="text" class="fi-input" placeholder="活动ID" style="width:110px;" id="fId">
+          <span class="fl">活动名称：</span>
+          <input type="text" class="fi-input" placeholder="活动名称" style="width:140px;" id="fName">
+          <span class="fl">活动时间：</span>
+          <div class="time-range">
+            <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="开始时间" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'">
+            <span class="time-sep">~</span>
+            <input type="text" placeholder="结束时间" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'">
+          </div>
+          <span class="fl">状态：</span>
+          <select class="fi-select" id="fStatus">
+            <option value="">全部</option><option value="1">开启</option><option value="0">关闭</option>
+          </select>
+          <button class="btn-search" onclick="doFilter()">搜索</button>
+          <a href="add_activity.html" class="btn-new">新增活动</a>
+        </div>
+        <div class="list-area">
+          <table>
+            <thead><tr>
+              <th class="sortable" onclick="sortBy('id')">ID <span class="sort-arrows"><span class="arr-up" id="s-id-up"></span><span class="arr-dn" id="s-id-dn"></span></span></th>
+              <th class="sortable" onclick="sortBy('sort')">排序 <span class="sort-arrows"><span class="arr-up" id="s-sort-up"></span><span class="arr-dn" id="s-sort-dn"></span></span></th>
+              <th>状态</th>
+              <th class="sortable" onclick="sortBy('time')">起止时间 <span class="sort-arrows"><span class="arr-up" id="s-time-up"></span><span class="arr-dn" id="s-time-dn"></span></span></th>
+              <th>币种</th><th>语系</th><th>活动模板</th><th>活动名称</th><th>预览图片</th>
+              <th>黑名单层级</th><th>指定代理</th><th>到达／中奖人数</th>
+              <th>提现稽核流水比例</th><th>稽核不过手续费比例</th><th>充值类型</th><th>操作</th>
+            </tr></thead>
+            <tbody id="tBody"></tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <span id="totalTxt">Total 4</span>
+          <select class="pg-sel"><option>10/page</option><option>20/page</option></select>
+          <div class="pg-btn">‹</div><div class="pg-btn active">1</div><div class="pg-btn">›</div>
+          <span>Go to</span><input type="number" class="pg-input" value="1">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const rawData=[
+  {id:50005,sort:0,status:0,timeStart:'26/04/07',timeEnd:'26/05/30',currency:'PHP',lang:'菲律宾文',template:'预约活动',name:'丹尼测试预约活动 PHP',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'100%',feeRatio:'—',rechargeType:'笔笔充'},
+  {id:50006,sort:0,status:0,timeStart:'26/04/08',timeEnd:'51/01/01',currency:'PHP',lang:'菲律宾文',template:'预约活动',name:'预约活动四月',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'—',feeRatio:'—',rechargeType:'—'},
+  {id:50007,sort:0,status:1,timeStart:'26/04/08',timeEnd:'51/01/01',currency:'PHP',lang:'菲律宾文',template:'预约活动',name:'春季预约活动',blacklist:'第一层',agent:'dannyagentsub',winCount:'0/0',auditRatio:'100%',feeRatio:'—',rechargeType:'首充'},
+  {id:50008,sort:0,status:0,timeStart:'26/04/10',timeEnd:'26/06/30',currency:'PHP',lang:'菲律宾文',template:'预约活动',name:'四月预约活动PHP',blacklist:'—',agent:'—',winCount:'5/2',auditRatio:'150%',feeRatio:'5%',rechargeType:'全部'},
+];
+let filtered=[...rawData],sortKey='',sortDir=1;
+function doFilter(){
+  const name=(document.getElementById('fName').value||'').toLowerCase();
+  const id=document.getElementById('fId').value||'';
+  const status=document.getElementById('fStatus').value;
+  filtered=rawData.filter(r=>{
+    if(name&&!r.name.toLowerCase().includes(name))return false;
+    if(id&&!String(r.id).includes(id))return false;
+    if(status!==''&&String(r.status)!==status)return false;
+    return true;
+  });
+  renderRows();
+}
+function sortBy(key){
+  if(sortKey===key)sortDir*=-1;else{sortKey=key;sortDir=1;}
+  ['id','sort','time'].forEach(k=>{
+    const u=document.getElementById('s-'+k+'-up'),d=document.getElementById('s-'+k+'-dn');
+    if(u)u.classList.remove('active');if(d)d.classList.remove('active');
+  });
+  const el=document.getElementById('s-'+key+(sortDir===1?'-up':'-dn'));
+  if(el)el.classList.add('active');
+  filtered.sort((a,b)=>{
+    let av=key==='id'?a.id:key==='sort'?a.sort:a.timeStart;
+    let bv=key==='id'?b.id:key==='sort'?b.sort:b.timeStart;
+    return av>bv?sortDir:av<bv?-sortDir:0;
+  });
+  renderRows();
+}
+function toggleSt(id){const r=rawData.find(x=>x.id===id);if(r)r.status=r.status?0:1;doFilter();}
+function delRow(id){
+  if(confirm('确认删除活动 '+id+' ？')){
+    const i=rawData.findIndex(x=>x.id===id);
+    if(i>-1)rawData.splice(i,1);
+    filtered=filtered.filter(x=>x.id!==id);renderRows();
+  }
+}
+function renderRows(){
+  const tbody=document.getElementById('tBody');
+  document.getElementById('totalTxt').textContent='Total '+filtered.length;
+  if(!filtered.length){tbody.innerHTML='<tr><td colspan="16" style="text-align:center;padding:32px;color:#bbb;">暂无数据</td></tr>';return;}
+  tbody.innerHTML=filtered.map(r=>`<tr>
+    <td>${r.id}</td><td>${r.sort}</td>
+    <td class="${r.status?'status-on':'status-off'}">${r.status?'开启':'关闭'}</td>
+    <td style="font-size:11px;line-height:1.7;">${r.timeStart}<br>至 ${r.timeEnd}</td>
+    <td>${r.currency}</td><td>${r.lang}</td><td>${r.template}</td><td>${r.name}</td>
+    <td><button class="alink">上传</button></td>
+    <td>${r.blacklist==='—'?'<span style="color:#bbb">—</span>':'<span style="background:#e6f4ff;color:#1677ff;padding:1px 7px;border-radius:3px;font-size:11px;">'+r.blacklist+'</span>'}</td>
+    <td style="font-size:11px;">${r.agent==='—'?'<span style="color:#bbb">—</span>':'<span style="color:#1677ff">'+r.agent+'</span>'}</td>
+    <td style="text-align:center;">${r.winCount}</td>
+    <td style="text-align:center;">${r.auditRatio}</td>
+    <td style="text-align:center;">${r.feeRatio==='—'?'<span style="color:#bbb">—</span>':r.feeRatio}</td>
+    <td>${r.rechargeType==='—'?'<span style="color:#bbb">—</span>':r.rechargeType}</td>
+    <td>
+      <div class="acts-row">
+        <a href="add_activity.html" class="alink">编辑</a>
+        <button class="alink" onclick="delRow(${r.id})">删除</button>
+      </div>
+      <div class="acts-row">
+        <button class="alink" onclick="toggleSt(${r.id})">${r.status?'关闭':'开启'}</button>
+      </div>
+    </td>
+  </tr>`).join('');
+}
+renderRows();
+</script>
+</body>
+</html>
