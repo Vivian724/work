@@ -128,7 +128,9 @@ tr:hover td{background:#fafafa;}
       <div class="bc-bar">位置 <span>›</span> 活动配置 <span>›</span> <span class="cur">活动列表</span></div>
       <div class="page-card">
         <div class="tab-bar"><div class="tab">活动列表</div></div>
-        <div class="filter-area">
+        <div style="position:relative;display:inline-block;width:100%;">
+          <span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">1</span>
+        <div class="filter-area" style="border:2px solid #ff4d4f;">
           <span class="fl">活动模板：</span>
           <select class="fi-select" id="fTmpl"><option value="">预约活动</option></select>
           <span class="fl">活动ID：</span>
@@ -149,7 +151,10 @@ tr:hover td{background:#fafafa;}
           <button class="btn-search" onclick="doFilter()">搜索</button>
           <a href="add_activity.html" class="btn-new">新增活动</a>
         </div>
-        <div class="list-area">
+        </div>
+        <div style="position:relative;display:inline-block;width:100%;">
+          <span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">2</span>
+        <div class="list-area" style="border:2px solid #ff4d4f;">
           <table>
             <thead><tr>
               <th class="sortable" onclick="sortBy('id')">ID <span class="sort-arrows"><span class="arr-up" id="s-id-up"></span><span class="arr-dn" id="s-id-dn"></span></span></th>
@@ -159,10 +164,11 @@ tr:hover td{background:#fafafa;}
               <th>币种</th><th>语系</th><th>活动模板</th><th>活动名称</th>
               <th>预览图片</th>
               <th>黑名单层级</th><th>指定代理</th><th>到达／中奖人数</th>
-              <th>提现稽核流水比例</th><th>稽核不过手续费比例</th><th>充值类型</th><th>操作</th>
+              <th>提现稽核流水比例</th><th>操作</th>
             </tr></thead>
             <tbody id="tBody"></tbody>
           </table>
+        </div>
         </div>
         <div class="pagination">
           <span id="totalTxt">Total 4</span>
@@ -264,8 +270,8 @@ function delRow(id){
 function renderRows(){
   var tbody=document.getElementById('tBody');
   document.getElementById('totalTxt').textContent='Total '+filtered.length;
-  if(!filtered.length){tbody.innerHTML='<tr><td colspan="16" style="text-align:center;padding:32px;color:#bbb;">暂无数据</td></tr>';return;}
-  tbody.innerHTML=filtered.map(function(r){return '<tr>'+
+  if(!filtered.length){tbody.innerHTML='<tr><td colspan="14" style="text-align:center;padding:32px;color:#bbb;">暂无数据</td></tr>';return;}
+  tbody.innerHTML=filtered.map(function(r,ri){return '<tr>'+
     '<td>'+r.id+'</td>'+
     '<td>'+r.sort+'</td>'+
     '<td class="'+(r.status?'status-on':'status-off')+'">'+(r.status?'开启':'关闭')+'</td>'+
@@ -274,13 +280,11 @@ function renderRows(){
     '<td style="font-size:11px;">'+r.lang+'</td>'+
     '<td>'+r.template+'</td>'+
     '<td>'+r.name+'</td>'+
-    '<td><button class="upload-pill" onclick="openPreview('+r.id+')">上传</button></td>'+
+    '<td>'+(ri===0?'<div style="position:relative;display:inline-block;"><span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">3</span><div style="border:2px solid #ff4d4f;border-radius:4px;display:inline-block;"><button class="upload-pill" onclick="openPreview('+r.id+')">上传</button></div></div>':'<button class="upload-pill" onclick="openPreview('+r.id+')">上传</button>')+'</td>'+
     '<td>'+(r.blacklist==='—'?'<span style="color:#bbb">—</span>':'<span style="background:#e6f4ff;color:#1677ff;padding:1px 7px;border-radius:3px;font-size:11px;">'+r.blacklist+'</span>')+'</td>'+
     '<td style="font-size:11px;">'+(r.agent==='—'?'<span style="color:#bbb">—</span>':'<span style="color:#1677ff">'+r.agent+'</span>')+'</td>'+
     '<td style="text-align:center;">'+r.winCount+'</td>'+
     '<td style="text-align:center;">'+r.auditRatio+'</td>'+
-    '<td style="text-align:center;">'+(r.feeRatio==='—'?'<span style="color:#bbb">—</span>':r.feeRatio)+'</td>'+
-    '<td>'+(r.rechargeType==='—'?'<span style="color:#bbb">—</span>':r.rechargeType)+'</td>'+
     '<td>'+
       '<div class="acts-row">'+
         '<a href="add_activity.html" class="alink">编辑</a>'+

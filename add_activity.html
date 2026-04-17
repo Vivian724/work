@@ -22,7 +22,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .top-stat .warn{color:#ff4d4f;font-weight:500;}
 .top-div{width:0.5px;height:12px;background:#e0e0e0;flex-shrink:0;}
 .top-right{display:flex;align-items:center;gap:8px;font-size:13px;color:#555;}
-.bell{width:26px;height:26px;border-radius:50%;border:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:center;}
 .avatar{width:26px;height:26px;border-radius:50%;background:#ff4d4f;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:500;}
 .content-area{flex:1;padding:12px 16px;}
 .bc-bar{font-size:13px;color:#999;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
@@ -32,8 +31,8 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .step-nav{width:168px;flex-shrink:0;background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;padding:8px 0;}
 .step-nav-item{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;font-size:13px;color:#666;border-left:3px solid transparent;}
 .step-nav-item:hover{background:#f5f5f5;}
-.step-nav-item.active{color:#1677ff;background:#e6f4ff;border-left-color:#1677ff;}
 .step-nav-item.done .snum{background:#1677ff;border-color:#1677ff;color:#fff;}
+.step-nav-item.active{color:#1677ff;background:#e6f4ff;border-left-color:#1677ff;}
 .step-nav-item.active .snum{background:#1677ff;border-color:#1677ff;color:#fff;}
 .snum{width:20px;height:20px;border-radius:50%;border:1.5px solid #d9d9d9;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;color:#999;}
 .step-main{flex:1;display:flex;flex-direction:column;gap:10px;}
@@ -47,7 +46,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .btn-exit{height:32px;padding:0 16px;border:1px solid #ff4d4f;border-radius:16px;background:#fff;font-size:13px;cursor:pointer;color:#ff4d4f;text-decoration:none;display:inline-flex;align-items:center;}
 .btn-exit:hover{background:#fff2f0;}
 .btn-submit{height:32px;padding:0 20px;border:none;border-radius:16px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
-.btn-submit:hover{background:#4096ff;}
 .step-content{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;padding:20px 24px;}
 .step-desc{font-size:12px;color:#999;margin-bottom:16px;}
 .sec-title{font-size:14px;font-weight:500;color:#1677ff;border-left:3px solid #1677ff;padding-left:8px;margin-bottom:14px;}
@@ -63,7 +61,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .f-input[type=number]{-moz-appearance:textfield;}
 .f-input[type=number]::-webkit-outer-spin-button,.f-input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
 .f-textarea{border:1px solid #d9d9d9;border-radius:4px;padding:8px 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;resize:vertical;min-height:80px;}
-.f-textarea::placeholder{color:#bbb;font-size:12px;}
 .f-select{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;}
 .radio-group{display:flex;gap:16px;align-items:center;padding-top:6px;}
 .radio-item{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;}
@@ -75,7 +72,9 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .toggle.on{background:#1677ff;}
 .toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left 0.2s;}
 .toggle.on::after{left:20px;}
+.toggle.disabled-toggle{opacity:0.4;cursor:not-allowed;pointer-events:none;}
 .hint{font-size:12px;color:#999;margin-top:4px;}
+/* multiselect */
 .ms-wrap{border:1px solid #d9d9d9;border-radius:4px;padding:4px 8px;min-height:34px;display:flex;align-items:center;flex-wrap:wrap;gap:4px;cursor:pointer;background:#fff;position:relative;}
 .ms-tag{display:inline-flex;align-items:center;gap:4px;background:#f0f0f0;border-radius:3px;padding:2px 6px;font-size:12px;color:#333;}
 .ms-tag .ms-rm{cursor:pointer;color:#999;font-size:11px;}
@@ -87,42 +86,43 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .ms-option.selected{color:#1677ff;}
 .ms-check{color:#1677ff;font-size:12px;}
 .ms-placeholder{color:#bbb;font-size:12px;}
+/* lang tabs */
 .lang-tabs{display:flex;border-bottom:1px solid #e8e8e8;margin-bottom:16px;}
 .lang-tab{padding:8px 16px;font-size:13px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
 .lang-tab.active{color:#1677ff;border-bottom-color:#1677ff;}
+/* image upload */
 .img-section-title{display:flex;align-items:center;font-size:13px;font-weight:500;margin-bottom:4px;}
 .img-num{width:20px;height:20px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;margin-right:6px;flex-shrink:0;}
 .upload-btn{height:34px;padding:0 20px;background:#1677ff;color:#fff;border:none;border-radius:17px;font-size:13px;cursor:pointer;}
-.upload-btn:hover{background:#4096ff;}
 .img-upload-box{border:1px solid #d9d9d9;border-radius:4px;min-height:120px;display:flex;align-items:center;justify-content:center;background:#fafafa;}
 .rich-editor{border:1px solid #d9d9d9;border-radius:4px;overflow:hidden;}
 .rich-toolbar{background:#f5f5f5;border-bottom:1px solid #e8e8e8;padding:6px 10px;display:flex;gap:6px;flex-wrap:wrap;}
 .rich-tool{font-size:12px;color:#555;cursor:pointer;padding:2px 5px;border-radius:2px;}
-.rich-tool:hover{background:#e0e0e0;}
 .rich-body{min-height:100px;padding:10px;font-size:13px;color:#bbb;}
+/* award table */
 .award-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
 .award-table th{background:#f5f7fa;padding:8px 10px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;}
 .award-table td{padding:8px 10px;border:1px solid #ebeef5;text-align:center;vertical-align:middle;}
 .btn-add{height:30px;padding:0 16px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;margin-bottom:10px;}
-.btn-add:hover{background:#4096ff;}
 .btn-del{height:28px;padding:0 12px;background:#ff4d4f;color:#fff;border:none;border-radius:4px;font-size:12px;cursor:pointer;}
 .td-input{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:12px;width:90px;outline:none;}
-.td-input::placeholder{color:#bbb;font-size:11px;}
 .td-input[type=number]{-moz-appearance:textfield;}
 .td-input[type=number]::-webkit-inner-spin-button,.td-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
 .td-select{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 4px;font-size:12px;outline:none;}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+/* claim */
 .ratio-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100px;-moz-appearance:textfield;}
 .ratio-input::-webkit-outer-spin-button,.ratio-input::-webkit-inner-spin-button{-webkit-appearance:none;}
 .ratio-input:focus{border-color:#1677ff;}
 .game-btn{height:32px;padding:0 16px;border:1px solid #1677ff;border-radius:16px;background:#fff;color:#1677ff;font-size:13px;cursor:pointer;}
-.game-btn:hover{background:#e6f4ff;}
+/* 风控 disabled */
+.risk-disabled{opacity:0.45;pointer-events:none;}
+.f-input-disabled{background:#f5f5f5;color:#bbb;cursor:not-allowed;}
+/* game modal */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:500;}
 .modal{background:#fff;border-radius:8px;width:620px;max-height:580px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.15);}
 .modal-header{padding:16px 24px;border-bottom:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;}
 .modal-title{font-size:15px;font-weight:500;color:#333;}
 .modal-close{cursor:pointer;color:#999;font-size:20px;background:none;border:none;line-height:1;}
-.modal-close:hover{color:#333;}
 .modal-body{flex:1;padding:16px 24px;overflow-y:auto;}
 .game-category{margin-bottom:12px;border:0.5px solid #e8e8e8;border-radius:6px;overflow:hidden;}
 .cat-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f9f9f9;border-bottom:0.5px solid #e8e8e8;cursor:pointer;}
@@ -134,6 +134,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .modal-footer{padding:12px 24px;border-top:0.5px solid #e8e8e8;display:flex;justify-content:flex-end;gap:8px;}
 .modal-cancel{height:32px;padding:0 20px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;font-size:13px;cursor:pointer;color:#666;}
 .modal-confirm{height:32px;padding:0 20px;border:none;border-radius:4px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;}
+/* preview */
 .preview-warn{background:#fff2f0;border:1px solid #ffccc7;border-radius:4px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#ff4d4f;}
 .preview-step-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:#333;}
 .preview-snum{width:22px;height:22px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -146,6 +147,11 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .prev-img-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
 .prev-img-table th{background:#f5f7fa;padding:8px 12px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;}
 .prev-img-table td{padding:8px 12px;border:1px solid #ebeef5;text-align:center;color:#bbb;}
+/* 领取条件区块 */
+.claim-cond-box{background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-top:8px;}
+.claim-cond-text{font-size:13px;color:#333;line-height:2;display:flex;align-items:center;flex-wrap:wrap;gap:8px;}
+.claim-inline-input{height:32px;width:100px;border:1px solid #1677ff;border-radius:4px;padding:0 8px;font-size:13px;color:#333;outline:none;background:#fff;-moz-appearance:textfield;}
+.claim-inline-input::-webkit-outer-spin-button,.claim-inline-input::-webkit-inner-spin-button{-webkit-appearance:none;}
 .hidden{display:none!important;}
 </style>
 </head>
@@ -165,8 +171,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
     <div class="topbar">
       <div class="top-left">当前时间：2026/04/14 10:33:02 +08:00</div>
       <div class="top-center">
-        <div class="bell"><svg viewBox="0 0 16 16" fill="none" width="13" height="13"><path d="M8 2a5 5 0 0 0-5 5v2l-1 2h12l-1-2V7a5 5 0 0 0-5-5z" stroke="#666" stroke-width="1.2"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0" stroke="#666" stroke-width="1.2"/></svg></div>
-        <div class="top-div" style="margin:0 4px;"></div>
         <div class="top-stat">在线人数：<span class="num">28</span></div><div class="top-div"></div>
         <div class="top-stat">当日注册：<span class="num">7</span></div><div class="top-div"></div>
         <div class="top-stat">实名认证待处理：<span class="num">0</span></div><div class="top-div"></div>
@@ -193,6 +197,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
   </div>
 </div>
 
+<!-- 游戏选择弹窗 -->
 <div class="modal-overlay hidden" id="gameModal">
   <div class="modal">
     <div class="modal-header">
@@ -208,14 +213,27 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 </div>
 
 <script>
-const stepNames=['活动模板设置','活动图片','参与对象与名单','活动条件','风控设定','领取条件','提款条件','提交预览'];
-let cur=1,claimAuto=true,awardRows=[{}];
-const langOptions=[{val:'zh',label:'简体中文'},{val:'en',label:'英文'},{val:'ph',label:'菲律宾语'},{val:'vn',label:'越南语'},{val:'ceb',label:'宿雾语'}];
-let selectedLangs=['zh'],activeLangTab='zh',langOpen=false;
+// ── 步骤名称（6步）──────────────────────────────────────────────
+const stepNames=['活动模板设置','活动图片','参与对象与名单','活动条件','风控条件','提交预览'];
+let cur=1, claimAuto=true, awardRows=[{}];
+
+// ── 语系 ────────────────────────────────────────────────────────
+const langOptions=[
+  {val:'default',label:'预设'},
+  {val:'en',label:'英文'},
+  {val:'ph',label:'菲律宾语'},
+  {val:'vn',label:'越南语'},
+  {val:'ceb',label:'宿雾语'}
+];
+let selectedLangs=['default'], activeLangTab='default', langOpen=false;
+
+// ── 其他多选 ────────────────────────────────────────────────────
 const levelOptions=[{val:'default',label:'默认层'},{val:'1',label:'第一层'},{val:'2',label:'第二层'},{val:'3',label:'第三层'},{val:'4',label:'第四层'},{val:'5',label:'第五层'},{val:'internal',label:'内部充值'}];
 let selectedLevels=[],levelOpen=false;
 const vipOptions=Array.from({length:11},(_,i)=>({val:'vip'+i,label:'VIP'+i}));
 let selectedVips=[],vipOpen=false;
+
+// ── 游戏 ────────────────────────────────────────────────────────
 const gameCategories=[
   {cat:'EVO:EvoLive',games:['Football Studio','Crazy Coin Flip','Dead or Alive: Saloon','EvoLive Baccarat A','Football Studio Dice','Mega Ball','French Roulette Gold','Auto Lightning Roulette','Crazy Time A DNT','Speed Baccarat A']},
   {cat:'TPG:TPG',games:['Space Galaxy','Lucky Leprechaun','8 Dragons','Mahjong House','Sic-Bo']},
@@ -226,15 +244,25 @@ const gameCategories=[
 ];
 let tempSelected={},confirmedSelected={},confirmedCount=0;
 
+// 初始化全选
+gameCategories.forEach(function(c,i){
+  confirmedSelected[i]=new Set(c.games);
+  confirmedCount+=c.games.length;
+});
+
+// ── 导航 ────────────────────────────────────────────────────────
 function renderNav(){
-  document.getElementById('stepNav').innerHTML=stepNames.map((n,i)=>{
-    const num=i+1,isA=num===cur,isD=num<cur;
-    return '<div class="step-nav-item '+(isA?'active':isD?'done':'')+'" onclick="goStep('+num+'"><div class="snum">'+(isD?'✓':num)+'</div><span>'+n+'</span></div>';
+  document.getElementById('stepNav').innerHTML=stepNames.map(function(n,i){
+    var num=i+1,isA=num===cur,isD=num<cur;
+    // 所有步骤都可以直接点击跳转
+    return '<div class="step-nav-item '+(isA?'active':isD?'done':'')+'" onclick="goStep('+num+')" style="cursor:pointer;">'+
+      '<div class="snum">'+(isD?'✓':num)+'</div><span>'+n+'</span>'+
+    '</div>';
   }).join('');
 }
 function renderTopBtns(){
-  const isFirst=cur===1,isLast=cur===8;
-  let h='';
+  var isFirst=cur===1,isLast=cur===6;
+  var h='';
   if(!isFirst)h+='<button class="btn-prev" onclick="goStep('+(cur-1)+')">‹ 上一步</button>';
   if(isLast){
     h+='<a href="activity_list.html" class="btn-exit">退出编辑 ↩</a>';
@@ -249,49 +277,151 @@ function goStep(n){cur=n;renderNav();renderTopBtns();renderStep();}
 function toggle(el){el.classList.toggle('on');}
 
 function renderStep(){
-  const el=document.getElementById('stepContent');
+  var el=document.getElementById('stepContent');
   if(cur===1)el.innerHTML=step1();
   else if(cur===2){el.innerHTML=step2();setupLangDrop();}
   else if(cur===3){el.innerHTML=step3();setupDrops();}
-  else if(cur===4){el.innerHTML=step4();renderAward();}
+  else if(cur===4){el.innerHTML=step4();renderAward();setupRiskToggle();}
   else if(cur===5)el.innerHTML=step5();
-  else if(cur===6)el.innerHTML=step6();
-  else if(cur===7)el.innerHTML=step7();
-  else el.innerHTML=step8();
+  else el.innerHTML=step6();
 }
 
-function step1(){return '<div class="step-desc">将活动模板配置保存至系统，系统将自动配置相关功能</div><div class="sec-block"><div class="sec-title">活动模板</div><div class="field-row"><div class="field-label"><span class="req">*</span>活动模板：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>预约活动</option></select></div></div></div><div class="sec-block"><div class="sec-title">时间设定</div><div class="field-row"><div class="field-label">时间类型：</div><div class="field-ctrl"><div class="radio-group"><label class="radio-item"><input type="radio" name="tt" checked> 指定时间期间</label><label class="radio-item"><input type="radio" name="tt"> 长期展示</label></div></div></div><div class="field-row"><div class="field-label"><span class="req">*</span>进行时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"><span class="time-sep">～</span><input type="text" placeholder="结束时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"></div></div></div></div><div class="sec-block"><div class="sec-title">活动类型设置</div><div class="field-row"><div class="field-label">活动类型：</div><div class="field-ctrl"><div class="radio-group"><label class="radio-item"><input type="radio" name="as" checked> 关闭</label><label class="radio-item"><input type="radio" name="as"> 开启</label></div></div></div><div class="field-row"><div class="field-label"><span class="req">*</span>活动币种：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>PHP</option></select></div></div></div><div class="sec-block"><div class="sec-title">活动名称</div><div class="field-row"><div class="field-label"><span class="req">*</span>活动名称：</div><div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入" style="max-width:400px;"></div></div></div>';}
+// ════════════════════════════════════════════════════════════════
+// 步骤一：活动模板设置
+// ════════════════════════════════════════════════════════════════
+function step1(){
+  return '<div class="step-desc">将活动模板配置保存至系统，系统将自动配置相关功能</div>'+
+  '<div class="sec-block"><div class="sec-title">活动模板</div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动模板：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>预约活动</option></select></div></div></div>'+
+  '<div class="sec-block"><div class="sec-title">时间设定</div>'+
+  '<div style="background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
+    '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">第一期：预约活动</div>'+
+    '<div class="field-row"><div class="field-label"><span class="req">*</span>进行时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"><span class="time-sep">～</span><input type="text" placeholder="结束时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"></div></div></div>'+
+  '</div>'+
+  '<div style="background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
+    '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">第二期：奖励领取</div>'+
+    '<div class="field-row"><div class="field-label"><span class="req">*</span>进行时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"><span class="time-sep">～</span><input type="text" placeholder="结束时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"></div></div></div>'+
+  '</div></div>'+
+  '<div class="sec-block"><div class="sec-title">活动类型设置</div>'+
+  '<div class="field-row"><div class="field-label">活动类型：</div><div class="field-ctrl"><div class="radio-group"><label class="radio-item"><input type="radio" name="as" checked> 关闭</label><label class="radio-item"><input type="radio" name="as"> 开启</label></div></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动币种：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>PHP</option></select></div></div></div>'+
+  '<div class="sec-block"><div class="sec-title">活动名称</div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动名称：</div><div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入" style="max-width:400px;"></div></div></div>';
+}
 
+// ════════════════════════════════════════════════════════════════
+// 步骤二：活动图片
+// ════════════════════════════════════════════════════════════════
 function step2(){
-  var tagHtml=selectedLangs.length===0?'<span class="ms-placeholder">请选择语系</span>':selectedLangs.map(function(v){var lb=langOptions.find(function(o){return o.val===v;});lb=lb?lb.label:v;return '<span class="ms-tag">'+lb+'<span class="ms-rm" onclick="removeLang(event,\''+v+'\')">×</span></span>';}).join('');
-  var titleHtml=selectedLangs.map(function(v){return '<div class="field-row"><div class="field-label" style="min-width:140px;">活动标题('+v+')：</div><div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入'+v+'活动标题"></div></div>';}).join('');
-  var tabHtml=selectedLangs.map(function(v){var lb=langOptions.find(function(o){return o.val===v;});lb=lb?lb.label:v;return '<div class="lang-tab '+(v===activeLangTab?'active':'')+'" onclick="switchLangTab(\''+v+'\')">'+lb+'</div>';}).join('');
-  var ddHtml='<div class="ms-option" onclick="toggleAllLang()"><span>全选</span>'+(selectedLangs.length===langOptions.length?'<span class="ms-check">✓</span>':'')+'</div>'+langOptions.map(function(o){return '<div class="ms-option '+(selectedLangs.includes(o.val)?'selected':'')+'" onclick="toggleLang(\''+o.val+'\')"><span>'+o.label+'</span>'+(selectedLangs.includes(o.val)?'<span class="ms-check">✓</span>':'')+'</div>';}).join('');
-  return '<div class="step-desc">上传活动相关图片，用于展示在不同平台和位置。</div><div class="sec-block" style="border:0.5px solid #e8e8e8;border-radius:4px;padding:16px;"><div class="sec-title">活动类型设置</div><div class="field-row"><div class="field-label">活动语系</div><div class="field-ctrl" style="position:relative;max-width:400px;"><div class="ms-wrap" id="langWrap" onclick="toggleLangDrop(event)">'+tagHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(langOpen?'':'hidden')+'" id="langDropdown">'+ddHtml+'</div></div></div>'+titleHtml+'</div>'+(selectedLangs.length>0?'<div class="sec-block" style="border:0.5px solid #e8e8e8;border-radius:4px;padding:16px;margin-top:10px;"><div class="lang-tabs">'+tabHtml+'</div><div id="langTabContent">'+renderLangTabContent()+'</div></div>':'');
+  var tagHtml=selectedLangs.length===0
+    ?'<span class="ms-placeholder">请选择语系</span>'
+    :selectedLangs.map(function(v){
+        var lb=langOptions.find(function(o){return o.val===v;});
+        lb=lb?lb.label:v;
+        return '<span class="ms-tag">'+lb+(v==='default'?'':' <span class="ms-rm" onclick="removeLang(event,\''+v+'\')">×</span>')+'</span>';
+      }).join('');
+
+  var titleHtml= selectedLangs.length===1 && selectedLangs[0]==='default'
+    ? '<div class="field-row"><div class="field-label" style="min-width:140px;">活动标题：</div><div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入活动标题"></div></div>'
+    : selectedLangs.map(function(v){
+        var lb=langOptions.find(function(o){return o.val===v;});
+        lb=lb?lb.label:v;
+        var label=v==='default'?'活动标题':'活动标题('+lb+')';
+        return '<div class="field-row"><div class="field-label" style="min-width:140px;">'+label+'：</div><div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入活动标题"></div></div>';
+      }).join('');
+
+  var tabHtml=selectedLangs.map(function(v){
+    var lb=langOptions.find(function(o){return o.val===v;});
+    lb=lb?lb.label:v;
+    return '<div class="lang-tab '+(v===activeLangTab?'active':'')+'" onclick="switchLangTab(\''+v+'\')">'+lb+'</div>';
+  }).join('');
+
+  var ddHtml=langOptions.map(function(o){
+    var isSel=selectedLangs.includes(o.val);
+    var disableDefault=o.val==='default';
+    return '<div class="ms-option '+(isSel?'selected':'')+'" onclick="'+(disableDefault?'':'toggleLang(\''+o.val+'\')')+'">'+
+      '<span>'+o.label+(disableDefault?' <span style="font-size:11px;color:#bbb;">（固定）</span>':'')+'</span>'+
+      (isSel?'<span class="ms-check">✓</span>':'')+
+    '</div>';
+  }).join('');
+
+  return '<div class="step-desc">上传活动相关图片，用于展示在不同平台和位置。</div>'+
+  '<div class="sec-block" style="border:0.5px solid #e8e8e8;border-radius:4px;padding:16px;">'+
+    '<div class="sec-title">活动类型设置</div>'+
+    '<div class="field-row"><div class="field-label">活动语系</div><div class="field-ctrl" style="position:relative;max-width:400px;">'+
+      '<div class="ms-wrap" id="langWrap" onclick="toggleLangDrop(event)">'+tagHtml+'<span class="ms-arrow">▾</span></div>'+
+      '<div class="ms-dropdown '+(langOpen?'':'hidden')+'" id="langDropdown">'+ddHtml+'</div>'+
+    '</div></div>'+
+    titleHtml+
+  '</div>'+
+  (selectedLangs.length>0
+    ?'<div class="sec-block" style="border:0.5px solid #e8e8e8;border-radius:4px;padding:16px;margin-top:10px;">'+
+      '<div class="lang-tabs">'+tabHtml+'</div>'+
+      '<div id="langTabContent">'+renderLangTabContent()+'</div>'+
+    '</div>'
+    :'');
 }
 
 function renderLangTabContent(){
   return '<div class="field-row"><div class="field-label"><span class="req">*</span>排序：</div><div class="field-ctrl"><input type="number" class="f-input" style="max-width:160px;-moz-appearance:textfield;" placeholder="请输入" value="0"></div></div>'+
-  '<div class="sec-block" style="margin-top:8px;"><div class="sec-title">列表图片</div><div style="background:#e8f0fe;border-radius:4px;padding:8px 12px;font-size:12px;color:#1677ff;margin-bottom:12px;">「活动图片」栏位将显示系统预设图片。</div>'+imgBlock('1','PC端列表图片','自定义','列表图链接：（外部链接时，本栏位即为跳转内页）')+imgBlock('2','H5端列表图片','750×200','列表图链接：（外部链接时，本栏位即为跳转内页）')+'</div>'+
-  '<div class="sec-block"><div class="sec-title">内容图片</div>'+imgBlock('1','PC端内容图片','800×600','图片链接')+imgBlock('2','H5端内容图片','600×400','图片链接')+'</div>'+
-  '<div class="sec-block"><div class="sec-title">活动描述</div><div class="field-row"><div class="field-label">活动内容：</div><div class="field-ctrl"><div class="rich-editor"><div class="rich-toolbar"><span class="rich-tool">↩</span><span class="rich-tool">↪</span><span class="rich-tool" style="font-weight:700;">B</span><span class="rich-tool" style="font-style:italic;">I</span><span class="rich-tool" style="text-decoration:underline;">U</span><span class="rich-tool">≡</span><span class="rich-tool">≡</span><span class="rich-tool">≡</span></div><div class="rich-body" contenteditable="true">请输入活动描述内容...</div></div></div></div></div>'+
-  '<div class="sec-block"><div class="sec-title">备注</div><div style="font-size:13px;margin-bottom:6px;">备注内容</div><textarea class="f-textarea" placeholder="请输入备注内容..."></textarea><div class="hint">此备注仅供内部参考，不会显示给用户</div></div>';
+  '<div class="sec-block" style="margin-top:8px;"><div class="sec-title">列表图片</div><div style="background:#e8f0fe;border-radius:4px;padding:8px 12px;font-size:12px;color:#1677ff;margin-bottom:12px;">「活动图片」栏位将显示系统预设图片。</div>'+
+  imgBlock('1','PC端列表图片','自定义','列表图链接：（外部链接时，本栏位即为跳转内页）')+
+  imgBlock('2','H5端列表图片','750×200','列表图链接：（外部链接时，本栏位即为跳转内页）')+'</div>'+
+  '<div class="sec-block"><div class="sec-title">内容图片</div>'+
+  imgBlock('1','PC端内容图片','800×600','图片链接')+
+  imgBlock('2','H5端内容图片','600×400','图片链接')+'</div>'+
+  '<div class="sec-block"><div class="sec-title">活动描述</div><div class="field-row"><div class="field-label">活动内容：</div><div class="field-ctrl"><div class="rich-editor"><div class="rich-toolbar"><span class="rich-tool">↩</span><span class="rich-tool">↪</span><span class="rich-tool" style="font-weight:700;">B</span><span class="rich-tool" style="font-style:italic;">I</span><span class="rich-tool" style="text-decoration:underline;">U</span></div><div class="rich-body" contenteditable="true">请输入活动描述内容...</div></div></div></div></div>'+
+  '<div class="sec-block"><div class="sec-title">备注</div><textarea class="f-textarea" placeholder="请输入备注内容..."></textarea><div class="hint">此备注仅供内部参考，不会显示给用户</div></div>';
 }
-function imgBlock(num,title,size,link){return '<div style="margin-bottom:16px;"><div class="img-section-title"><span class="img-num">'+num+'</span>'+title+'</div><div style="font-size:12px;color:#999;margin-bottom:8px;">尺寸：'+size+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;"><div class="img-upload-box"><button class="upload-btn">点击上传自定义图片</button></div><div><div style="font-size:13px;margin-bottom:6px;">'+link+'</div><input type="text" class="f-input" placeholder="请输入外部链接网址"></div></div></div>';}
+function imgBlock(num,title,size,link){
+  return '<div style="margin-bottom:16px;"><div class="img-section-title"><span class="img-num">'+num+'</span>'+title+'</div><div style="font-size:12px;color:#999;margin-bottom:8px;">尺寸：'+size+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;"><div class="img-upload-box"><button class="upload-btn">点击上传自定义图片</button></div><div><div style="font-size:13px;margin-bottom:6px;">'+link+'</div><input type="text" class="f-input" placeholder="请输入外部链接网址"></div></div></div>';
+}
 
-function setupLangDrop(){setTimeout(function(){document.addEventListener('click',function h(e){if(!e.target.closest('#langWrap')&&!e.target.closest('#langDropdown')&&langOpen){langOpen=false;document.removeEventListener('click',h);renderStep();}});},0);}
+// 语系下拉逻辑
+function setupLangDrop(){
+  setTimeout(function(){
+    document.addEventListener('click',function h(e){
+      if(!e.target.closest('#langWrap')&&!e.target.closest('#langDropdown')&&langOpen){
+        langOpen=false;document.removeEventListener('click',h);renderStep();
+      }
+    });
+  },0);
+}
 function toggleLangDrop(e){e.stopPropagation();langOpen=!langOpen;renderStep();if(langOpen)setupLangDrop();}
-function toggleLang(v){if(selectedLangs.includes(v))selectedLangs=selectedLangs.filter(function(x){return x!==v;});else selectedLangs.push(v);if(!selectedLangs.includes(activeLangTab)&&selectedLangs.length>0)activeLangTab=selectedLangs[0];langOpen=true;renderStep();setupLangDrop();}
-function toggleAllLang(){if(selectedLangs.length===langOptions.length)selectedLangs=[];else{selectedLangs=langOptions.map(function(o){return o.val;});activeLangTab=selectedLangs[0];}langOpen=true;renderStep();setupLangDrop();}
-function removeLang(e,v){e.stopPropagation();selectedLangs=selectedLangs.filter(function(x){return x!==v;});if(activeLangTab===v&&selectedLangs.length>0)activeLangTab=selectedLangs[0];langOpen=false;renderStep();}
+function toggleLang(v){
+  if(v==='default')return;
+  if(selectedLangs.includes(v))selectedLangs=selectedLangs.filter(function(x){return x!==v;});
+  else selectedLangs.push(v);
+  if(!selectedLangs.includes(activeLangTab))activeLangTab=selectedLangs[0]||'default';
+  langOpen=true;renderStep();setupLangDrop();
+}
+function removeLang(e,v){
+  e.stopPropagation();
+  if(v==='default')return;
+  selectedLangs=selectedLangs.filter(function(x){return x!==v;});
+  if(activeLangTab===v)activeLangTab=selectedLangs[0]||'default';
+  langOpen=false;renderStep();
+}
 function switchLangTab(v){activeLangTab=v;var el=document.getElementById('langTabContent');if(el)el.innerHTML=renderLangTabContent();}
 
+// ════════════════════════════════════════════════════════════════
+// 步骤三：参与对象与名单
+// ════════════════════════════════════════════════════════════════
 function step3(){
   var lvlHtml=selectedLevels.length===0?'<span class="ms-placeholder">请选择充值层级</span>':selectedLevels.map(function(v){var lb=levelOptions.find(function(o){return o.val===v;});lb=lb?lb.label:v;return '<span class="ms-tag">'+lb+'<span class="ms-rm" onclick="removeLevel(event,\''+v+'\')">×</span></span>';}).join('');
   var vipHtml=selectedVips.length===0?'<span class="ms-placeholder">请选择会员等级</span>':selectedVips.map(function(v){var lb=vipOptions.find(function(o){return o.val===v;});lb=lb?lb.label:v;return '<span class="ms-tag">'+lb+'<span class="ms-rm" onclick="removeVip(event,\''+v+'\')">×</span></span>';}).join('');
   var lvlDd='<div class="ms-option '+(selectedLevels.length===levelOptions.length?'selected':'')+'" onclick="toggleAllLevel()"><span>全选</span>'+(selectedLevels.length===levelOptions.length?'<span class="ms-check">✓</span>':'')+'</div>'+levelOptions.map(function(o){return '<div class="ms-option '+(selectedLevels.includes(o.val)?'selected':'')+'" onclick="toggleLevel(\''+o.val+'\')"><span>'+o.label+'</span>'+(selectedLevels.includes(o.val)?'<span class="ms-check">✓</span>':'')+'</div>';}).join('');
   var vipDd='<div class="ms-option" onclick="toggleAllVip()"><span>全选</span>'+(selectedVips.length===vipOptions.length?'<span class="ms-check">✓</span>':'')+'</div>'+vipOptions.map(function(o){return '<div class="ms-option '+(selectedVips.includes(o.val)?'selected':'')+'" onclick="toggleVip(\''+o.val+'\')"><span>'+o.label+'</span>'+(selectedVips.includes(o.val)?'<span class="ms-check">✓</span>':'')+'</div>';}).join('');
-  return '<div class="step-desc">设置活动的参与对象与黑名单规则</div><div class="sec-block"><div class="sec-title">参与对象设置</div><div class="field-row"><div class="field-label">1. 充值层级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="levelWrap" onclick="toggleLevelDrop(event)">'+lvlHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(levelOpen?'':'hidden')+'" id="levelDropdown">'+lvlDd+'</div></div></div><div class="field-row"><div class="field-label">2. 指定代理：</div><div class="field-ctrl"><div class="radio-group" style="flex-direction:column;align-items:flex-start;gap:8px;"><label class="radio-item"><input type="radio" name="agent" checked> 不指定</label><label class="radio-item"><input type="radio" name="agent"> 指定代理线</label><label class="radio-item"><input type="radio" name="agent"> 指定代理直属会员</label></div></div></div><div class="field-row"><div class="field-label">3. 新会员限制：</div><div class="field-ctrl"><div style="display:flex;align-items:center;gap:10px;"><div class="toggle" onclick="toggle(this)"></div><span style="font-size:13px;">活动开始后注册的新会员</span></div><div class="hint">开启后，仅限活动开始后注册的新会员参与</div></div></div><div class="field-row"><div class="field-label">4. 会员等级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="vipWrap" onclick="toggleVipDrop(event)">'+vipHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(vipOpen?'':'hidden')+'" id="vipDropdown">'+vipDd+'</div></div></div><div class="field-row"><div class="field-label">5. 用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div><div class="sec-block"><div class="sec-title">黑名单设置</div><div class="field-row"><div class="field-label">黑名单限制类型：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择黑名单限制类型</option><option>类型一</option></select></div></div><div class="field-row"><div class="field-label">用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select><div class="hint">选择参与活动的用户标签，用于筛选目标用户群体</div></div></div></div>';
+  return '<div class="step-desc">设置活动的参与对象与黑名单规则</div>'+
+  '<div class="sec-block"><div class="sec-title">参与对象设置</div>'+
+  '<div class="field-row"><div class="field-label">1. 充值层级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="levelWrap" onclick="toggleLevelDrop(event)">'+lvlHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(levelOpen?'':'hidden')+'" id="levelDropdown">'+lvlDd+'</div></div></div>'+
+  '<div class="field-row"><div class="field-label">2. 指定代理：</div><div class="field-ctrl"><div class="radio-group" style="flex-direction:column;align-items:flex-start;gap:8px;"><label class="radio-item"><input type="radio" name="agent" checked> 不指定</label><label class="radio-item"><input type="radio" name="agent"> 指定代理线</label><label class="radio-item"><input type="radio" name="agent"> 指定代理直属会员</label></div></div></div>'+
+  '<div class="field-row"><div class="field-label">3. 新会员限制：</div><div class="field-ctrl"><div style="display:flex;align-items:center;gap:10px;"><div class="toggle" onclick="toggle(this)"></div><span style="font-size:13px;">活动开始后注册的新会员</span></div></div></div>'+
+  '<div class="field-row"><div class="field-label">4. 会员等级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="vipWrap" onclick="toggleVipDrop(event)">'+vipHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(vipOpen?'':'hidden')+'" id="vipDropdown">'+vipDd+'</div></div></div>'+
+  '<div class="field-row"><div class="field-label">5. 用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>'+
+  '<div class="sec-block"><div class="sec-title">黑名单设置</div>'+
+  '<div class="field-row"><div class="field-label">黑名单限制类型：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择黑名单限制类型</option><option>类型一</option></select></div></div>'+
+  '<div class="field-row"><div class="field-label">用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>';
 }
 function setupDrops(){setTimeout(function(){document.addEventListener('click',function h(e){var ch=false;if(!e.target.closest('#levelWrap')&&!e.target.closest('#levelDropdown')&&levelOpen){levelOpen=false;ch=true;}if(!e.target.closest('#vipWrap')&&!e.target.closest('#vipDropdown')&&vipOpen){vipOpen=false;ch=true;}if(ch){document.removeEventListener('click',h);renderStep();setupDrops();}});},0);}
 function toggleLevelDrop(e){e.stopPropagation();levelOpen=!levelOpen;vipOpen=false;renderStep();setupDrops();}
@@ -303,55 +433,244 @@ function toggleVip(v){if(selectedVips.includes(v))selectedVips=selectedVips.filt
 function toggleAllVip(){selectedVips=selectedVips.length===vipOptions.length?[]:vipOptions.map(function(o){return o.val;});vipOpen=true;renderStep();setupDrops();}
 function removeVip(e,v){e.stopPropagation();selectedVips=selectedVips.filter(function(x){return x!==v;});vipOpen=false;renderStep();}
 
-function step4(){return '<div class="step-desc">请设活动条件与触发规则</div><div class="sec-block"><div class="sec-title">审核方式</div><div class="radio-group" style="margin-bottom:16px;"><label class="radio-item"><input type="radio" name="audit" checked> 人工审核</label><label class="radio-item"><input type="radio" name="audit"> 自动审核</label></div></div><div class="sec-block"><div style="font-size:13px;margin-bottom:8px;">奖项配置：</div><button class="btn-add" onclick="addAward()">新增</button><table class="award-table"><thead><tr><th style="width:60px;">等级</th><th>奖励类型</th><th>所需流水</th><th>奖励金额</th><th style="width:80px;">操作</th></tr></thead><tbody id="awardBody"></tbody></table></div>';}
-function renderAward(){var el=document.getElementById('awardBody');if(!el)return;el.innerHTML=awardRows.map(function(_,i){return '<tr><td>'+(i+1)+'</td><td><select class="td-select"><option>礼金积分</option><option>免费投注券</option><option>免费旋转券</option><option>优惠券</option></select></td><td><input class="td-input" type="number" placeholder="请输入"></td><td><input class="td-input" type="number" placeholder="请输入"></td><td><button class="btn-del" onclick="delAward('+i+')">删除</button></td></tr>';}).join('');}
-function addAward(){awardRows.push({});renderAward();}
-function delAward(i){awardRows.splice(i,1);renderAward();}
-
-function step5(){return '<div class="step-desc">设置活动的风险控制规则，确保活动安全进行</div><div class="sec-block"><div class="sec-title">风险检测设置</div><div class="field-row"><div class="field-label">同IP检测：</div><div class="field-ctrl"><div class="toggle" onclick="toggle(this)"></div></div></div><div class="field-row"><div class="field-label">同手机号检测：</div><div class="field-ctrl"><div class="toggle" onclick="toggle(this)"></div></div></div><div class="field-row"><div class="field-label">同姓名检测：</div><div class="field-ctrl"><div class="toggle" onclick="toggle(this)"></div></div></div><div class="field-row"><div class="field-label">同email检测：</div><div class="field-ctrl"><div class="toggle" onclick="toggle(this)"></div></div></div></div><div class="sec-block" style="border:1px solid #ffccc7;border-radius:4px;padding:14px;"><div class="sec-title" style="color:#ff4d4f;border-left-color:#ff4d4f;">自动拒绝</div><div class="field-row"><div class="field-label">自动拒绝：</div><div class="field-ctrl"><div class="toggle" onclick="toggle(this)"></div></div></div><div class="field-row"><div class="field-label">触发条件：</div><div class="field-ctrl" style="display:flex;align-items:center;gap:8px;font-size:13px;">当违反 <input type="number" class="f-input" style="width:80px;-moz-appearance:textfield;" placeholder="0"> 笔以上，将自动拒绝</div></div></div>';}
-
-function step6(){return '<div class="step-desc">设置活动奖励的领取条件与限制规则</div><div class="sec-block"><div class="sec-title">领取方式</div><div class="radio-group"><label class="radio-item"><input type="radio" name="claim" '+(claimAuto?'checked':'')+' onchange="setClaimAuto(true)"> 自动领取</label><label class="radio-item"><input type="radio" name="claim" '+(!claimAuto?'checked':'')+' onchange="setClaimAuto(false)"> 手动领取</label></div></div><div class="sec-block"><div class="sec-title">有效领取天数</div><div style="display:flex;align-items:center;gap:8px;font-size:13px;"><input type="number" id="claimDays" class="f-input '+(claimAuto?'disabled':'')+'" style="width:120px;-moz-appearance:textfield;" placeholder="请输入天数" '+(claimAuto?'disabled':'')+'>天</div><div class="hint" id="claimHint">'+(claimAuto?'选择「手动领取」后可设置有效天数':'')+'</div></div><div class="sec-block"><div class="sec-title">已验证手机号</div><div class="radio-group"><label class="radio-item"><input type="radio" name="phone"> 是</label><label class="radio-item"><input type="radio" name="phone" checked> 否</label></div></div><div class="sec-block"><div class="sec-title">限制使用设备</div><div class="radio-group"><label class="radio-item"><input type="radio" name="device" checked> 无限制领奖设备</label><label class="radio-item"><input type="radio" name="device"> APP</label></div></div>';}
-function setClaimAuto(v){claimAuto=v;var inp=document.getElementById('claimDays'),hint=document.getElementById('claimHint');if(inp){if(v){inp.disabled=true;inp.classList.add('disabled');inp.value='';}else{inp.disabled=false;inp.classList.remove('disabled');inp.focus();}}if(hint)hint.textContent=v?'选择「手动领取」后可设置有效天数':'';}
-
-function step7(){
+// ════════════════════════════════════════════════════════════════
+// 步骤四：活动条件（原4 + 原6领取 + 原7提款）
+// ════════════════════════════════════════════════════════════════
+function step4(){
   var total=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);
-  return '<div class="step-desc">请设置活动的提款稽核条件</div><div class="two-col"><div class="sec-block" style="border:0.5px solid #e8e8e8;border-radius:4px;padding:16px;"><div class="sec-title">稽核不通过手续费比例</div><div style="display:flex;align-items:center;gap:8px;"><input type="number" class="ratio-input" value="100" min="0" max="100"><span style="font-size:13px;color:#666;">%</span></div></div><div class="sec-block" style="border:0.5px solid #e8e8e8;border-radius:4px;padding:16px;"><div class="sec-title">提现稽核流水比例</div><div style="display:flex;align-items:center;gap:8px;"><input type="number" class="ratio-input" value="0" min="0"><span style="font-size:13px;color:#666;">%</span></div></div></div><div class="sec-block" style="border:0.5px solid #e8e8e8;border-radius:4px;padding:16px;"><div class="sec-title">稽核条件</div><button class="game-btn" onclick="openModal()">已选择 <strong>'+total+'</strong> 个游戏</button>'+(total>0?'<div class="hint" style="margin-top:8px;">已选游戏数量：'+total+' 个</div>':'')+'</div>';
+  return '<div class="step-desc">请设置活动条件、领取条件与提款条件</div>'+
+
+  // ── 审核方式 ──
+  '<div class="sec-block"><div class="sec-title">审核方式</div>'+
+  '<div class="radio-group" style="margin-bottom:16px;">'+
+    '<label class="radio-item"><input type="radio" name="audit" checked> 人工审核</label>'+
+    '<label class="radio-item"><input type="radio" name="audit"> 自动审核</label>'+
+  '</div></div>'+
+
+  // ── 领取条件（图一）──
+  '<div class="sec-block"><div class="sec-title">领取条件</div>'+
+  '<div class="claim-cond-box">'+
+    '<div style="font-size:13px;color:#555;margin-bottom:12px;">在游戏预约第一阶段有预约。</div>'+
+    '<div class="claim-cond-text">'+
+      '且在第一阶段的活动时间内，有效投注每达到'+
+      '<input type="number" class="claim-inline-input" placeholder="请输入">'+
+      '一次奖励，上限'+
+      '<input type="number" class="claim-inline-input" placeholder="请输入">'+
+      '次'+
+    '</div>'+
+  '</div></div>'+
+
+  // ── 奖项配置 ──
+  '<div class="sec-block"><div class="sec-title">奖项配置</div>'+
+  '<button class="btn-add" onclick="addAward()">新增</button>'+
+  '<table class="award-table"><thead><tr><th style="width:60px;">等级</th><th>奖励类型</th><th>奖励金额/内容</th><th>所需流水</th><th style="width:80px;">操作</th></tr></thead><tbody id="awardBody"></tbody></table></div>'+
+
+  // ── 领取方式 ──
+  '<div class="sec-block"><div class="sec-title">领取方式</div>'+
+  '<div class="radio-group">'+
+    '<label class="radio-item"><input type="radio" name="claim" '+(claimAuto?'checked':'')+' onchange="setClaimAuto(true)"> 自动领取</label>'+
+    '<label class="radio-item"><input type="radio" name="claim" '+(!claimAuto?'checked':'')+' onchange="setClaimAuto(false)"> 手动领取</label>'+
+  '</div>'+
+  '<div style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:12px;">'+
+    '<input type="number" id="claimDays" class="f-input '+(claimAuto?'disabled':'')+'" style="width:120px;-moz-appearance:textfield;" placeholder="请输入天数" '+(claimAuto?'disabled':'')+'>天'+
+  '</div>'+
+  '<div class="hint">'+(claimAuto?'选择「手动领取」后可设置有效天数':'')+'</div>'+
+  '</div>'+
+  '<div class="sec-block"><div class="sec-title">已验证手机号</div>'+
+  '<div class="radio-group"><label class="radio-item"><input type="radio" name="phone"> 是</label><label class="radio-item"><input type="radio" name="phone" checked> 否</label></div></div>'+
+  '<div class="sec-block"><div class="sec-title">限制使用设备</div>'+
+  '<div class="radio-group"><label class="radio-item"><input type="radio" name="device" checked> 无限制领奖设备</label><label class="radio-item"><input type="radio" name="device"> APP</label></div></div>'+
+
+  // ── 提款条件 ──
+  '<div class="sec-block" style="border-top:1px solid #f0f0f0;padding-top:20px;margin-top:8px;">'+
+  '<div class="sec-title">提现稽核流水比例</div>'+
+  '<div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;"><input type="number" class="ratio-input" value="0" min="0"><span style="font-size:13px;color:#666;">%</span></div>'+
+  '<div class="sec-title">稽核条件</div>'+
+  '<button class="game-btn" onclick="openModal()">已选择 <strong>'+total+'</strong> 个游戏</button>'+
+  (total>0?'<div class="hint" style="margin-top:8px;">已选游戏数量：'+total+' 个</div>':'')+
+  '</div>';
 }
 
+function renderAward(){
+  var el=document.getElementById('awardBody');if(!el)return;
+  el.innerHTML=awardRows.map(function(_,i){
+    return '<tr>'+
+      '<td>'+(i+1)+'</td>'+
+      '<td><select class="td-select"><option>礼金</option><option>积分</option><option>免费投注券</option><option>免费旋转券</option><option>优惠券</option></select></td>'+
+      '<td><input class="td-input" type="text" placeholder="请输入"></td>'+
+      '<td><input class="td-input" type="number" placeholder="请输入"></td>'+
+      '<td><button class="btn-del" onclick="delAward('+i+')">删除</button></td>'+
+    '</tr>';
+  }).join('');
+}
+function addAward(){awardRows.push({});renderAward();}
+function delAward(i){awardRows.splice(i,1);renderAward();}
+function setClaimAuto(v){
+  claimAuto=v;
+  var inp=document.getElementById('claimDays');
+  if(inp){if(v){inp.disabled=true;inp.classList.add('disabled');inp.value='';}else{inp.disabled=false;inp.classList.remove('disabled');inp.focus();}}
+}
+
+// ════════════════════════════════════════════════════════════════
+// 步骤五：风控条件
+// ════════════════════════════════════════════════════════════════
+function step5(){
+  return '<div class="step-desc">设置活动的风险控制规则，确保活动安全进行</div>'+
+  '<div class="sec-block"><div class="sec-title">风险检测设置</div>'+
+  '<div class="field-row"><div class="field-label">同IP检测：</div><div class="field-ctrl"><div class="toggle" id="tog-ip" onclick="toggleRisk(this,\'ip\')"></div></div></div>'+
+  '<div class="field-row"><div class="field-label">同手机号检测：</div><div class="field-ctrl"><div class="toggle" id="tog-phone" onclick="toggleRisk(this,\'phone\')"></div></div></div>'+
+  '<div class="field-row"><div class="field-label">同姓名检测：</div><div class="field-ctrl"><div class="toggle" id="tog-name" onclick="toggleRisk(this,\'name\')"></div></div></div>'+
+  '<div class="field-row"><div class="field-label">同email检测：</div><div class="field-ctrl"><div class="toggle" id="tog-email" onclick="toggleRisk(this,\'email\')"></div></div></div>'+
+  '</div>'+
+  '<div id="autoRejectBlock" style="border:1px solid #ffccc7;border-radius:4px;padding:14px;opacity:0.4;pointer-events:none;">'+
+    '<div class="sec-title" style="color:#ff4d4f;border-left-color:#ff4d4f;">自动拒绝</div>'+
+    '<div class="field-row"><div class="field-label">自动拒绝：</div><div class="field-ctrl"><div class="toggle" id="tog-autorej"></div></div></div>'+
+    '<div class="field-row"><div class="field-label">触发条件：</div><div class="field-ctrl" style="display:flex;align-items:center;gap:8px;font-size:13px;">当违反 <input type="number" id="rejectInput" class="f-input f-input-disabled" style="width:80px;-moz-appearance:textfield;" placeholder="0" disabled> 笔以上，将自动拒绝</div></div>'+
+  '</div>';
+}
+
+function setupRiskToggle(){} // called after step4 renders—no-op here, handled in step5
+
+function toggleRisk(el, key){
+  el.classList.toggle('on');
+  updateAutoRejectState();
+}
+
+function updateAutoRejectState(){
+  var anyOn=['tog-ip','tog-phone','tog-name','tog-email'].some(function(id){
+    var t=document.getElementById(id);return t&&t.classList.contains('on');
+  });
+  var block=document.getElementById('autoRejectBlock');
+  if(!block)return;
+  if(anyOn){
+    block.style.opacity='1';
+    block.style.pointerEvents='auto';
+    // 自动打开自动拒绝开关
+    var tog=document.getElementById('tog-autorej');
+    if(tog&&!tog.classList.contains('on'))tog.classList.add('on');
+    var inp=document.getElementById('rejectInput');
+    if(inp){inp.disabled=false;inp.classList.remove('f-input-disabled');}
+  } else {
+    block.style.opacity='0.4';
+    block.style.pointerEvents='none';
+    var tog=document.getElementById('tog-autorej');
+    if(tog)tog.classList.remove('on');
+    var inp=document.getElementById('rejectInput');
+    if(inp){inp.disabled=true;inp.classList.add('f-input-disabled');}
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// 步骤六：提交预览
+// ════════════════════════════════════════════════════════════════
+function step6(){
+  var langStr=selectedLangs.map(function(v){var o=langOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、')||'–';
+  var levelStr=selectedLevels.length?selectedLevels.map(function(v){var o=levelOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、'):'–';
+  var vipStr=selectedVips.length?selectedVips.map(function(v){var o=vipOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、'):'–';
+  var total=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);
+  function row(req,k,v,red){return '<div class="preview-row"><span class="pk '+(req?'req':'')+'">'+(k)+'：</span><span class="pv '+(red?'red':v==='–'?'empty':'')+'">'+v+'</span></div>';}
+  function pRow(num,title,body,last){return '<div style="display:grid;grid-template-columns:130px 1fr;border-bottom:'+(last?'none':'0.5px solid #e8e8e8')+'"><div style="padding:14px 16px;border-right:0.5px solid #e8e8e8;"><div class="preview-step-title"><div class="preview-snum">'+num+'</div>'+title+'</div></div><div style="padding:14px 16px;">'+body+'</div></div>';}
+  return '<div class="step-desc">请确认以下活动配置信息，确认无误后点击提交按钮</div>'+
+  '<div class="preview-warn">● 请填写以下必填字段：有效时间、活动名称</div>'+
+  '<div style="border:0.5px solid #e8e8e8;border-radius:4px;overflow:hidden;">'+
+  '<div style="display:grid;grid-template-columns:130px 1fr;background:#f5f7fa;border-bottom:0.5px solid #e8e8e8;"><div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;border-right:0.5px solid #e8e8e8;">步骤</div><div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;">相关字段</div></div>'+
+  pRow('1','活动模板设置',
+    '<div class="preview-grid">'+
+    row(false,'活动ID','–')+row(true,'模板类型','–')+
+    row(true,'活动状态','关闭')+row(true,'第一期时间','–',true)+
+    row(true,'活动模板','预约活动')+row(true,'第二期时间','–',true)+
+    row(true,'活动币种','PHP')+row(true,'活动名称','–',true)+
+    '</div>')+
+  pRow('2','活动图片',
+    '<div>'+row(false,'语系',langStr)+row(false,'活动标题','–')+row(false,'图片排序','0')+
+    '<table class="prev-img-table" style="margin-top:8px;"><thead><tr><th>图片位置</th><th>缩图</th><th>图片 URL</th></tr></thead><tbody>'+
+    '<tr><td style="color:#333;">PC端列表图片</td><td>未上传</td><td>–</td></tr>'+
+    '<tr><td style="color:#333;">PC端内容图片</td><td>未上传</td><td>–</td></tr>'+
+    '<tr><td style="color:#333;">H5端列表图片</td><td>未上传</td><td>–</td></tr>'+
+    '<tr><td style="color:#333;">H5端内容图片</td><td>未上传</td><td>–</td></tr>'+
+    '</tbody></table></div>')+
+  pRow('3','参与对象与名单',
+    '<div class="preview-grid">'+
+    row(false,'充值层级',levelStr)+row(false,'指定代理','不指定')+
+    row(false,'新会员限制','否')+row(false,'会员等级',vipStr)+
+    row(false,'黑名单类型','–')+row(false,'用户标签','–')+
+    '</div>')+
+  pRow('4','活动条件',
+    '<div class="preview-grid">'+
+    row(false,'审核方式','人工审核')+
+    row(false,'领取条件','有效投注达到 – 次奖励，上限 – 次')+
+    row(false,'奖项配置',awardRows.length+'个等级')+
+    row(false,'领取方式',claimAuto?'自动领取':'手动领取')+
+    row(false,'有效天数',claimAuto?'–':'–')+
+    row(false,'已验证手机号','否')+
+    row(false,'限制使用设备','无限制领奖设备')+
+    row(false,'提现稽核流水比例','0%')+
+    row(false,'稽核条件游戏',total?total+'个':'–')+
+    '</div>')+
+  pRow('5','风控条件',
+    '<div class="preview-grid">'+
+    row(false,'同IP检测','否')+row(false,'同姓名检测','否')+
+    row(false,'同手机号检测','否')+row(false,'同email检测','否')+
+    row(false,'自动拒绝','–')+
+    '</div>',true)+
+  '</div>';
+}
+
+// ════════════════════════════════════════════════════════════════
+// 游戏弹窗
+// ════════════════════════════════════════════════════════════════
 function openModal(){
   tempSelected={};
   gameCategories.forEach(function(c,i){tempSelected[i]=new Set(confirmedSelected[i]||[]);});
   renderModalBody();
   document.getElementById('gameModal').classList.remove('hidden');
 }
+
 function renderModalBody(){
-  document.getElementById('modalBody').innerHTML=gameCategories.map(function(c,ci){
-    var sel=tempSelected[ci]||new Set();
-    var allChk=sel.size===c.games.length;
-    return '<div class="game-category"><div class="cat-header"><input type="checkbox" class="cat-check" '+(allChk?'checked':'')+' onclick="toggleCat('+ci+',this.checked)"><span class="cat-name">'+c.cat+'</span></div><div class="cat-games">'+c.games.map(function(g){return '<label class="game-row-item"><input type="checkbox" class="game-cb" '+(sel.has(g)?'checked':'')+' onchange="toggleGame('+ci+',\''+g+'\',this.checked)">'+g+'</label>';}).join('')+'</div></div>';
-  }).join('');
+  var allGames=gameCategories.reduce(function(a,c){return a.concat(c.games);},[]);
+  var totalSel=Object.values(tempSelected).reduce(function(s,set){return s+set.size;},0);
+  var allSelected=totalSel===allGames.length;
+
+  document.getElementById('modalBody').innerHTML=
+    // 全选行
+    '<div style="padding:10px 14px;border-bottom:1px solid #e8e8e8;background:#f9f9f9;display:flex;align-items:center;gap:10px;">'+
+      '<input type="checkbox" class="cat-check" '+(allSelected?'checked':'')+' onclick="toggleAllGames(this.checked)">'+
+      '<span style="font-size:14px;font-weight:500;color:#333;">全选</span>'+
+    '</div>'+
+    gameCategories.map(function(c,ci){
+      var sel=tempSelected[ci]||new Set();
+      var allChk=sel.size===c.games.length;
+      return '<div class="game-category">'+
+        '<div class="cat-header">'+
+          '<input type="checkbox" class="cat-check" '+(allChk?'checked':'')+' onclick="toggleCat('+ci+',this.checked)">'+
+          '<span class="cat-name">'+c.cat+'</span>'+
+        '</div>'+
+        '<div class="cat-games">'+
+          c.games.map(function(g){
+            return '<label class="game-row-item"><input type="checkbox" '+(sel.has(g)?'checked':'')+' onchange="toggleGame('+ci+',\''+g+'\',this.checked)">'+g+'</label>';
+          }).join('')+
+        '</div>'+
+      '</div>';
+    }).join('');
+}
+
+function toggleAllGames(checked){
+  gameCategories.forEach(function(c,i){
+    if(!tempSelected[i])tempSelected[i]=new Set();
+    if(checked)c.games.forEach(function(g){tempSelected[i].add(g);});
+    else tempSelected[i].clear();
+  });
+  renderModalBody();
 }
 function toggleCat(ci,checked){if(!tempSelected[ci])tempSelected[ci]=new Set();if(checked)gameCategories[ci].games.forEach(function(g){tempSelected[ci].add(g);});else tempSelected[ci].clear();renderModalBody();}
 function toggleGame(ci,g,checked){if(!tempSelected[ci])tempSelected[ci]=new Set();if(checked)tempSelected[ci].add(g);else tempSelected[ci].delete(g);renderModalBody();}
-function confirmGames(){confirmedSelected={};gameCategories.forEach(function(_,i){confirmedSelected[i]=new Set(tempSelected[i]||[]);});confirmedCount=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);closeModal();renderStep();}
-function closeModal(){document.getElementById('gameModal').classList.add('hidden');}
-
-function step8(){
-  var langStr=selectedLangs.map(function(v){var o=langOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、')||'–';
-  var levelStr=selectedLevels.length?selectedLevels.map(function(v){var o=levelOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、'):'–';
-  var vipStr=selectedVips.length?selectedVips.map(function(v){var o=vipOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、'):'–';
-  function row(req,k,v,red){return '<div class="preview-row"><span class="pk '+(req?'req':'')+'">'+(k)+'：</span><span class="pv '+(red?'red':v==='–'?'empty':'')+'">'+v+'</span></div>';}
-  function pRow(num,title,body,last){return '<div style="display:grid;grid-template-columns:130px 1fr;border-bottom:'+(last?'none':'0.5px solid #e8e8e8')+'"><div style="padding:14px 16px;border-right:0.5px solid #e8e8e8;"><div class="preview-step-title"><div class="preview-snum">'+num+'</div>'+title+'</div></div><div style="padding:14px 16px;">'+body+'</div></div>';}
-  return '<div class="step-desc">请确认以下活动配置信息，确认无误后点击提交按钮</div><div class="preview-warn">● 请填写以下必填字段：有效时间、活动名称</div><div style="border:0.5px solid #e8e8e8;border-radius:4px;overflow:hidden;"><div style="display:grid;grid-template-columns:130px 1fr;background:#f5f7fa;border-bottom:0.5px solid #e8e8e8;"><div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;border-right:0.5px solid #e8e8e8;">步骤</div><div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;">相关字段</div></div>'+
-  pRow('1','活动模板设置','<div class="preview-grid">'+row(false,'活动ID','–')+row(true,'模板类型','–')+row(true,'活动状态','关闭')+row(true,'有效时间','–',true)+row(true,'活动模板','预约活动')+row(false,'时间类型','指定时间期间')+row(true,'活动币种','PHP')+row(true,'活动名称','–',true)+'</div>')+
-  pRow('2','活动图片','<div>'+row(false,'语系',langStr)+row(false,'活动标题','–')+row(false,'图片排序','0')+'<table class="prev-img-table" style="margin-top:8px;"><thead><tr><th>图片位置</th><th>缩图</th><th>图片 URL</th></tr></thead><tbody><tr><td style="color:#333;">PC端列表图片</td><td>未上传</td><td>–</td></tr><tr><td style="color:#333;">PC端内容图片</td><td>未上传</td><td>–</td></tr><tr><td style="color:#333;">H5端列表图片</td><td>未上传</td><td>–</td></tr><tr><td style="color:#333;">H5端内容图片</td><td>未上传</td><td>–</td></tr></tbody></table></div>')+
-  pRow('3','参与对象与名单','<div class="preview-grid">'+row(false,'充值层级',levelStr)+row(false,'指定代理','不指定')+row(false,'新会员限制','否')+row(false,'会员等级',vipStr)+row(false,'黑名单类型','–')+row(false,'用户标签','–')+'</div>')+
-  pRow('4','活动条件','<div class="preview-grid">'+row(false,'审核方式','人工审核')+row(false,'奖项等级数',awardRows.length+'级')+'</div>')+
-  pRow('5','风控设定','<div class="preview-grid">'+row(false,'同IP检测','否')+row(false,'同姓名检测','否')+row(false,'同手机号检测','否')+row(false,'同email检测','否')+row(false,'自动拒绝','–')+'</div>')+
-  pRow('6','领取条件','<div class="preview-grid">'+row(false,'领取方式',claimAuto?'自动领取':'手动领取')+row(false,'手机验证','否')+row(false,'有效天数','–')+row(false,'设备限制','无限制领奖设备')+'</div>')+
-  pRow('7','提款条件','<div class="preview-grid">'+row(false,'稽核不通过手续费','100%')+row(false,'提现稽核流水比例','0%')+row(false,'稽核条件游戏',confirmedCount?confirmedCount+'个':'–')+'</div>',true)+
-  '</div>';
+function confirmGames(){
+  confirmedSelected={};
+  gameCategories.forEach(function(_,i){confirmedSelected[i]=new Set(tempSelected[i]||[]);});
+  confirmedCount=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);
+  closeModal();renderStep();
 }
+function closeModal(){document.getElementById('gameModal').classList.add('hidden');}
 
 goStep(1);
 </script>
