@@ -166,6 +166,8 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
       <span style="font-size:10px;color:#999;transform:rotate(90deg);display:inline-block;">›</span>
     </div>
     <a href="activity_list.html" class="submenu-item">活动列表</a>
+    <a href="award_review.html" class="submenu-item">派奖审核</a>
+    <a href="activity_report.html" class="submenu-item">活动报表</a>
   </div>
   <div class="right">
     <div class="topbar">
@@ -295,11 +297,11 @@ function step1(){
   '<div class="field-row"><div class="field-label"><span class="req">*</span>活动模板：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>预约活动</option></select></div></div></div>'+
   '<div class="sec-block"><div class="sec-title">时间设定</div>'+
   '<div style="background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
-    '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">第一期：预约活动</div>'+
+    '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">第一阶段：预约活动</div>'+
     '<div class="field-row"><div class="field-label"><span class="req">*</span>进行时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"><span class="time-sep">～</span><input type="text" placeholder="结束时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"></div></div></div>'+
   '</div>'+
   '<div style="background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
-    '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">第二期：奖励领取</div>'+
+    '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">第二阶段：奖励领取</div>'+
     '<div class="field-row"><div class="field-label"><span class="req">*</span>进行时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"><span class="time-sep">～</span><input type="text" placeholder="结束时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"></div></div></div>'+
   '</div></div>'+
   '<div class="sec-block"><div class="sec-title">活动类型设置</div>'+
@@ -363,15 +365,231 @@ function step2(){
 }
 
 function renderLangTabContent(){
-  return '<div class="field-row"><div class="field-label"><span class="req">*</span>排序：</div><div class="field-ctrl"><input type="number" class="f-input" style="max-width:160px;-moz-appearance:textfield;" placeholder="请输入" value="0"></div></div>'+
-  '<div class="sec-block" style="margin-top:8px;"><div class="sec-title">列表图片</div><div style="background:#e8f0fe;border-radius:4px;padding:8px 12px;font-size:12px;color:#1677ff;margin-bottom:12px;">「活动图片」栏位将显示系统预设图片。</div>'+
-  imgBlock('1','PC端列表图片','自定义','列表图链接：（外部链接时，本栏位即为跳转内页）')+
-  imgBlock('2','H5端列表图片','750×200','列表图链接：（外部链接时，本栏位即为跳转内页）')+'</div>'+
-  '<div class="sec-block"><div class="sec-title">内容图片</div>'+
-  imgBlock('1','PC端内容图片','800×600','图片链接')+
-  imgBlock('2','H5端内容图片','600×400','图片链接')+'</div>'+
-  '<div class="sec-block"><div class="sec-title">活动描述</div><div class="field-row"><div class="field-label">活动内容：</div><div class="field-ctrl"><div class="rich-editor"><div class="rich-toolbar"><span class="rich-tool">↩</span><span class="rich-tool">↪</span><span class="rich-tool" style="font-weight:700;">B</span><span class="rich-tool" style="font-style:italic;">I</span><span class="rich-tool" style="text-decoration:underline;">U</span></div><div class="rich-body" contenteditable="true">请输入活动描述内容...</div></div></div></div></div>'+
-  '<div class="sec-block"><div class="sec-title">备注</div><textarea class="f-textarea" placeholder="请输入备注内容..."></textarea><div class="hint">此备注仅供内部参考，不会显示给用户</div></div>';
+  var gameTotal=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);
+  return (
+    // ── Banner 图（必填）──────────────────────────────────────
+    '<div class="sec-block">'+
+      '<div class="sec-title"><span class="req">*</span>Banner 图</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+        imgCard('PC 端','建议尺寸 1400×800px')+
+        imgCard('H5 端','建议尺寸 390×320px')+
+      '</div>'+
+    '</div>'+
+
+    // ── 活动页底图（必填）────────────────────────────────────
+    '<div class="sec-block">'+
+      '<div class="sec-title"><span class="req">*</span>活动页底图</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+        imgCard('PC 端','建议尺寸 1400×2300px')+
+        imgCard('H5 端','建议尺寸 390×838px')+
+      '</div>'+
+    '</div>'+
+
+    // ── 主文案底图（必填）────────────────────────────────────
+    '<div class="sec-block">'+
+      '<div class="sec-title"><span class="req">*</span>主文案底图</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+        imgCard('PC 端','建议尺寸 946×543px')+
+        imgCard('H5 端','建议尺寸 356×294px')+
+      '</div>'+
+    '</div>'+
+
+    // ── 规则弹窗图（必填）────────────────────────────────────
+    '<div class="sec-block">'+
+      '<div class="sec-title"><span class="req">*</span>规则弹窗图</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+        imgCard('PC 端','建议尺寸 356×422px')+
+        imgCard('H5 端','建议尺寸 356×422px')+
+      '</div>'+
+    '</div>'+
+
+    // ── 卡片背景图（必填）────────────────────────────────────
+    '<div class="sec-block">'+
+      '<div class="sec-title"><span class="req">*</span>卡片背景图</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+        imgCard('PC 端','建议尺寸 946×453px')+
+        imgCard('H5 端','建议尺寸 356×294px')+
+      '</div>'+
+    '</div>'+
+
+    // ── 弹窗底图（必填）──────────────────────────────────────
+    '<div class="sec-block">'+
+      '<div class="sec-title"><span class="req">*</span>弹窗底图</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+        imgCard('PC 端','建议尺寸 356×289px')+
+        imgCard('H5 端','建议尺寸 356×289px')+
+      '</div>'+
+    '</div>'+
+
+    // ── 按钮底图（必填）──────────────────────────────────────
+    '<div class="sec-block">'+
+      '<div class="sec-title"><span class="req">*</span>按钮底图</div>'+
+      '<div style="margin-bottom:12px;">'+
+        '<div style="font-size:13px;font-weight:500;color:#555;margin-bottom:8px;">可点击状态</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+          imgCard('PC 端','建议尺寸 348×104px')+
+          imgCard('H5 端','建议尺寸 140×42px')+
+        '</div>'+
+      '</div>'+
+      '<div>'+
+        '<div style="font-size:13px;font-weight:500;color:#555;margin-bottom:8px;">不可点击状态</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+          imgCard('PC 端','建议尺寸 348×104px')+
+          imgCard('H5 端','建议尺寸 140×42px')+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+
+    // ══════════════════════════════════════════════════════════
+    // 附加显示配置（非必填）
+    // ══════════════════════════════════════════════════════════
+    '<div style="margin-top:8px;margin-bottom:16px;">'+
+      '<div style="font-size:14px;font-weight:500;color:#333;margin-bottom:6px;">附加显示配置</div>'+
+      '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 16px;font-size:13px;color:#ad6800;">以下配置为非必填，按需配置</div>'+
+    '</div>'+
+
+    // ── 附加配置列表 ────────────────────────────────────────────
+    '<div id="addonList">'+renderAddonList()+'</div>'+
+    (addonBlocks.length<3
+      ?'<button id="addonAddBtn" class="btn-add" style="margin-top:4px;" onclick="addAddon()">+ 新增配置</button>'
+      :'<button id="addonAddBtn" class="btn-add" style="margin-top:4px;background:#f5f5f5;color:#bbb;cursor:not-allowed;border:1px solid #e8e8e8;" disabled>最多新增 3 个配置</button>'
+    )+''+
+
+    // ── 首页浮窗设置 + 排序（同一区块）────────────────────────
+    '<div class="sec-block" style="margin-top:20px;border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;">'+
+
+      // 首页浮窗设置
+      '<div style="margin-bottom:20px;">'+
+        '<div style="font-size:14px;font-weight:500;color:#333;margin-bottom:12px;">'+
+          '首页浮窗设置：'+
+          '<label class="radio-item" style="margin-left:12px;"><input type="radio" name="floatWin" checked> 关闭</label>'+
+          '<label class="radio-item" style="margin-left:12px;"><input type="radio" name="floatWin"> 开启</label>'+
+        '</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:8px;">'+
+          imgCardAlt('PC 图片')+
+          imgCardAlt('H5 图片')+
+        '</div>'+
+        '<div style="font-size:12px;color:#999;margin-top:6px;">图片格式：png、bmp、jpg、gif；大小限制 5MB 内</div>'+
+      '</div>'+
+
+      // 排序
+      '<div class="field-row" style="margin-bottom:0;">'+
+        '<div class="field-label">排序：</div>'+
+        '<div class="field-ctrl"><input type="number" class="f-input" style="max-width:160px;-moz-appearance:textfield;" placeholder="请输入" value="0"></div>'+
+      '</div>'+
+    '</div>'+
+
+    // ── 备注 ────────────────────────────────────────────────────
+    '<div class="sec-block"><div class="sec-title">备注</div>'+
+    '<textarea class="f-textarea" placeholder="请输入备注内容..."></textarea>'+
+    '<div class="hint">此备注仅供内部参考，不会显示给用户</div></div>'
+  );
+}
+
+// ── 附加配置資料 ────────────────────────────────────────────────
+var addonBlocks=[{name:'',link:''}]; // 預設一個空白配置
+
+function renderAddonList(){
+  if(addonBlocks.length===0) return '<div style="color:#bbb;font-size:13px;padding:8px 0;">暂无配置，点击下方按钮新增</div>';
+  return addonBlocks.map(function(block, i){
+    var isOnly=addonBlocks.length===1;
+    return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
+      // header：序号 + 删除
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">'+
+        '<span style="font-size:14px;font-weight:500;color:#1677ff;">附加配置 '+(i+1)+'</span>'+
+        (!isOnly?'<button onclick="delAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:12px;cursor:pointer;">删除</button>':'')+
+      '</div>'+
+      // 进行时间
+      '<div class="field-row">'+
+        '<div class="field-label">进行时间：</div>'+
+        '<div class="field-ctrl">'+
+          '<div class="time-range-input">'+
+            '<svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg>'+
+            '<input type="text" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'">'+
+            '<span class="time-sep">～</span>'+
+            '<input type="text" placeholder="结束时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'">'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      // 链接
+      '<div class="field-row">'+
+        '<div class="field-label">链接：</div>'+
+        '<div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入跳转链接" style="max-width:500px;" value="'+block.link+'" oninput="addonBlocks['+i+'].link=this.value"></div>'+
+      '</div>'+
+      // PC / H5 图片
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+        imgCard('PC 端','建议尺寸 946×543px')+
+        imgCard('H5 端','建议尺寸 356×294px')+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function addAddon(){
+  if(addonBlocks.length>=3)return;
+  addonBlocks.push({name:'',link:''});
+  refreshAddonList();
+}
+
+function delAddon(i){
+  addonBlocks.splice(i,1);
+  refreshAddonList();
+}
+
+function refreshAddonList(){
+  var el=document.getElementById('addonList');
+  if(el)el.innerHTML=renderAddonList();
+  // 更新新增按钮状态
+  var addBtn=document.getElementById('addonAddBtn');
+  if(addBtn){
+    if(addonBlocks.length>=3){
+      addBtn.textContent='最多新增 3 个配置';
+      addBtn.disabled=true;
+      addBtn.style.background='#f5f5f5';
+      addBtn.style.color='#bbb';
+      addBtn.style.cursor='not-allowed';
+      addBtn.style.border='1px solid #e8e8e8';
+    } else {
+      addBtn.textContent='+ 新增配置';
+      addBtn.disabled=false;
+      addBtn.style.background='#1677ff';
+      addBtn.style.color='#fff';
+      addBtn.style.cursor='pointer';
+      addBtn.style.border='none';
+    }
+  }
+}
+
+// 浮窗图片上传卡片（无尺寸标注）
+function imgCardAlt(label){
+  return '<div style="border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;">'+
+    '<div style="background:#f5f7fa;padding:8px 14px;border-bottom:1px solid #e8e8e8;">'+
+      '<span style="font-size:13px;font-weight:500;color:#333;">'+label+'</span>'+
+    '</div>'+
+    '<div style="padding:14px;">'+
+      '<div style="min-height:100px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;">'+
+        '<svg viewBox="0 0 24 24" fill="none" width="28" height="28"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>'+
+        '<span style="font-size:12px;color:#bbb;">点击上传图片</span>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+// 单张图片上传卡片（仅上传框，无 URL 输入）
+function imgCard(platform, sizeHint){
+  return '<div style="border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;">'+
+    '<div style="background:#f5f7fa;padding:8px 14px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;">'+
+      '<span style="font-size:13px;font-weight:500;color:#333;">'+platform+'</span>'+
+      '<span style="font-size:11px;color:#bbb;">'+sizeHint+'</span>'+
+    '</div>'+
+    '<div style="padding:14px;">'+
+      '<div style="min-height:110px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;">'+
+        '<svg viewBox="0 0 24 24" fill="none" width="28" height="28"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>'+
+        '<span style="font-size:12px;color:#bbb;">点击上传图片</span>'+
+        '<span style="font-size:11px;color:#ccc;">PNG / JPG，≤ 2MB</span>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
 }
 function imgBlock(num,title,size,link){
   return '<div style="margin-bottom:16px;"><div class="img-section-title"><span class="img-num">'+num+'</span>'+title+'</div><div style="font-size:12px;color:#999;margin-bottom:8px;">尺寸：'+size+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;"><div class="img-upload-box"><button class="upload-btn">点击上传自定义图片</button></div><div><div style="font-size:13px;margin-bottom:6px;">'+link+'</div><input type="text" class="f-input" placeholder="请输入外部链接网址"></div></div></div>';
@@ -568,6 +786,7 @@ function step6(){
   var levelStr=selectedLevels.length?selectedLevels.map(function(v){var o=levelOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、'):'–';
   var vipStr=selectedVips.length?selectedVips.map(function(v){var o=vipOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、'):'–';
   var total=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);
+  var addonCount=addonBlocks.length;
   function row(req,k,v,red){return '<div class="preview-row"><span class="pk '+(req?'req':'')+'">'+(k)+'：</span><span class="pv '+(red?'red':v==='–'?'empty':'')+'">'+v+'</span></div>';}
   function pRow(num,title,body,last){return '<div style="display:grid;grid-template-columns:130px 1fr;border-bottom:'+(last?'none':'0.5px solid #e8e8e8')+'"><div style="padding:14px 16px;border-right:0.5px solid #e8e8e8;"><div class="preview-step-title"><div class="preview-snum">'+num+'</div>'+title+'</div></div><div style="padding:14px 16px;">'+body+'</div></div>';}
   return '<div class="step-desc">请确认以下活动配置信息，确认无误后点击提交按钮</div>'+
@@ -576,19 +795,26 @@ function step6(){
   '<div style="display:grid;grid-template-columns:130px 1fr;background:#f5f7fa;border-bottom:0.5px solid #e8e8e8;"><div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;border-right:0.5px solid #e8e8e8;">步骤</div><div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;">相关字段</div></div>'+
   pRow('1','活动模板设置',
     '<div class="preview-grid">'+
-    row(false,'活动ID','–')+row(true,'模板类型','–')+
-    row(true,'活动状态','关闭')+row(true,'第一期时间','–',true)+
-    row(true,'活动模板','预约活动')+row(true,'第二期时间','–',true)+
-    row(true,'活动币种','PHP')+row(true,'活动名称','–',true)+
+    row(false,'活动ID','–')+row(true,'模板类型','预约活动')+
+    row(true,'活动状态','关闭')+row(true,'活动币种','PHP')+
+    row(true,'活动名称','–',true)+row(true,'第一阶段时间','–',true)+
+    row(true,'第二阶段时间','–',true)+
     '</div>')+
   pRow('2','活动图片',
-    '<div>'+row(false,'语系',langStr)+row(false,'活动标题','–')+row(false,'图片排序','0')+
-    '<table class="prev-img-table" style="margin-top:8px;"><thead><tr><th>图片位置</th><th>缩图</th><th>图片 URL</th></tr></thead><tbody>'+
-    '<tr><td style="color:#333;">PC端列表图片</td><td>未上传</td><td>–</td></tr>'+
-    '<tr><td style="color:#333;">PC端内容图片</td><td>未上传</td><td>–</td></tr>'+
-    '<tr><td style="color:#333;">H5端列表图片</td><td>未上传</td><td>–</td></tr>'+
-    '<tr><td style="color:#333;">H5端内容图片</td><td>未上传</td><td>–</td></tr>'+
-    '</tbody></table></div>')+
+    '<div>'+
+    row(false,'语系',langStr)+row(false,'活动标题','–')+
+    '<table class="prev-img-table" style="margin-top:8px;margin-bottom:8px;">'+
+    '<thead><tr><th>图片类型</th><th>PC 端</th><th>H5 端</th></tr></thead>'+
+    '<tbody>'+
+    '<tr><td style="color:#333;text-align:left;padding-left:12px;">Banner 图</td><td>未上传</td><td>未上传</td></tr>'+
+    '<tr><td style="color:#333;text-align:left;padding-left:12px;">背景图</td><td>未上传</td><td>未上传</td></tr>'+
+    '<tr><td style="color:#333;text-align:left;padding-left:12px;">主活动图</td><td>未上传</td><td>未上传</td></tr>'+
+    '<tr><td style="color:#333;text-align:left;padding-left:12px;">规则图</td><td>未上传</td><td>未上传</td></tr>'+
+    '</tbody></table>'+
+    row(false,'附加显示配置',addonCount?addonCount+'个':'–')+
+    row(false,'参与活动游戏',total?total+'个':'–')+
+    row(false,'排序','0')+
+    '</div>')+
   pRow('3','参与对象与名单',
     '<div class="preview-grid">'+
     row(false,'充值层级',levelStr)+row(false,'指定代理','不指定')+
@@ -601,7 +827,7 @@ function step6(){
     row(false,'领取条件','有效投注达到 – 次奖励，上限 – 次')+
     row(false,'奖项配置',awardRows.length+'个等级')+
     row(false,'领取方式',claimAuto?'自动领取':'手动领取')+
-    row(false,'有效天数',claimAuto?'–':'–')+
+    row(false,'有效天数','–')+
     row(false,'已验证手机号','否')+
     row(false,'限制使用设备','无限制领奖设备')+
     row(false,'提现稽核流水比例','0%')+
