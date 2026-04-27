@@ -290,7 +290,7 @@ function renderRows(){
     return;
   }
   tbody.innerHTML=filtered.map(function(r,i){
-    var stColor=r.status==='未审核'?'#fa8c16':r.status==='审核通过'?'#52c41a':'#ff4d4f';
+    var stColor=r.status==='未审核'?'#1677ff':r.status==='审核通过'?'#52c41a':'#ff4d4f';
     var isAuto=r.reviewer==='system_auto'||r.reviewer==='auto_review';
     var reviewerHtml=r.reviewer==='—'
       ?'<span style="color:#bbb">—</span>'
