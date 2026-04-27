@@ -355,14 +355,18 @@ var detailData = [];
     var applyTime = new Date(d); applyTime.setHours(Math.floor(Math.random()*24),Math.floor(Math.random()*60),Math.floor(Math.random()*60));
     var reviewTime = new Date(applyTime); reviewTime.setHours(reviewTime.getHours()+Math.floor(Math.random()*6)+1);
     var st = statuses2[i % statuses2.length];
+    var at2 = awardTypes[i % awardTypes.length];
+    var amtPool2 = [500,300,1000,88,200,750,150,400];
+    var isAmt2 = (at2==='礼金'||at2==='优惠券');
     detailData.push({
       date: fmtDate(d),
       member: members[i % members.length],
       actId: actIds[ni],
       actType: actTypes[ni],
       actName: actNames[ni],
-      awardType: awardTypes[i % awardTypes.length],
-      awardName: genAwardContent(awardTypes[i % awardTypes.length], i),
+      awardType: at2,
+      awardName: genAwardContent(at2, i),
+      amount: isAmt2 ? amtPool2[i % amtPool2.length] : null,
       applyTime: fmtTime(applyTime),
       reviewTime: (st==='待审核'?'—':fmtTime(reviewTime)),
       status: st
@@ -431,16 +435,16 @@ function r1Draw(){
       '<td>'+r.awardType+'</td>'+
       '<td>'+r.awardName+'</td>'+
       '<td>'+r.times+'</td>'+
-      '<td>'+(r.amount!=null?'<strong>'+r.amount.toLocaleString('en',{minimumFractionDigits:2})+'</strong>':dash)+'</td>'+
+      '<td style="color:#ff4d4f;">'+(r.amount!=null?'<strong>'+r.amount.toLocaleString('en',{minimumFractionDigits:2})+'</strong>':dash)+'</td>'+
       '<td style="color:#1677ff;">'+(r.pts!=null?r.pts.toLocaleString('en'):dash)+'</td>'+
       '<td style="color:#52c41a;">'+(r.freeBet!=null?r.freeBet:dash)+'</td>'+
     '</tr>';
   }).join('') +
   '<tr class="sum-row">'+
     '<td class="left" colspan="6">合计</td>'+
-    '<td>'+totalAmt.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2})+'</td>'+
-    '<td>'+totalPts.toLocaleString('en')+'</td>'+
-    '<td>'+totalFree+'</td>'+
+    '<td style="color:#ff4d4f;">'+totalAmt.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2})+'</td>'+
+    '<td style="color:#1677ff;">'+totalPts.toLocaleString('en')+'</td>'+
+    '<td style="color:#52c41a;">'+totalFree+'</td>'+
   '</tr>';
 
   renderPager('r1Page', r1Page, Math.ceil(r1Filtered.length/r1PageSize), r1Filtered.length, function(p){r1Page=p;r1Draw();});
@@ -450,7 +454,7 @@ function r1Draw(){
 // Tab 2：活动数据统计
 // ══════════════════════════════════════════════════════
 var r2Page=1, r2PageSize=10, r2Filtered=detailData;
-var stColor={'待审核':'#fa8c16','已通过':'#52c41a','已拒绝':'#ff4d4f'};
+var stColor={'待审核':'#1677ff','已通过':'#52c41a','已拒绝':'#ff4d4f'};
 
 function renderTab2(){
   var mem   = document.getElementById('r2Member').value.trim().toLowerCase();
