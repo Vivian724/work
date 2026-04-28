@@ -231,9 +231,9 @@ let selectedLangs=['default'], activeLangTab='default', langOpen=false;
 
 // ── 其他多选 ────────────────────────────────────────────────────
 const levelOptions=[{val:'default',label:'默认层'},{val:'1',label:'第一层'},{val:'2',label:'第二层'},{val:'3',label:'第三层'},{val:'4',label:'第四层'},{val:'5',label:'第五层'},{val:'internal',label:'内部充值'}];
-let selectedLevels=[],levelOpen=false;
+let selectedLevels=levelOptions.map(function(o){return o.val;}),levelOpen=false;
 const vipOptions=Array.from({length:11},(_,i)=>({val:'vip'+i,label:'VIP'+i}));
-let selectedVips=[],vipOpen=false;
+let selectedVips=vipOptions.map(function(o){return o.val;}),vipOpen=false;
 
 // ── 游戏 ────────────────────────────────────────────────────────
 const gameCategories=[
@@ -385,9 +385,9 @@ function renderLangTabContent(){
       '</div>'+
     '</div>'+
 
-    // ── 主文案底图（必填）────────────────────────────────────
+    // ── 文案底图（必填）──────────────────────────────────────
     '<div class="sec-block">'+
-      '<div class="sec-title"><span class="req">*</span>主文案底图</div>'+
+      '<div class="sec-title"><span class="req">*</span>文案底图</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
         imgCard('PC 端','建议尺寸 946×543px')+
         imgCard('H5 端','建议尺寸 356×294px')+
@@ -400,15 +400,6 @@ function renderLangTabContent(){
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
         imgCard('PC 端','建议尺寸 356×422px')+
         imgCard('H5 端','建议尺寸 356×422px')+
-      '</div>'+
-    '</div>'+
-
-    // ── 卡片背景图（必填）────────────────────────────────────
-    '<div class="sec-block">'+
-      '<div class="sec-title"><span class="req">*</span>卡片背景图</div>'+
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
-        imgCard('PC 端','建议尺寸 946×453px')+
-        imgCard('H5 端','建议尺寸 356×294px')+
       '</div>'+
     '</div>'+
 
@@ -487,10 +478,10 @@ function renderLangTabContent(){
 }
 
 // ── 附加配置資料 ────────────────────────────────────────────────
-var addonBlocks=[{name:'',link:''}]; // 預設一個空白配置
+var addonBlocks=[]; // 預設不顯示，點新增配置才展開
 
 function renderAddonList(){
-  if(addonBlocks.length===0) return '<div style="color:#bbb;font-size:13px;padding:8px 0;">暂无配置，点击下方按钮新增</div>';
+  if(addonBlocks.length===0) return '';
   return addonBlocks.map(function(block, i){
     var isOnly=addonBlocks.length===1;
     return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
@@ -661,8 +652,8 @@ function step4(){
   // ── 审核方式 ──
   '<div class="sec-block"><div class="sec-title">审核方式</div>'+
   '<div class="radio-group" style="margin-bottom:16px;">'+
-    '<label class="radio-item"><input type="radio" name="audit" checked> 人工审核</label>'+
-    '<label class="radio-item"><input type="radio" name="audit"> 自动审核</label>'+
+    '<label class="radio-item"><input type="radio" name="audit"> 人工审核</label>'+
+    '<label class="radio-item"><input type="radio" name="audit" checked> 自动审核</label>'+
   '</div></div>'+
 
   // ── 领取条件（图一）──
@@ -808,9 +799,8 @@ function step6(){
     '<tbody>'+
     '<tr><td style="color:#333;text-align:left;padding-left:12px;">Banner 图</td><td>未上传</td><td>未上传</td></tr>'+
     '<tr><td style="color:#333;text-align:left;padding-left:12px;">活动页底图</td><td>未上传</td><td>未上传</td></tr>'+
-    '<tr><td style="color:#333;text-align:left;padding-left:12px;">主文案底图</td><td>未上传</td><td>未上传</td></tr>'+
+    '<tr><td style="color:#333;text-align:left;padding-left:12px;">文案底图</td><td>未上传</td><td>未上传</td></tr>'+
     '<tr><td style="color:#333;text-align:left;padding-left:12px;">规则弹窗图</td><td>未上传</td><td>未上传</td></tr>'+
-    '<tr><td style="color:#333;text-align:left;padding-left:12px;">卡片背景图</td><td>未上传</td><td>未上传</td></tr>'+
     '<tr><td style="color:#333;text-align:left;padding-left:12px;">弹窗底图</td><td>未上传</td><td>未上传</td></tr>'+
     '<tr><td style="color:#333;text-align:left;padding-left:12px;">按钮底图</td><td>未上传</td><td>未上传</td></tr>'+
     '</tbody></table>'+
@@ -826,7 +816,7 @@ function step6(){
     '</div>')+
   pRow('4','活动条件',
     '<div class="preview-grid">'+
-    row(false,'审核方式','人工审核')+
+    row(false,'审核方式','自动审核')+
     row(false,'领取条件','有效投注达到 – 次奖励，上限 – 次')+
     row(false,'奖项配置',awardRows.length+'个等级')+
     row(false,'领取方式',claimAuto?'自动领取':'手动领取')+

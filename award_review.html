@@ -145,7 +145,7 @@ tr:hover td{background:#fafafa;}
           <span class="fl">状态：</span>
           <select class="fi-select" id="fStatus">
             <option value="" selected>全部</option>
-            <option value="未审核">未审核</option>
+            <option value="待审核">待审核</option>
             <option value="审核通过">审核通过</option>
             <option value="审核不通过">审核不通过</option>
           </select>
@@ -237,17 +237,17 @@ tr:hover td{background:#fafafa;}
 </div>
 
 <script>
-var reviewerPool=['vivianadmin','system_auto','auto_review','sysadmin'];
+var reviewerPool=['vivianadmin','自动审核','sysadmin'];
 
 var rawData=[
-  {id:50005,account:'danny001',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 500.00',activityName:'acewin预约活动',status:'未审核',createTime:'26/04/07 10:22:15',reviewer:'—',reviewTime:'—',remark:'—'},
-  {id:50005,account:'player888',activityType:'预约活动',rewardType:'积分',rewardAmount:'200 pts',activityName:'vp预约活动',status:'未审核',createTime:'26/04/08 14:03:44',reviewer:'—',reviewTime:'—',remark:'—'},
-  {id:50006,account:'vivian123',activityType:'预约活动',rewardType:'免费投注券',rewardAmount:'×3 张',activityName:'春季预约活动',status:'审核通过',createTime:'26/04/08 16:55:02',reviewer:'vivianadmin',reviewTime:'26/04/10 09:00:12',remark:'正常用户'},
-  {id:50007,account:'spring007',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 1,000.00',activityName:'acewin预约活动',status:'未审核',createTime:'26/04/09 08:30:00',reviewer:'—',reviewTime:'—',remark:'—'},
-  {id:50007,account:'tester99',activityType:'充值活动',rewardType:'优惠券',rewardAmount:'PHP 88.00',activityName:'PHP充值春季礼',status:'审核不通过',createTime:'26/04/09 12:11:33',reviewer:'system_auto',reviewTime:'26/04/10 10:05:44',remark:'疑似异常操作'},
-  {id:50008,account:'april_ph',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 300.00',activityName:'vp预约活动',status:'未审核',createTime:'26/04/10 09:00:55',reviewer:'—',reviewTime:'—',remark:'—'},
-  {id:50008,account:'lucky88',activityType:'预约活动',rewardType:'免费旋转券',rewardAmount:'×5 张',activityName:'春季预约活动',status:'未审核',createTime:'26/04/10 15:44:18',reviewer:'—',reviewTime:'—',remark:'—'},
-  {id:50006,account:'member456',activityType:'充值活动',rewardType:'积分',rewardAmount:'500 pts',activityName:'PHP充值春季礼',status:'审核通过',createTime:'26/04/11 10:22:00',reviewer:'auto_review',reviewTime:'26/04/12 14:00:00',remark:'首次参与'},
+  {id:50005,account:'danny001',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 500.00',activityName:'acewin预约活动',status:'待审核',createTime:'26/04/28 10:22:15',reviewer:'—',reviewTime:'—',remark:'—'},
+  {id:50005,account:'player888',activityType:'预约活动',rewardType:'积分',rewardAmount:'200 pts',activityName:'vp预约活动',status:'待审核',createTime:'26/04/28 14:03:44',reviewer:'—',reviewTime:'—',remark:'—'},
+  {id:50006,account:'vivian123',activityType:'预约活动',rewardType:'免费投注券',rewardAmount:'×3 张',activityName:'春季预约活动',status:'审核通过',createTime:'26/04/28 16:55:02',reviewer:'vivianadmin',reviewTime:'26/04/28 09:00:12',remark:'正常用户'},
+  {id:50007,account:'spring007',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 1,000.00',activityName:'acewin预约活动',status:'待审核',createTime:'26/04/28 08:30:00',reviewer:'—',reviewTime:'—',remark:'—'},
+  {id:50007,account:'tester99',activityType:'充值活动',rewardType:'优惠券',rewardAmount:'PHP 88.00',activityName:'PHP充值春季礼',status:'审核不通过',createTime:'26/04/28 12:11:33',reviewer:'自动审核',reviewTime:'26/04/28 10:05:44',remark:'重复IP'},
+  {id:50008,account:'april_ph',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 300.00',activityName:'vp预约活动',status:'待审核',createTime:'26/04/28 09:00:55',reviewer:'—',reviewTime:'—',remark:'—'},
+  {id:50008,account:'lucky88',activityType:'预约活动',rewardType:'免费旋转券',rewardAmount:'×5 张',activityName:'春季预约活动',status:'待审核',createTime:'26/04/28 15:44:18',reviewer:'—',reviewTime:'—',remark:'—'},
+  {id:50006,account:'member456',activityType:'充值活动',rewardType:'积分',rewardAmount:'500 pts',activityName:'PHP充值春季礼',status:'审核通过',createTime:'26/04/28 10:22:00',reviewer:'自动审核',reviewTime:'26/04/28 14:00:00',remark:'重复手机号'},
 ];
 
 var filtered=[...rawData];
@@ -290,13 +290,13 @@ function renderRows(){
     return;
   }
   tbody.innerHTML=filtered.map(function(r,i){
-    var stColor=r.status==='未审核'?'#1677ff':r.status==='审核通过'?'#52c41a':'#ff4d4f';
-    var isAuto=r.reviewer==='system_auto'||r.reviewer==='auto_review';
+    var stColor=r.status==='待审核'?'#fa8c16':r.status==='审核通过'?'#52c41a':'#ff4d4f';
+    var isAuto=r.reviewer==='自动审核';
     var reviewerHtml=r.reviewer==='—'
       ?'<span style="color:#bbb">—</span>'
-      :'<span style="color:'+(isAuto?'#1677ff':'#333')+';">'+r.reviewer+(isAuto?' <span style="font-size:10px;background:#e6f4ff;color:#1677ff;padding:1px 4px;border-radius:2px;">自动</span>':'')+'</span>';
+      :'<span style="color:#333;">'+r.reviewer+'</span>';
     var ops='<span style="color:#bbb;font-size:12px;">—</span>';
-    if(r.status==='未审核'){
+    if(r.status==='待审核'){
       ops='<div class="acts-row">'+
         '<button class="alink" onclick="openPass('+i+')">审核通过</button>'+
         '<button class="alink" onclick="openReject('+i+')">审核驳回</button>'+
@@ -352,6 +352,12 @@ function confirmAction(type){
 }
 
 document.getElementById('fStatus').value='';
+(function(){
+  var t=new Date();
+  var today=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+  var ds=document.getElementById('fDateStart'); ds.value=today; ds.type='date';
+  var de=document.getElementById('fDateEnd');   de.value=today; de.type='date';
+})();
 doFilter();
 </script>
 </body>

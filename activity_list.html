@@ -93,6 +93,19 @@ tr:hover td{background:#fafafa;}
 .url-input{width:100%;margin-top:8px;height:28px;border:1px solid #e8e8e8;border-radius:4px;padding:0 8px;font-size:12px;color:#333;outline:none;background:#fff;}
 .url-input::placeholder{color:#ccc;font-size:11px;}
 .url-input:focus{border-color:#1677ff;}
+.lang-tabs{display:flex;border-bottom:1px solid #e8e8e8;margin-bottom:16px;}
+.lang-tab{padding:8px 16px;font-size:13px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.lang-tab.active{color:#1677ff;border-bottom-color:#1677ff;}
+.sec-title{font-size:14px;font-weight:500;color:#1677ff;border-left:3px solid #1677ff;padding-left:8px;margin-bottom:14px;}
+.sec-block{margin-bottom:20px;}
+.f-textarea{border:1px solid #d9d9d9;border-radius:4px;padding:8px 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;resize:vertical;min-height:80px;}
+.f-textarea:focus{border-color:#1677ff;}
+.btn-add{height:30px;padding:0 16px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;margin-bottom:10px;}
+.hint-text{font-size:12px;color:#999;margin-top:4px;}
+.img-card{border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;}
+.img-card-head{background:#f5f7fa;padding:8px 14px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;}
+.img-dashed{cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;padding:16px 12px;}
+.img-dashed:hover{border-color:#1677ff;background:#f0f7ff;}
 .hidden{display:none!important;}
 </style>
 </head>
@@ -209,14 +222,157 @@ const rawData=[
 ];
 let filtered=[...rawData],sortKey='',sortDir=1;
 
+var modalAddonBlocks=[],modalActiveLang='',modalLangs=[];
+
+function imgCard(platform,sizeHint){
+  return '<div class="img-card">'+
+    '<div class="img-card-head">'+
+      '<span style="font-size:13px;font-weight:500;color:#333;">'+platform+'</span>'+
+      (sizeHint?'<span style="font-size:11px;color:#bbb;">'+sizeHint+'</span>':'')+
+    '</div>'+
+    '<div style="padding:12px;">'+
+      '<div class="img-dashed">'+
+        '<svg viewBox="0 0 24 24" fill="none" width="26" height="26"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>'+
+        '<span style="font-size:12px;color:#bbb;">点击上传图片</span>'+
+        '<span style="font-size:11px;color:#ccc;">PNG / JPG，≤ 2MB</span>'+
+      '</div>'+
+      '<input type="text" class="url-input" placeholder="图片 URL" style="margin-top:8px;">'+
+    '</div>'+
+  '</div>';
+}
+function imgCardAlt(label){
+  return '<div class="img-card">'+
+    '<div class="img-card-head">'+
+      '<span style="font-size:13px;font-weight:500;color:#333;">'+label+'</span>'+
+    '</div>'+
+    '<div style="padding:12px;">'+
+      '<div class="img-dashed" style="min-height:70px;">'+
+        '<svg viewBox="0 0 24 24" fill="none" width="26" height="26"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>'+
+        '<span style="font-size:12px;color:#bbb;">点击上传图片</span>'+
+      '</div>'+
+      '<input type="text" class="url-input" placeholder="图片 URL" style="margin-top:8px;">'+
+    '</div>'+
+  '</div>';
+}
+function renderModalAddonList(){
+  if(modalAddonBlocks.length===0)return '';
+  return modalAddonBlocks.map(function(block,i){
+    return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-bottom:12px;">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'+
+        '<span style="font-size:14px;font-weight:500;color:#1677ff;">附加配置 '+(i+1)+'</span>'+
+        '<button onclick="delModalAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:12px;cursor:pointer;">删除</button>'+
+      '</div>'+
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+        '<span style="font-size:13px;color:#333;flex-shrink:0;">链接：</span>'+
+        '<input type="text" style="flex:1;height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;outline:none;" placeholder="请输入跳转链接" value="'+block.link+'" oninput="modalAddonBlocks['+i+'].link=this.value">'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 946×543px')+imgCard('H5 端','建议尺寸 356×294px')+'</div>'+
+    '</div>';
+  }).join('');
+}
+function addModalAddon(){
+  if(modalAddonBlocks.length>=3)return;
+  modalAddonBlocks.push({link:''});
+  refreshModalAddonList();
+}
+function delModalAddon(i){
+  modalAddonBlocks.splice(i,1);
+  refreshModalAddonList();
+}
+function refreshModalAddonList(){
+  var el=document.getElementById('modalAddonList');
+  if(el)el.innerHTML=renderModalAddonList();
+  var btn=document.getElementById('modalAddonAddBtn');
+  if(btn){
+    if(modalAddonBlocks.length>=3){
+      btn.textContent='最多新增 3 个配置';btn.disabled=true;
+      btn.style.background='#f5f5f5';btn.style.color='#bbb';btn.style.border='1px solid #e8e8e8';btn.style.cursor='not-allowed';
+    }else{
+      btn.textContent='+ 新增配置';btn.disabled=false;
+      btn.style.background='#1677ff';btn.style.color='#fff';btn.style.border='none';btn.style.cursor='pointer';
+    }
+  }
+}
+function renderModalLangContent(){
+  return '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>Banner 图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 1400×800px')+imgCard('H5 端','建议尺寸 390×320px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>活动页底图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 1400×2300px')+imgCard('H5 端','建议尺寸 390×838px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>文案底图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 946×543px')+imgCard('H5 端','建议尺寸 356×294px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>规则弹窗图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 356×422px')+imgCard('H5 端','建议尺寸 356×422px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>弹窗底图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 356×289px')+imgCard('H5 端','建议尺寸 356×289px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>按钮底图</div>'+
+    '<div style="margin-bottom:10px;">'+
+      '<div style="font-size:13px;font-weight:500;color:#555;margin-bottom:8px;">可点击状态</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 348×104px')+imgCard('H5 端','建议尺寸 140×42px')+'</div>'+
+    '</div>'+
+    '<div>'+
+      '<div style="font-size:13px;font-weight:500;color:#555;margin-bottom:8px;">不可点击状态</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 348×104px')+imgCard('H5 端','建议尺寸 140×42px')+'</div>'+
+    '</div>'+
+  '</div>'+
+  '<div style="margin-bottom:12px;">'+
+    '<div style="font-size:14px;font-weight:500;color:#333;margin-bottom:6px;">附加显示配置</div>'+
+    '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 14px;font-size:13px;color:#ad6800;margin-bottom:12px;">以下配置为非必填，按需配置</div>'+
+  '</div>'+
+  '<div id="modalAddonList">'+renderModalAddonList()+'</div>'+
+  (modalAddonBlocks.length<3
+    ?'<button id="modalAddonAddBtn" class="btn-add" onclick="addModalAddon()">+ 新增配置</button>'
+    :'<button id="modalAddonAddBtn" class="btn-add" style="background:#f5f5f5;color:#bbb;border:1px solid #e8e8e8;cursor:not-allowed;" disabled>最多新增 3 个配置</button>'
+  )+
+  '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-top:16px;margin-bottom:20px;">'+
+    '<div style="margin-bottom:14px;">'+
+      '<div style="font-size:14px;font-weight:500;color:#333;margin-bottom:10px;">首页浮窗设置：'+
+        '<label style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="mFloatWin" checked> 关闭</label>'+
+        '<label style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="mFloatWin"> 开启</label>'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px;">'+imgCardAlt('PC 图片')+imgCardAlt('H5 图片')+'</div>'+
+      '<div style="font-size:12px;color:#999;">图片格式：png、bmp、jpg、gif；大小限制 5MB 内</div>'+
+    '</div>'+
+    '<div style="display:flex;align-items:center;gap:10px;">'+
+      '<span style="font-size:13px;color:#333;flex-shrink:0;">排序：</span>'+
+      '<input type="number" style="height:34px;width:120px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;outline:none;-moz-appearance:textfield;" placeholder="请输入" value="0">'+
+    '</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title">备注</div>'+
+    '<textarea class="f-textarea" placeholder="请输入备注内容..."></textarea>'+
+    '<div class="hint-text">此备注仅供内部参考，不会显示给用户</div>'+
+  '</div>';
+}
+function switchModalLangTab(v){
+  modalActiveLang=v;
+  var tabHtml=modalLangs.map(function(lang){
+    var label=langMap[lang]||lang;
+    return '<div class="lang-tab '+(lang===v?'active':'')+'" onclick="switchModalLangTab(\''+lang+'\')">'+label+'</div>';
+  }).join('');
+  document.getElementById('modalTabBar').innerHTML=tabHtml;
+  document.getElementById('modalLangContent').innerHTML=renderModalLangContent();
+}
+
 function openPreview(id){
   var r=rawData.find(function(x){return x.id===id;});
   if(!r)return;
-  var cols=['PC端列表图片','PC端内容图片','H5端列表图片','H5端内容图片'];
-  var rows=r.langs.map(function(lang){
-    return '<tr><td class="lang-cell">'+(langMap[lang]||lang)+'</td>'+cols.map(function(){
-      return '<td><div class="upload-box"><svg viewBox="0 0 24 24" fill="none" width="26" height="26"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg><div class="upload-text">上传图片</div><div class="upload-hint">PNG/JPG ≤ 1MB</div></div><input type="text" class="url-input" placeholder="图片 URL"></td>';
-    }).join('')+'</tr>';
+  modalAddonBlocks=[];
+  modalLangs=r.langs||[];
+  modalActiveLang=modalLangs[0]||'';
+  var tabHtml=modalLangs.map(function(lang){
+    var label=langMap[lang]||lang;
+    return '<div class="lang-tab '+(lang===modalActiveLang?'active':'')+'" onclick="switchModalLangTab(\''+lang+'\')">'+label+'</div>';
   }).join('');
   document.getElementById('modalBody').innerHTML=
     '<div class="info-grid">'+
@@ -227,7 +383,8 @@ function openPreview(id){
     '<div class="info-item"><div class="info-label">模板类型</div><div class="info-value">'+r.template+'</div></div>'+
     '<div class="info-item"><div class="info-label">币种</div><div class="info-value">'+r.currency+'</div></div>'+
     '</div>'+
-    '<table class="img-table"><thead><tr><th style="width:80px;">语系</th>'+cols.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr></thead><tbody>'+rows+'</tbody></table>';
+    '<div class="lang-tabs" id="modalTabBar">'+tabHtml+'</div>'+
+    '<div id="modalLangContent">'+renderModalLangContent()+'</div>';
   document.getElementById('previewModal').classList.remove('hidden');
 }
 
