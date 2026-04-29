@@ -436,7 +436,7 @@ function renderRows(){
     '<td>'+r.id+'</td>'+
     '<td>'+r.sort+'</td>'+
     '<td class="'+(r.status?'status-on':'status-off')+'">'+(r.status?'开启':'关闭')+'</td>'+
-    '<td style="font-size:11px;line-height:1.7;">'+r.timeStart+'<br>至 '+r.timeEnd+'</td>'+
+    '<td style="font-size:11px;white-space:nowrap;">'+r.timeStart+'~'+r.timeEnd+'</td>'+
     '<td>'+r.currency+'</td>'+
     '<td style="font-size:11px;">'+r.lang+'</td>'+
     '<td>'+r.template+'</td>'+
