@@ -624,13 +624,49 @@ function step3(){
   return '<div class="step-desc">设置活动的参与对象与黑名单规则</div>'+
   '<div class="sec-block"><div class="sec-title">参与对象设置</div>'+
   '<div class="field-row"><div class="field-label">1. 充值层级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="levelWrap" onclick="toggleLevelDrop(event)">'+lvlHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(levelOpen?'':'hidden')+'" id="levelDropdown">'+lvlDd+'</div></div></div>'+
-  '<div class="field-row"><div class="field-label">2. 指定代理：</div><div class="field-ctrl"><div class="radio-group" style="flex-direction:column;align-items:flex-start;gap:8px;"><label class="radio-item"><input type="radio" name="agent" checked> 不指定</label><label class="radio-item"><input type="radio" name="agent"> 指定代理线</label><label class="radio-item"><input type="radio" name="agent"> 指定代理直属会员</label></div></div></div>'+
+  '<div class="field-row"><div class="field-label">2. 指定代理：</div><div class="field-ctrl">'+
+  '<div class="radio-group" style="flex-direction:column;align-items:flex-start;gap:10px;">'+
+    '<label class="radio-item"><input type="radio" name="agent" value="none" checked onchange="setAgentMode(\'none\')"> 不指定</label>'+
+    '<div>'+
+      '<label class="radio-item"><input type="radio" name="agent" value="line" onchange="setAgentMode(\'line\')"> 指定代理线</label>'+
+      '<div id="agentLineDrop" class="hidden" style="margin-top:8px;margin-left:4px;">'+
+        '<select class="f-select" style="max-width:320px;">'+
+          '<option value="">请选择代理线</option>'+
+          '<option>代理线A</option>'+
+          '<option>代理线B</option>'+
+          '<option>代理线C</option>'+
+          '<option>VIP专属线</option>'+
+          '<option>dannyagentsub线</option>'+
+        '</select>'+
+      '</div>'+
+    '</div>'+
+    '<div>'+
+      '<label class="radio-item"><input type="radio" name="agent" value="member" onchange="setAgentMode(\'member\')"> 指定代理直属会员</label>'+
+      '<div id="agentMemberDrop" class="hidden" style="margin-top:8px;margin-left:4px;">'+
+        '<select class="f-select" style="max-width:320px;">'+
+          '<option value="">请选择代理</option>'+
+          '<option>dannyagentsub</option>'+
+          '<option>agent001</option>'+
+          '<option>agent002</option>'+
+          '<option>proagent88</option>'+
+          '<option>vipagent_ph</option>'+
+        '</select>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+
+'</div></div>'+
   '<div class="field-row"><div class="field-label">3. 新会员限制：</div><div class="field-ctrl"><div style="display:flex;align-items:center;gap:10px;"><div class="toggle" onclick="toggle(this)"></div><span style="font-size:13px;">活动开始后注册的新会员</span></div></div></div>'+
   '<div class="field-row"><div class="field-label">4. 会员等级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="vipWrap" onclick="toggleVipDrop(event)">'+vipHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(vipOpen?'':'hidden')+'" id="vipDropdown">'+vipDd+'</div></div></div>'+
   '<div class="field-row"><div class="field-label">5. 用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>'+
   '<div class="sec-block"><div class="sec-title">黑名单设置</div>'+
   '<div class="field-row"><div class="field-label">黑名单限制类型：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择黑名单限制类型</option><option>类型一</option></select></div></div>'+
   '<div class="field-row"><div class="field-label">用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>';
+}
+function setAgentMode(v){
+  var lineDrop=document.getElementById('agentLineDrop');
+  var memberDrop=document.getElementById('agentMemberDrop');
+  if(lineDrop)lineDrop.classList.toggle('hidden',v!=='line');
+  if(memberDrop)memberDrop.classList.toggle('hidden',v!=='member');
 }
 function setupDrops(){setTimeout(function(){document.addEventListener('click',function h(e){var ch=false;if(!e.target.closest('#levelWrap')&&!e.target.closest('#levelDropdown')&&levelOpen){levelOpen=false;ch=true;}if(!e.target.closest('#vipWrap')&&!e.target.closest('#vipDropdown')&&vipOpen){vipOpen=false;ch=true;}if(ch){document.removeEventListener('click',h);renderStep();setupDrops();}});},0);}
 function toggleLevelDrop(e){e.stopPropagation();levelOpen=!levelOpen;vipOpen=false;renderStep();setupDrops();}
