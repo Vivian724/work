@@ -239,15 +239,16 @@ tr:hover td{background:#fafafa;}
 <script>
 var reviewerPool=['vivianadmin','自动审核','sysadmin'];
 
+var _td=(function(){var t=new Date();var yy=String(t.getFullYear()).slice(2);var mm=String(t.getMonth()+1).padStart(2,'0');var dd=String(t.getDate()).padStart(2,'0');return yy+'/'+mm+'/'+dd;})();
 var rawData=[
-  {id:50005,account:'danny001',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 500.00',activityName:'acewin预约活动',status:'待审核',createTime:'26/04/29 10:22:15',reviewer:'—',reviewTime:'—',remark:'—'},
-  {id:50005,account:'player888',activityType:'预约活动',rewardType:'积分',rewardAmount:'200 pts',activityName:'vp预约活动',status:'待审核',createTime:'26/04/29 14:03:44',reviewer:'—',reviewTime:'—',remark:'—'},
-  {id:50006,account:'vivian123',activityType:'预约活动',rewardType:'免费投注券',rewardAmount:'×3 张',activityName:'春季预约活动',status:'审核通过',createTime:'26/04/29 16:55:02',reviewer:'vivianadmin',reviewTime:'26/04/29 09:00:12',remark:'正常用户'},
-  {id:50007,account:'spring007',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 1,000.00',activityName:'acewin预约活动',status:'待审核',createTime:'26/04/29 08:30:00',reviewer:'—',reviewTime:'—',remark:'—'},
-  {id:50007,account:'tester99',activityType:'充值活动',rewardType:'优惠券',rewardAmount:'PHP 88.00',activityName:'PHP充值春季礼',status:'审核不通过',createTime:'26/04/29 12:11:33',reviewer:'自动审核',reviewTime:'26/04/29 10:05:44',remark:'重复IP'},
-  {id:50008,account:'april_ph',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 300.00',activityName:'vp预约活动',status:'待审核',createTime:'26/04/29 09:00:55',reviewer:'—',reviewTime:'—',remark:'—'},
-  {id:50008,account:'lucky88',activityType:'预约活动',rewardType:'免费旋转券',rewardAmount:'×5 张',activityName:'春季预约活动',status:'待审核',createTime:'26/04/29 15:44:18',reviewer:'—',reviewTime:'—',remark:'—'},
-  {id:50006,account:'member456',activityType:'充值活动',rewardType:'积分',rewardAmount:'500 pts',activityName:'PHP充值春季礼',status:'审核通过',createTime:'26/04/29 10:22:00',reviewer:'自动审核',reviewTime:'26/04/29 14:00:00',remark:'重复手机号'},
+  {id:50005,account:'danny001',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 500.00',activityName:'acewin预约活动',status:'待审核',createTime:_td+' 10:22:15',reviewer:'—',reviewTime:'—',remark:'—'},
+  {id:50005,account:'player888',activityType:'预约活动',rewardType:'积分',rewardAmount:'200 pts',activityName:'vp预约活动',status:'待审核',createTime:_td+' 14:03:44',reviewer:'—',reviewTime:'—',remark:'—'},
+  {id:50006,account:'vivian123',activityType:'预约活动',rewardType:'免费投注券',rewardAmount:'×3 张',activityName:'春季预约活动',status:'审核通过',createTime:_td+' 16:55:02',reviewer:'vivianadmin',reviewTime:_td+' 09:00:12',remark:'正常用户'},
+  {id:50007,account:'spring007',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 1,000.00',activityName:'acewin预约活动',status:'待审核',createTime:_td+' 08:30:00',reviewer:'—',reviewTime:'—',remark:'—'},
+  {id:50007,account:'tester99',activityType:'充值活动',rewardType:'优惠券',rewardAmount:'PHP 88.00',activityName:'PHP充值春季礼',status:'审核不通过',createTime:_td+' 12:11:33',reviewer:'自动审核',reviewTime:_td+' 10:05:44',remark:'重复IP'},
+  {id:50008,account:'april_ph',activityType:'预约活动',rewardType:'礼金',rewardAmount:'PHP 300.00',activityName:'vp预约活动',status:'待审核',createTime:_td+' 09:00:55',reviewer:'—',reviewTime:'—',remark:'—'},
+  {id:50008,account:'lucky88',activityType:'预约活动',rewardType:'免费旋转券',rewardAmount:'×5 张',activityName:'春季预约活动',status:'待审核',createTime:_td+' 15:44:18',reviewer:'—',reviewTime:'—',remark:'—'},
+  {id:50006,account:'member456',activityType:'充值活动',rewardType:'积分',rewardAmount:'500 pts',activityName:'PHP充值春季礼',status:'审核通过',createTime:_td+' 10:22:00',reviewer:'自动审核',reviewTime:_td+' 14:00:00',remark:'重复手机号'},
 ];
 
 var filtered=[...rawData];

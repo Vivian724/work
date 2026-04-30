@@ -483,12 +483,11 @@ var addonBlocks=[]; // 預設不顯示，點新增配置才展開
 function renderAddonList(){
   if(addonBlocks.length===0) return '';
   return addonBlocks.map(function(block, i){
-    var isOnly=addonBlocks.length===1;
     return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
       // header：序号 + 删除
       '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">'+
         '<span style="font-size:14px;font-weight:500;color:#1677ff;">附加配置 '+(i+1)+'</span>'+
-        (!isOnly?'<button onclick="delAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:12px;cursor:pointer;">删除</button>':'')+
+        '<button onclick="delAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:12px;cursor:pointer;">删除</button>'+
       '</div>'+
       // 进行时间
       '<div class="field-row">'+
