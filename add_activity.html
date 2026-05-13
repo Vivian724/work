@@ -700,10 +700,11 @@ function step4(){
   // ── 奖项配置 ──
   '<div class="sec-block"><div class="sec-title">奖项配置</div>'+
   '<button class="btn-add" onclick="addAward()">新增</button>'+
-  '<table class="award-table"><thead><tr><th style="width:60px;">等级</th><th>奖励类型</th><th>奖励金额/内容</th><th>彩金流水倍数</th><th style="width:80px;">操作</th></tr></thead><tbody id="awardBody"></tbody></table></div>'+
+  '<table class="award-table"><thead><tr><th style="width:60px;">等级</th><th>奖励类型</th><th>奖励金额/内容</th><th style="width:80px;">操作</th></tr></thead><tbody id="awardBody"></tbody></table></div>'+
 
   // ── 通用设置 ──
   '<div class="sec-block"><div class="sec-title">通用设置</div>'+
+  '<div class="field-row"><div class="field-label">彩金所需流水倍数：</div><div class="field-ctrl"><input type="number" class="f-input" style="max-width:200px;-moz-appearance:textfield;" placeholder="请输入"></div></div>'+
   '<div class="field-row"><div class="field-label">审核方式：</div><div class="field-ctrl"><div class="radio-group">'+
     '<label class="radio-item"><input type="radio" name="audit"> 人工审核</label>'+
     '<label class="radio-item"><input type="radio" name="audit" checked> 自动审核</label>'+
@@ -736,7 +737,6 @@ function renderAward(){
       '<td>'+(i+1)+'</td>'+
       '<td><select class="td-select"><option>彩金</option><option>积分</option><option>免费投注券</option><option>免费旋转券</option><option>优惠券</option></select></td>'+
       '<td><input class="td-input" type="text" placeholder="请输入"></td>'+
-      '<td><input class="td-input" type="number" placeholder="请输入"></td>'+
       '<td><button class="btn-del" onclick="delAward('+i+')">删除</button></td>'+
     '</tr>';
   }).join('');
@@ -848,6 +848,7 @@ function step6(){
     row(false,'审核方式','自动审核')+
     row(false,'领取条件','有效投注达到 – 次奖励，上限 – 次')+
     row(false,'奖项配置',awardRows.length+'个等级')+
+    row(false,'彩金所需流水倍数','–')+
     row(false,'领取方式',claimAuto?'自动领取':'手动领取')+
     row(false,'已验证手机号','否')+
     row(false,'限制使用设备','无限制')+
