@@ -294,7 +294,7 @@ function renderStep(){
 function step1(){
   return '<div class="step-desc">将活动模板配置保存至系统，系统将自动配置相关功能</div>'+
   '<div class="sec-block"><div class="sec-title">活动模板</div>'+
-  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动模板：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>预约活动</option></select></div></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动类型：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>预约活动</option></select></div></div></div>'+
   '<div class="sec-block"><div class="sec-title">时间设定</div>'+
   '<div style="background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
     '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">第一阶段：预约活动</div>'+
@@ -304,8 +304,8 @@ function step1(){
     '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">第二阶段：奖励领取</div>'+
     '<div class="field-row"><div class="field-label"><span class="req">*</span>进行时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"><span class="time-sep">～</span><input type="text" placeholder="结束时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"></div></div></div>'+
   '</div></div>'+
-  '<div class="sec-block"><div class="sec-title">活动类型设置</div>'+
-  '<div class="field-row"><div class="field-label">活动类型：</div><div class="field-ctrl"><div class="radio-group"><label class="radio-item"><input type="radio" name="as" checked> 关闭</label><label class="radio-item"><input type="radio" name="as"> 开启</label></div></div></div>'+
+  '<div class="sec-block"><div class="sec-title">活动设置</div>'+
+  '<div class="field-row"><div class="field-label">活动状态：</div><div class="field-ctrl"><div class="radio-group"><label class="radio-item"><input type="radio" name="as" checked> 关闭</label><label class="radio-item"><input type="radio" name="as"> 开启</label></div></div></div>'+
   '<div class="field-row"><div class="field-label"><span class="req">*</span>活动币种：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>PHP</option></select></div></div></div>'+
   '<div class="sec-block"><div class="sec-title">活动名称</div>'+
   '<div class="field-row"><div class="field-label"><span class="req">*</span>活动名称：</div><div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入" style="max-width:400px;"></div></div></div>';
@@ -349,7 +349,7 @@ function step2(){
 
   return '<div class="step-desc">上传活动相关图片，用于展示在不同平台和位置。</div>'+
   '<div class="sec-block" style="border:0.5px solid #e8e8e8;border-radius:4px;padding:16px;">'+
-    '<div class="sec-title">活动类型设置</div>'+
+    '<div class="sec-title">活动设置</div>'+
     '<div class="field-row"><div class="field-label">活动语系</div><div class="field-ctrl" style="position:relative;max-width:400px;">'+
       '<div class="ms-wrap" id="langWrap" onclick="toggleLangDrop(event)">'+tagHtml+'<span class="ms-arrow">▾</span></div>'+
       '<div class="ms-dropdown '+(langOpen?'':'hidden')+'" id="langDropdown">'+ddHtml+'</div>'+
@@ -658,7 +658,7 @@ function step3(){
   '<div class="field-row"><div class="field-label">4. 会员等级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="vipWrap" onclick="toggleVipDrop(event)">'+vipHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(vipOpen?'':'hidden')+'" id="vipDropdown">'+vipDd+'</div></div></div>'+
   '<div class="field-row"><div class="field-label">5. 用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>'+
   '<div class="sec-block"><div class="sec-title">黑名单设置</div>'+
-  '<div class="field-row"><div class="field-label">黑名单限制类型：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择黑名单限制类型</option><option>类型一</option></select></div></div>'+
+  '<div class="field-row"><div class="field-label">黑名单限制类型：</div><div class="field-ctrl"><input type="text" class="f-input" style="max-width:360px;" placeholder="请输入黑名单限制类型"></div></div>'+
   '<div class="field-row"><div class="field-label">用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>';
 }
 function setAgentMode(v){
@@ -684,14 +684,7 @@ function step4(){
   var total=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);
   return '<div class="step-desc">请设置活动条件、领取条件与提款条件</div>'+
 
-  // ── 审核方式 ──
-  '<div class="sec-block"><div class="sec-title">审核方式</div>'+
-  '<div class="radio-group" style="margin-bottom:16px;">'+
-    '<label class="radio-item"><input type="radio" name="audit"> 人工审核</label>'+
-    '<label class="radio-item"><input type="radio" name="audit" checked> 自动审核</label>'+
-  '</div></div>'+
-
-  // ── 领取条件（图一）──
+  // ── 领取条件 ──
   '<div class="sec-block"><div class="sec-title">领取条件</div>'+
   '<div class="claim-cond-box">'+
     '<div style="font-size:13px;color:#555;margin-bottom:12px;">在游戏预约第一阶段有预约。</div>'+
@@ -707,31 +700,32 @@ function step4(){
   // ── 奖项配置 ──
   '<div class="sec-block"><div class="sec-title">奖项配置</div>'+
   '<button class="btn-add" onclick="addAward()">新增</button>'+
-  '<table class="award-table"><thead><tr><th style="width:60px;">等级</th><th>奖励类型</th><th>奖励金额/内容</th><th>所需流水</th><th style="width:80px;">操作</th></tr></thead><tbody id="awardBody"></tbody></table></div>'+
+  '<table class="award-table"><thead><tr><th style="width:60px;">等级</th><th>奖励类型</th><th>奖励金额/内容</th><th>彩金流水倍数</th><th style="width:80px;">操作</th></tr></thead><tbody id="awardBody"></tbody></table></div>'+
 
-  // ── 领取方式 ──
-  '<div class="sec-block"><div class="sec-title">领取方式</div>'+
-  '<div class="radio-group">'+
-    '<label class="radio-item"><input type="radio" name="claim" '+(claimAuto?'checked':'')+' onchange="setClaimAuto(true)"> 自动领取</label>'+
-    '<label class="radio-item"><input type="radio" name="claim" '+(!claimAuto?'checked':'')+' onchange="setClaimAuto(false)"> 手动领取</label>'+
-  '</div>'+
-  '<div style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:12px;">'+
-    '<input type="number" id="claimDays" class="f-input '+(claimAuto?'disabled':'')+'" style="width:120px;-moz-appearance:textfield;" placeholder="请输入天数" '+(claimAuto?'disabled':'')+'>天'+
-  '</div>'+
-  '<div class="hint">'+(claimAuto?'选择「手动领取」后可设置有效天数':'')+'</div>'+
-  '</div>'+
-  '<div class="sec-block"><div class="sec-title">已验证手机号</div>'+
-  '<div class="radio-group"><label class="radio-item"><input type="radio" name="phone"> 是</label><label class="radio-item"><input type="radio" name="phone" checked> 否</label></div></div>'+
-  '<div class="sec-block"><div class="sec-title">限制使用设备</div>'+
-  '<div class="radio-group"><label class="radio-item"><input type="radio" name="device" checked> 无限制领奖设备</label><label class="radio-item"><input type="radio" name="device"> APP</label></div></div>'+
-
-  // ── 提款条件 ──
-  '<div class="sec-block" style="border-top:1px solid #f0f0f0;padding-top:20px;margin-top:8px;">'+
-  '<div class="sec-title">提现稽核流水比例</div>'+
-  '<div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;"><input type="number" class="ratio-input" value="0" min="0"><span style="font-size:13px;color:#666;">%</span></div>'+
-  '<div class="sec-title">稽核条件</div>'+
-  '<button class="game-btn" onclick="openModal()">已选择 <strong>'+total+'</strong> 个游戏</button>'+
-  (total>0?'<div class="hint" style="margin-top:8px;">已选游戏数量：'+total+' 个</div>':'')+
+  // ── 通用设置 ──
+  '<div class="sec-block"><div class="sec-title">通用设置</div>'+
+  '<div class="field-row"><div class="field-label">审核方式：</div><div class="field-ctrl"><div class="radio-group">'+
+    '<label class="radio-item"><input type="radio" name="audit"> 人工审核</label>'+
+    '<label class="radio-item"><input type="radio" name="audit" checked> 自动审核</label>'+
+  '</div></div></div>'+
+  '<div class="field-row"><div class="field-label">领取方式：</div><div class="field-ctrl">'+
+    '<div class="radio-group">'+
+      '<label class="radio-item"><input type="radio" name="claim" '+(claimAuto?'checked':'')+' onchange="setClaimAuto(true)"> 自动领取</label>'+
+      '<label class="radio-item"><input type="radio" name="claim" '+(!claimAuto?'checked':'')+' onchange="setClaimAuto(false)"> 手动领取</label>'+
+    '</div>'+
+    (!claimAuto?'<div style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:8px;"><input type="number" id="claimDays" class="f-input" style="width:120px;-moz-appearance:textfield;" placeholder="请输入天数">天</div>':'')+
+  '</div></div>'+
+  '<div class="field-row"><div class="field-label">已验证手机号：</div><div class="field-ctrl"><div class="radio-group">'+
+    '<label class="radio-item"><input type="radio" name="phone"> 是</label>'+
+    '<label class="radio-item"><input type="radio" name="phone" checked> 否</label>'+
+  '</div></div></div>'+
+  '<div class="field-row"><div class="field-label">限制使用设备：</div><div class="field-ctrl"><div class="radio-group">'+
+    '<label class="radio-item"><input type="radio" name="device" checked> 无限制</label>'+
+    '<label class="radio-item"><input type="radio" name="device"> 仅 APP</label>'+
+  '</div></div></div>'+
+  '<div class="field-row"><div class="field-label">稽核游戏范围：</div><div class="field-ctrl">'+
+    '<button class="game-btn" onclick="openModal()">已选择 <strong>'+total+'</strong> 个游戏</button>'+
+  '</div></div>'+
   '</div>';
 }
 
@@ -740,7 +734,7 @@ function renderAward(){
   el.innerHTML=awardRows.map(function(_,i){
     return '<tr>'+
       '<td>'+(i+1)+'</td>'+
-      '<td><select class="td-select"><option>礼金</option><option>积分</option><option>免费投注券</option><option>免费旋转券</option><option>优惠券</option></select></td>'+
+      '<td><select class="td-select"><option>彩金</option><option>积分</option><option>免费投注券</option><option>免费旋转券</option><option>优惠券</option></select></td>'+
       '<td><input class="td-input" type="text" placeholder="请输入"></td>'+
       '<td><input class="td-input" type="number" placeholder="请输入"></td>'+
       '<td><button class="btn-del" onclick="delAward('+i+')">删除</button></td>'+
@@ -855,11 +849,9 @@ function step6(){
     row(false,'领取条件','有效投注达到 – 次奖励，上限 – 次')+
     row(false,'奖项配置',awardRows.length+'个等级')+
     row(false,'领取方式',claimAuto?'自动领取':'手动领取')+
-    row(false,'有效天数','–')+
     row(false,'已验证手机号','否')+
-    row(false,'限制使用设备','无限制领奖设备')+
-    row(false,'提现稽核流水比例','0%')+
-    row(false,'稽核条件游戏',total?total+'个':'–')+
+    row(false,'限制使用设备','无限制')+
+    row(false,'稽核游戏范围',total?total+'个':'–')+
     '</div>')+
   pRow('5','风控条件',
     '<div class="preview-grid">'+
