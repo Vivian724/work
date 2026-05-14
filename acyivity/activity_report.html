@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>活动报表</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color:#333;background:#f0f2f5;min-width:1280px;}
+.layout{display:flex;min-height:100vh;}
+/* ── 侧边栏 ── */
+.sidebar{width:180px;flex-shrink:0;background:#fff;border-right:0.5px solid #e8e8e8;}
+.menu-parent{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:44px;font-size:13px;font-weight:500;background:#e8f0fe;color:#333;}
+.menu-parent .label{display:flex;align-items:center;gap:6px;}
+.menu-icon-box{width:20px;height:20px;border-radius:4px;background:#1677ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.new-badge{font-size:11px;color:#1677ff;font-weight:400;}
+.submenu-item{display:flex;align-items:center;padding:0 14px 0 40px;height:38px;font-size:13px;color:#555;text-decoration:none;border-left:3px solid transparent;}
+.submenu-item:hover{background:#f5f5f5;color:#1677ff;}
+.submenu-item.active{color:#1677ff;background:#e6f4ff;border-left-color:#1677ff;}
+/* ── 顶栏 ── */
+.right{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{background:#fff;border-bottom:0.5px solid #e8e8e8;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;}
+.top-left{font-size:12px;color:#666;white-space:nowrap;}
+.top-center{display:flex;align-items:center;flex:1;justify-content:center;overflow:hidden;}
+.top-stat{font-size:11px;color:#666;white-space:nowrap;padding:0 6px;}
+.top-stat .num{color:#1677ff;font-weight:500;}
+.top-stat .warn{color:#ff4d4f;font-weight:500;}
+.top-div{width:0.5px;height:12px;background:#e0e0e0;flex-shrink:0;}
+.top-right{display:flex;align-items:center;gap:8px;font-size:13px;color:#555;}
+.avatar{width:26px;height:26px;border-radius:50%;background:#ff4d4f;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:500;}
+/* ── 内容区 ── */
+.content-area{flex:1;padding:12px 16px;}
+.bc-bar{font-size:13px;color:#999;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.bc-bar a{color:#999;text-decoration:none;}.bc-bar a:hover{color:#1677ff;}
+.bc-bar .cur{color:#333;}
+.page-card{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;}
+/* ── Tab 栏 ── */
+.tab-bar{display:flex;border-bottom:0.5px solid #e8e8e8;padding:0 16px;}
+.tab-item{padding:11px 16px;font-size:13px;color:#666;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap;}
+.tab-item.active{color:#1677ff;border-bottom-color:#1677ff;}
+.tab-item:hover{color:#1677ff;}
+/* ── 筛选区 ── */
+.filter-area{padding:12px 16px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;row-gap:10px;}
+.fl{font-size:13px;color:#333;white-space:nowrap;}
+.fi-input{height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;}
+.fi-input::placeholder{color:#bbb;font-size:12px;}
+.fi-input:focus{border-color:#1677ff;}
+.fi-select{height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px;color:#333;background:#fff;outline:none;}
+.time-range{display:flex;align-items:center;height:32px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;padding:0 10px;gap:6px;}
+.time-range input{border:none;outline:none;font-size:12px;color:#bbb;background:transparent;width:100px;}
+.time-range input:focus{color:#333;}
+.time-sep{color:#bbb;font-size:12px;}
+.btn-search{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;}
+.btn-search:hover{background:#4096ff;}
+.btn-export{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;}
+.btn-export:hover{background:#4096ff;}
+/* ── 报表区 ── */
+.report-area{padding:0 16px 16px;overflow-x:auto;}
+/* 总金额行 */
+.total-bar{display:flex;justify-content:flex-end;align-items:center;padding:10px 0 8px;font-size:13px;color:#666;}
+.total-bar .total-val{color:#ff4d4f;font-weight:600;font-size:14px;margin-left:4px;}
+/* 表格 */
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:#fafafa;padding:10px 12px;text-align:center;font-weight:500;color:#888;border-bottom:1px solid #f0f0f0;border-top:1px solid #f0f0f0;white-space:nowrap;}
+th.left{text-align:left;}
+td{padding:11px 12px;border-bottom:0.5px solid #f0f0f0;color:#333;vertical-align:middle;text-align:center;}
+td.left{text-align:left;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#fafffe;}
+/* 长文本截断 */
+.ellipsis{display:inline-block;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom;}
+/* 汇总行 */
+.sum-row td{background:#f0f7ff;font-weight:600;color:#1677ff;border-top:1px solid #d6e4ff;}
+/* 领取状态 */
+.st-unclaimed{color:#fa8c16;font-size:12px;}
+.st-claimed{color:#52c41a;font-size:12px;}
+.st-expired{color:#bbb;font-size:12px;}
+/* 分页 */
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:12px 16px 14px;font-size:13px;color:#666;border-top:0.5px solid #f0f0f0;}
+.pg-info{margin-right:4px;}
+.pg-btn{min-width:28px;height:28px;border-radius:4px;border:1px solid #d9d9d9;background:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;padding:0 6px;}
+.pg-btn.active{background:#1677ff;color:#fff;border-color:#1677ff;}
+.pg-btn.disabled{color:#bbb;cursor:not-allowed;}
+.pg-ellipsis{color:#bbb;padding:0 2px;}
+.pg-sel{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:13px;}
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- 侧边栏 -->
+  <div class="sidebar">
+    <div class="menu-parent">
+      <div class="label">
+        <div class="menu-icon-box">
+          <svg viewBox="0 0 12 12" fill="none" width="12" height="12"><circle cx="6" cy="6" r="4" stroke="#fff" stroke-width="1.3"/><path d="M4 6h4M6 4v4" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <span>活动配置<span class="new-badge">（新）</span></span>
+      </div>
+      <span style="font-size:10px;color:#999;transform:rotate(90deg);display:inline-block;">›</span>
+    </div>
+    <a href="activity_list.html" class="submenu-item">活动列表</a>
+    <a href="award_review.html" class="submenu-item">派奖审核</a>
+    <a href="activity_report.html" class="submenu-item active">活动报表</a>
+  </div>
+
+  <div class="right">
+    <!-- 顶栏 -->
+    <div class="topbar">
+      <div class="top-left">当前时间：2026/04/23 10:35:21 +08:00</div>
+      <div class="top-center">
+        <div class="top-stat">在线人数：<span class="num">28</span></div><div class="top-div"></div>
+        <div class="top-stat">当日注册：<span class="num">7</span></div><div class="top-div"></div>
+        <div class="top-stat">实名认证待处理：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">当日充值成功：<span class="num">2</span></div><div class="top-div"></div>
+        <div class="top-stat">充值：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">提款：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">风控审核：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">待处理修改余额审批：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">VIP派奖审核：<span class="warn">1140</span></div>
+      </div>
+      <div class="top-right"><div class="avatar">CN</div>vivianadmin ▾</div>
+    </div>
+
+    <!-- 内容 -->
+    <div class="content-area">
+      <div class="bc-bar">位置 <span>›</span> 活动配置 <span>›</span> <span class="cur">活动报表</span></div>
+      <div class="page-card">
+
+        <!-- Tab 栏 -->
+        <div class="tab-bar">
+          <div class="tab-item active" id="tab1" onclick="switchTab(1)">活动奖励统计</div>
+          <div class="tab-item" id="tab2" onclick="switchTab(2)">活动数据统计</div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+             Tab 1：活动奖励统计
+        ══════════════════════════════════════════ -->
+        <div id="panel1">
+          <!-- 筛选 -->
+          <div class="filter-area">
+            <span class="fl">日期：</span>
+            <div class="time-range">
+              <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg>
+              <input type="text" id="r1DateStart" placeholder="开始日期" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'">
+              <span class="time-sep">~</span>
+              <input type="text" id="r1DateEnd" placeholder="结束日期" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'">
+            </div>
+            <span class="fl">活动类型：</span>
+            <select class="fi-select" id="r1Type">
+              <option value="">全部</option>
+              <option>预约活动</option>
+              <option>充值活动</option>
+              <option>下载有奖</option>
+              <option>定期宝箱</option>
+              <option>注册礼金活动</option>
+            </select>
+            <span class="fl">活动名称：</span>
+            <select class="fi-select" id="r1Name">
+              <option value="">全部</option>
+              <option>acewin预约活动</option>
+              <option>vp预约活动</option>
+              <option>春季预约活动</option>
+              <option>PHP充值春季礼</option>
+            </select>
+            <span class="fl">奖励类型：</span>
+            <select class="fi-select" id="r1Award">
+              <option value="">全部</option>
+              <option>礼金</option>
+              <option>积分</option>
+              <option>免费投注券</option>
+              <option>免费旋转券</option>
+              <option>优惠券</option>
+            </select>
+            <button class="btn-search" onclick="renderTab1()">
+              <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="6" cy="6" r="4.5" stroke="#fff" stroke-width="1.3"/><path d="M9.5 9.5L12.5 12.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>
+              搜索
+            </button>
+            <button class="btn-export" onclick="alert('导出功能')">
+              <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><path d="M2 10v2h10v-2" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v7" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/><path d="M4.5 5.5L7 8l2.5-2.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              导出
+            </button>
+          </div>
+          <!-- 三项汇总 -->
+          <div class="report-area">
+            <div class="total-bar" id="r1Total" style="gap:20px;">
+              <span>总金额：<span class="total-val" id="r1TotalAmt">—</span></span>
+              <span style="color:#666;">总积分：<span style="color:#1677ff;font-weight:600;font-size:14px;" id="r1TotalPts">—</span></span>
+              <span style="color:#666;">总免费投注次数：<span style="color:#52c41a;font-weight:600;font-size:14px;" id="r1TotalFree">—</span></span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="left">日期</th>
+                  <th>活动类型</th>
+                  <th>活动名称</th>
+                  <th>奖励类型</th>
+                  <th>奖励金额/内容</th>
+                  <th>领取次数</th>
+                  <th>活动金额</th>
+                  <th>活动积分</th>
+                  <th>免费投注次数</th>
+                </tr>
+              </thead>
+              <tbody id="r1Body"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="r1Page"></div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+             Tab 2：活动数据统计
+        ══════════════════════════════════════════ -->
+        <div id="panel2" class="hidden">
+          <!-- 筛选 -->
+          <div class="filter-area">
+            <span class="fl">会员帐号：</span>
+            <input type="text" class="fi-input" placeholder="请输入" style="width:140px;" id="r2Member">
+            <span class="fl">活动ID：</span>
+            <input type="text" class="fi-input" placeholder="请输入" style="width:100px;" id="r2ActivityId">
+            <span class="fl">活动类型：</span>
+            <select class="fi-select" id="r2Type">
+              <option value="">全部</option>
+              <option>预约活动</option>
+              <option>充值活动</option>
+              <option>下载有奖</option>
+              <option>定期宝箱</option>
+              <option>注册礼金活动</option>
+            </select>
+            <span class="fl">奖励类型：</span>
+            <select class="fi-select" id="r2Award">
+              <option value="">全部</option>
+              <option>礼金</option>
+              <option>积分</option>
+              <option>免费投注券</option>
+              <option>免费旋转券</option>
+              <option>优惠券</option>
+            </select>
+            <span class="fl">状态：</span>
+            <select class="fi-select" id="r2Status">
+              <option value="" selected>全部</option>
+              <option>待审核</option>
+              <option>已通过</option>
+              <option>已拒绝</option>
+            </select>
+            <button class="btn-search" onclick="renderTab2()">
+              <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="6" cy="6" r="4.5" stroke="#fff" stroke-width="1.3"/><path d="M9.5 9.5L12.5 12.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>
+              搜索
+            </button>
+            <button class="btn-export" onclick="alert('导出功能')">
+              <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><path d="M2 10v2h10v-2" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v7" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/><path d="M4.5 5.5L7 8l2.5-2.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              导出
+            </button>
+          </div>
+          <div class="report-area">
+            <table>
+              <thead>
+                <tr>
+                  <th>活动ID</th>
+                  <th class="left">会员帐号</th>
+                  <th>活动类型</th>
+                  <th>活动名称</th>
+                  <th>奖励类型</th>
+                  <th>奖励金额/内容</th>
+                  <th>申请领取时间</th>
+                  <th>审核发放时间</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody id="r2Body"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="r2Page"></div>
+        </div>
+
+      </div><!-- /page-card -->
+    </div><!-- /content-area -->
+  </div><!-- /right -->
+</div><!-- /layout -->
+
+<script>
+// ══════════════════════════════════════════════════════
+// 共用资料
+// ══════════════════════════════════════════════════════
+var actNames   = ['acewin预约活动','vp预约活动','春季预约活动','PHP充值春季礼'];
+var actTypes   = ['预约活动','预约活动','预约活动','充值活动'];
+var awardTypes = ['礼金','积分','免费投注券','免费旋转券','优惠券'];
+// 根据奖励类型生成对应格式内容（与派奖审核一致）
+function genAwardContent(awardType, i){
+  var amounts = ['PHP 500.00','PHP 300.00','PHP 1,000.00','PHP 88.00','PHP 200.00','PHP 750.00','PHP 150.00','PHP 400.00'];
+  var pts     = ['200 pts','500 pts','100 pts','350 pts','800 pts'];
+  var tickets = ['×3 张','×5 张','×1 张','×10 张','×2 张'];
+  if(awardType==='礼金'||awardType==='优惠券') return amounts[i % amounts.length];
+  if(awardType==='积分') return pts[i % pts.length];
+  if(awardType==='免费投注券'||awardType==='免费旋转券') return tickets[i % tickets.length];
+  return amounts[i % amounts.length];
+}
+var members    = ['acewin_user1','vp_member2','phptest99','rmbstar','lucky88','spring007','danny001','vivian123','player888','member456','newuser01','newuser02','agent_sub1','tginny06','tginny07','april_ph','jouventestrmb1','jouventestvnd1','vip_user01','vip_user02'];
+var statuses2  = ['待审核','已通过','已通过','已拒绝','待审核'];
+
+function pad(n){return String(n).padStart(2,'0');}
+function fmtDate(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function fmtTime(d){return fmtDate(d)+' '+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());}
+
+// ── Tab1 数据（活动奖励统计）──
+var rewardData = [];
+(function(){
+  var base = new Date('2026-04-22');
+  // 各类型的基础单价池
+  var amtPool  = [500, 300, 1000, 88, 200, 750, 150, 400];
+  var ptsPool  = [200, 500, 100, 350, 800];
+  var freePool = [3, 5, 1, 10, 2];
+
+  for(var i=0;i<80;i++){
+    var d = new Date(base); d.setDate(d.getDate()-Math.floor(i/8));
+    var ni  = i % actNames.length;
+    var at  = awardTypes[i % awardTypes.length];
+    var t   = Math.floor(Math.random()*30)+1; // 领取次数
+
+    var isAmt  = (at==='礼金'||at==='优惠券');
+    var isPts  = (at==='积分');
+    var isFree = (at==='免费投注券'||at==='免费旋转券');
+
+    var unitAmt  = isAmt  ? amtPool [i % amtPool.length]  : null;
+    var unitPts  = isPts  ? ptsPool [i % ptsPool.length]  : null;
+    var unitFree = isFree ? freePool[i % freePool.length] : null;
+
+    // 显示文字与派奖审核一致
+    var displayName = isAmt  ? 'PHP '+unitAmt.toLocaleString('en',{minimumFractionDigits:2})
+                     :isPts  ? unitPts+' pts'
+                     :isFree ? '×'+unitFree+' 张'
+                     : '—';
+
+    rewardData.push({
+      date:      fmtDate(d),
+      actType:   actTypes[ni],
+      actName:   actNames[ni],
+      awardType: at,
+      awardName: displayName,
+      times:     t,
+      amount:    isAmt  ? parseFloat((unitAmt  * t).toFixed(2)) : null,
+      pts:       isPts  ? unitPts  * t                          : null,
+      freeBet:   isFree ? unitFree * t                          : null
+    });
+  }
+})();
+
+// ── Tab2 数据（活动数据统计）──
+var detailData = [];
+(function(){
+  var base = new Date('2026-04-22');
+  var actIds = [50005,50006,50007,50008];
+  for(var i=0;i<356;i++){
+    var d = new Date(base); d.setDate(d.getDate()-Math.floor(i/20));
+    var ni = i % actNames.length;
+    var applyTime = new Date(d); applyTime.setHours(Math.floor(Math.random()*24),Math.floor(Math.random()*60),Math.floor(Math.random()*60));
+    var reviewTime = new Date(applyTime); reviewTime.setHours(reviewTime.getHours()+Math.floor(Math.random()*6)+1);
+    var st = statuses2[i % statuses2.length];
+    var at2 = awardTypes[i % awardTypes.length];
+    var amtPool2 = [500,300,1000,88,200,750,150,400];
+    var isAmt2 = (at2==='礼金'||at2==='优惠券');
+    detailData.push({
+      date: fmtDate(d),
+      member: members[i % members.length],
+      actId: actIds[ni],
+      actType: actTypes[ni],
+      actName: actNames[ni],
+      awardType: at2,
+      awardName: genAwardContent(at2, i),
+      amount: isAmt2 ? amtPool2[i % amtPool2.length] : null,
+      applyTime: fmtTime(applyTime),
+      reviewTime: (st==='待审核'?'—':fmtTime(reviewTime)),
+      status: st
+    });
+  }
+})();
+
+// ══════════════════════════════════════════════════════
+// Tab 切换
+// ══════════════════════════════════════════════════════
+function switchTab(n){
+  document.getElementById('tab1').classList.toggle('active', n===1);
+  document.getElementById('tab2').classList.toggle('active', n===2);
+  document.getElementById('panel1').classList.toggle('hidden', n!==1);
+  document.getElementById('panel2').classList.toggle('hidden', n!==2);
+}
+
+// ══════════════════════════════════════════════════════
+// Tab 1：活动奖励统计
+// ══════════════════════════════════════════════════════
+var r1Page=1, r1PageSize=10, r1Filtered=rewardData;
+
+function renderTab1(){
+  var ds     = document.getElementById('r1DateStart').value;
+  var de     = document.getElementById('r1DateEnd').value;
+  var type   = document.getElementById('r1Type').value;
+  var name   = document.getElementById('r1Name').value;
+  var award  = document.getElementById('r1Award').value;
+
+  r1Filtered = rewardData.filter(function(r){
+    if(ds && r.date < ds) return false;
+    if(de && r.date > de) return false;
+    if(type && r.actType !== type) return false;
+    if(name && r.actName !== name) return false;
+    if(award && r.awardType !== award) return false;
+    return true;
+  });
+  r1Page = 1;
+  r1Draw();
+}
+
+function r1Draw(){
+  var totalAmt  = r1Filtered.reduce(function(s,r){return r.amount!=null?s+r.amount:s;},0);
+  var totalPts  = r1Filtered.reduce(function(s,r){return r.pts!=null?s+r.pts:s;},0);
+  var totalFree = r1Filtered.reduce(function(s,r){return r.freeBet!=null?s+r.freeBet:s;},0);
+  document.getElementById('r1TotalAmt').textContent  = totalAmt.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('r1TotalPts').textContent  = totalPts.toLocaleString('en');
+  document.getElementById('r1TotalFree').textContent = totalFree.toLocaleString('en');
+
+  var start = (r1Page-1)*r1PageSize, end = start+r1PageSize;
+  var page  = r1Filtered.slice(start, end);
+  var tbody = document.getElementById('r1Body');
+
+  if(!r1Filtered.length){
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:#bbb;">暂无数据</td></tr>';
+    document.getElementById('r1Page').innerHTML = '';
+    return;
+  }
+
+  var dash = '<span style="color:#bbb">—</span>';
+  tbody.innerHTML = page.map(function(r){
+    return '<tr>'+
+      '<td class="left">'+r.date+'</td>'+
+      '<td>'+r.actType+'</td>'+
+      '<td><span class="ellipsis" title="'+r.actName+'">'+r.actName+'</span></td>'+
+      '<td>'+r.awardType+'</td>'+
+      '<td>'+r.awardName+'</td>'+
+      '<td>'+r.times+'</td>'+
+      '<td style="color:#ff4d4f;">'+(r.amount!=null?'<strong>'+r.amount.toLocaleString('en',{minimumFractionDigits:2})+'</strong>':dash)+'</td>'+
+      '<td style="color:#1677ff;">'+(r.pts!=null?r.pts.toLocaleString('en'):dash)+'</td>'+
+      '<td style="color:#52c41a;">'+(r.freeBet!=null?r.freeBet:dash)+'</td>'+
+    '</tr>';
+  }).join('') +
+  '<tr class="sum-row">'+
+    '<td class="left" colspan="6">合计</td>'+
+    '<td style="color:#ff4d4f;">'+totalAmt.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2})+'</td>'+
+    '<td style="color:#1677ff;">'+totalPts.toLocaleString('en')+'</td>'+
+    '<td style="color:#52c41a;">'+totalFree+'</td>'+
+  '</tr>';
+
+  renderPager('r1Page', r1Page, Math.ceil(r1Filtered.length/r1PageSize), r1Filtered.length, function(p){r1Page=p;r1Draw();});
+}
+
+// ══════════════════════════════════════════════════════
+// Tab 2：活动数据统计
+// ══════════════════════════════════════════════════════
+var r2Page=1, r2PageSize=10, r2Filtered=detailData;
+var stColor={'待审核':'#fa8c16','已通过':'#52c41a','已拒绝':'#ff4d4f'};
+
+function renderTab2(){
+  var mem   = document.getElementById('r2Member').value.trim().toLowerCase();
+  var aid   = document.getElementById('r2ActivityId').value.trim();
+  var atype = document.getElementById('r2Type').value;
+  var award = document.getElementById('r2Award').value;
+  var st    = document.getElementById('r2Status').value;
+
+  r2Filtered = detailData.filter(function(r){
+    if(mem && !r.member.toLowerCase().includes(mem)) return false;
+    if(aid && !String(r.actId).includes(aid)) return false;
+    if(atype && r.actType !== atype) return false;
+    if(award && r.awardType !== award) return false;
+    if(st && r.status !== st) return false;
+    return true;
+  });
+  r2Page = 1;
+  r2Draw();
+}
+
+function r2Draw(){
+  var start = (r2Page-1)*r2PageSize, end = start+r2PageSize;
+  var page  = r2Filtered.slice(start, end);
+  var tbody = document.getElementById('r2Body');
+
+  if(!r2Filtered.length){
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:#bbb;">暂无数据</td></tr>';
+    document.getElementById('r2Page').innerHTML = '';
+    return;
+  }
+
+  tbody.innerHTML = page.map(function(r){
+    return '<tr>'+
+      '<td>'+r.actId+'</td>'+
+      '<td class="left"><span style="color:#1677ff;">'+r.member+'</span></td>'+
+      '<td>'+r.actType+'</td>'+
+      '<td><span class="ellipsis" title="'+r.actName+'">'+r.actName+'</span></td>'+
+      '<td>'+r.awardType+'</td>'+
+      '<td>'+r.awardName+'</td>'+
+      '<td style="font-size:11px;color:#666;white-space:nowrap;">'+r.applyTime+'</td>'+
+      '<td style="font-size:11px;color:#666;white-space:nowrap;">'+(r.reviewTime==='—'?'<span style="color:#bbb">—</span>':r.reviewTime)+'</td>'+
+      '<td><span style="color:'+stColor[r.status]+';font-size:12px;">'+r.status+'</span></td>'+
+    '</tr>';
+  }).join('');
+
+  renderPager('r2Page', r2Page, Math.ceil(r2Filtered.length/r2PageSize), r2Filtered.length, function(p){r2Page=p;r2Draw();});
+}
+
+// ══════════════════════════════════════════════════════
+// 通用分页器
+// ══════════════════════════════════════════════════════
+function renderPager(containerId, cur, total, count, cb){
+  var el = document.getElementById(containerId);
+  if(total <= 1 && count <= 10){el.innerHTML='';return;}
+  var pages = [];
+  if(total <= 7){
+    for(var i=1;i<=total;i++) pages.push(i);
+  } else {
+    pages = [1,2];
+    if(cur > 4) pages.push('…');
+    var s = Math.max(3,cur-1), e = Math.min(total-2,cur+1);
+    for(var i=s;i<=e;i++) pages.push(i);
+    if(cur < total-3) pages.push('…');
+    pages.push(total-1,total);
+    pages = pages.filter(function(v,i,a){return a.indexOf(v)===i;});
+  }
+  var btns = pages.map(function(p){
+    if(p==='…') return '<span class="pg-ellipsis">…</span>';
+    return '<div class="pg-btn'+(p===cur?' active':'')+'" onclick="('+cb.toString()+')('+p+')">'+p+'</div>';
+  }).join('');
+  el.innerHTML =
+    '<span class="pg-info">共 '+count+' 条</span>'+
+    '<div class="pg-btn'+(cur===1?' disabled':'')+'" onclick="if('+cur+'>1)('+cb.toString()+')'+'('+(cur-1)+')">‹</div>'+
+    btns+
+    '<div class="pg-btn'+(cur===total?' disabled':'')+'" onclick="if('+cur+'<'+total+')('+cb.toString()+')'+'('+(cur+1)+')">›</div>';
+}
+
+renderTab1();
+renderTab2();
+</script>
+</body>
+</html>

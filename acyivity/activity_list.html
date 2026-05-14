@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>活动列表</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color:#333;background:#f0f2f5;min-width:1280px;}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:180px;flex-shrink:0;background:#fff;border-right:0.5px solid #e8e8e8;}
+.menu-parent{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:44px;font-size:13px;font-weight:500;background:#e8f0fe;color:#333;}
+.menu-parent .label{display:flex;align-items:center;gap:6px;}
+.menu-icon-box{width:20px;height:20px;border-radius:4px;background:#1677ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.new-badge{font-size:11px;color:#1677ff;font-weight:400;}
+.submenu-item{display:flex;align-items:center;padding:0 14px 0 40px;height:38px;font-size:13px;color:#555;text-decoration:none;border-left:3px solid transparent;}
+.submenu-item:hover{background:#f5f5f5;color:#1677ff;}
+.submenu-item.active{color:#1677ff;background:#e6f4ff;border-left-color:#1677ff;}
+.right{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{background:#fff;border-bottom:0.5px solid #e8e8e8;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;}
+.top-left{font-size:12px;color:#666;white-space:nowrap;}
+.top-center{display:flex;align-items:center;flex:1;justify-content:center;overflow:hidden;}
+.top-stat{font-size:11px;color:#666;white-space:nowrap;padding:0 6px;}
+.top-stat .num{color:#1677ff;font-weight:500;}
+.top-stat .warn{color:#ff4d4f;font-weight:500;}
+.top-div{width:0.5px;height:12px;background:#e0e0e0;flex-shrink:0;}
+.top-right{display:flex;align-items:center;gap:8px;font-size:13px;color:#555;}
+.bell{width:26px;height:26px;border-radius:50%;border:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:center;}
+.avatar{width:26px;height:26px;border-radius:50%;background:#ff4d4f;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:500;}
+.content-area{flex:1;padding:12px 16px;}
+.bc-bar{font-size:13px;color:#999;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.bc-bar .cur{color:#333;}
+.page-card{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;}
+.tab-bar{display:flex;border-bottom:0.5px solid #e8e8e8;padding:0 16px;}
+.tab{padding:11px 4px;font-size:13px;color:#1677ff;border-bottom:2px solid #1677ff;margin-right:20px;}
+.filter-area{padding:12px 16px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.fl{font-size:13px;color:#333;white-space:nowrap;}
+.fi-input{height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;}
+.fi-input::placeholder{color:#bbb;font-size:12px;}
+.fi-input:focus{border-color:#1677ff;}
+.fi-select{height:32px;border:1px solid #1677ff;border-radius:4px;padding:0 8px;font-size:13px;color:#333;background:#fff;outline:none;}
+.time-range{display:flex;align-items:center;height:32px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;padding:0 10px;gap:6px;}
+.time-range input{border:none;outline:none;font-size:12px;color:#bbb;background:transparent;width:95px;}
+.time-sep{color:#bbb;}
+.btn-search{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;}
+.btn-new{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;}
+.list-area{padding:12px 16px 0;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:1200px;}
+th{background:#fafafa;padding:9px 8px;text-align:left;font-weight:500;color:#888;border-bottom:1px solid #f0f0f0;white-space:nowrap;}
+th.sortable{cursor:pointer;}
+th.sortable:hover{color:#1677ff;}
+.sort-arrows{display:inline-flex;flex-direction:column;margin-left:3px;vertical-align:middle;gap:1px;}
+.arr-up{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:4px solid #ccc;}
+.arr-up.active{border-bottom-color:#1677ff;}
+.arr-dn{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid #ccc;}
+.arr-dn.active{border-top-color:#1677ff;}
+td{padding:11px 8px;border-bottom:0.5px solid #f0f0f0;color:#333;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#fafafa;}
+.status-on{color:#52c41a;font-size:12px;}
+.status-off{color:#999;font-size:12px;}
+.alink{font-size:12px;color:#1677ff;cursor:pointer;background:none;border:none;padding:0;white-space:nowrap;text-decoration:none;}
+.alink:hover{color:#4096ff;}
+.acts-row{display:flex;gap:12px;margin-bottom:4px;}
+.acts-row:last-child{margin-bottom:0;}
+.upload-pill{height:26px;padding:0 14px;background:#1677ff;color:#fff;border:none;border-radius:13px;font-size:12px;cursor:pointer;}
+.upload-pill:hover{background:#4096ff;}
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:10px 16px 14px;font-size:13px;color:#666;}
+.pg-btn{width:28px;height:28px;border-radius:4px;border:1px solid #d9d9d9;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;}
+.pg-btn.active{background:#1677ff;color:#fff;border-color:#1677ff;}
+.pg-sel{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:13px;}
+.pg-input{width:40px;height:28px;border:1px solid #d9d9d9;border-radius:4px;text-align:center;font-size:13px;}
+/* 彈窗 */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;z-index:500;padding-top:40px;}
+.modal{background:#fff;border-radius:8px;width:920px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.15);}
+.modal-header{padding:14px 24px;border-bottom:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.modal-title{font-size:15px;font-weight:500;color:#1677ff;}
+.modal-header-btns{display:flex;gap:8px;}
+.btn-cancel{height:30px;padding:0 16px;border:1px solid #ff4d4f;border-radius:15px;background:#fff;font-size:13px;cursor:pointer;color:#ff4d4f;}
+.btn-confirm{height:30px;padding:0 20px;border:none;border-radius:15px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
+.modal-body{flex:1;overflow-y:auto;padding:20px 24px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:20px;}
+.info-item{padding:6px 0;}
+.info-label{font-size:12px;color:#999;margin-bottom:3px;}
+.info-value{font-size:14px;font-weight:500;color:#333;}
+.img-table{width:100%;border-collapse:collapse;font-size:13px;}
+.img-table th{background:#f5f7fa;padding:10px 14px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;white-space:nowrap;}
+.img-table td{padding:12px 14px;border:1px solid #ebeef5;text-align:center;vertical-align:top;}
+.img-table td.lang-cell{text-align:left;font-size:13px;color:#333;font-weight:500;vertical-align:middle;white-space:nowrap;}
+.upload-box{border:1.5px dashed #d9d9d9;border-radius:6px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fafafa;min-height:90px;gap:4px;}
+.upload-box:hover{border-color:#1677ff;background:#f0f7ff;}
+.upload-text{font-size:12px;color:#bbb;}
+.upload-hint{font-size:11px;color:#ccc;}
+.url-input{width:100%;margin-top:8px;height:28px;border:1px solid #e8e8e8;border-radius:4px;padding:0 8px;font-size:12px;color:#333;outline:none;background:#fff;}
+.url-input::placeholder{color:#ccc;font-size:11px;}
+.url-input:focus{border-color:#1677ff;}
+.lang-tabs{display:flex;border-bottom:1px solid #e8e8e8;margin-bottom:16px;}
+.lang-tab{padding:8px 16px;font-size:13px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.lang-tab.active{color:#1677ff;border-bottom-color:#1677ff;}
+.sec-title{font-size:14px;font-weight:500;color:#1677ff;border-left:3px solid #1677ff;padding-left:8px;margin-bottom:14px;}
+.sec-block{margin-bottom:20px;}
+.f-textarea{border:1px solid #d9d9d9;border-radius:4px;padding:8px 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;resize:vertical;min-height:80px;}
+.f-textarea:focus{border-color:#1677ff;}
+.btn-add{height:30px;padding:0 16px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;margin-bottom:10px;}
+.hint-text{font-size:12px;color:#999;margin-top:4px;}
+.img-card{border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;}
+.img-card-head{background:#f5f7fa;padding:8px 14px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;}
+.img-dashed{cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;padding:16px 12px;}
+.img-dashed:hover{border-color:#1677ff;background:#f0f7ff;}
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="sidebar">
+    <div class="menu-parent">
+      <div class="label">
+        <div class="menu-icon-box"><svg viewBox="0 0 12 12" fill="none" width="12" height="12"><circle cx="6" cy="6" r="4" stroke="#fff" stroke-width="1.3"/><path d="M4 6h4M6 4v4" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+        <span>活动配置<span class="new-badge">（新）</span></span>
+      </div>
+      <span style="font-size:10px;color:#999;transform:rotate(90deg);display:inline-block;">›</span>
+    </div>
+    <a href="activity_list.html" class="submenu-item active">活动列表</a>
+    <a href="award_review.html" class="submenu-item">派奖审核</a>
+    <a href="activity_report.html" class="submenu-item">活动报表</a>
+  </div>
+  <div class="right">
+    <div class="topbar">
+      <div class="top-left">当前时间：2026/04/15 14:40:12 +08:00</div>
+      <div class="top-center">
+        <div class="bell"><svg viewBox="0 0 16 16" fill="none" width="13" height="13"><path d="M8 2a5 5 0 0 0-5 5v2l-1 2h12l-1-2V7a5 5 0 0 0-5-5z" stroke="#666" stroke-width="1.2"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0" stroke="#666" stroke-width="1.2"/></svg></div>
+        <div class="top-div" style="margin:0 4px;"></div>
+        <div class="top-stat">在线人数：<span class="num">28</span></div><div class="top-div"></div>
+        <div class="top-stat">当日注册：<span class="num">7</span></div><div class="top-div"></div>
+        <div class="top-stat">实名认证待处理：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">当日充值成功：<span class="num">2</span></div><div class="top-div"></div>
+        <div class="top-stat">充值：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">提款：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">风控审核：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">待处理修改余额审批：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">VIP派奖审核：<span class="warn">1140</span></div>
+      </div>
+      <div class="top-right"><div class="avatar">CN</div>vivianadmin ▾</div>
+    </div>
+    <div class="content-area">
+      <div class="bc-bar">位置 <span>›</span> 活动配置 <span>›</span> <span class="cur">活动列表</span></div>
+      <div class="page-card">
+        <div class="tab-bar"><div class="tab">活动列表</div></div>
+        <div style="position:relative;display:inline-block;width:100%;">
+          <span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">1</span>
+        <div class="filter-area" style="border:2px solid #ff4d4f;">
+          <span class="fl">活动模板：</span>
+          <select class="fi-select" id="fTmpl"><option value="">预约活动</option></select>
+          <span class="fl">活动ID：</span>
+          <input type="text" class="fi-input" placeholder="活动ID" style="width:110px;" id="fId">
+          <span class="fl">活动名称：</span>
+          <input type="text" class="fi-input" placeholder="活动名称" style="width:140px;" id="fName">
+          <span class="fl">活动时间：</span>
+          <div class="time-range">
+            <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="开始时间" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'">
+            <span class="time-sep">~</span>
+            <input type="text" placeholder="结束时间" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'">
+          </div>
+          <span class="fl">状态：</span>
+          <select class="fi-select" id="fStatus">
+            <option value="">全部</option><option value="1">开启</option><option value="0">关闭</option>
+          </select>
+          <button class="btn-search" onclick="doFilter()">搜索</button>
+          <a href="add_activity.html" class="btn-new">新增活动</a>
+        </div>
+        </div>
+        <div style="position:relative;display:inline-block;width:100%;">
+          <span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">2</span>
+        <div class="list-area" style="border:2px solid #ff4d4f;">
+          <table>
+            <thead><tr>
+              <th class="sortable" onclick="sortBy('id')">ID <span class="sort-arrows"><span class="arr-up" id="s-id-up"></span><span class="arr-dn" id="s-id-dn"></span></span></th>
+              <th class="sortable" onclick="sortBy('sort')">排序 <span class="sort-arrows"><span class="arr-up" id="s-sort-up"></span><span class="arr-dn" id="s-sort-dn"></span></span></th>
+              <th>状态</th>
+              <th class="sortable" onclick="sortBy('time')">起止时间 <span class="sort-arrows"><span class="arr-up" id="s-time-up"></span><span class="arr-dn" id="s-time-dn"></span></span></th>
+              <th>币种</th><th>语系</th><th>活动模板</th><th>活动名称</th>
+              <th>预览图片</th>
+              <th>黑名单层级</th><th>指定代理</th><th>到达／中奖人数</th>
+              <th>提现稽核流水比例</th><th>操作</th>
+            </tr></thead>
+            <tbody id="tBody"></tbody>
+          </table>
+        </div>
+        </div>
+        <div class="pagination">
+          <span id="totalTxt">Total 4</span>
+          <select class="pg-sel"><option>10/page</option><option>20/page</option></select>
+          <div class="pg-btn">‹</div><div class="pg-btn active">1</div><div class="pg-btn">›</div>
+          <span>Go to</span><input type="number" class="pg-input" value="1">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 預覽圖片彈窗 -->
+<div class="modal-overlay hidden" id="previewModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">预览图片</div>
+      <div class="modal-header-btns">
+        <button class="btn-cancel" onclick="closeModal()">取消 ↩</button>
+        <button class="btn-confirm" onclick="closeModal()">确认</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const langMap={zh:'简体中文',en:'英文',ph:'菲律宾语',vn:'越南语',ceb:'宿雾语'};
+const rawData=[
+  {id:50005,sort:0,status:0,timeStart:'26/04/07',timeEnd:'26/05/30',currency:'PHP',lang:'菲律宾语',langs:['ph'],template:'预约活动',name:'丹尼测试预约活动 PHP',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'100%',feeRatio:'—',rechargeType:'笔笔充'},
+  {id:50006,sort:0,status:0,timeStart:'26/04/08',timeEnd:'51/01/01',currency:'PHP',lang:'菲律宾语、简体中文',langs:['ph','zh'],template:'预约活动',name:'预约活动四月',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'—',feeRatio:'—',rechargeType:'—'},
+  {id:50007,sort:0,status:1,timeStart:'26/04/08',timeEnd:'51/01/01',currency:'PHP',lang:'菲律宾语、英文、越南语',langs:['ph','en','vn'],template:'预约活动',name:'春季预约活动',blacklist:'第一层',agent:'dannyagentsub',winCount:'0/0',auditRatio:'100%',feeRatio:'—',rechargeType:'首充'},
+  {id:50008,sort:0,status:0,timeStart:'26/04/10',timeEnd:'26/06/30',currency:'PHP',lang:'菲律宾语',langs:['ph'],template:'预约活动',name:'四月预约活动PHP',blacklist:'—',agent:'—',winCount:'5/2',auditRatio:'150%',feeRatio:'5%',rechargeType:'全部'},
+];
+let filtered=[...rawData],sortKey='',sortDir=1;
+
+var modalAddonBlocks=[],modalActiveLang='',modalLangs=[];
+
+function imgCard(platform,sizeHint){
+  return '<div class="img-card">'+
+    '<div class="img-card-head">'+
+      '<span style="font-size:13px;font-weight:500;color:#333;">'+platform+'</span>'+
+      (sizeHint?'<span style="font-size:11px;color:#bbb;">'+sizeHint+'</span>':'')+
+    '</div>'+
+    '<div style="padding:12px;">'+
+      '<div class="img-dashed">'+
+        '<svg viewBox="0 0 24 24" fill="none" width="26" height="26"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>'+
+        '<span style="font-size:12px;color:#bbb;">点击上传图片</span>'+
+        '<span style="font-size:11px;color:#ccc;">PNG / JPG，≤ 2MB</span>'+
+      '</div>'+
+      '<input type="text" class="url-input" placeholder="图片 URL" style="margin-top:8px;">'+
+    '</div>'+
+  '</div>';
+}
+function imgCardAlt(label){
+  return '<div class="img-card">'+
+    '<div class="img-card-head">'+
+      '<span style="font-size:13px;font-weight:500;color:#333;">'+label+'</span>'+
+    '</div>'+
+    '<div style="padding:12px;">'+
+      '<div class="img-dashed" style="min-height:70px;">'+
+        '<svg viewBox="0 0 24 24" fill="none" width="26" height="26"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>'+
+        '<span style="font-size:12px;color:#bbb;">点击上传图片</span>'+
+      '</div>'+
+      '<input type="text" class="url-input" placeholder="图片 URL" style="margin-top:8px;">'+
+    '</div>'+
+  '</div>';
+}
+function renderModalAddonList(){
+  if(modalAddonBlocks.length===0)return '';
+  return modalAddonBlocks.map(function(block,i){
+    return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-bottom:12px;">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'+
+        '<span style="font-size:14px;font-weight:500;color:#1677ff;">附加配置 '+(i+1)+'</span>'+
+        '<button onclick="delModalAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:12px;cursor:pointer;">删除</button>'+
+      '</div>'+
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+        '<span style="font-size:13px;color:#333;flex-shrink:0;">链接：</span>'+
+        '<input type="text" style="flex:1;height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;outline:none;" placeholder="请输入跳转链接" value="'+block.link+'" oninput="modalAddonBlocks['+i+'].link=this.value">'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 946×543px')+imgCard('H5 端','建议尺寸 356×294px')+'</div>'+
+    '</div>';
+  }).join('');
+}
+function addModalAddon(){
+  if(modalAddonBlocks.length>=3)return;
+  modalAddonBlocks.push({link:''});
+  refreshModalAddonList();
+}
+function delModalAddon(i){
+  modalAddonBlocks.splice(i,1);
+  refreshModalAddonList();
+}
+function refreshModalAddonList(){
+  var el=document.getElementById('modalAddonList');
+  if(el)el.innerHTML=renderModalAddonList();
+  var btn=document.getElementById('modalAddonAddBtn');
+  if(btn){
+    if(modalAddonBlocks.length>=3){
+      btn.textContent='最多新增 3 个配置';btn.disabled=true;
+      btn.style.background='#f5f5f5';btn.style.color='#bbb';btn.style.border='1px solid #e8e8e8';btn.style.cursor='not-allowed';
+    }else{
+      btn.textContent='+ 新增配置';btn.disabled=false;
+      btn.style.background='#1677ff';btn.style.color='#fff';btn.style.border='none';btn.style.cursor='pointer';
+    }
+  }
+}
+function renderModalLangContent(){
+  return '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>Banner 图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 1400×800px')+imgCard('H5 端','建议尺寸 390×320px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>活动页底图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 1400×2300px')+imgCard('H5 端','建议尺寸 390×838px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>文案底图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 946×543px')+imgCard('H5 端','建议尺寸 356×294px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>规则弹窗图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 356×422px')+imgCard('H5 端','建议尺寸 356×422px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>弹窗底图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 356×289px')+imgCard('H5 端','建议尺寸 356×289px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>按钮底图</div>'+
+    '<div style="margin-bottom:10px;">'+
+      '<div style="font-size:13px;font-weight:500;color:#555;margin-bottom:8px;">可点击状态</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 348×104px')+imgCard('H5 端','建议尺寸 140×42px')+'</div>'+
+    '</div>'+
+    '<div>'+
+      '<div style="font-size:13px;font-weight:500;color:#555;margin-bottom:8px;">不可点击状态</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 348×104px')+imgCard('H5 端','建议尺寸 140×42px')+'</div>'+
+    '</div>'+
+  '</div>'+
+  '<div style="margin-bottom:12px;">'+
+    '<div style="font-size:14px;font-weight:500;color:#333;margin-bottom:6px;">附加显示配置</div>'+
+    '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 14px;font-size:13px;color:#ad6800;margin-bottom:12px;">以下配置为非必填，按需配置</div>'+
+  '</div>'+
+  '<div id="modalAddonList">'+renderModalAddonList()+'</div>'+
+  (modalAddonBlocks.length<3
+    ?'<button id="modalAddonAddBtn" class="btn-add" onclick="addModalAddon()">+ 新增配置</button>'
+    :'<button id="modalAddonAddBtn" class="btn-add" style="background:#f5f5f5;color:#bbb;border:1px solid #e8e8e8;cursor:not-allowed;" disabled>最多新增 3 个配置</button>'
+  )+
+  '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-top:16px;margin-bottom:20px;">'+
+    '<div style="margin-bottom:14px;">'+
+      '<div style="font-size:14px;font-weight:500;color:#333;margin-bottom:10px;">首页浮窗设置：'+
+        '<label style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="mFloatWin" checked> 关闭</label>'+
+        '<label style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="mFloatWin"> 开启</label>'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px;">'+imgCardAlt('PC 图片')+imgCardAlt('H5 图片')+'</div>'+
+      '<div style="font-size:12px;color:#999;">图片格式：png、bmp、jpg、gif；大小限制 5MB 内</div>'+
+    '</div>'+
+    '<div style="display:flex;align-items:center;gap:10px;">'+
+      '<span style="font-size:13px;color:#333;flex-shrink:0;">排序：</span>'+
+      '<input type="number" style="height:34px;width:120px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;outline:none;-moz-appearance:textfield;" placeholder="请输入" value="0">'+
+    '</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title">备注</div>'+
+    '<textarea class="f-textarea" placeholder="请输入备注内容..."></textarea>'+
+    '<div class="hint-text">此备注仅供内部参考，不会显示给用户</div>'+
+  '</div>';
+}
+function switchModalLangTab(v){
+  modalActiveLang=v;
+  var tabHtml=modalLangs.map(function(lang){
+    var label=langMap[lang]||lang;
+    return '<div class="lang-tab '+(lang===v?'active':'')+'" onclick="switchModalLangTab(\''+lang+'\')">'+label+'</div>';
+  }).join('');
+  document.getElementById('modalTabBar').innerHTML=tabHtml;
+  document.getElementById('modalLangContent').innerHTML=renderModalLangContent();
+}
+
+function openPreview(id){
+  var r=rawData.find(function(x){return x.id===id;});
+  if(!r)return;
+  modalAddonBlocks=[];
+  modalLangs=r.langs||[];
+  modalActiveLang=modalLangs[0]||'';
+  var tabHtml=modalLangs.map(function(lang){
+    var label=langMap[lang]||lang;
+    return '<div class="lang-tab '+(lang===modalActiveLang?'active':'')+'" onclick="switchModalLangTab(\''+lang+'\')">'+label+'</div>';
+  }).join('');
+  document.getElementById('modalBody').innerHTML=
+    '<div class="info-grid">'+
+    '<div class="info-item"><div class="info-label">前端显示名称</div><div class="info-value">'+r.name+'</div></div>'+
+    '<div class="info-item"><div class="info-label">ID</div><div class="info-value">'+r.id+'</div></div>'+
+    '<div class="info-item"><div class="info-label">类型</div><div class="info-value">系统</div></div>'+
+    '<div class="info-item"><div class="info-label">时间</div><div class="info-value">'+r.timeStart+' 至 '+r.timeEnd+'</div></div>'+
+    '<div class="info-item"><div class="info-label">模板类型</div><div class="info-value">'+r.template+'</div></div>'+
+    '<div class="info-item"><div class="info-label">币种</div><div class="info-value">'+r.currency+'</div></div>'+
+    '</div>'+
+    '<div class="lang-tabs" id="modalTabBar">'+tabHtml+'</div>'+
+    '<div id="modalLangContent">'+renderModalLangContent()+'</div>';
+  document.getElementById('previewModal').classList.remove('hidden');
+}
+
+function closeModal(){document.getElementById('previewModal').classList.add('hidden');}
+
+function doFilter(){
+  var name=(document.getElementById('fName').value||'').toLowerCase();
+  var id=document.getElementById('fId').value||'';
+  var status=document.getElementById('fStatus').value;
+  filtered=rawData.filter(function(r){
+    if(name&&!r.name.toLowerCase().includes(name))return false;
+    if(id&&!String(r.id).includes(id))return false;
+    if(status!==''&&String(r.status)!==status)return false;
+    return true;
+  });
+  renderRows();
+}
+
+function sortBy(key){
+  if(sortKey===key)sortDir*=-1;else{sortKey=key;sortDir=1;}
+  ['id','sort','time'].forEach(function(k){
+    var u=document.getElementById('s-'+k+'-up'),d=document.getElementById('s-'+k+'-dn');
+    if(u)u.classList.remove('active');if(d)d.classList.remove('active');
+  });
+  var el=document.getElementById('s-'+key+(sortDir===1?'-up':'-dn'));
+  if(el)el.classList.add('active');
+  filtered.sort(function(a,b){
+    var av=key==='id'?a.id:key==='sort'?a.sort:a.timeStart;
+    var bv=key==='id'?b.id:key==='sort'?b.sort:b.timeStart;
+    return av>bv?sortDir:av<bv?-sortDir:0;
+  });
+  renderRows();
+}
+
+function toggleSt(id){var r=rawData.find(function(x){return x.id===id;});if(r)r.status=r.status?0:1;doFilter();}
+function delRow(id){
+  if(confirm('确认删除活动 '+id+' ？')){
+    var i=rawData.findIndex(function(x){return x.id===id;});
+    if(i>-1)rawData.splice(i,1);
+    filtered=filtered.filter(function(x){return x.id!==id;});renderRows();
+  }
+}
+
+function renderRows(){
+  var tbody=document.getElementById('tBody');
+  document.getElementById('totalTxt').textContent='Total '+filtered.length;
+  if(!filtered.length){tbody.innerHTML='<tr><td colspan="14" style="text-align:center;padding:32px;color:#bbb;">暂无数据</td></tr>';return;}
+  tbody.innerHTML=filtered.map(function(r,ri){return '<tr>'+
+    '<td>'+r.id+'</td>'+
+    '<td>'+r.sort+'</td>'+
+    '<td class="'+(r.status?'status-on':'status-off')+'">'+(r.status?'开启':'关闭')+'</td>'+
+    '<td style="font-size:11px;white-space:nowrap;">'+r.timeStart+'~'+r.timeEnd+'</td>'+
+    '<td>'+r.currency+'</td>'+
+    '<td style="font-size:11px;">'+r.lang+'</td>'+
+    '<td>'+r.template+'</td>'+
+    '<td>'+r.name+'</td>'+
+    '<td>'+(ri===0?'<div style="position:relative;display:inline-block;"><span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">3</span><div style="border:2px solid #ff4d4f;border-radius:4px;display:inline-block;"><button class="upload-pill" onclick="openPreview('+r.id+')">上传</button></div></div>':'<button class="upload-pill" onclick="openPreview('+r.id+')">上传</button>')+'</td>'+
+    '<td>'+(r.blacklist==='—'?'<span style="color:#bbb">—</span>':'<span style="background:#e6f4ff;color:#1677ff;padding:1px 7px;border-radius:3px;font-size:11px;">'+r.blacklist+'</span>')+'</td>'+
+    '<td style="font-size:11px;">'+(r.agent==='—'?'<span style="color:#bbb">—</span>':'<span style="color:#1677ff">'+r.agent+'</span>')+'</td>'+
+    '<td style="text-align:center;">'+r.winCount+'</td>'+
+    '<td style="text-align:center;">'+r.auditRatio+'</td>'+
+    '<td>'+
+      '<div class="acts-row">'+
+        '<a href="add_activity.html" class="alink">编辑</a>'+
+        '<button class="alink" style="color:#ff4d4f;" onclick="delRow('+r.id+')">删除</button>'+
+      '</div>'+
+      '<div class="acts-row">'+
+        '<button class="alink" onclick="toggleSt('+r.id+')">'+(r.status?'关闭':'开启')+'</button>'+
+      '</div>'+
+    '</td>'+
+  '</tr>';}).join('');
+}
+renderRows();
+</script>
+</body>
+</html>
