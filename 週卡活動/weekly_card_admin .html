@@ -650,7 +650,7 @@ function bindDrops() {
 // ── step 4 ──────────────────────────────────────────────────────
 function renderPlanCard(p, pi) {
   const BL = {std:'bstd',prem:'bprem',custom:'bcustom'};
-  const BN = {std:'标准',prem:'豪华',custom:'自定义'};
+  const BN = {std:'标准卡',prem:'豪华卡',custom:'自定义'};
   const rows = p.days.map((day,d) => {
     return `<tr>
       <td class="td-day">第${d+1}天</td>
@@ -670,10 +670,6 @@ function renderPlanCard(p, pi) {
         </div>
         <div style="font-size:10px;color:#bbb;margin-top:3px;">留空=无条件可领</div>
       </td>
-      <td>
-        <input type="number" class="to-inp" placeholder="倍数" value="${day.turnover}" data-plan="${pi}" data-day="${d}" data-field="turnover">
-        <div style="font-size:10px;color:#bbb;margin-top:3px;">仅彩金适用</div>
-      </td>
     </tr>`;
   }).join('');
 
@@ -681,29 +677,19 @@ function renderPlanCard(p, pi) {
     <div class="pch" data-toggleCol="${pi}">
       <div class="pchl">
         <span class="pbadge ${BL[p.bt]||'bcustom'}">${BN[p.bt]||'自定义'}</span>
-        <span class="pname">${p.name}</span>
-        <span class="pprice">${p.price.toLocaleString()} PHP</span>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
-        ${pi>0?`<button class="b-delplan" data-delPlan="${pi}">删除</button>`:''}
         <span style="font-size:12px;color:#999;">${p.col?'▸':'▾'}</span>
       </div>
     </div>
     ${p.col ? '' : `
     <div class="pbody">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:18px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
         <div><div style="font-size:12px;color:#999;margin-bottom:6px;"><span class="req">*</span>卡型名称</div>
           <input type="text" class="fi" value="${p.name}" data-plan="${pi}" data-field="name">
         </div>
         <div><div style="font-size:12px;color:#999;margin-bottom:6px;"><span class="req">*</span>周卡费用（PHP）</div>
           <input type="number" class="fi" value="${p.price}" data-plan="${pi}" data-field="price">
-        </div>
-        <div><div style="font-size:12px;color:#999;margin-bottom:6px;">卡型标识</div>
-          <select class="fsel" data-plan="${pi}" data-field="bt">
-            <option value="std"${p.bt==='std'?' selected':''}>标准</option>
-            <option value="prem"${p.bt==='prem'?' selected':''}>豪华</option>
-            <option value="custom"${p.bt==='custom'?' selected':''}>自定义</option>
-          </select>
         </div>
       </div>
       <div style="margin-bottom:14px;">
@@ -714,7 +700,6 @@ function renderPlanCard(p, pi) {
           <th style="min-width:130px;">签到奖励</th>
           <th style="min-width:160px;">额外奖励</th>
           <th style="min-width:160px;">额外奖励条件</th>
-          <th style="width:90px;">彩金流水倍数<div style="font-size:10px;font-weight:400;color:#999;">仅彩金适用</div></th>
         </tr></thead><tbody>${rows}</tbody></table>
       </div>
     </div>`}
@@ -727,12 +712,13 @@ function renderPlanList() {
 function step4() {
   const total = Object.values(confSel).reduce((s,set)=>s+set.size,0);
   return `
-  <div class="sdesc">配置多种周卡方案，每种方案独立设置周卡费用与每日奖励明细。</div>
   <div class="tip-r">⚠ <strong>注意：</strong>修改奖励配置后将<strong>立即生效</strong>，已购买但尚未领取的奖励将按最新规则执行，请谨慎操作。</div>
   <div class="tip-b">ℹ <strong>规则说明：</strong>前台每位会员<strong>限购一张</strong>周卡；签到奖励无门槛可领；额外奖励需满足当日条件才可手动领取；彩金流水倍数<strong>仅针对彩金</strong>，积分、免费旋转、优惠券不计入。</div>
   <div id="planList">${plans.map((p,i)=>renderPlanCard(p,i)).join('')}</div>
-  <button class="b-addplan" id="bAddPlan">＋ 新增卡型</button>
   <div class="sb" style="margin-top:24px;border-top:1px solid #f0f0f0;padding-top:20px;"><div class="sec-t">通用设置</div>
+    <div class="fr"><div class="fl">彩金所需流水倍数：</div><div class="fc">
+      <input type="number" class="fi" placeholder="请输入" style="max-width:200px;">
+    </div></div>
     <div class="fr"><div class="fl">审核方式：</div><div class="fc"><div class="rg">
       <label class="ri"><input type="radio" name="audit"> 人工审核</label>
       <label class="ri"><input type="radio" name="audit" checked> 自动审核</label>
