@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>週卡活動</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+
+:root {
+  --pink: #FF8EC6;
+  --pink2: #FFC5E0;
+  --pink-pale: #FFF3FA;
+  --blue: #74C8FA;
+  --blue2: #B8E5FF;
+  --gold: #FFB300;
+  --bg: #FFF5FB;
+  --bg2: #FFFFFF;
+  --line: rgba(255,142,198,0.15);
+  --text: #1A1A2C;
+  --muted: #5E5E78;
+  --green: #3DC98A;
+  --red: #F87171;
+  --purple: #A078F5;
+  --w: 390px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html, body {
+  background: linear-gradient(160deg, #FFE4F4 0%, #D6EEFF 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.phone {
+  width: 100%;
+  max-width: var(--w);
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FFF4FB 0%, #EBF6FF 55%, #F0F8FF 100%);
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  overflow: visible;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,107,157,0.1) 0%, transparent 70%);
+}
+.hero-eyebrow {
+  position: relative;
+  font-size: 10px; letter-spacing: 4px;
+  color: var(--pink); font-weight: 700; opacity: 0.85;
+  text-transform: uppercase;
+}
+.hero-title {
+  position: relative;
+  font-size: 38px; font-weight: 900; letter-spacing: 6px;
+  background: linear-gradient(135deg, #FF72B8 0%, #C490FF 50%, #74C8FA 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: drop-shadow(0 2px 10px rgba(255,107,157,0.2));
+  line-height: 1;
+}
+.hero-sub {
+  position: relative;
+  font-size: 11px; color: var(--muted); letter-spacing: 1.5px;
+}
+.hero-pill {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(255,107,157,0.08);
+  border: 1px solid rgba(255,107,157,0.2);
+  border-radius: 20px; padding: 3px 12px;
+  font-size: 10px; color: var(--pink); font-weight: 600;
+  margin-top: 2px;
+}
+.rules-tab {
+  position: absolute; right: -1px; bottom: 24px;
+  background: linear-gradient(135deg, #FF72B8, var(--pink));
+  color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  padding: 6px 10px 6px 12px;
+  border-radius: 20px 0 0 20px;
+  cursor: pointer;
+  box-shadow: -2px 2px 10px rgba(255,107,157,0.3);
+  display: flex; align-items: center; gap: 5px;
+  z-index: 10; user-select: none; transition: all 0.2s;
+}
+.rules-tab:active { transform: scaleX(0.94); }
+.rules-tab svg { width:11px;height:11px;fill:#fff;flex-shrink:0; }
+
+/* ─── RULES MODAL ─── */
+.rules-mask {
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);
+  z-index:400;display:flex;align-items:center;justify-content:center;
+  padding:24px 20px;
+  opacity:0;pointer-events:none;transition:opacity 0.25s ease;
+}
+.rules-mask.open { opacity:1;pointer-events:all; }
+.rules-modal {
+  width:100%;max-width:340px;background:#fff;
+  border-radius:20px;border:1px solid rgba(255,107,157,0.18);
+  overflow:hidden;
+  transform:scale(0.92) translateY(16px);
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  position:relative;
+}
+.rules-mask.open .rules-modal { transform:scale(1) translateY(0); }
+.rules-modal::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--pink),transparent);
+}
+.rm-head {
+  padding:16px 18px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+.rm-title { font-size:13px;font-weight:700;color:var(--pink);display:flex;align-items:center;gap:7px; }
+.rm-title::before { content:'📋';font-size:14px; }
+.rm-close {
+  width:26px;height:26px;border-radius:8px;background:rgba(0,0,0,0.04);
+  border:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--muted);cursor:pointer;transition:all 0.15s;
+}
+.rm-close:active { background:rgba(0,0,0,0.08); }
+.rm-body { padding:14px 18px 20px;max-height:60vh;overflow-y:auto; }
+.rm-body::-webkit-scrollbar { width:3px; }
+.rm-body::-webkit-scrollbar-thumb { background:rgba(255,107,157,0.2);border-radius:2px; }
+.rule-item { display:flex;gap:10px;padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.05); }
+.rule-item:last-child { border:none;padding-bottom:0; }
+.rule-item:first-child { padding-top:0; }
+.rule-dot {
+  width:18px;height:18px;border-radius:50%;flex-shrink:0;margin-top:2px;
+  background:rgba(255,107,157,0.08);border:1px solid rgba(255,107,157,0.22);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;color:var(--pink);font-weight:700;
+}
+.rule-text { font-size:12px;color:var(--muted);line-height:1.75; }
+.rule-text b { color:var(--text); }
+
+/* ─── PLAN SELECTOR ─── */
+.plan-wrap {
+  margin: 0 12px;
+  padding: 14px;
+  background: rgba(255,255,255,0.65);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.85);
+  box-shadow: 0 3px 18px rgba(0,0,0,0.04);
+}
+.plan-tabs { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0; }
+.plan-tab {
+  position:relative;background:#fff;
+  border:1.5px solid rgba(0,0,0,0.07);border-radius:16px;
+  padding:14px 14px 12px;cursor:pointer;transition:all 0.22s;
+  overflow:hidden;text-align:left;
+}
+.plan-tab::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:transparent;
+  transition:all 0.22s;
+}
+.plan-tab.active { border-color:var(--pink);background:rgba(255,107,157,0.03); }
+.plan-tab.active::before { background:linear-gradient(90deg,transparent,var(--pink),transparent); }
+.plan-tab.active-premium { border-color:var(--purple);background:rgba(160,120,245,0.04); }
+.plan-tab.active-premium::before { background:linear-gradient(90deg,transparent,var(--purple),transparent); }
+.pt-badge {
+  display:inline-block;font-size:9px;font-weight:700;letter-spacing:0.5px;
+  padding:2px 8px;border-radius:20px;margin-bottom:8px;text-transform:uppercase;
+}
+.badge-std { background:rgba(255,107,157,0.1);color:var(--pink);border:1px solid rgba(255,107,157,0.22); }
+.badge-prem { background:rgba(160,120,245,0.1);color:var(--purple);border:1px solid rgba(160,120,245,0.22); }
+.pt-price { font-size:26px;font-weight:900;line-height:1;color:var(--text); }
+.pt-price.gold { color:var(--pink); }
+.pt-price.purple { color:var(--purple); }
+.pt-unit { font-size:11px;font-weight:500;color:var(--muted); }
+.pt-name { font-size:11px;color:var(--muted);margin-top:5px; }
+.pt-best {
+  position:absolute;top:10px;right:10px;
+  font-size:9px;font-weight:700;
+  background:rgba(160,120,245,0.1);border:1px solid rgba(160,120,245,0.22);
+  color:var(--purple);padding:2px 7px;border-radius:20px;
+}
+.pt-check {
+  position:absolute;bottom:10px;right:12px;
+  width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;opacity:0;transition:opacity 0.2s;
+}
+.plan-tab.active .pt-check { opacity:1;background:rgba(255,107,157,0.12);border:1px solid var(--pink);color:var(--pink); }
+.plan-tab.active-premium .pt-check { opacity:1;background:rgba(160,120,245,0.12);border:1px solid var(--purple);color:var(--purple); }
+
+/* ─── PLAN DETAIL ─── */
+.plan-detail {
+  margin:10px 0 0;background:#fff;border-radius:16px;
+  border:1px solid rgba(255,107,157,0.14);overflow:hidden;
+  position:relative;transition:border-color 0.3s;
+}
+.plan-detail.prem { border-color:rgba(160,120,245,0.2); }
+.plan-detail::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--pink),transparent);transition:all 0.3s;
+}
+.plan-detail.prem::before { background:linear-gradient(90deg,transparent,var(--purple),transparent); }
+.pd-tags {
+  padding:12px 16px;display:flex;gap:5px;flex-wrap:wrap;
+  border-bottom:1px solid rgba(0,0,0,0.05);
+}
+.pd-tag { font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600; }
+.t-cash   { background:rgba(61,201,138,0.1);color:var(--green);border:1px solid rgba(61,201,138,0.2); }
+.t-spin   { background:rgba(160,120,245,0.1);color:var(--purple);border:1px solid rgba(160,120,245,0.2); }
+.t-point  { background:rgba(255,179,0,0.1);color:var(--gold);border:1px solid rgba(255,179,0,0.2); }
+.t-coupon { background:rgba(255,140,64,0.1);color:var(--orange);border:1px solid rgba(255,140,64,0.2); }
+.pd-note {
+  padding:9px 16px;font-size:11px;color:var(--muted);line-height:1.6;
+  border-bottom:1px solid rgba(0,0,0,0.05);
+}
+.pd-note b { color:var(--text); }
+
+.pd-buy {
+  margin:12px 16px 14px;
+  width:calc(100% - 32px);padding:13px;
+  border-radius:12px;border:none;
+  font-family:inherit;font-size:15px;font-weight:700;letter-spacing:0.5px;
+  cursor:pointer;transition:all 0.2s;
+  background:linear-gradient(135deg,#FF72B8,#FFB0D8);
+  color:#fff;box-shadow:0 4px 16px rgba(255,142,198,0.3);
+}
+.pd-buy.prem {
+  background:linear-gradient(135deg,#7C3AED,#A078F5);
+  box-shadow:0 4px 16px rgba(160,120,245,0.28);
+}
+.pd-buy:active { transform:scale(0.97);box-shadow:none; }
+.pd-buy.purchased {
+  background: rgba(61,201,138,0.1);
+  border: 1.5px solid rgba(61,201,138,0.28);
+  color: var(--green);
+  box-shadow: none;
+  cursor: default;
+}
+.pd-buy.blocked {
+  background: rgba(0,0,0,0.05);
+  color: var(--muted);
+  box-shadow: none;
+  cursor: default;
+}
+.pt-purchased-tag {
+  position: absolute; bottom: 10px; left: 12px;
+  font-size: 8px; font-weight: 700;
+  background: rgba(61,201,138,0.1); color: var(--green);
+  border: 1px solid rgba(61,201,138,0.22); padding: 2px 6px;
+  border-radius: 20px; pointer-events: none;
+}
+.plan-detail.dimmed::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(160,160,160,0.13);
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 2;
+}
+.section.dimmed {
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+/* ─── SECTION ─── */
+.section {
+  margin: 14px 12px 0;
+  padding: 16px;
+  background: rgba(255,255,255,0.65);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.85);
+  box-shadow: 0 3px 18px rgba(0,0,0,0.04);
+}
+.sec-hd { display:flex;align-items:center;gap:10px;margin-bottom:12px; }
+.sec-line { flex:1;height:1px;background:rgba(255,107,157,0.15); }
+.sec-line.rev { background:linear-gradient(90deg,rgba(255,107,157,0.15),transparent); }
+.sec-title { font-size:11px;letter-spacing:3px;color:var(--pink);font-weight:700;white-space:nowrap; }
+
+/* ─── CHECKIN CARD ─── */
+.checkin-card {
+  background:#fff;border-radius:18px;
+  border:1px solid rgba(255,107,157,0.14);
+  overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,0.04);
+}
+.cc-hd {
+  padding:13px 16px 11px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid rgba(0,0,0,0.05);
+}
+.cc-title { font-size:13px;font-weight:700;color:var(--text); }
+.cc-badge {
+  font-size:11px;color:var(--pink);
+  background:rgba(255,107,157,0.08);border:1px solid rgba(255,107,157,0.18);
+  padding:2px 10px;border-radius:20px;font-weight:600;
+}
+.cc-bar-wrap { padding:12px 16px 4px; }
+.cc-bar {
+  height:6px;background:rgba(0,0,0,0.06);border-radius:3px;
+  overflow:visible;margin-bottom:4px;position:relative;
+}
+.cc-fill {
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--pink),var(--blue));
+  position:relative;transition:width 0.6s ease;
+}
+.cc-fill::after {
+  content:'';position:absolute;right:-5px;top:-3px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--pink);box-shadow:0 0 8px rgba(255,107,157,0.45);
+}
+.cc-bar-label {
+  text-align:right;font-size:9px;color:var(--muted);padding-bottom:8px;
+}
+
+/* ─── DAY STRIP ─── */
+.days-strip {
+  display:grid;grid-template-columns:repeat(7,1fr);gap:4px;
+  padding:6px 10px 16px;
+}
+.day-col { display:flex;flex-direction:column;align-items:center;gap:4px; }
+.day-num { font-size:8px;color:var(--muted);font-weight:700;letter-spacing:0.2px; }
+.day-dot {
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;border:2px solid transparent;
+  transition:all 0.2s;
+}
+.day-dot.done { background:rgba(61,201,138,0.1);border-color:rgba(61,201,138,0.35);font-size:18px; }
+.day-dot.today {
+  background:linear-gradient(145deg,rgba(255,107,157,0.15),rgba(91,179,238,0.1));
+  border-color:var(--pink);box-shadow:0 0 14px rgba(255,107,157,0.3);
+  animation:glow-pink 2s ease-in-out infinite;font-size:20px;
+}
+.day-dot.locked { background:rgba(0,0,0,0.04);border-color:rgba(0,0,0,0.08);font-size:16px; }
+.day-dot.big-prize {
+  background:linear-gradient(145deg,rgba(255,179,0,0.12),rgba(255,107,157,0.08));
+  border-color:rgba(255,179,0,0.4);
+}
+@keyframes glow-pink {
+  0%,100% { box-shadow:0 0 8px rgba(255,142,198,0.2); }
+  50%      { box-shadow:0 0 18px rgba(255,142,198,0.45); }
+}
+.day-reward {
+  font-size:7.5px;font-weight:600;color:var(--muted);
+  text-align:center;line-height:1.3;max-width:40px;word-break:break-all;
+}
+.day-col.done  .day-reward { color:var(--green); }
+.day-col.today .day-reward { color:var(--pink);font-weight:700; }
+.day-col.prize .day-reward { color:var(--gold); }
+
+/* ─── REWARD LIST ─── */
+.reward-list { display:flex;flex-direction:column;gap:8px; }
+
+.rw-card {
+  background:#fff;border-radius:16px;
+  border:1.5px solid rgba(0,0,0,0.07);
+  overflow:hidden;display:flex;
+  box-shadow:0 2px 8px rgba(0,0,0,0.04);
+  transition:border-color 0.2s;flex-direction:column;
+}
+.rw-card.done  { border-color:rgba(61,201,138,0.22); }
+.rw-card.today { border-color:rgba(255,107,157,0.3);box-shadow:0 3px 14px rgba(255,107,157,0.1); }
+.rw-card.locked { opacity:0.82; }
+
+.rw-main { display:flex;align-items:center;gap:11px;width:100%;padding:12px 14px; }
+
+.rw-badge {
+  width:42px;height:42px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:900;
+}
+.rw-badge.done   { background:rgba(61,201,138,0.1);color:var(--green);border:1.5px solid rgba(61,201,138,0.25); }
+.rw-badge.today  { background:linear-gradient(145deg,rgba(255,107,157,0.12),rgba(91,179,238,0.08));color:var(--pink);border:1.5px solid rgba(255,107,157,0.3); }
+.rw-badge.locked { background:rgba(0,0,0,0.04);color:var(--muted);border:1.5px solid rgba(0,0,0,0.08); }
+.rw-badge.prize  { background:linear-gradient(145deg,rgba(255,179,0,0.12),rgba(255,107,157,0.08));color:var(--gold);border:1.5px solid rgba(255,179,0,0.3); }
+
+.rw-mid { flex:1;min-width:0; }
+.rw-chips { display:flex;gap:4px;flex-wrap:wrap;align-items:center; }
+.rw-chip { font-size:12px;padding:5px 12px;border-radius:20px;font-weight:700; }
+.rw-chip.dim { opacity:0.45; }
+
+.rw-action { flex-shrink:0; }
+.cbtn {
+  padding:5px 11px;border-radius:8px;border:none;
+  font-family:inherit;font-size:10px;font-weight:700;
+  cursor:pointer;transition:all 0.2s;letter-spacing:0.3px;
+}
+.cbtn.active { background:linear-gradient(135deg,#FF72B8,var(--pink));color:#fff;box-shadow:0 2px 10px rgba(255,142,198,0.3); }
+.cbtn.active:active { transform:scale(0.95); }
+.cbtn.done   { background:rgba(61,201,138,0.08);border:1px solid rgba(61,201,138,0.2);color:var(--green);cursor:default; }
+.cbtn.locked { background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.08);color:var(--muted);cursor:default; }
+
+/* ─── Type 1: 標題列 + 上下排版 (has-extra) ─── */
+.rw-card.has-extra { flex-direction: column; }
+.rw-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px;
+  border-bottom: 1.5px solid rgba(255,142,198,0.1);
+}
+.rw-head .rw-badge { width:28px;height:28px;font-size:10px; }
+.rw-head-info { flex: 1; min-width: 0; }
+.rw-head-title { font-size: 12px; font-weight: 700; color: var(--text); }
+.rw-head-sub { font-size: 9px; color: var(--muted); margin-top: 1px; }
+.rw-head-tag {
+  font-size: 9px; font-weight: 700; padding: 2px 8px;
+  border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+}
+.rw-head-tag.today  { background: linear-gradient(135deg,var(--pink),var(--blue2)); color:#fff; }
+.rw-head-tag.done   { background: rgba(61,201,138,0.1); color:var(--green); border:1px solid rgba(61,201,138,0.2); }
+.rw-head-tag.locked { background: rgba(0,0,0,0.05); color:var(--muted); }
+.rw-head-tag.prize  { background: rgba(255,179,0,0.12); color:var(--gold); border:1px solid rgba(255,179,0,0.25); }
+/* 上下兩列 */
+.rw-cols { display: flex; flex-direction: column; }
+.rw-left {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+}
+.rw-right {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  background: rgba(116,200,250,0.08);
+  border-top: 1.5px dashed rgba(116,200,250,0.28);
+}
+.rw-col-tag {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.4px;
+  color: var(--muted); text-transform: uppercase; white-space: nowrap;
+  margin-bottom: 1px;
+}
+.rw-right .rw-col-tag { color: #4AAAD8; }
+.rw-row-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
+.rw-row-icon.dim { opacity: 0.35; }
+.rw-row-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.rw-col-val { font-size: 13px; font-weight: 800; background:none!important; border:none!important; padding:0!important; }
+.rw-col-val.dim { opacity: 0.4; }
+.rw-col-sub { font-size: 9px; color: var(--muted); font-weight: 500; }
+.rw-col-sub.dim { opacity: 0.4; }
+.rw-cond-pill {
+  font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+  background: rgba(116,200,250,0.1); color: #4AAAD8;
+  border: 1px solid rgba(116,200,250,0.3); white-space: nowrap; margin-top: 2px;
+  display: inline-block;
+}
+.rw-cond-pill.met {
+  background: rgba(61,201,138,0.08); color: var(--green);
+  border-color: rgba(61,201,138,0.2);
+}
+
+/* ─── Type 2: 純簽到單行 (no-extra) ─── */
+.rw-card.no-extra {
+  flex-direction: row; align-items: center;
+  padding: 11px 14px; gap: 12px;
+}
+
+/* mini deposit progress bar */
+.rw-dep-prog { margin-top:4px;display:flex;align-items:center;gap:6px; }
+.rw-dep-bar { flex:1;height:4px;background:rgba(0,0,0,0.08);border-radius:2px;overflow:hidden;min-width:50px; }
+.rw-dep-fill { height:100%;background:linear-gradient(90deg,var(--blue),var(--blue2));border-radius:2px;transition:width 0.5s ease; }
+.rw-dep-text { font-size:8px;color:var(--blue);white-space:nowrap;font-weight:600; }
+.cbtn.cond-wait {
+  background:rgba(116,200,250,0.09);border:1px solid rgba(116,200,250,0.28);
+  color:var(--blue);cursor:default;font-size:10px;padding:5px 10px;
+}
+
+/* ─── BUY CONFIRM MODAL ─── */
+.buy-mask {
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.45);backdrop-filter:blur(10px);
+  z-index:350;display:flex;align-items:center;justify-content:center;
+  padding:24px 20px;opacity:0;pointer-events:none;transition:opacity 0.25s ease;
+}
+.buy-mask.open { opacity:1;pointer-events:all; }
+.buy-modal {
+  width:100%;max-width:320px;background:#fff;border-radius:24px;
+  padding:24px 22px 22px;position:relative;
+  transform:scale(0.9) translateY(20px);
+  transition:transform 0.32s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 24px 60px rgba(0,0,0,0.12);overflow:hidden;
+}
+.buy-modal::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--pink),var(--blue));
+}
+.buy-mask.open .buy-modal { transform:scale(1) translateY(0); }
+.buy-icon { font-size:42px;text-align:center;margin-bottom:10px;display:block; }
+.buy-heading { text-align:center;margin-bottom:6px; }
+.buy-subtitle { font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:5px; }
+.buy-plan-name { font-size:18px;font-weight:900;color:var(--text);letter-spacing:1px; }
+.buy-price {
+  text-align:center;font-size:38px;font-weight:900;letter-spacing:1px;
+  background:linear-gradient(135deg,var(--pink),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin:10px 0 18px;line-height:1;
+}
+.buy-info {
+  background:rgba(116,200,250,0.07);border:1px solid rgba(116,200,250,0.2);
+  border-radius:14px;padding:13px 15px;margin-bottom:18px;
+  display:flex;flex-direction:column;gap:9px;
+}
+.buy-info-item { font-size:12px;color:var(--text);line-height:1.4;display:flex;align-items:flex-start;gap:8px; }
+.buy-info-item .bi-icon { flex-shrink:0;font-size:13px; }
+.buy-info-item.warn { color:var(--muted);font-size:11px; }
+.buy-actions { display:flex;gap:9px; }
+.buy-cancel {
+  flex:1;padding:12px 8px;border-radius:12px;border:1.5px solid rgba(0,0,0,0.09);
+  background:rgba(0,0,0,0.03);font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);
+  cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.buy-cancel:active { background:rgba(0,0,0,0.07); }
+.buy-confirm {
+  flex:2;padding:12px 8px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,#FF72B8,var(--pink));
+  font-family:inherit;font-size:13px;font-weight:700;color:#fff;
+  cursor:pointer;transition:all 0.2s;box-shadow:0 4px 14px rgba(255,142,198,0.3);
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.buy-confirm:active { transform:scale(0.97);box-shadow:none; }
+
+/* ─── POPUPS ─── */
+.popup-mask {
+  position:fixed;inset:0;background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(8px);z-index:200;
+  display:flex;align-items:flex-end;justify-content:center;
+  animation:mask-in 0.2s ease;
+}
+@keyframes mask-in { from{opacity:0} to{opacity:1} }
+.popup-sheet {
+  width:100%;max-width:var(--w);background:#fff;
+  border-radius:24px 24px 0 0;border-top:1.5px solid rgba(255,107,157,0.2);
+  padding-bottom:env(safe-area-inset-bottom,20px);
+  animation:sheet-up 0.32s cubic-bezier(0.34,1.56,0.64,1);
+  position:relative;overflow:hidden;
+}
+.popup-sheet::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--pink),transparent);
+}
+@keyframes sheet-up { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
+.sh-handle { width:34px;height:3px;border-radius:2px;background:rgba(0,0,0,0.1);margin:12px auto 0; }
+.sh-top { padding:18px 20px 0;text-align:center; }
+.sh-icon { font-size:44px;display:block;margin-bottom:10px;animation:bounce-i 2.5s ease infinite; }
+@keyframes bounce-i { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+.sh-title { font-size:18px;font-weight:900;letter-spacing:0.5px;margin-bottom:4px;color:var(--text); }
+.sh-title span { background:linear-gradient(135deg,var(--pink),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+.sh-info { font-size:12px;color:var(--muted);margin-bottom:16px; }
+.sh-days { display:flex;justify-content:center;gap:5px;padding:0 14px;margin-bottom:16px; }
+.sd { flex:1;display:flex;flex-direction:column;align-items:center;gap:3px; }
+.sd-dot { width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;border:1.5px solid transparent; }
+.sd-dot.done   { background:rgba(61,201,138,0.1);border-color:rgba(61,201,138,0.3); }
+.sd-dot.today  { background:rgba(255,107,157,0.1);border-color:var(--pink);box-shadow:0 0 8px rgba(255,107,157,0.3); }
+.sd-dot.locked { background:rgba(0,0,0,0.04);border-color:rgba(0,0,0,0.08); }
+.sd-lbl { font-size:8px;color:var(--muted);font-weight:600; }
+.sh-rewards { display:flex;gap:8px;padding:0 18px;margin-bottom:18px; }
+.sh-rc { flex:1;background:rgba(0,0,0,0.02);border:1px solid rgba(0,0,0,0.06);border-radius:12px;padding:10px 6px;text-align:center; }
+.sh-rc .ri { font-size:20px;margin-bottom:3px;display:block; }
+.sh-rc .rv { font-size:12px;font-weight:900;color:var(--pink); }
+.sh-rc .rn { font-size:9px;color:var(--muted);margin-top:2px; }
+.sh-btns { padding:0 18px 8px;display:flex;flex-direction:column;gap:8px; }
+.sh-btn { width:100%;padding:13px;border-radius:12px;border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.3px; }
+.sh-btn.primary { background:linear-gradient(135deg,#FF72B8,var(--pink));color:#fff;box-shadow:0 3px 14px rgba(255,142,198,0.28); }
+.sh-btn.primary:active { transform:scale(0.97); }
+.sh-btn.ghost { background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.07);color:var(--muted);font-size:12px; }
+.sh-check { display:flex;align-items:center;justify-content:center;gap:7px;padding:6px 18px 4px; }
+.sh-check input { accent-color:var(--pink);width:14px;height:14px; }
+.sh-check label { font-size:11px;color:var(--muted);cursor:pointer; }
+.confirm-sheet {
+  width:100%;max-width:var(--w);background:#fff;border-radius:24px 24px 0 0;
+  border-top:1px solid rgba(248,113,113,0.2);
+  padding:22px 18px calc(env(safe-area-inset-bottom,0px) + 20px);
+  text-align:center;animation:sheet-up 0.28s cubic-bezier(0.34,1.56,0.64,1);
+}
+.cs-icon { font-size:32px;margin-bottom:8px;display:block; }
+.cs-title { font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text); }
+.cs-desc { font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:18px; }
+.cs-desc b { color:var(--pink); }
+.cs-btns { display:flex;gap:10px; }
+.cs-btns button { flex:1;padding:11px;border-radius:10px;border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer; }
+.c-stay  { background:rgba(255,107,157,0.1);border:1px solid rgba(255,107,157,0.22)!important;color:var(--pink); }
+.c-leave { background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2)!important;color:var(--red); }
+
+/* toast */
+.toast {
+  position:fixed;top:20px;left:50%;
+  transform:translateX(-50%) translateY(-14px);
+  background:rgba(61,201,138,0.1);border:1px solid rgba(61,201,138,0.25);
+  color:var(--green);padding:9px 18px;border-radius:10px;
+  font-size:12px;font-weight:600;white-space:nowrap;
+  z-index:999;opacity:0;transition:all 0.3s ease;pointer-events:none;
+}
+.toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
+
+.spacer { height:32px; }
+</style>
+</head>
+<body>
+<div class="phone">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-eyebrow">限時活動</div>
+  <div class="hero-title">週卡活動</div>
+  <div class="hero-sub">購買即享 · 7天連續簽到領獎</div>
+  <div class="hero-pill">🔥 每日登入自動簽到</div>
+  <div class="rules-tab" onclick="openRulesModal()">
+    <svg viewBox="0 0 16 16"><path d="M2 2h12v12H2z" fill="none" stroke="#fff" stroke-width="1.5" rx="2"/><path d="M5 5h6M5 8h6M5 11h4" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>
+    規則
+  </div>
+</div>
+
+<!-- PLAN SELECTOR -->
+<div class="plan-wrap">
+  <div class="plan-tabs">
+    <div class="plan-tab active" id="tab-500" onclick="selectPlan('500')">
+      <div class="pt-badge badge-std">標準</div>
+      <div class="pt-price gold">500</div>
+      <div class="pt-unit">PHP / 7天</div>
+      <div class="pt-name">現金 + 積分</div>
+      <div class="pt-check">✓</div>
+    </div>
+    <div class="plan-tab" id="tab-2000" onclick="selectPlan('2000')">
+      <div class="pt-badge badge-prem">豪華</div>
+      <div class="pt-price purple">2,000</div>
+      <div class="pt-unit">PHP / 7天</div>
+      <div class="pt-name">現金 + 旋轉 + 積分 + 券</div>
+      <div class="pt-best">推薦</div>
+      <div class="pt-check">✓</div>
+    </div>
+  </div>
+  <div class="plan-detail" id="plan-detail">
+    <div class="pd-tags" id="pd-tags">
+      <span class="pd-tag t-cash">💵 現金</span>
+      <span class="pd-tag t-point">⭐ 積分</span>
+    </div>
+    <div class="pd-note" id="pd-note">
+      彩金流水依各天配置 · 積分獎勵無流水要求 · 每週期限購一次
+    </div>
+    <button class="pd-buy" id="pd-buy" onclick="triggerBuy()">立即購買 — 500 PHP</button>
+  </div>
+</div>
+
+<!-- CHECKIN PROGRESS -->
+<div class="section">
+  <div class="sec-hd">
+    <div class="sec-line"></div>
+    <div class="sec-title">簽到進度</div>
+    <div class="sec-line rev"></div>
+  </div>
+  <div class="checkin-card">
+    <div class="cc-hd">
+      <div class="cc-title">本週簽到</div>
+      <div class="cc-badge" id="cc-badge-text">已簽 3 / 7 天</div>
+    </div>
+    <div class="cc-bar-wrap">
+      <div class="cc-bar"><div class="cc-fill" style="width:38%"></div></div>
+      <div class="cc-bar-label">再 4 天解鎖終極大獎 🎁</div>
+    </div>
+    <div class="days-strip" id="days-strip"></div>
+  </div>
+</div>
+
+<!-- DAILY REWARD LIST -->
+<div class="section">
+  <div class="sec-hd">
+    <div class="sec-line"></div>
+    <div class="sec-title">每日獎勵</div>
+    <div class="sec-line rev"></div>
+  </div>
+  <div class="reward-list" id="reward-list"></div>
+</div>
+
+<div class="spacer"></div>
+</div><!-- /phone -->
+
+<!-- BUY CONFIRM MODAL -->
+<div class="buy-mask" id="buy-mask" onclick="handleBuyMaskClick(event)">
+  <div class="buy-modal" onclick="event.stopPropagation()">
+    <span class="buy-icon">🛒</span>
+    <div class="buy-heading">
+      <div class="buy-subtitle">確認購買</div>
+      <div class="buy-plan-name" id="buy-plan-name">豪華周卡</div>
+    </div>
+    <div class="buy-price" id="buy-price">₱2,000</div>
+    <div class="buy-info">
+      <div class="buy-info-item"><span class="bi-icon">✦</span>購買後立即開始 7 天獎勵週期</div>
+      <div class="buy-info-item"><span class="bi-icon">✦</span>每日登入即可領取專屬獎勵</div>
+      <div class="buy-info-item warn"><span class="bi-icon">!</span>購買後不可退款，請確認後再操作</div>
+    </div>
+    <div class="buy-actions">
+      <button class="buy-cancel" onclick="closeBuyModal()">✕ 取消</button>
+      <button class="buy-confirm" onclick="confirmPurchase()">🛒 確認購買</button>
+    </div>
+  </div>
+</div>
+
+<!-- RULES MODAL -->
+<div class="rules-mask" id="rules-mask" onclick="handleRulesMaskClick(event)">
+  <div class="rules-modal" onclick="event.stopPropagation()">
+    <div class="rm-head">
+      <div class="rm-title">活動規則</div>
+      <div class="rm-close" onclick="closeRulesModal()">✕</div>
+    </div>
+    <div class="rm-body">
+      <div class="rule-item"><div class="rule-dot">1</div><div class="rule-text">每個週期僅可購買<b>一次</b>週卡，週期結束後資格自動重置。</div></div>
+      <div class="rule-item"><div class="rule-dot">2</div><div class="rule-text">簽到獎勵按<b>實際登入天數</b>累計，若7天內未全部簽到，週期結束時強制重置。</div></div>
+      <div class="rule-item"><div class="rule-dot">3</div><div class="rule-text"><b>日常簽到獎勵</b>（FREE）登入後可直接手動領取；<b>額外獎勵</b>須滿足當日條件後才可領取。</div></div>
+      <div class="rule-item"><div class="rule-dot">4</div><div class="rule-text">彩金（Bonus）類獎勵需完成對應<b>流水倍數</b>之有效投注，其餘類型（積分、旋轉、優惠券）不設流水要求。</div></div>
+      <div class="rule-item"><div class="rule-dot">5</div><div class="rule-text">額外獎勵條件須於<b>當日 24:00 前</b>完成達標，逾期視為未達標，不予補發。</div></div>
+      <div class="rule-item"><div class="rule-dot">6</div><div class="rule-text">活動期間若獎勵規則調整，<b>已領取獎勵</b>不受影響，未領取按最新規則執行。</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKIN POPUP -->
+<div class="popup-mask" id="checkin-popup" style="display:none" onclick="handleMaskClick(event,'checkin-popup')">
+  <div class="popup-sheet" onclick="event.stopPropagation()">
+    <div class="sh-handle"></div>
+    <div class="sh-top">
+      <span class="sh-icon">🎉</span>
+      <div class="sh-title"><span>第 4 天簽到獎勵</span></div>
+      <div class="sh-info">再堅持 3 天解鎖終極大獎！</div>
+    </div>
+    <div class="sh-days">
+      <div class="sd"><div class="sd-dot done">⭐</div><div class="sd-lbl">Day1</div></div>
+      <div class="sd"><div class="sd-dot done">⭐</div><div class="sd-lbl">Day2</div></div>
+      <div class="sd"><div class="sd-dot done">⭐</div><div class="sd-lbl">Day3</div></div>
+      <div class="sd"><div class="sd-dot today">🎀</div><div class="sd-lbl">Day4</div></div>
+      <div class="sd"><div class="sd-dot locked">🌙</div><div class="sd-lbl">Day5</div></div>
+      <div class="sd"><div class="sd-dot locked">🌙</div><div class="sd-lbl">Day6</div></div>
+      <div class="sd"><div class="sd-dot locked">👑</div><div class="sd-lbl">Day7</div></div>
+    </div>
+    <div class="sh-rewards" id="popup-rewards"></div>
+    <div class="sh-btns">
+      <button class="sh-btn primary" onclick="doClaim()">🎁 領取今日獎勵</button>
+      <button class="sh-btn ghost" onclick="tryCloseCheckin()">稍後再說</button>
+    </div>
+    <div class="sh-check">
+      <input type="checkbox" id="no-show">
+      <label for="no-show">今日不再顯示</label>
+    </div>
+    <div style="height:6px"></div>
+  </div>
+</div>
+
+<!-- CONFIRM POPUP -->
+<div class="popup-mask" id="confirm-popup" style="display:none" onclick="cancelLeave()">
+  <div class="confirm-sheet" onclick="event.stopPropagation()">
+    <span class="cs-icon">⚠️</span>
+    <div class="cs-title">確定離開嗎？</div>
+    <div class="cs-desc">今日簽到獎勵尚未領取<br>獎勵將在 <b>24小時內</b> 自動過期</div>
+    <div class="cs-btns">
+      <button class="c-stay" onclick="cancelLeave()">繼續領取</button>
+      <button class="c-leave" onclick="confirmLeave()">確認離開</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const plans = {
+  '500': {
+    tags: '<span class="pd-tag t-cash">💵 現金</span><span class="pd-tag t-point">⭐ 積分</span>',
+    note: '彩金流水依各天配置 · 積分獎勵無流水要求 · 每週期限購一次',
+    btnText: '立即購買 — 500 PHP',
+    btnClass: '',
+    days: [
+      { free:{ chips:[{cls:'t-cash',txt:'💵 50 PHP'}] }, extra:{ chips:[{cls:'t-point',txt:'⭐ 80 pts'}], cond:'當日存款 ≥ 200 PHP', condMet:true },  turnover:3, status:'done',   stripIcon:'⭐', stripHint:'50 PHP' },
+      { free:{ chips:[{cls:'t-point',txt:'⭐ 100 pts'}] }, extra:{ chips:[{cls:'t-cash',txt:'💵 30 PHP'}], cond:'當日存款 ≥ 200 PHP', condMet:true }, turnover:3, status:'done',   stripIcon:'⭐', stripHint:'100 pts' },
+      { free:{ chips:[{cls:'t-cash',txt:'💵 60 PHP'}] }, extra:{ chips:[{cls:'t-point',txt:'⭐ 120 pts'}], cond:'當日存款 ≥ 300 PHP', condMet:false }, turnover:3, status:'done',   stripIcon:'⭐', stripHint:'60 PHP' },
+      { free:{ chips:[{cls:'t-cash',txt:'💵 70 PHP'}] }, extra:{ chips:[{cls:'t-cash',txt:'💵 50 PHP'}], cond:'當日存款 ≥ 300 PHP', condMet:false, depositNow:120, depositTarget:300 }, turnover:3, status:'today',  stripIcon:'🎀', stripHint:'今日' },
+      { free:{ chips:[{cls:'t-point',txt:'⭐ 200 pts'}] }, extra:null, turnover:3, status:'locked', stripIcon:'🌙', stripHint:'200 pts' },
+      { free:{ chips:[{cls:'t-cash',txt:'💵 80 PHP'}] }, extra:null, turnover:3, status:'locked', stripIcon:'🌙', stripHint:'80 PHP' },
+      { free:{ chips:[{cls:'t-cash',txt:'💵 120 PHP'}] }, extra:{ chips:[{cls:'t-cash',txt:'💵 80 PHP'}], cond:'當日存款 ≥ 500 PHP', condMet:false }, turnover:5, status:'locked', stripIcon:'👑', stripHint:'大獎' },
+    ],
+    popupRewards: [{ icon:'💵', val:'70 PHP', name:'現金' }],
+  },
+  '2000': {
+    tags: '<span class="pd-tag t-cash">💵 現金</span><span class="pd-tag t-spin">🎰 旋轉</span><span class="pd-tag t-point">⭐ 積分</span><span class="pd-tag t-coupon">🎟 優惠券</span>',
+    note: '彩金流水依各天配置 · 積分、旋轉、優惠券無流水要求 · 每週期限購一次',
+    btnText: '立即購買 — 2,000 PHP',
+    btnClass: 'prem',
+    days: [
+      { free:{ chips:[{cls:'t-cash',txt:'💵 200 PHP'}] }, extra:{ chips:[{cls:'t-coupon',txt:'🎟 ×1'}], cond:'當日存款 ≥ 500 PHP', condMet:true },  turnover:5, status:'done',   stripIcon:'⭐', stripHint:'200 PHP' },
+      { free:{ chips:[{cls:'t-point',txt:'⭐ 500 pts'}] }, extra:{ chips:[{cls:'t-cash',txt:'💵 100 PHP'}], cond:'當日存款 ≥ 500 PHP', condMet:true }, turnover:5, status:'done',   stripIcon:'⭐', stripHint:'500 pts' },
+      { free:{ chips:[{cls:'t-cash',txt:'💵 220 PHP'}] }, extra:{ chips:[{cls:'t-spin',txt:'🎰 ×15'}], cond:'當日存款 ≥ 800 PHP', condMet:false }, turnover:5, status:'done',   stripIcon:'⭐', stripHint:'220 PHP' },
+      { free:{ chips:[{cls:'t-cash',txt:'💵 250 PHP'}] }, extra:{ chips:[{cls:'t-cash',txt:'💵 150 PHP'}], cond:'當日存款 ≥ 1000 PHP', condMet:false, depositNow:350, depositTarget:1000 }, turnover:5, status:'today',  stripIcon:'🎀', stripHint:'今日' },
+      { free:{ chips:[{cls:'t-cash',txt:'💵 270 PHP'}] }, extra:{ chips:[{cls:'t-point',txt:'⭐ 500 pts'}], cond:'當日存款 ≥ 1000 PHP', condMet:false }, turnover:5, status:'locked', stripIcon:'🌙', stripHint:'270 PHP' },
+      { free:{ chips:[{cls:'t-spin',txt:'🎰 ×30'}] }, extra:{ chips:[{cls:'t-cash',txt:'💵 200 PHP'}], cond:'當日存款 ≥ 1500 PHP', condMet:false }, turnover:5, status:'locked', stripIcon:'🌙', stripHint:'×30 旋轉' },
+      { free:{ chips:[{cls:'t-cash',txt:'💵 500 PHP'}] }, extra:{ chips:[{cls:'t-coupon',txt:'🎟 ×3'}], cond:'當日存款 ≥ 2000 PHP', condMet:false }, turnover:8, status:'locked', stripIcon:'👑', stripHint:'大獎' },
+    ],
+    popupRewards: [{ icon:'💵', val:'250 PHP', name:'現金' }, { icon:'🎰', val:'×20 轉', name:'免費旋轉' }],
+  }
+};
+
+let currentPlan = '500';
+let day4Claimed = false;
+let purchasedPlan = null;
+
+function selectPlan(key) {
+  currentPlan = key;
+  const p = plans[key];
+  document.getElementById('tab-500').className = 'plan-tab' + (key==='500' ? ' active' : '');
+  document.getElementById('tab-2000').className = 'plan-tab' + (key==='2000' ? ' active-premium' : '');
+  const detail = document.getElementById('plan-detail');
+  detail.className = 'plan-detail' + (key==='2000' ? ' prem' : '');
+  document.getElementById('pd-tags').innerHTML = p.tags;
+  document.getElementById('pd-note').innerHTML = p.note;
+  const btn = document.getElementById('pd-buy');
+  btn.textContent = p.btnText;
+  btn.className = 'pd-buy' + (p.btnClass ? ' ' + p.btnClass : '');
+  renderCheckinCard(key);
+  renderDayStrip(key);
+  renderRewardList(key);
+  renderPopupRewards(key);
+  updateBuyButton();
+}
+
+function renderDayStrip(key) {
+  const p = plans[key];
+  const isMine = (purchasedPlan === null || purchasedPlan === key);
+  const strip = document.getElementById('days-strip');
+  strip.innerHTML = p.days.map((d, i) => {
+    const st = isMine ? ((i===3 && day4Claimed) ? 'done' : d.status) : 'locked';
+    const isLast = i === 6;
+    const colCls = st + (isLast ? ' prize' : '');
+    const dotCls = st + (isLast ? ' big-prize' : '');
+    let icon, hint;
+    if (isMine) {
+      icon = (i===3 && day4Claimed) ? '⭐' : d.stripIcon;
+      hint = (i===3 && day4Claimed) ? '已簽到' : (st==='done' ? '已簽到' : d.stripHint);
+    } else {
+      icon = isLast ? '👑' : '🌙';
+      hint = d.free.chips[0].txt.replace(/^[^\s]+\s/, '');
+    }
+    return `
+      <div class="day-col ${colCls}">
+        <div class="day-num">DAY${i+1}</div>
+        <div class="day-dot ${dotCls}">${icon}</div>
+        <div class="day-reward">${hint}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderCheckinCard(key) {
+  const isMine = (purchasedPlan === null || purchasedPlan === key);
+  document.getElementById('cc-badge-text').textContent =
+    isMine ? '已簽 3 / 7 天' : '0 / 7 天';
+  document.querySelector('.cc-fill').style.width =
+    isMine ? '38%' : '0%';
+  document.querySelector('.cc-bar-label').textContent =
+    isMine ? '再 4 天解鎖終極大獎 🎁' : '購買後開始簽到 · 7 天連續解鎖大獎 🎁';
+}
+
+function renderRewardList(key) {
+  const p = plans[key];
+  const list = document.getElementById('reward-list');
+  const isMine = (purchasedPlan === null || purchasedPlan === key);
+  list.innerHTML = p.days.map((d, i) => {
+    const st       = isMine ? ((i===3 && day4Claimed) ? 'done' : d.status) : 'locked';
+    const isToday  = st === 'today';
+    const isDone   = st === 'done';
+    const isLocked = st === 'locked';
+    const isLast   = i === 6;
+    const hasExtra = !!(d.extra && d.extra.chips && d.extra.chips.length > 0);
+
+    const badgeCls   = isLast ? 'prize' : st;
+    const badgeLabel = isLast ? '👑' : `D${i+1}`;
+    const borderStyle = isLast ? ' style="border-color:rgba(255,179,0,0.25)"' : '';
+
+    const freeChips = d.free.chips.map(c =>
+      `<span class="rw-chip ${c.cls}${isLocked ? ' dim' : ''}">${c.txt}</span>`
+    ).join('');
+
+    let btn = '';
+    if (isToday && !day4Claimed) {
+      btn = `<button class="cbtn active" onclick="openCheckinPopup()">領取</button>`;
+    } else if (isDone) {
+      btn = `<button class="cbtn done">✓ 已領</button>`;
+    } else {
+      btn = `<button class="cbtn locked">待解鎖</button>`;
+    }
+
+    if (hasExtra) {
+      // ── Type 1：標題列 + 上下排版 ──
+      const ex    = d.extra;
+      const exDim = isLocked || !ex.condMet;
+
+      const subLabel = { 't-cash':'現金', 't-point':'積分', 't-spin':'免費旋轉', 't-coupon':'優惠券' };
+
+      const fc = d.free.chips[0];
+      const fSp = fc.txt.indexOf(' ');
+      const fIcon = fSp > -1 ? fc.txt.slice(0, fSp) : fc.txt;
+      const fAmt  = fSp > -1 ? fc.txt.slice(fSp + 1) : fc.txt;
+      const fSub  = subLabel[fc.cls] || '';
+
+      const ec = ex.chips[0];
+      const eSp = ec.txt.indexOf(' ');
+      const eIcon = eSp > -1 ? ec.txt.slice(0, eSp) : ec.txt;
+      const eAmt  = eSp > -1 ? ec.txt.slice(eSp + 1) : ec.txt;
+      const eSub  = subLabel[ec.cls] || '';
+
+      const headTagMap = { done:'已領取', today:'今日', locked:'待解鎖', prize:'大獎' };
+      const headTagTxt = headTagMap[badgeCls] || '';
+
+      const condMet = isDone || ex.condMet;
+      const condPill = !isLocked
+        ? `<div class="rw-cond-pill${condMet ? ' met' : ''}">${condMet ? '✓ 條件已達' : ex.cond}</div>`
+        : '';
+
+      let progHtml = '';
+      if (isToday && !ex.condMet && !isDone && ex.depositNow !== undefined) {
+        const pct  = Math.min(100, Math.round(ex.depositNow / ex.depositTarget * 100));
+        const left = ex.depositTarget - ex.depositNow;
+        progHtml = `<div class="rw-dep-prog">
+          <div class="rw-dep-bar"><div class="rw-dep-fill" style="width:${pct}%"></div></div>
+          <span class="rw-dep-text">₱${ex.depositNow}/₱${ex.depositTarget} · 還差₱${left}</span>
+        </div>`;
+      }
+
+      let exBtn = '';
+      if (isDone) {
+        exBtn = `<button class="cbtn done">✓ 已領</button>`;
+      } else if (isToday && ex.condMet) {
+        exBtn = `<button class="cbtn active" onclick="showToast('✅ 額外獎勵已領取！')">領取</button>`;
+      } else if (isToday && !ex.condMet) {
+        exBtn = `<button class="cbtn cond-wait">✕ 未達標</button>`;
+      } else {
+        exBtn = `<button class="cbtn locked">待解鎖</button>`;
+      }
+
+      return `
+        <div class="rw-card has-extra ${st}"${borderStyle}>
+          <div class="rw-head">
+            <div class="rw-badge ${badgeCls}">${badgeLabel}</div>
+            <div class="rw-head-info">
+              <div class="rw-head-title">第 ${i+1} 天</div>
+            </div>
+          </div>
+          <div class="rw-cols">
+            <div class="rw-left">
+              <div class="rw-row-icon${isLocked ? ' dim' : ''}">${fIcon}</div>
+              <div class="rw-row-info">
+                <div class="rw-col-tag">基本獎勵</div>
+                <div class="rw-col-val ${fc.cls}${isLocked ? ' dim' : ''}">${fAmt}</div>
+                <div class="rw-col-sub${isLocked ? ' dim' : ''}">${fSub}</div>
+              </div>
+              <div class="rw-action">${btn}</div>
+            </div>
+            <div class="rw-right">
+              <div class="rw-row-icon${exDim ? ' dim' : ''}">${eIcon}</div>
+              <div class="rw-row-info">
+                <div class="rw-col-tag">額外獎勵</div>
+                <div class="rw-col-val ${ec.cls}${exDim ? ' dim' : ''}">${eAmt}</div>
+                <div class="rw-col-sub${exDim ? ' dim' : ''}">${eSub}</div>
+                ${condPill}${progHtml}
+              </div>
+              <div class="rw-action">${exBtn}</div>
+            </div>
+          </div>
+        </div>`;
+    } else {
+      // ── Type 2：純簽到單行 ──
+      return `
+        <div class="rw-card no-extra ${st}"${borderStyle}>
+          <div class="rw-badge ${badgeCls}">${badgeLabel}</div>
+          <div class="rw-mid"><div class="rw-chips">${freeChips}</div></div>
+          <div class="rw-action">${btn}</div>
+        </div>`;
+    }
+  }).join('');
+}
+
+function renderPopupRewards(key) {
+  document.getElementById('popup-rewards').innerHTML = plans[key].popupRewards.map(r =>
+    `<div class="sh-rc"><span class="ri">${r.icon}</span><div class="rv">${r.val}</div><div class="rn">${r.name}</div></div>`
+  ).join('');
+}
+
+function openRulesModal() {
+  document.getElementById('rules-mask').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeRulesModal() {
+  document.getElementById('rules-mask').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleRulesMaskClick(e) {
+  if (e.target === document.getElementById('rules-mask')) closeRulesModal();
+}
+function openCheckinPopup() {
+  renderPopupRewards(currentPlan);
+  document.getElementById('checkin-popup').style.display = 'flex';
+}
+function handleMaskClick(e, id) {
+  if (e.target.classList.contains('popup-mask')) {
+    if (id==='checkin-popup') tryCloseCheckin();
+    else if (id==='confirm-popup') cancelLeave();
+  }
+}
+function tryCloseCheckin() {
+  document.getElementById('checkin-popup').style.display = 'none';
+  document.getElementById('confirm-popup').style.display = 'flex';
+}
+function cancelLeave() {
+  document.getElementById('confirm-popup').style.display = 'none';
+  document.getElementById('checkin-popup').style.display = 'flex';
+}
+function confirmLeave() {
+  document.getElementById('confirm-popup').style.display = 'none';
+}
+function doClaim() {
+  day4Claimed = true;
+  document.getElementById('checkin-popup').style.display = 'none';
+  renderCheckinCard(currentPlan);
+  renderDayStrip(currentPlan);
+  renderRewardList(currentPlan);
+  showToast('🎉 獎勵已發放至您的帳戶！');
+}
+function triggerBuy() {
+  if (purchasedPlan !== null) return;
+  openBuyModal();
+}
+function openBuyModal() {
+  const planName = currentPlan === '500' ? '標準周卡' : '豪華周卡';
+  const price    = currentPlan === '500' ? '₱500'    : '₱2,000';
+  document.getElementById('buy-plan-name').textContent = planName;
+  document.getElementById('buy-price').textContent = price;
+  document.getElementById('buy-mask').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeBuyModal() {
+  document.getElementById('buy-mask').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleBuyMaskClick(e) {
+  if (e.target === document.getElementById('buy-mask')) closeBuyModal();
+}
+function confirmPurchase() {
+  closeBuyModal();
+  purchasedPlan = currentPlan;
+  updateBuyButton();
+  showToast('✅ 購買成功！週卡已啟動');
+}
+function updateBuyButton() {
+  const btn = document.getElementById('pd-buy');
+  const p = plans[currentPlan];
+  document.querySelectorAll('.pt-purchased-tag').forEach(e => e.remove());
+  if (purchasedPlan) {
+    const tab = document.getElementById('tab-' + purchasedPlan);
+    if (tab) {
+      const tag = document.createElement('div');
+      tag.className = 'pt-purchased-tag';
+      tag.textContent = '✓ 已購';
+      tab.appendChild(tag);
+    }
+  }
+  const detail = document.getElementById('plan-detail');
+  const sections = document.querySelectorAll('.section');
+  const isOtherPurchased = purchasedPlan !== null && purchasedPlan !== currentPlan;
+  if (purchasedPlan === currentPlan) {
+    btn.textContent = '每週限購一次';
+    btn.className = 'pd-buy purchased';
+  } else if (isOtherPurchased) {
+    btn.textContent = '每週限購一次';
+    btn.className = 'pd-buy blocked';
+  } else {
+    btn.textContent = p.btnText;
+    btn.className = 'pd-buy' + (p.btnClass ? ' ' + p.btnClass : '');
+  }
+  if (isOtherPurchased) {
+    detail.classList.add('dimmed');
+    sections.forEach(s => s.classList.add('dimmed'));
+  } else {
+    detail.classList.remove('dimmed');
+    sections.forEach(s => s.classList.remove('dimmed'));
+  }
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+selectPlan('500');
+</script>
+</body>
+</html>
