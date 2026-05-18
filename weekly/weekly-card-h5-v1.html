@@ -12,8 +12,8 @@
   --blue: #74C8FA;
   --blue2: #B8E5FF;
   --gold: #FFB300;
-  --text: #1A1A2C;
-  --muted: #5E5E78;
+  --text: #EDE5FF;
+  --muted: #9D8EC2;
   --green: #3DC98A;
   --red: #F87171;
   --purple: #A078F5;
@@ -24,7 +24,10 @@
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
 html, body {
-  background: linear-gradient(160deg, #FFE4F4 0%, #D6EEFF 100%);
+  background:
+    radial-gradient(ellipse at 25% 15%, rgba(160,120,245,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 78% 85%, rgba(255,107,157,0.16) 0%, transparent 55%),
+    linear-gradient(160deg, #1C0832 0%, #08122A 100%);
   min-height: 100vh;
   overflow-x: auto;
   overflow-y: auto;
@@ -52,7 +55,7 @@ html, body {
   height: 780px;
   overflow-y: auto;
   overflow-x: hidden;
-  background: linear-gradient(180deg, #FFF4FB 0%, #EBF6FF 55%, #F0F8FF 100%);
+  background: linear-gradient(180deg, #180A2E 0%, #0E1828 55%, #081220 100%);
   font-family: 'Noto Sans SC', sans-serif;
   color: var(--text);
   position: relative;
@@ -342,6 +345,7 @@ html, body {
 .cbtn-claim:active { transform:scale(0.95); }
 .cbtn-claimed { background:rgba(61,201,138,0.08); color:var(--green); border:1px solid rgba(61,201,138,0.2); cursor:default; }
 .cbtn-deposit { background:linear-gradient(135deg,#FFB300,#FF8F00); color:#fff; box-shadow:0 2px 8px rgba(255,179,0,0.3); }
+.cbtn-expired { background:rgba(248,113,113,0.07); color:var(--red); border:1px solid rgba(248,113,113,0.2); cursor:default; }
 .cbtn-deposit:active { transform:scale(0.95); }
 .cbtn-bet     { background:linear-gradient(135deg,#9B59F5,#7C3AED); color:#fff; box-shadow:0 2px 8px rgba(160,120,245,0.3); }
 .cbtn-bet:active { transform:scale(0.95); }
@@ -407,13 +411,20 @@ html, body {
 .dp-body { padding:14px 16px 16px; }
 .dp-cta { width:100%; padding:13px; border-radius:12px; border:none; background:linear-gradient(135deg,#FF72B8,var(--pink)); color:#fff; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:6px; }
 .dp-check { display:flex; align-items:center; justify-content:center; gap:6px; }
-.dp-plans { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
-.dp-plan-item { border-radius:12px; padding:9px 11px; border:1px solid rgba(0,0,0,0.07); background:rgba(0,0,0,0.02); }
-.dp-plan-item.prime { border-color:rgba(160,120,245,0.22); background:rgba(160,120,245,0.03); }
-.dp-plan-item.elite { border-color:rgba(255,107,157,0.22); background:rgba(255,107,157,0.03); }
-.dp-plan-name { font-size:10px; font-weight:700; color:var(--text); margin-bottom:6px; }
-.dp-plan-rewards { display:flex; gap:5px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
-.dp-plan-rewards::-webkit-scrollbar { display:none; }
+.dp-plans { display:flex; flex-direction:row; gap:8px; margin-bottom:14px; }
+.dp-plan-item { flex:1; border-radius:14px; padding:11px 10px 10px; border:1.5px solid rgba(0,0,0,0.07); background:rgba(0,0,0,0.02); min-width:0; }
+.dp-plan-item.prime { border-color:rgba(160,120,245,0.35); background:linear-gradient(135deg,rgba(160,120,245,0.06),rgba(91,179,238,0.04)); box-shadow:0 3px 12px rgba(160,120,245,0.1); }
+.dp-plan-item.elite { border-color:rgba(255,107,157,0.3); background:rgba(255,107,157,0.03); }
+.dp-plan-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.dp-plan-name { font-size:11px; font-weight:800; color:var(--text); display:flex; align-items:center; gap:5px; }
+.dp-plan-rec { font-size:8px; font-weight:700; padding:1px 6px; border-radius:20px; background:rgba(160,120,245,0.12); color:var(--purple); border:1px solid rgba(160,120,245,0.25); }
+.dp-plan-price { font-size:14px; font-weight:900; }
+.dp-plan-price.prime { color:var(--purple); }
+.dp-plan-price.elite { color:var(--pink); }
+.dp-plan-rewards { display:flex; flex-wrap:wrap; gap:5px; }
+.dp-plan-rewards .chip-ico { font-size:22px; }
+.dp-plan-rewards .chip-val { font-size:12px; }
+.dp-plan-rewards .chip { padding:5px 10px; gap:5px; }
 .dp-check input { accent-color:var(--pink); width:13px; height:13px; }
 .dp-check label { font-size:11px; color:var(--muted); cursor:pointer; }
 .dp-confirm-overlay { position:absolute; inset:0; background:rgba(10,5,30,0.7); backdrop-filter:blur(6px); z-index:20; display:flex; align-items:center; justify-content:center; padding:24px; }
@@ -491,7 +502,132 @@ html, body {
 /* ─── TOAST ─── */
 .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-14px); background:rgba(61,201,138,0.1); border:1px solid rgba(61,201,138,0.25); color:var(--green); padding:9px 18px; border-radius:10px; font-size:12px; font-weight:600; white-space:nowrap; z-index:999; opacity:0; transition:all 0.3s ease; pointer-events:none; }
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+/* ─── PLAN CARD TOTAL VALUE LINE ─── */
+.pcv-tv-line { font-size:10px; color:var(--muted); margin:8px 0 4px; }
+
 .spacer { height:28px; }
+
+/* ══════════════════════════════════════
+   V1 — NIGHT MODE OVERRIDES
+   ══════════════════════════════════════ */
+
+/* Demo label */
+.demo-label { background:rgba(255,255,255,0.08); color:rgba(200,165,255,0.85); }
+
+/* ─ Plan cards ─ */
+.plan-wrap { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.09); box-shadow:0 3px 18px rgba(0,0,0,0.4); }
+.plan-card-v { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); box-shadow:0 3px 14px rgba(0,0,0,0.35); }
+.plan-card-v.prime { box-shadow:0 3px 22px rgba(160,120,245,0.18); }
+.plan-card-v.elite { box-shadow:0 3px 22px rgba(255,107,157,0.14); }
+.pcv-buy.blocked-plan { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); }
+.pcv-buy.purchased    { background:rgba(61,201,138,0.1); border-color:rgba(61,201,138,0.3); }
+.pcv-rewards::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.15); }
+.pcv-ri.t-cash   { background:rgba(61,201,138,0.1);  border-color:rgba(61,201,138,0.25); }
+.pcv-ri.t-point  { background:rgba(255,179,0,0.1);   border-color:rgba(255,179,0,0.25); }
+.pcv-ri.t-spin   { background:rgba(160,120,245,0.1); border-color:rgba(160,120,245,0.25); }
+.pcv-ri.t-coupon { background:rgba(255,142,64,0.1);  border-color:rgba(255,142,64,0.25); }
+.pcv-ri-name { color:var(--muted); }
+
+/* ─ Section / rules ─ */
+.section { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.08); box-shadow:0 3px 18px rgba(0,0,0,0.32); }
+.sec-line { background:rgba(255,107,157,0.25); }
+.tnc-item { border-color:rgba(255,255,255,0.07); }
+.tnc-text { color:var(--muted); }
+.tnc-text b { color:var(--text); }
+
+/* ─ Claim page ─ */
+.claim-sec-line { background:rgba(255,107,157,0.25); }
+.ch-progress    { background:rgba(255,107,157,0.1); border-color:rgba(255,107,157,0.28); color:var(--text); }
+.ch-bar-wrap    { background:rgba(255,107,157,0.2); }
+
+/* ─ Reward table ─ */
+.rwt-head                { border-color:rgba(255,255,255,0.07); }
+.rwt-row                 { border-color:rgba(255,255,255,0.07); }
+.rwt-day                 { border-color:rgba(255,255,255,0.07); }
+.rwt-basic               { border-color:rgba(255,255,255,0.07); }
+.rwt-row.today-row       { background:rgba(255,107,157,0.08); }
+.rwt-row.prize-row       { background:rgba(255,179,0,0.07); }
+.rwt-num-circle.locked   { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.12); }
+.rwt-locked-txt          { color:var(--muted); }
+
+/* ─ Compact reward rows ─ */
+.rw-compact        { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.08); }
+.rw-compact.done   { border-color:rgba(61,201,138,0.25); }
+.rw-compact.locked { border-color:rgba(255,255,255,0.06); opacity:0.6; }
+.rw-cpt-num.locked { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); }
+.rw-cpt-tag.locked { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); }
+
+/* ─ Expanded card (today) ─ */
+.rw-card          { background:rgba(255,255,255,0.04); border-color:rgba(255,107,157,0.35); box-shadow:0 4px 18px rgba(255,107,157,0.15); }
+.rw-exp-head      { border-color:rgba(255,255,255,0.08); }
+.rw-row.extra-row { background:rgba(116,200,250,0.08); border-color:rgba(116,200,250,0.3); }
+
+/* ─ Overview rows ─ */
+.ov-row          { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.08); }
+.ov-row.ov-last  { border-color:rgba(255,179,0,0.3); }
+.ov-si.t-cash    { background:rgba(61,201,138,0.1);  border-color:rgba(61,201,138,0.28); }
+.ov-si.t-point   { background:rgba(255,179,0,0.1);   border-color:rgba(255,179,0,0.28); }
+.ov-si.t-spin    { background:rgba(160,120,245,0.1); border-color:rgba(160,120,245,0.28); }
+.ov-si.t-coupon  { background:rgba(255,142,64,0.1);  border-color:rgba(255,142,64,0.28); }
+
+/* ─ Chips ─ */
+.t-cash   { background:rgba(61,201,138,0.12);  border-color:rgba(61,201,138,0.3); }
+.t-point  { background:rgba(255,179,0,0.12);   border-color:rgba(255,179,0,0.3); }
+.t-spin   { background:rgba(160,120,245,0.12); border-color:rgba(160,120,245,0.3); }
+.t-coupon { background:rgba(255,142,64,0.12);  border-color:rgba(255,142,64,0.3); }
+
+/* ─ Cond pill ─ */
+.cond-pill     { background:rgba(116,200,250,0.12); border-color:rgba(116,200,250,0.28); }
+.cond-pill.met { background:rgba(61,201,138,0.1);   border-color:rgba(61,201,138,0.25); }
+
+/* ─ cbtn states ─ */
+.cbtn-claimed { background:rgba(61,201,138,0.1);   border-color:rgba(61,201,138,0.25); }
+.cbtn-expired { background:rgba(248,113,113,0.1);  border-color:rgba(248,113,113,0.25); }
+
+/* ─ Buy modal ─ */
+.buy-modal  { background:#160A2C; }
+.buy-info   { background:rgba(116,200,250,0.07); border-color:rgba(116,200,250,0.18); }
+.buy-cancel { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.12); }
+
+/* ─ Rules modal ─ */
+.rules-modal { background:#160A2C; }
+.rule-item   { border-color:rgba(255,255,255,0.07); }
+.rm-head     { border-color:rgba(255,255,255,0.08); }
+.rm-close    { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.1); }
+.rule-text   { color:var(--muted); }
+.rule-text b { color:var(--text); }
+
+/* ─ Auto-dispatch popup ─ */
+.apu-sheet   { background:#160A2C; }
+.apu-rewards { border-color:rgba(255,255,255,0.08); }
+.apu-rw      { border-color:rgba(255,255,255,0.07); }
+.apu-rw-ico  { background:rgba(61,201,138,0.12); }
+.apu-extra   { background:rgba(255,179,0,0.06); border-color:rgba(255,179,0,0.4); }
+
+/* ─ Deposit popup ─ */
+.dp-page        { background:linear-gradient(180deg,#160A2C 0%,#0A1628 100%) !important; }
+.dp-page-topbar { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.08); color:var(--text); }
+.dp-form-block  { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.08); }
+.dp-form-label  { color:var(--muted); }
+.dp-form-input  { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.1); }
+.dp-card        { background:#180B2E; }
+.dp-banner      { background:linear-gradient(135deg,#3A1060 0%,#1E1550 55%,#0E2050 100%); }
+.dp-banner-sub  { color:rgba(200,165,255,0.75); }
+.dp-banner-date { color:rgba(180,145,230,0.6); }
+.dp-plan-item   { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); }
+.dp-plan-item.prime { background:linear-gradient(135deg,rgba(160,120,245,0.1),rgba(91,179,238,0.06)); border-color:rgba(160,120,245,0.4); }
+.dp-plan-item.elite { background:rgba(255,107,157,0.06); border-color:rgba(255,107,157,0.35); }
+.dp-check label     { color:var(--muted); }
+.dp-confirm-card    { background:#180B2E; }
+
+/* ─ Claim popup sheet ─ */
+.popup-sheet { background:#160A2C; border-color:rgba(255,107,157,0.25); }
+.sh-rc       { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.09); }
+.sh-info     { color:var(--muted); }
+
+/* ─ Plan detail card ─ */
+.plan-detail-card      { background:rgba(255,255,255,0.05); border-color:rgba(255,107,157,0.2); }
+.plan-detail-card.prem { border-color:rgba(160,120,245,0.25); }
 </style>
 </head>
 <body>
@@ -517,7 +653,7 @@ html, body {
         </div>
         <div class="pcv-bottom">
           <div class="pcv-price prime">P 2,000.00</div>
-          <button class="pcv-buy prime" id="pcv-buy-prime" onclick="triggerBuy('prime')">立即购买 <span class="pcv-buy-ico">🛒</span></button>
+          <button class="pcv-buy prime" id="pcv-buy-prime" onclick="triggerBuy('prime')">立即购买</button>
         </div>
         <div id="pcv-rewards-prime"></div>
       </div>
@@ -527,7 +663,7 @@ html, body {
         </div>
         <div class="pcv-bottom">
           <div class="pcv-price elite">P 500.00</div>
-          <button class="pcv-buy elite" id="pcv-buy-elite" onclick="triggerBuy('elite')">立即购买 <span class="pcv-buy-ico">🛒</span></button>
+          <button class="pcv-buy elite" id="pcv-buy-elite" onclick="triggerBuy('elite')">立即购买</button>
         </div>
         <div id="pcv-rewards-elite"></div>
       </div>
@@ -670,11 +806,17 @@ html, body {
         <div class="dp-body">
           <div class="dp-plans">
             <div class="dp-plan-item prime">
-              <div class="dp-plan-name">豪华卡</div>
+              <div class="dp-plan-hd">
+                <div class="dp-plan-name">豪华卡 <span class="dp-plan-rec">推荐</span></div>
+                <div class="dp-plan-price prime">P 2,000</div>
+              </div>
               <div id="dpop-rewards-prime"></div>
             </div>
             <div class="dp-plan-item elite">
-              <div class="dp-plan-name">标准卡</div>
+              <div class="dp-plan-hd">
+                <div class="dp-plan-name">标准卡</div>
+                <div class="dp-plan-price elite">P 500</div>
+              </div>
               <div id="dpop-rewards-elite"></div>
             </div>
           </div>
@@ -854,13 +996,15 @@ function renderPlanBonus(key, containerId) {
     });
   });
   const items = [
-    { cls:'t-cash',   ico:'💵', name:'現金總共',   val:`${T.cash} PHP` },
-    { cls:'t-point',  ico:'⭐', name:'積分總共',   val:`${T.point} pts` },
-    { cls:'t-spin',   ico:'🎰', name:'旋轉卷',     val:`${T.spin} Free Spins` },
-    { cls:'t-coupon', ico:'🎟', name:'優惠卷',     val:`×${T.coupon}` },
+    { cls:'t-cash',   ico:'💵', name:'現金',   val:`${T.cash} PHP` },
+    { cls:'t-point',  ico:'⭐', name:'積分',   val:`${T.point} pts` },
+    { cls:'t-spin',   ico:'🎰', name:'旋轉卷', val:`${T.spin} Spins` },
+    { cls:'t-coupon', ico:'🎟', name:'優惠卷', val:`×${T.coupon}` },
   ];
   const el = document.getElementById(containerId);
-  if (el) el.innerHTML = `<div class="pcv-rewards">` +
+  if (el) el.innerHTML =
+    `<div class="pcv-tv-line">7天總獎勵</div>` +
+    `<div class="pcv-rewards">` +
     items.map(it => `<div class="pcv-ri ${it.cls}">
       <div class="pcv-ri-ico">${it.ico}</div>
       <div class="pcv-ri-name">${it.name}</div>
@@ -950,8 +1094,8 @@ function renderRewardList(key) {
       } else if (isDone) {
         condEl   = `<span class="rwt-cond-txt">${ex.cond}</span>`;
         actionEl = extCl
-          ? `<span class="cond-pill met" style="font-size:8px">✓ 已领取</span>`
-          : `<span class="rwt-expired">已过期</span>`;
+          ? `<span class="cbtn cbtn-claimed">✓ 已领取</span>`
+          : `<span class="cbtn cbtn-expired">已过期</span>`;
       } else {
         condEl = `<span class="rwt-cond-txt">${ex.cond}</span>`;
         if (extCl) {
@@ -1030,10 +1174,10 @@ renderPlanBonus('elite', 'pcv-rewards-elite');
     });
   });
   const html = [
-    `<span class="chip sm t-cash"><span class="chip-ico">💵</span><span class="chip-val">${T.cash} PHP</span></span>`,
-    `<span class="chip sm t-point"><span class="chip-ico">⭐</span><span class="chip-val">${T.point} pts</span></span>`,
-    `<span class="chip sm t-spin"><span class="chip-ico">🎰</span><span class="chip-val">×${T.spin}</span></span>`,
-    `<span class="chip sm t-coupon"><span class="chip-ico">🎟</span><span class="chip-val">×${T.coupon}</span></span>`,
+    `<span class="chip t-cash"><span class="chip-ico">💵</span><span class="chip-val">${T.cash} PHP</span></span>`,
+    `<span class="chip t-point"><span class="chip-ico">⭐</span><span class="chip-val">${T.point} pts</span></span>`,
+    `<span class="chip t-spin"><span class="chip-ico">🎰</span><span class="chip-val">×${T.spin}</span></span>`,
+    `<span class="chip t-coupon"><span class="chip-ico">🎟</span><span class="chip-val">×${T.coupon}</span></span>`,
   ].join('');
   const el = document.getElementById(containerId);
   if (el) el.innerHTML = `<div class="dp-plan-rewards">${html}</div>`;
@@ -1052,10 +1196,10 @@ renderPlanBonus('elite', 'pcv-rewards-elite');
     });
   });
   const html = [
-    `<span class="chip sm t-cash"><span class="chip-ico">💵</span><span class="chip-val">${T.cash} PHP</span></span>`,
-    `<span class="chip sm t-point"><span class="chip-ico">⭐</span><span class="chip-val">${T.point} pts</span></span>`,
-    `<span class="chip sm t-spin"><span class="chip-ico">🎰</span><span class="chip-val">×${T.spin}</span></span>`,
-    `<span class="chip sm t-coupon"><span class="chip-ico">🎟</span><span class="chip-val">×${T.coupon}</span></span>`,
+    `<span class="chip t-cash"><span class="chip-ico">💵</span><span class="chip-val">${T.cash} PHP</span></span>`,
+    `<span class="chip t-point"><span class="chip-ico">⭐</span><span class="chip-val">${T.point} pts</span></span>`,
+    `<span class="chip t-spin"><span class="chip-ico">🎰</span><span class="chip-val">×${T.spin}</span></span>`,
+    `<span class="chip t-coupon"><span class="chip-ico">🎟</span><span class="chip-val">×${T.coupon}</span></span>`,
   ].join('');
   const el = document.getElementById(containerId);
   if (el) el.innerHTML = `<div class="dp-plan-rewards">${html}</div>`;
