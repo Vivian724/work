@@ -245,15 +245,30 @@ html, body {
   position: sticky; left: 0; z-index: 3;
 }
 /* claim table — larger cells for comfortable viewing */
-.htable-claim th { padding:14px 12px; font-size:11px; min-width:108px; }
-.htable-claim th.sticky-col { min-width:58px; }
-.htable-claim td { padding:14px 10px; min-width:108px; }
-.htable-claim td.sticky-col { min-width:58px; padding:14px 12px; font-size:11px; }
-.htable-claim .chip { font-size:12px; padding:5px 12px; }
-.htable-claim .extra-cond { font-size:10px; }
-.htable-claim .cbtn-claim { font-size:11px; padding:6px 14px; }
+.htable-claim th { padding:16px 12px; font-size:11px; min-width:116px; }
+.htable-claim th.sticky-col { min-width:62px; }
+.htable-claim td { padding:18px 10px; min-width:116px; }
+.htable-claim td.sticky-col { min-width:62px; padding:18px 13px; font-size:12px; font-weight:800; }
+.htable-claim .chip { font-size:13px; padding:6px 13px; }
+.htable-claim .extra-cond { font-size:10px; margin-bottom:2px; }
+.htable-claim .check-circle { width:22px; height:22px; font-size:12px; margin-top:7px; }
+.htable-claim .cbtn-claim { font-size:12px; padding:7px 16px; margin-top:6px; }
 .htable-claim .cbtn-claimed,
-.htable-claim .cbtn-wait { font-size:10px; padding:4px 10px; }
+.htable-claim .cbtn-wait,
+.htable-claim .cbtn-missed { font-size:10px; padding:5px 11px; margin-top:6px; }
+.htable-claim .cbtn-deposit,
+.htable-claim .cbtn-bet { font-size:12px; padding:7px 14px; margin-top:6px; }
+
+/* claim section block */
+.claim-section-hd {
+  display:flex; align-items:center; gap:10px;
+  padding:14px 16px 0;
+}
+.claim-section-title {
+  font-size:12px; font-weight:800; letter-spacing:2px; color:var(--text);
+  white-space:nowrap;
+}
+.claim-section-line { flex:1; height:1px; background:rgba(255,107,157,0.15); }
 
 /* today col */
 .td-today { background:rgba(255,107,157,0.04) !important; }
@@ -599,8 +614,14 @@ html, body {
     </div>
 
     <!-- Claim Table -->
-    <div class="section no-pad" style="margin-top:16px">
-      <div class="htable-outer" style="border-radius:20px">
+    <div class="section no-pad" style="margin-top:16px; border:1.5px solid rgba(255,107,157,0.2); box-shadow:0 6px 24px rgba(255,107,157,0.08);">
+      <div class="claim-section-hd">
+        <div class="claim-section-line"></div>
+        <div class="claim-section-title">签到 &amp; 额外奖励</div>
+        <div class="claim-section-line" style="background:linear-gradient(90deg,rgba(255,107,157,0.15),transparent)"></div>
+      </div>
+      <div style="height:10px"></div>
+      <div class="htable-outer" style="border-radius:0 0 20px 20px">
         <table class="htable htable-claim" id="claim-table"></table>
       </div>
     </div>
