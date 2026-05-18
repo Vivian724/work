@@ -606,11 +606,11 @@ html, body {
     <div class="claim-hero">
       <div class="pgh-tag">限时活动</div>
       <div class="ch-plan-name" id="ch-plan-name">标准卡</div>
-      <div class="pgh-date">☀️ 2026/06/01 – 2026/06/30</div>
       <div class="ch-progress">
         <div class="ch-progress-bar-wrap"><div class="ch-progress-bar" id="ch-bar" style="width:57%"></div></div>
         <span id="ch-progress-text">已签到 4 / 7 天</span>
       </div>
+      <div class="pgh-date">☀️ 2026/06/01 – 2026/06/30</div>
     </div>
 
     <!-- Claim Table -->
@@ -902,7 +902,7 @@ function renderBonusTable(key) {
   const p = plans[key];
   let html = '<thead><tr>';
   html += '<th class="sticky-col"></th>';
-  p.days.forEach((_, i) => html += `<th>Day ${i+1}</th>`);
+  p.days.forEach((_, i) => html += `<th>D${i+1}</th>`);
   html += '</tr></thead><tbody>';
 
   // 日常签到 row
@@ -936,7 +936,7 @@ function renderClaimTable(key) {
   html += '<th class="sticky-col"></th>';
   p.days.forEach((d, i) => {
     const isToday = d.status === 'today';
-    html += `<th class="${isToday ? 'th-today' : ''}">${dayNames[i]}${isToday ? '<br><span style="font-size:8px;font-weight:700;color:var(--pink)">● 今日</span>' : ''}</th>`;
+    html += `<th class="${isToday ? 'th-today' : ''}">Day ${i+1}${isToday ? '<br><span style="font-size:8px;font-weight:700;color:var(--pink)">● 今日</span>' : ''}</th>`;
   });
   html += '</tr></thead><tbody>';
 
