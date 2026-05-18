@@ -368,15 +368,16 @@ html, body {
 .ch-plan-name { font-size:42px; font-weight:900; letter-spacing:5px; color:#fff; position:relative; filter:drop-shadow(0 3px 14px rgba(0,0,0,0.2)); line-height:1; }
 .ch-progress {
   display:inline-flex; align-items:center; gap:6px;
-  background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.28);
+  background:rgba(255,107,157,0.07); border:1px solid rgba(255,107,157,0.18);
   border-radius:20px; padding:5px 14px;
-  font-size:12px; color:#fff; font-weight:600;
+  font-size:12px; color:var(--text); font-weight:600;
   position: relative;
 }
+.ch-progress-wrap { display:flex; justify-content:center; padding:10px 16px 2px; }
 .ch-progress-bar-wrap {
-  width:90px; height:5px; background:rgba(255,255,255,0.25); border-radius:3px; overflow:hidden;
+  width:90px; height:5px; background:rgba(255,107,157,0.15); border-radius:3px; overflow:hidden;
 }
-.ch-progress-bar { height:100%; background:#fff; border-radius:3px; }
+.ch-progress-bar { height:100%; background:linear-gradient(90deg,var(--pink),#FF6EA8); border-radius:3px; }
 
 /* ─── AUTO POPUP PHONE ─── */
 .phone-demo { width:var(--w)!important; min-height:500px!important; height:500px; overflow:hidden; position:relative; }
@@ -412,7 +413,10 @@ html, body {
 .apu-extra { display:flex; align-items:center; gap:10px; margin:0 14px 12px; background:rgba(255,179,0,0.05); border:1.5px dashed rgba(255,179,0,0.4); border-radius:12px; padding:10px 12px; }
 .apu-extra-left { flex:1; min-width:0; }
 .apu-extra-tag { font-size:9px; font-weight:700; color:var(--gold); margin-bottom:3px; }
-.apu-extra-reward { font-size:13px; font-weight:900; color:var(--text); }
+.apu-extra-reward { display:flex; align-items:center; gap:5px; margin-bottom:2px; }
+.apu-extra-ico { font-size:20px; line-height:1; }
+.apu-extra-val { font-size:14px; font-weight:900; color:var(--text); line-height:1.2; }
+.apu-extra-lbl { font-size:9px; color:var(--muted); }
 .apu-extra-cond { font-size:9px; color:var(--muted); margin-top:2px; }
 .apu-extra-btn { font-size:11px; font-weight:700; padding:6px 12px; border-radius:20px; cursor:pointer; flex-shrink:0; background:rgba(255,179,0,0.12); color:var(--gold); border:1.5px solid rgba(255,179,0,0.35); font-family:inherit; }
 .apu-btn { display:block; width:calc(100% - 28px); margin:0 14px; padding:12px; border-radius:12px; border:none; background:linear-gradient(135deg,#FF72B8,var(--pink)); color:#fff; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; box-shadow:0 4px 14px rgba(255,142,198,0.28); }
@@ -606,10 +610,6 @@ html, body {
     <div class="claim-hero">
       <div class="pgh-tag">限时活动</div>
       <div class="ch-plan-name" id="ch-plan-name">标准卡</div>
-      <div class="ch-progress">
-        <div class="ch-progress-bar-wrap"><div class="ch-progress-bar" id="ch-bar" style="width:57%"></div></div>
-        <span id="ch-progress-text">已签到 4 / 7 天</span>
-      </div>
       <div class="pgh-date">☀️ 2026/06/01 – 2026/06/30</div>
     </div>
 
@@ -617,8 +617,14 @@ html, body {
     <div class="section no-pad" style="margin-top:16px; border:1.5px solid rgba(255,107,157,0.2); box-shadow:0 6px 24px rgba(255,107,157,0.08);">
       <div class="claim-section-hd">
         <div class="claim-section-line"></div>
-        <div class="claim-section-title">签到 &amp; 额外奖励</div>
+        <div class="claim-section-title">每日签到</div>
         <div class="claim-section-line" style="background:linear-gradient(90deg,rgba(255,107,157,0.15),transparent)"></div>
+      </div>
+      <div class="ch-progress-wrap">
+        <div class="ch-progress">
+          <div class="ch-progress-bar-wrap"><div class="ch-progress-bar" id="ch-bar" style="width:57%"></div></div>
+          <span id="ch-progress-text">已签到 4 / 7 天</span>
+        </div>
       </div>
       <div style="height:10px"></div>
       <div class="htable-outer" style="border-radius:0 0 20px 20px">
@@ -681,8 +687,11 @@ html, body {
       <div class="apu-extra">
         <div class="apu-extra-left">
           <div class="apu-extra-tag">🎯 额外奖励待领取</div>
-          <div class="apu-extra-reward">🎟 Voucher ×2</div>
-          <div class="apu-extra-cond">當日存款 ≥ 300P</div>
+          <div class="apu-extra-reward">
+            <span class="apu-extra-ico">🎟</span>
+            <div><div class="apu-extra-val">×2</div><div class="apu-extra-lbl">优惠券</div></div>
+          </div>
+          <div class="apu-extra-cond">存款 ≥ 300 PHP</div>
         </div>
         <button class="apu-extra-btn">去存款</button>
       </div>
@@ -829,7 +838,7 @@ const plans = {
       { basic:{ cls:'t-cash',  txt:'💵 60 PHP'  }, extra:{ cls:'t-cash',  txt:'💵 50 PHP',  cond:'存款 ≥ 300 PHP', condMet:true  }, status:'done'   },
       { basic:{ cls:'t-cash',  txt:'💵 70 PHP'  }, extra:{ cls:'t-coupon',txt:'🎟 ×2',      cond:'存款 ≥ 300 PHP', condMet:false }, status:'today'  },
       { basic:{ cls:'t-point', txt:'⭐ 200 pts' }, extra:{ cls:'t-cash', txt:'💵 60 PHP', cond:'存款 ≥ 400 PHP', condMet:true }, status:'open' },
-      { basic:{ cls:'t-cash',  txt:'💵 80 PHP'  }, extra:null, status:'locked'  },
+      { basic:{ cls:'t-cash',  txt:'💵 80 PHP'  }, extra:{ cls:'t-point', txt:'⭐ 500 pts', cond:'存款 ≥ 400 PHP', condMet:false }, status:'locked'  },
       { basic:{ cls:'t-cash',  txt:'💵 120 PHP' }, extra:{ cls:'t-spin',  txt:'🎰 ×5',      cond:'投注 ≥ 500 PHP', condMet:false }, status:'locked'  },
     ]
   },
@@ -948,10 +957,12 @@ function renderClaimTable(key) {
     const isLocked = d.status === 'locked';
     const isOpen   = d.status === 'open';
     const cls = isToday ? ' td-today' : isLocked ? ' td-locked' : '';
-    const showCheck = isDone || isToday;
+    const showCheck = isDone || isToday || isOpen;
     html += `<td class="${cls}">
-      <span class="chip ${d.basic.cls}">${d.basic.txt}</span>
-      ${showCheck ? '<div class="check-circle">✓</div>' : ''}
+      <div class="extra-inner">
+        <span class="chip ${d.basic.cls}">${d.basic.txt}</span>
+        ${showCheck ? '<div class="check-circle">✓</div>' : ''}
+      </div>
     </td>`;
   });
   html += '</tr>';
@@ -973,7 +984,7 @@ function renderClaimTable(key) {
         <span class="chip ${d.extra.cls}" style="margin-top:2px">${d.extra.txt}</span>`;
       if (isToday || isOpen) {
         if (claimed) {
-          html += `<span class="cbtn-claimed">✓ 已领取</span>`;
+          html += `<span class="cbtn-claimed">已领取</span>`;
         } else if (d.extra.condMet) {
           html += `<button class="cbtn-claim" onclick="claimExtra('${key}',${i})">领取</button>`;
         } else if (d.extra.cond.includes('投注')) {
@@ -983,7 +994,7 @@ function renderClaimTable(key) {
         }
       } else if (isDone) {
         html += d.extra.condMet
-          ? `<span class="cbtn-claimed">✓ 已领取</span>`
+          ? `<span class="cbtn-claimed">已领取</span>`
           : `<span class="cbtn-missed">已过期</span>`;
       } else if (isLocked) {
         html += `<span class="cbtn-wait">🔒 未解锁</span>`;
