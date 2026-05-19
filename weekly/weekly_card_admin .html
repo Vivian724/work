@@ -43,7 +43,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .b-prev:hover{border-color:#1677ff;color:#1677ff;}
 .b-next{height:32px;padding:0 20px;border:none;border-radius:16px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
 .b-exit{height:32px;padding:0 16px;border:1px solid #ff4d4f;border-radius:16px;background:#fff;font-size:13px;cursor:pointer;color:#ff4d4f;text-decoration:none;display:inline-flex;align-items:center;}
-.b-sub{height:32px;padding:0 20px;border:none;border-radius:16px;background:#52c41a;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
+.b-sub{height:32px;padding:0 20px;border:none;border-radius:16px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
 .sbox{background:#fff;border-radius:4px;border:1px solid #e8e8e8;padding:20px 24px;}
 .sdesc{font-size:12px;color:#999;margin-bottom:16px;}
 .sec-t{font-size:14px;font-weight:500;color:#1677ff;border-left:3px solid #1677ff;padding-left:8px;margin-bottom:14px;}
@@ -157,6 +157,18 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .ltab{padding:8px 16px;font-size:13px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
 .ltab.act{color:#1677ff;border-bottom-color:#1677ff;}
 .hidden{display:none!important;}
+.preview-warn{background:#fff2f0;border:1px solid #ffccc7;border-radius:4px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#ff4d4f;}
+.preview-step-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:#333;}
+.preview-snum{width:22px;height:22px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;}
+.preview-row{display:flex;gap:6px;font-size:13px;padding:7px 0;border-bottom:1px solid #f5f5f5;}
+.preview-row:last-child{border-bottom:none;}
+.pk{color:#999;min-width:90px;flex-shrink:0;}
+.pk.req::before{content:'*';color:#ff4d4f;margin-right:2px;}
+.pv{color:#333;}.pv.empty{color:#bbb;}.pv.red{color:#ff4d4f;}
+.prev-img-table{width:100%;border-collapse:collapse;font-size:13px;}
+.prev-img-table th{background:#f5f7fa;padding:8px 12px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;}
+.prev-img-table td{padding:8px 12px;border:1px solid #ebeef5;text-align:center;color:#bbb;}
 </style>
 </head>
 <body>
@@ -189,7 +201,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
         <div class="snav" id="snav"></div>
         <div class="smain">
           <div class="stbar">
-            <div class="st-ttl">周卡活动配置</div>
+            <div class="st-ttl">活动配置步骤</div>
             <div class="stbtns" id="stbtns"></div>
           </div>
           <div class="sbox" id="sc"></div>
@@ -211,7 +223,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 <script>
 'use strict';
 // ── data ────────────────────────────────────────────────────────
-const STEPS = ['活动模板设置','活动图片','参与对象与名单','周卡配置','风控条件','提交预览'];
+const STEPS = ['活动模板设置','活动图片','参与对象与名单','活动条件','风控条件','提交预览'];
 let cur = 1;
 
 const LANGS = [
@@ -278,7 +290,7 @@ function typeOpts(sel) {
   ).join('');
 }
 function condOpts(sel) {
-  return [['deposit','充值'],['turnover','流水']].map(([k,v]) =>
+  return [['deposit','充值'],['turnover','投注']].map(([k,v]) =>
     `<option value="${k}"${sel===k?' selected':''}>${v}</option>`
   ).join('');
 }
@@ -355,53 +367,42 @@ function step1() {
   <div class="sdesc">将活动模板配置保存至系统，系统将自动配置相关功能。</div>
   <div class="sb"><div class="sec-t">活动模板</div>
     <div class="fr"><div class="fl"><span class="req">*</span>活动类型：</div><div class="fc">
-      <input type="text" class="fi fi-dis" value="周卡活动" readonly style="max-width:300px;">
-      <div class="hint">活动类型固定为「周卡活动」，如需其他类型请返回活动列表重新选择</div>
+      <select class="fsel" style="max-width:300px;">
+        <option>预约活动</option>
+        <option selected>周卡活动</option>
+      </select>
     </div></div>
     <div class="fr"><div class="fl"><span class="req">*</span>活动名称：</div><div class="fc">
-      <input type="text" class="fi" placeholder="请输入活动名称，例如：本周专属周卡" style="max-width:400px;">
+      <input type="text" class="fi" placeholder="请输入" style="max-width:400px;">
     </div></div>
-  </div>
-  <div class="sb"><div class="sec-t">时间设定</div>
-    <div class="tip-b">📅 设置活动总时间范围，系统将按周期天数自动切割并循环运行。</div>
-    <div style="background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-bottom:12px;">
-      <div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">活动总时间范围</div>
-      <div class="fr" style="margin-bottom:0;"><div class="fl"><span class="req">*</span>进行时间：</div><div class="fc">
-        ${dtRange()}
-      </div></div>
-    </div>
-  </div>
-  <div class="sb"><div class="sec-t">周期设定</div>
-    <div class="fr"><div class="fl"><span class="req">*</span>周期天数：</div>
-      <div class="fc" style="display:flex;align-items:center;gap:10px;">
-        <input type="number" class="fi" value="7" min="1" max="30" style="max-width:100px;">
-        <span style="font-size:13px;color:#666;">天 / 周期</span>
-        <span style="font-size:12px;color:#999;">（前台展示对应天数的签到进度）</span>
-      </div>
-    </div>
-    <div class="fr"><div class="fl">自动重置：</div><div class="fc">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div class="tog on" data-tog></div>
-        <span style="font-size:13px;color:#666;">周期结束后自动重置购买资格</span>
-      </div>
-      <div class="hint">开启后，玩家可在新周期重新购买周卡</div>
+    <div class="fr"><div class="fl"><span class="req">*</span>活动币种：</div><div class="fc">
+      <select class="fsel" style="max-width:200px;"><option>PHP</option></select>
     </div></div>
-  </div>
-  <div class="sb"><div class="sec-t">活动设置</div>
     <div class="fr"><div class="fl">活动状态：</div><div class="fc"><div class="rg">
       <label class="ri"><input type="radio" name="status" checked> 关闭</label>
       <label class="ri"><input type="radio" name="status"> 开启</label>
     </div></div></div>
-    <div class="fr"><div class="fl"><span class="req">*</span>活动币种：</div><div class="fc">
-      <select class="fsel" style="max-width:200px;"><option>PHP</option><option>VND</option><option>THB</option></select>
-    </div></div>
-    <div class="fr"><div class="fl">存款强制弹窗：</div><div class="fc">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div class="tog" data-tog></div>
-        <span style="font-size:13px;color:#666;">玩家存款成功后弹出周卡购买提示</span>
+  </div>
+  <div class="sb"><div class="sec-t">时间设定</div>
+    <div style="background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;">
+      <div class="fr" style="margin-bottom:12px;"><div class="fl"><span class="req">*</span>进行时间：</div><div class="fc">
+        ${dtRange()}
+        <div class="hint">活动总时间</div>
+      </div></div>
+      <div class="fr" style="margin-bottom:12px;"><div class="fl"><span class="req">*</span>周期天数：</div>
+        <div class="fc" style="display:flex;align-items:center;gap:10px;">
+          <input type="number" class="fi" value="7" min="1" max="30" style="max-width:100px;">
+          <span style="font-size:13px;color:#666;">天 / 周期</span>
+          <span style="font-size:12px;color:#999;">（前台展示对应天数的签到进度）</span>
+        </div>
       </div>
-      <div class="hint">弹窗含「今日不再显示」选项；点击离开时将二次确认</div>
-    </div></div>
+      <div class="fr" style="margin-bottom:0;"><div class="fl">自动重置：</div><div class="fc">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="tog on" data-tog></div>
+          <span style="font-size:13px;color:#666;">周期结束后自动重置购买资格，开启后玩家可在新周期重新购买周卡。</span>
+        </div>
+      </div></div>
+    </div>
   </div>`;
 }
 
@@ -426,21 +427,15 @@ function imgContent() {
     const lb = (LANGS.find(o=>o.v===v)||{l:v}).l;
     return `<div class="ltab${v===activeLang?' act':''}" data-langTab="${v}">${lb}</div>`;
   }).join('');
-  const titleF = selLangs.length===1&&selLangs[0]==='default'
-    ? `<div class="fr"><div class="fl">活动标题：</div><div class="fc"><input type="text" class="fi" placeholder="请输入活动标题"></div></div>`
-    : selLangs.map(v => {
-        const lb=(LANGS.find(o=>o.v===v)||{l:v}).l;
-        return `<div class="fr"><div class="fl">活动标题(${lb})：</div><div class="fc"><input type="text" class="fi" placeholder="请输入活动标题"></div></div>`;
-      }).join('');
   return `
     <div class="ltabs">${tabs}</div>
     <div id="imgArea">
-      <div class="sb"><div class="sec-t"><span class="req">*</span>① Banner 图</div>
+      <div class="sb"><div class="sec-t"><span class="req">*</span>Banner 图</div>
         <div class="imgrid">${iCard('PC 端','建议尺寸 1400×800px')}${iCard('H5 端','建议尺寸 390×320px')}</div></div>
-      <div class="sb"><div class="sec-t"><span class="req">*</span>② 活动页底图</div>
+      <div class="sb"><div class="sec-t"><span class="req">*</span>活动页底图</div>
         <div class="tip-y">前台周卡专题页整体背景图，涵盖 Hero 区、卡型选择区、签到进度区视觉占位。</div>
         <div class="imgrid">${iCard('PC 端','建议尺寸 1400×2300px')}${iCard('H5 端','建议尺寸 390×838px')}</div></div>
-      <div class="sb"><div class="sec-t"><span class="req">*</span>③ 规则弹窗图</div>
+      <div class="sb"><div class="sec-t"><span class="req">*</span>规则弹窗图</div>
         <div class="imgrid">${iCard('PC 端','建议尺寸 356×422px')}${iCard('H5 端','建议尺寸 356×422px')}</div></div>
       <div class="sb" style="border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;">
         <div style="margin-bottom:16px;">
@@ -456,21 +451,23 @@ function imgContent() {
         </div></div>
       </div>
       <div class="sb" style="margin-top:20px;"><div class="sec-t">备注</div>
-        <textarea class="fi" style="height:80px;resize:vertical;padding-top:8px;" placeholder="请输入备注内容（仅供内部参考）"></textarea>
+        <textarea class="fi" style="height:80px;resize:vertical;padding-top:8px;" placeholder="请输入"></textarea>
       </div>
-    </div>
-    ${titleF}`;
+    </div>`;
 }
 function step2() {
   return `
   <div class="sdesc">上传周卡活动相关图片，用于展示在不同平台与位置。</div>
   <div class="sb" style="border:1px solid #e8e8e8;border-radius:4px;padding:16px;">
-    <div class="sec-t">活动语系设置</div>
+    <div class="sec-t">活动设置</div>
     <div class="fr"><div class="fl">活动语系：</div><div class="fc" style="position:relative;max-width:400px;">
       <div class="ms-wrap" id="langWrap">
         ${buildLangTags()}<span class="ms-arr">▾</span>
       </div>
       <div class="ms-dd${langOpen?'':' hidden'}" id="langDd">${buildLangDd()}</div>
+    </div></div>
+    <div class="fr"><div class="fl">活动标题：</div><div class="fc">
+      <input type="text" class="fi" placeholder="请输入" style="max-width:400px;">
     </div></div>
   </div>
   <div class="sb" style="border:1px solid #e8e8e8;border-radius:4px;padding:16px;margin-top:10px;">
@@ -585,7 +582,7 @@ function step3() {
   </div>
   <div class="sb"><div class="sec-t">黑名单设置</div>
     <div class="fr"><div class="fl">黑名单限制类型：</div><div class="fc">
-      <input type="text" class="fi" placeholder="请输入黑名单限制类型" style="max-width:360px;">
+      <input type="text" class="fi" placeholder="请输入" style="max-width:360px;">
     </div></div>
     <div class="fr" style="margin-bottom:0;"><div class="fl">用户标签：</div><div class="fc">
       <select class="fsel" style="max-width:360px;"><option value="">请选择用户标签</option></select>
@@ -716,6 +713,13 @@ function step4() {
   <div class="tip-b">ℹ <strong>规则说明：</strong>前台每位会员<strong>限购一张</strong>周卡；签到奖励无门槛可领；额外奖励需满足当日条件才可手动领取；彩金流水倍数<strong>仅针对彩金</strong>，积分、免费旋转、优惠券不计入。</div>
   <div id="planList">${plans.map((p,i)=>renderPlanCard(p,i)).join('')}</div>
   <div class="sb" style="margin-top:24px;border-top:1px solid #f0f0f0;padding-top:20px;"><div class="sec-t">通用设置</div>
+    <div class="fr"><div class="fl">存款强制弹窗：</div><div class="fc">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="tog" data-tog></div>
+        <span style="font-size:13px;color:#666;">玩家存款成功后弹出周卡购买提示</span>
+      </div>
+      <div class="hint">弹窗含「今日不再显示」选项；点击离开时将二次确认</div>
+    </div></div>
     <div class="fr"><div class="fl">彩金所需流水倍数：</div><div class="fc">
       <input type="number" class="fi" placeholder="请输入" style="max-width:200px;">
     </div></div>
@@ -806,10 +810,10 @@ function step5() {
   return `
   <div class="sdesc">设置周卡活动的风险控制规则，防止多账号刷活动。</div>
   <div class="sb"><div class="sec-t">风险检测设置</div>
-    <div class="fr"><div class="fl">同IP检测：</div><div class="fc"><div class="tog" data-tog id="rip"></div></div></div>
-    <div class="fr"><div class="fl">同手机号检测：</div><div class="fc"><div class="tog" data-tog id="rph"></div></div></div>
-    <div class="fr"><div class="fl">同姓名检测：</div><div class="fc"><div class="tog" data-tog id="rnm"></div></div></div>
-    <div class="fr"><div class="fl">同email检测：</div><div class="fc"><div class="tog" data-tog id="rem"></div></div></div>
+    <div class="fr"><div class="fl">同IP检测：</div><div class="fc"><div class="tog" id="rip" onclick="toggleRisk5(this)"></div></div></div>
+    <div class="fr"><div class="fl">同手机号检测：</div><div class="fc"><div class="tog" id="rph" onclick="toggleRisk5(this)"></div></div></div>
+    <div class="fr"><div class="fl">同姓名检测：</div><div class="fc"><div class="tog" id="rnm" onclick="toggleRisk5(this)"></div></div></div>
+    <div class="fr"><div class="fl">同email检测：</div><div class="fc"><div class="tog" id="rem" onclick="toggleRisk5(this)"></div></div></div>
   </div>
   <div id="rejectBlock" class="risk-bl" style="opacity:0.4;pointer-events:none;">
     <div class="sec-t" style="color:#ff4d4f;border-left-color:#ff4d4f;">自动拒绝</div>
@@ -821,57 +825,97 @@ function step5() {
     </div>
   </div>`;
 }
+function toggleRisk5(el) {
+  el.classList.toggle('on');
+  const anyOn = ['rip','rph','rnm','rem'].some(id => { const t=$(id); return t&&t.classList.contains('on'); });
+  const block=$('rejectBlock');
+  if (!block) return;
+  block.style.opacity = anyOn ? '1' : '0.4';
+  block.style.pointerEvents = anyOn ? 'auto' : 'none';
+  const rauto=$('rauto'), rejN=$('rejN');
+  if (anyOn) {
+    rauto && rauto.classList.add('on');
+    rejN && (rejN.disabled=false);
+  } else {
+    rauto && rauto.classList.remove('on');
+    rejN && (rejN.disabled=true, rejN.value='');
+  }
+}
 
 // ── step 6 ──────────────────────────────────────────────────────
 function step6() {
   const total = Object.values(confSel).reduce((s,set)=>s+set.size,0);
-  const prows = plans.map(p => {
+  const langStr = selLangs.map(v=>(LANGS.find(o=>o.v===v)||{l:v}).l).join('、')||'–';
+  function row(req,k,v,red) {
+    return `<div class="preview-row"><span class="pk${req?' req':''}">${k}：</span><span class="pv${red?' red':v==='–'?' empty':''}">${v}</span></div>`;
+  }
+  function pRow(num,title,body,last) {
+    return `<div style="display:grid;grid-template-columns:130px 1fr;border-bottom:${last?'none':'1px solid #e8e8e8'}">
+      <div style="padding:14px 16px;border-right:1px solid #e8e8e8;">
+        <div class="preview-step-title"><div class="preview-snum">${num}</div>${title}</div>
+      </div>
+      <div style="padding:14px 16px;">${body}</div>
+    </div>`;
+  }
+  const planRows = plans.map(p => {
     const ex = p.days.filter(d=>d.extra.val&&d.extra.val!=='').length;
-    return `<tr><td>${p.name}</td><td>${p.price.toLocaleString()} PHP</td><td>${ex>0?ex+'天有额外奖励':'仅签到奖励'}</td></tr>`;
+    return row(false, p.name, `${p.price.toLocaleString()} PHP · ${ex>0?ex+'天有额外奖励':'仅签到奖励'}`);
   }).join('');
   return `
   <div class="sdesc">请确认以下活动配置信息，确认无误后点击「确认送出」。</div>
-  <div class="tip-r">● 请确认已填写所有必填项：活动名称、活动时间、各卡型周卡费用与每日奖励</div>
-  <div class="pst"><div class="psn">1</div>活动模板设置</div>
-  <table class="ptable">
-    <tr><th style="width:160px;">字段</th><th>内容</th></tr>
-    <tr><td>活动类型</td><td>周卡活动</td></tr>
-    <tr><td>活动名称</td><td class="rd">未填写</td></tr>
-    <tr><td>活动状态</td><td>关闭</td></tr>
-    <tr><td>活动币种</td><td>PHP</td></tr>
-    <tr><td>活动时间</td><td class="rd">未设置</td></tr>
-    <tr><td>周期天数</td><td>7 天</td></tr>
-    <tr><td>自动重置</td><td>是</td></tr>
-    <tr><td>存款强制弹窗</td><td>关闭</td></tr>
-  </table>
-  <div class="pst"><div class="psn">2</div>活动图片</div>
-  <table class="ptable">
-    <tr><th>图片类型</th><th>PC 端</th><th>H5 端</th></tr>
-    <tr><td>① Banner 图</td><td class="mt">未上传</td><td class="mt">未上传</td></tr>
-    <tr><td>② 活动页底图</td><td class="mt">未上传</td><td class="mt">未上传</td></tr>
-    <tr><td>③ 规则弹窗图</td><td class="mt">未上传</td><td class="mt">未上传</td></tr>
-  </table>
-  <div class="pst"><div class="psn">3</div>参与对象与名单</div>
-  <table class="ptable">
-    <tr><th style="width:160px;">字段</th><th>内容</th></tr>
-    <tr><td>充值层级</td><td>全选（${selLevels.length} 层）</td></tr>
-    <tr><td>指定代理</td><td>不指定</td></tr>
-    <tr><td>会员等级</td><td>全选（VIP0–VIP10）</td></tr>
-    <tr><td>黑名单</td><td class="mt">未配置</td></tr>
-  </table>
-  <div class="pst"><div class="psn">4</div>周卡配置（${plans.length} 种卡型）</div>
-  <table class="ptable">
-    <tr><th>卡型</th><th>周卡费用</th><th>额外奖励</th></tr>${prows}
-  </table>
-  <div style="font-size:12px;color:#999;margin-bottom:16px;">稽核游戏范围：已选 ${total} 个游戏（仅针对彩金奖励）</div>
-  <div class="pst"><div class="psn">5</div>风控条件</div>
-  <table class="ptable">
-    <tr><th style="width:160px;">检测项目</th><th>状态</th></tr>
-    <tr><td>同IP检测</td><td>关闭</td></tr>
-    <tr><td>同手机号检测</td><td>关闭</td></tr>
-    <tr><td>同姓名检测</td><td>关闭</td></tr>
-    <tr><td>同Email检测</td><td>关闭</td></tr>
-  </table>`;
+  <div class="preview-warn">● 请填写以下必填字段：活动名称、活动总时间、进行时间</div>
+  <div style="border:1px solid #e8e8e8;border-radius:4px;overflow:hidden;">
+    <div style="display:grid;grid-template-columns:130px 1fr;background:#f5f7fa;border-bottom:1px solid #e8e8e8;">
+      <div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;border-right:1px solid #e8e8e8;">步骤</div>
+      <div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;">相关字段</div>
+    </div>
+    ${pRow('1','活动模板设置',
+      `<div class="preview-grid">
+        ${row(false,'活动类型','周卡活动')}${row(true,'活动状态','关闭')}
+        ${row(true,'活动币种','PHP')}${row(true,'活动名称','–',true)}
+        ${row(true,'进行时间','–',true)}${row(true,'周期天数','7 天')}
+        ${row(false,'自动重置','是')}
+      </div>`
+    )}
+    ${pRow('2','活动图片',
+      `<div>
+        ${row(false,'语系',langStr)}${row(false,'活动标题','–')}
+        <table class="prev-img-table" style="margin-top:8px;margin-bottom:8px;">
+          <thead><tr><th>图片类型</th><th>PC 端</th><th>H5 端</th></tr></thead>
+          <tbody>
+            <tr><td style="color:#333;text-align:left;padding-left:12px;">Banner 图</td><td>未上传</td><td>未上传</td></tr>
+            <tr><td style="color:#333;text-align:left;padding-left:12px;">活动页底图</td><td>未上传</td><td>未上传</td></tr>
+            <tr><td style="color:#333;text-align:left;padding-left:12px;">规则弹窗图</td><td>未上传</td><td>未上传</td></tr>
+          </tbody>
+        </table>
+        ${row(false,'排序','0')}
+      </div>`
+    )}
+    ${pRow('3','参与对象与名单',
+      `<div class="preview-grid">
+        ${row(false,'充值层级',`全选（${selLevels.length} 层）`)}${row(false,'指定代理','不指定')}
+        ${row(false,'新会员限制','否')}${row(false,'会员等级','全选（VIP0–VIP10）')}
+        ${row(false,'黑名单','–')}
+      </div>`
+    )}
+    ${pRow('4','活动条件',
+      `<div class="preview-grid">
+        ${row(false,'存款强制弹窗','关闭')}${row(false,'彩金流水倍数','–')}
+        ${row(false,'审核方式','自动审核')}${row(false,'领取方式','手动领取')}
+        ${row(false,'已验证手机号','否')}${row(false,'限制使用设备','无限制')}
+        ${row(false,'稽核游戏范围',total?total+'个':'–')}
+      </div>
+      <div style="margin-top:8px;border-top:1px solid #f0f0f0;padding-top:8px;">${planRows}</div>`
+    )}
+    ${pRow('5','风控条件',
+      `<div class="preview-grid">
+        ${row(false,'同IP检测','关闭')}${row(false,'同姓名检测','关闭')}
+        ${row(false,'同手机号检测','关闭')}${row(false,'同email检测','关闭')}
+        ${row(false,'自动拒绝','–')}
+      </div>`,
+      true
+    )}
+  </div>`;
 }
 
 // ── game modal ───────────────────────────────────────────────────
@@ -928,39 +972,18 @@ $('mclBtn').addEventListener('click', closeModal);
 $('mCancel').addEventListener('click', closeModal);
 $('mOk').addEventListener('click', confirmModal);
 
-// ── bind step 5 risk toggles ─────────────────────────────────────
-function bindStep5Risk() {
-  ['rip','rph','rnm','rem'].forEach(id => {
-    const t = $(id);
-    if (!t) return;
-    t.addEventListener('click', () => {
-      t.classList.toggle('on');
-      const anyOn = ['rip','rph','rnm','rem'].some(x => $(x)&&$(x).classList.contains('on'));
-      const block = $('rejectBlock');
-      if (!block) return;
-      block.style.opacity = anyOn ? '1' : '0.4';
-      block.style.pointerEvents = anyOn ? 'auto' : 'none';
-      const rauto = $('rauto'), rejN = $('rejN');
-      if (anyOn) { rauto&&rauto.classList.add('on'); rejN&&(rejN.disabled=false); }
-      else { rauto&&rauto.classList.remove('on'); rejN&&(rejN.disabled=true,rejN.value=''); }
-    });
-  });
-}
-
 // ── override renderStep to also bind step-specific events ────────
 const _renderStep = renderStep;
 function renderStep() {
   const el2 = $('sc');
   const fns = [null, step1, step2, step3, step4, step5, step6];
   el2.innerHTML = fns[cur]();
-  // bind togs in all steps
   el2.querySelectorAll('.tog[data-tog]').forEach(t => {
     t.addEventListener('click', () => t.classList.toggle('on'));
   });
   if (cur===2) bindLang();
   if (cur===3) bindDrops();
   if (cur===4) bindPlanList();
-  if (cur===5) bindStep5Risk();
 }
 
 // ── init ─────────────────────────────────────────────────────────

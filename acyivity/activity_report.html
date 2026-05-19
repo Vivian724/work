@@ -195,6 +195,7 @@ tr:hover td{background:#fafffe;}
                   <th>活动名称</th>
                   <th>奖励类型</th>
                   <th>奖励金额/内容</th>
+                  <th>参加人数</th>
                   <th>领取次数</th>
                   <th>活动金额</th>
                   <th>活动积分</th>
@@ -315,6 +316,7 @@ var rewardData = [];
     var ni  = i % actNames.length;
     var at  = awardTypes[i % awardTypes.length];
     var t   = Math.floor(Math.random()*30)+1; // 领取次数
+    var p   = Math.max(1, Math.floor(t * (0.6 + Math.random()*0.4))); // 参加人数
 
     var isAmt  = (at==='礼金'||at==='优惠券');
     var isPts  = (at==='积分');
@@ -336,6 +338,7 @@ var rewardData = [];
       actName:   actNames[ni],
       awardType: at,
       awardName: displayName,
+      participants: p,
       times:     t,
       amount:    isAmt  ? parseFloat((unitAmt  * t).toFixed(2)) : null,
       pts:       isPts  ? unitPts  * t                          : null,
@@ -421,7 +424,7 @@ function r1Draw(){
   var tbody = document.getElementById('r1Body');
 
   if(!r1Filtered.length){
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:#bbb;">暂无数据</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:#bbb;">暂无数据</td></tr>';
     document.getElementById('r1Page').innerHTML = '';
     return;
   }
@@ -434,6 +437,7 @@ function r1Draw(){
       '<td><span class="ellipsis" title="'+r.actName+'">'+r.actName+'</span></td>'+
       '<td>'+r.awardType+'</td>'+
       '<td>'+r.awardName+'</td>'+
+      '<td>'+r.participants+'</td>'+
       '<td>'+r.times+'</td>'+
       '<td style="color:#ff4d4f;">'+(r.amount!=null?'<strong>'+r.amount.toLocaleString('en',{minimumFractionDigits:2})+'</strong>':dash)+'</td>'+
       '<td style="color:#1677ff;">'+(r.pts!=null?r.pts.toLocaleString('en'):dash)+'</td>'+
@@ -441,7 +445,7 @@ function r1Draw(){
     '</tr>';
   }).join('') +
   '<tr class="sum-row">'+
-    '<td class="left" colspan="6">合计</td>'+
+    '<td class="left" colspan="7">合计</td>'+
     '<td style="color:#ff4d4f;">'+totalAmt.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2})+'</td>'+
     '<td style="color:#1677ff;">'+totalPts.toLocaleString('en')+'</td>'+
     '<td style="color:#52c41a;">'+totalFree+'</td>'+

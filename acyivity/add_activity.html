@@ -294,7 +294,11 @@ function renderStep(){
 function step1(){
   return '<div class="step-desc">将活动模板配置保存至系统，系统将自动配置相关功能</div>'+
   '<div class="sec-block"><div class="sec-title">活动模板</div>'+
-  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动类型：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>预约活动</option></select></div></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动类型：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>周卡活动</option><option>预约活动</option></select></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动名称：</div><div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入" style="max-width:400px;"></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动币种：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>PHP</option></select></div></div>'+
+  '<div class="field-row"><div class="field-label">活动状态：</div><div class="field-ctrl"><div class="radio-group"><label class="radio-item"><input type="radio" name="as" checked> 关闭</label><label class="radio-item"><input type="radio" name="as"> 开启</label></div></div></div>'+
+  '</div>'+
   '<div class="sec-block"><div class="sec-title">时间设定</div>'+
   '<div style="background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
     '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">第一阶段：预约活动</div>'+
@@ -303,12 +307,7 @@ function step1(){
   '<div style="background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
     '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:12px;">第二阶段：奖励领取</div>'+
     '<div class="field-row"><div class="field-label"><span class="req">*</span>进行时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"><span class="time-sep">～</span><input type="text" placeholder="结束时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"></div></div></div>'+
-  '</div></div>'+
-  '<div class="sec-block"><div class="sec-title">活动设置</div>'+
-  '<div class="field-row"><div class="field-label">活动状态：</div><div class="field-ctrl"><div class="radio-group"><label class="radio-item"><input type="radio" name="as" checked> 关闭</label><label class="radio-item"><input type="radio" name="as"> 开启</label></div></div></div>'+
-  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动币种：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>PHP</option></select></div></div></div>'+
-  '<div class="sec-block"><div class="sec-title">活动名称</div>'+
-  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动名称：</div><div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入" style="max-width:400px;"></div></div></div>';
+  '</div></div>';
 }
 
 // ════════════════════════════════════════════════════════════════
