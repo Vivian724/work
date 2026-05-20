@@ -466,7 +466,7 @@ function step3() {
       <div class="ms-wrap" id="lvlWrap">${lvlTags}<span class="ms-arr">▾</span></div>
       <div class="ms-dd${levelOpen?'':' hidden'}" id="lvlDd">${lvlDd}</div>
     </div></div>
-    <div class="fr"><div class="fl">2. 指定代理：</div><div class="fc">
+    <div class="fr"><div class="fl">2. 指定代理线：</div><div class="fc">
       <div class="rg" style="flex-direction:column;align-items:flex-start;gap:10px;">
         <label class="ri"><input type="radio" name="agent" value="none" checked> 不指定</label>
         <div>
@@ -769,7 +769,7 @@ function step6() {
     )}
     ${pRow('3','参与对象与名单',
       `<div class="preview-grid">
-        ${row(false,'充值层级',`全选（${selLevels.length} 层）`)}${row(false,'指定代理',agentStr)}
+        ${row(false,'充值层级',`全选（${selLevels.length} 层）`)}${row(false,'指定代理线',agentStr)}
         ${row(false,'新会员限制','否')}${row(false,'会员等级','全选（VIP0–VIP10）')}
         ${row(false,'黑名单','–')}
       </div>`
