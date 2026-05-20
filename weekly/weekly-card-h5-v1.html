@@ -711,7 +711,7 @@ html, body {
       </div>
       <div class="tnc-list">
         <div class="tnc-item"><div class="tnc-dot">1</div><div class="tnc-text">每个周期仅可购买<b>一次</b>周卡，周期结束后资格自动重置。</div></div>
-        <div class="tnc-item"><div class="tnc-dot">2</div><div class="tnc-text"><b>日常签到奖励</b>于每日登录后<b>自动派发</b>至账户，无需手动领取。</div></div>
+        <div class="tnc-item"><div class="tnc-dot">2</div><div class="tnc-text" id="tnc-rule2-buy"></div></div>
         <div class="tnc-item"><div class="tnc-dot">3</div><div class="tnc-text"><b>额外奖励</b>须于当日 24:00 前完成条件达标后手动领取。</div></div>
         <div class="tnc-item"><div class="tnc-dot">4</div><div class="tnc-text">彩金类奖励需完成对应<b>流水倍数</b>之有效投注。</div></div>
         <div class="tnc-item"><div class="tnc-dot">5</div><div class="tnc-text">积分及优惠券类奖励<b>不设流水</b>要求。</div></div>
@@ -761,7 +761,7 @@ html, body {
       </div>
       <div class="tnc-list">
         <div class="tnc-item"><div class="tnc-dot">1</div><div class="tnc-text">每个周期仅可购买<b>一次</b>周卡，周期结束后资格自动重置。</div></div>
-        <div class="tnc-item"><div class="tnc-dot">2</div><div class="tnc-text"><b>日常签到奖励</b>于每日登录后<b>自动派发</b>至账户，无需手动领取。</div></div>
+        <div class="tnc-item"><div class="tnc-dot">2</div><div class="tnc-text" id="tnc-rule2-claim"></div></div>
         <div class="tnc-item"><div class="tnc-dot">3</div><div class="tnc-text"><b>额外奖励</b>须于当日 24:00 前完成条件达标后手动领取。</div></div>
         <div class="tnc-item"><div class="tnc-dot">4</div><div class="tnc-text">彩金类奖励需完成对应<b>流水倍数</b>之有效投注。</div></div>
         <div class="tnc-item"><div class="tnc-dot">5</div><div class="tnc-text">积分及优惠券类奖励<b>不设流水</b>要求。</div></div>
@@ -931,7 +931,7 @@ html, body {
     </div>
     <div class="rm-body">
       <div class="rule-item"><div class="rule-dot">1</div><div class="rule-text">每个周期仅可购买<b>一次</b>周卡，周期结束后资格自动重置。</div></div>
-      <div class="rule-item"><div class="rule-dot">2</div><div class="rule-text"><b>日常签到奖励</b>于每日登录后自动派发，无需手动领取。</div></div>
+      <div class="rule-item"><div class="rule-dot">2</div><div class="rule-text" id="rule2-modal"></div></div>
       <div class="rule-item"><div class="rule-dot">3</div><div class="rule-text"><b>额外奖励</b>须于当日 24:00 前达标后手动领取，逾期不补发。</div></div>
       <div class="rule-item"><div class="rule-dot">4</div><div class="rule-text">彩金类奖励需完成对应<b>流水倍数</b>之有效投注。</div></div>
       <div class="rule-item"><div class="rule-dot">5</div><div class="rule-text">积分及优惠券类奖励<b>不设流水</b>要求。</div></div>
@@ -958,6 +958,22 @@ html, body {
 <div class="toast" id="toast"></div>
 
 <script>
+/* ─── 後台配置：'auto' 自動派發 | 'manual' 手動領取 ─── */
+const CLAIM_MODE = 'auto';
+
+const RULE2_TEXT = {
+  auto:   '<b>日常签到奖励</b>于每日登录后<b>自动派发</b>至账户，无需手动领取。',
+  manual: '<b>日常签到奖励</b>需于签到当日前往领取页<b>手动领取</b>，逾期视为放弃。'
+};
+
+function applyClaimModeRule() {
+  const html = RULE2_TEXT[CLAIM_MODE] || RULE2_TEXT.auto;
+  ['tnc-rule2-buy', 'tnc-rule2-claim', 'rule2-modal'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  });
+}
+
 const dayNames = ['第一天','第二天','第三天','第四天','第五天','第六天','第七天'];
 
 const plans = {
@@ -1303,6 +1319,7 @@ function showToast(msg) {
 })('elite', 'dpop-rewards-elite');
 
 selectPlan('elite');
+applyClaimModeRule();
 </script>
 </body>
 </html>
