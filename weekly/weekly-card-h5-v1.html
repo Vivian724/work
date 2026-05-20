@@ -81,67 +81,62 @@ html, body {
 .pgh-sub   { font-size:13px; color:rgba(255,255,255,0.85); position:relative; font-weight:500; margin-top:2px; }
 .pgh-date  { font-size:10px; color:rgba(255,255,255,0.65); position:relative; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); padding:2px 12px; border-radius:20px; margin-top:2px; letter-spacing:0.5px; }
 
-/* ─── PLAN TABS ─── */
-.plan-wrap { margin:14px 12px 0; padding:16px 12px 14px; background:rgba(255,255,255,0.65); border-radius:20px; border:1px solid rgba(255,255,255,0.85); box-shadow:0 3px 18px rgba(0,0,0,0.04); }
-.plan-tabs { display:flex; justify-content:center; align-items:flex-end; gap:24px; }
-.plan-tab { position:relative; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; padding:0; }
-.plan-tab::before { display:none; }
-.pt-indicator { width:0; height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-top:9px solid var(--pink); opacity:0; transition:opacity 0.2s; }
-.plan-tab.active .pt-indicator { opacity:1; border-top-color:var(--pink); }
-.plan-tab.active-premium .pt-indicator { opacity:1; border-top-color:var(--purple); }
-.pt-icon-card { position:relative; width:84px; height:84px; border-radius:18px; background:#fff; border:2px solid rgba(0,0,0,0.07); display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,0.08); transition:all 0.22s; overflow:visible; }
-.pt-glow-ring { position:absolute; inset:-10px; border-radius:50%; border:2px solid transparent; opacity:0; transition:all 0.22s; pointer-events:none; }
-.plan-tab.active .pt-icon-card { border-color:var(--pink); box-shadow:0 4px 20px rgba(255,107,157,0.22); }
-.plan-tab.active .pt-glow-ring { opacity:1; border-color:rgba(255,107,157,0.38); background:radial-gradient(circle, rgba(255,107,157,0.1) 0%, transparent 65%); }
-.plan-tab.active-premium .pt-icon-card { border-color:var(--purple); box-shadow:0 4px 20px rgba(160,120,245,0.22); }
-.plan-tab.active-premium .pt-glow-ring { opacity:1; border-color:rgba(160,120,245,0.38); background:radial-gradient(circle, rgba(160,120,245,0.1) 0%, transparent 65%); }
-.pt-badge { display:inline-block; font-size:8px; font-weight:700; letter-spacing:0.5px; padding:2px 7px; border-radius:20px; margin-bottom:5px; text-transform:uppercase; }
+/* ─── PLAN TABS (purchase page) ─── */
+.plan-wrap { margin:14px 12px 0; padding:12px; background:rgba(255,255,255,0.05); border-radius:20px; border:1px solid rgba(255,255,255,0.09); box-shadow:0 3px 18px rgba(0,0,0,0.4); }
+.plan-tabs { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.plan-tab { position:relative; background:rgba(255,255,255,0.05); border:1.5px solid rgba(255,255,255,0.1); border-radius:16px; padding:14px 14px 12px; cursor:pointer; transition:all 0.22s; overflow:hidden; text-align:left; }
+.plan-tab::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:transparent; transition:all 0.22s; }
+.plan-tab.active { border-color:var(--pink); background:rgba(255,107,157,0.08); }
+.plan-tab.active::before { background:linear-gradient(90deg,transparent,var(--pink),transparent); }
+.plan-tab.active-premium { border-color:var(--purple); background:rgba(160,120,245,0.08); }
+.plan-tab.active-premium::before { background:linear-gradient(90deg,transparent,var(--purple),transparent); }
+.pt-badge { display:inline-block; font-size:9px; font-weight:700; letter-spacing:0.5px; padding:2px 8px; border-radius:20px; margin-bottom:8px; text-transform:uppercase; }
 .badge-std  { background:rgba(255,107,157,0.1); color:var(--pink); border:1px solid rgba(255,107,157,0.22); }
 .badge-prem { background:rgba(160,120,245,0.1); color:var(--purple); border:1px solid rgba(160,120,245,0.22); }
-.pt-price { font-size:22px; font-weight:900; line-height:1; }
+.pt-price { font-size:24px; font-weight:900; line-height:1; }
 .pt-price.gold   { color:var(--pink); }
 .pt-price.purple { color:var(--purple); }
-.pt-unit { font-size:9px; font-weight:500; color:var(--muted); margin-top:2px; }
-.pt-label { font-size:12px; font-weight:700; color:var(--muted); transition:color 0.2s; white-space:nowrap; }
-.plan-tab.active .pt-label { color:var(--pink); }
-.plan-tab.active-premium .pt-label { color:var(--purple); }
-.pt-best { position:absolute; top:-9px; left:50%; transform:translateX(-50%); font-size:8px; font-weight:700; white-space:nowrap; background:rgba(160,120,245,0.1); border:1px solid rgba(160,120,245,0.22); color:var(--purple); padding:2px 7px; border-radius:20px; }
-.pt-purchased-tag { position:absolute; top:18px; right:-4px; font-size:8px; font-weight:700; background:rgba(61,201,138,0.1); color:var(--green); border:1px solid rgba(61,201,138,0.22); padding:2px 6px; border-radius:20px; }
+.pt-unit { font-size:11px; font-weight:500; color:var(--muted); }
+.pt-best { position:absolute; top:10px; right:10px; font-size:9px; font-weight:700; background:rgba(160,120,245,0.1); border:1px solid rgba(160,120,245,0.22); color:var(--purple); padding:2px 7px; border-radius:20px; }
+.pt-check { position:absolute; bottom:10px; right:12px; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; opacity:0; transition:opacity 0.2s; }
+.plan-tab.active .pt-check { opacity:1; background:rgba(255,107,157,0.12); border:1px solid var(--pink); color:var(--pink); }
+.plan-tab.active-premium .pt-check { opacity:1; background:rgba(160,120,245,0.12); border:1px solid var(--purple); color:var(--purple); }
+.pt-purchased-tag { position:absolute; bottom:10px; left:12px; font-size:8px; font-weight:700; background:rgba(61,201,138,0.1); color:var(--green); border:1px solid rgba(61,201,138,0.22); padding:2px 6px; border-radius:20px; }
 
-/* ─── PLAN LIST (vertical stacked cards) ─── */
-.plan-list { display:flex; flex-direction:column; gap:10px; margin:14px 12px 0; }
-.plan-card-v { background:rgba(255,255,255,0.8); border-radius:18px; border:1.5px solid rgba(0,0,0,0.06); padding:14px 16px; box-shadow:0 3px 14px rgba(0,0,0,0.05); position:relative; }
-.plan-card-v::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
-.plan-card-v.elite::before { background:linear-gradient(90deg,transparent,var(--pink),transparent); }
-.plan-card-v.prime::before { background:linear-gradient(90deg,transparent,var(--purple),transparent); }
-.pcv-top  { display:flex; align-items:center; justify-content:space-between; margin-bottom:3px; }
-.pcv-name { font-size:15px; font-weight:800; color:var(--text); }
-.pcv-rec  { font-size:9px; font-weight:700; padding:2px 9px; border-radius:20px; background:rgba(160,120,245,0.1); color:var(--purple); border:1px solid rgba(160,120,245,0.22); }
-.pcv-desc { font-size:11px; color:var(--muted); line-height:1.5; margin-bottom:12px; }
-.pcv-bottom { display:flex; align-items:center; justify-content:space-between; }
-.pcv-price { font-size:20px; font-weight:900; letter-spacing:0.5px; }
-.pcv-price.elite { color:var(--pink); }
-.pcv-price.prime { color:var(--purple); }
-.pcv-buy { display:inline-flex; align-items:center; gap:6px; padding:10px 18px; border-radius:12px; border:none; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
-.pcv-buy.elite { background:linear-gradient(135deg,#FF72B8,var(--pink)); color:#fff; box-shadow:0 4px 14px rgba(255,142,198,0.28); }
-.pcv-buy.prime { background:linear-gradient(135deg,#7C3AED,var(--purple)); color:#fff; box-shadow:0 4px 14px rgba(160,120,245,0.28); }
-.pcv-buy.purchased  { background:rgba(61,201,138,0.08); border:1.5px solid rgba(61,201,138,0.3); color:var(--green); box-shadow:none; cursor:default; }
-.pcv-buy.blocked-plan { background:rgba(0,0,0,0.04); color:var(--muted); border:1px solid rgba(0,0,0,0.08); box-shadow:none; cursor:default; }
-.pcv-buy:not(.purchased):not(.blocked-plan):active { transform:scale(0.97); }
-.pcv-buy-ico { font-size:14px; line-height:1; }
-.pcv-rewards { display:flex; flex-direction:row; gap:6px; margin-top:10px; padding-bottom:4px; }
-.pcv-ri { flex:1; min-width:0; border-radius:10px; padding:10px 6px 8px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:3px; }
-.pcv-ri.t-cash   { background:rgba(61,201,138,0.08);  border:1px solid rgba(61,201,138,0.18);  }
-.pcv-ri.t-point  { background:rgba(255,179,0,0.08);    border:1px solid rgba(255,179,0,0.18);   }
-.pcv-ri.t-spin   { background:rgba(160,120,245,0.08);  border:1px solid rgba(160,120,245,0.18); }
-.pcv-ri.t-coupon { background:rgba(255,142,64,0.08);   border:1px solid rgba(255,142,64,0.18);  }
-.pcv-ri-ico  { font-size:22px; line-height:1; margin-bottom:2px; }
-.pcv-ri-name { font-size:9px; font-weight:700; color:var(--muted); }
-.pcv-ri-val  { font-size:13px; font-weight:900; }
-.pcv-ri.t-cash   .pcv-ri-val { color:var(--green); }
-.pcv-ri.t-point  .pcv-ri-val { color:var(--gold); }
-.pcv-ri.t-spin   .pcv-ri-val { color:var(--purple); }
-.pcv-ri.t-coupon .pcv-ri-val { color:var(--orange); }
+/* ─── HORIZONTAL BONUS TABLE ─── */
+.htable-outer { overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:12px; }
+.htable-outer::-webkit-scrollbar { height:4px; }
+.htable-outer::-webkit-scrollbar-thumb { background:rgba(255,107,157,0.3); border-radius:2px; }
+.htable { border-collapse:collapse; width:max-content; min-width:100%; }
+.htable th { padding:10px; font-size:10px; font-weight:700; text-align:center; background:rgba(255,107,157,0.1); border:1px solid rgba(255,255,255,0.08); white-space:nowrap; color:var(--text); min-width:92px; }
+.htable th.sticky-col { min-width:52px; background:rgba(255,107,157,0.07); position:sticky; left:0; z-index:3; }
+.htable td { padding:10px 8px; text-align:center; border:1px solid rgba(255,255,255,0.07); min-width:92px; vertical-align:middle; }
+.htable td.sticky-col { position:sticky; left:0; z-index:2; background:#180A2E; box-shadow:2px 0 6px rgba(0,0,0,0.2); font-size:10px; font-weight:700; letter-spacing:0.5px; color:var(--muted); text-transform:uppercase; white-space:nowrap; padding:10px; min-width:52px; }
+.extra-inner { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.extra-cond  { font-size:9px; color:var(--muted); line-height:1.3; }
+.no-extra { font-size:12px; color:rgba(255,255,255,0.15); }
+
+/* ─── RULES SIDE TAB ─── */
+.rules-side-tab {
+  position: absolute;
+  right: 0;
+  bottom: 16px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #3A8FFF 0%, #1655CC 100%);
+  border: 1.5px solid rgba(120,180,255,0.55);
+  border-right: none;
+  border-radius: 20px 0 0 20px;
+  padding: 6px 12px 6px 10px;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: -3px 2px 12px rgba(22,85,204,0.5);
+}
+.rst-ico { font-size: 14px; line-height: 1; }
+.rst-txt { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
 
 /* ─── REWARD TABLE (claim page: day | 日常签到 | 额外奖励) ─── */
 .rw-table { display:flex; flex-direction:column; }
@@ -237,6 +232,24 @@ html, body {
 .ov-si.t-point  .ov-si-val { color:var(--gold); }
 .ov-si.t-spin   .ov-si-val { color:var(--purple); }
 .ov-si.t-coupon .ov-si-val { color:var(--orange); }
+
+/* ─── REWARD TABLE DONE DIVIDER ─── */
+.rwt-done-row { opacity: 0.62; }
+.rwt-section-divider {
+  display: grid;
+  grid-template-columns: 62px 1fr 1fr;
+  border-top: 1.5px dashed rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.02);
+}
+.rwt-section-divider span {
+  grid-column: 1 / -1;
+  padding: 5px 12px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
 
 /* ─── T&C RULES ─── */
 .tnc-list { display:flex; flex-direction:column; }
@@ -641,33 +654,55 @@ html, body {
       <div class="pgh-title">周卡活动</div>
       <div class="pgh-sub">购买即享 · 7天连续签到领奖</div>
       <div class="pgh-date">☀️ 2026/06/01 – 2026/06/30</div>
+      <button class="rules-side-tab" onclick="openRulesModal()">
+        <span class="rst-ico">📋</span>
+        <span class="rst-txt">规则</span>
+      </button>
     </div>
 
-    <div class="plan-list">
-      <div class="plan-card-v prime">
-        <div class="pcv-top">
-          <div class="pcv-name">豪华卡</div>
-          <div class="pcv-rec">推荐</div>
+    <!-- Plan Tabs -->
+    <div class="plan-wrap">
+      <div class="plan-tabs">
+        <div class="plan-tab active" id="pt-elite" onclick="selectPlan('elite')">
+          <div class="pt-badge badge-std">标准卡</div>
+          <div class="pt-price gold">500</div>
+          <div class="pt-unit">PHP / 7天</div>
+          <div class="pt-check">✓</div>
         </div>
-        <div class="pcv-bottom">
-          <div class="pcv-price prime">P 2,000.00</div>
-          <button class="pcv-buy prime" id="pcv-buy-prime" onclick="triggerBuy('prime')">立即购买</button>
+        <div class="plan-tab" id="pt-prime" onclick="selectPlan('prime')">
+          <div class="pt-badge badge-prem">豪华卡</div>
+          <div class="pt-price purple">2,000</div>
+          <div class="pt-unit">PHP / 7天</div>
+          <div class="pt-best">推荐</div>
+          <div class="pt-check">✓</div>
         </div>
-        <div id="pcv-rewards-prime"></div>
-      </div>
-      <div class="plan-card-v elite">
-        <div class="pcv-top">
-          <div class="pcv-name">标准卡</div>
-        </div>
-        <div class="pcv-bottom">
-          <div class="pcv-price elite">P 500.00</div>
-          <button class="pcv-buy elite" id="pcv-buy-elite" onclick="triggerBuy('elite')">立即购买</button>
-        </div>
-        <div id="pcv-rewards-elite"></div>
       </div>
     </div>
 
+    <!-- Plan Detail Card -->
+    <div class="plan-detail-card" id="pdc">
+      <div class="pdc-name" id="pdc-name">标准卡</div>
+      <div class="pdc-desc" id="pdc-desc">每日签到领奖 · 连续7天丰厚现金回馈</div>
+      <div class="pdc-price" id="pdc-price">P 500.00</div>
+      <button class="pdc-buy" id="pdc-buy" onclick="triggerBuy()">立即购买</button>
+    </div>
 
+    <!-- 奖励总览 -->
+    <div class="section no-pad">
+      <div style="padding:14px 16px 10px;">
+        <div class="sec-hd" style="margin-bottom:0">
+          <div class="sec-line"></div>
+          <div class="sec-title">奖励总览</div>
+          <div class="sec-line rev"></div>
+        </div>
+      </div>
+      <div class="htable-outer" style="border-radius:0">
+        <table class="htable" id="bonus-table"></table>
+      </div>
+      <div style="height:4px"></div>
+    </div>
+
+    <!-- 规则说明 -->
     <div class="section" style="margin-bottom:0">
       <div class="sec-hd">
         <div class="sec-line"></div>
@@ -696,6 +731,10 @@ html, body {
       <div class="pgh-tag">限时活动</div>
       <div class="ch-plan-name" id="ch-plan-name">标准卡</div>
       <div class="pgh-date">☀️ 2026/06/01 – 2026/06/30</div>
+      <button class="rules-side-tab" onclick="openRulesModal()">
+        <span class="rst-ico">📋</span>
+        <span class="rst-txt">规则</span>
+      </button>
     </div>
 
     <!-- V1 STYLE: 每日签到 (compact + expanded vertical cards) -->
@@ -954,30 +993,82 @@ let currentPlan = 'elite';
 let purchasedPlan = null;
 const extraClaimed = new Set(['elite-0','elite-1','prime-0','prime-1']);
 
-/* ─── SELECT PLAN (claim page) ─── */
+/* ─── SELECT PLAN ─── */
 function selectPlan(key) {
   currentPlan = key;
   const p = plans[key];
+
+  // Purchase page tabs
+  const eliteTab = document.getElementById('pt-elite');
+  const primeTab = document.getElementById('pt-prime');
+  if (eliteTab) eliteTab.className = 'plan-tab' + (key==='elite' ? ' active' : '');
+  if (primeTab) primeTab.className = 'plan-tab' + (key==='prime' ? ' active-premium' : '');
+
+  // Plan detail card
+  const pdc = document.getElementById('pdc');
+  if (pdc) {
+    pdc.className = 'plan-detail-card' + (key==='prime' ? ' prem' : '');
+    document.getElementById('pdc-name').textContent = p.name;
+    document.getElementById('pdc-desc').textContent = p.desc;
+    document.getElementById('pdc-price').textContent = p.price;
+  }
+  updateBuyBtn();
+
+  // Claim hero & progress
   document.getElementById('ch-plan-name').textContent = p.name;
   const pct = Math.round(p.doneDays / p.totalDays * 100);
   document.getElementById('ch-bar').style.width = pct + '%';
   document.getElementById('ch-progress-text').textContent = `已签到 ${p.doneDays} / ${p.totalDays} 天`;
+
+  renderBonusTable(key);
   renderRewardList(key);
 }
 
-/* ─── UPDATE PLAN BUY BUTTONS ─── */
-function updatePlanBtns() {
-  ['elite','prime'].forEach(key => {
-    const btn = document.getElementById('pcv-buy-'+key);
-    if (!btn) return;
-    if (purchasedPlan === key) {
-      btn.innerHTML = '✓ 已購買';
-      btn.className = 'pcv-buy purchased';
-    } else if (purchasedPlan !== null) {
-      btn.innerHTML = '立即購買';
-      btn.className = 'pcv-buy blocked-plan';
+/* ─── UPDATE BUY BUTTON ─── */
+function updateBuyBtn() {
+  const btn = document.getElementById('pdc-buy');
+  if (!btn) return;
+  const p = plans[currentPlan];
+  document.querySelectorAll('.pt-purchased-tag').forEach(e => e.remove());
+  if (purchasedPlan) {
+    const tab = document.getElementById('pt-' + purchasedPlan);
+    if (tab) { const t = document.createElement('div'); t.className='pt-purchased-tag'; t.textContent='✓ 已购'; tab.appendChild(t); }
+  }
+  if (purchasedPlan === currentPlan) {
+    btn.textContent = '每周限购一次'; btn.className = 'pdc-buy purchased';
+  } else if (purchasedPlan !== null) {
+    btn.textContent = '每周限购一次'; btn.className = 'pdc-buy blocked';
+  } else {
+    btn.textContent = '立即购买';
+    btn.className = 'pdc-buy' + (p.btnClass ? ' '+p.btnClass : '');
+  }
+}
+
+/* ─── BONUS TABLE ─── */
+function renderBonusTable(key) {
+  const el = document.getElementById('bonus-table');
+  if (!el) return;
+  const p = plans[key];
+  const chipHtml = (r) => {
+    const ico = r.txt.split(' ')[0];
+    const val = r.txt.slice(ico.length + 1);
+    return `<span class="chip sm ${r.cls}"><span class="chip-ico">${ico}</span><span class="chip-val">${val}</span></span>`;
+  };
+  let html = '<thead><tr><th class="sticky-col"></th>';
+  p.days.forEach((_, i) => html += `<th>D${i+1}</th>`);
+  html += '</tr></thead><tbody>';
+  html += '<tr><td class="sticky-col">日常签到</td>';
+  p.days.forEach(d => html += `<td>${chipHtml(d.basic)}</td>`);
+  html += '</tr><tr><td class="sticky-col">额外奖励</td>';
+  p.days.forEach(d => {
+    if (d.extra) {
+      html += `<td><div class="extra-inner"><div class="extra-cond">${d.extra.cond}</div>${chipHtml(d.extra)}</div></td>`;
+    } else {
+      html += `<td><span class="no-extra">—</span></td>`;
     }
   });
+  html += '</tr></tbody>';
+  el.innerHTML = html;
 }
 
 /* ─── PLAN CARD REWARD SUMMARY ─── */
@@ -1038,6 +1129,7 @@ function renderBonusOverview(key) {
 }
 
 /* ─── REWARD LIST (table: day | 日常签到 | 额外奖励) ─── */
+/* 排序：今日 → 待解锁 → 已完成 */
 function renderRewardList(key) {
   const p = plans[key];
 
@@ -1048,12 +1140,20 @@ function renderRewardList(key) {
       <div class="rwt-col-hd">额外奖励</div>
     </div>`;
 
-  const rows = p.days.map((d, i) => {
+  // Sort indices: today → locked → done
+  const sortedIdx = [
+    ...p.days.map((d, i) => i).filter(i => p.days[i].status === 'today'),
+    ...p.days.map((d, i) => i).filter(i => p.days[i].status === 'locked'),
+    ...p.days.map((d, i) => i).filter(i => p.days[i].status === 'done'),
+  ];
+
+  const buildRow = (i) => {
+    const d  = p.days[i];
     const st       = d.status;
     const isDone   = st === 'done';
     const isToday  = st === 'today';
     const isLocked = st === 'locked';
-    const isLast   = i === 6;
+    const isLast   = i === p.days.length - 1;
     const ek       = `${key}-${i}`;
     const extCl    = extraClaimed.has(ek);
 
@@ -1063,6 +1163,7 @@ function renderRewardList(key) {
         <div class="rwt-day-inner">
           <div class="rwt-day-label">Day ${i+1}</div>
           ${isToday ? `<span class="rw-exp-today-tag" style="font-size:7px;padding:1px 5px">今日</span>` : ''}
+          ${isDone  ? `<span style="font-size:8px;color:var(--green)">✓</span>` : ''}
         </div>
       </div>`;
 
@@ -1110,9 +1211,11 @@ function renderRewardList(key) {
       extraCell = `<div class="rwt-extra${isLocked ? ' rwt-dim' : ''}">${condEl}${eChip}${actionEl}</div>`;
     }
 
-    const rowCls = isToday ? ' today-row' : ((isLast && !isLocked) ? ' prize-row' : '');
+    const rowCls = isToday ? ' today-row' : (isDone ? ' rwt-done-row' : (isLast ? ' prize-row' : ''));
     return `<div class="rwt-row${rowCls}">${dayCell}${basicCell}${extraCell}</div>`;
-  }).join('');
+  };
+
+  const rows = sortedIdx.map(i => buildRow(i)).join('');
 
   document.getElementById('reward-list').innerHTML = `<div class="rw-table">${header}${rows}</div>`;
 }
@@ -1133,10 +1236,9 @@ function closeClaimPopup() { document.getElementById('claim-popup').style.displa
 function handleMaskClick(e, id) { if (e.target.classList.contains('popup-mask')) document.getElementById(id).style.display='none'; }
 
 /* ─── BUY FLOW ─── */
-function triggerBuy(key) {
+function triggerBuy() {
   if (purchasedPlan !== null) return;
-  currentPlan = key;
-  const p = plans[key];
+  const p = plans[currentPlan];
   document.getElementById('buy-plan-name').textContent = p.name;
   document.getElementById('buy-price').textContent     = p.price;
   document.getElementById('buy-mask').classList.add('open');
@@ -1144,7 +1246,7 @@ function triggerBuy(key) {
 }
 function closeBuyModal()       { document.getElementById('buy-mask').classList.remove('open'); document.body.style.overflow = ''; }
 function handleBuyMaskClick(e) { if (e.target === document.getElementById('buy-mask')) closeBuyModal(); }
-function confirmPurchase()     { closeBuyModal(); purchasedPlan = currentPlan; updatePlanBtns(); selectPlan(currentPlan); showToast('✅ 购买成功！周卡已启动'); }
+function confirmPurchase()     { closeBuyModal(); purchasedPlan = currentPlan; updateBuyBtn(); showToast('✅ 购买成功！周卡已启动'); }
 
 function openRulesModal()        { document.getElementById('rules-mask').classList.add('open'); document.body.style.overflow='hidden'; }
 function closeRulesModal()       { document.getElementById('rules-mask').classList.remove('open'); document.body.style.overflow=''; }
@@ -1155,9 +1257,6 @@ function showToast(msg) {
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
-
-renderPlanBonus('prime', 'pcv-rewards-prime');
-renderPlanBonus('elite', 'pcv-rewards-elite');
 
 (function renderDpBonus(key, containerId) {
   const p = plans[key];

@@ -435,7 +435,7 @@ function imgContent() {
       <div class="sb"><div class="sec-t"><span class="req">*</span>活动页底图</div>
         <div class="tip-y">前台周卡专题页整体背景图，涵盖 Hero 区、卡型选择区、签到进度区视觉占位。</div>
         <div class="imgrid">${iCard('PC 端','建议尺寸 1400×2300px')}${iCard('H5 端','建议尺寸 390×838px')}</div></div>
-      <div class="sb"><div class="sec-t"><span class="req">*</span>规则弹窗图</div>
+      <div class="sb"><div class="sec-t"><span class="req">*</span>规则图</div>
         <div class="imgrid">${iCard('PC 端','建议尺寸 356×422px')}${iCard('H5 端','建议尺寸 356×422px')}</div></div>
       <div class="sb" style="border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;">
         <div style="margin-bottom:16px;">
@@ -707,7 +707,9 @@ function renderPlanList() {
   bindPlanList();
 }
 function step4() {
+  const allTotal = GCATS.reduce((s,c)=>s+c.games.length,0);
   const total = Object.values(confSel).reduce((s,set)=>s+set.size,0);
+  const gameLabel = total === allTotal ? '已选择 全部 游戏' : `已选择 <strong>${total}</strong> 个游戏`;
   return `
   <div class="tip-r">⚠ <strong>注意：</strong>修改奖励配置后将<strong>立即生效</strong>，已购买但尚未领取的奖励将按最新规则执行，请谨慎操作。</div>
   <div class="tip-b">ℹ <strong>规则说明：</strong>前台每位会员<strong>限购一张</strong>周卡；签到奖励无门槛可领；额外奖励需满足当日条件才可手动领取；彩金流水倍数<strong>仅针对彩金</strong>，积分、免费旋转、优惠券不计入。</div>
@@ -728,8 +730,8 @@ function step4() {
       <label class="ri"><input type="radio" name="audit" checked> 自动审核</label>
     </div></div></div>
     <div class="fr"><div class="fl">领取方式：</div><div class="fc"><div class="rg">
-      <label class="ri"><input type="radio" name="claim"> 自动领取</label>
-      <label class="ri"><input type="radio" name="claim" checked> 手动领取</label>
+      <label class="ri"><input type="radio" name="claim" checked> 自动领取</label>
+      <label class="ri"><input type="radio" name="claim"> 手动领取</label>
     </div><div class="hint">额外奖励无论此设定，均须满足条件后手动领取</div></div></div>
     <div class="fr"><div class="fl">已验证手机号：</div><div class="fc"><div class="rg">
       <label class="ri"><input type="radio" name="phone"> 是</label>
@@ -740,7 +742,7 @@ function step4() {
       <label class="ri"><input type="radio" name="device"> 仅 APP</label>
     </div></div></div>
     <div class="fr" style="margin-bottom:0;"><div class="fl">稽核游戏范围：</div><div class="fc">
-      <button class="game-btn" id="bOpenModal">已选择 <strong>${total}</strong> 个游戏</button>
+      <button class="game-btn" id="bOpenModal">${gameLabel}</button>
       <div class="hint" style="margin-top:6px;">仅适用于彩金（Cash）奖励部分的流水稽核</div>
     </div></div>
   </div>`;
@@ -885,7 +887,7 @@ function step6() {
           <tbody>
             <tr><td style="color:#333;text-align:left;padding-left:12px;">Banner 图</td><td>未上传</td><td>未上传</td></tr>
             <tr><td style="color:#333;text-align:left;padding-left:12px;">活动页底图</td><td>未上传</td><td>未上传</td></tr>
-            <tr><td style="color:#333;text-align:left;padding-left:12px;">规则弹窗图</td><td>未上传</td><td>未上传</td></tr>
+            <tr><td style="color:#333;text-align:left;padding-left:12px;">规则图</td><td>未上传</td><td>未上传</td></tr>
           </tbody>
         </table>
         ${row(false,'排序','0')}
@@ -901,7 +903,7 @@ function step6() {
     ${pRow('4','活动条件',
       `<div class="preview-grid">
         ${row(false,'存款强制弹窗','关闭')}${row(false,'彩金流水倍数','–')}
-        ${row(false,'审核方式','自动审核')}${row(false,'领取方式','手动领取')}
+        ${row(false,'审核方式','自动审核')}${row(false,'领取方式','自动领取')}
         ${row(false,'已验证手机号','否')}${row(false,'限制使用设备','无限制')}
         ${row(false,'稽核游戏范围',total?total+'个':'–')}
       </div>
