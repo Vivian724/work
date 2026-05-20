@@ -199,6 +199,21 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
   </div>
 </div>
 
+<!-- 代理线选择弹窗 -->
+<div class="modal-overlay hidden" id="agentLineModal">
+  <div class="modal" style="width:480px;">
+    <div class="modal-header">
+      <span class="modal-title">请选择代理</span>
+      <button class="modal-close" onclick="closeAgentLineModal()">×</button>
+    </div>
+    <div class="modal-body" id="agentLineModalBody"></div>
+    <div class="modal-footer">
+      <button class="modal-cancel" onclick="closeAgentLineModal()">取消</button>
+      <button class="modal-confirm" onclick="confirmAgentLines()">确定</button>
+    </div>
+  </div>
+</div>
+
 <!-- 游戏选择弹窗 -->
 <div class="modal-overlay hidden" id="gameModal">
   <div class="modal">
@@ -244,6 +259,9 @@ const gameCategories=[
   {cat:'电子游戏',games:['老虎机A','老虎机B','老虎机C','经典水果机','幸运转盘']},
   {cat:'电子宾果游戏',games:['宾果A','宾果B','宾果C','超级宾果','快速宾果']},
 ];
+var agentLineOptions=['代理线A','代理线B','代理线C','VIP专属线','dannyagentsub线'];
+var selectedAgentLines=[],tempAgentLines=[];
+
 let tempSelected={},confirmedSelected={},confirmedCount=0;
 
 // 初始化全选
@@ -630,29 +648,11 @@ function step3(){
   '<div class="radio-group" style="flex-direction:column;align-items:flex-start;gap:10px;">'+
     '<label class="radio-item"><input type="radio" name="agent" value="none" checked onchange="setAgentMode(\'none\')"> 不指定</label>'+
     '<div>'+
-      '<label class="radio-item"><input type="radio" name="agent" value="line" onchange="setAgentMode(\'line\')"> 指定代理线</label>'+
+      '<label class="radio-item"><input type="radio" name="agent" value="line" onchange="setAgentMode(\'line\')"> 指定代理</label>'+
       '<div id="agentLineDrop" class="hidden" style="margin-top:8px;margin-left:4px;">'+
-        '<select class="f-select" style="max-width:320px;">'+
-          '<option value="">请选择代理线</option>'+
-          '<option>代理线A</option>'+
-          '<option>代理线B</option>'+
-          '<option>代理线C</option>'+
-          '<option>VIP专属线</option>'+
-          '<option>dannyagentsub线</option>'+
-        '</select>'+
-      '</div>'+
-    '</div>'+
-    '<div>'+
-      '<label class="radio-item"><input type="radio" name="agent" value="member" onchange="setAgentMode(\'member\')"> 指定代理直属会员</label>'+
-      '<div id="agentMemberDrop" class="hidden" style="margin-top:8px;margin-left:4px;">'+
-        '<select class="f-select" style="max-width:320px;">'+
-          '<option value="">请选择代理</option>'+
-          '<option>dannyagentsub</option>'+
-          '<option>agent001</option>'+
-          '<option>agent002</option>'+
-          '<option>proagent88</option>'+
-          '<option>vipagent_ph</option>'+
-        '</select>'+
+        '<button class="game-btn" onclick="openAgentLineModal()">'+
+          (selectedAgentLines.length?'已选择 <strong>'+selectedAgentLines.length+'</strong> 个代理':'选择代理')+
+        '</button>'+
       '</div>'+
     '</div>'+
   '</div>'+
@@ -666,10 +666,32 @@ function step3(){
 }
 function setAgentMode(v){
   var lineDrop=document.getElementById('agentLineDrop');
-  var memberDrop=document.getElementById('agentMemberDrop');
   if(lineDrop)lineDrop.classList.toggle('hidden',v!=='line');
-  if(memberDrop)memberDrop.classList.toggle('hidden',v!=='member');
 }
+function openAgentLineModal(){
+  tempAgentLines=selectedAgentLines.slice();
+  renderAgentLineModalBody();
+  document.getElementById('agentLineModal').classList.remove('hidden');
+}
+function closeAgentLineModal(){document.getElementById('agentLineModal').classList.add('hidden');}
+function renderAgentLineModalBody(){
+  var allSel=tempAgentLines.length===agentLineOptions.length;
+  document.getElementById('agentLineModalBody').innerHTML=
+    '<div style="padding:10px 14px;border-bottom:1px solid #e8e8e8;background:#f9f9f9;display:flex;align-items:center;gap:10px;">'+
+      '<input type="checkbox" class="cat-check" '+(allSel?'checked':'')+' onclick="toggleAllAgentLines(this.checked)">'+
+      '<span style="font-size:14px;font-weight:500;color:#333;">全选</span>'+
+    '</div>'+
+    agentLineOptions.map(function(line){
+      var chk=tempAgentLines.includes(line);
+      return '<div style="padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid #f5f5f5;">'+
+        '<input type="checkbox" class="cat-check" '+(chk?'checked':'')+' onchange="toggleAgentLine(\''+line+'\',this.checked)">'+
+        '<span style="font-size:13px;color:#333;">'+line+'</span>'+
+      '</div>';
+    }).join('');
+}
+function toggleAllAgentLines(checked){tempAgentLines=checked?agentLineOptions.slice():[];renderAgentLineModalBody();}
+function toggleAgentLine(line,checked){if(checked){if(!tempAgentLines.includes(line))tempAgentLines.push(line);}else{tempAgentLines=tempAgentLines.filter(function(l){return l!==line;});}renderAgentLineModalBody();}
+function confirmAgentLines(){selectedAgentLines=tempAgentLines.slice();closeAgentLineModal();renderStep();}
 function setupDrops(){setTimeout(function(){document.addEventListener('click',function h(e){var ch=false;if(!e.target.closest('#levelWrap')&&!e.target.closest('#levelDropdown')&&levelOpen){levelOpen=false;ch=true;}if(!e.target.closest('#vipWrap')&&!e.target.closest('#vipDropdown')&&vipOpen){vipOpen=false;ch=true;}if(ch){document.removeEventListener('click',h);renderStep();setupDrops();}});},0);}
 function toggleLevelDrop(e){e.stopPropagation();levelOpen=!levelOpen;vipOpen=false;renderStep();setupDrops();}
 function toggleLevel(v){if(selectedLevels.includes(v))selectedLevels=selectedLevels.filter(function(x){return x!==v;});else selectedLevels.push(v);levelOpen=true;renderStep();setupDrops();}

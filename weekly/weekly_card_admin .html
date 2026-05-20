@@ -58,7 +58,8 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .fi:focus{border-color:#1677ff;}
 .fi[type=number]{-moz-appearance:textfield;}
 .fi[type=number]::-webkit-outer-spin-button,.fi[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
-.fi-dis{background:#f5f5f5;color:#999;cursor:not-allowed;}
+.fi[type=time]{padding:0 8px;}
+.fi-dis{background:#f5f5f5;color:#555;cursor:not-allowed;}
 .fsel{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;}
 .rg{display:flex;gap:16px;align-items:center;padding-top:6px;flex-wrap:wrap;}
 .ri{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;}
@@ -67,7 +68,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .tog.on{background:#1677ff;}
 .tog::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left .2s;}
 .tog.on::after{left:20px;}
-
 .dt-range{display:flex;align-items:center;gap:6px;padding:0 10px;height:34px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;max-width:440px;}
 .dt-range input[type=datetime-local]{border:none;outline:none;font-size:12px;color:#555;background:transparent;width:160px;}
 .tsep{color:#bbb;font-size:12px;}
@@ -113,7 +113,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .to-inp{height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:12px;outline:none;background:#fff;width:60px;-moz-appearance:textfield;text-align:center;}
 .to-inp::-webkit-inner-spin-button,.to-inp::-webkit-outer-spin-button{-webkit-appearance:none;}
 .to-inp:focus{border-color:#1677ff;}
-
 .b-addplan{height:36px;border:1.5px dashed #1677ff;border-radius:6px;background:#f0f7ff;color:#1677ff;font-size:13px;cursor:pointer;width:100%;margin-top:4px;}
 .b-addplan:hover{background:#e6f4ff;}
 .b-delplan{height:26px;padding:0 10px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:12px;cursor:pointer;}
@@ -153,9 +152,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .ms-opt.sel{color:#1677ff;}
 .ms-ck{color:#1677ff;font-size:12px;}
 .ms-ph{color:#bbb;font-size:12px;}
-.ltabs{display:flex;border-bottom:1px solid #e8e8e8;margin-bottom:16px;}
-.ltab{padding:8px 16px;font-size:13px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
-.ltab.act{color:#1677ff;border-bottom-color:#1677ff;}
 .hidden{display:none!important;}
 .preview-warn{background:#fff2f0;border:1px solid #ffccc7;border-radius:4px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#ff4d4f;}
 .preview-step-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:#333;}
@@ -169,6 +165,14 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .prev-img-table{width:100%;border-collapse:collapse;font-size:13px;}
 .prev-img-table th{background:#f5f7fa;padding:8px 12px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;}
 .prev-img-table td{padding:8px 12px;border:1px solid #ebeef5;text-align:center;color:#bbb;}
+/* agent modal */
+.agent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:4px 0;}
+.agent-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;border:2px solid #e8e8e8;border-radius:8px;cursor:pointer;transition:border-color .15s,background .15s;}
+.agent-item:hover{border-color:#1677ff;background:#f0f7ff;}
+.agent-item.sel{border-color:#1677ff;background:#e6f4ff;}
+.agent-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;font-weight:700;flex-shrink:0;}
+.agent-name{font-size:13px;color:#333;text-align:center;}
+.agent-sel-ck{font-size:11px;color:#1677ff;font-weight:500;}
 </style>
 </head>
 <body>
@@ -210,6 +214,8 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
     </div>
   </div>
 </div>
+
+<!-- game modal -->
 <div class="mov hidden" id="gModal">
   <div class="modal">
     <div class="mhdr"><span>选择稽核游戏范围</span><button class="mcl" id="mclBtn">&#215;</button></div>
@@ -220,17 +226,24 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
     </div>
   </div>
 </div>
+
+<!-- agent modal -->
+<div class="mov hidden" id="agentModal">
+  <div class="modal" style="width:520px;max-height:480px;">
+    <div class="mhdr"><span>选择代理线</span><button class="mcl" id="agMclBtn">&#215;</button></div>
+    <div class="mbody" id="agMbody"></div>
+    <div class="mfoot">
+      <button class="b-mc" id="agCancel">取消</button>
+      <button class="b-mok" id="agOk">确定</button>
+    </div>
+  </div>
+</div>
+
 <script>
 'use strict';
 // ── data ────────────────────────────────────────────────────────
 const STEPS = ['活动模板设置','活动图片','参与对象与名单','活动条件','风控条件','提交预览'];
 let cur = 1;
-
-const LANGS = [
-  {v:'default',l:'预设'},{v:'en',l:'英文'},{v:'ph',l:'菲律宾语'},
-  {v:'vn',l:'越南语'},{v:'ceb',l:'宿雾语'}
-];
-let selLangs = ['default'], activeLang = 'default', langOpen = false;
 
 const LEVELS = [
   {v:'d',l:'默认层'},{v:'1',l:'第一层'},{v:'2',l:'第二层'},{v:'3',l:'第三层'},
@@ -240,6 +253,19 @@ let selLevels = LEVELS.map(o => o.v), levelOpen = false;
 
 const VIPS = Array.from({length:11}, (_,i) => ({v:`vip${i}`, l:`VIP${i}`}));
 let selVips = VIPS.map(o => o.v), vipOpen = false;
+
+const AGENTS = [
+  {v:'agA', l:'代理线 A', color:'#1677ff'},
+  {v:'agB', l:'代理线 B', color:'#52c41a'},
+  {v:'agC', l:'代理线 C', color:'#fa8c16'},
+  {v:'agD', l:'代理线 D', color:'#722ed1'},
+  {v:'agE', l:'代理线 E', color:'#f5222d'},
+  {v:'agF', l:'代理线 F', color:'#13c2c2'},
+  {v:'agG', l:'代理线 G', color:'#eb2f96'},
+  {v:'agH', l:'代理线 H', color:'#faad14'},
+];
+let selAgentLine = null;
+let tmpAgentLine = null;
 
 const GCATS = [
   {cat:'EVO Live', games:['Football Studio','Crazy Coin Flip','EvoLive Baccarat A','Crazy Time','Speed Baccarat A','Mega Ball']},
@@ -282,7 +308,6 @@ let planId = 3;
 
 // ── helpers ─────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
-const h = s => s; // identity – template literals handle quoting
 
 function typeOpts(sel) {
   return Object.entries(TC).map(([k,v]) =>
@@ -293,14 +318,6 @@ function condOpts(sel) {
   return [['deposit','充值'],['turnover','投注']].map(([k,v]) =>
     `<option value="${k}"${sel===k?' selected':''}>${v}</option>`
   ).join('');
-}
-function iCard(p, hint) {
-  return `<div class="imgcard">
-    <div class="imghead"><span>${p}</span><em>${hint}</em></div>
-    <div class="imgbox">
-      <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span>点击上传图片</span><em>PNG / JPG ≤ 2MB</em>
-    </div></div>`;
 }
 function iAlt(l) {
   return `<div class="imgcard">
@@ -345,21 +362,15 @@ function renderBtns() {
 }
 function goStep(n) { cur=n; renderNav(); renderBtns(); renderStep(); }
 function renderStep() {
-  const el = $('sc');
+  const el2 = $('sc');
   const fns = [null, step1, step2, step3, step4, step5, step6];
-  el.innerHTML = fns[cur]();
-  bindStep(cur);
-}
-function bindStep(n) {
-  if (n===2) bindLang();
-  if (n===3) bindDrops();
-  if (n===4) bindPlanList();
-  // toggle buttons in all steps
-  el.querySelectorAll('.tog[data-tog]').forEach(t => {
+  el2.innerHTML = fns[cur]();
+  el2.querySelectorAll('.tog[data-tog]').forEach(t => {
     t.addEventListener('click', () => t.classList.toggle('on'));
   });
+  if (cur===3) bindDrops();
+  if (cur===4) bindPlanList();
 }
-const el = $('sc'); // placeholder – will be reassigned in goStep via renderStep
 
 // ── step 1 ──────────────────────────────────────────────────────
 function step1() {
@@ -389,139 +400,40 @@ function step1() {
         ${dtRange()}
         <div class="hint">活动总时间</div>
       </div></div>
-      <div class="fr" style="margin-bottom:12px;"><div class="fl"><span class="req">*</span>周期天数：</div>
-        <div class="fc" style="display:flex;align-items:center;gap:10px;">
-          <input type="number" class="fi" value="7" min="1" max="30" style="max-width:100px;">
-          <span style="font-size:13px;color:#666;">天 / 周期</span>
-          <span style="font-size:12px;color:#999;">（前台展示对应天数的签到进度）</span>
-        </div>
-      </div>
-      <div class="fr" style="margin-bottom:0;"><div class="fl">自动重置：</div><div class="fc">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div class="tog on" data-tog></div>
-          <span style="font-size:13px;color:#666;">周期结束后自动重置购买资格，开启后玩家可在新周期重新购买周卡。</span>
-        </div>
+      <div class="fr" style="margin-bottom:0;"><div class="fl"><span class="req">*</span>活动使用时间：</div><div class="fc">
+        ${dtRange()}
+        <div class="hint">玩家可签到领奖的时间区间</div>
       </div></div>
     </div>
   </div>`;
 }
 
 // ── step 2 ──────────────────────────────────────────────────────
-function buildLangTags() {
-  if (!selLangs.length) return `<span class="ms-ph">请选择语系</span>`;
-  return selLangs.map(v => {
-    const lb = (LANGS.find(o=>o.v===v)||{l:v}).l;
-    const rm = v==='default' ? '' : `<button class="ms-rm" data-rmLang="${v}">×</button>`;
-    return `<span class="ms-tag">${lb}${rm}</span>`;
-  }).join('');
-}
-function buildLangDd() {
-  return LANGS.map(o => {
-    const sel = selLangs.includes(o.v);
-    const fixed = o.v==='default' ? ' <span style="font-size:11px;color:#bbb;">(固定)</span>' : '';
-    return `<div class="ms-opt${sel?' sel':''}" data-toggleLang="${o.v}">${o.l}${fixed}${sel?'<span class="ms-ck">✓</span>':''}</div>`;
-  }).join('');
-}
-function imgContent() {
-  const tabs = selLangs.map(v => {
-    const lb = (LANGS.find(o=>o.v===v)||{l:v}).l;
-    return `<div class="ltab${v===activeLang?' act':''}" data-langTab="${v}">${lb}</div>`;
-  }).join('');
-  return `
-    <div class="ltabs">${tabs}</div>
-    <div id="imgArea">
-      <div class="sb"><div class="sec-t"><span class="req">*</span>Banner 图</div>
-        <div class="imgrid">${iCard('PC 端','建议尺寸 1400×800px')}${iCard('H5 端','建议尺寸 390×320px')}</div></div>
-      <div class="sb"><div class="sec-t"><span class="req">*</span>活动页底图</div>
-        <div class="tip-y">前台周卡专题页整体背景图，涵盖 Hero 区、卡型选择区、签到进度区视觉占位。</div>
-        <div class="imgrid">${iCard('PC 端','建议尺寸 1400×2300px')}${iCard('H5 端','建议尺寸 390×838px')}</div></div>
-      <div class="sb"><div class="sec-t"><span class="req">*</span>规则图</div>
-        <div class="imgrid">${iCard('PC 端','建议尺寸 356×422px')}${iCard('H5 端','建议尺寸 356×422px')}</div></div>
-      <div class="sb" style="border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;">
-        <div style="margin-bottom:16px;">
-          <div style="font-size:14px;font-weight:500;color:#333;margin-bottom:10px;">首页浮窗设置：
-            <label class="ri" style="margin-left:12px;display:inline-flex;"><input type="radio" name="floatWin" checked> 关闭</label>
-            <label class="ri" style="margin-left:12px;display:inline-flex;"><input type="radio" name="floatWin"> 开启</label>
-          </div>
-          <div class="imgrid" style="margin-bottom:6px;">${iAlt('PC 图片')}${iAlt('H5 图片')}</div>
-          <div style="font-size:12px;color:#999;">图片格式：png、bmp、jpg、gif；大小限制 5MB 内</div>
-        </div>
-        <div class="fr" style="margin-bottom:0;"><div class="fl">排序：</div><div class="fc">
-          <input type="number" class="fi" style="max-width:120px;" value="0">
-        </div></div>
-      </div>
-      <div class="sb" style="margin-top:20px;"><div class="sec-t">备注</div>
-        <textarea class="fi" style="height:80px;resize:vertical;padding-top:8px;" placeholder="请输入"></textarea>
-      </div>
-    </div>`;
-}
 function step2() {
   return `
-  <div class="sdesc">上传周卡活动相关图片，用于展示在不同平台与位置。</div>
-  <div class="sb" style="border:1px solid #e8e8e8;border-radius:4px;padding:16px;">
-    <div class="sec-t">活动设置</div>
-    <div class="fr"><div class="fl">活动语系：</div><div class="fc" style="position:relative;max-width:400px;">
-      <div class="ms-wrap" id="langWrap">
-        ${buildLangTags()}<span class="ms-arr">▾</span>
+  <div class="sdesc">设置首页浮窗图片及活动备注。</div>
+  <div class="sb" style="border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;">
+    <div class="sec-t">首页浮窗设置</div>
+    <div style="margin-bottom:16px;">
+      <div style="font-size:14px;font-weight:500;color:#333;margin-bottom:10px;">浮窗开关：
+        <label class="ri" style="margin-left:12px;display:inline-flex;"><input type="radio" name="floatWin" checked> 关闭</label>
+        <label class="ri" style="margin-left:12px;display:inline-flex;"><input type="radio" name="floatWin"> 开启</label>
       </div>
-      <div class="ms-dd${langOpen?'':' hidden'}" id="langDd">${buildLangDd()}</div>
-    </div></div>
-    <div class="fr"><div class="fl">活动标题：</div><div class="fc">
-      <input type="text" class="fi" placeholder="请输入" style="max-width:400px;">
+      <div class="imgrid" style="margin-bottom:6px;">${iAlt('PC 图片')}${iAlt('H5 图片')}</div>
+      <div style="font-size:12px;color:#999;">图片格式：png、bmp、jpg、gif；大小限制 5MB 内</div>
+    </div>
+    <div class="fr" style="margin-bottom:0;"><div class="fl">排序：</div><div class="fc">
+      <input type="number" class="fi" style="max-width:120px;" value="0">
     </div></div>
   </div>
-  <div class="sb" style="border:1px solid #e8e8e8;border-radius:4px;padding:16px;margin-top:10px;">
-    ${imgContent()}
+  <div class="sb" style="margin-top:16px;border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;">
+    <div class="sec-t">备注</div>
+    <textarea class="fi" style="height:80px;resize:vertical;padding-top:8px;" placeholder="请输入"></textarea>
   </div>`;
-}
-function bindLang() {
-  const wrap = $('langWrap'), dd = $('langDd');
-  if (!wrap) return;
-  wrap.addEventListener('click', e => {
-    e.stopPropagation();
-    langOpen = !langOpen;
-    dd && dd.classList.toggle('hidden', !langOpen);
-  });
-  document.addEventListener('click', function h2(e) {
-    if (!e.target.closest('#langWrap') && !e.target.closest('#langDd') && langOpen) {
-      langOpen = false;
-      dd && dd.classList.add('hidden');
-      document.removeEventListener('click', h2);
-    }
-  });
-  // toggle lang
-  dd && dd.querySelectorAll('[data-toggleLang]').forEach(opt => {
-    opt.addEventListener('click', e => {
-      const v = opt.dataset.togglelang;
-      if (v === 'default') return;
-      const idx = selLangs.indexOf(v);
-      if (idx >= 0) selLangs.splice(idx,1); else selLangs.push(v);
-      if (!selLangs.includes(activeLang)) activeLang = selLangs[0]||'default';
-      renderStep(); bindLang();
-    });
-  });
-  // remove lang tags
-  wrap.querySelectorAll('[data-rmlang]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const v = btn.dataset.rmlang;
-      selLangs = selLangs.filter(x=>x!==v);
-      if (activeLang===v) activeLang = selLangs[0]||'default';
-      langOpen = false; renderStep(); bindLang();
-    });
-  });
-  // lang tabs
-  const area = $('sc');
-  area.querySelectorAll('[data-langtab]').forEach(tab => {
-    tab.addEventListener('click', () => {
-      activeLang = tab.dataset.langtab;
-      area.querySelectorAll('[data-langtab]').forEach(t => t.classList.toggle('act', t.dataset.langtab===activeLang));
-    });
-  });
 }
 
 // ── step 3 ──────────────────────────────────────────────────────
-function buildMsDd(items, selArr, toggleFn, allFn) {
+function buildMsDd(items, selArr) {
   const allSel = selArr.length === items.length;
   let h2 = `<div class="ms-opt${allSel?' sel':''}" data-msAll>${allSel?'✓ ':''} 全选</div>`;
   h2 += items.map(o => {
@@ -530,12 +442,17 @@ function buildMsDd(items, selArr, toggleFn, allFn) {
   }).join('');
   return h2;
 }
-function buildMsTags(items, selArr, rmFn) {
+function buildMsTags(items, selArr) {
   if (!selArr.length) return `<span class="ms-ph">请选择</span>`;
   return selArr.map(v => {
     const lb=(items.find(o=>o.v===v)||{l:v}).l;
     return `<span class="ms-tag">${lb}<button class="ms-rm" data-rmV="${v}">×</button></span>`;
   }).join('');
+}
+function agentBtnLabel() {
+  if (!selAgentLine) return '选择代理';
+  const ag = AGENTS.find(a => a.v === selAgentLine);
+  return `${ag ? ag.l : selAgentLine} &nbsp;<span style="font-size:11px;color:#999;">点击更改</span>`;
 }
 function step3() {
   const lvlTags = buildMsTags(LEVELS, selLevels);
@@ -555,13 +472,7 @@ function step3() {
         <div>
           <label class="ri"><input type="radio" name="agent" value="line"> 指定代理线</label>
           <div id="aLine" class="hidden" style="margin-top:8px;margin-left:4px;">
-            <select class="fsel" style="max-width:300px;"><option value="">请选择代理线</option><option>代理线A</option></select>
-          </div>
-        </div>
-        <div>
-          <label class="ri"><input type="radio" name="agent" value="member"> 指定代理直属会员</label>
-          <div id="aMem" class="hidden" style="margin-top:8px;margin-left:4px;">
-            <select class="fsel" style="max-width:300px;"><option value="">请选择代理</option><option>agent001</option></select>
+            <button type="button" class="game-btn" id="bOpenAgentModal">${agentBtnLabel()}</button>
           </div>
         </div>
       </div>
@@ -590,8 +501,7 @@ function step3() {
   </div>`;
 }
 function bindDrops() {
-  // toggle dropdowns
-  function bindMs(wrapId, ddId, selArr, items, onToggle, onAll, onRm) {
+  function bindMs(wrapId, ddId, selArr, items) {
     const wrap = $(wrapId), dd = $(ddId);
     if (!wrap || !dd) return;
     let open = false;
@@ -633,11 +543,11 @@ function bindDrops() {
   // agent radio
   $('sc').querySelectorAll('input[name=agent]').forEach(r => {
     r.addEventListener('change', () => {
-      const v = r.value;
-      $('aLine') && $('aLine').classList.toggle('hidden', v!=='line');
-      $('aMem') && $('aMem').classList.toggle('hidden', v!=='member');
+      $('aLine') && $('aLine').classList.toggle('hidden', r.value !== 'line');
     });
   });
+  // agent modal button
+  $('bOpenAgentModal') && $('bOpenAgentModal').addEventListener('click', openAgentModal);
   // togs
   $('sc').querySelectorAll('.tog[data-tog]').forEach(t => {
     t.addEventListener('click', () => t.classList.toggle('on'));
@@ -682,8 +592,9 @@ function renderPlanCard(p, pi) {
     ${p.col ? '' : `
     <div class="pbody">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
-        <div><div style="font-size:12px;color:#999;margin-bottom:6px;"><span class="req">*</span>卡型名称</div>
-          <input type="text" class="fi" value="${p.name}" data-plan="${pi}" data-field="name">
+        <div>
+          <div style="font-size:12px;color:#999;margin-bottom:6px;">卡型名称</div>
+          <div class="fi fi-dis" style="display:flex;align-items:center;">${p.name}</div>
         </div>
         <div><div style="font-size:12px;color:#999;margin-bottom:6px;"><span class="req">*</span>周卡费用（PHP）</div>
           <input type="number" class="fi" value="${p.price}" data-plan="${pi}" data-field="price">
@@ -712,7 +623,6 @@ function step4() {
   const gameLabel = total === allTotal ? '已选择 全部 游戏' : `已选择 <strong>${total}</strong> 个游戏`;
   return `
   <div class="tip-r">⚠ <strong>注意：</strong>修改奖励配置后将<strong>立即生效</strong>，已购买但尚未领取的奖励将按最新规则执行，请谨慎操作。</div>
-  <div class="tip-b">ℹ <strong>规则说明：</strong>前台每位会员<strong>限购一张</strong>周卡；签到奖励无门槛可领；额外奖励需满足当日条件才可手动领取；彩金流水倍数<strong>仅针对彩金</strong>，积分、免费旋转、优惠券不计入。</div>
   <div id="planList">${plans.map((p,i)=>renderPlanCard(p,i)).join('')}</div>
   <div class="sb" style="margin-top:24px;border-top:1px solid #f0f0f0;padding-top:20px;"><div class="sec-t">通用设置</div>
     <div class="fr"><div class="fl">存款强制弹窗：</div><div class="fc">
@@ -750,7 +660,6 @@ function step4() {
 function bindPlanList() {
   const pl = $('planList');
   if (!pl) return;
-  // collapse
   pl.querySelectorAll('[data-toggleCol]').forEach(el => {
     el.addEventListener('click', () => {
       const pi = +el.dataset.togglecol;
@@ -758,17 +667,6 @@ function bindPlanList() {
       renderPlanList();
     });
   });
-  // delete plan
-  pl.querySelectorAll('[data-delPlan]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const pi = +btn.dataset.delplan;
-      if (plans.length <= 1) { alert('至少保留一种卡型'); return; }
-      plans.splice(pi,1); renderPlanList();
-    });
-  });
-
-  // inputs / selects
   pl.querySelectorAll('[data-field]').forEach(inp => {
     inp.addEventListener('change', () => {
       const pi = inp.dataset.plan != null ? +inp.dataset.plan : null;
@@ -777,31 +675,16 @@ function bindPlanList() {
       if (pi == null) return;
       const p = plans[pi];
       if (d == null) {
-        // plan-level field
         if (field==='price') p.price = Number(inp.value)||0;
         else if (field==='bt') { p.bt = inp.value; renderPlanList(); }
-        else if (field==='name') p.name = inp.value;
       } else {
-        // day-level field
         const parts = field.split('.');
         if (parts.length===1) p.days[d][parts[0]] = inp.value;
         else p.days[d][parts[0]][parts[1]] = inp.value;
       }
     });
   });
-  // add plan button
-  $('bAddPlan') && $('bAddPlan').addEventListener('click', () => {
-    const days = Array.from({length:7}, () => emptyDay());
-    plans.push({id:planId++, name:'新卡型', bt:'custom', price:0, col:false, days});
-    renderPlanList();
-    setTimeout(() => {
-      const last = $(`pc${plans.length-1}`);
-      if (last) last.scrollIntoView({behavior:'smooth',block:'center'});
-    }, 100);
-  });
-  // open modal button
   $('bOpenModal') && $('bOpenModal').addEventListener('click', openModal);
-  // togs
   $('sc').querySelectorAll('.tog[data-tog]').forEach(t => {
     t.addEventListener('click', () => t.classList.toggle('on'));
   });
@@ -847,7 +730,6 @@ function toggleRisk5(el) {
 // ── step 6 ──────────────────────────────────────────────────────
 function step6() {
   const total = Object.values(confSel).reduce((s,set)=>s+set.size,0);
-  const langStr = selLangs.map(v=>(LANGS.find(o=>o.v===v)||{l:v}).l).join('、')||'–';
   function row(req,k,v,red) {
     return `<div class="preview-row"><span class="pk${req?' req':''}">${k}：</span><span class="pv${red?' red':v==='–'?' empty':''}">${v}</span></div>`;
   }
@@ -859,13 +741,14 @@ function step6() {
       <div style="padding:14px 16px;">${body}</div>
     </div>`;
   }
+  const agentStr = selAgentLine ? (AGENTS.find(a=>a.v===selAgentLine)||{l:selAgentLine}).l : '不指定';
   const planRows = plans.map(p => {
     const ex = p.days.filter(d=>d.extra.val&&d.extra.val!=='').length;
     return row(false, p.name, `${p.price.toLocaleString()} PHP · ${ex>0?ex+'天有额外奖励':'仅签到奖励'}`);
   }).join('');
   return `
   <div class="sdesc">请确认以下活动配置信息，确认无误后点击「确认送出」。</div>
-  <div class="preview-warn">● 请填写以下必填字段：活动名称、活动总时间、进行时间</div>
+  <div class="preview-warn">● 请填写以下必填字段：活动名称、进行时间、活动使用时间</div>
   <div style="border:1px solid #e8e8e8;border-radius:4px;overflow:hidden;">
     <div style="display:grid;grid-template-columns:130px 1fr;background:#f5f7fa;border-bottom:1px solid #e8e8e8;">
       <div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;border-right:1px solid #e8e8e8;">步骤</div>
@@ -875,27 +758,18 @@ function step6() {
       `<div class="preview-grid">
         ${row(false,'活动类型','周卡活动')}${row(true,'活动状态','关闭')}
         ${row(true,'活动币种','PHP')}${row(true,'活动名称','–',true)}
-        ${row(true,'进行时间','–',true)}${row(true,'周期天数','7 天')}
-        ${row(false,'自动重置','是')}
+        ${row(true,'进行时间','–',true)}${row(true,'活动使用时间','–',true)}
       </div>`
     )}
     ${pRow('2','活动图片',
-      `<div>
-        ${row(false,'语系',langStr)}${row(false,'活动标题','–')}
-        <table class="prev-img-table" style="margin-top:8px;margin-bottom:8px;">
-          <thead><tr><th>图片类型</th><th>PC 端</th><th>H5 端</th></tr></thead>
-          <tbody>
-            <tr><td style="color:#333;text-align:left;padding-left:12px;">Banner 图</td><td>未上传</td><td>未上传</td></tr>
-            <tr><td style="color:#333;text-align:left;padding-left:12px;">活动页底图</td><td>未上传</td><td>未上传</td></tr>
-            <tr><td style="color:#333;text-align:left;padding-left:12px;">规则图</td><td>未上传</td><td>未上传</td></tr>
-          </tbody>
-        </table>
-        ${row(false,'排序','0')}
+      `<div class="preview-grid">
+        ${row(false,'首页浮窗','关闭')}${row(false,'排序','0')}
+        ${row(false,'备注','–')}
       </div>`
     )}
     ${pRow('3','参与对象与名单',
       `<div class="preview-grid">
-        ${row(false,'充值层级',`全选（${selLevels.length} 层）`)}${row(false,'指定代理','不指定')}
+        ${row(false,'充值层级',`全选（${selLevels.length} 层）`)}${row(false,'指定代理',agentStr)}
         ${row(false,'新会员限制','否')}${row(false,'会员等级','全选（VIP0–VIP10）')}
         ${row(false,'黑名单','–')}
       </div>`
@@ -941,7 +815,6 @@ function renderModalBody() {
     h2 += `</div></div>`;
   });
   $('mbody').innerHTML = h2;
-  // bind modal checkboxes
   $('allGames').addEventListener('change', function() {
     GCATS.forEach((_,i) => {
       if (!tmpSel[i]) tmpSel[i]=new Set();
@@ -974,19 +847,44 @@ $('mclBtn').addEventListener('click', closeModal);
 $('mCancel').addEventListener('click', closeModal);
 $('mOk').addEventListener('click', confirmModal);
 
-// ── override renderStep to also bind step-specific events ────────
-const _renderStep = renderStep;
-function renderStep() {
-  const el2 = $('sc');
-  const fns = [null, step1, step2, step3, step4, step5, step6];
-  el2.innerHTML = fns[cur]();
-  el2.querySelectorAll('.tog[data-tog]').forEach(t => {
-    t.addEventListener('click', () => t.classList.toggle('on'));
-  });
-  if (cur===2) bindLang();
-  if (cur===3) bindDrops();
-  if (cur===4) bindPlanList();
+// ── agent modal ──────────────────────────────────────────────────
+function openAgentModal() {
+  tmpAgentLine = selAgentLine;
+  renderAgentModalBody();
+  $('agentModal').classList.remove('hidden');
 }
+function renderAgentModalBody() {
+  let h2 = `<div class="agent-grid">`;
+  AGENTS.forEach(ag => {
+    const sel = tmpAgentLine === ag.v;
+    h2 += `<div class="agent-item${sel?' sel':''}" data-agV="${ag.v}">
+      <div class="agent-av" style="background:${ag.color};">${ag.l.slice(-1)}</div>
+      <span class="agent-name">${ag.l}</span>
+      ${sel ? '<span class="agent-sel-ck">✓ 已选择</span>' : ''}
+    </div>`;
+  });
+  h2 += `</div>`;
+  $('agMbody').innerHTML = h2;
+  $('agMbody').querySelectorAll('[data-agV]').forEach(item => {
+    item.addEventListener('click', () => {
+      tmpAgentLine = item.dataset.agv;
+      renderAgentModalBody();
+    });
+  });
+}
+function closeAgentModal() { $('agentModal').classList.add('hidden'); }
+function confirmAgentModal() {
+  selAgentLine = tmpAgentLine;
+  closeAgentModal();
+  renderStep();
+  bindDrops();
+  // re-check the line radio
+  const lineRadio = $('sc') && $('sc').querySelector('input[name=agent][value="line"]');
+  if (lineRadio) { lineRadio.checked = true; $('aLine') && $('aLine').classList.remove('hidden'); }
+}
+$('agMclBtn').addEventListener('click', closeAgentModal);
+$('agCancel').addEventListener('click', closeAgentModal);
+$('agOk').addEventListener('click', confirmAgentModal);
 
 // ── init ─────────────────────────────────────────────────────────
 goStep(1);
