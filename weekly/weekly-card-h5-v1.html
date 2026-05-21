@@ -99,6 +99,7 @@ html, body {
 .pt-unit { font-size:11px; font-weight:500; color:var(--muted); }
 .pt-best { position:absolute; top:10px; right:10px; font-size:9px; font-weight:700; background:rgba(160,120,245,0.1); border:1px solid rgba(160,120,245,0.22); color:var(--purple); padding:2px 7px; border-radius:20px; }
 .pt-check { position:absolute; bottom:10px; right:12px; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; opacity:0; transition:opacity 0.2s; }
+.pt-date { font-size:9px; color:rgba(255,255,255,0.5); margin-top:4px; letter-spacing:0.3px; display:flex; align-items:center; gap:3px; }
 .plan-tab.active .pt-check { opacity:1; background:rgba(255,107,157,0.12); border:1px solid var(--pink); color:var(--pink); }
 .plan-tab.active-premium .pt-check { opacity:1; background:rgba(160,120,245,0.12); border:1px solid var(--purple); color:var(--purple); }
 .pt-purchased-tag { position:absolute; bottom:10px; left:12px; font-size:8px; font-weight:700; background:rgba(61,201,138,0.1); color:var(--green); border:1px solid rgba(61,201,138,0.22); padding:2px 6px; border-radius:20px; }
@@ -169,6 +170,7 @@ html, body {
 .pdc-name  { font-size:16px; font-weight:800; color:var(--text); margin-bottom:5px; }
 .pdc-desc  { font-size:11px; color:var(--muted); margin-bottom:12px; line-height:1.5; }
 .pdc-price { font-size:30px; font-weight:900; color:var(--gold); margin-bottom:14px; letter-spacing:0.5px; }
+.pdc-date { font-size:10px; color:var(--muted); margin-bottom:12px; letter-spacing:0.3px; }
 .pdc-buy { padding:12px 32px; border-radius:12px; border:none; background:linear-gradient(135deg,#FF72B8,var(--pink)); color:#fff; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; box-shadow:0 4px 14px rgba(255,142,198,0.3); transition:all 0.2s; }
 .pdc-buy:active { transform:scale(0.97); box-shadow:none; }
 .pdc-buy.prem      { background:linear-gradient(135deg,#7C3AED,var(--purple)); box-shadow:0 4px 14px rgba(160,120,245,0.3); }
@@ -684,6 +686,7 @@ html, body {
       <div class="pdc-name" id="pdc-name">标准卡</div>
       <div class="pdc-desc" id="pdc-desc">每日签到领奖 · 连续7天丰厚现金回馈</div>
       <div class="pdc-price" id="pdc-price">P 500.00</div>
+      <div class="pdc-date">⏱️ 活動使用時間　2026/06/01 – 2026/07/10</div>
       <button class="pdc-buy" id="pdc-buy" onclick="triggerBuy()">立即购买</button>
     </div>
 
@@ -730,7 +733,7 @@ html, body {
     <div class="claim-hero">
       <div class="pgh-tag">限时活动</div>
       <div class="ch-plan-name" id="ch-plan-name">标准卡</div>
-      <div class="pgh-date">☀️ 2026/06/01 – 2026/06/30</div>
+      <div class="pgh-date" style="background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15);">⏱️ 活動使用時間　2026/06/01 – 2026/07/10</div>
       <button class="rules-side-tab" onclick="openRulesModal()">
         <span class="rst-ico">📋</span>
         <span class="rst-txt">规则</span>
