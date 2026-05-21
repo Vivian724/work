@@ -253,6 +253,39 @@ html, body {
   text-transform: uppercase;
 }
 
+/* ─── HINT POPUP CARDS (Col 3) ─── */
+.hint-popup {
+  background: rgba(22, 10, 44, 0.93);
+  border: 1px solid rgba(255, 107, 157, 0.28);
+  border-radius: 14px;
+  padding: 10px 36px 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+  transition: opacity 0.2s, transform 0.2s;
+  position: relative;
+}
+.hint-popup.dismissed { opacity:0; pointer-events:none; transform:translateY(-6px); }
+.hint-popup-close {
+  position: absolute; top: 8px; right: 8px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.13);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--muted); cursor: pointer;
+  font-family: inherit;
+}
+.hint-popup-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
+.hint-popup-body { flex: 1; min-width: 0; }
+.hint-popup-title { font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.hint-popup-desc  { font-size: 10px; color: var(--muted); line-height: 1.4; }
+.hint-popup-desc b { color: var(--text); }
+.hint-popup-btn {
+  flex-shrink: 0; font-size: 10px; font-weight: 700; padding: 5px 10px;
+  border-radius: 20px; background: linear-gradient(135deg,#FF72B8,var(--pink));
+  color: #fff; border: none; cursor: pointer; font-family: inherit;
+}
+
 /* ─── T&C RULES ─── */
 .tnc-list { display:flex; flex-direction:column; }
 .tnc-item { display:flex; gap:10px; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.05); }
@@ -684,7 +717,6 @@ html, body {
       <div class="pdc-name" id="pdc-name">Regular Weekly Card</div>
       <div class="pdc-desc" id="pdc-desc">每日签到领奖 · 连续7天丰厚现金回馈</div>
       <div class="pdc-price" id="pdc-price">P 500.00</div>
-      <div class="pdc-date">Event Period: 2026/06/31-2026/06/30</div>
       <button class="pdc-buy" id="pdc-buy" onclick="triggerBuy()">立即购买</button>
     </div>
 
@@ -707,16 +739,17 @@ html, body {
     <div class="section" style="margin-bottom:0">
       <div class="sec-hd">
         <div class="sec-line"></div>
-        <div class="sec-title">TERMS &amp; CONDITIONS</div>
+        <div class="sec-title">GENERAL MECHANICS</div>
         <div class="sec-line rev"></div>
       </div>
       <div class="tnc-list">
-        <div class="tnc-item"><div class="tnc-dot">1</div><div class="tnc-text">This promotion is valid only for <b>eligible registered and KYC-verified OKBet players</b> who purchase a valid Weekly Card.</div></div>
-        <div class="tnc-item"><div class="tnc-dot">2</div><div class="tnc-text">Rewards earned from sign-ins and daily tasks are <b>non-transferable</b> and cannot be exchanged for other promotional items or alternative credits.</div></div>
-        <div class="tnc-item"><div class="tnc-dot">3</div><div class="tnc-text">The following individuals are <b>not eligible</b> to participate: employees of OKBet, their immediate family members up to the second degree of affinity, operators of gaming sites, banned individuals, as well as government officials or employees.</div></div>
-        <div class="tnc-item"><div class="tnc-dot">4</div><div class="tnc-text">In the event of suspected <b>fraudulent or suspicious activities</b> (including but not limited to multi-accounting, cheating, or manipulating daily task resets), OKBet reserves the right to close the player's account, and any associated cards, winnings, or rewards will be completely forfeited.</div></div>
-        <div class="tnc-item"><div class="tnc-dot">5</div><div class="tnc-text">OKBet retains the right to <b>modify or terminate</b> this promotion without prior notice, subject to PAGCOR approval.</div></div>
-        <div class="tnc-item"><div class="tnc-dot">6</div><div class="tnc-text">All materials and prizes will be <b>shouldered by OKBet</b>.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">1</div><div class="tnc-text"><b>Event Period:</b> TBD (To Be Determined)</div></div>
+        <div class="tnc-item"><div class="tnc-dot">2</div><div class="tnc-text"><b>OKBet Weekly Bonus Card Selection:</b> During the active event period, players can choose to purchase either the Classic Card or the Premium Card.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">3</div><div class="tnc-text"><b>Purchase Eligibility:</b> Players can only purchase and hold one (1) type of OKBet Weekly Bonus Card at any given time. Once the 7-day cycle of the current card completely expires, eligibility resets, and the player may repurchase any card of their choice.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">4</div><div class="tnc-text"><b>Daily Login Rewards:</b> Upon successfully purchasing a OKBet Weekly Bonus Card, players will automatically receive their corresponding daily sign-in reward simply by logging into their account each day.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">5</div><div class="tnc-text"><b>Daily Task Rewards:</b> To claim additional Daily Task rewards, players must fulfill the specified task requirements and manually claim the reward within the same day.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">6</div><div class="tnc-text"><b>Strict Daily Expiry &amp; Reset:</b> All daily sign-in statuses, tasks, and unclaimed rewards reset strictly at 11:59:59 PM every day.<br>If a player fails to log in, fails to complete the required task, or forgets to claim the reward on that day, the rewards for that day will be permanently forfeited and cannot be reissued or reclaimed later.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">7</div><div class="tnc-text"><b>Turnover Requirement:</b> All bonuses and rewards received from this activity are subject to a specific turnover requirement before withdrawal. The exact turnover multiplier is TBD (To Be Determined) and will be applied upon credit issuance.</div></div>
       </div>
     </div>
     <div class="spacer"></div>
@@ -730,7 +763,6 @@ html, body {
 
     <div class="claim-hero">
       <div class="ch-plan-name" id="ch-plan-name">Regular Weekly Card</div>
-      <div class="pgh-date" style="background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15);">Event Period: 2026/06/31-2026/06/30</div>
       <button class="rules-side-tab" onclick="openRulesModal()">
         <span class="rst-ico">📋</span>
         <span class="rst-txt">规则</span>
@@ -756,16 +788,17 @@ html, body {
     <div class="section" style="margin-bottom:0">
       <div class="sec-hd">
         <div class="sec-line"></div>
-        <div class="sec-title">TERMS &amp; CONDITIONS</div>
+        <div class="sec-title">GENERAL MECHANICS</div>
         <div class="sec-line rev"></div>
       </div>
       <div class="tnc-list">
-        <div class="tnc-item"><div class="tnc-dot">1</div><div class="tnc-text">This promotion is valid only for <b>eligible registered and KYC-verified OKBet players</b> who purchase a valid Weekly Card.</div></div>
-        <div class="tnc-item"><div class="tnc-dot">2</div><div class="tnc-text">Rewards earned from sign-ins and daily tasks are <b>non-transferable</b> and cannot be exchanged for other promotional items or alternative credits.</div></div>
-        <div class="tnc-item"><div class="tnc-dot">3</div><div class="tnc-text">The following individuals are <b>not eligible</b> to participate: employees of OKBet, their immediate family members up to the second degree of affinity, operators of gaming sites, banned individuals, as well as government officials or employees.</div></div>
-        <div class="tnc-item"><div class="tnc-dot">4</div><div class="tnc-text">In the event of suspected <b>fraudulent or suspicious activities</b> (including but not limited to multi-accounting, cheating, or manipulating daily task resets), OKBet reserves the right to close the player's account, and any associated cards, winnings, or rewards will be completely forfeited.</div></div>
-        <div class="tnc-item"><div class="tnc-dot">5</div><div class="tnc-text">OKBet retains the right to <b>modify or terminate</b> this promotion without prior notice, subject to PAGCOR approval.</div></div>
-        <div class="tnc-item"><div class="tnc-dot">6</div><div class="tnc-text">All materials and prizes will be <b>shouldered by OKBet</b>.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">1</div><div class="tnc-text"><b>Event Period:</b> TBD (To Be Determined)</div></div>
+        <div class="tnc-item"><div class="tnc-dot">2</div><div class="tnc-text"><b>OKBet Weekly Bonus Card Selection:</b> During the active event period, players can choose to purchase either the Classic Card or the Premium Card.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">3</div><div class="tnc-text"><b>Purchase Eligibility:</b> Players can only purchase and hold one (1) type of OKBet Weekly Bonus Card at any given time. Once the 7-day cycle of the current card completely expires, eligibility resets, and the player may repurchase any card of their choice.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">4</div><div class="tnc-text"><b>Daily Login Rewards:</b> Upon successfully purchasing a OKBet Weekly Bonus Card, players will automatically receive their corresponding daily sign-in reward simply by logging into their account each day.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">5</div><div class="tnc-text"><b>Daily Task Rewards:</b> To claim additional Daily Task rewards, players must fulfill the specified task requirements and manually claim the reward within the same day.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">6</div><div class="tnc-text"><b>Strict Daily Expiry &amp; Reset:</b> All daily sign-in statuses, tasks, and unclaimed rewards reset strictly at 11:59:59 PM every day.<br>If a player fails to log in, fails to complete the required task, or forgets to claim the reward on that day, the rewards for that day will be permanently forfeited and cannot be reissued or reclaimed later.</div></div>
+        <div class="tnc-item"><div class="tnc-dot">7</div><div class="tnc-text"><b>Turnover Requirement:</b> All bonuses and rewards received from this activity are subject to a specific turnover requirement before withdrawal. The exact turnover multiplier is TBD (To Be Determined) and will be applied upon credit issuance.</div></div>
       </div>
     </div>
     <div class="spacer"></div>
@@ -817,6 +850,34 @@ html, body {
       </div>
       <button class="apu-btn">确认</button>
     </div>
+  </div>
+</div>
+
+<!-- ───────── COL 3B: 提示彈窗 ───────── -->
+<div class="demo-col" style="width:var(--w);flex-shrink:0">
+  <div class="demo-label">提示彈窗</div>
+  <div style="display:flex;flex-direction:column;gap:12px;width:100%;padding:0 4px">
+
+    <!-- 提示彈窗 1：任務完成領取獎勵 -->
+    <div class="hint-popup">
+      <button class="hint-popup-close" onclick="this.closest('.hint-popup').classList.add('dismissed')">✕</button>
+      <div class="hint-popup-icon">✅</div>
+      <div class="hint-popup-body">
+        <div class="hint-popup-title">任務完成！領取獎勵</div>
+        <div class="hint-popup-desc">今日任務已達標，<b>🎟 優惠券 ×1</b> 可領取</div>
+      </div>
+    </div>
+
+    <!-- 提示彈窗 2：每日簽到獎勵 -->
+    <div class="hint-popup">
+      <button class="hint-popup-close" onclick="this.closest('.hint-popup').classList.add('dismissed')">✕</button>
+      <div class="hint-popup-icon">🎁</div>
+      <div class="hint-popup-body">
+        <div class="hint-popup-title">每日簽到獎勵待領取！</div>
+        <div class="hint-popup-desc">今日簽到獎勵 <b>💵 70 PHP</b>，請前往領取頁手動領取</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -924,17 +985,16 @@ html, body {
 <div class="rules-mask" id="rules-mask" onclick="handleRulesMaskClick(event)">
   <div class="rules-modal" onclick="event.stopPropagation()">
     <div class="rm-head">
-      <div class="rm-title">General Mechanics</div>
+      <div class="rm-title">Terms &amp; Conditions</div>
       <div class="rm-close" onclick="closeRulesModal()">✕</div>
     </div>
     <div class="rm-body">
-      <div class="rule-item"><div class="rule-dot">1</div><div class="rule-text"><b>Event Period:</b> TBD (To Be Determined)</div></div>
-      <div class="rule-item"><div class="rule-dot">2</div><div class="rule-text"><b>OKBet Weekly Bonus Card Selection:</b> During the active event period, players can choose to purchase either the Classic Card or the Premium Card.</div></div>
-      <div class="rule-item"><div class="rule-dot">3</div><div class="rule-text"><b>Purchase Eligibility:</b> Players can only purchase and hold one (1) type of OKBet Weekly Bonus Card at any given time. Once the 7-day cycle of the current card completely expires, eligibility resets, and the player may repurchase any card of their choice.</div></div>
-      <div class="rule-item"><div class="rule-dot">4</div><div class="rule-text"><b>Daily Login Rewards:</b> Upon successfully purchasing a OKBet Weekly Bonus Card, players will automatically receive their corresponding daily sign-in reward simply by logging into their account each day.</div></div>
-      <div class="rule-item"><div class="rule-dot">5</div><div class="rule-text"><b>Daily Task Rewards:</b> To claim additional Daily Task rewards, players must fulfill the specified task requirements and manually claim the reward within the same day.</div></div>
-      <div class="rule-item"><div class="rule-dot">6</div><div class="rule-text"><b>Strict Daily Expiry &amp; Reset:</b> All daily sign-in statuses, tasks, and unclaimed rewards reset strictly at 11:59:59 PM every day.<br><br>If a player fails to log in, fails to complete the required task, or forgets to claim the reward on that day, the rewards for that day will be permanently forfeited and cannot be reissued or reclaimed later.</div></div>
-      <div class="rule-item"><div class="rule-dot">7</div><div class="rule-text"><b>Turnover Requirement:</b> All bonuses and rewards received from this activity are subject to a specific turnover requirement before withdrawal. The exact turnover multiplier is TBD (To Be Determined) and will be applied upon credit issuance.</div></div>
+      <div class="rule-item"><div class="rule-dot">1</div><div class="rule-text">This promotion is valid only for <b>eligible registered and KYC-verified OKBet players</b> who purchase a valid Weekly Card.</div></div>
+      <div class="rule-item"><div class="rule-dot">2</div><div class="rule-text">Rewards earned from sign-ins and daily tasks are <b>non-transferable</b> and cannot be exchanged for other promotional items or alternative credits.</div></div>
+      <div class="rule-item"><div class="rule-dot">3</div><div class="rule-text">The following individuals are <b>not eligible</b> to participate: employees of OKBet, their immediate family members up to the second degree of affinity, operators of gaming sites, banned individuals, as well as government officials or employees.</div></div>
+      <div class="rule-item"><div class="rule-dot">4</div><div class="rule-text">In the event of suspected <b>fraudulent or suspicious activities</b> (including but not limited to multi-accounting, cheating, or manipulating daily task resets), OKBet reserves the right to close the player's account, and any associated cards, winnings, or rewards will be completely forfeited.</div></div>
+      <div class="rule-item"><div class="rule-dot">5</div><div class="rule-text">OKBet retains the right to <b>modify or terminate</b> this promotion without prior notice, subject to PAGCOR approval.</div></div>
+      <div class="rule-item"><div class="rule-dot">6</div><div class="rule-text">All materials and prizes will be <b>shouldered by OKBet</b>.</div></div>
     </div>
   </div>
 </div>
