@@ -158,6 +158,7 @@ html, body {
 .rwt-extra { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:10px 6px; }
 .rwt-dim { opacity:0.55; }
 .rwt-cond-txt { font-size:8px; color:var(--muted); text-align:center; line-height:1.4; }
+.rwt-extra-name { font-size:8px; font-weight:700; color:var(--text); text-align:center; line-height:1.3; }
 .rwt-expired { font-size:9px; font-weight:700; padding:2px 8px; border-radius:20px; background:rgba(248,113,113,0.08); color:var(--red); border:1px solid rgba(248,113,113,0.2); }
 .rwt-locked-txt { font-size:8px; color:var(--muted); }
 .rwt-none { font-size:12px; color:rgba(0,0,0,0.15); }
@@ -430,6 +431,7 @@ html, body {
 .apu-extra-reward { display:flex; align-items:center; gap:5px; margin-bottom:2px; }
 .apu-extra-ico { font-size:20px; line-height:1; }
 .apu-extra-val { font-size:14px; font-weight:900; color:var(--text); line-height:1.2; }
+.apu-extra-name { font-size:11px; font-weight:700; color:var(--text); line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:120px; }
 .apu-extra-lbl { font-size:9px; color:var(--muted); }
 .apu-extra-cond-txt { font-size:9px; color:var(--muted); margin-top:2px; }
 .apu-extra-btn    { font-size:11px; font-weight:700; padding:6px 12px; border-radius:20px; cursor:pointer; flex-shrink:0; background:rgba(255,179,0,0.12); color:var(--gold); border:1.5px solid rgba(255,179,0,0.35); font-family:inherit; }
@@ -842,7 +844,10 @@ html, body {
           <div class="apu-extra-tag">🎯 额外奖励待领取</div>
           <div class="apu-extra-reward">
             <span class="apu-extra-ico">🎟</span>
-            <div><div class="apu-extra-val">×1</div><div class="apu-extra-lbl">优惠券</div></div>
+            <div>
+              <div class="apu-extra-val">×1</div>
+              <div class="apu-extra-name">Acewin Free Spins</div>
+            </div>
           </div>
           <div class="apu-extra-cond-txt">投注 ≥ 500 PHP</div>
         </div>
@@ -1043,9 +1048,9 @@ const plans = {
       { basic:{cls:'t-cash',  txt:'💵 50 PHP'},  extra:{cls:'t-point', txt:'⭐ 80 pts',  cond:'存款 ≥ 200 PHP', condMet:true},  status:'done'   },
       { basic:{cls:'t-point', txt:'⭐ 100 pts'}, extra:{cls:'t-spin',  txt:'🎰 ×5',      cond:'存款 ≥ 200 PHP', condMet:true},  status:'done'   },
       { basic:{cls:'t-spin',  txt:'🎰 ×8'},      extra:{cls:'t-cash',  txt:'💵 30 PHP',   cond:'存款 ≥ 300 PHP', condMet:false}, status:'done'   },
-      { basic:{cls:'t-cash',  txt:'💵 70 PHP'},  extra:{cls:'t-coupon',txt:'🎟 ×1',       cond:'投注 ≥ 500 PHP', condMet:false}, status:'today'  },
+      { basic:{cls:'t-cash',  txt:'💵 70 PHP'},  extra:{cls:'t-coupon',txt:'🎟 ×1', name:'Acewin Free Spins',  cond:'投注 ≥ 500 PHP', condMet:false}, status:'today'  },
       { basic:{cls:'t-coupon',txt:'🎟 ×1'},      extra:{cls:'t-cash',   txt:'💵 60 PHP',  cond:'存款 ≥ 400 PHP', condMet:false}, status:'locked' },
-      { basic:{cls:'t-point', txt:'⭐ 150 pts'}, extra:{cls:'t-coupon', txt:'🎟 ×1',      cond:'投注 ≥ 400 PHP', condMet:false}, status:'locked' },
+      { basic:{cls:'t-point', txt:'⭐ 150 pts'}, extra:{cls:'t-coupon', txt:'🎟 ×1', name:'Acewin Free Spins', cond:'投注 ≥ 400 PHP', condMet:false}, status:'locked' },
       { basic:{cls:'t-cash',  txt:'💵 120 PHP'}, extra:{cls:'t-spin',  txt:'🎰 ×15',     cond:'存款 ≥ 500 PHP', condMet:false}, status:'locked' },
     ]
   },
@@ -1056,9 +1061,9 @@ const plans = {
       { basic:{cls:'t-cash',  txt:'💵 200 PHP'}, extra:{cls:'t-point', txt:'⭐ 300 pts', cond:'存款 ≥ 500 PHP',   condMet:true},  status:'done'   },
       { basic:{cls:'t-point', txt:'⭐ 500 pts'}, extra:{cls:'t-spin',  txt:'🎰 ×15',     cond:'存款 ≥ 500 PHP',   condMet:true},  status:'done'   },
       { basic:{cls:'t-spin',  txt:'🎰 ×20'},     extra:{cls:'t-cash',  txt:'💵 100 PHP',  cond:'存款 ≥ 800 PHP',   condMet:false}, status:'done'   },
-      { basic:{cls:'t-cash',  txt:'💵 250 PHP'}, extra:{cls:'t-coupon',txt:'🎟 ×2',       cond:'存款 ≥ 1,000 PHP', condMet:false}, status:'today'  },
+      { basic:{cls:'t-cash',  txt:'💵 250 PHP'}, extra:{cls:'t-coupon',txt:'🎟 ×2', name:'Acewin Free Spins', cond:'存款 ≥ 1,000 PHP', condMet:false}, status:'today'  },
       { basic:{cls:'t-coupon',txt:'🎟 ×2'},      extra:{cls:'t-cash',  txt:'💵 150 PHP',  cond:'存款 ≥ 1,000 PHP', condMet:false}, status:'locked' },
-      { basic:{cls:'t-point', txt:'⭐ 800 pts'}, extra:{cls:'t-coupon',txt:'🎟 ×1',       cond:'存款 ≥ 1,500 PHP', condMet:false}, status:'locked' },
+      { basic:{cls:'t-point', txt:'⭐ 800 pts'}, extra:{cls:'t-coupon',txt:'🎟 ×1', name:'Acewin Free Spins', cond:'存款 ≥ 1,500 PHP', condMet:false}, status:'locked' },
       { basic:{cls:'t-cash',  txt:'💵 500 PHP'}, extra:{cls:'t-spin',  txt:'🎰 ×30',     cond:'存款 ≥ 2,000 PHP', condMet:false}, status:'locked' },
     ]
   }
@@ -1261,6 +1266,7 @@ function renderRewardList(key) {
       const eIcon = ex.txt.split(' ')[0];
       const eAmt  = ex.txt.slice(eIcon.length + 1);
       const eChip = `<span class="chip sm ${ex.cls}"><span class="chip-ico">${eIcon}</span><span class="chip-val">${eAmt}</span></span>`;
+      const eNameEl = ex.name ? `<span class="rwt-extra-name">${ex.name}</span>` : '';
       let condEl = '', actionEl = '';
 
       if (isLocked) {
@@ -1283,7 +1289,7 @@ function renderRewardList(key) {
         }
       }
 
-      extraCell = `<div class="rwt-extra${isLocked ? ' rwt-dim' : ''}">${condEl}${eChip}${actionEl}</div>`;
+      extraCell = `<div class="rwt-extra${isLocked ? ' rwt-dim' : ''}">${condEl}${eChip}${eNameEl}${actionEl}</div>`;
     }
 
     const rowCls = isToday ? ' today-row' : (isDone ? ' rwt-done-row' : (isLast ? ' prize-row' : ''));
