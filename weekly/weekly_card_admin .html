@@ -277,7 +277,7 @@ const GCATS = [
 let tmpSel = {}, confSel = {};
 GCATS.forEach((_,i) => { confSel[i] = new Set(GCATS[i].games); });
 
-const TC = {cash:'彩金', point:'积分', spin:'免费旋转', coupon:'优惠券'};
+const TC = {cash:'彩金', point:'积分', spin:'免费旋转', coupon:'优惠券', freeBet:'免费投注', propCard:'道具卡'};
 
 function mkDay(ft,fv,et,ev,ct,cv,to) {
   return { free:{type:ft,val:fv}, extra:{type:et,val:ev,condType:ct,condVal:cv}, turnover:to };
@@ -285,7 +285,7 @@ function mkDay(ft,fv,et,ev,ct,cv,to) {
 function emptyDay() { return mkDay('cash','','spin','','deposit','',''); }
 
 let plans = [
-  { id:1, name:'标准卡', bt:'std', price:500, col:false, days:[
+  { id:1, name:'Classic Card', bt:'std', price:500, col:false, days:[
     mkDay('cash','10','spin','','deposit','0','2'),
     mkDay('spin','5','cash','12','deposit','200','3'),
     mkDay('spin','8','cash','13','turnover','500','4'),
@@ -294,7 +294,7 @@ let plans = [
     mkDay('cash','30','spin','','deposit','',''),
     mkDay('cash','50','spin','30','turnover','1000','5')
   ]},
-  { id:2, name:'豪华卡', bt:'prem', price:2000, col:false, days:[
+  { id:2, name:'Premium Card', bt:'prem', price:2000, col:false, days:[
     mkDay('cash','50','spin','10','deposit','0','2'),
     mkDay('spin','10','cash','80','deposit','200','3'),
     mkDay('spin','15','cash','100','turnover','500','4'),
@@ -399,10 +399,6 @@ function step1() {
       <div class="fr" style="margin-bottom:12px;"><div class="fl"><span class="req">*</span>进行时间：</div><div class="fc">
         ${dtRange()}
         <div class="hint">活动总时间</div>
-      </div></div>
-      <div class="fr" style="margin-bottom:0;"><div class="fl"><span class="req">*</span>活动使用时间：</div><div class="fc">
-        ${dtRange()}
-        <div class="hint">玩家可签到领奖的时间区间</div>
       </div></div>
     </div>
   </div>`;
@@ -556,8 +552,6 @@ function bindDrops() {
 
 // ── step 4 ──────────────────────────────────────────────────────
 function renderPlanCard(p, pi) {
-  const BL = {std:'bstd',prem:'bprem',custom:'bcustom'};
-  const BN = {std:'标准卡',prem:'豪华卡',custom:'自定义'};
   const rows = p.days.map((day,d) => {
     return `<tr>
       <td class="td-day">第${d+1}天</td>
@@ -581,14 +575,6 @@ function renderPlanCard(p, pi) {
   }).join('');
 
   return `<div class="plan-card" id="pc${pi}">
-    <div class="pch" data-toggleCol="${pi}">
-      <div class="pchl">
-        <span class="pbadge ${BL[p.bt]||'bcustom'}">${BN[p.bt]||'自定义'}</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:12px;color:#999;">${p.col?'▸':'▾'}</span>
-      </div>
-    </div>
     ${p.col ? '' : `
     <div class="pbody">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
