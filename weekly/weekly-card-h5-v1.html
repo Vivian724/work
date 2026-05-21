@@ -851,7 +851,7 @@ html, body {
           </div>
           <div class="apu-extra-cond-txt">投注 ≥ 500 PHP</div>
         </div>
-        <button class="apu-extra-btn">Deposit</button>
+        <button class="apu-extra-btn">Play Now</button>
       </div>
       <button class="apu-btn">Confirm</button>
     </div>
@@ -1284,9 +1284,9 @@ function renderRewardList(key) {
         } else if (ex.condMet) {
           actionEl = `<button class="cbtn cbtn-claim" onclick="claimExtra('${key}',${i})">领取</button>`;
         } else if (ex.cond.includes('投注')) {
-          actionEl = `<button class="cbtn cbtn-bet" onclick="showToast('🎰 前往游戏页面')">Deposit</button>`;
+          actionEl = `<button class="cbtn cbtn-bet" onclick="showToast('🎰 前往游戏页面')">Play Now</button>`;
         } else {
-          actionEl = `<button class="cbtn cbtn-deposit" onclick="showToast('💰 前往存款页面')">Deposit</button>`;
+          actionEl = `<button class="cbtn cbtn-deposit" onclick="showToast('💰 前往存款页面')">Play Now</button>`;
         }
       }
 
