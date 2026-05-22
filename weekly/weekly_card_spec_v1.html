@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OKBet Weekly Bonus Card — 規格書 v1</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --nav-h:52px;
+  --side-w:192px;
+  --scale:0.58;
+  --pw:390px;
+  --ph:780px;
+  --pvsm:290px;
+  --pvw:calc(var(--pw)*var(--scale));
+  --pvh:calc(var(--ph)*var(--scale));
+  --bg:#F1F5F9;
+  --white:#fff;
+  --border:#E2E8F0;
+  --text:#0F172A;
+  --muted:#64748B;
+  --c1:#3B82F6;
+  --c2:#8B5CF6;
+  --c3:#10B981;
+  --c4:#F59E0B;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+
+/* ── TOPBAR ── */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:10px;z-index:200}
+.topbar-title{font-size:15px;font-weight:700}
+.topbar-v{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(139,92,246,.1);color:var(--c2);border:1px solid rgba(139,92,246,.2)}
+.topbar-file{margin-left:auto;font-size:11px;color:var(--muted)}
+
+/* ── LAYOUT ── */
+.layout{display:flex;padding-top:var(--nav-h);min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--side-w);flex-shrink:0;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;background:var(--white);border-right:1px solid var(--border);padding:14px 0}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.nav-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:10px 16px 4px}
+.nav-a{display:flex;align-items:center;gap:8px;padding:6px 16px;font-size:13px;color:var(--muted);text-decoration:none;border-left:2px solid transparent;transition:all .15s}
+.nav-a:hover{color:var(--text);background:var(--bg)}
+.nav-a.on{color:var(--c2);background:rgba(139,92,246,.06);border-left-color:var(--c2)}
+.nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.nd-buy{background:var(--c1)}.nd-claim{background:var(--c3)}.nd-popup{background:var(--c2)}.nd-data{background:var(--c4)}
+
+/* ── MAIN ── */
+.main{flex:1;min-width:0;padding:36px 40px 80px}
+
+/* ── ZONE HEADER ── */
+.zone{margin-bottom:60px;scroll-margin-top:calc(var(--nav-h)+20px)}
+.zone-hd{display:flex;align-items:center;gap:14px;margin-bottom:28px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+.zone-num{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+.zn-buy{background:rgba(59,130,246,.1);color:var(--c1)}
+.zn-claim{background:rgba(16,185,129,.1);color:var(--c3)}
+.zn-popup{background:rgba(139,92,246,.1);color:var(--c2)}
+.zn-data{background:rgba(245,158,11,.1);color:var(--c4)}
+.zone-title{font-size:22px;font-weight:800}
+.zone-badge{font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase}
+.zb-buy{background:rgba(59,130,246,.08);color:var(--c1);border:1px solid rgba(59,130,246,.2)}
+.zb-claim{background:rgba(16,185,129,.08);color:var(--c3);border:1px solid rgba(16,185,129,.2)}
+.zb-popup{background:rgba(139,92,246,.08);color:var(--c2);border:1px solid rgba(139,92,246,.2)}
+.zb-data{background:rgba(245,158,11,.08);color:var(--c4);border:1px solid rgba(245,158,11,.2)}
+
+/* ── SUB SECTION ── */
+.sub{margin-bottom:40px}
+.sub-title{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;letter-spacing:.5px;text-transform:uppercase}
+.sub-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── SPEC ROW ── */
+.spec-row{display:flex;gap:28px;align-items:flex-start}
+.spec-tables{flex:1;min-width:0;display:flex;flex-direction:column;gap:16px}
+
+/* ── PHONE PREVIEW ── */
+.pv-wrap{position:relative;padding-top:22px;flex-shrink:0}
+.pv-label{position:absolute;top:0;left:0;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+.pv-outer{width:var(--pvw);height:var(--pvh);overflow:hidden;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.14);border:1px solid rgba(0,0,0,.06);background:#180A2E;position:relative;flex-shrink:0}
+.pv-outer.sm{height:var(--pvsm)}
+.spec-iframe{width:var(--pw);height:var(--ph);transform:scale(var(--scale));transform-origin:top left;border:none;display:block;position:absolute;top:0;left:0}
+.spec-iframe.sm{height:500px}
+
+/* ── TABLES ── */
+table{width:100%;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);font-size:13px}
+th{background:#F8FAFC;padding:8px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid var(--border);text-align:left}
+td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:last-child td{border:none}
+tr:hover td{background:#FAFBFC}
+code{font-family:'SF Mono',Menlo,monospace;font-size:11px;background:rgba(99,102,241,.08);color:#4F46E5;padding:1px 5px;border-radius:4px}
+
+/* ── STATUS CHIPS ── */
+.s{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.s-done{background:rgba(16,185,129,.1);color:var(--c3);border:1px solid rgba(16,185,129,.2)}
+.s-today{background:rgba(236,72,153,.1);color:#DB2777;border:1px solid rgba(236,72,153,.2)}
+.s-locked{background:rgba(100,116,139,.1);color:var(--muted);border:1px solid rgba(100,116,139,.2)}
+.s-on{background:rgba(59,130,246,.1);color:var(--c1);border:1px solid rgba(59,130,246,.2)}
+.s-off{background:rgba(100,116,139,.08);color:var(--muted);border:1px solid rgba(100,116,139,.15)}
+
+/* ── NOTE ── */
+.note{display:flex;gap:9px;padding:9px 13px;background:rgba(59,130,246,.05);border:1px solid rgba(59,130,246,.15);border-radius:8px;font-size:12px;color:var(--muted);margin-bottom:12px}
+.note-ico{font-size:14px;flex-shrink:0;margin-top:1px}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border);margin:52px 0}
+
+@media(max-width:860px){.sidebar{display:none}.spec-row{flex-direction:column}.main{padding:20px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">OKBet Weekly Bonus Card</div>
+  <div class="topbar-v">規格書 v1</div>
+  <div class="topbar-file">weekly-card-h5-v1.html · 2026-05-22</div>
+</div>
+
+<div class="layout">
+
+<!-- ─── SIDEBAR ─── -->
+<aside class="sidebar">
+  <div class="nav-label">區塊</div>
+  <a href="#zone-buy"   class="nav-a"><span class="nav-dot nd-buy"></span>購買頁</a>
+  <a href="#zone-claim" class="nav-a"><span class="nav-dot nd-claim"></span>領取頁</a>
+  <a href="#zone-popup" class="nav-a"><span class="nav-dot nd-popup"></span>彈窗區</a>
+
+  <div class="nav-label" style="margin-top:8px">彈窗細項</div>
+  <a href="#popup-auto"    class="nav-a"><span class="nav-dot nd-popup"></span>登錄自動派發</a>
+  <a href="#popup-hint"    class="nav-a"><span class="nav-dot nd-popup"></span>提示彈窗</a>
+  <a href="#popup-deposit" class="nav-a"><span class="nav-dot nd-popup"></span>存款頁彈窗</a>
+  <a href="#popup-leave"   class="nav-a"><span class="nav-dot nd-popup"></span>確認離開</a>
+  <a href="#popup-buy"     class="nav-a"><span class="nav-dot nd-popup"></span>Buy Confirm</a>
+  <a href="#popup-rules"   class="nav-a"><span class="nav-dot nd-popup"></span>Rules Modal</a>
+  <a href="#popup-claim"   class="nav-a"><span class="nav-dot nd-popup"></span>Claim Popup</a>
+
+  <div class="nav-label" style="margin-top:8px">資料</div>
+  <a href="#data-rewards" class="nav-a"><span class="nav-dot nd-data"></span>獎勵資料表</a>
+</aside>
+
+<main class="main">
+
+<div style="display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:rgba(245,158,11,.08);border:1.5px solid rgba(245,158,11,.3);border-radius:10px;margin-bottom:32px;font-size:13px;color:#92400E;line-height:1.6">
+  <span style="font-size:16px;flex-shrink:0;margin-top:1px">⚠️</span>
+  <div><strong>前台數據僅供演示</strong>：v1 原型中所有獎勵金額、任務條件、卡片方案等數值均為示意用途，<strong>非最終數據</strong>。實際上線數據以後台設置為準，前台所有數值皆由後台動態配置。</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ZONE 1 — 購買頁
+════════════════════════════════════════════ -->
+<section class="zone" id="zone-buy">
+  <div class="zone-hd">
+    <div class="zone-num zn-buy">1</div>
+    <div class="zone-title">購買頁</div>
+    <div class="zone-badge zb-buy">Purchase Page</div>
+  </div>
+
+  <div class="spec-row">
+    <!-- 手機預覽 -->
+    <div class="pv-wrap">
+      <div class="pv-label">Classic Card 選中</div>
+      <div class="pv-outer">
+        <iframe class="spec-iframe" src="weekly-card-h5-v1.html?col=0" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <!-- 規格表 -->
+    <div class="spec-tables">
+
+      <div class="sub">
+        <div class="sub-title">全域規則</div>
+        <table>
+          <thead><tr><th>#</th><th>規則</th><th>說明</th></tr></thead>
+          <tbody>
+            <tr><td>G1</td><td>每周限購一張</td><td>同時只能持有一張，7 天週期完全結束後才可重購</td></tr>
+            <tr><td>G2</td><td>兩種卡互斥</td><td>持有任一卡時，另一卡購買按鈕顯示 disabled</td></tr>
+            <tr><td>G3</td><td>每日重置</td><td>每天 <strong>11:59:59 PM</strong> 重置當日簽到、任務與未領獎勵</td></tr>
+            <tr><td>G4</td><td>過期作廢</td><td>未登入 / 未完成 / 未領取 → 獎勵永久作廢，不補發</td></tr>
+            <tr><td>G5</td><td>CLAIM_MODE</td><td>後台設定 <code>auto</code>（登入自動派發）或 <code>manual</code>（手動領取）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">Plan Tab 狀態</div>
+        <table>
+          <thead><tr><th>組件</th><th>狀態</th><th>外觀</th></tr></thead>
+          <tbody>
+            <tr><td>Plan Tab — Classic</td><td><span class="s s-on">選中</span></td><td>粉色邊框、右下角 ✓</td></tr>
+            <tr><td>Plan Tab — Classic</td><td><span class="s s-done">已購買</span></td><td>左下角「✓ 已購」綠色 tag</td></tr>
+            <tr><td>Plan Tab — Premium</td><td><span class="s s-on">選中</span></td><td>紫色邊框、顯示「推荐」badge</td></tr>
+            <tr><td>Buy Now 按鈕</td><td><span class="s s-on">未購買</span></td><td>漸層粉色，可點擊</td></tr>
+            <tr><td>Buy Now 按鈕</td><td><span class="s s-done">已購買同款</span></td><td>文字「每周限購一次」，綠色，不可點</td></tr>
+            <tr><td>Buy Now 按鈕</td><td><span class="s s-off">已購買他款</span></td><td>文字「每周限購一次」，灰色，不可點</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">互動觸發</div>
+        <table>
+          <thead><tr><th>觸發</th><th>條件</th><th>執行動作</th></tr></thead>
+          <tbody>
+            <tr><td>點擊 Plan Tab</td><td>—</td><td>切換方案，更新 Detail Card + Weekly Rewards 表格</td></tr>
+            <tr><td>點擊 Buy Now</td><td><code>purchasedPlan === null</code></td><td>開啟 Buy Confirm Modal</td></tr>
+            <tr><td>點擊 Buy Now</td><td><code>purchasedPlan !== null</code></td><td>無反應（disabled）</td></tr>
+            <tr><td>點擊「規則」Tab</td><td>—</td><td>開啟 Rules Modal</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     ZONE 2 — 領取頁
+════════════════════════════════════════════ -->
+<section class="zone" id="zone-claim">
+  <div class="zone-hd">
+    <div class="zone-num zn-claim">2</div>
+    <div class="zone-title">領取頁</div>
+    <div class="zone-badge zb-claim">Claim Page</div>
+  </div>
+
+  <div class="spec-row">
+    <div class="pv-wrap">
+      <div class="pv-label">領取頁 — Day 4 Today</div>
+      <div class="pv-outer">
+        <iframe class="spec-iframe" src="weekly-card-h5-v1.html?col=1" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="spec-tables">
+
+      <div class="note"><div class="note-ico">🎨</div><div>視覺樣式、文案內容、進度圖表由 <strong>UI 設計出圖</strong>，規格書僅定義按鈕對應情境與互動邏輯。</div></div>
+
+      <div class="sub">
+        <div class="sub-title">日常簽到 — 按鈕對應情境</div>
+        <table>
+          <thead><tr><th>CLAIM_MODE</th><th>情境</th><th>按鈕 / 顯示</th><th>點擊行為</th></tr></thead>
+          <tbody>
+            <tr><td><code>auto</code></td><td>登入後系統自動派發</td><td>✓ 打勾（無按鈕）</td><td>—</td></tr>
+            <tr><td><code>manual</code></td><td>當日未領取</td><td><strong>Claim</strong></td><td>開啟 Claim Popup，完成後顯示 ✓</td></tr>
+            <tr><td><code>manual</code></td><td>已領取</td><td><strong>Claimed</strong>（disabled）</td><td>—</td></tr>
+            <tr><td>both</td><td>未到達該天（locked）</td><td>無按鈕</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">額外獎勵 — 按鈕對應情境</div>
+        <table>
+          <thead><tr><th>情境</th><th>按鈕</th><th>點擊行為</th></tr></thead>
+          <tbody>
+            <tr><td>條件未達標 — 需存款</td><td><strong>Deposit</strong></td><td>導至存款頁面</td></tr>
+            <tr><td>條件未達標 — 需投注</td><td><strong>Play Now</strong></td><td>導至首頁</td></tr>
+            <tr><td>條件已達標，未領取</td><td><strong>Claim</strong></td><td>開啟 Claim Popup，完成後顯示 Claimed</td></tr>
+            <tr><td>已領取</td><td><strong>Claimed</strong>（disabled）</td><td>—</td></tr>
+            <tr><td>當日過期未領取</td><td><strong>Expired</strong>（disabled）</td><td>—</td></tr>
+            <tr><td>未到達該天（locked）</td><td>無按鈕</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">其他互動</div>
+        <table>
+          <thead><tr><th>觸發</th><th>執行動作</th></tr></thead>
+          <tbody>
+            <tr><td>點擊「規則」Tab</td><td>開啟 Rules Modal</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     ZONE 3 — 彈窗區
+════════════════════════════════════════════ -->
+<section class="zone" id="zone-popup">
+  <div class="zone-hd">
+    <div class="zone-num zn-popup">3</div>
+    <div class="zone-title">彈窗區</div>
+    <div class="zone-badge zb-popup">Popups &amp; Modals</div>
+  </div>
+
+  <!-- ── 3-1 登錄自動派發 ── -->
+  <div class="sub" id="popup-auto">
+    <div class="sub-title">登錄自動派發 Bottom Sheet</div>
+    <div class="note"><div class="note-ico">💡</div><div>觸發：<code>CLAIM_MODE = "auto"</code>，玩家登入後自動派發當日日常簽到獎勵</div></div>
+    <div class="spec-row">
+      <div class="pv-wrap">
+        <div class="pv-label">Auto-dispatch Bottom Sheet</div>
+        <div class="pv-outer sm">
+          <iframe class="spec-iframe sm" src="weekly-card-h5-v1.html?col=2" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="spec-tables">
+        <table>
+          <thead><tr><th>組件</th><th>說明</th></tr></thead>
+          <tbody>
+            <tr><td>Auto tag</td><td>「⚡ Automatically Claimed Upon Login」固定標籤</td></tr>
+            <tr><td>標題</td><td>「Day X Daily Reward Successfully Claimed」，X = 當日天數</td></tr>
+            <tr><td>進度圓點</td><td>7 個，顯示 done / today / locked 三種狀態</td></tr>
+            <tr><td>獎勵列表</td><td>已自動派發的日常獎勵，標示「✓ Credited」</td></tr>
+            <tr><td>額外獎勵區塊</td><td>顯示當日 extra 獎勵 + 完成條件 + 快捷按鈕</td></tr>
+            <tr><td>Confirm 按鈕</td><td>點擊關閉 Bottom Sheet</td></tr>
+          </tbody>
+        </table>
+        <table>
+          <thead><tr><th>觸發</th><th>執行動作</th></tr></thead>
+          <tbody>
+            <tr><td>玩家登入 + CLAIM_MODE = auto</td><td>自動派發日常獎勵，顯示 Bottom Sheet</td></tr>
+            <tr><td>點擊 Confirm</td><td>關閉 Bottom Sheet</td></tr>
+            <tr><td>點擊 Play Now（extra 區塊）</td><td>導至首頁</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3-2 提示彈窗 ── -->
+  <div class="sub" id="popup-hint">
+    <div class="sub-title">提示彈窗（Banner）</div>
+    <div class="note"><div class="note-ico">💡</div><div>以 Banner 浮現，<strong>不阻斷操作流程</strong></div></div>
+    <div class="spec-row">
+      <div class="pv-wrap">
+        <div class="pv-label">提示彈窗 × 2</div>
+        <div class="pv-outer">
+          <iframe class="spec-iframe" src="weekly-card-h5-v1.html?col=3" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="spec-tables">
+        <table>
+          <thead><tr><th>類型</th><th>觸發時機</th><th>內容</th></tr></thead>
+          <tbody>
+            <tr><td>任務完成</td><td>玩家完成當日任務條件</td><td>「Weekly Card Task Completed！」+ 可領取的 extra 獎勵</td></tr>
+            <tr><td>日常簽到</td><td><code>CLAIM_MODE = manual</code>，當日未領取</td><td>「Weekly Card Daily Reward Available！」+ 獎勵金額</td></tr>
+          </tbody>
+        </table>
+        <table>
+          <thead><tr><th>觸發</th><th>執行動作</th></tr></thead>
+          <tbody>
+            <tr><td>點擊 ✕</td><td>Banner 淡出消失（當日有效，不再顯示）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3-3 存款頁面彈窗 ── -->
+  <div class="sub" id="popup-deposit">
+    <div class="sub-title">存款頁面彈窗</div>
+    <div class="spec-row">
+      <div class="pv-wrap">
+        <div class="pv-label">存款頁 — 彈窗疊加</div>
+        <div class="pv-outer sm">
+          <iframe class="spec-iframe sm" src="weekly-card-h5-v1.html?col=4" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="spec-tables">
+        <table>
+          <thead><tr><th>條件</th><th>顯示</th></tr></thead>
+          <tbody>
+            <tr><td>玩家未購買週卡</td><td>✅ 顯示</td></tr>
+            <tr><td>玩家已購買週卡</td><td>❌ 不顯示</td></tr>
+            <tr><td>當日已勾選 Don't Show Again Today</td><td>❌ 不顯示</td></tr>
+          </tbody>
+        </table>
+        <table>
+          <thead><tr><th>觸發</th><th>執行動作</th></tr></thead>
+          <tbody>
+            <tr><td>點擊 View Now</td><td>導至購買頁</td></tr>
+            <tr><td>點擊 ✕</td><td>開啟 3-4 確認離開彈窗</td></tr>
+            <tr><td>勾選 Don't Show Again Today</td><td>開啟 3-4 確認離開彈窗</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3-4 確認離開 ── -->
+  <div class="sub" id="popup-leave">
+    <div class="sub-title">確認離開彈窗</div>
+    <div class="note"><div class="note-ico">💡</div><div>觸發時機：點擊 3-3 的 ✕ 關閉、勾選 Don't Show Again Today，或點擊返回 / 離開操作</div></div>
+    <div class="spec-row">
+      <div class="pv-wrap">
+        <div class="pv-label">確認離開 — 疊加在存款彈窗上</div>
+        <div class="pv-outer sm">
+          <iframe class="spec-iframe sm" src="weekly-card-h5-v1.html?col=5" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="spec-tables">
+        <table>
+          <thead><tr><th>觸發</th><th>執行動作</th></tr></thead>
+          <tbody>
+            <tr><td>點擊「Go to Purchase」</td><td>關閉確認彈窗，導至購買頁</td></tr>
+            <tr><td>點擊「Leave」</td><td>關閉所有彈窗，離開當前頁面</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3-5 Buy Confirm Modal ── -->
+  <div class="sub" id="popup-buy">
+    <div class="sub-title">Buy Confirm Modal</div>
+    <div class="note"><div class="note-ico">💡</div><div>觸發：點擊「Buy Now」（<code>purchasedPlan === null</code>）</div></div>
+    <div class="spec-row">
+      <div class="pv-wrap">
+        <div class="pv-label">Buy Confirm 開啟狀態</div>
+        <div class="pv-outer">
+          <iframe class="spec-iframe" src="weekly-card-h5-v1.html?col=0&modal=buy-mask" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="spec-tables">
+        <table>
+          <thead><tr><th>組件</th><th>說明</th></tr></thead>
+          <tbody>
+            <tr><td>方案名稱 / 價格</td><td>動態顯示選中方案</td></tr>
+            <tr><td>購買須知</td><td>4 條（即時生效、每日自動、完成任務、不可退款）</td></tr>
+            <tr><td>Confirm Purchase</td><td>記錄 <code>purchasedPlan</code>，Toast「購買成功」，關閉 Modal</td></tr>
+            <tr><td>Cancel / 點擊背景</td><td>關閉 Modal</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3-6 Rules Modal ── -->
+  <div class="sub" id="popup-rules">
+    <div class="sub-title">Rules Modal（T&amp;C）</div>
+    <div class="note"><div class="note-ico">💡</div><div>觸發：任何頁面的「規則」側邊 Tab</div></div>
+    <div class="spec-row">
+      <div class="pv-wrap">
+        <div class="pv-label">Rules Modal 開啟狀態</div>
+        <div class="pv-outer">
+          <iframe class="spec-iframe" src="weekly-card-h5-v1.html?col=0&modal=rules-mask" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="spec-tables">
+        <table>
+          <thead><tr><th>行為</th><th>說明</th></tr></thead>
+          <tbody>
+            <tr><td>開啟</td><td><code>body overflow:hidden</code>，Modal 縮放動畫進場</td></tr>
+            <tr><td>關閉</td><td>點擊 ✕ 或背景遮罩</td></tr>
+            <tr><td>內容</td><td>6 條 T&C，可捲動（max-height: 60vh）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3-7 Claim Popup ── -->
+  <div class="sub" id="popup-claim">
+    <div class="sub-title">Claim Popup（Bottom Sheet）</div>
+    <div class="note"><div class="note-ico">💡</div><div>觸發：點擊「Claim」（日常簽到）或「领取」（每日任務）</div></div>
+    <div class="spec-row">
+      <div class="pv-wrap">
+        <div class="pv-label">Claim Popup 開啟狀態</div>
+        <div class="pv-outer">
+          <iframe class="spec-iframe" src="weekly-card-h5-v1.html?col=1&modal=claim-popup" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="spec-tables">
+        <table>
+          <thead><tr><th>組件</th><th>說明</th></tr></thead>
+          <tbody>
+            <tr><td>標題</td><td>動態：「第 X 天 日常簽到 / 額外獎勵」</td></tr>
+            <tr><td>獎勵卡片</td><td>icon + 金額/數量 + 類型名稱</td></tr>
+            <tr><td>關閉</td><td>點擊 ✕ 或背景遮罩</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     DATA — 獎勵資料表
+════════════════════════════════════════════ -->
+<section class="zone" id="data-rewards">
+  <div class="zone-hd">
+    <div class="zone-num zn-data">D1</div>
+    <div class="zone-title">獎勵資料表</div>
+    <div class="zone-badge zb-data">Data</div>
+  </div>
+
+  <div class="note" style="margin-bottom:16px"><div class="note-ico">⚠️</div><div>以下數值為<strong>演示用途</strong>，實際金額、條件與獎勵類型以後台設置為準。</div></div>
+  <p style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px">Classic Card — 500 PHP / 7 天</p>
+  <table style="margin-bottom:24px">
+    <thead><tr><th>天</th><th>日常簽到</th><th>每日任務條件</th><th>每日任務獎勵</th></tr></thead>
+    <tbody>
+      <tr><td>Day 1</td><td>💵 50 PHP</td><td>存款 ≥ 200 PHP</td><td>⭐ 80 pts</td></tr>
+      <tr><td>Day 2</td><td>⭐ 100 pts</td><td>存款 ≥ 200 PHP</td><td>🎰 ×5 Free Spins</td></tr>
+      <tr><td>Day 3</td><td>🎰 ×8 Free Spins</td><td>存款 ≥ 300 PHP</td><td>💵 30 PHP</td></tr>
+      <tr><td>Day 4</td><td>💵 70 PHP</td><td>投注 ≥ 500 PHP</td><td>🎟 Acewin Free Spins ×1</td></tr>
+      <tr><td>Day 5</td><td>🎟 Coupon ×1</td><td>存款 ≥ 400 PHP</td><td>💵 60 PHP</td></tr>
+      <tr><td>Day 6</td><td>⭐ 150 pts</td><td>投注 ≥ 400 PHP</td><td>🎟 Acewin Free Spins ×1</td></tr>
+      <tr><td>Day 7</td><td>💵 120 PHP</td><td>存款 ≥ 500 PHP</td><td>🎰 ×15 Free Spins</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px">Premium Card — 2,000 PHP / 7 天</p>
+  <table>
+    <thead><tr><th>天</th><th>日常簽到</th><th>每日任務條件</th><th>每日任務獎勵</th></tr></thead>
+    <tbody>
+      <tr><td>Day 1</td><td>💵 200 PHP</td><td>存款 ≥ 500 PHP</td><td>⭐ 300 pts</td></tr>
+      <tr><td>Day 2</td><td>⭐ 500 pts</td><td>存款 ≥ 500 PHP</td><td>🎰 ×15 Free Spins</td></tr>
+      <tr><td>Day 3</td><td>🎰 ×20 Free Spins</td><td>存款 ≥ 800 PHP</td><td>💵 100 PHP</td></tr>
+      <tr><td>Day 4</td><td>💵 250 PHP</td><td>存款 ≥ 1,000 PHP</td><td>🎟 Acewin Free Spins ×2</td></tr>
+      <tr><td>Day 5</td><td>🎟 Coupon ×2</td><td>存款 ≥ 1,000 PHP</td><td>💵 150 PHP</td></tr>
+      <tr><td>Day 6</td><td>⭐ 800 pts</td><td>存款 ≥ 1,500 PHP</td><td>🎟 Acewin Free Spins ×1</td></tr>
+      <tr><td>Day 7</td><td>💵 500 PHP</td><td>存款 ≥ 2,000 PHP</td><td>🎰 ×30 Free Spins</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+</main>
+</div>
+
+<script>
+/* ─── Scrollspy ─── */
+const zones = document.querySelectorAll('.zone, .sub[id]');
+const links = document.querySelectorAll('.nav-a');
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const id = e.target.id;
+      links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#'+id));
+    }
+  });
+}, { threshold: 0.15, rootMargin: '-52px 0px -55% 0px' }).observe
+? (() => zones.forEach(z => new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#'+e.target.id));
+      }
+    });
+  }, { threshold:0.15, rootMargin:'-52px 0px -55% 0px' }).observe(z)))()
+: null;
+</script>
+</body>
+</html>
