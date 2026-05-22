@@ -180,7 +180,7 @@ html, body {
 
 /* ─── SECTION ─── */
 .section { margin:12px 12px 0; padding:16px; background:rgba(255,255,255,0.65); border-radius:20px; border:1px solid rgba(255,255,255,0.85); box-shadow:0 3px 18px rgba(0,0,0,0.04); }
-.section.no-pad { padding:0; overflow:hidden; }
+.section.no-pad { padding:0; overflow:clip; }
 .sec-hd { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
 .sec-line { flex:1; height:1px; background:rgba(255,107,157,0.15); }
 .sec-line.rev { background:linear-gradient(90deg,rgba(255,107,157,0.15),transparent); }
@@ -1048,7 +1048,7 @@ const plans = {
       { basic:{cls:'t-cash',  txt:'💵 50 PHP'},  extra:{cls:'t-point', txt:'⭐ 80 pts',  cond:'存款 ≥ 200 PHP', condMet:true},  status:'done'   },
       { basic:{cls:'t-point', txt:'⭐ 100 pts'}, extra:{cls:'t-spin',  txt:'🎰 ×5',      cond:'存款 ≥ 200 PHP', condMet:true},  status:'done'   },
       { basic:{cls:'t-spin',  txt:'🎰 ×8'},      extra:{cls:'t-cash',  txt:'💵 30 PHP',   cond:'存款 ≥ 300 PHP', condMet:false}, status:'done'   },
-      { basic:{cls:'t-cash',  txt:'💵 70 PHP'},  extra:{cls:'t-coupon',txt:'🎟 ×1', name:'Acewin Free Spins',  cond:'投注 ≥ 500 PHP', condMet:false}, status:'today'  },
+      { basic:{cls:'t-cash',  txt:'💵 70 PHP'},  extra:{cls:'t-coupon',txt:'🎟 ×1', name:'Acewin Free Spins',  cond:'投注 ≥ 500 PHP', condMet:false, btnLabel:'Deposit'}, status:'today'  },
       { basic:{cls:'t-coupon',txt:'🎟 ×1'},      extra:{cls:'t-cash',   txt:'💵 60 PHP',  cond:'存款 ≥ 400 PHP', condMet:false}, status:'locked' },
       { basic:{cls:'t-point', txt:'⭐ 150 pts'}, extra:{cls:'t-coupon', txt:'🎟 ×1', name:'Acewin Free Spins', cond:'投注 ≥ 400 PHP', condMet:false}, status:'locked' },
       { basic:{cls:'t-cash',  txt:'💵 120 PHP'}, extra:{cls:'t-spin',  txt:'🎰 ×15',     cond:'存款 ≥ 500 PHP', condMet:false}, status:'locked' },
@@ -1072,6 +1072,7 @@ const plans = {
 let currentPlan = 'elite';
 let purchasedPlan = null;
 const extraClaimed = new Set(['elite-0','elite-1','prime-0','prime-1']);
+const basicClaimed = new Set();
 
 /* ─── SELECT PLAN ─── */
 function selectPlan(key) {
@@ -1252,9 +1253,14 @@ function renderRewardList(key) {
     const bIcon = bc.txt.split(' ')[0];
     const bAmt  = bc.txt.slice(bIcon.length + 1);
     const bChip = `<span class="chip sm ${bc.cls}"><span class="chip-ico">${bIcon}</span><span class="chip-val">${bAmt}</span></span>`;
+    const bkCl  = basicClaimed.has(ek);
     const bSt   = isLocked
       ? `<span class="rwt-locked-txt">未解锁</span>`
-      : `<div class="check-circle" style="margin-top:0">✓</div>`;
+      : (isToday && key === 'elite')
+        ? bkCl
+          ? `<div class="check-circle" style="margin-top:0">✓</div>`
+          : `<button class="cbtn cbtn-claim" onclick="claimBasic('${key}',${i})">Claim</button>`
+        : `<div class="check-circle" style="margin-top:0">✓</div>`;
     const basicCell = `<div class="rwt-basic${isLocked ? ' rwt-dim' : ''}">${bChip}${bSt}</div>`;
 
     // ── Extra cell ──
@@ -1283,7 +1289,7 @@ function renderRewardList(key) {
         } else if (ex.condMet) {
           actionEl = `<button class="cbtn cbtn-claim" onclick="claimExtra('${key}',${i})">领取</button>`;
         } else if (ex.cond.includes('投注')) {
-          actionEl = `<button class="cbtn cbtn-bet" onclick="showToast('🎰 前往游戏页面')">Play Now</button>`;
+          actionEl = `<button class="cbtn cbtn-bet" onclick="showToast('🎰 前往游戏页面')">${ex.btnLabel || 'Play Now'}</button>`;
         } else {
           actionEl = `<button class="cbtn cbtn-deposit" onclick="showToast('💰 前往存款页面')">Play Now</button>`;
         }
@@ -1299,6 +1305,18 @@ function renderRewardList(key) {
   const rows = sortedIdx.map(i => buildRow(i)).join('');
 
   document.getElementById('reward-list').innerHTML = `<div class="rw-table">${header}${rows}</div>`;
+}
+
+/* ─── CLAIM BASIC ─── */
+function claimBasic(key, i) {
+  const d = plans[key].days[i];
+  basicClaimed.add(`${key}-${i}`);
+  document.getElementById('popup-day-label').textContent = `${dayNames[i]}日常簽到`;
+  const bIcon = d.basic.txt.split(' ')[0];
+  document.getElementById('popup-rewards').innerHTML =
+    `<div class="sh-rc"><span class="ri">${bIcon}</span><div class="rv">${d.basic.txt}</div><div class="rn">日常簽到</div></div>`;
+  document.getElementById('claim-popup').style.display = 'flex';
+  renderRewardList(key);
 }
 
 /* ─── CLAIM EXTRA ─── */
@@ -1385,6 +1403,37 @@ function showToast(msg) {
 
 selectPlan('elite');
 applyClaimModeRule();
+
+/* ─── spec iframe URL param controller ─── */
+;(function(){
+  const p = new URLSearchParams(location.search);
+  const col = p.get('col');
+  if(col !== null){
+    const idx = parseInt(col);
+    const cols = document.querySelectorAll('.demo-col');
+    cols.forEach((c,i) => { c.style.display = i===idx ? 'flex' : 'none'; });
+    const stage = document.querySelector('.demo-stage');
+    if(stage) stage.style.cssText = 'display:flex;padding:0;gap:0;min-width:unset;';
+    cols[idx]?.querySelectorAll('.demo-label').forEach(l => l.style.display='none');
+    document.documentElement.style.setProperty('background','transparent','important');
+    document.body.style.setProperty('background','transparent','important');
+    document.body.style.overflow = 'hidden';
+  }
+  const modal = p.get('modal');
+  if(modal){
+    const el = document.getElementById(modal);
+    if(el){
+      el.classList.add('open');
+      if(modal === 'claim-popup'){
+        el.style.display = 'flex';
+        const lbl = document.getElementById('popup-day-label');
+        const rwd = document.getElementById('popup-rewards');
+        if(lbl) lbl.textContent = 'Day 4 日常簽到';
+        if(rwd) rwd.innerHTML = '<div class="sh-rc"><span class="ri">💵</span><div class="rv">70 PHP</div><div class="rn">日常簽到</div></div>';
+      }
+    }
+  }
+})();
 </script>
 </body>
 </html>
