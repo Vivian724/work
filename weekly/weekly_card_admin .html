@@ -218,7 +218,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 <!-- game modal -->
 <div class="mov hidden" id="gModal">
   <div class="modal">
-    <div class="mhdr"><span>选择稽核游戏范围</span><button class="mcl" id="mclBtn">&#215;</button></div>
+    <div class="mhdr"><span>选择适用游戏范围</span><button class="mcl" id="mclBtn">&#215;</button></div>
     <div class="mbody" id="mbody"></div>
     <div class="mfoot">
       <button class="b-mc" id="mCancel">取消</button>
@@ -637,9 +637,8 @@ function step4() {
       <label class="ri"><input type="radio" name="device" checked> 无限制</label>
       <label class="ri"><input type="radio" name="device"> 仅 APP</label>
     </div></div></div>
-    <div class="fr" style="margin-bottom:0;"><div class="fl">稽核游戏范围：</div><div class="fc">
+    <div class="fr" style="margin-bottom:0;"><div class="fl">适用游戏范围：</div><div class="fc">
       <button class="game-btn" id="bOpenModal">${gameLabel}</button>
-      <div class="hint" style="margin-top:6px;">仅适用于彩金（Cash）奖励部分的流水稽核</div>
     </div></div>
   </div>`;
 }
@@ -765,7 +764,7 @@ function step6() {
         ${row(false,'存款强制弹窗','关闭')}${row(false,'彩金流水倍数','–')}
         ${row(false,'审核方式','自动审核')}${row(false,'领取方式','自动领取')}
         ${row(false,'已验证手机号','否')}${row(false,'限制使用设备','无限制')}
-        ${row(false,'稽核游戏范围',total?total+'个':'–')}
+        ${row(false,'适用游戏范围',total?total+'个':'–')}
       </div>
       <div style="margin-top:8px;border-top:1px solid #f0f0f0;padding-top:8px;">${planRows}</div>`
     )}
