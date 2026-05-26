@@ -476,6 +476,19 @@ html, body {
 .buy-confirm { padding:12px 28px; border-radius:12px; border:none; background:linear-gradient(135deg,#FF72B8,var(--pink)); font-family:inherit; font-size:13px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 4px 14px rgba(255,142,198,0.3); display:flex; align-items:center; justify-content:center; gap:5px; }
 .buy-confirm:active { transform:scale(0.97); }
 
+/* ─── INSUFFICIENT BALANCE MODAL ─── */
+.balance-mask { position:fixed; inset:0; background:rgba(0,0,0,0.55); backdrop-filter:blur(10px); z-index:360; display:flex; align-items:center; justify-content:center; padding:24px 20px; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+.balance-mask.open { opacity:1; pointer-events:all; }
+.balance-modal { width:100%; max-width:290px; background:#fff; border-radius:24px; padding:32px 22px 22px; position:relative; transform:scale(0.9) translateY(20px); transition:transform 0.32s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 24px 60px rgba(0,0,0,0.15); text-align:center; }
+.balance-mask.open .balance-modal { transform:scale(1) translateY(0); }
+.balance-icon  { font-size:44px; margin-bottom:12px; display:block; }
+.balance-title { font-size:17px; font-weight:900; color:#1a1a2e; margin-bottom:8px; }
+.balance-desc  { font-size:13px; color:#9ca3af; margin-bottom:24px; line-height:1.65; }
+.balance-btns  { display:flex; gap:10px; }
+.balance-btn-close  { flex:1; padding:12px; border-radius:12px; border:1.5px solid rgba(0,0,0,0.1); background:transparent; font-family:inherit; font-size:13px; font-weight:700; color:#6b7280; cursor:pointer; }
+.balance-btn-topup  { flex:1; padding:12px; border-radius:12px; border:none; background:linear-gradient(135deg,var(--pink),var(--blue)); font-family:inherit; font-size:13px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 4px 12px rgba(255,142,198,0.3); }
+.balance-btn-topup:active { transform:scale(0.97); }
+
 /* ─── RULES MODAL ─── */
 .rules-mask { position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(8px); z-index:400; display:flex; align-items:center; justify-content:center; padding:24px 20px; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
 .rules-mask.open { opacity:1; pointer-events:all; }
@@ -787,6 +800,19 @@ html, body {
   </div>
 </div>
 
+<!-- ─── INSUFFICIENT BALANCE MODAL ─── -->
+<div class="balance-mask" id="balance-mask" onclick="handleBalanceMaskClick(event)">
+  <div class="balance-modal" onclick="event.stopPropagation()">
+    <span class="balance-icon">💰</span>
+    <div class="balance-title">Insufficient Funds</div>
+    <div class="balance-desc">Your funds are insufficient.<br>Please make a deposit to continue.</div>
+    <div class="balance-btns">
+      <button class="balance-btn-close" onclick="closeBalanceModal()">Leave</button>
+      <button class="balance-btn-topup" onclick="goTopUp()">Deposit</button>
+    </div>
+  </div>
+</div>
+
 <!-- ─── RULES MODAL ─── -->
 <div class="rules-mask" id="rules-mask" onclick="handleRulesMaskClick(event)">
   <div class="rules-modal" onclick="event.stopPropagation()">
@@ -1038,12 +1064,28 @@ function closeBuyModal() {
 function handleBuyMaskClick(e) {
   if (e.target === document.getElementById('buy-mask')) closeBuyModal();
 }
+/* 演示用錢包餘額，實際由後台帶入 */
+const DEMO_WALLET = 150;
+const PLAN_PRICE  = { elite: 500, prime: 2000 };
+
 function confirmPurchase() {
   closeBuyModal();
-  purchasedPlan = currentPlan;
-  updateBuyBtn();
-  showToast('✅ 购买成功！周卡已启动');
+  const required = PLAN_PRICE[currentPlan] || 500;
+  if (DEMO_WALLET < required) {
+    setTimeout(() => openBalanceModal(), 120);
+  } else {
+    purchasedPlan = currentPlan;
+    updateBuyBtn();
+    showToast('✅ 购买成功！周卡已启动');
+  }
 }
+function openBalanceModal() {
+  document.getElementById('balance-mask').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeBalanceModal()       { document.getElementById('balance-mask').classList.remove('open'); document.body.style.overflow = ''; }
+function handleBalanceMaskClick(e) { if (e.target === document.getElementById('balance-mask')) closeBalanceModal(); }
+function goTopUp()                 { closeBalanceModal(); showToast('🏦 前往存款页面…'); }
 
 /* ─── POPUPS ─── */
 function handleMaskClick(e, id) {
@@ -1062,6 +1104,32 @@ function showToast(msg) {
 }
 
 selectPlan('elite');
+
+/* ─── spec iframe URL param controller ─── */
+;(function(){
+  const p = new URLSearchParams(location.search);
+  const col = p.get('col');
+  if(col !== null){
+    const idx = parseInt(col);
+    const cols = document.querySelectorAll('.demo-col');
+    cols.forEach((c,i) => { c.style.display = i===idx ? 'flex' : 'none'; });
+    const stage = document.querySelector('.demo-stage');
+    if(stage) stage.style.cssText = 'display:flex;padding:0;gap:0;min-width:unset;';
+    cols[idx]?.querySelectorAll('.demo-label').forEach(l => l.style.display='none');
+    document.documentElement.style.setProperty('background','transparent','important');
+    document.body.style.setProperty('background','transparent','important');
+    document.body.style.overflow = 'hidden';
+  }
+  const modal = p.get('modal');
+  if(modal){
+    if(modal === 'balance-mask'){
+      openBalanceModal();
+    } else {
+      const el = document.getElementById(modal);
+      if(el) el.classList.add('open');
+    }
+  }
+})();
 </script>
 </body>
 </html>

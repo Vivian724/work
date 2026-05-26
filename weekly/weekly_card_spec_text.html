@@ -234,29 +234,42 @@ body {
     </div>
   </div>
 
-  <!-- 3-6 Rules Modal -->
+  <!-- 3-6 Insufficient Balance Modal -->
   <div class="s-row">
     <div class="phone-wrap">
-      <div class="phone-frame">
-        <iframe src="weekly-card-h5-v1.html?col=0&modal=rules-mask" title="Rules Modal"></iframe>
+      <div class="phone-frame popup" style="height:520px">
+        <iframe src="weekly-card-h5-v2.html?col=0&modal=balance-mask" title="Insufficient Balance Modal"></iframe>
       </div>
-      <div class="phone-label">3-6 Rules Modal（T&amp;C）</div>
+      <div class="phone-label">3-6 Insufficient Balance Modal</div>
     </div>
     <div>
       <div id="s-p6" class="spec-text"></div>
     </div>
   </div>
 
-  <!-- 3-7 Claim Popup -->
+  <!-- 3-7 Rules Modal -->
+  <div class="s-row">
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <iframe src="weekly-card-h5-v1.html?col=0&modal=rules-mask" title="Rules Modal"></iframe>
+      </div>
+      <div class="phone-label">3-7 Rules Modal（T&amp;C）</div>
+    </div>
+    <div>
+      <div id="s-p7" class="spec-text"></div>
+    </div>
+  </div>
+
+  <!-- 3-8 Claim Popup -->
   <div class="s-row">
     <div class="phone-wrap">
       <div class="phone-frame">
         <iframe src="weekly-card-h5-v1.html?col=1&modal=claim-popup" title="Claim Popup"></iframe>
       </div>
-      <div class="phone-label">3-7 Claim Popup</div>
+      <div class="phone-label">3-8 Claim Popup</div>
     </div>
     <div>
-      <div id="s-p7" class="spec-text"></div>
+      <div id="s-p8" class="spec-text"></div>
     </div>
   </div>
   <hr class="s-divider">
@@ -337,7 +350,7 @@ const SECTIONS = {
 
   popupHd: `## 3. 弹窗区
 
-  本活动共涉及以下 7 个弹窗，依触发时机分别说明。`,
+  本活动共涉及以下 8 个弹窗，依触发时机分别说明。`,
 
   p1: `### 3-1  登录自动派发 Bottom Sheet
   后台设定「自动派发」时，玩家当日首次登录后自动执行并弹出此底部弹窗，
@@ -349,8 +362,10 @@ const SECTIONS = {
   p2: `### 3-2  提示 Banner（Bottom Sheet，显示方式同 3-7）
   从页面底部弹出，不阻断主画面操作，与 3-7 Claim Popup 为同类底部弹窗组件。
   有两种触发时机：
-- 触发 A：后台设定「手动领取」，玩家当日登录后尚未领取日常签到 → 显示签到提示 Banner
-- 触发 B：玩家完成当日任务条件 → 显示任务完成 Banner
+- 触发 A：玩家完成当日任务条件 → 显示任务完成 Banner
+  > 文案（上方）：weekly card task completed
+- 触发 B：后台设定「手动领取」，玩家当日登录后尚未领取日常签到 → 显示签到提示 Banner
+  > 文案（下方）：weekly card daily reward available
 - 点击 X → Banner 消失，当日不再显示`,
 
   p3: `### 3-3  存款页面弹窗
@@ -369,10 +384,21 @@ const SECTIONS = {
   p5: `### 3-5  Buy Confirm Modal
   玩家在购买页点击「Buy Now」后弹出，带背景遮罩，让玩家再次确认购买信息。
 - 内容：所选方案名称、价格（动态带入）、购买须知
-- 点击「Confirm Purchase」→ 购买成功，关闭 Modal 与遮罩，跳转领取页
+- 点击「Confirm Purchase」→
+    · 余额充足：购买成功，关闭 Modal 与遮罩，跳转领取页
+    · 余额不足：关闭本 Modal，触发 3-6 余额不足弹窗
 - 点击「Cancel」或点击背景遮罩 → 关闭 Modal，留在购买页`,
 
-  p6: `### 3-6  Rules Modal — Terms & Conditions
+  p6: `### 3-6  Insufficient Funds Modal — 余额不足提示
+  玩家在 3-5 Buy Confirm Modal 点击「Confirm Purchase」时，
+  若钱包余额不足，自动关闭 3-5 并弹出此 Modal。
+- 触发条件：钱包余额 < 所选周卡售价
+- 内容：提示 icon、标题「Insufficient Funds」、说明文字
+  ⚠ 不显示当前余额，不显示所需金额
+- 点击「Leave」→ 关闭 Modal，停留购买页
+- 点击「Deposit」→ 关闭 Modal，跳转充值页`,
+
+  p7: `### 3-7  Rules Modal — Terms & Conditions
   点击任一页面右上角的「规则」侧边 Tab 触发，带背景遮罩，弹出 Terms & Conditions 完整条款内文。
 - 关闭：点击 X 或背景遮罩
 
@@ -380,11 +406,18 @@ const SECTIONS = {
   Terms & Conditions：点击「规则」按钮后弹出的 Modal 内文
   General Mechanics：购买页 / 领取页下方嵌入的区块说明文字`,
 
-  p7: `### 3-7  Claim Popup（Bottom Sheet）
+  p8: `### 3-8  Claim Popup（Bottom Sheet）
   玩家点击「Claim」按钮后从底部弹出，带背景遮罩，显示本次领取的奖励内容。
   日常签到与额外奖励共用同一个 Popup 组件，内容动态带入。
-- 内容：天数标题（动态，如「Day 3」）、奖励卡片
-- 关闭：点击 X 或背景遮罩`,
+- 关闭：点击 X 或背景遮罩
+
+### 情境 A｜日常签到弹窗
+  > 标题：Day X Daily Reward
+  > 说明文字：Your reward has been credited to your account.
+
+### 情境 B｜每日任务弹窗
+  > 标题：Day X Task Reward
+  > 说明文字：Your reward has been credited to your account.`,
 
   rewards: `## 奖励数据表（演示数值，以后台设置为准）
 
@@ -435,7 +468,7 @@ function render(text) {
   ['global','s-global'],['buy','s-buy'],['claim','s-claim'],
   ['popupHd','s-popup-hd'],
   ['p1','s-p1'],['p2','s-p2'],['p3','s-p3'],['p4','s-p4'],
-  ['p5','s-p5'],['p6','s-p6'],['p7','s-p7'],['rewards','s-rewards']
+  ['p5','s-p5'],['p6','s-p6'],['p7','s-p7'],['p8','s-p8'],['rewards','s-rewards']
 ].forEach(([key, id]) => {
   document.getElementById(id).innerHTML = render(SECTIONS[key]);
 });

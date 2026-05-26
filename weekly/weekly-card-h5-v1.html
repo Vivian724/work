@@ -505,6 +505,19 @@ html, body {
 .buy-confirm { padding:12px 28px; border-radius:12px; border:none; background:linear-gradient(135deg,#FF72B8,var(--pink)); font-family:inherit; font-size:13px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 4px 14px rgba(255,142,198,0.3); display:flex; align-items:center; justify-content:center; gap:5px; }
 .buy-confirm:active { transform:scale(0.97); }
 
+/* ─── INSUFFICIENT FUNDS MODAL ─── */
+.balance-mask { position:fixed; inset:0; background:rgba(0,0,0,0.55); backdrop-filter:blur(10px); z-index:360; display:flex; align-items:center; justify-content:center; padding:24px 20px; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+.balance-mask.open { opacity:1; pointer-events:all; }
+.balance-modal { width:100%; max-width:290px; background:#fff; border-radius:24px; padding:32px 22px 22px; position:relative; transform:scale(0.9) translateY(20px); transition:transform 0.32s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 24px 60px rgba(0,0,0,0.15); text-align:center; }
+.balance-mask.open .balance-modal { transform:scale(1) translateY(0); }
+.balance-icon  { font-size:44px; margin-bottom:12px; display:block; }
+.balance-title { font-size:17px; font-weight:900; color:#1a1a2e; margin-bottom:8px; }
+.balance-desc  { font-size:13px; color:#9ca3af; margin-bottom:24px; line-height:1.65; }
+.balance-btns  { display:flex; gap:10px; }
+.balance-btn-close { flex:1; padding:12px; border-radius:12px; border:1.5px solid rgba(0,0,0,0.1); background:transparent; font-family:inherit; font-size:13px; font-weight:700; color:#6b7280; cursor:pointer; }
+.balance-btn-topup { flex:1; padding:12px; border-radius:12px; border:none; background:linear-gradient(135deg,var(--pink),var(--blue)); font-family:inherit; font-size:13px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 4px 12px rgba(255,142,198,0.3); }
+.balance-btn-topup:active { transform:scale(0.97); }
+
 /* ─── RULES MODAL ─── */
 .rules-mask  { position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(8px); z-index:400; display:flex; align-items:center; justify-content:center; padding:24px 20px; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
 .rules-mask.open { opacity:1; pointer-events:all; }
@@ -986,6 +999,19 @@ html, body {
   </div>
 </div>
 
+<!-- ─── INSUFFICIENT FUNDS MODAL ─── -->
+<div class="balance-mask" id="balance-mask" onclick="handleBalanceMaskClick(event)">
+  <div class="balance-modal" onclick="event.stopPropagation()">
+    <span class="balance-icon">💰</span>
+    <div class="balance-title">Insufficient Funds</div>
+    <div class="balance-desc">Your funds are insufficient.<br>Please make a deposit to continue.</div>
+    <div class="balance-btns">
+      <button class="balance-btn-close" onclick="closeBalanceModal()">Leave</button>
+      <button class="balance-btn-topup" onclick="goTopUp()">Deposit</button>
+    </div>
+  </div>
+</div>
+
 <!-- ─── RULES MODAL ─── -->
 <div class="rules-mask" id="rules-mask" onclick="handleRulesMaskClick(event)">
   <div class="rules-modal" onclick="event.stopPropagation()">
@@ -1011,8 +1037,8 @@ html, body {
     <div class="sh-handle"></div>
     <div class="sh-top">
       <span class="sh-icon">🎉</span>
-      <div class="sh-title"><span id="popup-day-label">第 4 天额外奖励</span></div>
-      <div class="sh-info">奖励已存入您的账户</div>
+      <div class="sh-title"><span id="popup-day-label">Day 4 Task Reward</span></div>
+      <div class="sh-info">Your reward has been credited to your account.</div>
     </div>
     <div class="sh-rewards" id="popup-rewards"></div>
     <div style="height:20px"></div>
@@ -1311,10 +1337,10 @@ function renderRewardList(key) {
 function claimBasic(key, i) {
   const d = plans[key].days[i];
   basicClaimed.add(`${key}-${i}`);
-  document.getElementById('popup-day-label').textContent = `${dayNames[i]}日常簽到`;
+  document.getElementById('popup-day-label').textContent = `Day ${i+1} Daily Reward`;
   const bIcon = d.basic.txt.split(' ')[0];
   document.getElementById('popup-rewards').innerHTML =
-    `<div class="sh-rc"><span class="ri">${bIcon}</span><div class="rv">${d.basic.txt}</div><div class="rn">日常簽到</div></div>`;
+    `<div class="sh-rc"><span class="ri">${bIcon}</span><div class="rv">${d.basic.txt}</div></div>`;
   document.getElementById('claim-popup').style.display = 'flex';
   renderRewardList(key);
 }
@@ -1323,10 +1349,10 @@ function claimBasic(key, i) {
 function claimExtra(key, i) {
   const d = plans[key].days[i];
   extraClaimed.add(`${key}-${i}`);
-  document.getElementById('popup-day-label').textContent = `${dayNames[i]}额外奖励`;
+  document.getElementById('popup-day-label').textContent = `Day ${i+1} Task Reward`;
   const eIcon = d.extra.txt.split(' ')[0];
   document.getElementById('popup-rewards').innerHTML =
-    `<div class="sh-rc"><span class="ri">${eIcon}</span><div class="rv">${d.extra.txt}</div><div class="rn">额外奖励</div></div>`;
+    `<div class="sh-rc"><span class="ri">${eIcon}</span><div class="rv">${d.extra.txt}</div></div>`;
   document.getElementById('claim-popup').style.display = 'flex';
   renderRewardList(key);
 }
@@ -1345,7 +1371,21 @@ function triggerBuy() {
 }
 function closeBuyModal()       { document.getElementById('buy-mask').classList.remove('open'); document.body.style.overflow = ''; }
 function handleBuyMaskClick(e) { if (e.target === document.getElementById('buy-mask')) closeBuyModal(); }
-function confirmPurchase()     { closeBuyModal(); purchasedPlan = currentPlan; updateBuyBtn(); showToast('✅ 购买成功！周卡已启动'); }
+const DEMO_WALLET = 150;
+const PLAN_PRICE  = { classic: 500, premium: 2000 };
+function confirmPurchase() {
+  closeBuyModal();
+  const required = PLAN_PRICE[currentPlan] || 500;
+  if (DEMO_WALLET < required) {
+    setTimeout(() => openBalanceModal(), 120);
+  } else {
+    purchasedPlan = currentPlan; updateBuyBtn(); showToast('✅ 购买成功！周卡已启动');
+  }
+}
+function openBalanceModal()        { document.getElementById('balance-mask').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeBalanceModal()       { document.getElementById('balance-mask').classList.remove('open'); document.body.style.overflow=''; }
+function handleBalanceMaskClick(e) { if (e.target===document.getElementById('balance-mask')) closeBalanceModal(); }
+function goTopUp()                 { closeBalanceModal(); showToast('🏦 前往存款页面…'); }
 
 function openRulesModal()        { document.getElementById('rules-mask').classList.add('open'); document.body.style.overflow='hidden'; }
 function closeRulesModal()       { document.getElementById('rules-mask').classList.remove('open'); document.body.style.overflow=''; }
@@ -1421,15 +1461,19 @@ applyClaimModeRule();
   }
   const modal = p.get('modal');
   if(modal){
-    const el = document.getElementById(modal);
-    if(el){
-      el.classList.add('open');
-      if(modal === 'claim-popup'){
-        el.style.display = 'flex';
-        const lbl = document.getElementById('popup-day-label');
-        const rwd = document.getElementById('popup-rewards');
-        if(lbl) lbl.textContent = 'Day 4 日常簽到';
-        if(rwd) rwd.innerHTML = '<div class="sh-rc"><span class="ri">💵</span><div class="rv">70 PHP</div><div class="rn">日常簽到</div></div>';
+    if(modal === 'balance-mask'){
+      openBalanceModal();
+    } else {
+      const el = document.getElementById(modal);
+      if(el){
+        el.classList.add('open');
+        if(modal === 'claim-popup'){
+          el.style.display = 'flex';
+          const lbl = document.getElementById('popup-day-label');
+          const rwd = document.getElementById('popup-rewards');
+          if(lbl) lbl.textContent = 'Day 4 Daily Reward';
+          if(rwd) rwd.innerHTML = '<div class="sh-rc"><span class="ri">💵</span><div class="rv">70 PHP</div></div>';
+        }
       }
     }
   }
