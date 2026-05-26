@@ -297,7 +297,7 @@ const SECTIONS = {
   右上角有「规则」侧边 Tab，点击弹出 Rules Modal。
 
   ⚠ 注意：右上角「规则」弹窗内文为 Terms & Conditions，
-     页面下方嵌入区块文案为 General Mechanics，两者独立，需分开提供。（详见 3-6）
+     页面下方嵌入区块文案为 General Mechanics，两者独立，需分开提供。（详见 3-7）
 
 ### 情境 A｜会员尚未购买（首次进入）
 - 进入活动入口 → 显示购买页
@@ -312,7 +312,7 @@ const SECTIONS = {
 - 已购买会员不存在进入购买页的路径
 
 ### 情境 C｜点击「规则」
-- 点击右上角规则侧边 Tab → 开启 Rules Modal（3-6）
+- 点击右上角规则侧边 Tab → 开启 Rules Modal（3-7）
 - Rules Modal 内文为 T&C 条款，与页面下方 General Mechanics 文案不同`,
 
   claim: `## 2. 领取页
@@ -332,14 +332,14 @@ const SECTIONS = {
 
 ### 情境 B｜日常签到 — 后台设置「手动领取」
 - 玩家当日登录后，前台当前页面下方显示「日常签到提示 Banner」（3-2，显示方式同大奖池）
-- 玩家须至领取页手动点击「Claim」→ 开启 Claim Popup（3-7）完成领取
+- 玩家须至领取页手动点击「Claim」→ 开启 Claim Popup（3-8）完成领取
 - 领取完成 → 按钮改为「Claimed」disabled（手动领取不显示勾勾）
 - 未到达的天数：无按钮
 
 ### 情境 C｜额外奖励 — 依当日任务条件显示
 - 条件未达标，任务为存款 → 显示「Deposit」按钮，点击导至存款页面
 - 条件未达标，任务为投注 → 显示「Play Now」按钮，点击导至首页
-- 条件已达标，尚未领取 → 显示「Claim」按钮，点击开启 Claim Popup（3-7）
+- 条件已达标，尚未领取 → 显示「Claim」按钮，点击开启 Claim Popup（3-8）
 - 已领取 → 显示「Claimed」disabled
 - 当日结束前未领取 → 显示「Expired」disabled，奖励当天过期作废
 - 未到达该天（locked）→ 无按钮
@@ -359,8 +359,8 @@ const SECTIONS = {
 - 点击「Confirm」→ 关闭 Bottom Sheet
 - 点击「Play Now」→ 导至首页`,
 
-  p2: `### 3-2  提示 Banner（Bottom Sheet，显示方式同 3-7）
-  从页面底部弹出，不阻断主画面操作，与 3-7 Claim Popup 为同类底部弹窗组件。
+  p2: `### 3-2  提示 Banner（Bottom Sheet，显示方式同 3-8）
+  从页面底部弹出，不阻断主画面操作，与 3-8 Claim Popup 为同类底部弹窗组件。
   有两种触发时机：
 - 触发 A：玩家完成当日任务条件 → 显示任务完成 Banner
   > 文案（上方）：weekly card task completed
