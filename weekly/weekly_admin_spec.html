@@ -80,6 +80,7 @@ tr:hover{background:#fafbff;}
       <li><a href="#s4">活动条件（卡型配置 + 通用设置）</a></li>
       <li><a href="#s5">风控条件</a></li>
       <li><a href="#s6">提交预览</a></li>
+      <li><a href="#s7">关联后台页面影响</a></li>
     </ol>
   </div>
 
@@ -453,6 +454,58 @@ tr:hover{background:#fafbff;}
         </table>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ── 关联后台页面影响 ── -->
+  <div class="step" id="s7">
+    <div class="step-header">
+      <div class="step-num" style="background:#595959;">★</div>
+      <div class="step-title">关联后台页面影响</div>
+      <div class="step-desc">周卡活动资料将影响以下后台页面</div>
+    </div>
+    <div class="step-body">
+      <div class="sec">
+        <div class="sec-label">影响页面一览</div>
+        <table>
+          <thead><tr><th>后台路径</th><th>影响说明</th><th>参考图</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>活动配置（新）&gt; 派奖审核</td>
+              <td>
+                当周卡活动「审核方式」设为「人工审核」时，派奖记录进入此页面，由后台人员手动审核后再派发<br>
+                <span style="color:#888;font-size:12px;">※ 备注：目前该活动运营预设为自动审核</span>
+              </td>
+              <td>图一</td>
+            </tr>
+            <tr>
+              <td>活动配置（新）&gt; 活动报表（奖励统计、数据统计）</td>
+              <td>活动报表需支持以「周卡活动」为条件进行查询，奖励统计与数据统计两个维度均须涵盖周卡活动数据</td>
+              <td>图二</td>
+            </tr>
+            <tr>
+              <td>活动配置（新）&gt; 活动报表（数据统计）</td>
+              <td>
+                新增「天数」维度栏位，直接以活动天数名称展现：<code>Day 1</code>、<code>Day 2</code>…<br>
+                <span style="color:#888;font-size:12px;">范例：若该会员当日同时领取日常奖励与额外奖励，此列表将显示两笔记录</span>
+              </td>
+              <td>图三</td>
+            </tr>
+            <tr>
+              <td>财务管理 &gt; 资金明细</td>
+              <td>
+                交易类型下拉选单选择「活动金额」（现有）；子类型新增「周卡活动」<br><br>
+                <strong>列表中「备注」栏位说明（由后端写入，共四种状态）：</strong><br>
+                · <code>classic card amount: 500.00</code><br>
+                · <code>premium card amount: 500.00</code><br>
+                · <code>daily rewards</code><br>
+                · <code>daily task rewards</code>
+              </td>
+              <td>图四</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
