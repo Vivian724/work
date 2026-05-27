@@ -287,6 +287,7 @@ const SECTIONS = {
 - 每周限购一张：7 天周期完全结束后才可重购
 - 两种卡互斥：Classic 与 Premium，持有任一卡时另一张不可购买
 - 每日重置：每日 00:00:00 AM 重置当日签到状态、任务与未领奖励，当天未领取即失效不补发
+  同步重置：3-1 当日弹出状态 / 3-3「今日不再显示」状态
 - 派发模式：后台设定「自动派发」或「手动领取」两种模式`,
 
   buy: `## 1. 购买页
@@ -353,25 +354,37 @@ const SECTIONS = {
   本活动共涉及以下 8 个弹窗，依触发时机分别说明。`,
 
   p1: `### 3-1  登录自动派发 Bottom Sheet
-  后台设定「自动派发」时，玩家当日首次登录后自动执行并弹出此底部弹窗，
-  告知玩家今日日常奖励已自动发放，并显示额外奖励条件。
+  后台设定「自动领取」时，玩家当日首次登录后触发此弹窗。
+  仅在「首页」弹出；若玩家登录时所在页面为「我的」、「积分商城」或「排行榜」，则暂不弹出，
+  待玩家进入首页时才触发。
 - 内容：当日天数标题、已派发奖励（Credited）、额外奖励条件与对应按钮
+  奖励金额与条件数值动态读取后台该天配置
 - 点击「Confirm」→ 关闭 Bottom Sheet
 - 点击「Play Now」→ 导至首页`,
 
-  p2: `### 3-2  提示 Banner（Bottom Sheet，显示方式同 3-8）
-  从页面底部弹出，不阻断主画面操作，与 3-8 Claim Popup 为同类底部弹窗组件。
-  有两种触发时机：
-- 触发 A：玩家完成当日任务条件 → 显示任务完成 Banner
-  > 文案（上方）：weekly card task completed
-- 触发 B：后台设定「手动领取」，玩家当日登录后尚未领取日常签到 → 显示签到提示 Banner
-  > 文案（下方）：weekly card daily reward available
+  p2: `### 3-2  提示 Banner
+  从页面底部滑出，不阻断主画面操作。两种触发时机独立，可同时存在。
+
+- 触发 A：玩家完成当日任务条件后触发，不限当前所在页面
+  > 标题：Weekly Card Task Completed!
+  > 说明：Today's task has been completed. {奖励图标} {奖励名称} ×{数量} is ready to claim.
+  {奖励图标}、{奖励名称}、{数量} 读取后台该天额外奖励配置
+
+- 触发 B：后台设定「手动领取」，玩家当日登录且尚未领取日常签到时触发
+  页面触发逻辑同 3-1：仅在「首页」弹出；「我的」／「积分商城」／「排行榜」不弹出，待进入首页时触发
+  > 标题：Weekly Card Daily Reward Available!
+  > 说明：Today's reward: {奖励图标} {金额／数量}. Please go to the rewards page to claim it.
+  {奖励图标}、{金额／数量} 读取后台该天日常签到奖励配置
+
 - 点击 X → Banner 消失，当日不再显示`,
 
   p3: `### 3-3  存款页面弹窗
   玩家进入存款页面时，若尚未购买周卡，则显示此推广弹窗。
 - 显示条件：玩家尚未购买周卡
 - 不显示：玩家已购买周卡 / 已勾选「Don't Show Again Today」
+- 弹窗内显示 Classic Card 与 Premium Card 两张方案，各自列出卡名、价格与奖励总量
+  奖励总量：总彩金、总积分、总旋转卷、总优惠券
+  数值为后台该卡型 7 天配置中，日常签到＋额外奖励的加总
 - 点击「View Now」→ 导至购买页
 - 点击「X」→ 开启 3-4 确认离开弹窗
 - 勾选「Don't Show Again Today」→ 开启 3-4 确认离开弹窗`,
@@ -414,10 +427,12 @@ const SECTIONS = {
 ### 情境 A｜日常签到弹窗
   > 标题：Day X Daily Reward
   > 说明文字：Your reward has been credited to your account.
+  奖励内容读取后台该天日常签到奖励配置
 
 ### 情境 B｜每日任务弹窗
   > 标题：Day X Task Reward
-  > 说明文字：Your reward has been credited to your account.`,
+  > 说明文字：Your reward has been credited to your account.
+  奖励内容读取后台该天额外奖励配置`,
 
   rewards: `## 奖励数据表（演示数值，以后台设置为准）
 
