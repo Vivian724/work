@@ -458,6 +458,9 @@ html, body {
 .dp-banner-date { font-size:10px; color:rgba(70,30,100,0.55); font-weight:500; margin-top:2px; }
 .dp-body { padding:14px 16px 16px; }
 .dp-cta { width:100%; padding:13px; border-radius:12px; border:none; background:linear-gradient(135deg,#FF72B8,var(--pink)); color:#fff; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:6px; }
+.dp-btns { display:flex; gap:8px; margin-bottom:10px; }
+.dp-btns .dp-cta { margin-bottom:0; flex:1; width:auto; }
+.dp-btn-leave { flex:1; padding:13px; border-radius:12px; border:1.5px solid rgba(0,0,0,0.12); background:transparent; font-family:inherit; font-size:14px; font-weight:700; color:#6b7280; cursor:pointer; }
 .dp-check { display:flex; align-items:center; justify-content:center; gap:6px; }
 .dp-plans { display:flex; flex-direction:row; gap:8px; margin-bottom:14px; }
 .dp-plan-item { flex:1; border-radius:14px; padding:14px 12px 12px; border:1.5px solid rgba(0,0,0,0.07); background:rgba(0,0,0,0.02); min-width:0; }
@@ -475,15 +478,6 @@ html, body {
 .dp-plan-rewards .chip-val { font-size:11px; font-weight:700; }
 .dp-check input { accent-color:var(--pink); width:13px; height:13px; }
 .dp-check label { font-size:11px; color:var(--muted); cursor:pointer; }
-.dp-confirm-overlay { position:absolute; inset:0; background:rgba(10,5,30,0.7); backdrop-filter:blur(6px); z-index:20; display:flex; align-items:center; justify-content:center; padding:24px; }
-.dp-confirm-card { width:100%; background:#fff; border-radius:20px; padding:22px 18px 18px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.22); overflow:hidden; position:relative; }
-.dp-confirm-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--red),transparent); }
-.dp-confirm-icon  { font-size:32px; margin-bottom:8px; display:block; }
-.dp-confirm-title { font-size:15px; font-weight:900; color:var(--text); margin-bottom:14px; }
-.dp-confirm-btns  { display:flex; gap:8px; }
-.dp-confirm-btns button { flex:1; padding:11px 6px; border-radius:10px; font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; border:none; }
-.dp-btn-stay  { background:linear-gradient(135deg,#FF72B8,var(--pink)); color:#fff; box-shadow:0 3px 10px rgba(255,142,198,0.25); }
-.dp-btn-leave { background:rgba(248,113,113,0.07); border:1px solid rgba(248,113,113,0.2)!important; color:var(--red); }
 
 /* ─── BUY CONFIRM MODAL ─── */
 .buy-mask { position:fixed; inset:0; background:rgba(0,0,0,0.45); backdrop-filter:blur(10px); z-index:350; display:flex; align-items:center; justify-content:center; padding:24px 20px; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
@@ -679,7 +673,6 @@ html, body {
 .dp-plan-item.prime { background:linear-gradient(135deg,rgba(160,120,245,0.1),rgba(91,179,238,0.06)); border-color:rgba(160,120,245,0.4); }
 .dp-plan-item.elite { background:rgba(255,107,157,0.06); border-color:rgba(255,107,157,0.35); }
 .dp-check label     { color:var(--muted); }
-.dp-confirm-card    { background:#180B2E; }
 
 /* ─ Claim popup sheet ─ */
 .popup-sheet { background:#160A2C; border-color:rgba(255,107,157,0.25); }
@@ -911,7 +904,7 @@ html, body {
     </div>
     <div class="dp-overlay">
       <div class="dp-card">
-        <button class="dp-close">✕</button>
+        <button class="dp-close" onclick="this.closest('.dp-overlay').style.display='none'">✕</button>
         <div class="dp-banner">
           <div class="dp-banner-title">OKBet Weekly Bonus Card</div>
           <div class="dp-banner-sub">Purchase now to unlock exclusive rewards</div>
@@ -934,7 +927,10 @@ html, body {
               <div id="dpop-rewards-elite"></div>
             </div>
           </div>
-          <button class="dp-cta">View Now</button>
+          <div class="dp-btns">
+            <button class="dp-btn-leave" onclick="this.closest('.dp-overlay').style.display='none'">Leave</button>
+            <button class="dp-cta" onclick="location.href='?col=0'">View Now</button>
+          </div>
           <div class="dp-check">
             <input type="checkbox" id="dp-no-show">
             <label for="dp-no-show">Don't Show Again Today</label>
@@ -945,30 +941,21 @@ html, body {
   </div>
 </div>
 
-<!-- ───────── COL 5: 确认离开弹窗 ───────── -->
+<!-- ───────── COL 5: Insufficient Funds Modal ───────── -->
 <div class="demo-col">
-  <div class="demo-label">确认离开弹窗</div>
+  <div class="demo-label">餘額不足彈窗</div>
   <div class="phone phone-dp">
-    <div class="dp-page"><div class="dp-page-topbar">存款</div></div>
-    <div class="dp-overlay" style="filter:blur(1px) brightness(0.6)">
-      <div class="dp-card">
-        <div class="dp-banner">
-          <div class="dp-banner-title">OKBet Weekly Bonus Card</div>
-          <div class="dp-banner-sub">Purchase now to unlock exclusive rewards</div>
-        </div>
-        <div class="dp-body">
-          <button class="dp-cta">View Now</button>
-          <div class="dp-check"><input type="checkbox"><label style="font-size:11px;color:var(--muted);margin-left:6px">Don't Show Again Today</label></div>
-        </div>
-      </div>
+    <div class="dp-page">
+      <div class="dp-page-topbar">购买页</div>
     </div>
-    <div class="dp-confirm-overlay">
-      <div class="dp-confirm-card">
-        <span class="dp-confirm-icon">🚪</span>
-        <div class="dp-confirm-title">Are you sure you want to leave?</div>
-        <div class="dp-confirm-btns">
-          <button class="dp-btn-stay">Go to Purchase</button>
-          <button class="dp-btn-leave">Leave</button>
+    <div class="dp-overlay">
+      <div class="balance-modal" style="transform:scale(1) translateY(0);">
+        <span class="balance-icon">💰</span>
+        <div class="balance-title">Insufficient Funds</div>
+        <div class="balance-desc">Your funds are insufficient.<br>Please make a deposit to continue.</div>
+        <div class="balance-btns">
+          <button class="balance-btn-close">Leave</button>
+          <button class="balance-btn-topup">Deposit</button>
         </div>
       </div>
     </div>
