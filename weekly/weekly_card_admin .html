@@ -285,7 +285,7 @@ function mkDay(ft,fv,et,ev,ct,cv,to) {
 function emptyDay() { return mkDay('cash','','spin','','deposit','',''); }
 
 let plans = [
-  { id:1, name:'Classic Card', bt:'std', price:500, col:false, days:[
+  { id:1, name:'Elite Pass', bt:'std', price:500, col:false, days:[
     mkDay('cash','10','spin','','deposit','0','2'),
     mkDay('spin','5','cash','12','deposit','200','3'),
     mkDay('spin','8','cash','13','turnover','500','4'),
@@ -294,7 +294,7 @@ let plans = [
     mkDay('cash','30','spin','','deposit','',''),
     mkDay('cash','50','spin','30','turnover','1000','5')
   ]},
-  { id:2, name:'Premium Card', bt:'prem', price:2000, col:false, days:[
+  { id:2, name:'Prime Pass', bt:'prem', price:2000, col:false, days:[
     mkDay('cash','50','spin','10','deposit','0','2'),
     mkDay('spin','10','cash','80','deposit','200','3'),
     mkDay('spin','15','cash','100','turnover','500','4'),

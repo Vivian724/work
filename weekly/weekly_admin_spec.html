@@ -250,11 +250,11 @@ tr:hover{background:#fafbff;}
         <div class="sec-label">卡型配置</div>
         <p style="font-size:13px;color:#555;margin-bottom:12px;">系统内建两种卡型，每种卡型包含 7 天签到奖励配置。</p>
 
-        <div class="sub-title"><span class="badge b-classic">Classic Card</span>　标准周卡</div>
+        <div class="sub-title"><span class="badge b-classic">Elite Pass</span>　标准周卡</div>
         <table>
           <thead><tr><th>字段名称</th><th>控件类型</th><th>必填</th><th>规则</th><th>备注</th></tr></thead>
           <tbody>
-            <tr><td>卡型名称</td><td>只读文本</td><td class="req-n">—</td><td>固定显示 <code>Classic Card</code></td><td>不可修改</td></tr>
+            <tr><td>卡型名称</td><td>只读文本</td><td class="req-n">—</td><td>固定显示 <code>Elite Pass</code></td><td>不可修改</td></tr>
             <tr><td>周卡费用（PHP）</td><td>数字输入</td><td class="req-y">是</td><td>正整数</td><td>默认值 <code>0</code></td></tr>
             <tr><td>签到奖励（第 1–7 天）</td><td>下拉 + 数字输入</td><td class="req-y">是</td><td>类型见「奖励类型」表；数量为正整数</td><td>无门槛，签到即可领</td></tr>
             <tr><td>额外奖励（第 1–7 天）</td><td>下拉 + 数字输入</td><td class="req-n">否</td><td>类型见「奖励类型」表；数量留空 = 该天不开放额外奖励</td><td>—</td></tr>
@@ -262,11 +262,11 @@ tr:hover{background:#fafbff;}
           </tbody>
         </table>
 
-        <div class="sub-title" style="margin-top:18px;"><span class="badge b-premium">Premium Card</span>　豪华周卡</div>
+        <div class="sub-title" style="margin-top:18px;"><span class="badge b-premium">Prime Pass</span>　豪华周卡</div>
         <table>
           <thead><tr><th>字段名称</th><th>控件类型</th><th>必填</th><th>规则</th><th>备注</th></tr></thead>
           <tbody>
-            <tr><td>卡型名称</td><td>只读文本</td><td class="req-n">—</td><td>固定显示 <code>Premium Card</code></td><td>不可修改</td></tr>
+            <tr><td>卡型名称</td><td>只读文本</td><td class="req-n">—</td><td>固定显示 <code>Prime Pass</code></td><td>不可修改</td></tr>
             <tr><td>周卡费用（PHP）</td><td>数字输入</td><td class="req-y">是</td><td>正整数</td><td>默认值 <code>0</code></td></tr>
             <tr><td>签到奖励（第 1–7 天）</td><td>下拉 + 数字输入</td><td class="req-y">是</td><td>类型见「奖励类型」表</td><td>无门槛，签到即可领</td></tr>
             <tr><td>额外奖励（第 1–7 天）</td><td>下拉 + 数字输入</td><td class="req-n">否</td><td>数量留空 = 该天不开放额外奖励</td><td>—</td></tr>
@@ -426,7 +426,7 @@ tr:hover{background:#fafbff;}
             <tr><td>已验证手机号</td><td class="req-n">否</td><td>显示「是」或「否」</td></tr>
             <tr><td>限制使用设备</td><td class="req-n">否</td><td>显示「无限制」或「仅 APP」</td></tr>
             <tr><td>适用游戏范围</td><td class="req-n">否</td><td>显示已选游戏数量，例：「26 个」；未选则灰色「–」</td></tr>
-            <tr><td>卡型奖励摘要</td><td class="req-n">—</td><td>每张卡型独立一行，显示：卡名 · 费用（PHP）· 有额外奖励的天数，例：「Classic Card · 500 PHP · 3 天有额外奖励」</td></tr>
+            <tr><td>卡型奖励摘要</td><td class="req-n">—</td><td>每张卡型独立一行，显示：卡名 · 费用（PHP）· 有额外奖励的天数，例：「Elite Pass · 500 PHP · 3 天有额外奖励」</td></tr>
           </tbody>
         </table>
 
@@ -496,8 +496,8 @@ tr:hover{background:#fafbff;}
               <td>
                 交易类型下拉选单选择「活动金额」（现有）；子类型新增「周卡活动」<br><br>
                 <strong>列表中「备注」栏位说明（由后端写入，共四种状态）：</strong><br>
-                · <code>classic card amount: 500.00</code><br>
-                · <code>premium card amount: 500.00</code><br>
+                · <code>elite pass amount: 500.00</code><br>
+                · <code>prime pass amount: 500.00</code><br>
                 · <code>daily rewards</code><br>
                 · <code>daily task rewards</code>
               </td>

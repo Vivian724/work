@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OKBet Weekly Bonus Card — 规格书 v1</title>
+<title>Weekly Bonus Pass — 规格书 v1</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -123,7 +123,7 @@ body {
 <div class="wrap">
 
   <div class="topbar">
-    <span class="topbar-title">OKBet Weekly Bonus Card · 规格书 v1 · 2026-05-22</span>
+    <span class="topbar-title">Weekly Bonus Pass · 规格书 v1 · 2026-05-22</span>
     <button class="copy-btn" id="copyBtn" onclick="copySpec()">Copy All</button>
   </div>
 
@@ -141,7 +141,7 @@ body {
       <div class="phone-frame">
         <iframe src="weekly-card-h5-v1.html?col=0" title="购买页"></iframe>
       </div>
-      <div class="phone-label">购买页 — Classic Card</div>
+      <div class="phone-label">购买页 — Elite Pass</div>
     </div>
     <div>
       <div id="s-buy" class="spec-text"></div>
@@ -271,16 +271,21 @@ body {
 const SECTIONS = {
   global: `## 全局规则
 
+- 活动时间：所有时间显示读取后台活动时间配置
+  备注：General Mechanics 规则第一点 — Event Period（时间展示读取后台活动时间配置，event period: TBD）
 - 每周限购一张：7 天周期完全结束后才可重购
-- 两种卡互斥：Classic 与 Premium，持有任一卡时另一张不可购买
+- 两种卡互斥：Elite Pass 与 Prime Pass，持有任一卡时另一张不可购买
 - 每日重置：每日 00:00:00 AM 重置当日签到状态、任务与未领奖励，当天未领取即失效不补发
   同步重置：3-1 当日弹出状态 / 3-3「今日不再显示」状态
 - 派发模式：后台设定「自动派发」或「手动领取」两种模式`,
 
   buy: `## 1. 购买页
 
+⚠ 规格说明：时间显示读取后台活动时间配置
+  备注：购买页上方 Banner 亦显示活动时间（读取后台活动时间配置）
+
   玩家通过活动入口进入此页面选购周卡。
-  页面包含两张方案卡（Classic / Premium），点击切换后文案与价格同步更新。
+  页面包含两张方案卡（Elite Pass / Prime Pass），点击切换后文案与价格同步更新。
   页面下方有 7 天奖励总预览，可左右滑动浏览。
   右上角有「规则」侧边 Tab，点击弹出 Rules Modal。
 
@@ -289,9 +294,9 @@ const SECTIONS = {
 
 ### 情境 A｜会员尚未购买（首次进入）
 - 进入活动入口 → 显示购买页
-- 卡片名称固定为 Classic Card 与 Premium Card（写死，不可更改）
+- 卡片名称固定为 Elite Pass 与 Prime Pass（写死，不可更改）
 - 卡片价格由后台设定（动态读取）
-- 点击 Classic Card 或 Premium Card Tab → 切换选中卡，价格即时更新
+- 点击 Elite Pass 或 Prime Pass Tab → 切换选中卡，价格即时更新
 - 点击「Buy Now」→ 开启购买确认弹窗（3-5）
 - 弹窗内确认购买 → 购买成功，关闭弹窗，直接跳转领取页
 
@@ -306,7 +311,7 @@ const SECTIONS = {
   claim: `## 2. 领取页
 
   购买成功后玩家的主要操作页面，显示 7 天进度。
-  上方 Banner 样式依持有卡别不同而有所差异（Classic Card / Premium Card）。
+  上方 Banner 样式依持有卡别不同而有所差异（Elite Pass / Prime Pass）。
   每一天包含两个奖励栏位：
   - 日常签到：每日登录即可触发（自动或手动，后台设定）
   - 额外奖励：需完成当日任务条件（存款或投注达标）才可领取
@@ -370,7 +375,7 @@ const SECTIONS = {
 - 触发时机：玩家点击「离开存款页面」的操作时触发
 - 显示条件：玩家尚未购买周卡
 - 不显示：玩家已购买周卡 / 已勾选「Don't Show Again Today」
-- 弹窗内显示 Classic Card 与 Premium Card 两张方案，各自列出卡名、价格与奖励总量
+- 弹窗内显示 Elite Pass 与 Prime Pass 两张方案，各自列出卡名、价格与奖励总量
   奖励总量：总彩金、总积分、总旋转卷、总优惠券
   数值为后台该卡型 7 天配置中，日常签到＋额外奖励的加总
 - 点击「View Now」→ 导至购买页
@@ -420,7 +425,7 @@ const SECTIONS = {
 
   rewards: `## 奖励数据表（演示数值，以后台设置为准）
 
-### Classic Card — 500 PHP / 7 天
+### Elite Pass — 500 PHP / 7 天
 | 天    | 日常签到      | 任务条件       | 任务奖励             |
 |-------|---------------|----------------|----------------------|
 | Day 1 | Cash 50 PHP   | 存款 ≥ 200 PHP | Points 80 pts        |
@@ -431,7 +436,7 @@ const SECTIONS = {
 | Day 6 | Points 150    | 投注 ≥ 400 PHP | Acewin Free Spins x1 |
 | Day 7 | Cash 120 PHP  | 存款 ≥ 500 PHP | Free Spins x15       |
 
-### Premium Card — 2,000 PHP / 7 天
+### Prime Pass — 2,000 PHP / 7 天
 | 天    | 日常签到       | 任务条件         | 任务奖励             |
 |-------|----------------|------------------|----------------------|
 | Day 1 | Cash 200 PHP   | 存款 ≥ 500 PHP   | Points 300           |
