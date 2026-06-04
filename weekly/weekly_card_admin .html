@@ -272,7 +272,8 @@ const GCATS = [
   {cat:'TPG',      games:['Space Galaxy','Lucky Leprechaun','8 Dragons','Mahjong House','Sic-Bo']},
   {cat:'CQ9 SLOT', games:['Money Tree','Hot Spin','Sky Lanterns','Lucky Bats','Fortune Dragon']},
   {cat:'PG',       games:['Pinata Wins','Dead Man\'s Riches','Jack the Giant Hunter','Diner Frenzy']},
-  {cat:'电子游戏',  games:['老虎机A','老虎机B','老虎机C','经典水果机','幸运转盘']}
+  {cat:'电子游戏',  games:['老虎机A','老虎机B','老虎机C','经典水果机','幸运转盘']},
+  {cat:'体育',      games:['体育']}
 ];
 let tmpSel = {}, confSel = {};
 GCATS.forEach((_,i) => { confSel[i] = new Set(GCATS[i].games); });
@@ -459,40 +460,35 @@ function step3() {
   <div class="sdesc">设置周卡活动的参与对象与黑名单规则。</div>
   <div class="sb"><div class="sec-t">参与对象设置</div>
     <div class="fr"><div class="fl">1. 充值层级：</div><div class="fc" style="position:relative;max-width:380px;">
-      <div class="ms-wrap" id="lvlWrap">${lvlTags}<span class="ms-arr">▾</span></div>
-      <div class="ms-dd${levelOpen?'':' hidden'}" id="lvlDd">${lvlDd}</div>
+      <div class="ms-wrap" id="lvlWrap" style="pointer-events:none;background:#f5f5f5;cursor:not-allowed;"><span style="font-size:13px;color:#555;">全选</span><span class="ms-arr">▾</span></div>
+      <div class="ms-dd hidden" id="lvlDd">${lvlDd}</div>
     </div></div>
     <div class="fr"><div class="fl">2. 指定代理线：</div><div class="fc">
       <div class="rg" style="flex-direction:column;align-items:flex-start;gap:10px;">
-        <label class="ri"><input type="radio" name="agent" value="none" checked> 不指定</label>
-        <div>
-          <label class="ri"><input type="radio" name="agent" value="line"> 指定代理线</label>
-          <div id="aLine" class="hidden" style="margin-top:8px;margin-left:4px;">
-            <button type="button" class="game-btn" id="bOpenAgentModal">${agentBtnLabel()}</button>
-          </div>
-        </div>
+        <label class="ri"><input type="radio" name="agent" value="none" checked disabled> 不指定</label>
+        <label class="ri"><input type="radio" name="agent" value="line" disabled> 指定代理线</label>
       </div>
     </div></div>
     <div class="fr"><div class="fl">3. 新会员限制：</div><div class="fc">
       <div style="display:flex;align-items:center;gap:10px;">
-        <div class="tog" data-tog></div>
-        <span style="font-size:13px;">活动开始后注册的新会员</span>
+        <div class="tog" style="pointer-events:none;opacity:0.45;"></div>
+        <span style="font-size:13px;color:#bbb;">活动开始后注册的新会员</span>
       </div>
     </div></div>
     <div class="fr"><div class="fl">4. 会员等级：</div><div class="fc" style="position:relative;max-width:380px;">
-      <div class="ms-wrap" id="vipWrap">${vipTags}<span class="ms-arr">▾</span></div>
-      <div class="ms-dd${vipOpen?'':' hidden'}" id="vipDd">${vipDd}</div>
+      <div class="ms-wrap" id="vipWrap" style="pointer-events:none;background:#f5f5f5;cursor:not-allowed;"><span style="font-size:13px;color:#555;">全选</span><span class="ms-arr">▾</span></div>
+      <div class="ms-dd hidden" id="vipDd">${vipDd}</div>
     </div></div>
     <div class="fr"><div class="fl">5. 用户标签：</div><div class="fc">
-      <select class="fsel" style="max-width:360px;"><option value="">请选择用户标签</option></select>
+      <select class="fsel" style="max-width:360px;" disabled><option value="">请选择用户标签</option></select>
     </div></div>
   </div>
   <div class="sb"><div class="sec-t">黑名单设置</div>
-    <div class="fr"><div class="fl">黑名单限制类型：</div><div class="fc">
-      <input type="text" class="fi" placeholder="请输入" style="max-width:360px;">
+    <div class="fr"><div class="fl">黑名单：</div><div class="fc">
+      <textarea class="fi" style="height:80px;resize:vertical;padding-top:8px;max-width:560px;" placeholder="请输入，以逗号分隔多个用户名"></textarea>
     </div></div>
     <div class="fr" style="margin-bottom:0;"><div class="fl">用户标签：</div><div class="fc">
-      <select class="fsel" style="max-width:360px;"><option value="">请选择用户标签</option></select>
+      <select class="fsel" style="max-width:360px;" disabled><option value="">请选择用户标签</option></select>
     </div></div>
   </div>`;
 }
@@ -633,12 +629,13 @@ function step4() {
       <label class="ri"><input type="radio" name="phone"> 是</label>
       <label class="ri"><input type="radio" name="phone" checked> 否</label>
     </div></div></div>
-    <div class="fr"><div class="fl">限制使用设备：</div><div class="fc"><div class="rg">
-      <label class="ri"><input type="radio" name="device" checked> 无限制</label>
-      <label class="ri"><input type="radio" name="device"> 仅 APP</label>
+    <div class="fr"><div class="fl">限制使用设备：</div><div class="fc"><div class="rg" style="pointer-events:none;opacity:0.5;">
+      <label class="ri"><input type="radio" name="device" checked disabled> 无限制</label>
+      <label class="ri"><input type="radio" name="device" disabled> 仅 APP</label>
     </div></div></div>
     <div class="fr" style="margin-bottom:0;"><div class="fl">适用游戏范围：</div><div class="fc">
       <button class="game-btn" id="bOpenModal">${gameLabel}</button>
+      <div class="hint">全选范围含体育</div>
     </div></div>
   </div>`;
 }

@@ -208,14 +208,15 @@ tr:hover{background:#fafbff;}
 
       <div class="sec">
         <div class="sec-label">参与对象设置</div>
+        <div class="note note-b" style="margin-bottom:10px;">此区块全部为系统预设值，<strong>不可修改</strong>。</div>
         <table>
-          <thead><tr><th>字段名称</th><th>控件类型</th><th>必填</th><th>选项 / 规则</th><th>备注</th></tr></thead>
+          <thead><tr><th>字段名称</th><th>控件类型</th><th>必填</th><th>预设值</th><th>备注</th></tr></thead>
           <tbody>
-            <tr><td>1. 充值层级</td><td>多选下拉</td><td class="req-n">否</td><td>默认层 / 第一层 / 第二层 / 第三层 / 第四层 / 第五层 / 内部充值；支持全选</td><td>默认全选；可单独取消某层</td></tr>
-            <tr><td>2. 指定代理线</td><td>单选 + 弹窗选择</td><td class="req-n">否</td><td>不指定（预选）/ 指定代理线</td><td>选「指定代理线」后弹出代理线选择弹窗（A–H 共 8 条），单选</td></tr>
-            <tr><td>3. 新会员限制</td><td>开关（Toggle）</td><td class="req-n">否</td><td>关闭（预设）/ 开启</td><td>开启后，活动开始后注册的新会员不可参与</td></tr>
-            <tr><td>4. 会员等级</td><td>多选下拉</td><td class="req-n">否</td><td>VIP0 ～ VIP10，支持全选</td><td>默认全选</td></tr>
-            <tr><td>用户标签</td><td>下拉选单</td><td class="req-n">否</td><td>由系统标签列表动态带出</td><td>不选则代表不限制标签</td></tr>
+            <tr><td>1. 充值层级</td><td>只读文本</td><td class="req-n">否</td><td>全选（固定）</td><td>不可更改</td></tr>
+            <tr><td>2. 指定代理线</td><td>只读文本</td><td class="req-n">否</td><td>不指定（固定）</td><td>不可更改</td></tr>
+            <tr><td>3. 新会员限制</td><td>只读文本</td><td class="req-n">否</td><td>关闭（固定）</td><td>不可更改</td></tr>
+            <tr><td>4. 会员等级</td><td>只读文本</td><td class="req-n">否</td><td>全选 VIP0–VIP10（固定）</td><td>不可更改</td></tr>
+            <tr><td>用户标签</td><td>只读文本</td><td class="req-n">否</td><td>不限制（固定）</td><td>不可更改</td></tr>
           </tbody>
         </table>
       </div>
@@ -226,7 +227,6 @@ tr:hover{background:#fafbff;}
           <thead><tr><th>字段名称</th><th>控件类型</th><th>必填</th><th>规则</th><th>备注</th></tr></thead>
           <tbody>
             <tr><td>黑名单限制类型</td><td>文本输入</td><td class="req-n">否</td><td>自由输入</td><td>—</td></tr>
-            <tr><td>用户标签</td><td>下拉选单</td><td class="req-n">否</td><td>由系统标签列表动态带出</td><td>黑名单专用标签筛选</td></tr>
           </tbody>
         </table>
       </div>
@@ -294,13 +294,13 @@ tr:hover{background:#fafbff;}
             <tr><td>审核方式</td><td>单选</td><td class="req-n">否</td><td>人工审核 / 自动审核（预选）</td><td>—</td></tr>
             <tr><td>领取方式</td><td>单选</td><td class="req-n">否</td><td>自动领取（预选）/ 手动领取</td><td>额外奖励无论此设定，均须满足条件后由玩家手动领取</td></tr>
             <tr><td>已验证手机号</td><td>单选</td><td class="req-n">否</td><td>是 / 否（预选）</td><td>限制仅绑定手机号的会员可参与</td></tr>
-            <tr><td>限制使用设备</td><td>单选</td><td class="req-n">否</td><td>无限制（预选）/ 仅 APP</td><td>—</td></tr>
+            <tr><td>限制使用设备</td><td>只读文本</td><td class="req-n">否</td><td>无限制（固定，不可更改）</td><td>—</td></tr>
             <tr style="background:#fff2f0;">
               <td style="color:#cf1322;font-weight:600;">适用游戏范围 <span style="font-size:11px;font-weight:400;">🔴 5/25 调整</span></td>
               <td style="color:#cf1322;">弹窗多选</td>
               <td class="req-n" style="color:#cf1322;">否</td>
-              <td style="color:#cf1322;">点击按钮开启游戏选择弹窗；弹窗中支持依游戏类别全选 / 单选；按钮上显示已选数量，例：「已选择 35 个游戏」；<strong>预设全选</strong></td>
-              <td style="color:#cf1322;">指定本活动奖励条件中有效投注（Turnover）的游戏范围；玩家须在所选游戏内完成投注，才计入奖励条件达成；未选择时不限制游戏范围</td>
+              <td style="color:#cf1322;">点击按钮开启游戏选择弹窗；弹窗中支持依游戏类别全选 / 单选；按钮上显示已选数量，例：「已选择 35 个游戏」；<strong>预设全选</strong>（含体育）<br>※ 弹窗内需新增「体育」勾选项</td>
+              <td style="color:#cf1322;">指定本活动奖励条件中有效投注（Turnover）的游戏范围；玩家须在所选游戏内完成投注，才计入奖励条件达成；未选择时不限制游戏范围<br>※ 体育类别不细分项目，选取即整页全部计入</td>
             </tr>
           </tbody>
         </table>
@@ -424,7 +424,7 @@ tr:hover{background:#fafbff;}
             <tr><td>审核方式</td><td class="req-n">否</td><td>显示「人工审核」或「自动审核」</td></tr>
             <tr><td>领取方式</td><td class="req-n">否</td><td>显示「自动领取」或「手动领取」</td></tr>
             <tr><td>已验证手机号</td><td class="req-n">否</td><td>显示「是」或「否」</td></tr>
-            <tr><td>限制使用设备</td><td class="req-n">否</td><td>显示「无限制」或「仅 APP」</td></tr>
+            <tr><td>限制使用设备</td><td class="req-n">否</td><td>固定显示「无限制」</td></tr>
             <tr><td>适用游戏范围</td><td class="req-n">否</td><td>显示已选游戏数量，例：「26 个」；未选则灰色「–」</td></tr>
             <tr><td>卡型奖励摘要</td><td class="req-n">—</td><td>每张卡型独立一行，显示：卡名 · 费用（PHP）· 有额外奖励的天数，例：「Elite Pass · 500 PHP · 3 天有额外奖励」</td></tr>
           </tbody>
@@ -496,8 +496,8 @@ tr:hover{background:#fafbff;}
               <td>
                 交易类型下拉选单选择「活动金额」（现有）；子类型新增「周卡活动」<br><br>
                 <strong>列表中「备注」栏位说明（由后端写入，共四种状态）：</strong><br>
-                · <code>elite pass amount: 500.00</code><br>
-                · <code>prime pass amount: 500.00</code><br>
+                · <code>elite pass amount</code><br>
+                · <code>prime pass amount</code><br>
                 · <code>daily rewards</code><br>
                 · <code>daily task rewards</code>
               </td>
