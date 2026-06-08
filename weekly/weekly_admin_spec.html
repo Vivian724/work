@@ -494,14 +494,43 @@ tr:hover{background:#fafbff;}
             <tr>
               <td>财务管理 &gt; 资金明细</td>
               <td>
+                <span style="font-size:11px;color:#cf1322;font-weight:600;">🔴 6/8 调整</span><br>
                 交易类型下拉选单选择「活动金额」（现有）；子类型新增「周卡活动」<br><br>
-                <strong>列表中「备注」栏位说明（由后端写入，共四种状态）：</strong><br>
-                · <code>elite pass amount</code><br>
-                · <code>prime pass amount</code><br>
-                · <code>daily rewards</code><br>
-                · <code>daily task rewards</code>
+                <strong>列表中「备注」栏位格式（由后端写入，共三种状态）：</strong><br>
+                · 购卡：<code>[Elite Pass][Elite Pass Purchase]</code> 或 <code>[Prime Pass][Prime Pass Purchase]</code><br>
+                · 每日签到奖励：<code>[Elite Pass][D{N} Signin {Bonus}]</code><br>
+                · 每日任务奖励：<code>[Elite Pass][D{N} Task {Bonus}]</code><br>
+                <span style="color:#888;font-size:12px;">※ {N} 为天数变量（如 D1、D2…）；{Bonus} 为奖励内容变量（如奖励类型或金额）；Elite Pass 依实际卡型替换为 Prime Pass</span>
               </td>
               <td>图四</td>
+            </tr>
+            <tr>
+              <td>积分商城 &gt; 用户积分记录</td>
+              <td>
+                <span style="font-size:11px;color:#cf1322;font-weight:600;">🔴 6/8 新增</span><br>
+                归属下拉选单选择「<strong>活动赠送积分</strong>」（现有分类），对应周卡活动派发的积分记录<br><br>
+                <strong>列表中「原因」栏位格式（由后端写入）：</strong><br>
+                · 取活动名称写入<br><br>
+                <strong>列表中「备注」栏位格式（由后端写入，共三种状态）：</strong><br>
+                · 购卡：<code>[Elite Pass][Elite Pass Purchase]</code> 或 <code>[Prime Pass][Prime Pass Purchase]</code><br>
+                · 每日签到奖励：<code>[Elite Pass][D{N} Signin {Bonus}]</code><br>
+                · 每日任务奖励：<code>[Elite Pass][D{N} Task {Bonus}]</code><br>
+                <span style="color:#888;font-size:12px;">※ {N} 为天数变量（如 D1、D2…）；{Bonus} 为奖励内容变量（如奖励类型或金额）；Elite Pass 依实际卡型替换为 Prime Pass</span>
+              </td>
+              <td>图五</td>
+            </tr>
+            <tr>
+              <td>积分商城 &gt; 免费旋转管理</td>
+              <td>
+                <span style="font-size:11px;color:#cf1322;font-weight:600;">🔴 6/8 新增</span><br>
+                Tab「免费旋转发送记录」需支持显示由周卡活动派发的免费旋转记录<br><br>
+                <strong>列表中「备注」栏位格式（由后端写入，共三种状态）：</strong><br>
+                · 购卡：<code>[Elite Pass][Elite Pass Purchase]</code> 或 <code>[Prime Pass][Prime Pass Purchase]</code><br>
+                · 每日签到奖励：<code>[Elite Pass][D{N} Signin {Bonus}]</code><br>
+                · 每日任务奖励：<code>[Elite Pass][D{N} Task {Bonus}]</code><br>
+                <span style="color:#888;font-size:12px;">※ {N} 为天数变量（如 D1、D2…）；{Bonus} 为奖励内容变量（如奖励类型或金额）；Elite Pass 依实际卡型替换为 Prime Pass</span>
+              </td>
+              <td>图六</td>
             </tr>
           </tbody>
         </table>

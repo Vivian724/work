@@ -280,7 +280,9 @@
 | 活动配置（新）> 派奖审核 | 当周卡活动「审核方式」设为「人工审核」时，派奖记录进入此页面，由后台人员手动审核后再派发<br>※ 备注：目前该活动运营预设为自动审核 | 图一 |
 | 活动配置（新）> 活动报表（奖励统计、数据统计） | 活动报表需支持以「周卡活动」为条件进行查询，奖励统计与数据统计两个维度均须涵盖周卡活动数据 | 图二 |
 | 活动配置（新）> 活动报表（数据统计） | 新增「天数」维度栏位，直接以活动天数名称展现：`Day 1`、`Day 2`…<br>范例：若该会员当日同时领取日常奖励与额外奖励，此列表将显示两笔记录 | 图三 |
-| 财务管理 > 资金明细 | 交易类型下拉选单选择「活动金额」（现有）；子类型新增「周卡活动」<br><br>**列表中「备注」栏位说明（由后端写入，共四种状态）：**<br>· `elite pass amount`<br>· `prime pass amount`<br>· `daily rewards`<br>· `daily task rewards` | 图四 |
+| 财务管理 > 资金明细 | 🔴 6/8 调整<br>交易类型下拉选单选择「活动金额」（现有）；子类型新增「周卡活动」<br><br>**列表中「备注」栏位格式（由后端写入，共三种状态）：**<br>· 购卡：`[Elite Pass][Elite Pass Purchase]` 或 `[Prime Pass][Prime Pass Purchase]`<br>· 每日签到奖励：`[Elite Pass][D{N} Signin {Bonus}]`<br>· 每日任务奖励：`[Elite Pass][D{N} Task {Bonus}]`<br>※ {N} 为天数变量（如 D1、D2…）；{Bonus} 为奖励内容变量（如奖励类型或金额）；Elite Pass 依实际卡型替换为 Prime Pass | 图四 |
+| 积分商城 > 用户积分记录 | 🔴 6/8 新增<br>归属下拉选单选择「活动赠送积分」（现有分类），对应周卡活动派发的积分记录<br><br>**列表中「原因」栏位格式（由后端写入）：**<br>· 取活动名称写入<br><br>**列表中「备注」栏位格式（由后端写入，共三种状态）：**<br>· 购卡：`[Elite Pass][Elite Pass Purchase]` 或 `[Prime Pass][Prime Pass Purchase]`<br>· 每日签到奖励：`[Elite Pass][D{N} Signin {Bonus}]`<br>· 每日任务奖励：`[Elite Pass][D{N} Task {Bonus}]`<br>※ {N} 为天数变量（如 D1、D2…）；{Bonus} 为奖励内容变量（如奖励类型或金额）；Elite Pass 依实际卡型替换为 Prime Pass | 图五 |
+| 积分商城 > 免费旋转管理 | 🔴 6/8 新增<br>Tab「免费旋转发送记录」需支持显示由周卡活动派发的免费旋转记录<br><br>**列表中「备注」栏位格式（由后端写入，共三种状态）：**<br>· 购卡：`[Elite Pass][Elite Pass Purchase]` 或 `[Prime Pass][Prime Pass Purchase]`<br>· 每日签到奖励：`[Elite Pass][D{N} Signin {Bonus}]`<br>· 每日任务奖励：`[Elite Pass][D{N} Task {Bonus}]`<br>※ {N} 为天数变量（如 D1、D2…）；{Bonus} 为奖励内容变量（如奖励类型或金额）；Elite Pass 依实际卡型替换为 Prime Pass | 图六 |
 
 ---
 
