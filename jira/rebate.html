@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>奖励配置 + 游戏配置</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color:#333;background:#f0f2f5;padding:30px;}
+
+.page-wrap{background:#fff;border-radius:6px;border:1px solid #e8e8e8;padding:24px 28px;max-width:960px;}
+
+.reward-title{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:600;color:#333;margin-bottom:18px;}
+.reward-title .icon{width:18px;height:18px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+.vip0-block{border:1px solid #e8e8e8;border-radius:4px 4px 0 0;overflow:hidden;}
+.vip0-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;user-select:none;background:#fff;}
+.vip0-head:hover{background:#fafafa;}
+.vip0-body{padding:16px;border-top:1px solid #e8e8e8;background:#fff;}
+.apply-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:13px;}
+.apply-row input[type=checkbox]{width:15px;height:15px;accent-color:#1677ff;}
+.tips-txt{font-size:13px;color:#ff4d4f;line-height:1.7;}
+.b-add{height:32px;padding:0 16px;border:none;border-radius:4px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;margin-right:12px;flex-shrink:0;}
+.b-add:hover{background:#0958d9;}
+.add-tips-row{display:flex;align-items:center;}
+
+.vip-list{border:1px solid #e8e8e8;border-top:none;border-radius:0 0 4px 4px;margin-bottom:20px;}
+.vip-item{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #e8e8e8;cursor:pointer;font-size:14px;color:#333;}
+.vip-item:last-child{border-bottom:none;}
+.vip-item:hover{background:#fafafa;}
+.vip-item .arr{color:#bbb;}
+
+.bonus-row{display:flex;align-items:center;gap:8px;margin-bottom:24px;font-size:13px;}
+.req{color:#ff4d4f;margin-right:2px;}
+.bonus-inp{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;width:180px;outline:none;}
+.bonus-inp:focus{border-color:#1677ff;}
+
+.divider{border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;}
+
+.sec-t{font-size:14px;font-weight:500;color:#1677ff;border-left:3px solid #1677ff;padding-left:8px;margin-bottom:14px;}
+.dim-row{display:flex;align-items:center;gap:6px;margin-bottom:14px;font-size:13px;}
+.dim-row>span{min-width:70px;color:#333;}
+.ri{display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px;color:#333;}
+.ri input{accent-color:#1677ff;width:15px;height:15px;}
+.b-sel{height:32px;padding:0 18px;border:none;border-radius:4px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;margin-bottom:14px;}
+.b-sel:hover{background:#0958d9;}
+
+/* 表格 — 通用 */
+.cfg-table{width:100%;border-collapse:collapse;font-size:13px;}
+.cfg-table th{background:#fafafa;padding:12px 16px;text-align:center;font-weight:400;color:#666;border:1px solid #e8e8e8;}
+.cfg-table td{padding:12px 16px;border:1px solid #e8e8e8;text-align:center;color:#333;vertical-align:middle;}
+.cfg-table td.nodata{color:#bbb;padding:24px;}
+.cfg-table tbody tr:nth-child(odd) td{background:#f9fbff;}
+.cfg-table tbody tr:hover td{background:#f0f7ff;}
+
+.b-del{height:30px;padding:0 14px;border:none;border-radius:4px;background:#f5827a;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
+.b-del:hover{background:#e6524a;}
+
+/* 彈窗 */
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:500;}
+.overlay.hidden{display:none!important;}
+.modal{background:#fff;border-radius:8px;width:800px;max-height:640px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.18);}
+.mhdr{padding:18px 24px 14px;display:flex;align-items:center;justify-content:space-between;}
+.mhdr span{font-size:16px;font-weight:500;color:#333;}
+.mcl{cursor:pointer;color:#999;font-size:22px;background:none;border:none;line-height:1;}
+.mcl:hover{color:#333;}
+.mbody{flex:1;overflow-y:auto;padding:8px 24px 20px;}
+
+.vendor-section{margin-bottom:22px;}
+.vendor-section-title{font-size:13px;font-weight:600;color:#333;margin-bottom:10px;}
+.game-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 8px;}
+.game-row-item{display:flex;align-items:center;gap:7px;font-size:13px;color:#333;padding:3px 0;cursor:pointer;user-select:none;}
+.game-row-item input{accent-color:#1677ff;width:14px;height:14px;flex-shrink:0;cursor:pointer;}
+.game-row-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+.vendor-flat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.vendor-flat-item{display:flex;align-items:center;gap:7px;font-size:13px;color:#333;padding:3px 0;cursor:pointer;user-select:none;}
+.vendor-flat-item input{accent-color:#1677ff;width:14px;height:14px;flex-shrink:0;cursor:pointer;}
+
+.mfoot{padding:12px 24px;border-top:1px solid #e8e8e8;display:flex;align-items:center;justify-content:flex-end;gap:10px;background:#fff;}
+.mfoot-info{font-size:13px;color:#666;margin-right:auto;}
+.mfoot-info strong{color:#333;font-weight:500;}
+.b-cancel{height:34px;padding:0 20px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;font-size:13px;cursor:pointer;color:#333;}
+.b-cancel:hover{border-color:#aaa;}
+.b-ok{height:34px;padding:0 22px;border:none;border-radius:4px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
+.b-ok:hover{background:#0958d9;}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="reward-title"><div class="icon">!</div>奖励配置</div>
+
+  <div class="vip0-block">
+    <div class="vip0-head" id="vip0Head">
+      <span>VIP0</span><span id="vip0Chev">∨</span>
+    </div>
+    <div class="vip0-body" id="vip0Body">
+      <div class="apply-row">
+        <input type="checkbox" id="applyOthers">
+        <label for="applyOthers" style="cursor:pointer;">套用至其他等级</label>
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#bbb;color:#fff;font-size:10px;cursor:default;margin-left:2px;">?</span>
+      </div>
+      <div class="add-tips-row">
+        <button class="b-add">新增</button>
+        <span class="tips-txt">Tips：领取方式：手动领取时将会在系统时间的周期结束后00:00自动统计完成后，玩家才可以申请领取上一周期的奖励</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="vip-list">
+    <div class="vip-item"><span>VIP1</span><span class="arr">›</span></div>
+    <div class="vip-item"><span>VIP2</span><span class="arr">›</span></div>
+    <div class="vip-item"><span>VIP3</span><span class="arr">›</span></div>
+    <div class="vip-item"><span>VIP4</span><span class="arr">›</span></div>
+    <div class="vip-item"><span>VIP5</span><span class="arr">›</span></div>
+    <div class="vip-item"><span>VIP6</span><span class="arr">›</span></div>
+    <div class="vip-item"><span>VIP7</span><span class="arr">›</span></div>
+    <div class="vip-item"><span>VIP8</span><span class="arr">›</span></div>
+    <div class="vip-item"><span>VIP9</span><span class="arr">›</span></div>
+    <div class="vip-item"><span>VIP10</span><span class="arr">›</span></div>
+  </div>
+
+  <div class="bonus-row">
+    <span><span class="req">*</span>奖金所需流水</span>
+    <input type="number" class="bonus-inp" placeholder="请输入">
+    <span>倍</span>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-t">游戏配置</div>
+  <div class="dim-row">
+    <span>游戏配置：</span>
+    <label class="ri"><input type="radio" name="dim" value="game" checked> 小游戏维度</label>
+    <label class="ri" style="margin-left:16px;"><input type="radio" name="dim" value="vendor"> 厂商维度</label>
+  </div>
+  <button class="b-sel" id="bOpen">选择游戏</button>
+
+  <!-- 表格容器，根據維度切換欄位 -->
+  <div id="tableWrap"></div>
+</div>
+
+<!-- 彈窗 -->
+<div class="overlay hidden" id="modal">
+  <div class="modal">
+    <div class="mhdr">
+      <span id="modalTitle">选择游戏</span>
+      <button class="mcl" id="closeBtn">&#215;</button>
+    </div>
+    <div class="mbody" id="modalBody"></div>
+    <div class="mfoot">
+      <span class="mfoot-info" id="footInfo">已选 <strong>0</strong> 个</span>
+      <button class="b-cancel" id="cancelBtn">取消</button>
+      <button class="b-ok" id="okBtn">确认选择</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// VIP0
+let vip0Open = true;
+document.getElementById('vip0Head').addEventListener('click', () => {
+  vip0Open = !vip0Open;
+  document.getElementById('vip0Body').style.display = vip0Open ? '' : 'none';
+  document.getElementById('vip0Chev').textContent = vip0Open ? '∨' : '›';
+});
+
+// ── 資料 ─────────────────────────────────────────
+const VENDORS = [
+  { code:'JILI',   name:'JILI',   games:[
+    {name:'Tongits Go',id:'199'},{name:'Boxing King',id:'77'},{name:'Money Coming',id:'82'},
+    {name:'Jili Caishen',id:'88'},{name:'iRich Bingo',id:'91'},{name:'Rapid Gems 777',id:'104'},
+    {name:'Boxing King Title Match',id:'112'},{name:'Party Ape',id:'118'},{name:'Mines/Mines',id:'56'},
+    {name:'Fortune/Gems',id:'57'},{name:'RomaX',id:'64'},{name:'Chin Shi Huang',id:'65'},
+    {name:'Lucky Bingo',id:'67'},{name:'Plinko of Mine',id:'72'},{name:'Royal Quest',id:'73'},
+    {name:'Clover Coins 3x3',id:'76'},{name:'Go Rush',id:'83'},{name:'Super Ace',id:'84'},
+    {name:'Mega Ace',id:'85'},{name:'Shanghai Beauty',id:'86'},{name:'Crystal 777 DELUXE',id:'92'},
+    {name:'ROMA X 1000',id:'96'},{name:'King Arthur',id:'97'},{name:'Gallina Fortunata',id:'100'},
+    {name:'FortunePig',id:'101'},{name:'Golden Empire',id:'102'},{name:'Charge/Buffalo',id:'105'},
+    {name:'Thor X',id:'107'},{name:'Chicken Dash',id:'109'},{name:'Drop Ball',id:'111'},
+    {name:'Fortune Coins 2 Hit the Gold',id:'115'}
+  ]},
+  { code:'PS',     name:'PS',     games:[
+    {name:'CAISHEN–LUCKY SPREAD',id:'PS001'},{name:'777',id:'PS002'},
+    {name:'Athena–Lucky Spread',id:'PS003'},{name:'SUPER WIN',id:'PS004'},
+    {name:'SUGAR BOOM',id:'PS005'},{name:'LUCKY ACE',id:'PS006'},
+    {name:'NECROMANCER•SHA',id:'PS007'},{name:'HIYAS GEMS',id:'PS008'},
+    {name:'Super Gems',id:'PS009'},{name:'Knight Arthur',id:'PS010'},{name:'Mahjong Origin',id:'PS011'}
+  ]},
+  { code:'OKMINI', name:'OKMINI', games:[
+    {name:'CG53–Poker',id:'OM001'},{name:'Color Game–Bonaza',id:'OM002'},
+    {name:'Drop Ball',id:'OM003'},{name:'Jet Rush',id:'OM004'},
+    {name:'Color Game Bonanza',id:'OM005'},{name:'CG52',id:'OM006'}
+  ]},
+  { code:'TPG',    name:'TPG',    games:[
+    {name:'Mahjong House',id:'TPG001'},{name:'8 Dragons',id:'TPG002'},
+    {name:'Lucky Leprechaun',id:'TPG003'},{name:'Space Galaxy',id:'TPG004'},{name:'Sic-Bo',id:'TPG005'}
+  ]},
+  { code:'CQ9',    name:'CQ9 SLOT', games:[
+    {name:'Money Tree',id:'CQ9001'},{name:'Hot Spin',id:'CQ9002'},
+    {name:'Sky Lanterns',id:'CQ9003'},{name:'Lucky Bats',id:'CQ9004'},{name:'Fortune Dragon',id:'CQ9005'}
+  ]},
+  { code:'PG',     name:'PG SOFT', games:[
+    {name:'Pinata Wins',id:'PG001'},{name:"Dead Man's Riches",id:'PG002'},
+    {name:'Jack the Giant Hunter',id:'PG003'},{name:'Diner Frenzy',id:'PG004'}
+  ]}
+];
+
+// 廠商清單（含代碼）
+const ALL_VENDORS = [
+  {name:'93Connect',           code:'93C'},
+  {name:'FunkyGame',           code:'FKG'},
+  {name:'TPG Games',           code:'TPG'},
+  {name:'Advantage Play Mini', code:'APM'},
+  {name:'Evolution LIVE CASINO',code:'EVO'},
+  {name:'RealTime Gaming',     code:'RTG'},
+  {name:'SBTY SW',             code:'SBTY'},
+  {name:'CQ9 Gaming',          code:'CQ9'},
+  {name:'OkGames',             code:'OKG'},
+  {name:'OKBINGO',             code:'OKBINGO'},
+  {name:'PG SOFT',             code:'PG'},
+  {name:'EG1',                 code:'EG1'},
+  {name:'DWG',                 code:'DWG'},
+  {name:'JILI',                code:'JILI'},
+  {name:'Vertex Play',         code:'VTP'},
+  {name:'Advantplay',          code:'AVP'},
+  {name:'RedTiger',            code:'RTG2'},
+  {name:'NETENT',              code:'NET'},
+  {name:'No Limit City',       code:'NLC'},
+  {name:'BigTimeGaming',       code:'BTG'},
+  {name:'Evolution RNG',       code:'EVNG'},
+  {name:'BETSOFT',             code:'BSG'},
+  {name:'King Maker',          code:'KMG'},
+  {name:'PlayStar Gaming',     code:'PSG'},
+  {name:'FC Gaming',           code:'FCG'},
+  {name:'Vivo Gaming',         code:'VVG'},
+  {name:'SA Gaming',           code:'SAG'},
+  {name:'WE Gaming',           code:'WEG'},
+  {name:'JDB Gaming',          code:'JDB'},
+  {name:'OKPlay',              code:'OKP'},
+  {name:'Mini Games',          code:'MNG'},
+  {name:'ONCASINO',            code:'ONC'},
+  {name:'PRAGMATIC PLAY SLOT', code:'PPS'},
+  {name:'PRAGMATIC PLAY LIVE', code:'PPL'},
+  {name:'FC Gaming Fishing',   code:'FCGF'},
+  {name:'UU Slots',            code:'UUS'},
+  {name:'YGR',                 code:'YGR'},
+  {name:'Playtech Live',       code:'PTL'},
+  {name:'Rich88',              code:'R88'},
+  {name:'Playtech Slot',       code:'PTS'},
+  {name:'Realistic',           code:'RSG'},
+  {name:'Fantasy Sports',      code:'FSP'},
+  {name:'Yellow Bat',          code:'YBT'},
+  {name:'BNG',                 code:'BNG'},
+  {name:'OMNIPLAY',            code:'OMN'},
+  {name:'ACEWIN SLOT',         code:'AWS'},
+  {name:'ACEWIN FISING',       code:'AWF'},
+  {name:'MI Games',            code:'MIG'},
+  {name:'VA',                  code:'VA'},
+  {name:'759SLOT',             code:'759'},
+  {name:'SEXY CASINO (S)',     code:'SEXY'}
+];
+
+let dim = 'game';
+let tmpGameSel = {};
+let tmpVendorSel = new Set();
+let confirmed = [];
+
+// 維度切換
+document.querySelectorAll('input[name="dim"]').forEach(r => {
+  r.addEventListener('change', () => {
+    dim = r.value;
+    tmpGameSel = {}; tmpVendorSel = new Set(); confirmed = [];
+    document.getElementById('bOpen').textContent = dim === 'game' ? '选择游戏' : '选择厂商';
+    renderTable();
+  });
+});
+
+document.getElementById('bOpen').addEventListener('click', openModal);
+document.getElementById('closeBtn').addEventListener('click', closeModal);
+document.getElementById('cancelBtn').addEventListener('click', closeModal);
+document.getElementById('okBtn').addEventListener('click', confirmModal);
+
+function openModal() {
+  tmpGameSel = {}; tmpVendorSel = new Set();
+  if (dim === 'game') {
+    confirmed.forEach(r => {
+      if (!tmpGameSel[r.vendorCode]) tmpGameSel[r.vendorCode] = new Set();
+      tmpGameSel[r.vendorCode].add(r.gameId);
+    });
+  } else {
+    confirmed.forEach(r => tmpVendorSel.add(r.vendorCode));
+  }
+  renderModal();
+  document.getElementById('modal').classList.remove('hidden');
+}
+function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+function confirmModal() {
+  confirmed = [];
+  if (dim === 'game') {
+    VENDORS.forEach(v => {
+      const s = tmpGameSel[v.code];
+      if (!s || s.size === 0) return;
+      s.forEach(gid => {
+        const g = v.games.find(x => x.id === gid);
+        if (g) confirmed.push({vendorName:v.name, vendorCode:v.code, gameName:g.name, gameId:g.id});
+      });
+    });
+  } else {
+    ALL_VENDORS.forEach(v => {
+      if (tmpVendorSel.has(v.code))
+        confirmed.push({vendorName:v.name, vendorCode:v.code});
+    });
+  }
+  closeModal(); renderTable();
+}
+
+function updateFoot() {
+  const n = dim === 'game'
+    ? Object.values(tmpGameSel).reduce((s,set)=>s+set.size, 0)
+    : tmpVendorSel.size;
+  document.getElementById('footInfo').innerHTML = `已选 <strong>${n}</strong> 个`;
+}
+
+function renderModal() {
+  const isGame = dim === 'game';
+  document.getElementById('modalTitle').textContent = isGame ? '选择游戏' : '选择厂商';
+  const bodyEl = document.getElementById('modalBody');
+
+  if (isGame) {
+    let html = '';
+    VENDORS.forEach(v => {
+      const selSet = tmpGameSel[v.code] || new Set();
+      html += `<div class="vendor-section">
+        <div class="vendor-section-title">${v.name}</div>
+        <div class="game-grid">
+          ${v.games.map(g=>`<label class="game-row-item">
+            <input type="checkbox" data-vc="${v.code}" data-gid="${g.id}"${selSet.has(g.id)?' checked':''}>
+            <span title="${g.name}">${g.name}</span>
+          </label>`).join('')}
+        </div>
+      </div>`;
+    });
+    bodyEl.innerHTML = html;
+    bodyEl.querySelectorAll('input[data-gid]').forEach(cb => {
+      cb.addEventListener('change', function() {
+        const vc=this.dataset.vc, gid=this.dataset.gid;
+        if (!tmpGameSel[vc]) tmpGameSel[vc] = new Set();
+        if (this.checked) tmpGameSel[vc].add(gid); else tmpGameSel[vc].delete(gid);
+        updateFoot();
+      });
+    });
+  } else {
+    bodyEl.innerHTML = `<div class="vendor-flat-grid">
+      ${ALL_VENDORS.map(v=>`<label class="vendor-flat-item">
+        <input type="checkbox" data-vc="${v.code}"${tmpVendorSel.has(v.code)?' checked':''}><span>${v.name}</span>
+      </label>`).join('')}
+    </div>`;
+    bodyEl.querySelectorAll('input[data-vc]').forEach(cb => {
+      cb.addEventListener('change', function() {
+        if (this.checked) tmpVendorSel.add(this.dataset.vc); else tmpVendorSel.delete(this.dataset.vc);
+        updateFoot();
+      });
+    });
+  }
+  updateFoot();
+}
+
+// ── 表格渲染（根據維度切換欄位）─────────────────
+function renderTable() {
+  const wrap = document.getElementById('tableWrap');
+  if (dim === 'game') {
+    // 5欄：厂商名称 / 厂商代码 / 游戏名称 / 游戏代码 / 操作
+    if (!confirmed.length) {
+      wrap.innerHTML = `<table class="cfg-table"><thead><tr>
+        <th>厂商名称</th><th>厂商代码</th><th>游戏名称</th><th>游戏代码</th><th style="width:90px;">操作</th>
+      </tr></thead><tbody><tr><td colspan="5" class="nodata">No Data</td></tr></tbody></table>`;
+    } else {
+      wrap.innerHTML = `<table class="cfg-table"><thead><tr>
+        <th>厂商名称</th><th>厂商代码</th><th>游戏名称</th><th>游戏代码</th><th style="width:90px;">操作</th>
+      </tr></thead><tbody>
+        ${confirmed.map((r,i)=>`<tr>
+          <td>${r.vendorName}</td><td>${r.vendorCode}</td><td>${r.gameName}</td><td>${r.gameId}</td>
+          <td><button class="b-del" data-i="${i}">删除</button></td>
+        </tr>`).join('')}
+      </tbody></table>`;
+    }
+  } else {
+    // 3欄：厂商名称 / 厂商代码 / 操作
+    if (!confirmed.length) {
+      wrap.innerHTML = `<table class="cfg-table"><thead><tr>
+        <th>厂商名称</th><th>厂商代码</th><th style="width:90px;">操作</th>
+      </tr></thead><tbody><tr><td colspan="3" class="nodata">No Data</td></tr></tbody></table>`;
+    } else {
+      wrap.innerHTML = `<table class="cfg-table"><thead><tr>
+        <th>厂商名称</th><th>厂商代码</th><th style="width:90px;">操作</th>
+      </tr></thead><tbody>
+        ${confirmed.map((r,i)=>`<tr>
+          <td>${r.vendorName}</td><td>${r.vendorCode}</td>
+          <td><button class="b-del" data-i="${i}">删除</button></td>
+        </tr>`).join('')}
+      </tbody></table>`;
+    }
+  }
+  // 綁定刪除
+  wrap.querySelectorAll('.b-del').forEach(btn => {
+    btn.addEventListener('click', () => { confirmed.splice(+btn.dataset.i,1); renderTable(); });
+  });
+}
+
+// 初始化表格
+renderTable();
+</script>
+</body>
+</html>
