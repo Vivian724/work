@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一番赏活动管理</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  background: #f0f2f5;
+  color: #333;
+}
+
+/* ── LAYOUT ── */
+.page { padding: 24px; min-height: 100vh; }
+.breadcrumb {
+  font-size: 13px; color: #999; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 6px;
+}
+.breadcrumb span { color: #333; }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.page-title { font-size: 18px; font-weight: 600; color: #1a1a1a; }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  background: #fff; border-radius: 4px;
+  padding: 16px 20px; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.filter-bar input, .filter-bar select {
+  height: 32px; border: 1px solid #d9d9d9; border-radius: 4px;
+  padding: 0 10px; font-size: 13px; color: #333; outline: none;
+}
+.filter-bar input { width: 180px; }
+.filter-bar select { width: 140px; background: #fff; cursor: pointer; }
+.filter-bar input:focus, .filter-bar select:focus { border-color: #1677ff; }
+
+/* ── TABLE ── */
+.table-wrap {
+  background: #fff; border-radius: 4px;
+  overflow: hidden;
+}
+.table-info {
+  padding: 12px 20px; font-size: 13px; color: #999;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+table {
+  width: 100%; border-collapse: collapse;
+}
+thead tr { background: #fafafa; }
+th {
+  padding: 12px 16px; font-size: 13px; font-weight: 600;
+  color: #555; text-align: left; border-bottom: 1px solid #f0f0f0;
+  white-space: nowrap;
+}
+td {
+  padding: 14px 16px; font-size: 13px; color: #333;
+  border-bottom: 1px solid #f8f8f8; vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafcff; }
+
+/* ── STATUS BADGE ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 500;
+}
+.badge-active { background: #f6ffed; color: #389e0d; border: 1px solid #b7eb8f; }
+.badge-inactive { background: #f5f5f5; color: #999; border: 1px solid #e8e8e8; }
+.badge-ended { background: #fff1f0; color: #cf1322; border: 1px solid #ffa39e; }
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap { display: flex; align-items: center; gap: 8px; }
+.progress-bar {
+  flex: 1; height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden;
+  min-width: 80px;
+}
+.progress-fill { height: 100%; border-radius: 3px; background: #1677ff; transition: width 0.3s; }
+.progress-fill.high { background: #ff4d4f; }
+.progress-fill.mid { background: #fa8c16; }
+.progress-text { font-size: 12px; color: #999; white-space: nowrap; }
+
+/* ── ACTION LINKS ── */
+.action-links { display: flex; align-items: center; gap: 12px; }
+.action-links a {
+  font-size: 13px; color: #1677ff; cursor: pointer; text-decoration: none;
+  white-space: nowrap;
+}
+.action-links a:hover { color: #0958d9; }
+.action-links a.danger { color: #ff4d4f; }
+.action-links a.danger:hover { color: #cf1322; }
+.action-links .divider { color: #e8e8e8; }
+
+/* ── TOGGLE SWITCH ── */
+.toggle {
+  position: relative; display: inline-block; width: 40px; height: 22px;
+}
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; cursor: pointer; inset: 0;
+  background: #ccc; border-radius: 22px; transition: 0.3s;
+}
+.toggle-slider:before {
+  content: ''; position: absolute;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: white; left: 3px; top: 3px; transition: 0.3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle input:checked + .toggle-slider { background: #1677ff; }
+.toggle input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+/* ── BUTTONS ── */
+.btn {
+  padding: 6px 16px; border-radius: 4px; font-size: 13px;
+  cursor: pointer; border: 1px solid transparent; height: 32px;
+  display: inline-flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.btn-primary { background: #1677ff; color: #fff; border-color: #1677ff; }
+.btn-primary:hover { background: #0958d9; }
+.btn-default { background: #fff; color: #333; border-color: #d9d9d9; }
+.btn-default:hover { border-color: #1677ff; color: #1677ff; }
+.btn-sm { height: 28px; padding: 4px 12px; font-size: 12px; }
+
+/* ── TIER TAGS ── */
+.tier-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tier-tag {
+  padding: 1px 8px; border-radius: 10px; font-size: 11px; font-weight: 600;
+  background: #e6f4ff; color: #1677ff; border: 1px solid #91caff;
+}
+.tier-tag.last { background: #fff7e6; color: #fa8c16; border-color: #ffd591; }
+
+/* ── PAGINATION ── */
+.pagination {
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 16px 20px; gap: 6px; border-top: 1px solid #f0f0f0;
+}
+.page-btn {
+  min-width: 32px; height: 32px; border: 1px solid #d9d9d9;
+  background: #fff; border-radius: 4px; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 0 8px;
+}
+.page-btn:hover { border-color: #1677ff; color: #1677ff; }
+.page-btn.active { background: #1677ff; border-color: #1677ff; color: #fff; }
+.page-total { font-size: 13px; color: #999; margin-right: 8px; }
+
+/* ── MODAL ── */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 24px 0; overflow-y: auto; z-index: 1000;
+}
+.overlay.hidden { display: none; }
+.modal {
+  background: #fff; border-radius: 4px;
+  width: 900px; max-width: 96vw;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+.modal-header {
+  padding: 16px 24px; font-size: 16px; font-weight: 600;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-close { background: none; border: none; font-size: 18px; color: #999; cursor: pointer; }
+.modal-close:hover { color: #333; }
+.modal-body { padding: 24px; max-height: 75vh; overflow-y: auto; }
+.modal-footer {
+  padding: 14px 24px; border-top: 1px solid #f0f0f0;
+  display: flex; justify-content: center; gap: 12px;
+}
+
+/* ── FORM ── */
+.form-row { display: flex; align-items: flex-start; margin-bottom: 16px; }
+.form-label {
+  width: 130px; flex-shrink: 0; padding-top: 6px;
+  text-align: right; padding-right: 12px;
+  color: #333; font-size: 13px;
+}
+.form-label .req { color: #ff4d4f; margin-right: 2px; }
+.form-control { flex: 1; }
+.form-control input[type="text"],
+.form-control input[type="number"],
+.form-control select {
+  width: 100%; height: 32px; border: 1px solid #d9d9d9;
+  border-radius: 4px; padding: 0 10px; font-size: 13px;
+  outline: none; color: #333;
+}
+.form-control input:focus, .form-control select:focus {
+  border-color: #1677ff; box-shadow: 0 0 0 2px rgba(22,119,255,0.1);
+}
+.input-suffix { display: flex; align-items: center; }
+.input-suffix input { border-radius: 4px 0 0 4px; }
+.suffix-tag {
+  background: #fafafa; border: 1px solid #d9d9d9; border-left: none;
+  padding: 0 10px; height: 32px; display: flex; align-items: center;
+  color: #999; font-size: 13px; border-radius: 0 4px 4px 0; white-space: nowrap;
+}
+.radio-group { display: flex; flex-wrap: wrap; gap: 6px 20px; padding-top: 6px; }
+.radio-group label { display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 13px; }
+input[type="radio"], input[type="checkbox"] { cursor: pointer; accent-color: #1677ff; }
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type="number"] { -moz-appearance: textfield; }
+
+/* ── SECTION ── */
+.section-title {
+  font-size: 13px; font-weight: 600; color: #1677ff;
+  margin-bottom: 14px; margin-top: 4px;
+  display: flex; align-items: center; gap: 8px;
+  padding-bottom: 8px; border-bottom: 1px solid #f0f0f0;
+}
+.section-divider { margin: 20px 0 16px; border-top: 1px dashed #e8e8e8; padding-top: 16px; }
+
+/* ── TOTAL BANNER ── */
+.total-banner {
+  background: #e6f4ff; border: 1px solid #91caff; border-radius: 4px;
+  padding: 10px 16px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: #0958d9;
+}
+.total-banner strong { font-size: 20px; font-weight: 700; color: #1677ff; }
+
+/* ── PRIZE TIER ── */
+.prize-tier {
+  border: 1px solid #e8e8e8; border-radius: 6px;
+  margin-bottom: 10px; overflow: hidden;
+}
+.tier-header {
+  background: #fafafa; padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.tier-name-input {
+  max-width: 120px; border: 1px solid #d9d9d9; border-radius: 4px;
+  padding: 3px 8px; font-size: 13px; height: 28px;
+}
+.tier-name-input:focus { border-color: #1677ff; outline: none; }
+.tier-qty-box {
+  display: flex; align-items: center; gap: 5px;
+  background: #f5f7fa; border: 1px solid #e4e7ed;
+  border-radius: 4px; padding: 0 10px; height: 28px;
+}
+.tier-qty-box span { font-size: 12px; color: #666; white-space: nowrap; }
+.tier-qty-input {
+  width: 56px; border: none; background: transparent;
+  text-align: center; font-size: 13px; font-weight: 600; color: #333; outline: none;
+}
+.tier-body { padding: 12px 16px; }
+.tier-fields { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.tier-field label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; }
+.tier-field select, .tier-field input[type="text"], .tier-field input[type="number"] {
+  height: 30px; font-size: 13px; min-width: 120px;
+  border: 1px solid #d9d9d9; border-radius: 4px; padding: 0 8px;
+  outline: none; width: 100%;
+}
+.tier-upload { margin-top: 10px; }
+.tier-upload label { font-size: 12px; color: #666; margin-bottom: 4px; display: block; }
+.upload-btn-sm {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #1677ff; color: #fff; border: none;
+  padding: 3px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; height: 28px;
+}
+.upload-btn-sm:hover { background: #0958d9; }
+.prize-tier.last-tier { border-color: #ffd591; }
+.prize-tier.last-tier .tier-header { background: #fff7e6; border-color: #ffd591; }
+.last-note {
+  font-size: 11px; color: #fa8c16;
+  background: rgba(250,140,22,0.08); padding: 2px 8px; border-radius: 10px;
+}
+.btn-add-tier {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px dashed #1677ff; color: #1677ff; background: none;
+  padding: 5px 16px; border-radius: 4px; font-size: 13px; cursor: pointer;
+  height: 32px;
+}
+.btn-add-tier:hover { background: #e6f4ff; }
+.btn-danger-text { background: none; border: none; color: #ff4d4f; font-size: 13px; cursor: pointer; }
+.btn-danger-text:hover { color: #cf1322; }
+
+/* freespin rows */
+.freespin-row {
+  display: flex; align-items: center; gap: 10px;
+  background: #fafafa; border: 1px solid #e8e8e8;
+  border-radius: 6px; padding: 8px 12px; margin-bottom: 8px;
+}
+.freespin-row select { flex: 1; min-width: 160px; height: 30px; font-size: 13px;
+  border: 1px solid #d9d9d9; border-radius: 4px; padding: 0 8px; outline: none; }
+
+/* VIP */
+.vip-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.vip-item { display: flex; align-items: center; border: 1px solid #d9d9d9; border-radius: 4px; overflow: hidden; height: 32px; }
+.vip-tag { background: #fafafa; border-right: 1px solid #d9d9d9; padding: 0 10px; font-size: 12px; color: #555; white-space: nowrap; height: 100%; display: flex; align-items: center; min-width: 48px; }
+.vip-item input { border: none; border-radius: 0; height: 100%; padding: 0 8px; flex: 1; min-width: 0; outline: none; }
+
+
+/* ── SET (套數) ── */
+.set-wrap {
+  border: 1px solid #d9d9d9; border-radius: 8px;
+  margin-bottom: 16px; overflow: hidden;
+}
+.set-header {
+  background: #f5f7ff; padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid #e8e8e8; cursor: pointer;
+  user-select: none;
+}
+.set-badge {
+  background: #1677ff; color: #fff;
+  font-size: 12px; font-weight: 700;
+  padding: 2px 12px; border-radius: 12px; white-space: nowrap;
+}
+.set-name-input {
+  border: 1px solid #d9d9d9; border-radius: 4px;
+  padding: 3px 8px; font-size: 13px; height: 28px;
+  max-width: 140px; outline: none;
+}
+.set-name-input:focus { border-color: #1677ff; }
+.set-toggle { margin-left: auto; font-size: 12px; color: #999; }
+.set-body { padding: 16px; background: #fafbff; }
+.set-total {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #e6f4ff; border: 1px solid #91caff; border-radius: 4px;
+  padding: 6px 14px; font-size: 13px; color: #0958d9; margin-bottom: 14px;
+}
+.set-total strong { font-size: 18px; font-weight: 700; color: #1677ff; }
+
+/* COPY TAG */
+.copy-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #f6ffed; color: #389e0d; border: 1px solid #b7eb8f;
+  padding: 1px 8px; border-radius: 10px; font-size: 11px;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- breadcrumb -->
+  <div class="breadcrumb">
+    位置 › 积分商城 › <span>商品管理</span>
+  </div>
+
+  <!-- 币别选择器 -->
+  <div style="margin-bottom:12px;">
+    <select style="width:160px;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;outline:none;background:#fff;">
+      <option value="">选择币别</option>
+      <option>菲律宾比索</option>
+      <option>台币</option>
+      <option>人民币</option>
+    </select>
+  </div>
+
+  <!-- filter bar -->
+  <div class="filter-bar" style="justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;">
+      <select style="width:120px;">
+        <option>全部类型</option>
+        <option>一番赏</option>
+        <option>盲盒</option>
+        <option>实物</option>
+      </select>
+      <select style="width:100px;">
+        <option>全部</option>
+        <option>启用</option>
+        <option>停用</option>
+      </select>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:13px;color:#333;white-space:nowrap;">是否限时抢购：</span>
+        <select style="width:100px;">
+          <option>全部</option>
+          <option>是</option>
+          <option>否</option>
+        </select>
+      </div>
+      <input type="text" placeholder="名" style="width:140px;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:13px;color:#333;white-space:nowrap;">发布时间：</span>
+        <div style="display:flex;align-items:center;gap:6px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;height:32px;background:#fff;">
+          <span style="color:#bbb;">🕐</span>
+          <input type="datetime-local" style="border:none;outline:none;font-size:13px;background:transparent;width:150px;">
+          <span style="color:#999;">~</span>
+          <input type="datetime-local" style="border:none;outline:none;font-size:13px;background:transparent;width:150px;">
+        </div>
+      </div>
+      <button class="btn btn-primary btn-sm">🔍 搜索</button>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('new')" style="flex-shrink:0;">＋ 新增商品</button>
+  </div>
+
+  <!-- table -->
+  <div class="table-wrap">
+    <div style="padding:10px 16px;font-size:13px;color:#ff4d4f;font-weight:500;border-bottom:1px solid #f0f0f0;">
+      限时抢购商品过期自动前台隐藏，后台将于3:00自动下架
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>排序</th>
+          <th>类型</th>
+          <th>名</th>
+          <th>商品简介</th>
+          <th>封面图</th>
+          <th>购买价格</th>
+          <th>限购</th>
+          <th>库存</th>
+          <th>已售</th>
+          <th>限时抢购</th>
+          <th>状态</th>
+          <th>发布时间</th>
+          <th>发布者</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="pagination">
+      <span class="page-total">Total 4</span>
+      <div class="page-btn">‹</div>
+      <div class="page-btn active">1</div>
+      <div class="page-btn">›</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL ══════════════ -->
+<div class="overlay hidden" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modalTitle">新增一番赏活动</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- 基本信息 -->
+      <div class="section-title">基本信息</div>
+
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>活动名称：</div>
+        <div class="form-control"><input type="text" placeholder="请输入活动名称" id="activityName"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>币种：</div>
+        <div class="form-control">
+          <select style="max-width:180px;">
+            <option>菲律宾比索</option><option>台币</option><option>人民币</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>商品图片：</div>
+        <div class="form-control">
+          <button class="upload-btn-sm" style="height:32px;font-size:13px;">📁 选择文件</button>
+          <div style="font-size:12px;color:#ff4d4f;margin-top:4px;">尺寸750×750，最多可上传6张图，默认第一张图为封面图</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>单次价格：</div>
+        <div class="form-control">
+          <div class="input-suffix">
+            <input type="number" placeholder="请输入" style="max-width:200px;border-radius:4px 0 0 4px;">
+            <span class="suffix-tag">积分</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>排序：</div>
+        <div class="form-control"><input type="number" value="1" style="max-width:100px;"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-label">单个会员限购数：</div>
+        <div class="form-control">
+          <div class="vip-grid">
+            <div class="vip-item"><span class="vip-tag">VIP0</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP1</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP2</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP3</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP4</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP5</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP6</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP7</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP8</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP9</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP10</span><input type="number" value="0"></div>
+          </div>
+          <div style="margin-top:8px;display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" id="limitCheck2">
+            <label for="limitCheck2" style="font-size:13px;color:#1677ff;cursor:pointer;">限购</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>是否限时：</div>
+        <div class="form-control">
+          <div class="radio-group">
+            <label><input type="radio" name="flashSale2" value="no" checked onchange="toggleFlashSale2(this)"> 否</label>
+            <label><input type="radio" name="flashSale2" value="yes" onchange="toggleFlashSale2(this)"> 是</label>
+          </div>
+          <div id="flashRange2" style="display:none;margin-top:8px;">
+            <div style="display:flex;align-items:center;gap:8px;border:1px solid #d9d9d9;border-radius:4px;padding:6px 12px;max-width:420px;">
+              <span style="color:#bbb;">🕐</span>
+              <input type="datetime-local" style="border:none;outline:none;font-size:13px;flex:1;background:transparent;">
+              <span style="color:#999;font-size:13px;">～</span>
+              <input type="datetime-local" style="border:none;outline:none;font-size:13px;flex:1;background:transparent;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label">审核模式：</div>
+        <div class="form-control">
+          <div class="radio-group">
+            <label><input type="radio" name="audit2"> 自动审核</label>
+            <label><input type="radio" name="audit2" checked> 手动审核</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 套數配置 -->
+      <div class="section-divider">
+        <div class="section-title">套数配置
+          <span style="font-size:12px;color:#999;font-weight:400;">同主题可设定多套，每套独立奖池</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <button class="btn-add-tier" onclick="addSet()">＋ 新增套数</button>
+          <span style="font-size:12px;color:#999;" id="setCountInfo">目前 1 套</span>
+        </div>
+        <div id="setList"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="submitForm2()">确定</button>
+      <button class="btn btn-default" onclick="closeModal()">取消</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── TABLE DATA ──
+const activities = [
+  { id:1, name:'苹果一番赏', price:50, start:'2026-06-01', end:'2026-06-30', publisher:'olivia', copied:false,
+    sets:[
+      { name:'A套', tiers:['A赏','B赏','C赏','D赏'], total:100, drawn:100, status:'ended' },
+      { name:'B套', tiers:['A赏','B赏','C赏','D赏'], total:100, drawn:87,  status:'active' },
+      { name:'C套', tiers:['A赏','B赏','C赏','D赏'], total:100, drawn:0,   status:'inactive' },
+    ]
+  },
+  { id:2, name:'节日特别版一番赏', price:100, start:'2026-05-01', end:'2026-05-31', publisher:'ethan-pm', copied:false,
+    sets:[
+      { name:'A套', tiers:['A赏','B赏','C赏'], total:60, drawn:60, status:'ended' },
+    ]
+  },
+  { id:3, name:'高价值VIP专属赏', price:200, start:'2026-06-10', end:'2026-07-10', publisher:'olivia', copied:false,
+    sets:[
+      { name:'A套', tiers:['A赏','B赏','C赏','D赏','E赏'], total:50, drawn:12, status:'active' },
+      { name:'B套', tiers:['A赏','B赏','C赏','D赏','E赏'], total:50, drawn:0,  status:'inactive' },
+    ]
+  },
+  { id:4, name:'入门款一番赏', price:20, start:'-', end:'-', publisher:'jayAdmin', copied:true,
+    sets:[
+      { name:'A套', tiers:['A赏','B赏','C赏'], total:200, drawn:0, status:'inactive' },
+    ]
+  },
+];
+
+function statusBadge(s) {
+  if (s === 'active')   return `<span class="badge badge-active"><span class="badge-dot"></span>启用</span>`;
+  if (s === 'inactive') return `<span class="badge badge-inactive"><span class="badge-dot"></span>停用</span>`;
+  if (s === 'ended')    return `<span class="badge badge-ended"><span class="badge-dot"></span>已结束</span>`;
+}
+
+function progressBar(drawn, total) {
+  const pct = total > 0 ? Math.round(drawn/total*100) : 0;
+  const cls = pct >= 90 ? 'high' : pct >= 60 ? 'mid' : '';
+  return `<div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill ${cls}" style="width:${pct}%"></div></div>
+    <span class="progress-text">${drawn}/${total}</span>
+  </div>`;
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = activities.map((a,i) => {
+    const allEnded = a.sets.every(s => s.status === 'ended');
+    const anyActive = a.sets.some(s => s.status === 'active');
+    const overallStatus = allEnded ? 'ended' : anyActive ? 'active' : 'inactive';
+    const expanded = a._expanded || false;
+
+    const mainRow = `
+    <tr style="cursor:pointer;" onclick="toggleExpand(${a.id})">
+      <td>${i+1}</td>
+      <td><span style="background:#e6f4ff;color:#1677ff;border:1px solid #91caff;padding:2px 8px;border-radius:10px;font-size:12px;">一番赏</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:13px;color:#999;transition:transform 0.2s;">${expanded ? '▼' : '▶'}</span>
+          <div>
+            <div style="font-weight:500;color:#1a1a1a;">${a.name} ${a.copied ? '<span class="copy-tag">📋 复制</span>' : ''}</div>
+            <div style="font-size:12px;color:#999;margin-top:2px;">${a.sets.length} 套</div>
+          </div>
+        </div>
+      </td>
+      <td style="color:#999;font-size:12px;">—</td>
+      <td>
+        <div style="width:48px;height:48px;background:#f0f0f0;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#ccc;">图片</div>
+      </td>
+      <td>${a.price} 积分</td>
+      <td style="color:#666;">0</td>
+      <td>${a.sets.reduce((s,t)=>s+t.total,0)}</td>
+      <td>${a.sets.reduce((s,t)=>s+t.drawn,0)}</td>
+      <td style="color:#666;">${a.start === '-' ? '否' : '是'}</td>
+      <td>${statusBadge(overallStatus)}</td>
+      <td style="font-size:12px;color:#666;">${a.start === '-' ? '—' : a.start}</td>
+      <td style="color:#666;">${a.publisher}</td>
+      <td>
+        <div class="action-links">
+          <a onclick="event.stopPropagation();openModal('edit',${a.id})">编辑</a>
+          <span class="divider">|</span>
+          <a class="danger" onclick="event.stopPropagation();deleteActivity(${a.id})">删除</a>
+        </div>
+      </td>
+    </tr>`;
+
+    const setRows = expanded ? a.sets.map((s,si) => `
+    <tr style="background:#f5f8ff;border-left:3px solid #1677ff;">
+      <td style="color:#bbb;font-size:12px;text-align:center;">${si+1}</td>
+      <td></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;padding-left:20px;">
+          <span style="width:3px;height:40px;background:#91caff;border-radius:2px;flex-shrink:0;"></span>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#1677ff;">${s.name}</div>
+            <div class="tier-tags" style="margin-top:4px;">
+              ${s.tiers.map(t=>`<span class="tier-tag">${t}</span>`).join('')}
+              <span class="tier-tag last">Last赏</span>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="color:#999;font-size:12px;">—</td>
+      <td>
+        <div style="width:36px;height:36px;background:#e8f0ff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#91caff;">图片</div>
+      </td>
+      <td style="font-size:12px;color:#666;">${a.price} 积分</td>
+      <td style="color:#666;">0</td>
+      <td style="font-size:13px;font-weight:500;">${s.total}</td>
+      <td>${progressBar(s.drawn, s.total)}</td>
+      <td style="color:#666;">—</td>
+      <td>${statusBadge(s.status)}</td>
+      <td style="color:#999;font-size:12px;">${a.start === '-' ? '—' : a.start}</td>
+      <td style="color:#666;">${a.publisher}</td>
+      <td>
+        <div class="action-links">
+          <a onclick="event.stopPropagation()">编辑</a>
+          <span class="divider">|</span>
+          <a class="danger" onclick="event.stopPropagation()">删除</a>
+        </div>
+      </td>
+    </tr>`).join('') : '';
+
+    return mainRow + setRows;
+  }).join('');
+}
+
+function deleteActivity(id) {
+  if (!confirm('确认删除此活动？')) return;
+  const idx = activities.findIndex(a => a.id === id);
+  if (idx > -1) activities.splice(idx, 1);
+  renderTable();
+}
+
+function toggleExpand(id) {
+  const a = activities.find(a => a.id === id);
+  if (a) { a._expanded = !a._expanded; renderTable(); }
+}
+
+// ── MODAL ──
+function openModal(mode, id) {
+  document.getElementById('modalTitle').textContent = mode === 'new' ? '新增一番赏活动' : '编辑一番赏活动';
+  document.getElementById('modalOverlay').classList.remove('hidden');
+  if (mode === 'new') {
+    sets = [];
+    setNextId = 0;
+    nextId2 = 0;
+    addSet();
+  }
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.add('hidden');
+}
+function toggleFlashSale2(el) {
+  document.getElementById('flashRange2').style.display = el.value === 'yes' ? 'block' : 'none';
+}
+
+// ── SET LOGIC ──
+const SET_NAMES = ['A套','B套','C套','D套','E套','F套','G套','H套'];
+const TIER_NAMES2 = ['A赏','B赏','C赏','D赏','E赏','F赏','G赏','H赏'];
+let sets = [];      // [{id, name, tiers:[]}]
+let setNextId = 0;
+let tiers2 = [];    // kept for compat but per-set now
+let nextId2 = 0;
+
+function addSet() {
+  const sid = setNextId++;
+  let newTiers = [];
+  if (sets.length > 0) {
+    // 复制第一套的奖级结构（新 id，独立配置）
+    newTiers = sets[0].tiers.map(t => ({
+      id: nextId2++,
+      name: t.name,
+      qty: t.qty
+    }));
+  }
+  const isFirst = sets.length === 0;
+  sets.push({ id: sid, name: SET_NAMES[sets.length] || ('套' + (sets.length+1)), tiers: newTiers, collapsed: false, copied: !isFirst });
+  renderSets();
+}
+
+function removeSet(sid) {
+  if (sets.length <= 1) { alert('至少保留 1 套'); return; }
+  sets = sets.filter(s => s.id !== sid);
+  renderSets();
+}
+
+function toggleSet(sid) {
+  const s = sets.find(s => s.id === sid);
+  if (s) { s.collapsed = !s.collapsed; renderSets(); }
+}
+
+function addTierToSet(sid) {
+  const s = sets.find(s => s.id === sid);
+  if (!s) return;
+  if (s.tiers.length >= 8) { alert('最多 H赏，共 8 个奖级'); return; }
+  s.tiers.push({ id: nextId2++, name: TIER_NAMES2[s.tiers.length], qty: 1 });
+  renderSets();
+}
+
+function removeTierFromSet(sid, tid) {
+  const s = sets.find(s => s.id === sid);
+  if (!s) return;
+  if (s.tiers.length <= 1) { alert('至少保留 1 个奖级'); return; }
+  s.tiers = s.tiers.filter(t => t.id !== tid);
+  renderSets();
+}
+
+function setTotal(sid) {
+  const s = sets.find(s => s.id === sid);
+  if (!s) return 0;
+  return s.tiers.reduce((a,t) => a + (parseInt(t.qty)||0), 0) + 1;
+}
+
+function renderTierHTML(sid, t, idx) {
+  const tid = `s${sid}t${t.id}`;
+  return `
+    <div class="prize-tier" id="tier-${tid}">
+      <div class="tier-header">
+        <div style="display:flex;align-items:center;gap:8px;flex:1;">
+          <input class="tier-name-input" type="text" value="${t.name}" placeholder="奖级名称" required
+            onchange="updateTierName(${sid},${t.id},this.value)">
+          <div class="tier-qty-box">
+            <span>数量</span>
+            <input class="tier-qty-input" type="number" min="1" value="${t.qty||1}" required
+              oninput="updateTierQty(${sid},${t.id},this.value)">
+            <span style="font-size:12px;color:#999;">张</span>
+          </div>
+        </div>
+        <button class="btn-danger-text" onclick="removeTierFromSet(${sid},${t.id})">✕ 删除</button>
+      </div>
+      <div class="tier-body">
+        <div class="tier-fields">
+          <div class="tier-field" style="min-width:130px;">
+            <label><span style="color:#ff4d4f;">*</span>第一层</label>
+            <select onchange="onCat1Change2(this,'${tid}')" required>
+              <option value="virtual">虚拟物品</option>
+              <option value="real">实物</option>
+            </select>
+          </div>
+          <div class="tier-field" style="min-width:130px;" id="cat2-wrap-${tid}">
+            <label><span style="color:#ff4d4f;">*</span>第二层</label>
+            <select onchange="onCat2Change2(this,'${tid}')" required>
+              <option value="bonus">彩金</option>
+              <option value="points">积分</option>
+              <option value="spin">旋转券</option>
+              <option value="freespin">免费旋转券</option>
+              <option value="freebet">免费投注券</option>
+              <option value="tool">道具卡</option>
+            </select>
+          </div>
+          <div id="dynamic-fields-${tid}" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;"></div>
+          <div class="tier-field" style="min-width:130px;">
+            <label><span style="color:#ff4d4f;">*</span>奖品名称</label>
+            <input type="text" placeholder="请输入奖品名称" required>
+          </div>
+        </div>
+        <div class="tier-upload" style="margin-top:10px;">
+          <label><span style="color:#ff4d4f;">*</span>奖品图片</label>
+          <button class="upload-btn-sm">📁 选择文件</button>
+        </div>
+        <div id="freespin-extra-${tid}" style="display:none;margin-top:12px;">
+          <div style="font-size:12px;color:#1677ff;font-weight:600;margin-bottom:8px;">旋转券配置</div>
+          <div id="freespin-list-extra-${tid}" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
+          <button type="button" class="btn-add-tier" style="height:30px;font-size:12px;"
+            onclick="addFreespinRow2('extra-${tid}')">＋ 新增旋转券</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderLastTierHTML(sid) {
+  const lid = `s${sid}last`;
+  return `
+    <div class="prize-tier last-tier">
+      <div class="tier-header">
+        <div style="display:flex;align-items:center;gap:8px;flex:1;">
+          <input class="tier-name-input" type="text" value="Last赏" required>
+          <div class="tier-qty-box" style="background:#fff7e6;border-color:#ffd591;">
+            <span style="color:#fa8c16;">数量</span>
+            <input class="tier-qty-input" type="number" value="1" disabled style="color:#fa8c16;">
+            <span style="color:#fa8c16;font-size:12px;">张</span>
+          </div>
+          <span class="last-note">🏆 压轴奖：最后一抽自动触发，固定 1 张</span>
+        </div>
+      </div>
+      <div class="tier-body">
+        <div class="tier-fields">
+          <div class="tier-field" style="min-width:130px;">
+            <label><span style="color:#ff4d4f;">*</span>第一层</label>
+            <select onchange="onCat1Change2(this,'${lid}')" required>
+              <option value="virtual">虚拟物品</option>
+              <option value="real">实物</option>
+            </select>
+          </div>
+          <div class="tier-field" style="min-width:130px;" id="cat2-wrap-${lid}">
+            <label><span style="color:#ff4d4f;">*</span>第二层</label>
+            <select onchange="onCat2Change2(this,'${lid}')" required>
+              <option value="bonus">彩金</option>
+              <option value="points">积分</option>
+              <option value="spin">旋转券</option>
+              <option value="freespin">免费旋转券</option>
+              <option value="freebet">免费投注券</option>
+              <option value="tool">道具卡</option>
+            </select>
+          </div>
+          <div id="dynamic-fields-${lid}" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;"></div>
+          <div class="tier-field" style="min-width:130px;">
+            <label><span style="color:#ff4d4f;">*</span>奖品名称</label>
+            <input type="text" placeholder="请输入奖品名称" required>
+          </div>
+        </div>
+        <div class="tier-upload" style="margin-top:10px;">
+          <label><span style="color:#ff4d4f;">*</span>奖品图片</label>
+          <button class="upload-btn-sm">📁 选择文件</button>
+        </div>
+        <div id="freespin-extra-${lid}" style="display:none;margin-top:12px;">
+          <div style="font-size:12px;color:#1677ff;font-weight:600;margin-bottom:8px;">旋转券配置</div>
+          <div id="freespin-list-extra-${lid}"></div>
+          <button type="button" class="btn-add-tier" style="height:30px;font-size:12px;"
+            onclick="addFreespinRow2('extra-${lid}')">＋ 新增旋转券</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderSets() {
+  const list = document.getElementById('setList');
+  if (!list) return;
+  list.innerHTML = sets.map((s, si) => `
+    <div class="set-wrap" id="set-${s.id}">
+      <div class="set-header" onclick="toggleSet(${s.id})">
+        <span class="set-badge">${SET_NAMES[si] || s.name}</span>
+        <input class="set-name-input" type="text" value="${s.name}" placeholder="套名称"
+          onclick="event.stopPropagation()"
+          onchange="updateSetName(${s.id},this.value)">
+        ${s.copied ? '<span style="font-size:11px;color:#389e0d;background:#f6ffed;border:1px solid #b7eb8f;padding:1px 8px;border-radius:10px;margin-left:4px;">📋 已复制第一套配置</span>' : ''}
+        <div class="set-total" style="margin-left:12px;">
+          🎫 总券数 <strong id="setTotal-${s.id}">${setTotal(s.id)}</strong> 张
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:12px;">
+          ${sets.length > 1 ? `<button class="btn-danger-text" onclick="event.stopPropagation();removeSet(${s.id})">✕ 删除此套</button>` : ''}
+          <span class="set-toggle">${s.collapsed ? '▶ 展开' : '▼ 收起'}</span>
+        </div>
+      </div>
+      <div class="set-body" style="${s.collapsed ? 'display:none;' : ''}">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <button class="btn-add-tier" onclick="addTierToSet(${s.id})">＋ 新增奖级</button>
+          <span style="font-size:12px;color:#999;">目前 ${s.tiers.length} 个奖级（最多 H赏，共 8 级）</span>
+        </div>
+        ${s.tiers.map((t,idx) => renderTierHTML(s.id, t, idx)).join('')}
+        ${renderLastTierHTML(s.id)}
+      </div>
+    </div>
+  `).join('');
+
+  // init dynamic fields
+  sets.forEach(s => {
+    if (!s.collapsed) {
+      s.tiers.forEach(t => {
+        const tid = `s${s.id}t${t.id}`;
+        renderDynamicFields2('dynamic-fields-' + tid, 'bonus');
+      });
+      renderDynamicFields2('dynamic-fields-s' + s.id + 'last', 'bonus');
+    }
+  });
+
+  document.getElementById('setCountInfo').textContent = `目前 ${sets.length} 套`;
+}
+
+function updateSetName(sid, val) {
+  const s = sets.find(s => s.id === sid);
+  if (s) s.name = val;
+}
+function updateTierName(sid, tid, val) {
+  const s = sets.find(s => s.id === sid);
+  if (!s) return;
+  const t = s.tiers.find(t => t.id === tid);
+  if (t) t.name = val;
+}
+function updateTierQty(sid, tid, val) {
+  const s = sets.find(s => s.id === sid);
+  if (!s) return;
+  const t = s.tiers.find(t => t.id === tid);
+  if (t) { t.qty = parseInt(val)||0; const el = document.getElementById('setTotal-' + sid); if(el) el.textContent = setTotal(sid); }
+}
+
+// legacy stubs (replaced by set logic)
+function addTier2() {}
+function removeTier2() {}
+function updateTotal2() {}
+function updateTierInfo2() {}
+
+// renderTiers2 removed
+
+// ── DYNAMIC FIELDS ──
+const CAT2_VIRTUAL = [
+  { value:'bonus', label:'彩金' },
+  { value:'points', label:'积分' },
+  { value:'spin', label:'旋转券' },
+  { value:'freespin', label:'免费旋转券' },
+  { value:'freebet', label:'免费投注券' },
+  { value:'tool', label:'道具卡' },
+];
+
+function renderDynamicFields2(containerId, cat2Val) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  let html = '';
+  if (cat2Val === 'bonus') {
+    html = `
+      <div class="tier-field"><label><span style="color:#ff4d4f;">*</span>流水倍数</label>
+        <input type="number" placeholder="请输入" min="0" required></div>
+      <div class="tier-field"><label><span style="color:#ff4d4f;">*</span>金额</label>
+        <input type="number" placeholder="请输入" min="0" required></div>`;
+  } else if (cat2Val === 'points') {
+    html = `<div class="tier-field"><label><span style="color:#ff4d4f;">*</span>积分数量</label>
+      <input type="number" placeholder="请输入" min="0" required></div>`;
+  } else if (cat2Val === 'spin') {
+    html = `<div class="tier-field" style="min-width:160px;"><label><span style="color:#ff4d4f;">*</span>选择旋转券游戏</label>
+      <select required><option value="" disabled selected>请选择</option>
+        <option>J Mania Triple Jam</option><option>FC Freespins</option>
+        <option>Slot Game A</option><option>Slot Game B</option></select></div>`;
+  } else if (cat2Val === 'freespin') {
+    const tierId = containerId.replace('dynamic-fields-', '');
+    const extra = document.getElementById('freespin-extra-' + tierId);
+    if (extra) {
+      extra.style.display = 'block';
+      const list = document.getElementById('freespin-list-extra-' + tierId);
+      if (list && list.children.length === 0) addFreespinRow2('extra-' + tierId);
+    }
+  } else if (cat2Val === 'freebet') {
+    html = `<div class="tier-field"><label><span style="color:#ff4d4f;">*</span>金额</label>
+      <input type="number" placeholder="请输入" min="0" required></div>`;
+  } else if (cat2Val === 'tool') {
+    html = `<div class="tier-field" style="min-width:160px;"><label><span style="color:#ff4d4f;">*</span>选择道具卡</label>
+      <select required><option value="" disabled selected>请选择</option>
+        <option>道具卡 A</option><option>道具卡 B</option></select></div>`;
+  } else if (cat2Val === 'real') {
+    html = `<div class="tier-field" style="min-width:200px;"><label><span style="color:#ff4d4f;">*</span>商品简介</label>
+      <input type="text" placeholder="请输入商品简介" required></div>`;
+  }
+  container.innerHTML = html;
+}
+
+function onCat1Change2(sel, tierId) {
+  const cat1Val = sel.value;
+  const cat2Wrap = document.getElementById('cat2-wrap-' + tierId);
+  const extra = document.getElementById('freespin-extra-' + tierId);
+  if (extra) extra.style.display = 'none';
+  if (cat1Val === 'real') {
+    cat2Wrap.style.display = 'none';
+    renderDynamicFields2('dynamic-fields-' + tierId, 'real');
+  } else {
+    cat2Wrap.style.display = '';
+    cat2Wrap.querySelector('select').innerHTML = CAT2_VIRTUAL.map(o=>`<option value="${o.value}">${o.label}</option>`).join('');
+    renderDynamicFields2('dynamic-fields-' + tierId, 'bonus');
+  }
+}
+
+function onCat2Change2(sel, tierId) {
+  const extra = document.getElementById('freespin-extra-' + tierId);
+  if (extra) extra.style.display = 'none';
+  renderDynamicFields2('dynamic-fields-' + tierId, sel.value);
+}
+
+// ── FREESPIN ROWS ──
+let fsRowId2 = 0;
+function addFreespinRow2(containerId) {
+  const list = document.getElementById('freespin-list-extra-' + containerId.replace('extra-', ''));
+  if (!list) {
+    const list2 = document.getElementById('freespin-list-' + containerId);
+    if (!list2) return;
+    _appendFsRow(list2, containerId);
+    return;
+  }
+  _appendFsRow(list, containerId);
+}
+
+function _appendFsRow(list, containerId) {
+  const rowId = 'fs2-' + (fsRowId2++);
+  const div = document.createElement('div');
+  div.className = 'freespin-row';
+  div.id = rowId;
+  div.innerHTML = `
+    <span style="font-size:12px;color:#999;white-space:nowrap;">旋转券 ${list.children.length + 1}</span>
+    <select required>
+      <option value="" disabled selected>选择免费旋转游戏</option>
+      <option>J Mania Triple Jam</option><option>FC Freespins</option>
+      <option>Slot Game A</option><option>Slot Game B</option>
+    </select>
+    <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+      <span style="font-size:12px;color:#666;white-space:nowrap;"><span style="color:#ff4d4f;">*</span> 张数</span>
+      <input type="number" min="1" placeholder="0" required
+        style="width:60px;height:30px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px;text-align:center;">
+      <span style="font-size:12px;color:#999;">张</span>
+    </div>
+    <button type="button" class="btn-danger-text" onclick="removeFsRow2('${rowId}',this)">✕ 删除</button>
+  `;
+  list.appendChild(div);
+  updateFsNumbers2(list);
+}
+
+function removeFsRow2(rowId, btn) {
+  const row = document.getElementById(rowId);
+  const list = row.parentElement;
+  row.remove();
+  updateFsNumbers2(list);
+}
+
+function updateFsNumbers2(list) {
+  Array.from(list.children).forEach((row, i) => {
+    const label = row.querySelector('span');
+    if (label) label.textContent = '旋转券 ' + (i + 1);
+  });
+}
+
+function submitForm2() {
+  alert('✅ 验证通过，提交成功！');
+  closeModal();
+}
+
+// ── INIT ──
+renderTable();
+</script>
+</body>
+</html>
