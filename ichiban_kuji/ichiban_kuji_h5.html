@@ -73,12 +73,38 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .dz-foot{display:flex;justify-content:space-between;margin-top:9px;font-size:11px;color:var(--sumi-2)}
 .dz-foot .mine b{color:var(--sumi);font-size:12px}
 
-/* 速报 */
-.flash{display:flex;align-items:center;gap:8px;padding:8px 16px;background:#FBF3E0;border-bottom:1px solid var(--line);overflow:hidden}
-.flash .tag{flex-shrink:0;background:var(--shu);color:#fff;font-size:10px;letter-spacing:1px;padding:2px 7px;border-radius:3px;font-family:"Songti SC",serif}
-.flash .track{flex:1;overflow:hidden;white-space:nowrap;font-size:11.5px;color:var(--sumi-2)}
-.flash .track b{color:var(--shu-d)} .flash .track .zan{color:var(--kin-d)}
-.flash .track span{margin-right:26px}
+/* 规则按钮（banner右下角） */
+.kv-rules{position:absolute;bottom:10px;right:10px;z-index:3;border:none;border-radius:14px;background:rgba(255,255,255,.88);color:var(--sumi-2);font-size:11px;font-weight:600;padding:5px 11px;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;font-family:inherit;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.kv-rules:active{background:#fff}
+/* 规则弹窗 */
+.rules-ov{position:absolute;inset:0;background:rgba(42,39,35,.75);z-index:60;display:none;align-items:flex-start;justify-content:center;padding:80px 24px 24px}
+.rules-ov.show{display:flex}
+.rules-box{background:var(--paper);border-radius:10px;width:100%;max-height:80%;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--kin)}
+.rules-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 16px 11px;border-bottom:1px solid var(--line)}
+.rules-htitle{font-size:14px;letter-spacing:4px}
+.rules-bd{overflow-y:auto;padding:12px 16px 16px}
+.rules-row{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.rules-row:last-child{border:none;padding-bottom:0}
+.rules-row:first-child{padding-top:0}
+.rules-dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;margin-top:2px;background:rgba(198,54,47,.08);border:1px solid rgba(198,54,47,.22);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--shu);font-weight:700}
+.rules-txt{font-size:11.5px;color:var(--sumi-2);line-height:1.7}
+.rules-txt b{color:var(--sumi)}
+/* 新撕券区 */
+.tkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.tkt-card{border:none;cursor:pointer;border-radius:7px;background:var(--shu);color:#fff;box-shadow:0 2px 0 var(--shu-d);padding:9px 12px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;overflow:hidden;font-family:inherit}
+.tkt-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(255,255,255,.25)}
+.tkt-card:active{transform:translateY(1px);box-shadow:0 1px 0 var(--shu-d)}
+.tkt-card .tc-n{font-family:"Songti SC",serif;font-size:16px;font-weight:700;line-height:1}
+.tkt-card .tc-cost{font-size:10px;opacity:.8}
+.tkt-card.all{background:linear-gradient(135deg,#C9A24B,#9c7a2c)}
+.tkt-card.on{box-shadow:0 0 0 2.5px rgba(255,255,255,.9),0 0 0 4.5px var(--shu-d),0 2px 0 var(--shu-d)}
+.tkt-card.all.on{box-shadow:0 0 0 2.5px rgba(255,255,255,.9),0 0 0 4.5px var(--kin-d),0 2px 0 var(--kin-d)}
+.tkt-card[disabled]{background:#b3a69a;box-shadow:none;cursor:not-allowed}
+.tear-main{width:100%;border:none;cursor:pointer;background:var(--sumi);color:#fff;border-radius:7px;padding:10px;box-shadow:0 2px 0 #1a1714;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit}
+.tear-main:active{transform:translateY(1px);box-shadow:0 1px 0 #1a1714}
+.tear-main .tm-lbl{font-family:"Songti SC",serif;font-size:14px;letter-spacing:2px}
+.tear-main small{font-size:11px;opacity:.8}
+.tear-main[disabled]{background:#b3a69a;box-shadow:none;cursor:not-allowed}
 
 /* 奖品一览 */
 .pool{padding:14px 16px 24px}
@@ -157,36 +183,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .sold-chip{font-family:"Songti SC",serif;color:var(--shu);border:1.5px solid var(--shu);border-radius:4px;font-size:11px;padding:1px 7px;transform:rotate(-5deg)}
 
 /* 弹窗（置中）*/
-.overlay{position:absolute;inset:0;background:rgba(42,39,35,.78);display:none;align-items:center;justify-content:center;padding:24px;z-index:50}
+.overlay{position:absolute;inset:0;background:rgba(42,39,35,.78);display:none;align-items:flex-start;justify-content:center;padding:430px 24px 8px;z-index:50}
 .overlay.show{display:flex}
-.result{background:var(--paper);border-radius:10px;width:100%;max-height:84%;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--kin)}
-.result-head{text-align:center;padding:16px 16px 10px;font-size:18px;letter-spacing:3px}
-.result-body{overflow-y:auto;padding:4px 16px 8px}
+.result{background:var(--paper);border-radius:10px;width:100%;max-height:440px;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--kin)}
+.result-head{text-align:center;padding:11px 16px 7px;font-size:15px;letter-spacing:3px}
+.result-body{overflow-y:auto;padding:4px 10px 8px}
 .last-hit{background:linear-gradient(135deg,#D9B45A,#9c7a2c);color:#fff;text-align:center;padding:9px;font-size:13px;letter-spacing:3px;margin-bottom:10px;border-radius:5px}
-.rk{position:relative;border:1px solid var(--line-2);border-radius:7px;margin-bottom:10px;overflow:hidden;min-height:72px;background:var(--fuda)}
-.rk .reveal{display:flex;align-items:center;gap:12px;padding:13px 12px}
-.rk .rseal{flex-shrink:0;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:50px;height:50px;border-radius:8px;background:var(--shu);color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.45);opacity:0;transform:scale(.6)}
-.rk .rseal .a{font-family:"Songti SC",serif;font-size:22px;font-weight:700;line-height:1}
-.rk .rseal .s{font-size:9px;opacity:.9;margin-top:2px;letter-spacing:.5px}
+.rk-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.rk{position:relative;border:1px solid var(--line-2);border-radius:7px;margin-bottom:0;overflow:hidden;min-height:54px;background:var(--fuda)}
+.rk .reveal{display:flex;align-items:center;gap:8px;padding:8px 9px}
+.rk .rseal{flex-shrink:0;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:38px;height:38px;border-radius:6px;background:var(--shu);color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.45)}
+.rk .rseal .a{font-family:"Songti SC",serif;font-size:16px;font-weight:700;line-height:1}
+.rk .rseal .s{font-size:7px;opacity:.9;margin-top:1px;letter-spacing:.5px}
 .rk .rseal.gold{background:linear-gradient(135deg,#D9B45A,#9c7a2c);box-shadow:inset 0 0 0 2px rgba(255,255,255,.55),0 0 0 3px rgba(201,162,75,.3)}
-.rk.torn .rseal{animation:stamp .55s cubic-bezier(.2,1.4,.4,1) .5s forwards}
-@keyframes stamp{0%{transform:scale(1.7) rotate(-10deg);opacity:0}55%{transform:scale(.92) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
 .rk .reveal .r-txt{flex:1;min-width:0}
-.rk .reveal .nm{font-size:15px;font-weight:700;line-height:1.25}
-.rk .reveal .ty{font-size:11px;color:var(--sumi-2);margin-top:3px}
+.rk .reveal .nm{font-size:12px;font-weight:700;line-height:1.25}
+.rk .reveal .ty{font-size:10px;color:var(--sumi-2);margin-top:2px}
 .rk .reveal .r-pic{background:#fff;border:1px solid var(--line-2);border-radius:8px;padding:4px;box-shadow:0 1px 4px rgba(0,0,0,.07);flex-shrink:0}
 .rk .reveal .r-pic .ph,.rk .reveal .r-pic .ic{width:46px;height:46px;box-shadow:none}
 .rk .reveal .r-pic .ic span{font-size:24px}
-.rk .cover{position:absolute;inset:0;background:var(--sumi);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-family:"Songti SC",serif;font-size:13px;letter-spacing:3px;z-index:2;border-left:3px dashed rgba(255,255,255,.55);clip-path:inset(0 0 0 0);transition:clip-path 1.1s ease}
+.rk .cover{position:absolute;inset:0;background:var(--sumi);color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;font-family:"Songti SC",serif;font-size:11px;letter-spacing:2px;z-index:2;border-left:3px dashed rgba(255,255,255,.55);clip-path:inset(0 0 0 0);transition:clip-path 1.1s ease}
 .rk.torn .cover{clip-path:inset(0 0 0 100%)}
-.rk .cover .arrow{font-size:15px;opacity:.85}
+.rk .cover .arrow{font-size:13px;opacity:.85}
 .sum-row{display:flex;align-items:center;gap:10px;background:var(--fuda);border:1px solid var(--line-2);border-radius:7px;padding:9px 12px;margin-bottom:8px}
 .sum-row .ph,.sum-row .ic{width:40px;height:40px;flex-shrink:0} .sum-row .ic span{font-size:20px}
 .sum-row .nm{flex:1;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
 .sum-row .cnt{font-family:"Songti SC",serif;font-size:18px;font-weight:700;color:var(--shu)}
 .result-foot{padding:12px 16px 16px;border-top:1px solid var(--line)}
 .btn-ok{width:100%;background:var(--sumi);color:#fff;border:none;border-radius:6px;padding:11px;font-size:14px;letter-spacing:3px;cursor:pointer;font-family:"Songti SC",serif}
-@media (prefers-reduced-motion:reduce){.rk .cover{transition:none}.rk .rseal{opacity:1;transform:none;animation:none}}
+@media (prefers-reduced-motion:reduce){.rk .cover{transition:none}}
 </style>
 </head>
 <body>
@@ -217,11 +242,6 @@ const TIERS=[
   {sho:'H',name:'彩金 1,000',type:'彩金',art:'bonus',total:27,left:12},
 ];
 const LAST={sho:'楽',name:'招财猫 黄金开运摆件',type:'实物',art:'physical',total:1,left:1};
-const FLASH=[
-  {who:'vi***01',sho:'A',nm:'招财猫 大号公仔',zan:'剩1'},
-  {who:'ok***ad',sho:'B',nm:'彩金 5,000',zan:'剩2'},
-  {who:'je***88',sho:'A',nm:'招财猫 大号公仔',zan:'剩1'},
-];
 const COST=95;
 
 function artImg(key){const a=ART[key];return a.kind==='photo'
@@ -239,7 +259,8 @@ function deviceHTML(){return `
   <div class="banner">
     <div class="kv"><div class="kv-ph">主视觉 KV 图<br><small>建议 1080×600</small></div>
       <div class="scrim"></div><div class="nobori serif">一番赏</div>
-      <div class="kv-text"><div class="kicker">ICHIBAN KUJI · 第 23 期</div><div class="kv-title serif">招财猫 开运赏</div></div></div>
+      <div class="kv-text"><div class="kv-title serif">招财猫 开运赏</div></div>
+      <button class="kv-rules" onclick="var d=this.closest('.device');d.querySelector('.rules-ov').classList.add('show');d.scrollIntoView({behavior:'smooth',block:'start'})">📋 Rules</button></div>
     <div class="noren-edge"></div>
     <div class="b-stock"><div class="r1"><span>剩 <b class="js-zan">49</b> / 100 张</span></div>
       <div class="stock-bar"><div class="stock-fill js-fill" style="width:49%"></div></div></div>
@@ -252,8 +273,18 @@ function deviceHTML(){return `
       <div class="main"><span class="t1">▼ 沿虚线撕开 ▼</span><span class="t2">撕券抽赏 <small class="js-cost">95 积分</small></span></div></button>
     <div class="dz-foot"><span>每张 95 积分 · 必中一赏</span><span class="mine">积分 <b class="js-pts2">316,149</b></span></div>
   </div>
-  <div class="flash"><span class="tag serif">开奖速报</span><div class="track"><span class="js-flash"></span></div></div>
   <div class="pool"><div class="noren"><div class="band serif">奖品一览</div></div><div class="js-pool"></div></div>
+  <div class="rules-ov"><div class="rules-box">
+    <div class="rules-hd"><div class="rules-htitle serif">活动规则</div>
+      <div class="icon-btn" onclick="this.closest('.rules-ov').classList.remove('show')">✕</div></div>
+    <div class="rules-bd">
+      <div class="rules-row"><div class="rules-dot">1</div><div class="rules-txt">每张抽券售价 <b>95 积分</b>，必中一赏，抽奖结果当场揭晓。</div></div>
+      <div class="rules-row"><div class="rules-dot">2</div><div class="rules-txt"><b>Last赏</b>（压轴大奖）将在最后一张券被抽出时自动触发。</div></div>
+      <div class="rules-row"><div class="rules-dot">3</div><div class="rules-txt">各赏位数量有限，售罄后不再补充，请尽早参与。</div></div>
+      <div class="rules-row"><div class="rules-dot">4</div><div class="rules-txt">奖品以实际派发为准，实物奖品将另行通知配送事宜。</div></div>
+      <div class="rules-row"><div class="rules-dot">5</div><div class="rules-txt">积分余额不足时无法购券，请确认余额后再操作。</div></div>
+    </div>
+  </div></div>
   <div class="overlay js-overlay"><div class="result">
     <div class="result-head serif js-rhead">开奖结果</div>
     <div class="result-body js-rbody"></div>
@@ -315,19 +346,23 @@ function createApp(rootId, mode){
     if(results.length>12){
       const agg={};
       results.forEach(r=>{const k=r.isLast?'L':r.tier.sho;(agg[k]=agg[k]||{tier:r.tier,isLast:r.isLast,n:0}).n++;});
-      Object.values(agg).forEach(g=>{html+=`<div class="sum-row">${artImg(g.tier.art)}
+      const aggList=Object.values(agg).sort((a,b)=>a.isLast?-1:b.isLast?1:0);
+      aggList.forEach(g=>{html+=`<div class="sum-row">
         <div class="nm">${badge(g.tier,g.isLast)} ${g.isLast?'Last赏 · ':''}${g.tier.name}</div><div class="cnt">×${g.n}</div></div>`;});
       $('.js-rbody').innerHTML=html;
     }else{
+      html+='<div class="rk-grid">';
       results.forEach((r,i)=>{const t=r.tier;
         html+=`<div class="rk" data-i="${i}"><div class="reveal">${revealBadge(t,r.isLast)}
-          <div class="r-txt"><div class="nm">${r.isLast?'Last赏 · ':''}${t.name}</div><div class="ty">${t.type}</div></div>
-          <div class="r-pic">${artImg(t.art)}</div></div>
-          <div class="cover serif">一番赏 · No.${String(Math.floor(Math.random()*900)+100)} <span class="arrow">撕开 ▶</span></div></div>`;});
+          <div class="r-txt"><div class="nm">${r.isLast?'Last赏·':''}${t.name}</div><div class="ty">${t.type}</div></div>
+          </div>
+          <div class="cover serif">一番赏 <span class="arrow">撕▶</span></div></div>`;});
+      html+='</div>';
       $('.js-rbody').innerHTML=html;
       results.forEach((r,i)=>setTimeout(()=>{const el=$(`.rk[data-i="${i}"]`);if(el)el.classList.add('torn');},300+i*280));
     }
     $('.js-overlay').classList.add('show');
+    root.scrollIntoView({behavior:'smooth',block:'start'});
   }
   function draw(){
     if(totalLeft()<=0)return;
@@ -345,7 +380,6 @@ function createApp(rootId, mode){
     points-=cost; renderPool(); showResult(results,lastTriggered);
   }
 
-  $('.js-flash').innerHTML=FLASH.map(f=>`<span><b>${f.who}</b> 抽中 ${f.sho}赏 · ${f.nm}　<span class="zan">${f.zan}</span></span>`).join('');
   $('.js-seg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     $('.js-seg').querySelectorAll('button').forEach(x=>x.classList.remove('on'));
     b.classList.add('on'); drawN=b.dataset.n==='all'?'all':parseInt(b.dataset.n); updateStock();});
