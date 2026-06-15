@@ -355,8 +355,6 @@ input[type="number"] { -moz-appearance: textfield; }
     <select style="width:160px;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;outline:none;background:#fff;">
       <option value="">选择币别</option>
       <option>菲律宾比索</option>
-      <option>台币</option>
-      <option>人民币</option>
     </select>
   </div>
 
@@ -451,7 +449,7 @@ input[type="number"] { -moz-appearance: textfield; }
         <div class="form-label"><span class="req">*</span>币种：</div>
         <div class="form-control">
           <select style="max-width:180px;">
-            <option>菲律宾比索</option><option>台币</option><option>人民币</option>
+            <option>菲律宾比索</option>
           </select>
         </div>
       </div>
@@ -518,8 +516,8 @@ input[type="number"] { -moz-appearance: textfield; }
         <div class="form-label">审核模式：</div>
         <div class="form-control">
           <div class="radio-group">
-            <label><input type="radio" name="audit2"> 自动审核</label>
-            <label><input type="radio" name="audit2" checked> 手动审核</label>
+            <label style="color:#bbb;cursor:not-allowed;"><input type="radio" name="audit2" checked disabled> 自动审核</label>
+            <label style="color:#bbb;cursor:not-allowed;"><input type="radio" name="audit2" disabled> 手动审核</label>
           </div>
         </div>
       </div>

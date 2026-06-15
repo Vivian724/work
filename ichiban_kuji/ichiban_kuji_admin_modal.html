@@ -287,6 +287,60 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
 .limit-row {
   display: flex; align-items: center; gap: 8px; margin-top: 8px;
 }
+
+/* ── BANNER UPLOAD ── */
+.banner-panels {
+  display: flex; gap: 16px; flex-wrap: wrap;
+}
+.banner-panel {
+  flex: 1; min-width: 280px;
+  border: 1px solid #e8e8e8; border-radius: 6px; overflow: hidden;
+}
+.banner-panel-header {
+  background: #fafafa; padding: 8px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px; color: #555; font-weight: 500;
+}
+.banner-panel-header .size-hint { font-size: 12px; color: #bbb; }
+.banner-panel-body {
+  padding: 12px; min-height: 180px; position: relative;
+  display: flex; flex-direction: column;
+}
+.banner-drop-zone {
+  flex: 1; border: 1.5px dashed #d9d9d9; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 150px; cursor: pointer; position: relative; overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+}
+.banner-drop-zone:hover { border-color: #1677ff; background: #f0f7ff; }
+.banner-drop-zone img.banner-preview {
+  width: 100%; height: 100%; object-fit: cover;
+  position: absolute; inset: 0;
+}
+.banner-drop-zone .banner-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  color: #bbb; font-size: 12px; pointer-events: none;
+}
+.banner-drop-zone .banner-placeholder .plus-icon {
+  font-size: 24px; color: #d9d9d9; line-height: 1;
+}
+.banner-panel-footer {
+  display: flex; justify-content: flex-end; padding-top: 8px;
+}
+.btn-banner-delete {
+  background: none; border: none; color: #1677ff; font-size: 13px;
+  cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0 2px;
+}
+.btn-banner-delete:hover { color: #ff4d4f; }
+.banner-field-row {
+  display: flex; align-items: flex-start; margin-bottom: 14px; gap: 0;
+}
+.banner-field-label {
+  width: 130px; flex-shrink: 0; padding-top: 4px;
+  text-align: right; padding-right: 12px;
+  color: #333; font-size: 13px;
+}
 </style>
 </head>
 <body>
@@ -306,8 +360,6 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
         <div class="form-control">
           <select style="max-width:180px;">
             <option>菲律宾比索</option>
-            <option>台币</option>
-            <option>人民币</option>
           </select>
         </div>
       </div>
@@ -444,11 +496,126 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
         <div class="form-label">审核模式：</div>
         <div class="form-control">
           <div class="radio-group">
-            <label><input type="radio" name="auditMode"> 自动审核</label>
-            <label><input type="radio" name="auditMode" checked> 手动审核</label>
+            <label style="color:#bbb;cursor:not-allowed;"><input type="radio" name="auditMode" checked disabled> 自动审核</label>
+            <label style="color:#bbb;cursor:not-allowed;"><input type="radio" name="auditMode" disabled> 手动审核</label>
           </div>
         </div>
       </div>
+
+      <!-- 顶部图配置 -->
+      <div style="margin-top:16px;">
+        <div class="banner-field-row">
+          <div class="banner-field-label"><span class="req">*</span>顶部图：</div>
+          <div style="flex:1;">
+            <div class="banner-panels">
+              <!-- PC 端 -->
+              <div class="banner-panel">
+                <div class="banner-panel-header">
+                  <span>PC 端</span>
+                  <span class="size-hint">建议尺寸 1400×800px</span>
+                </div>
+                <div class="banner-panel-body">
+                  <div class="banner-drop-zone" onclick="document.getElementById('bannerPcInput').click()">
+                    <img class="banner-preview" id="bannerPcPreview" src="" style="display:none;">
+                    <div class="banner-placeholder" id="bannerPcPlaceholder">
+                      <span class="plus-icon">＋</span>
+                      <span>点击上传图片</span>
+                    </div>
+                  </div>
+                  <input type="file" id="bannerPcInput" accept="image/*" style="display:none;"
+                    onchange="previewBanner(this,'bannerPcPreview','bannerPcPlaceholder')">
+                  <div class="banner-panel-footer">
+                    <button type="button" class="btn-banner-delete" onclick="clearBanner('bannerPcInput','bannerPcPreview','bannerPcPlaceholder')">
+                      <svg viewBox="64 64 896 896" width="13" height="13" fill="currentColor" style="vertical-align:-1px;margin-right:4px;"><path d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"/></svg>删除
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- H5 端 -->
+              <div class="banner-panel">
+                <div class="banner-panel-header">
+                  <span>H5 端</span>
+                  <span class="size-hint">建议尺寸 390×320px</span>
+                </div>
+                <div class="banner-panel-body">
+                  <div class="banner-drop-zone" onclick="document.getElementById('bannerH5Input').click()">
+                    <img class="banner-preview" id="bannerH5Preview" src="" style="display:none;">
+                    <div class="banner-placeholder" id="bannerH5Placeholder">
+                      <span class="plus-icon">＋</span>
+                      <span>点击上传图片</span>
+                    </div>
+                  </div>
+                  <input type="file" id="bannerH5Input" accept="image/*" style="display:none;"
+                    onchange="previewBanner(this,'bannerH5Preview','bannerH5Placeholder')">
+                  <div class="banner-panel-footer">
+                    <button type="button" class="btn-banner-delete" onclick="clearBanner('bannerH5Input','bannerH5Preview','bannerH5Placeholder')">
+                      <svg viewBox="64 64 896 896" width="13" height="13" fill="currentColor" style="vertical-align:-1px;margin-right:4px;"><path d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"/></svg>删除
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /顶部图配置 -->
+
+      <!-- 规则弹窗图配置 -->
+      <div style="margin-top:16px;">
+        <div class="banner-field-row">
+          <div class="banner-field-label"><span class="req">*</span>规则弹窗图：</div>
+          <div style="flex:1;">
+            <div class="banner-panels">
+              <!-- PC 端 -->
+              <div class="banner-panel">
+                <div class="banner-panel-header">
+                  <span>PC 端</span>
+                  <span class="size-hint">建议尺寸 356×422px</span>
+                </div>
+                <div class="banner-panel-body">
+                  <div class="banner-drop-zone" onclick="document.getElementById('rulePcInput').click()">
+                    <img class="banner-preview" id="rulePcPreview" src="" style="display:none;">
+                    <div class="banner-placeholder" id="rulePcPlaceholder">
+                      <span class="plus-icon">＋</span>
+                      <span>点击上传图片</span>
+                    </div>
+                  </div>
+                  <input type="file" id="rulePcInput" accept="image/*" style="display:none;"
+                    onchange="previewBanner(this,'rulePcPreview','rulePcPlaceholder')">
+                  <div class="banner-panel-footer">
+                    <button type="button" class="btn-banner-delete" onclick="clearBanner('rulePcInput','rulePcPreview','rulePcPlaceholder')">
+                      <svg viewBox="64 64 896 896" width="13" height="13" fill="currentColor" style="vertical-align:-1px;margin-right:4px;"><path d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"/></svg>删除
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- H5 端 -->
+              <div class="banner-panel">
+                <div class="banner-panel-header">
+                  <span>H5 端</span>
+                  <span class="size-hint">建议尺寸 356×422px</span>
+                </div>
+                <div class="banner-panel-body">
+                  <div class="banner-drop-zone" onclick="document.getElementById('ruleH5Input').click()">
+                    <img class="banner-preview" id="ruleH5Preview" src="" style="display:none;">
+                    <div class="banner-placeholder" id="ruleH5Placeholder">
+                      <span class="plus-icon">＋</span>
+                      <span>点击上传图片</span>
+                    </div>
+                  </div>
+                  <input type="file" id="ruleH5Input" accept="image/*" style="display:none;"
+                    onchange="previewBanner(this,'ruleH5Preview','ruleH5Placeholder')">
+                  <div class="banner-panel-footer">
+                    <button type="button" class="btn-banner-delete" onclick="clearBanner('ruleH5Input','ruleH5Preview','ruleH5Placeholder')">
+                      <svg viewBox="64 64 896 896" width="13" height="13" fill="currentColor" style="vertical-align:-1px;margin-right:4px;"><path d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"/></svg>删除
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /规则弹窗图配置 -->
 
       <!-- ═══════════════════════════════════════
            一番赏奖级配置區塊
@@ -458,20 +625,20 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
 
         <!-- 总券数 banner -->
         <div class="total-banner">
-          🎫 总券数：<strong id="totalCount">0</strong> 張
+          🎫 总券数：<strong id="totalCount">0</strong> 张
           <span style="color:#666;font-size:12px;margin-left:4px;">（各奖级数量自动加总）</span>
         </div>
 
         <!-- 新增奖级按鈕 -->
         <div class="add-tier-wrap">
           <button class="btn-add-tier" onclick="addTier()">＋ 新增奖级</button>
-          <span class="tier-count-info" id="tierCountInfo">目前 1 个奖级（最多 G賞，共 7 級）</span>
+          <span class="tier-count-info" id="tierCountInfo">目前 1 个奖级（最多 G赏，共 7 级）</span>
         </div>
 
         <!-- 獎級列表 -->
         <div id="tierList"></div>
 
-        <!-- Last 賞（固定，不可刪除）-->
+        <!-- Last 赏（固定，不可删除）-->
         <div class="prize-tier last-tier" id="lastTier">
           <div class="tier-header">
             <div style="display:flex;align-items:center;gap:8px;flex:1;">
@@ -479,7 +646,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
               <div style="display:flex;align-items:center;gap:5px;background:#fff7e6;border:1px solid #ffd591;border-radius:4px;padding:0 10px;height:28px;">
                 <span style="font-size:12px;color:#fa8c16;white-space:nowrap;">数量</span>
                 <input type="number" value="1" disabled style="width:40px;border:none;background:transparent;text-align:center;font-size:13px;font-weight:600;color:#fa8c16;outline:none;">
-                <span style="font-size:12px;color:#fa8c16;">張</span>
+                <span style="font-size:12px;color:#fa8c16;">张</span>
               </div>
               <span class="last-note">🏆 压轴奖：最后一抽自动触发，固定 1 张</span>
             </div>
@@ -529,13 +696,13 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
 </div>
 
 <script>
-const TIER_NAMES = ['A賞','B賞','C賞','D賞','E賞','F賞','G賞'];
+const TIER_NAMES = ['A赏','B赏','C赏','D赏','E赏','F赏','G赏'];
 let tiers = []; // [{id, name, qty}]
 let nextId = 0;
 
 function addTier() {
   if (tiers.length >= 8) {
-    alert('最多可新增至 G賞，共 7 个奖级');
+    alert('最多可新增至 G赏，共 7 个奖级');
     return;
   }
   const id = nextId++;
@@ -605,7 +772,7 @@ function renderDynamicFields(containerId, cat2Val) {
   } else if (cat2Val === 'coupon') {
     html = `
       <div class="tier-field" style="flex:2">
-        <label><span class="req">*</span>選擇优惠券</label>
+        <label><span class="req">*</span>选择优惠券</label>
         <select>
           <option value="">请选择</option>
           <option>优惠券 A</option>
@@ -718,7 +885,7 @@ function renderTiers() {
             <input class="tier-qty-input" type="number" min="1" value="${t.qty||1}"
               oninput="tiers[${idx}].qty = parseInt(this.value)||0; updateTotal();"
               placeholder="0" style="width:56px;border:none;background:transparent;text-align:center;font-size:13px;font-weight:600;color:#333;outline:none;" required>
-            <span style="font-size:12px;color:#999;">張</span>
+            <span style="font-size:12px;color:#999;">张</span>
           </div>
         </div>
         ${tiers.length > 1 ? `<button class="btn-danger-text" onclick="removeTier(${t.id})">✕ 删除</button>` : ''}
@@ -810,6 +977,26 @@ function previewFsImage(input, rowId) {
 function toggleFlashSale(el) {
   document.getElementById('flashSaleRange').style.display =
     el.value === 'yes' ? 'block' : 'none';
+}
+
+function previewBanner(input, previewId, placeholderId) {
+  const file = input.files[0];
+  if (!file) return;
+  const prev = document.getElementById(previewId);
+  const ph = document.getElementById(placeholderId);
+  prev.src = URL.createObjectURL(file);
+  prev.style.display = 'block';
+  ph.style.display = 'none';
+}
+
+function clearBanner(inputId, previewId, placeholderId) {
+  const input = document.getElementById(inputId);
+  const prev = document.getElementById(previewId);
+  const ph = document.getElementById(placeholderId);
+  input.value = '';
+  prev.src = '';
+  prev.style.display = 'none';
+  ph.style.display = 'flex';
 }
 
 // Init with A賞
