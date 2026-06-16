@@ -376,16 +376,22 @@ const SECTIONS = {
   从页面底部滑出，不阻断主画面操作。两种触发时机独立，可同时存在。
   Banner 左侧 icon 对应本次奖励图标，动态读取后台该天奖励配置。
 
+  奖励显示规则（两种奖励类别）：
+  - 奖励类别 A｜免费投注、免费旋转、优惠券、道具卡 → 显示「{獎勵類別} ×{数量}」
+  - 奖励类别 B｜积分、彩金 → 显示「{金额} {獎勵類別}」
+
 - 触发 A：玩家完成当日任务条件后触发，不限当前所在页面
   > 标题：Weekly Card Task Completed!
-  > 说明：Today's task has been completed. {奖励名称} ×{数量} is ready to claim.
-  {奖励名称}、{数量} 读取后台该天额外奖励配置
+  > 说明（奖励类别 A）：Today's task has been completed. {獎勵類別} ×{数量} is ready to claim.
+  > 说明（奖励类别 B）：Today's task has been completed. {金额} {獎勵類別} is ready to claim.
+  奖励显示依上方奖励类别规则，读取后台该天额外奖励配置
 
 - 触发 B：后台设定「手动领取」，玩家当日登录且尚未领取日常签到时触发
   页面触发逻辑同 3-1：仅在「首页」弹出；「我的」／「积分商城」／「排行榜」不弹出，待进入首页时触发
   > 标题：Weekly Card Daily Reward Available!
-  > 说明：Today's reward: {金额／数量}. Please go to the rewards page to claim it.
-  {金额／数量} 读取后台该天日常签到奖励配置
+  > 说明（奖励类别 A）：Today's reward: {獎勵類別} ×{数量}. Please go to the rewards page to claim it.
+  > 说明（奖励类别 B）：Today's reward: {金额} {獎勵類別}. Please go to the rewards page to claim it.
+  奖励显示依上方奖励类别规则，读取后台该天日常签到奖励配置
 
 - 点击 X → Banner 消失，当日不再显示`,
 
@@ -431,6 +437,10 @@ const SECTIONS = {
   玩家点击「Claim」按钮后从底部弹出，带背景遮罩，显示本次领取的奖励内容。
   日常签到与额外奖励共用同一个 Popup 组件，内容动态带入。
 - 关闭：点击 X 或背景遮罩
+
+  奖励显示规则（两种奖励类别）：
+  - 奖励类别 A｜免费投注、免费旋转、优惠券、道具卡 → {奖励 icon} ×{数量}（如 ×2）
+  - 奖励类别 B｜彩金、积分 → {奖励 icon} + {金额}（如 500.00）
 
 ### 情境 A｜日常签到弹窗
   > 标题：Day X Daily Reward
