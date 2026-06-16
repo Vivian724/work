@@ -605,7 +605,7 @@ function step4() {
   const total = Object.values(confSel).reduce((s,set)=>s+set.size,0);
   const gameLabel = total === allTotal ? '已选择 全部 游戏' : `已选择 <strong>${total}</strong> 个游戏`;
   return `
-  <div class="tip-r">⚠ <strong>注意：</strong>修改奖励配置后将<strong>立即生效</strong>，已购买但尚未领取的奖励将按最新规则执行，请谨慎操作。</div>
+  <div class="tip-r">⚠ <strong>注意：</strong>修改奖励配置后将<strong>立即生效</strong>，已购买但尚未结算的奖励将按最新规则执行，请谨慎操作。</div>
   <div id="planList">${plans.map((p,i)=>renderPlanCard(p,i)).join('')}</div>
   <div class="sb" style="margin-top:24px;border-top:1px solid #f0f0f0;padding-top:20px;"><div class="sec-t">通用设置</div>
     <div class="fr"><div class="fl">存款强制弹窗：</div><div class="fc">
