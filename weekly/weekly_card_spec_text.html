@@ -95,7 +95,8 @@ body {
 .t-li   { color: #CDD6F4; display: block; }
 .t-tbl  { color: #CDD6F4; display: block; }
 .t-sep  { color: #313244; display: block; }
-.t-ctx  { color: #7F849C; display: block; font-style: italic; }
+.t-ctx    { color: #7F849C; display: block; font-style: italic; }
+.t-update { color: #F9E2AF; display: block; font-weight: 600; }
 
 /* Popup phone frames — shorter, scroll into popup area */
 .phone-frame.popup {
@@ -376,9 +377,10 @@ const SECTIONS = {
   从页面底部滑出，不阻断主画面操作。两种触发时机独立，可同时存在。
   Banner 左侧 icon 对应本次奖励图标，动态读取后台该天奖励配置。
 
-  奖励显示规则（两种奖励类别）：
-  - 奖励类别 A｜免费投注、免费旋转、优惠券、道具卡 → 显示「{獎勵類別} ×{数量}」
-  - 奖励类别 B｜积分、彩金 → 显示「{金额} {獎勵類別}」
+[6/16] ✎ 6/16 調整
+[6/16] 奖励显示规则（两种奖励类别）：
+[6/16]   - 奖励类别 A｜免费投注、免费旋转、优惠券、道具卡 → 显示「{獎勵類別} ×{数量}」
+[6/16]   - 奖励类别 B｜积分、彩金 → 显示「{金额} {獎勵類別}」
 
 - 触发 A：玩家完成当日任务条件后触发，不限当前所在页面
   > 标题：Weekly Card Task Completed!
@@ -438,9 +440,10 @@ const SECTIONS = {
   日常签到与额外奖励共用同一个 Popup 组件，内容动态带入。
 - 关闭：点击 X 或背景遮罩
 
-  奖励显示规则（两种奖励类别）：
-  - 奖励类别 A｜免费投注、免费旋转、优惠券、道具卡 → {奖励 icon} ×{数量}（如 ×2）
-  - 奖励类别 B｜彩金、积分 → {奖励 icon} + {金额}（如 500.00）
+[6/16] ✎ 6/16 調整
+[6/16] 奖励显示规则（两种奖励类别）：
+[6/16]   - 奖励类别 A｜免费投注、免费旋转、优惠券、道具卡 → {奖励 icon} ×{数量}（如 ×2）
+[6/16]   - 奖励类别 B｜彩金、积分 → {奖励 icon} + {金额}（如 500.00）
 
 ### 情境 A｜日常签到弹窗
   > 标题：Day X Daily Reward
@@ -484,6 +487,7 @@ function render(text) {
       .replace(/&/g,'&amp;')
       .replace(/</g,'&lt;')
       .replace(/>/g,'&gt;');
+    if (line.startsWith('[6/16] '))   return `<span class="t-update">${esc.slice(7)}</span>`;
     if (/^## /.test(line))         return `<span class="t-h2">${esc}</span>`;
     if (/^### /.test(line))        return `<span class="t-h3">${esc}</span>`;
     if (/^&gt; /.test(esc))        return `<span class="t-note">${esc}</span>`;
