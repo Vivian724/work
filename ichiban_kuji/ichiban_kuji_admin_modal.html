@@ -383,7 +383,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
             <label><input type="checkbox"> 免费投注</label>
             <label><input type="checkbox"> 盲盒</label>
             <label><input type="checkbox"> 道具卡</label>
-            <label><input type="checkbox" checked class="ichiban-cb"> <span class="ichiban-label">一番赏</span></label>
+            <label><input type="checkbox" checked class="ichiban-cb"> <span class="ichiban-label">Ichiban Kuji</span></label>
           </div>
         </div>
       </div>
@@ -412,7 +412,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
             <label><input type="radio" name="productType" value="blind"> 盲盒</label>
             <label><input type="radio" name="productType" value="freebet"> 免费投注</label>
             <label><input type="radio" name="productType" value="tool"> 道具卡</label>
-            <label><input type="radio" name="productType" value="ichiban" checked> <span class="ichiban-label">一番赏</span></label>
+            <label><input type="radio" name="productType" value="ichiban" checked> <span class="ichiban-label">Ichiban Kuji</span></label>
           </div>
         </div>
       </div>
@@ -621,7 +621,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
            一番赏奖级配置區塊
            ═══════════════════════════════════════ -->
       <div class="section-divider">
-        <div class="section-title">一番赏奖级配置</div>
+        <div class="section-title">Ichiban Kuji 奖级配置</div>
 
         <!-- 总券数 banner -->
         <div class="total-banner">
@@ -642,7 +642,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
         <div class="prize-tier last-tier" id="lastTier">
           <div class="tier-header">
             <div style="display:flex;align-items:center;gap:8px;flex:1;">
-              <input class="tier-name-input" type="text" value="Last赏" placeholder="奖级名称" style="max-width:120px;" required>
+              <span class="req">*</span><input class="tier-name-input" type="text" value="Last赏" placeholder="奖级名称" style="max-width:120px;" required>
               <div style="display:flex;align-items:center;gap:5px;background:#fff7e6;border:1px solid #ffd591;border-radius:4px;padding:0 10px;height:28px;">
                 <span style="font-size:12px;color:#fa8c16;white-space:nowrap;">数量</span>
                 <input type="number" value="1" disabled style="width:40px;border:none;background:transparent;text-align:center;font-size:13px;font-weight:600;color:#fa8c16;outline:none;">
@@ -672,8 +672,8 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
                 </select>
               </div>
               <div id="dynamic-fields-last" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;"></div>
-              <div class="tier-field" style="min-width:130px;">
-                <label>奖品名称</label>
+              <div class="tier-field" id="prize-name-wrap-last" style="min-width:130px;display:none;">
+                <label><span class="req">*</span>奖品名称</label>
                 <input type="text" placeholder="请输入奖品名称">
               </div>
             </div>
@@ -788,8 +788,39 @@ function renderDynamicFields(containerId, cat2Val) {
           <option>票券 A</option>
         </select>
       </div>`;
+  } else if (cat2Val === 'freebet') {
+    html = `
+      <div class="tier-field" style="flex:2">
+        <label><span class="req">*</span>选择免费投注券</label>
+        <select required>
+          <option value="" disabled selected>请选择</option>
+          <option>免费投注券 A</option>
+          <option>免费投注券 B</option>
+        </select>
+      </div>`;
+  } else if (cat2Val === 'tool') {
+    html = `
+      <div class="tier-field" style="flex:2">
+        <label><span class="req">*</span>选择道具卡</label>
+        <select required>
+          <option value="" disabled selected>请选择</option>
+          <option>道具卡 A</option>
+          <option>道具卡 B</option>
+        </select>
+      </div>`;
   }
   container.innerHTML = html;
+
+  // 奖品名称：只在实物(real)时显示
+  const SHOW_NAME_CATS = ['real'];
+  const tierId = containerId.replace('dynamic-fields-', '');
+  const nameWrap = document.getElementById('prize-name-wrap-' + tierId);
+  if (nameWrap) {
+    const show = SHOW_NAME_CATS.includes(cat2Val);
+    nameWrap.style.display = show ? '' : 'none';
+    const inp = nameWrap.querySelector('input');
+    if (inp) inp.required = show;
+  }
 }
 
 // 第一层 虚拟物品/实物 選項
@@ -830,9 +861,9 @@ function tierFieldsHtml(tierId, isLast) {
           </select>
         </div>
         <div id="dynamic-fields-${tierId}" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;"></div>
-        <div class="tier-field" style="min-width:130px;">
+        <div class="tier-field" id="prize-name-wrap-${tierId}" style="min-width:130px;display:none;">
           <label><span class='req'>*</span>奖品名称</label>
-          <input type="text" placeholder="请输入奖品名称" required>
+          <input type="text" placeholder="请输入奖品名称">
         </div>
       </div>
       <div class="tier-upload" style="margin-top:10px;">
@@ -877,9 +908,9 @@ function renderTiers() {
     <div class="prize-tier" id="tier-${t.id}">
       <div class="tier-header">
         <div style="display:flex;align-items:center;gap:8px;flex:1;">
-          <input class="tier-name-input" type="text" value="${t.name}"
+          <span class="req">*</span><input class="tier-name-input" type="text" value="${t.name}"
             onchange="tiers[${idx}].name = this.value"
-            placeholder="奖级名称" style="max-width:120px;">
+            placeholder="奖级名称" style="max-width:120px;" required>
           <div style="display:flex;align-items:center;gap:5px;background:#f5f7fa;border:1px solid #e4e7ed;border-radius:4px;padding:0 10px;height:28px;">
             <span style="font-size:12px;color:#666;white-space:nowrap;">数量</span>
             <input class="tier-qty-input" type="number" min="1" value="${t.qty||1}"
