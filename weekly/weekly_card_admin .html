@@ -89,7 +89,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .pch:hover{background:#f0f7ff;}
 .pchl{display:flex;align-items:center;gap:10px;}
 .pbadge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:700;}
-.bstd{background:#fff7e6;color:#d46b08;border:1px solid #ffd591;}
+.bstd{background:#fff7e6;color:#ff4d4f;border:1px solid #ffd591;}
 .bprem{background:#f9f0ff;color:#722ed1;border:1px solid #d3adf7;}
 .bcustom{background:#f0f7ff;color:#1677ff;border:1px solid #91caff;}
 .pname{font-size:14px;font-weight:500;color:#333;}
@@ -549,6 +549,7 @@ function bindDrops() {
 // ── step 4 ──────────────────────────────────────────────────────
 function renderPlanCard(p, pi) {
   const rows = p.days.map((day,d) => {
+    const hasExtra = day.extra.val !== '' && day.extra.val != null;
     return `<tr>
       <td class="td-day">第${d+1}天</td>
       <td>
@@ -560,12 +561,12 @@ function renderPlanCard(p, pi) {
         <input type="number" class="rinp" placeholder="留空=不开放" value="${day.extra.val}" data-plan="${pi}" data-day="${d}" data-field="extra.val">
       </td>
       <td>
-        <div class="cond-wrap">
+        ${hasExtra ? '<div style="font-size:11px;color:#ff4d4f;font-weight:500;margin-bottom:4px;text-align:left;"><span class="req">*</span>必填</div>' : ''}
+        <div class="cond-wrap" style="justify-content:flex-start;">
           <select class="cond-sel" data-plan="${pi}" data-day="${d}" data-field="extra.condType">${condOpts(day.extra.condType)}</select>
           <span class="cond-gte">≥</span>
-          <input type="number" class="cond-inp" placeholder="留空=无条件" value="${day.extra.condVal}" data-plan="${pi}" data-day="${d}" data-field="extra.condVal">
+          <input type="number" class="cond-inp" placeholder="请输入" value="${day.extra.condVal}" data-plan="${pi}" data-day="${d}" data-field="extra.condVal">
         </div>
-        <div style="font-size:10px;color:#bbb;margin-top:3px;">留空=无条件可领</div>
       </td>
     </tr>`;
   }).join('');
@@ -584,7 +585,7 @@ function renderPlanCard(p, pi) {
       </div>
       <div style="margin-bottom:14px;">
         <div style="font-size:13px;font-weight:500;color:#333;margin-bottom:8px;"><span class="req">*</span>奖励配置：</div>
-        <div style="font-size:12px;color:#ff4d4f;margin-bottom:8px;">签到奖励无门槛可领；额外奖励数量留空=不开放；额外奖励条件留空=无条件可领。</div>
+        <div style="font-size:12px;color:#ff4d4f;margin-bottom:8px;">签到奖励无门槛可领；额外奖励数量留空=不开放；<span style="color:#ff4d4f;font-weight:500;">额外奖励有数量时，奖励条件为必填，不可留空。</span></div>
         <table class="rtable"><thead><tr>
           <th style="width:72px;">签到天数</th>
           <th style="min-width:130px;">签到奖励</th>
