@@ -189,7 +189,7 @@ body {
       <div class="phone-frame popup">
         <iframe src="weekly-card-h5-v1.html?col=3" title="提示 Banner" style="top:230px"></iframe>
       </div>
-      <div class="phone-label">3-2 提示 Banner</div>
+      <div class="phone-label">3-2 提示底部弹窗</div>
     </div>
     <div>
       <div id="s-p2" class="spec-text"></div>
@@ -334,7 +334,8 @@ const SECTIONS = {
 ### 情境 A｜日常签到 — 后台设置「自动派发」
 - 玩家当日首次登录后，在当前所在页面自动弹出「登录自动派发弹窗」（3-1）
 - 系统同步自动派发日常奖励
-- 领取页日常签到栏显示 ✓，无按钮
+[6/17] ✎ 6/17 调整
+[6/17] ✓ 仅显示于「已过完的天数」；当天完成自动派发后，当天不显示 ✓，当天无按钮
 
 ### 情境 B｜日常签到 — 后台设置「手动领取」
 - 玩家当日登录后，前台当前页面下方显示「日常签到提示 Banner」（3-2，显示方式同大奖池）
@@ -348,7 +349,8 @@ const SECTIONS = {
 
   当天共四种按钮状态：
 - 条件未达标，任务为存款 → 显示「Deposit」按钮，点击导至存款页面
-- 条件未达标，任务为投注 → 显示「Play Now」按钮，点击导至首页
+[6/17] ✎ 6/17 调整
+[6/17] - 条件未达标，任务为投注 → 显示「Play Now」按钮，点击导至首页热门
 - 条件已达标，尚未领取 → 显示「Claim」按钮，点击开启 Claim Popup（3-8）
 - 已领取（手动领取或自动派发）→ 显示「Claimed」disabled
 
@@ -368,34 +370,38 @@ const SECTIONS = {
   奖励金额与条件数值动态读取后台该天配置
 - 已派发奖励（Credited）为不可点击的展示图标，仅供显示，无交互行为
 - 点击「Confirm」→ 关闭弹窗
-- 点击「Play Now」→ 导至首页
+[6/17] ✎ 6/17 调整
+[6/17] - 点击「Play Now」→ 导至首页热门
 - 额外奖励条件按钮交互：
     · 任务为存款 → 显示 Deposit 图标按钮，点击导至存款页面
-    · 任务为投注 → 显示「Play Now」按钮，点击导至首页`,
+[6/17]     · 任务为投注 → 显示「Play Now」按钮，点击导至首页热门`,
 
-  p2: `### 3-2  提示 Banner
+  p2: `### 3-2  提示底部弹窗
+[6/17] ✎ 6/17 调整：3-2 更名为「提示底部弹窗」（原名：提示 Banner）
   从页面底部滑出，不阻断主画面操作。两种触发时机独立，可同时存在。
-  Banner 左侧 icon 对应本次奖励图标，动态读取后台该天奖励配置。
+  底部弹窗左侧 icon 对应本次奖励图标，动态读取后台该天奖励配置。
 
-[6/16] ✎ 6/16 調整
+[6/16] ✎ 6/16 调整
 [6/16] 奖励显示规则（两种奖励类别）：
-[6/16]   - 奖励类别 A｜免费投注、免费旋转、优惠券、道具卡 → 显示「{獎勵類別} ×{数量}」
-[6/16]   - 奖励类别 B｜积分、彩金 → 显示「{金额} {獎勵類別}」
+[6/16]   - 奖励类别 A｜免费投注、免费旋转、优惠券、道具卡 → 显示「{奖励类别} ×{数量}」
+[6/16]   - 奖励类别 B｜积分、彩金 → 显示「{金额} {奖励类别}」
 
 - 触发 A：玩家完成当日任务条件后触发，不限当前所在页面
   > 标题：Weekly Card Task Completed!
-  > 说明（奖励类别 A）：Today's task has been completed. {獎勵類別} ×{数量} is ready to claim.
-  > 说明（奖励类别 B）：Today's task has been completed. {金额} {獎勵類別} is ready to claim.
+  > 说明（奖励类别 A）：Today's task has been completed. {奖励类别} ×{数量} is ready to claim.
+  > 说明（奖励类别 B）：Today's task has been completed. {金额} {奖励类别} is ready to claim.
   奖励显示依上方奖励类别规则，读取后台该天额外奖励配置
 
 - 触发 B：后台设定「手动领取」，玩家当日登录且尚未领取日常签到时触发
   页面触发逻辑同 3-1：仅在「首页」弹出；「我的」／「积分商城」／「排行榜」不弹出，待进入首页时触发
   > 标题：Weekly Card Daily Reward Available!
-  > 说明（奖励类别 A）：Today's reward: {獎勵類別} ×{数量}. Please go to the rewards page to claim it.
-  > 说明（奖励类别 B）：Today's reward: {金额} {獎勵類別}. Please go to the rewards page to claim it.
+  > 说明（奖励类别 A）：Today's reward: {奖励类别} ×{数量}. Please go to the rewards page to claim it.
+  > 说明（奖励类别 B）：Today's reward: {金额} {奖励类别}. Please go to the rewards page to claim it.
   奖励显示依上方奖励类别规则，读取后台该天日常签到奖励配置
 
-- 点击 X → Banner 消失，当日不再显示`,
+[6/17] ✎ 6/17 调整
+[6/17] - 点击关闭 → 弹窗消失，当日不再显示
+[6/17]   逻辑同步任务中心`,
 
   p3: `### 3-3  存款页面弹窗
   玩家点击离开存款页面时，若尚未购买周卡，则触发此推广弹窗（exit-intent 拦截）。
@@ -440,7 +446,7 @@ const SECTIONS = {
   日常签到与额外奖励共用同一个 Popup 组件，内容动态带入。
 - 关闭：点击 X 或背景遮罩
 
-[6/16] ✎ 6/16 調整
+[6/16] ✎ 6/16 调整
 [6/16] 奖励显示规则（两种奖励类别）：
 [6/16]   - 奖励类别 A｜免费投注、免费旋转、优惠券、道具卡 → {奖励 icon} ×{数量}（如 ×2）
 [6/16]   - 奖励类别 B｜彩金、积分 → {奖励 icon} + {金额}（如 500.00）
@@ -487,7 +493,7 @@ function render(text) {
       .replace(/&/g,'&amp;')
       .replace(/</g,'&lt;')
       .replace(/>/g,'&gt;');
-    if (line.startsWith('[6/16] '))   return `<span class="t-update">${esc.slice(7)}</span>`;
+    if (line.startsWith('[6/16] ') || line.startsWith('[6/17] '))   return `<span class="t-update">${esc.slice(7)}</span>`;
     if (/^## /.test(line))         return `<span class="t-h2">${esc}</span>`;
     if (/^### /.test(line))        return `<span class="t-h3">${esc}</span>`;
     if (/^&gt; /.test(esc))        return `<span class="t-note">${esc}</span>`;
