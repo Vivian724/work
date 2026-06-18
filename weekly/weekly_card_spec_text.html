@@ -175,7 +175,7 @@ body {
       <div class="phone-frame popup">
         <iframe src="weekly-card-h5-v1.html?col=2" title="登录自动派发弹窗"></iframe>
       </div>
-      <div class="phone-label">3-1 登录自动派发弹窗</div>
+      <div class="phone-label">3-1 自动领取弹窗</div>
 
     </div>
     <div>
@@ -332,14 +332,14 @@ const SECTIONS = {
   当天卡片正常显示；其余天数（未到达 / 已完成）套用遮罩降低亮度。
 
 ### 情境 A｜日常签到 — 后台设置「自动派发」
-- 玩家当日首次登录后，在当前所在页面自动弹出「登录自动派发弹窗」（3-1）
+- 玩家当日首次登录后，在当前所在页面自动弹出「自动领取弹窗」（3-1）
 - 系统同步自动派发日常奖励
 [6/17] ✎ 6/17 调整
 [6/17] ✓ 仅显示于「已过完的天数」；当天完成自动派发后，当天不显示 ✓，当天无按钮
 
 ### 情境 B｜日常签到 — 后台设置「手动领取」
 - 玩家当日登录后，前台当前页面下方显示「日常签到提示 Banner」（3-2，显示方式同大奖池）
-- 玩家须至领取页手动点击「Claim」→ 开启 Claim Popup（3-8）完成领取
+- 玩家须至领取页手动点击「Claim」→ 开启 Claim Popup（3-7）完成领取
 - 领取完成 → 按钮改为「Claimed」disabled
 - 过了当日 00:00:00 → 按钮消失，不显示任何状态
 
@@ -351,7 +351,7 @@ const SECTIONS = {
 - 条件未达标，任务为存款 → 显示「Deposit」按钮，点击导至存款页面
 [6/17] ✎ 6/17 调整
 [6/17] - 条件未达标，任务为投注 → 显示「Play Now」按钮，点击导至首页热门
-- 条件已达标，尚未领取 → 显示「Claim」按钮，点击开启 Claim Popup（3-8）
+- 条件已达标，尚未领取 → 显示「Claim」按钮，点击开启 Claim Popup（3-7）
 - 已领取（手动领取或自动派发）→ 显示「Claimed」disabled
 
 ### 情境 D｜天数排列顺序（今日置顶）
@@ -362,17 +362,24 @@ const SECTIONS = {
 
   本活动共涉及以下 7 个弹窗，依触发时机分别说明。`,
 
-  p1: `### 3-1  登录自动派发弹窗
-  后台设定「自动领取」时，玩家当日首次登录后触发此弹窗。
+  p1: `### 3-1  自动领取弹窗
+  后台设定「自动领取」时触发。
+  内容：当日天数标题、已派发奖励（Credited）、额外奖励条件与对应按钮。
+  奖励金额与条件数值动态读取后台该天配置。
+  已派发奖励（Credited）为不可点击的展示图标，仅供显示，无交互行为。
+
+[6/18] 情境 A｜首次购买完成 → 签到页（Day 1）
+[6/18] - 会员购买周卡完成，系统跳转至签到页时，直接在签到页弹出本弹窗
+[6/18] - 签到页 Day 1 日常签到按钮同步显示为「Claimed」disabled 状态
+[6/18] - 点击「Confirm」→ 关闭弹窗，停留签到页
+
+  情境 B｜每日首次登录（Day 2–7）
   仅在「首页」弹出；若玩家登录时所在页面为「我的」、「积分商城」或「排行榜」，则暂不弹出，
   待玩家进入首页时才触发。
-- 内容：当日天数标题、已派发奖励（Credited）、额外奖励条件与对应按钮
-  奖励金额与条件数值动态读取后台该天配置
-- 已派发奖励（Credited）为不可点击的展示图标，仅供显示，无交互行为
 - 点击「Confirm」→ 关闭弹窗
 [6/17] ✎ 6/17 调整
 [6/17] - 点击「Play Now」→ 导至首页热门
-- 额外奖励条件按钮交互：
+- 额外奖励条件按钮交互（情境 A / B 通用）：
     · 任务为存款 → 显示 Deposit 图标按钮，点击导至存款页面
 [6/17]     · 任务为投注 → 显示「Play Now」按钮，点击导至首页热门`,
 
@@ -493,7 +500,7 @@ function render(text) {
       .replace(/&/g,'&amp;')
       .replace(/</g,'&lt;')
       .replace(/>/g,'&gt;');
-    if (line.startsWith('[6/16] ') || line.startsWith('[6/17] '))   return `<span class="t-update">${esc.slice(7)}</span>`;
+    if (line.startsWith('[6/16] ') || line.startsWith('[6/17] ') || line.startsWith('[6/18] '))   return `<span class="t-update">${esc.slice(7)}</span>`;
     if (/^## /.test(line))         return `<span class="t-h2">${esc}</span>`;
     if (/^### /.test(line))        return `<span class="t-h3">${esc}</span>`;
     if (/^&gt; /.test(esc))        return `<span class="t-note">${esc}</span>`;
