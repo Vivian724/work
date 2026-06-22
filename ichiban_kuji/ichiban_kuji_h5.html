@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>一番赏 H5 · A / B 两版对照</title>
+<title>一番赏 H5</title>
 <style>
 /* ============================================================
    日系·和纸风一番赏 H5  ── A 单列 / B 双列，两台并排同时显示
@@ -122,31 +122,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .ph{background:repeating-linear-gradient(45deg,#EEE6D0 0 8px,#E9E0C8 8px 16px);border:1px solid var(--line-2);border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--sumi-2);font-size:9px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .ic{border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 
-/* A 版单列 */
-.row .ph,.row .ic{width:var(--img);height:var(--img);flex-shrink:0}
-.row .ic span{font-size:30px}
-.row{display:flex;align-items:center;gap:11px;background:var(--fuda);border:1px solid var(--line-2);border-radius:8px;padding:9px 11px;margin-bottom:8px;position:relative;overflow:hidden}
-.row.sold{opacity:.55;filter:grayscale(.4)}
-.row.hi{border:1.5px solid var(--kin);background:linear-gradient(160deg,#FDF6E1,#F4E6BD);box-shadow:0 3px 12px rgba(176,138,60,.28)}
-.row.hi::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 96% 12%,rgba(255,242,205,.75),transparent 34%)}
-.row.mid{border:1px solid #E3CF9A;background:#FBF7EC}
-.row .midtag{font-size:9px;color:var(--kin-d);border:1px solid #D9B45A;background:#fff;border-radius:3px;padding:0 4px;font-weight:400}
-.row.last{background:linear-gradient(135deg,#FBF3DC,#F3E4B8);border:1.5px solid var(--kin);padding-left:15px;box-shadow:0 3px 14px rgba(176,138,60,.3)}
-.row.last::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(var(--kin),#9c7a2c)}
-.row .r-ribbon{position:absolute;top:0;right:0;background:linear-gradient(135deg,#D9B45A,#9c7a2c);color:#fff;font-size:10px;letter-spacing:1px;padding:2px 10px;border-radius:0 0 0 7px;z-index:2;box-shadow:0 1px 4px rgba(0,0,0,.15)}
-.row .r-main{flex:1;min-width:0;position:relative;z-index:1}
-.row .r-name{font-size:13.5px;font-weight:600;line-height:1.25;display:flex;align-items:center;flex-wrap:wrap;gap:5px}
-.row.last .r-name{font-size:15px;font-weight:700}
-.row .uptag{font-size:9px;color:#fff;background:linear-gradient(135deg,#D9B45A,#9c7a2c);border:none;border-radius:3px;padding:1px 6px;position:relative;z-index:2}
-.row .r-type{font-size:10px;color:var(--ai);margin-top:3px}
-.row .r-note{font-size:10px;color:var(--kin-d);margin-top:3px}
-.row .r-zan{flex-shrink:0;text-align:right;min-width:50px;display:flex;align-items:baseline;justify-content:flex-end;gap:2px}
-.row .r-zan .lbl{font-size:10px;color:var(--sumi-2)}
-.row .r-zan .num{font-family:"Songti SC",serif;font-size:20px;font-weight:700;color:var(--sumi)}
-.row.last .r-zan .num{font-size:23px;color:var(--shu)}
-.row .r-zan .num.low{color:var(--shu)}
-.row .r-zan .tot{font-size:10px;color:var(--sumi-2)}
-
 /* B 版双列 */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .gfeat{grid-column:1/-1;display:flex;gap:13px;align-items:center;background:linear-gradient(135deg,#FBF3DC,#F3E4B8);border:1.5px solid var(--kin);border-radius:9px;padding:12px;position:relative;overflow:hidden;box-shadow:0 3px 14px rgba(176,138,60,.3);margin-bottom:2px}
@@ -216,8 +191,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 </head>
 <body>
 <div class="stage">
-  <div class="col"><div class="vlabel serif">A 版 <small>单列</small></div><div class="device" id="dev-A"></div></div>
-  <div class="col"><div class="vlabel serif">B 版 <small>双列</small></div><div class="device" id="dev-B"></div></div>
+  <div class="col"><div class="device" id="dev-B"></div></div>
 </div>
 
 <script>
@@ -290,8 +264,7 @@ function deviceHTML(){return `
     <div class="result-body js-rbody"></div>
     <div class="result-foot"><button class="btn-ok js-ok">收下</button></div></div></div>`;}
 
-/* ── App 工厂：每台手机独立状态 ── */
-function createApp(rootId, mode){
+function createApp(rootId){
   const root=document.getElementById(rootId);
   root.innerHTML=deviceHTML();
   const $=s=>root.querySelector(s);
@@ -303,15 +276,6 @@ function createApp(rootId, mode){
   const grand=()=>tiers.reduce((s,t)=>s+t.total,0)+last.total;
   const curN=()=>drawN==='all'?normalLeft():drawN;
 
-  function rowA(t,{lst,hi,mid,ribbon,note}={}){
-    const sold=t.left<=0, low=t.left>0&&t.left/t.total<=.34;
-    return `<div class="row ${lst?'last':''} ${hi?'hi':''} ${mid?'mid':''} ${sold?'sold':''}">
-      ${ribbon?`<div class="r-ribbon serif">${ribbon}</div>`:''}${badge(t,lst,hi)}${artImg(t.art)}
-      <div class="r-main"><div class="r-name">${lst?'Last赏 · ':''}${t.name}${hi?'<span class="uptag">★ 上位赏</span>':''}${mid?'<span class="midtag">人气</span>':''}</div>
-        <div class="r-type">${t.type}</div>${note?`<div class="r-note">${note}</div>`:''}</div>
-      <div class="r-zan">${sold?'<span class="sold-chip serif">售罄</span>':
-        `<span class="lbl">剩</span><span class="num ${low?'low':''}">${t.left}</span><span class="tot">/${t.total}</span>`}</div></div>`;
-  }
   function featB(t,ribbon,note){return `<div class="gfeat"><div class="r-ribbon serif">${ribbon}</div>
     <div class="g-img">${artImg(t.art)}</div><div class="info">${badge(t,true)}
       <div class="f-name serif">Last赏 · ${t.name}</div><span class="f-type">${t.type}</span>
@@ -324,13 +288,8 @@ function createApp(rootId, mode){
       <div class="g-img">${artImg(t.art)}</div><div class="g-name">${t.name}</div><div class="g-type">${t.type}</div></div>`;
   }
   function renderPool(){
-    if(mode==='A'){
-      $('.js-pool').innerHTML=rowA(last,{lst:true,ribbon:'压轴大奖',note:'抽走最后一张券者自动获得'})
-        +tiers.map(t=>rowA(t,{hi:t.hi,mid:t.mid})).join('');
-    }else{
-      $('.js-pool').innerHTML=`<div class="grid">${featB(last,'压轴大奖','抽走最后一张券者自动获得')}
-        ${tiers.map(t=>cardB(t,{hi:t.hi,mid:t.mid})).join('')}</div>`;
-    }
+    $('.js-pool').innerHTML=`<div class="grid">${featB(last,'压轴大奖','抽走最后一张券者自动获得')}
+      ${tiers.map(t=>cardB(t,{hi:t.hi,mid:t.mid})).join('')}</div>`;
     updateStock();
   }
   function updateStock(){
@@ -390,8 +349,7 @@ function createApp(rootId, mode){
   renderPool();
 }
 
-createApp('dev-A','A');
-createApp('dev-B','B');
+createApp('dev-B');
 </script>
 </body>
 </html>
