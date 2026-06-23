@@ -15,8 +15,8 @@
   .block{padding:24px 30px;}
   .block h2{font-size:16px;margin:0 0 12px;font-weight:700;}
 
-  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:4px 0 4px;}
-  th,td{border:1px solid #e6e8eb;padding:8px 11px;text-align:left;vertical-align:top;}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;margin:4px 0 4px;}
+  th,td{border:1px solid #e6e8eb;padding:10px 13px;text-align:left;vertical-align:top;}
   th{background:#f6f7f9;font-weight:600;color:#3a3f47;}
 
   .page{border-top:1px solid #eef0f2;}
@@ -112,80 +112,150 @@
 
   <div class="block">
     <h2>文件说明</h2>
-    <p>本文件为<strong>会员前台</strong>（H5 / App）规格；后台选品、上架、审核、查看三方信息等逻辑见《后台需求规格（Share Treat）》。本次新增重点为：会员购买 Share Treat 商品后，<strong>订单详情页需展示第三方（BIZ TREATS / Share Treats）回传的兑换信息</strong>（兑换码 / 兑换链接 / 兑换密码），并依商品类型与审核 / 派发状态呈现对应内容。</p>
+    <p>这是 Share Treat 积分商城的<strong>会员端（前台）规格</strong>，供 QA / RD / UI 参考。</p>
+    <ul>
+      <li><strong>核心改动：</strong>会员购买后，可在「订单详情」看到第三方派发的<strong>兑换信息</strong>（兑换码 / 链接 / 密码），凭此去实体店核销。</li>
+      <li>后台逻辑（选品 / 上架 / 审核 / 查看三方信息）见《后台需求规格（Share Treat）》。</li>
+    </ul>
 
     <h2 style="margin-top:22px;">变更摘要</h2>
     <table>
       <tr><th style="width:34px">#</th><th>页面</th><th>路径</th><th>主要改动</th></tr>
-      <tr><td>1</td><td>商品卡 / 商品详情</td><td>积分商城 &gt; 列表 &gt; 商品详情弹窗</td><td>沿用图片 / 简介 / 价格 / 折扣 / 库存；<span class="red">新增蓝字「如何兑换 / 兑换条款」入口 + 二级「兑换说明」弹窗</span>（内容来自三方 Brand API）</td></tr>
+      <tr><td>1</td><td>挑你的 Treat · 商品列表 & 详情</td><td>积分商城 &gt; Share Treat 分类 &gt; 商品详情弹窗</td><td>沿用图片 / 简介 / 价格 / 折扣 / 库存；<span class="red">新增蓝字「如何兑换 / 兑换条款」入口 + 二级「兑换说明」弹窗</span>（内容来自三方 Brand API）</td></tr>
       <tr><td>2</td><td>确认订单</td><td>购买 &gt; 确认订单弹窗</td><td>沿用既有结构；<span class="red">新增「我已阅读并同意兑换条款」勾选</span>，默认不勾、未勾时付款置灰</td></tr>
-      <tr><td>3</td><td>购买成功</td><td>付款 &gt; 购买成功弹窗</td><td>「立即使用」对 Share Treat 改为<strong>跳转订单详情的兑换信息区块</strong>；「查看订单」进入订单详情</td></tr>
-      <tr><td>4</td><td>兑换记录</td><td>订单 &gt; 兑换记录</td><td>沿用列表结构；状态标签新增「待审核」「失败」两种态（原仅「已完成」）</td></tr>
-      <tr><td>5</td><td><span class="red">订单详情</span></td><td>兑换记录 &gt; 订单详情</td><td><strong>既有页，非新增页</strong>；原「兑换单号」改称<strong>「订单编号」</strong>，并<span class="red">新增「兑换信息」区块</span>（兑换码 / 链接 / 密码 + 有效期，来自三方派发）</td></tr>
+      <tr><td>3</td><td>购买成功</td><td>付款 &gt; 购买成功弹窗</td><td>移除「立即使用」按钮，<span class="red">仅保留「查看订单」</span>，点击进入订单详情（兑换信息统一在订单详情查看）</td></tr>
+      <tr><td>4</td><td>兑换记录</td><td>订单 &gt; 兑换记录</td><td>沿用列表结构；状态标签<span class="red">新增「待审核」</span>（原仅「已完成」）；自动审核 → 直接「已完成」，人工审核 → 先「待审核」后「已完成」</td></tr>
+      <tr><td>5</td><td><span class="red">订单详情</span></td><td>兑换记录 &gt; 订单详情</td><td><strong>既有页，非新增页</strong>；原「兑换单号」改称<strong>「订单编号」</strong>；新增「兑换信息」区块（兑换码 / 链接 / 密码 + 有效期）；<span class="red">新增「如何兑换 / 兑换条款」入口</span>（含可兑换门市清单，与商品详情页相同内容）</td></tr>
     </table>
   </div>
 
   <!-- 页面1 -->
   <div class="page">
-    <div class="page-bar"><span class="n">页面 1</span>商品卡 / 商品详情弹窗
-      <span class="p">路径：<code>积分商城 &gt; 列表</code> · <code>商品详情弹窗</code></span></div>
-    <div class="cols">
-      <div class="imgcol"><div class="stick">
-        <div class="phone">
-          <div class="ph-status">14:57</div>
-          <div class="ph-nav">Share Treat <span style="position:absolute;right:14px;color:#9aa1ad;font-weight:400;">×</span></div>
-          <div class="ph-body">
-            <div class="card">
-              <div class="badge">⚡ -5%</div>
-              <div style="display:flex;justify-content:center;margin:6px 0 12px;"><div class="swatch">b</div></div>
-              <div style="font-weight:700;font-size:15px;">实物</div>
-              <div style="font-size:12px;color:#8b919c;background:#f4f5f7;display:inline-block;padding:2px 8px;border-radius:6px;margin:6px 0;">库存 5000</div>
-              <div><span class="pts"><span class="ico"></span>19</span><span class="old">20</span></div>
-              <div style="margin:10px 0 2px;font-size:13px;color:#3358d4;font-weight:700;">如何兑换 / 兑换条款 ›</div>
-              <div style="margin-top:10px;"><span class="btn btn-primary">购买　<span style="opacity:.85;">⭐ 19</span></span></div>
+    <div class="page-bar"><span class="n">页面 1</span>挑你的 Treat　·　商品列表 & 详情弹窗
+      <span class="p">路径：<code>积分商城 &gt; Share Treat 分类</code> · <code>商品详情弹窗</code></span></div>
+    <!-- 子区域 A：商品列表 -->
+    <div style="border-top:1px solid #eef0f2;">
+      <div style="padding:9px 30px;background:#f6f7f9;border-bottom:1px solid #eef0f2;display:flex;align-items:center;gap:10px;">
+        <span style="background:#3358d4;color:#fff;border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;">① 画面</span>
+        <span style="font-size:14px;font-weight:700;">商品列表（Share Treat 分类）</span>
+      </div>
+      <div class="cols">
+        <div class="imgcol"><div class="stick">
+          <div class="phone">
+            <div class="ph-status">14:57</div>
+            <div class="ph-nav" style="font-size:12px;font-weight:700;">积分商城</div>
+            <div class="ph-body" style="padding:10px 12px;">
+              <div style="display:flex;gap:10px;margin-bottom:8px;font-size:11px;font-weight:700;">
+                <span style="color:#9aa1ad;">实物</span>
+                <span style="color:#3358d4;border-bottom:2px solid #3358d4;padding-bottom:2px;">Share Treat</span>
+                <span style="color:#9aa1ad;">彩金</span>
+              </div>
+              <div style="display:flex;gap:6px;margin-bottom:10px;">
+                <span style="background:#23272e;color:#fff;font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700;">推荐</span>
+                <span style="background:#eceef1;color:#5b626d;font-size:10px;padding:3px 9px;border-radius:20px;">我能购买</span>
+                <span style="background:#eceef1;color:#5b626d;font-size:10px;padding:3px 9px;border-radius:20px;">价格 ⇅</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div class="card" style="position:relative;padding:8px;">
+                  <div class="badge" style="font-size:9px;padding:1px 5px;top:-7px;">⚡ -20%</div>
+                  <div style="width:100%;aspect-ratio:1;background:linear-gradient(135deg,#f5a96a,#e8825a);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:6px;">🍟</div>
+                  <div style="font-weight:700;font-size:10.5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">McDonald's 中薯</div>
+                  <div style="font-size:10px;color:#9aa1ad;margin:2px 0;">库存 500</div>
+                  <div><span class="pts" style="font-size:11px;"><span class="ico"></span>16</span><span class="old" style="font-size:10px;">20</span></div>
+                </div>
+                <div class="card" style="padding:8px;">
+                  <div style="width:100%;aspect-ratio:1;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:6px;">🎴</div>
+                  <div style="font-weight:700;font-size:10.5px;">VP道具卡</div>
+                  <div style="font-size:10px;color:#9aa1ad;margin:2px 0;">库存 96</div>
+                  <div><span class="pts" style="font-size:11px;"><span class="ico"></span>33</span></div>
+                </div>
+              </div>
             </div>
           </div>
+          <div class="cap">两列并排：左 = 有折扣（⚡ + 划线价），右 = 无折扣</div>
+        </div></div>
+        <div class="speccol">
+          <h3>入口说明</h3>
+          <p>会员在积分商城顶部点选「<strong>Share Treat</strong>」分类标签，即可看到后台已上架的商品列表。</p>
+          <table>
+            <tr><th>项目</th><th>说明</th></tr>
+            <tr><td>分类标签</td><td>由后台控制是否显示「Share Treat」分类</td></tr>
+            <tr><td>商品来源</td><td>后台上架；上架 / 下架 / 排序均由后台控制</td></tr>
+            <tr><td>有折扣时</td><td>左上角显示 ⚡ 折扣标签（如 -20%）+ 划线原价</td></tr>
+            <tr><td>无折扣时</td><td>仅显示积分价格，无标签</td></tr>
+            <tr><td>点击商品卡</td><td>弹出商品详情弹窗（见 ② 画面）</td></tr>
+          </table>
+          <h3>商品卡字段（沿用）</h3>
+          <table>
+            <tr><th>字段</th><th>来源</th><th>说明</th></tr>
+            <tr><td>商品图片</td><td>后台</td><td>后台上传或三方带出</td></tr>
+            <tr><td>商品名称</td><td>后台 / 三方</td><td>如「McDonald's 中薯」「VP道具卡」</td></tr>
+            <tr><td>购买价格（积分）</td><td>后台</td><td>会员需支付的积分数</td></tr>
+            <tr><td>积分折扣 / 限时</td><td>后台</td><td>⚡ -XX% 标签 + 划线原价</td></tr>
+            <tr><td>库存</td><td>后台 / 三方</td><td>显示剩余库存数量</td></tr>
+          </table>
+          <div class="tip">QA 验证：后台需已上架至少一件 Share Treat 商品，才能在前台「Share Treat」分类看到商品。</div>
+          <h3>功能逻辑</h3>
+          <ul>
+            <li>库存为 0 或商品下架时，商品卡依旧展示，但进入详情后「购买」按钮置灰。</li>
+          </ul>
         </div>
-        <div class="cap">列表卡片＋商品详情弹窗（沿用既有样式）</div>
-      </div></div>
-      <div class="speccol">
-        <h3>说明</h3>
-        <p>Share Treat 商品在前台与其他积分商品<strong>展示一致</strong>，无新增字段。商品图片、商品简介、购买价格（积分）、积分折扣、库存、限时抢购标签等均由后台填写 / 带出（详见后台规格）。</p>
-        <h3>字段（沿用）</h3>
-        <table>
-          <tr><th>字段</th><th>来源</th><th>说明</th></tr>
-          <tr><td>商品图片</td><td>后台</td><td>后台上传或三方带出</td></tr>
-          <tr><td>商品名称</td><td>后台 / 三方</td><td>如「实物」「VP道具卡」</td></tr>
-          <tr><td>商品简介</td><td>后台</td><td>详情弹窗正文</td></tr>
-          <tr><td>购买价格（积分）</td><td>后台</td><td>会员需支付的积分数</td></tr>
-          <tr><td>积分折扣 / 限时</td><td>后台</td><td>如「-5%」「划线原价」</td></tr>
-          <tr><td>库存</td><td>后台 / 三方</td><td>可显示剩余库存</td></tr>
-        </table>
-        <h3>新增：如何兑换 / 兑换条款入口</h3>
-        <p>商品详情弹窗内新增一行<strong>蓝字「如何兑换 / 兑换条款 ›」</strong>，点击弹出「<strong>兑换说明</strong>」二级弹窗（见下方弹窗规格）。该内容为会员购买前必看，含使用方式与不可退等限制。</p>
-        <table>
-          <tr><th>项目</th><th>规格</th></tr>
-          <tr><td>位置</td><td>商品详情弹窗内，价格下方、「购买」按钮上方</td></tr>
-          <tr><td>样式</td><td>蓝色文字 + 右箭头「›」，可点击</td></tr>
-          <tr><td>点击行为</td><td>弹出「兑换说明」二级弹窗（覆盖在商品详情之上）</td></tr>
-        </table>
+      </div>
+    </div>
 
-        <h3>「兑换说明」弹窗规格</h3>
-        <table>
-          <tr><th>字段</th><th>来源</th><th>说明</th></tr>
-          <tr><td>弹窗标题</td><td>固定</td><td>「兑换说明」或「如何兑换 / 条款」</td></tr>
-          <tr><td>正文内容</td><td><strong>三方 Brand API</strong> <code>redeemInfoUrl</code></td><td>含 ABOUT / HOW TO REDEEM / TERMS OF USE 等段落</td></tr>
-          <tr><td>关闭</td><td>固定</td><td>右上角「×」或点遮罩返回商品详情</td></tr>
-        </table>
-        <div class="note">条款内含「<strong class="red">购买后不可取消 / 不可退款</strong>」「一次性使用」「仅限指定门市 / 不适用外送」等限制，是客诉高发点，必须购买前可见。建议「不可退」一句在弹窗内<strong class="red">红字</strong>突出。</div>
-        <div class="tip">内容为英文 / 当地用语时，建议后台可对该段做本地化覆盖；无覆盖则原样显示三方内容。是否本地化由后台决定（与后台规格对齐）。</div>
-
-        <h3>功能逻辑</h3>
-        <ul>
-          <li>点「购买」进入<strong>确认订单</strong>（页面 2）。</li>
-          <li>库存为 0 或商品下架时，「购买」按钮置灰不可点。</li>
-          <li>「兑换说明」弹窗内容拉取失败时显示「加载失败，请稍后重试」+ 重试，不阻断浏览商品。</li>
-        </ul>
+    <!-- 子区域 B：商品详情弹窗 -->
+    <div style="border-top:2px solid #c6d3fa;">
+      <div style="padding:9px 30px;background:#eef2ff;border-bottom:1px solid #dbe4ff;display:flex;align-items:center;gap:10px;">
+        <span style="background:#3358d4;color:#fff;border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;">② 画面</span>
+        <span style="font-size:14px;font-weight:700;">商品详情弹窗（点击商品卡后弹出）</span>
+      </div>
+      <div class="cols">
+        <div class="imgcol"><div class="stick">
+          <div class="phone">
+            <div class="ph-status">14:57</div>
+            <div class="ph-nav">Share Treat <span style="position:absolute;right:14px;color:#9aa1ad;font-weight:400;">×</span></div>
+            <div style="background:#fff;overflow:hidden;">
+              <div style="padding:10px 14px 6px;font-weight:700;font-size:14px;">McDonald's 中薯</div>
+              <div style="display:flex;justify-content:center;padding:4px 14px 10px;">
+                <div style="width:140px;height:140px;border-radius:12px;background:linear-gradient(135deg,#f5a96a,#e8825a);display:flex;align-items:center;justify-content:center;font-size:40px;">🍟</div>
+              </div>
+              <div style="padding:0 14px 10px;font-size:11px;color:#5b626d;line-height:1.65;">凭兑换码至任意麦当劳指定门市兑换中薯一份，一次性使用，不适用于外送，购买后不可退款。</div>
+              <div style="padding:0 14px 14px;font-size:13px;color:#3358d4;font-weight:700;">如何兑换 / 兑换条款 ›</div>
+              <div style="padding:11px 14px 14px;background:#3358d4;text-align:center;color:#fff;font-weight:700;font-size:14px;">购买 ⭐ 16</div>
+            </div>
+          </div>
+          <div class="cap">弹窗：「Share Treat」分类签 + 商品名 + 置中图 + 描述 + <strong>新增如何兑换入口</strong> + 购买</div>
+        </div></div>
+        <div class="speccol">
+          <h3>弹窗说明</h3>
+          <p>点击商品卡弹出，沿用既有弹窗样式。本次新增：</p>
+          <ul>
+            <li>标题栏显示分类名「<strong>Share Treat</strong>」（而非商品名）</li>
+            <li>商品名作为弹窗内容的副标题（左对齐，图片上方）</li>
+            <li>商品简介下方新增「<strong>如何兑换 / 兑换条款 ›</strong>」蓝字入口</li>
+          </ul>
+          <h3>新增：如何兑换 / 兑换条款</h3>
+          <table>
+            <tr><th>项目</th><th>规格</th></tr>
+            <tr><td>位置</td><td>商品简介下方、「购买」按钮上方</td></tr>
+            <tr><td>样式</td><td>蓝色文字 + 右箭头「›」，可点击</td></tr>
+            <tr><td>点击行为</td><td>弹出「兑换说明」二级弹窗（覆盖在商品详情之上）</td></tr>
+          </table>
+          <h3>「兑换说明」弹窗规格</h3>
+          <table>
+            <tr><th>字段</th><th>来源</th><th>说明</th></tr>
+            <tr><td>弹窗标题</td><td>固定</td><td>「兑换说明」或「如何兑换 / 条款」</td></tr>
+            <tr><td>正文内容</td><td><strong>三方 Brand API</strong> <code>redeemInfoUrl</code></td><td>含 HOW TO REDEEM / TERMS 等段落（含可兑换门市清单）</td></tr>
+            <tr><td>关闭</td><td>固定</td><td>右上角「×」或点遮罩返回商品详情</td></tr>
+          </table>
+          <div class="note">条款含「<strong class="red">购买后不可取消 / 不可退款</strong>」「一次性使用」「仅限指定门市」，是客诉高发点，须购买前可见。建议「不可退」一句<strong class="red">红字</strong>突出。</div>
+          <div class="tip">内容为英文时，建议后台可做本地化覆盖；无覆盖则原样显示三方内容。</div>
+          <h3>功能逻辑</h3>
+          <ul>
+            <li>点「购买」进入<strong>确认订单</strong>（页面 2）。</li>
+            <li>「兑换说明」弹窗内容拉取失败时，显示「加载失败，请稍后重试」+ 重试，不阻断商品浏览。</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -200,12 +270,13 @@
           <div class="ph-status">14:58</div>
           <div class="ph-nav">确认订单 <span style="position:absolute;right:14px;color:#9aa1ad;font-weight:400;">×</span></div>
           <div class="ph-body">
-            <div class="center" style="margin:4px 0 10px;"><div class="swatch" style="margin:0 auto;">VP</div>
-              <div style="font-weight:800;font-size:16px;margin-top:8px;">VP道具卡</div></div>
+            <div class="center" style="margin:4px 0 10px;">
+              <div style="width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#f5a96a,#e8825a);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto;">🍟</div>
+              <div style="font-weight:800;font-size:16px;margin-top:8px;">McDonald's 中薯</div></div>
             <div class="card" style="padding:4px 12px;">
-              <div class="row"><span class="k">商品价格</span><span class="v pts"><span class="ico"></span>33</span></div>
-              <div class="row"><span class="k">折扣</span><span class="v">0%</span></div>
-              <div class="row" style="border-bottom:none;"><span class="k">总价</span><span class="v pts"><span class="ico"></span>33</span></div>
+              <div class="row"><span class="k">商品价格</span><span class="v pts"><span class="ico"></span>20</span></div>
+              <div class="row"><span class="k">折扣</span><span class="v">-20%</span></div>
+              <div class="row" style="border-bottom:none;"><span class="k">总价</span><span class="v pts"><span class="ico"></span>16</span></div>
             </div>
             <div style="display:flex;align-items:flex-start;gap:7px;margin:12px 2px 4px;font-size:12px;color:#5b626d;line-height:1.5;">
               <span style="flex:0 0 15px;width:15px;height:15px;border:1.5px solid #c2c7d0;border-radius:4px;margin-top:1px;"></span>
@@ -263,29 +334,16 @@
             <div class="center"><div class="swatch" style="margin:0 auto;border-radius:50%;background:linear-gradient(135deg,#f5a96a,#e8825a);">🐿</div>
               <div style="font-weight:800;font-size:18px;margin:14px 0 18px;">购买成功</div></div>
             <div style="display:flex;gap:10px;">
-              <span class="btn btn-ghost" style="flex:1;">立即使用</span>
               <span class="btn btn-primary" style="flex:1;">查看订单</span>
             </div>
           </div>
         </div>
-        <div class="cap">购买成功（立即使用 / 查看订单）</div>
+        <div class="cap">购买成功（仅「查看订单」按钮）</div>
       </div></div>
       <div class="speccol">
         <h3>改动点</h3>
-        <ol>
-          <li><strong>查看订单</strong>：进入<strong>订单详情</strong>（页面 5）。</li>
-          <li><strong>立即使用</strong>（Share Treat）：
-            <ul>
-              <li>若派发已成功（已拿到兑换码 / 链接）→ 跳转<strong>订单详情并定位到「兑换信息」区块</strong>。</li>
-              <li>若为<strong>手动审核</strong>尚未派发 → 跳转订单详情，区块显示「<strong>审核中，待发放</strong>」（见页面 5）。</li>
-            </ul>
-          </li>
-        </ol>
-        <h3>功能逻辑</h3>
-        <ul>
-          <li>「立即使用」不再弹独立页，统一收敛到订单详情的兑换信息区块，避免两套展示。</li>
-          <li>是 URL 型商品时，「立即使用」也可直接唤起兑换链接（二选一，建议统一进订单详情，体验一致、便于补看）。</li>
-        </ul>
+        <p>移除「立即使用」按钮，<strong>仅保留「查看订单」</strong>，点击进入订单详情（页面 5）。</p>
+        <div class="tip">兑换信息（兑换码 / 链接 / 密码）统一在订单详情查看，入口收敛、体验一致。</div>
       </div>
     </div>
   </div>
@@ -303,10 +361,10 @@
             <div style="background:#fff;border:1px solid #edeef0;border-radius:8px;padding:8px 10px;font-size:12px;color:#9aa1ad;margin-bottom:8px;">全部 ▾</div>
             <div style="font-size:11px;color:#e5484d;margin-bottom:10px;">*订单记录数据同步存在延迟，若未发现最新记录请稍后再试。</div>
             <div class="card" style="margin-bottom:10px;display:flex;gap:10px;align-items:center;">
-              <div class="swatch" style="width:44px;height:44px;font-size:15px;">VP</div>
+              <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#f5a96a,#e8825a);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🍟</div>
               <div style="flex:1;"><div class="mini">2026-06-23 14:59:14</div>
-                <div style="font-weight:700;font-size:13px;">VP道具卡</div>
-                <div class="pts" style="font-size:12px;"><span class="ico"></span>33</div></div>
+                <div style="font-weight:700;font-size:13px;">McDonald's 中薯</div>
+                <div class="pts" style="font-size:12px;"><span class="ico"></span>16</div></div>
               <span class="col-tag t-done">已完成</span>
             </div>
             <div class="card" style="margin-bottom:10px;display:flex;gap:10px;align-items:center;">
@@ -316,21 +374,14 @@
                 <div class="pts" style="font-size:12px;"><span class="ico"></span>1</div></div>
               <span class="col-tag t-wait">待审核</span>
             </div>
-            <div class="card" style="display:flex;gap:10px;align-items:center;">
-              <div class="swatch" style="width:44px;height:44px;font-size:15px;background:#cfd4dc;color:#fff;">▦</div>
-              <div style="flex:1;"><div class="mini">2026-06-22 14:07:47</div>
-                <div style="font-weight:700;font-size:13px;">PISO Luck 100</div>
-                <div class="pts" style="font-size:12px;"><span class="ico"></span>1</div></div>
-              <span class="col-tag t-fail">失败</span>
-            </div>
           </div>
         </div>
-        <div class="cap">兑换记录列表（状态标签新增「待审核」「失败」）</div>
+        <div class="cap">兑换记录列表（状态：待审核 / 已完成）</div>
       </div></div>
       <div class="speccol">
         <h3>改动点</h3>
         <ol>
-          <li><strong>状态标签</strong>：原仅「已完成」，新增 <span class="col-tag t-wait">待审核</span>（手动审核未通过 / 未派发）与 <span class="col-tag t-fail">失败</span>（派发失败）两种态。</li>
+          <li><strong>状态标签</strong>：原仅「已完成」，新增 <span class="col-tag t-wait">待审核</span>。<br>自动审核 → 购买后直接显示「已完成」；人工审核 → 先显示「待审核」，后台审核通过派发后更新为「已完成」。</li>
           <li>其余结构（缩略图、时间、商品名、消耗积分、点击进详情）沿用既有逻辑。</li>
         </ol>
         <h3>字段规格</h3>
@@ -340,11 +391,11 @@
           <tr><td>下单时间</td><td><code>YYYY-MM-DD HH:mm:ss</code></td></tr>
           <tr><td>商品名称</td><td>如「VP道具卡」</td></tr>
           <tr><td>消耗积分</td><td>本笔扣减的积分</td></tr>
-          <tr><td>状态</td><td>待审核 / 已完成 / 失败</td></tr>
+          <tr><td>状态</td><td>待审核 / 已完成</td></tr>
         </table>
         <h3>功能逻辑</h3>
         <ul>
-          <li>顶部下拉可按状态筛选（全部 / 待审核 / 已完成 / 失败）。</li>
+          <li>顶部下拉可按状态筛选（全部 / 待审核 / 已完成）。</li>
           <li>点任意一笔进入<strong>订单详情</strong>（页面 5）。</li>
           <li>保留「数据同步存在延迟」提示文案。</li>
         </ul>
@@ -379,7 +430,8 @@
               <div class="field" style="margin:0 0 8px;"><span class="copy">复制</span><div class="lab">兑换链接　← 或开这个</div><div class="val" style="color:#3358d4;font-size:12px;">https://…/r?b=60e2…c0</div></div>
               <div class="field" style="margin:0;"><div class="lab">有效期至</div><div class="val">2030-12-31</div></div>
             </div>
-            <div class="center" style="margin-top:14px;font-size:13px;color:#3358d4;font-weight:700;">对订单有疑问？联系客服</div>
+            <div style="margin-top:10px;font-size:13px;color:#3358d4;font-weight:700;text-align:center;">如何兑换 / 兑换条款 ›</div>
+            <div class="center" style="margin-top:8px;font-size:13px;color:#3358d4;font-weight:700;">对订单有疑问？联系客服</div>
           </div>
         </div>
         <div class="cap">订单详情（既有页）：步骤条＋订单信息＋<strong>新增兑换信息区块</strong></div>
@@ -418,14 +470,14 @@
 
         <h3>按状态显示规则</h3>
         <table>
-          <tr><th>状态</th><th>步骤条</th><th>兑换信息区块</th></tr>
-          <tr><td><span class="col-tag t-wait">待审核</span></td><td>待审核（高亮）→ 已完成（灰）</td><td>显示「<strong>审核中，发放后可查看兑换信息</strong>」，不显示码 / 链接</td></tr>
-          <tr><td><span class="col-tag t-done">已完成</span></td><td>两步均 ✓</td><td>按 pinType 显示兑换码 / 链接 / 密码 + 有效期</td></tr>
-          <tr><td><span class="col-tag t-fail">失败</span></td><td>失败态（红）</td><td>显示失败原因摘要 + 「联系客服」；积分已退则提示「积分已退回」</td></tr>
+          <tr><th>状态</th><th>触发条件</th><th>步骤条</th><th>兑换信息区块</th></tr>
+          <tr><td><span class="col-tag t-wait">待审核</span></td><td>后台设为人工审核，尚未派发</td><td>待审核（高亮）→ 已完成（灰）</td><td>显示「<strong>审核中，发放后可查看兑换信息</strong>」，不显示码 / 链接</td></tr>
+          <tr><td><span class="col-tag t-done">已完成</span></td><td>自动审核 / 人工审核通过后三方已派发</td><td>两步均 ✓</td><td>按 pinType 显示兑换码 / 链接 / 密码 + 有效期</td></tr>
         </table>
 
         <h3>功能逻辑</h3>
         <ul>
+          <li><strong>如何兑换 / 兑换条款</strong>：兑换信息区块下方提供蓝字入口，点击弹出与商品详情页相同的「兑换说明」弹窗（含可兑换门市清单）。会员拿到兑换码后仍可随时查阅去哪里核销。</li>
           <li><strong>复制</strong>：兑换码 / 链接 / 三方订单号均提供一键复制，复制后 Toast「已复制」。</li>
           <li><strong>打开链接</strong>：连结型 / Universal 型提供「打开兑换链接」；Universal 型同屏提示「兑换密码：{pin}」。</li>
           <li><strong>有效期</strong>：到期前可正常显示；已过期时码 / 链接置灰并提示「已过期，请联系客服」。</li>
@@ -435,9 +487,8 @@
 
         <h3>异常处理</h3>
         <ul>
-          <li><strong>派发失败</strong>（如三方余额不足 <code>API_WALLET_INF0001</code>、无库存 <code>API_LOCATION_RED0001</code>）：状态置「失败」，提示失败 + 退积分说明（以服务端为准）。</li>
           <li><strong>兑换信息拉取失败</strong>：区块显示「加载失败，请稍后重试」+ 重试按钮；不影响订单其他信息展示。</li>
-          <li><strong>无任何兑换字段返回</strong>（异常）：区块显示「暂未获取到兑换信息，请联系客服」。</li>
+          <li><strong>无任何兑换字段返回</strong>（已完成但无内容）：区块显示「暂未获取到兑换信息，请联系客服」。</li>
         </ul>
       </div>
     </div>
