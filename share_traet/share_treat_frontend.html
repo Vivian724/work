@@ -22,7 +22,7 @@
   .page{border-top:1px solid #eef0f2;}
   .page-bar{padding:17px 30px;background:#fafbfc;font-size:20px;font-weight:700;}
   .page-bar .n{display:inline-block;background:#eef2ff;color:#3358d4;border-radius:6px;
-    font-size:15px;padding:3px 10px;margin-right:10px;font-weight:700;}
+    font-size:14px;padding:3px 12px;margin-right:10px;font-weight:700;letter-spacing:.5px;}
   .page-bar .p{display:block;font-size:14.5px;color:#6b7280;font-weight:400;margin-top:6px;}
   .page-bar .p code{background:#f1f2f4;border-radius:4px;padding:2px 6px;
     font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13.5px;}
@@ -121,7 +121,7 @@
 
     <h2 style="margin-top:22px;">变更摘要</h2>
     <table>
-      <tr><th style="width:68px">序号</th><th style="width:120px">页面</th><th style="width:250px">路径</th><th>主要改动</th></tr>
+      <tr><th style="width:68px">页码</th><th style="width:120px">页面</th><th style="width:250px">路径</th><th>主要改动</th></tr>
       <tr><td>1</td><td>商品列表</td><td>积分商城 &gt; Share Treat 分类</td><td>沿用图片 / 价格 / 折扣 / 库存；点击商品进入商品详情。</td></tr>
       <tr><td>2</td><td>商品详情</td><td>商品列表 &gt; 点击商品卡</td><td><span class="red">新增「如何兑换 / 兑换条款」入口 + 二级「兑换说明」弹窗</span>（内容来自三方 Brand API）。</td></tr>
       <tr><td>3</td><td>确认订单</td><td>购买 &gt; 确认订单弹窗</td><td><span class="red">新增「我已阅读并同意《如何兑换 / 兑换条款》」勾选</span>，默认不勾、未勾时付款置灰。</td></tr>
@@ -134,7 +134,7 @@
 
   <!-- 1 商品列表 -->
   <div class="page">
-    <div class="page-bar"><span class="n">1</span>商品列表
+    <div class="page-bar"><span class="n">第 1 页</span>商品列表
       <span class="p">路径：<code>积分商城 &gt; Share Treat 分类</code> · 商品以两列卡片并排展示；有折扣时左上角显示 ⚡ 标签与划线原价</span></div>
     <div class="cols">
         <div class="imgcol"><div class="stick">
@@ -204,7 +204,7 @@
 
   <!-- 2 商品详情 -->
   <div class="page">
-    <div class="page-bar"><span class="n">2</span>商品详情弹窗
+    <div class="page-bar"><span class="n">第 2 页</span>商品详情弹窗
       <span class="p">路径：<code>商品列表 &gt; 点击商品卡</code> · 弹窗含商品简介、「如何兑换 / 兑换条款」入口与购买按钮</span></div>
     <div class="cols">
         <div class="imgcol"><div class="stick">
@@ -295,7 +295,7 @@
 
   <!-- 3 确认订单 -->
   <div class="page">
-    <div class="page-bar"><span class="n">3</span>确认订单
+    <div class="page-bar"><span class="n">第 3 页</span>确认订单
       <span class="p">路径：<code>购买 &gt; 确认订单弹窗</code></span></div>
     <div class="cols">
       <div class="imgcol"><div class="stick">
@@ -357,7 +357,7 @@
 
   <!-- 4 购买成功 -->
   <div class="page">
-    <div class="page-bar"><span class="n">4</span>购买成功
+    <div class="page-bar"><span class="n">第 4 页</span>购买成功
       <span class="p">路径：<code>付款 &gt; 购买成功弹窗</code></span></div>
     <div class="cols">
       <div class="imgcol"><div class="stick">
@@ -389,7 +389,7 @@
 
   <!-- 5 兑换记录 -->
   <div class="page">
-    <div class="page-bar"><span class="n">5</span>兑换记录
+    <div class="page-bar"><span class="n">第 5 页</span>兑换记录
       <span class="p">路径：<code>订单 &gt; 兑换记录</code></span></div>
     <div class="cols">
       <div class="imgcol"><div class="stick">
@@ -444,7 +444,7 @@
 
   <!-- 6 订单详情 -->
   <div class="page">
-    <div class="page-bar"><span class="n">6</span>订单详情（既有页，新增「兑换信息」区块）
+    <div class="page-bar"><span class="n">第 6 页</span>订单详情（既有页，新增「兑换信息」区块）
       <span class="p">路径：<code>兑换记录 &gt; 订单详情</code>　此页本已存在，本次仅在其内新增兑换信息</span></div>
     <div class="cols">
       <div class="imgcol"><div class="stick">
@@ -578,7 +578,7 @@
 
   <!-- 7 商品列表 · 已搶光 -->
   <div class="page">
-    <div class="page-bar"><span class="n">7</span>商品列表 · 已搶光
+    <div class="page-bar"><span class="n">第 7 页</span>商品列表 · 已搶光
       <span class="p">路径：<code>积分商城 &gt; Share Treat 分类</code> · 库存为 0 时，商品卡叠加半透明遮罩显示「已搶光」</span></div>
     <div class="cols">
       <div class="imgcol"><div class="stick">
