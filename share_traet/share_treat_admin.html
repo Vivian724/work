@@ -53,6 +53,18 @@
   .chk li{position:relative;padding-left:24px;}
   .chk li::before{content:"";position:absolute;left:0;top:4px;width:14px;height:14px;
     border:1.5px solid #b8bcc4;border-radius:3px;}
+  /* ---- 顶部页面导航 ---- */
+  html{scroll-behavior:smooth;}
+  .page{scroll-margin-top:72px;}
+  #top{scroll-margin-top:72px;}
+  .nav{position:sticky;top:12px;z-index:30;background:#fff;border:1px solid #e6e8eb;
+    border-radius:10px;box-shadow:0 2px 12px rgba(20,28,45,.07);padding:9px 14px;margin-bottom:18px;
+    display:flex;flex-wrap:wrap;gap:7px;align-items:center;}
+  .nav b{font-size:13px;color:#6b7280;margin-right:4px;font-weight:700;}
+  .nav a{font-size:13px;color:#3a3f47;text-decoration:none;background:#f1f2f4;
+    border-radius:7px;padding:5px 11px;font-weight:600;white-space:nowrap;transition:.15s;}
+  .nav a:hover{background:#eef2ff;color:#3358d4;}
+
   @media(max-width:880px){
     .cols{flex-direction:column;}
     .imgcol,.speccol{flex:1 1 auto;max-width:100%;border-right:none;}
@@ -60,7 +72,15 @@
     .imgcol .stick{position:static;}
   }
 </style></head>
-<body><div class="wrap"><div class="paper">
+<body><div class="wrap">
+  <nav class="nav">
+    <b>目录</b>
+    <a href="#top">变更摘要</a>
+    <a href="#p1">页面 1 · 新增商品</a>
+    <a href="#p2">页面 2 · 用户积分记录</a>
+    <a href="#p3">页面 3 · 商品兑换记录</a>
+  </nav>
+  <div class="paper" id="top">
 
   <div class="head">
     <h1>积分商城　后台需求规格（Share Treat）</h1>
@@ -69,16 +89,17 @@
 
   <div class="block">
     <h2>变更摘要</h2>
+    <div class="tip" style="border-left-color:#3358d4;background:#eef2ff;"><strong>QA 验收范围：</strong>本次后台改动<strong>仅针对「Share Treat」类型商品</strong>，验收请聚焦 Share Treat 的新增商品 / 三级联动 / 库存取小值 / 审核（通过·拒绝退分）/ 查看三方信息（脱敏）等流程；<strong>其他商品类型不在本次范围、行为维持不变</strong>。</div>
     <table>
       <tr><th style="width:34px">#</th><th>页面</th><th>路径</th><th>主要改动</th></tr>
-      <tr><td>1</td><td>新增商品</td><td>后台 &gt; 积分商城 &gt; 商品管理 &gt; 新增商品</td><td>商品类型新增 Share Treat；选中后出现「类别 / 厂商 / 商品」三级联动 + 商品详情</td></tr>
-      <tr><td>2</td><td>用户积分记录</td><td>后台 &gt; 积分商城 &gt; 用户积分记录</td><td>「原因」改显示商品类型；「备注」改显示商品名称</td></tr>
-      <tr><td>3</td><td>商品兑换记录</td><td>后台 &gt; 积分商城 &gt; 商品兑换记录</td><td>类型筛选新增 Share Treat；操作栏「查看三方信息」+ 弹窗；手动审核先显示审核按钮，审核完成后才显示「查看三方信息」</td></tr>
+      <tr><td>1</td><td>新增商品</td><td>后台 &gt; 积分商城 &gt; 商品管理 &gt; 新增商品</td><td>新增商品类别及商品类型 <strong>Share Treat</strong>；选中商品类型 Share Treat 后出现「类别 / 厂商 / 商品」三级联动 + 商品详情</td></tr>
+      <tr><td>2</td><td>用户积分记录</td><td>后台 &gt; 积分商城 &gt; 用户积分记录</td><td>Share Treat 订单「原因」显示 <strong>Share Treat</strong>（商品类型）；「备注」显示商品名称</td></tr>
+      <tr><td>3</td><td>商品兑换记录</td><td>后台 &gt; 积分商城 &gt; 商品兑换记录</td><td>类型筛选新增 Share Treat；操作栏「查看三方信息」+ 弹窗；手动审核先显示审核按钮，<strong>审核可通过 / 拒绝</strong>，通过后才显示「查看三方信息」，<span class="red">拒绝则全额退还会员积分</span></td></tr>
     </table>
   </div>
 
   <!-- 页面1 -->
-  <div class="page">
+  <div class="page" id="p1">
     <div class="page-bar"><span class="n">页面 1</span>新增商品
       <span class="p">路径：<code>后台 &gt; 积分商城 &gt; 商品管理 &gt; 新增商品</code></span></div>
     <div class="cols">
@@ -87,10 +108,10 @@
       </div></div>
       <div class="speccol">
         <h3>改动说明</h3>
-        <p>「商品类型」新增选项 <strong>Share Treat</strong>。选中后在下方显示一组「三级联动 + 商品详情」字段，供管理员选定要上架兑换的商品。其余字段（商品图片、购买价格、积分折扣比例、排序、单个会员限购数、库存、是否限时抢购、审核模式等）维持既有逻辑不变。</p>
+        <p>新增商品类别 <strong>Share Treat</strong> 及商品类型 <strong>Share Treat</strong>。选中商品类型 Share Treat 后，在下方显示一组「三级联动 + 商品详情」字段，供管理员选定要上架兑换的商品。其余字段（商品图片、购买价格、积分折扣比例、排序、单个会员限购数、库存、是否限时抢购、审核模式等）维持既有逻辑不变。</p>
         <h3>改动点</h3>
         <ol>
-          <li>「商品类型」单选新增选项 <strong>Share Treat</strong>。</li>
+          <li>新增商品类别 <strong>Share Treat</strong> 及商品类型 <strong>Share Treat</strong>。</li>
           <li>选中 Share Treat 后，新增字段（图中<span class="red">红框</span>）：选择类别、选择厂商、选择商品、商品详情、商品简介。</li>
           <li>选中其他商品类型时，上述新增字段不显示。</li>
         </ol>
@@ -100,8 +121,8 @@
           <tr><td>选择类别 Category</td><td>下拉</td><td>是</td><td>Share Treat 商品类别，数据来自第三方 API</td></tr>
           <tr><td>选择厂商 Brand</td><td>下拉</td><td>是</td><td>依所选类别联动带出</td></tr>
           <tr><td>选择商品 Goods</td><td>下拉</td><td>是</td><td>依所选厂商联动带出</td></tr>
-          <tr><td>商品详情 Goods Detail</td><td>显示（只读）</td><td>—</td><td>选定商品后自动带出</td></tr>
-          <tr><td>库存</td><td>数字</td><td>是</td><td>管理员手动输入；保存时系统自动与第三方 API 回传库存对比，取<strong>两者较小值</strong>作为实际上架库存上限</td></tr>
+          <tr><td>商品详情 Goods Detail</td><td>显示（只读）</td><td>—</td><td>选定商品后自动带出；仅供运营参考，<strong>不可编辑</strong></td></tr>
+          <tr><td>库存</td><td>数字</td><td>是</td><td>管理员手动输入；保存时系统自动与第三方 API 回传库存对比，取<strong>两者较小值</strong>作为实际上架库存上限。若第三方 API 回传库存为 <strong>0</strong> 或<strong>无回传值</strong>，「库存」栏位自动置灰、不可填写</td></tr>
           <tr><td>商品简介</td><td>文本</td><td>是</td><td>沿用既有字段</td></tr>
         </table>
         <h3>功能逻辑</h3>
@@ -109,7 +130,8 @@
           <li>联动顺序：类别 → 厂商 → 商品 → 详情。</li>
           <li>上层变更时，下层选项需清空并重新加载。</li>
           <li>类别 / 厂商 / 商品三级数据均来自第三方提供的 API（接口文件）。</li>
-          <li>库存取最小值：保存时系统自动比较管理员输入数量与第三方 API 回传库存，取<strong>二者中的较小值</strong>作为最终上架库存，以防止超卖。若第三方 API 无库存数据，则以管理员输入值为准。</li>
+          <li>库存取最小值：保存时系统自动比较管理员输入数量与第三方 API 回传库存，取<strong>二者中的较小值</strong>作为最终上架库存，以防止超卖。</li>
+          <li>若第三方 API 回传库存为 <strong>0</strong> 或<strong>无回传值</strong>，「库存」输入栏自动置灰、不可填写。</li>
         </ul>
         <h3>异常处理（第三方 API 连接失败）</h3>
         <p>选择 Share Treat 后，若三级下拉的数据来源（第三方 API）连接失败或无响应，需弹出错误提示，并将受影响的下拉置为不可选、「确定」按钮禁止提交。</p>
@@ -117,40 +139,45 @@
           <li>错误提示（顶部 Toast）：<strong>「资料载入失败，请检查网络或稍后重试」</strong></li>
           <li>连接失败期间「确定」按钮禁止提交，避免存入空商品。</li>
         </ul>
+        <h3>库存逻辑情境一览</h3>
+        <table>
+          <tr><th>情境</th><th>管理员填写</th><th>三方回传</th><th>最终上架库存</th><th>说明</th></tr>
+          <tr>
+            <td>A · 管理员填写 &gt; 三方库存</td>
+            <td><code>1 000</code></td>
+            <td><code>500</code></td>
+            <td><strong>500</strong></td>
+            <td>取三方值（较小值）</td>
+          </tr>
+          <tr>
+            <td>B · 管理员填写 ≤ 三方库存</td>
+            <td><code>200</code></td>
+            <td><code>500</code></td>
+            <td><strong>200</strong></td>
+            <td>取管理员值（较小值）</td>
+          </tr>
+          <tr>
+            <td>C · 三方回传库存为 0</td>
+            <td>任意</td>
+            <td><code style="color:#e5484d;font-weight:700;">0</code></td>
+            <td><strong>0</strong></td>
+            <td>「库存」栏位<strong>自动置灰</strong>，不可填写；最终库存为 0</td>
+          </tr>
+          <tr>
+            <td>D · 三方无库存数据</td>
+            <td>任意</td>
+            <td><code style="color:#b5790a;">null / 无</code></td>
+            <td>—</td>
+            <td>「库存」栏位<strong>自动置灰</strong>，不可填写；无法新增库存数据</td>
+          </tr>
+        </table>
       </div>
     </div>
   </div>
 
-  <!-- 库存取最小值 补充示意 -->
-  <div style="border-top:1px solid #eef0f2;padding:20px 28px 24px;background:#fcfcfd;">
-    <div style="font-size:12.5px;font-weight:700;color:#3a3f47;margin-bottom:14px;">补充示意：库存取最小值逻辑（三情境）</div>
-    <div style="display:flex;gap:14px;flex-wrap:wrap;">
-      <div style="background:#fff;border:1px solid #e6e8eb;border-radius:8px;padding:13px 15px;min-width:195px;">
-        <div style="font-size:11.5px;font-weight:700;color:#3358d4;margin-bottom:8px;">情境 A · 管理员填写 &gt; 三方库存</div>
-        <div style="font-size:12px;color:#33404d;margin:3px 0;">管理员填写：<code>1 000</code></div>
-        <div style="font-size:12px;color:#33404d;margin:3px 0;">三方回传：<code>500</code></div>
-        <div style="border-top:1px dashed #dde0e5;margin:7px 0;"></div>
-        <div style="font-size:12px;font-weight:700;color:#30a46c;">→ 上架库存 <code>500</code>（取较小值）</div>
-      </div>
-      <div style="background:#fff;border:1px solid #e6e8eb;border-radius:8px;padding:13px 15px;min-width:195px;">
-        <div style="font-size:11.5px;font-weight:700;color:#3358d4;margin-bottom:8px;">情境 B · 管理员填写 ≤ 三方库存</div>
-        <div style="font-size:12px;color:#33404d;margin:3px 0;">管理员填写：<code>200</code></div>
-        <div style="font-size:12px;color:#33404d;margin:3px 0;">三方回传：<code>500</code></div>
-        <div style="border-top:1px dashed #dde0e5;margin:7px 0;"></div>
-        <div style="font-size:12px;font-weight:700;color:#30a46c;">→ 上架库存 <code>200</code>（取较小值）</div>
-      </div>
-      <div style="background:#fff;border:1px solid #e6e8eb;border-radius:8px;padding:13px 15px;min-width:195px;">
-        <div style="font-size:11.5px;font-weight:700;color:#3358d4;margin-bottom:8px;">情境 C · 三方无库存数据</div>
-        <div style="font-size:12px;color:#33404d;margin:3px 0;">管理员填写：<code>200</code></div>
-        <div style="font-size:12px;color:#33404d;margin:3px 0;">三方回传：<code style="color:#b5790a;">null / 无</code></div>
-        <div style="border-top:1px dashed #dde0e5;margin:7px 0;"></div>
-        <div style="font-size:12px;font-weight:700;color:#30a46c;">→ 上架库存 <code>200</code>（以管理员值为准）</div>
-      </div>
-    </div>
-  </div>
 
   <!-- 页面2 -->
-  <div class="page">
+  <div class="page" id="p2">
     <div class="page-bar"><span class="n">页面 2</span>用户积分记录
       <span class="p">路径：<code>后台 &gt; 积分商城 &gt; 用户积分记录</code></span></div>
     <div class="cols">
@@ -159,10 +186,10 @@
       </div></div>
       <div class="speccol">
         <h3>改动说明</h3>
-        <p>针对「积分兑换商品」类型的记录，调整「原因」与「备注」两列的显示内容。（Share Treat 归属于积分兑换商品；其余类型逻辑不变。）</p>
+        <p>针对商品类型为 <strong>Share Treat</strong> 的兑换记录，调整「原因」与「备注」两列的显示内容；其余商品类型逻辑不变。</p>
         <h3>改动点</h3>
         <ol>
-          <li><strong>「原因」</strong>：改为显示<strong>商品类型</strong>（该笔兑换商品的类型，如 Share Treat / 话费 等）。</li>
+          <li><strong>「原因」</strong>：改为显示<strong>商品类型</strong>，Share Treat 商品显示值为 <code>Share Treat</code>。</li>
           <li><strong>「备注」</strong>：改为显示<strong>商品名称</strong>（该笔兑换的商品名称）。</li>
         </ol>
       </div>
@@ -170,7 +197,7 @@
   </div>
 
   <!-- 页面3 -->
-  <div class="page">
+  <div class="page" id="p3">
     <div class="page-bar"><span class="n">页面 3</span>商品兑换记录
       <span class="p">路径：<code>后台 &gt; 积分商城 &gt; 商品兑换记录</code></span></div>
     <div class="cols">
@@ -178,9 +205,17 @@
         <!-- 商品兑换记录列表 mockup -->
         <div style="border:1px solid #e6e8eb;border-radius:8px;overflow:hidden;font-size:11.5px;background:#fff;margin-bottom:14px;">
           <div style="background:#fafbfc;padding:8px 12px;border-bottom:1px solid #eef0f2;font-weight:700;font-size:12px;color:#3a3f47;">商品兑换记录</div>
-          <div style="padding:7px 10px;display:flex;gap:6px;border-bottom:1px solid #eef0f2;">
-            <span style="background:#eceef1;border-radius:4px;padding:2px 8px;font-size:10.5px;color:#5b626d;">全部</span>
-            <span style="background:#eceef1;border-radius:4px;padding:2px 8px;font-size:10.5px;color:#5b626d;">Share Treat ▾</span>
+          <!-- 筛选栏：对应真实后台 filter bar，箭头处新增 Share Treat 类型选项 -->
+          <div style="padding:7px 10px;display:flex;gap:5px;border-bottom:1px solid #eef0f2;align-items:center;flex-wrap:wrap;">
+            <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 7px;font-size:9.5px;color:#9aa1ad;">选择币别 ▾</span>
+            <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 7px;font-size:9.5px;color:#5b626d;">全部 ▾</span>
+            <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 16px;font-size:9.5px;color:#c5c9d0;">会员名</span>
+            <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 7px;font-size:9.5px;color:#c5c9d0;">日期范围</span>
+            <span style="background:#eef2ff;border:1.5px solid #3358d4;border-radius:4px;padding:2px 7px;font-size:9.5px;color:#3358d4;font-weight:700;position:relative;">
+              Share Treat ▾
+              <span style="position:absolute;top:-7px;right:-4px;background:#e5484d;color:#fff;font-size:7px;border-radius:3px;padding:0 3px;line-height:13px;font-weight:700;">NEW</span>
+            </span>
+            <span style="background:#3358d4;border-radius:4px;padding:2px 9px;font-size:9.5px;color:#fff;font-weight:600;">搜索</span>
           </div>
           <table style="font-size:10.5px;margin:0;">
             <tr style="background:#f6f7f9;">
@@ -197,6 +232,12 @@
               <td style="padding:5px 8px;">VP 道具卡</td>
               <td style="padding:5px 8px;"><span style="background:#fff3da;color:#b5790a;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;">待审核</span></td>
               <td style="padding:5px 8px;color:#3358d4;font-weight:700;font-size:10.5px;">审核</td>
+            </tr>
+            <tr>
+              <td style="padding:5px 8px;">vivian01</td>
+              <td style="padding:5px 8px;">VA免费旋转1</td>
+              <td style="padding:5px 8px;"><span style="background:#eceef1;color:#8b919c;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;">审核未通过</span></td>
+              <td style="padding:5px 8px;color:#9aa1ad;font-size:10.5px;">—（已退积分）</td>
             </tr>
           </table>
         </div>
@@ -238,6 +279,33 @@
           </li>
           <li><strong>点击「查看三方信息」</strong>：弹出「三方信息」窗口，显示三方订单号、兑换码 / 兑换链接。</li>
         </ol>
+
+        <h3>审核动作（手动审核：通过 / 拒绝）</h3>
+        <p>手动审核的订单，操作栏先显示「<strong>审核</strong>」按钮。点击后进入审核处理，管理员可选择<strong>通过</strong>或<strong>拒绝</strong>，并可填写「备注」（<strong>非必填，沿用既有逻辑</strong>）。审核结果与后续行为如下：</p>
+        <table>
+          <tr><th>审核结果</th><th>订单状态</th><th>积分</th><th>三方派发</th><th>操作栏</th><th>前台对应</th></tr>
+          <tr><td><strong>通过</strong></td><td>审核通过</td><td>维持已扣减</td><td>触发三方派发兑换数据</td><td>改显「查看三方信息」</td><td>已完成</td></tr>
+          <tr><td><strong class="red">拒绝</strong></td><td><strong>审核未通过</strong></td><td><strong class="red">全额退还本次扣减积分</strong></td><td>不派发、无兑换数据</td><td>不显示「查看三方信息」</td><td>已拒绝</td></tr>
+        </table>
+        <div class="note"><strong>拒绝＝全额退积分。</strong>审核拒绝后，系统自动将本次扣减的积分<strong>全额退还</strong>至会员账户（与其他商品类型既有逻辑一致）。前台该订单状态转为「已拒绝」，且不显示任何兑换码 / 链接。</div>
+
+        <h3>订单状态与操作人</h3>
+        <table>
+          <tr><th>订单状态</th><th>含义</th><th>操作人显示</th></tr>
+          <tr><td>待审核</td><td>手动审核、尚未处理</td><td>—（待处理）</td></tr>
+          <tr><td>审核通过</td><td>自动审核通过，或管理员审核通过</td><td><strong>自动＝</strong><code>SYSTEM</code>；<strong>人工＝</strong>管理员账号（如 <code>vivianadmin</code>）</td></tr>
+          <tr><td>审核未通过</td><td>管理员审核拒绝</td><td>执行拒绝的管理员账号</td></tr>
+        </table>
+        <div class="tip"><strong>「操作人」是区分自动 / 人工的依据：</strong>显示 <code>SYSTEM</code> 代表系统自动审核通过；显示具体管理员账号则代表该笔为人工审核（通过或拒绝）。</div>
+
+        <h3>前后台状态对照</h3>
+        <table>
+          <tr><th>后台（订单状态）</th><th>前台（兑换记录 / 订单详情）</th></tr>
+          <tr><td>待审核</td><td>待审核</td></tr>
+          <tr><td>审核通过</td><td>已完成</td></tr>
+          <tr><td><strong>审核未通过</strong></td><td><strong>已拒绝</strong></td></tr>
+        </table>
+
         <h3>弹窗字段规格</h3>
         <table>
           <tr><th>字段</th><th>类型</th><th>说明</th><th>脱敏规则</th></tr>
@@ -250,6 +318,7 @@
           <li>兑换码 / 兑换链接依第三方 API 返回的数据显示，二者可能其一、也可能并存（取决于该商品的 API 数据）。</li>
           <li>「查看三方信息」仅 Share Treat 类型显示；其他类型维持原入口。</li>
           <li><strong>脱敏显示</strong>：三方信息弹窗中的敏感字段均需模糊处理——三方订单号仅显示后五码，兑换码 / 兑换链接仅显示后四码；兑换码与兑换链接同时移除复制按钮，防止明文外泄。</li>
+          <li><strong>审核拒绝退积分</strong>：手动审核拒绝时，系统全额退还会员本次扣减的积分；订单状态记为「审核未通过」，操作人记为执行拒绝的管理员账号，前台同步显示「已拒绝」。</li>
         </ul>
       </div>
     </div>
