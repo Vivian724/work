@@ -94,7 +94,7 @@
       <tr><th style="width:34px">#</th><th>页面</th><th>路径</th><th>主要改动</th></tr>
       <tr><td>1</td><td>新增商品</td><td>后台 &gt; 积分商城 &gt; 商品管理 &gt; 新增商品</td><td>新增商品类别及商品类型 <strong>Share Treat</strong>；选中商品类型 Share Treat 后出现「类别 / 厂商 / 商品」三级联动 + 商品详情</td></tr>
       <tr><td>2</td><td>用户积分记录</td><td>后台 &gt; 积分商城 &gt; 用户积分记录</td><td>Share Treat 订单「原因」显示 <strong>Share Treat</strong>（商品类型）；「备注」显示商品名称</td></tr>
-      <tr><td>3</td><td>商品兑换记录</td><td>后台 &gt; 积分商城 &gt; 商品兑换记录</td><td>类型筛选新增 Share Treat；操作栏「查看三方信息」+ 弹窗；手动审核先显示审核按钮，<strong>审核可通过 / 拒绝</strong>，通过后才显示「查看三方信息」，<span class="red">拒绝则全额退还会员积分</span></td></tr>
+      <tr><td>3</td><td>商品兑换记录</td><td>后台 &gt; 积分商城 &gt; 商品兑换记录</td><td>类型筛选新增 Share Treat；操作栏「查看三方信息」+ 弹窗；手动审核先显示审核按钮，审核可通过 / 拒绝，通过后才显示「查看三方信息」，拒绝则全额退还会员积分</td></tr>
     </table>
   </div>
 
@@ -112,7 +112,7 @@
         <h3>改动点</h3>
         <ol>
           <li>新增商品类别 <strong>Share Treat</strong> 及商品类型 <strong>Share Treat</strong>。</li>
-          <li>选中 Share Treat 后，新增字段（图中<span class="red">红框</span>）：选择类别、选择厂商、选择商品、商品详情、商品简介。</li>
+          <li>选中 Share Treat 后，新增字段：选择类别、选择厂商、选择商品、商品详情、商品简介。</li>
           <li>选中其他商品类型时，上述新增字段不显示。</li>
         </ol>
         <h3>字段规格</h3>
@@ -274,9 +274,7 @@
         <ol>
           <li><strong>类型筛选下拉（最右侧）</strong>：新增选项 <strong>Share Treat</strong>，可按此类型筛选。</li>
           <li><strong>操作栏</strong>：Share Treat 类型订单显示「<strong>查看三方信息</strong>」（对应原话费类的「查看充值信息」）。</li>
-          <li><strong>审核控制</strong>：
-            <div class="note">当订单为<strong>手动审核</strong>时，操作栏<strong>先显示「审核」按钮</strong>；点击并完成审核后，操作栏才显示「<strong>查看三方信息</strong>」。若为<strong>自动审核</strong>，操作栏直接显示「查看三方信息」。</div>
-          </li>
+          <li><strong>审核控制</strong>：手动审核时，操作栏<strong>先显示「审核」按钮</strong>，完成审核后才显示「查看三方信息」；自动审核直接显示「查看三方信息」。</li>
           <li><strong>点击「查看三方信息」</strong>：弹出「三方信息」窗口，显示三方订单号、兑换码 / 兑换链接。</li>
         </ol>
 
@@ -285,10 +283,8 @@
         <table>
           <tr><th>审核结果</th><th>订单状态</th><th>积分</th><th>三方派发</th><th>操作栏</th><th>前台对应</th></tr>
           <tr><td><strong>通过</strong></td><td>审核通过</td><td>维持已扣减</td><td>触发三方派发兑换数据</td><td>改显「查看三方信息」</td><td>已完成</td></tr>
-          <tr><td><strong class="red">拒绝</strong></td><td><strong>审核未通过</strong></td><td><strong class="red">全额退还本次扣减积分</strong></td><td>不派发、无兑换数据</td><td>不显示「查看三方信息」</td><td>已拒绝</td></tr>
+          <tr><td><strong>拒绝</strong></td><td><strong>审核未通过</strong></td><td><strong>全额退还本次扣减积分</strong></td><td>不派发、无兑换数据</td><td>不显示「查看三方信息」</td><td>已拒绝</td></tr>
         </table>
-        <div class="note"><strong>拒绝＝全额退积分。</strong>审核拒绝后，系统自动将本次扣减的积分<strong>全额退还</strong>至会员账户（与其他商品类型既有逻辑一致）。前台该订单状态转为「已拒绝」，且不显示任何兑换码 / 链接。</div>
-
         <h3>订单状态与操作人</h3>
         <table>
           <tr><th>订单状态</th><th>含义</th><th>操作人显示</th></tr>
@@ -296,8 +292,6 @@
           <tr><td>审核通过</td><td>自动审核通过，或管理员审核通过</td><td><strong>自动＝</strong><code>SYSTEM</code>；<strong>人工＝</strong>管理员账号（如 <code>vivianadmin</code>）</td></tr>
           <tr><td>审核未通过</td><td>管理员审核拒绝</td><td>执行拒绝的管理员账号</td></tr>
         </table>
-        <div class="tip"><strong>「操作人」是区分自动 / 人工的依据：</strong>显示 <code>SYSTEM</code> 代表系统自动审核通过；显示具体管理员账号则代表该笔为人工审核（通过或拒绝）。</div>
-
         <h3>前后台状态对照</h3>
         <table>
           <tr><th>后台（订单状态）</th><th>前台（兑换记录 / 订单详情）</th></tr>
