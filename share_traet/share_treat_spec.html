@@ -186,7 +186,7 @@
     <a href="#fe1">1 商品列表</a>
     <a href="#fe2">2 商品详情</a>
     <a href="#fe3">3 确认订单</a>
-    <a href="#fe4">4 购买成功</a>
+    <a href="#fe4">4 购买结果</a>
     <a href="#fe5">5 兑换记录</a>
     <a href="#fe6">6 订单详情</a>
     <a href="#fe7">7 已搶光</a>
@@ -274,9 +274,9 @@
             <tr><td>商品名称</td><td>后台配置</td><td>由后台定义，如「McDonald's 中薯」「VP道具卡」</td></tr>
             <tr><td>购买价格（积分）</td><td>后台</td><td>会员需支付的积分数</td></tr>
             <tr><td>积分折扣 / 限时</td><td>后台</td><td>既有逻辑，不变动；⚡ -XX% 标签 + 划线原价</td></tr>
-            <tr><td>库存</td><td>后端计算后回传</td><td>前台展示后端回传值；值为 0 时显示「已搶光」遮罩（见第 7 页）</td></tr>
+            <tr><td>库存</td><td>后端计算后回传</td><td>前台展示后端回传值（取后台配置与三方实时库存的较小值）；值为 0 时显示「已搶光」遮罩（见第 7 页）</td></tr>
           </table>
-          <div class="note"><strong>库存显示值（归属后台规格书）：</strong>前台展示的库存数字由后端统一计算后回传，前台不做任何运算。取值原则：以「三方实时库存」与「后台配置库存上限」两者中较小的值为准。回传值为 0 时，前台显示「已搶光」遮罩。详细取值逻辑请定义于后台规格书，本文件不重复说明。</div>
+          <div class="note"><strong>库存显示值：</strong>前台展示的库存数字由后端统一计算后回传，前台不做任何运算。取值原则：以「三方实时库存」与「后台配置库存」两者中<strong>较小的值</strong>为准。回传值为 0 时，前台显示「已搶光」遮罩。</div>
           <div class="tip">QA 验证：后台需已上架至少一件 Share Treat 商品，才能在前台「Share Treat」分类看到商品。</div>
           <h3>文案长度限制</h3>
           <table>
@@ -484,7 +484,8 @@
         <ul>
           <li>未勾选同意：付款置灰；点击置灰按钮可轻提示「请先阅读并同意如何兑换 / 兑换条款」。</li>
           <li>「付款」前再次校验库存与积分余额；不足时提示并阻止下单。</li>
-          <li>付款＝扣减会员积分并向后台 / 三方发起兑换（派发）。成功后进入<strong>购买成功</strong>（第 4 页）。</li>
+          <li>付款时先向第三方 API 校验库存：库存不足（回传 0）→ 显示<strong>购买失败弹窗</strong>（第 4 页 · 状态 B），积分不扣除、不生成兑换记录。</li>
+          <li>库存充足 → 扣减会员积分并向后台 / 三方发起兑换（派发）。成功后进入<strong>购买成功弹窗</strong>（第 4 页 · 状态 A）。</li>
           <li>建议服务端记录本次「同意条款」的时间戳与条款版本，便于日后查证。</li>
         </ul>
         <div class="tip">扣分与三方派发的时序、失败回滚（退积分）以后台 / 服务端为准；前台只负责呈现结果状态。</div>
@@ -492,34 +493,72 @@
     </div>
   </div>
 
-  <!-- 4 购买成功 -->
+  <!-- 4 购买结果 -->
   <div class="page" id="fe4">
-    <div class="page-bar"><span class="n">第 4 页</span>购买成功
-      <span class="p">路径：<code>付款 &gt; 购买成功弹窗</code></span></div>
+    <div class="page-bar"><span class="n">第 4 页</span>购买结果
+      <span class="p">路径：<code>付款 &gt; 购买结果弹窗</code></span></div>
     <div class="cols">
       <div class="imgcol"><div class="stick">
-        <div class="phone">
-          <div class="ph-status">14:59</div>
-          <div class="ph-body" style="padding:24px 16px;">
-            <div class="center"><div class="swatch" style="margin:0 auto;border-radius:50%;background:linear-gradient(135deg,#f5a96a,#e8825a);">🐿</div>
-              <div style="font-weight:800;font-size:18px;margin:14px 0 18px;">购买成功</div></div>
-            <div style="display:flex;gap:10px;">
-              <span class="btn btn-primary" style="flex:1;">查看订单</span>
+        <div style="display:flex;flex-direction:column;gap:24px;">
+          <!-- 状态 A：购买成功 -->
+          <div>
+            <div class="phone">
+              <div class="ph-status">14:59</div>
+              <div class="ph-body" style="padding:24px 16px;">
+                <div class="center"><div class="swatch" style="margin:0 auto;border-radius:50%;background:linear-gradient(135deg,#f5a96a,#e8825a);">🐿</div>
+                  <div style="font-weight:800;font-size:18px;margin:14px 0 18px;">购买成功</div></div>
+                <div style="display:flex;gap:10px;">
+                  <span class="btn btn-primary" style="flex:1;">查看订单</span>
+                </div>
+              </div>
             </div>
+            <div class="cap">状态 A · 购买成功</div>
+          </div>
+          <!-- 状态 B：购买失败（已搶光） -->
+          <div>
+            <div class="phone">
+              <div class="ph-status">14:59</div>
+              <div class="ph-body" style="padding:24px 16px;">
+                <div class="center">
+                  <div class="swatch" style="margin:0 auto;border-radius:50%;background:linear-gradient(135deg,#d1d5db,#9ca3af);">😔</div>
+                  <div style="font-weight:800;font-size:18px;margin:14px 0 8px;">已搶光</div>
+                  <div style="font-size:13px;color:#6b7280;line-height:1.6;margin-bottom:18px;">很抱歉，此商品库存已不足，<br>购买未成功，积分不会被扣除。</div>
+                </div>
+                <div style="display:flex;gap:10px;">
+                  <span class="btn btn-primary" style="flex:1;">返 回</span>
+                </div>
+              </div>
+            </div>
+            <div class="cap">状态 B · 购买失败（已搶光）</div>
           </div>
         </div>
-        <div class="cap">购买成功（仅「查看订单」按钮）</div>
       </div></div>
       <div class="speccol">
-        <h3>改动点</h3>
+        <h3>状态 A · 购买成功</h3>
         <p>移除「立即使用」按钮，<strong>仅保留「查看订单」</strong>，点击进入<strong>兑换记录</strong>（第 5 页）。</p>
-        <h3>弹窗关闭行为</h3>
         <table>
           <tr><th>操作</th><th>行为</th></tr>
           <tr><td>点击「查看订单」</td><td>进入兑换记录（第 5 页）</td></tr>
-          <tr><td>点击弹窗外区域</td><td>弹窗关闭，停留在当前页面（不跳转）</td></tr>
+          <tr><td>点击弹窗外区域</td><td>弹窗关闭，停留在当前页面</td></tr>
         </table>
         <div class="tip">兑换信息（兑换码 / 兑换链接）统一在订单详情查看；购买成功后「查看订单」先进入兑换记录列表，再点入具体订单详情，入口收敛、体验一致。</div>
+
+        <h3>状态 B · 购买失败（已搶光）</h3>
+        <p>会员按下「付款」后，后端校验三方库存为 <strong>0</strong> 时，显示此失败弹窗。</p>
+        <table>
+          <tr><th>项目</th><th>规格</th></tr>
+          <tr><td>标题</td><td>已搶光（共用第 7 页「已搶光」翻译 key）</td></tr>
+          <tr><td>说明文字</td><td>很抱歉，此商品库存已不足，购买未成功，积分不会被扣除。</td></tr>
+          <tr><td>按钮</td><td>「返回」</td></tr>
+          <tr><td>积分</td><td><strong>不扣除</strong>（校验在扣分前执行）</td></tr>
+          <tr><td>兑换记录</td><td><strong>不生成</strong></td></tr>
+        </table>
+        <table>
+          <tr><th>操作</th><th>行为</th></tr>
+          <tr><td>点击「返回」</td><td>返回商品列表（第 1 页）；该商品显示「已搶光」遮罩、库存 0</td></tr>
+          <tr><td>点击弹窗外区域</td><td>同上，返回商品列表</td></tr>
+        </table>
+        <div class="tip">积分校验顺序：先验库存 → 再扣积分，避免扣分后无货的回滚复杂度。</div>
       </div>
     </div>
   </div>
@@ -917,7 +956,7 @@
           <tr><td>选择厂商 Brand</td><td>下拉</td><td>是</td><td>依所选类别联动带出</td></tr>
           <tr><td>选择商品 Goods</td><td>下拉</td><td>是</td><td>依所选厂商联动带出</td></tr>
           <tr><td>商品详情 Goods Detail</td><td>显示（只读）</td><td>—</td><td>选定商品后自动带出；仅供运营参考，<strong>不可编辑</strong></td></tr>
-          <tr><td>库存</td><td>数字</td><td>是</td><td>管理员手动输入；保存时系统自动与第三方 API 回传库存对比，取<strong>两者较小值</strong>作为实际上架库存上限。若第三方 API 回传库存为 <strong>0</strong> 或<strong>无回传值</strong>，「库存」栏位自动置灰、不可填写</td></tr>
+          <tr><td>库存</td><td>数字</td><td>是</td><td>管理员手动输入，输入值不可超过第三方 API 回传库存；输入框后方显示灰色辅助文字「剩余库存：xxx 件」，数值来自第三方 API 实时回传，供管理员填写时参考。若第三方 API 回传库存为 <strong>0</strong>，辅助文字显示「剩余库存：0 件」，「库存」栏位自动置灰、不可填写；若第三方 API <strong>无回传值</strong>，辅助文字不显示，「库存」栏位同步置灰、不可填写</td></tr>
           <tr><td>商品简介</td><td>文本</td><td>是</td><td>沿用既有字段</td></tr>
         </table>
         <h3>功能逻辑</h3>
@@ -925,8 +964,10 @@
           <li>联动顺序：类别 → 厂商 → 商品 → 详情。</li>
           <li>上层变更时，下层选项需清空并重新加载。</li>
           <li>类别 / 厂商 / 商品三级数据均来自第三方提供的 API（接口文件）。</li>
-          <li>库存取最小值：保存时系统自动比较管理员输入数量与第三方 API 回传库存，取<strong>二者中的较小值</strong>作为最终上架库存，以防止超卖。</li>
-          <li>若第三方 API 回传库存为 <strong>0</strong> 或<strong>无回传值</strong>，「库存」输入栏自动置灰、不可填写。</li>
+          <li>库存辅助文字：选定商品后，输入框后方自动显示灰色文字「剩余库存：xxx 件」，数值实时来自第三方 API 回传，供管理员填写时参考。</li>
+          <li>库存上限验证：管理员输入值不可超过第三方 API 回传库存；超出时输入框即时提示错误，「确定」按钮禁止提交。</li>
+          <li>若第三方 API 回传库存为 <strong>0</strong>，辅助文字显示「剩余库存：0 件」，「库存」输入栏自动置灰、不可填写。</li>
+          <li>若第三方 API <strong>无回传值</strong>，辅助文字不显示，「库存」输入栏自动置灰、不可填写。</li>
         </ul>
         <h3>异常处理（第三方 API 连接失败）</h3>
         <p>选择 Share Treat 后，若三级下拉的数据来源（第三方 API）连接失败或无响应，需弹出错误提示，并将受影响的下拉置为不可选、「确定」按钮禁止提交。</p>
@@ -934,38 +975,6 @@
           <li>错误提示（顶部 Toast）：<strong>「资料载入失败，请检查网络或稍后重试」</strong></li>
           <li>连接失败期间「确定」按钮禁止提交，避免存入空商品。</li>
         </ul>
-        <h3>库存逻辑情境一览</h3>
-        <table>
-          <tr><th>情境</th><th>管理员填写</th><th>三方回传</th><th>最终上架库存</th><th>说明</th></tr>
-          <tr>
-            <td>A · 管理员填写 &gt; 三方库存</td>
-            <td><code>1 000</code></td>
-            <td><code>500</code></td>
-            <td><strong>500</strong></td>
-            <td>取三方值（较小值）</td>
-          </tr>
-          <tr>
-            <td>B · 管理员填写 ≤ 三方库存</td>
-            <td><code>200</code></td>
-            <td><code>500</code></td>
-            <td><strong>200</strong></td>
-            <td>取管理员值（较小值）</td>
-          </tr>
-          <tr>
-            <td>C · 三方回传库存为 0</td>
-            <td>任意</td>
-            <td><code style="color:#e5484d;font-weight:700;">0</code></td>
-            <td><strong>0</strong></td>
-            <td>「库存」栏位<strong>自动置灰</strong>，不可填写；最终库存为 0</td>
-          </tr>
-          <tr>
-            <td>D · 三方无库存数据</td>
-            <td>任意</td>
-            <td><code style="color:#b5790a;">null / 无</code></td>
-            <td>—</td>
-            <td>「库存」栏位<strong>自动置灰</strong>，不可填写；无法新增库存数据</td>
-          </tr>
-        </table>
       </div>
     </div>
   </div>
