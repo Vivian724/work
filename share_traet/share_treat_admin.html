@@ -122,7 +122,7 @@
           <tr><td>选择厂商 Brand</td><td>下拉</td><td>是</td><td>依所选类别联动带出</td></tr>
           <tr><td>选择商品 Goods</td><td>下拉</td><td>是</td><td>依所选厂商联动带出</td></tr>
           <tr><td>商品详情 Goods Detail</td><td>显示（只读）</td><td>—</td><td>选定商品后自动带出；仅供运营参考，<strong>不可编辑</strong></td></tr>
-          <tr><td>库存</td><td>数字</td><td>是</td><td>管理员手动输入；保存时系统自动与第三方 API 回传库存对比，取<strong>两者较小值</strong>作为实际上架库存上限。若第三方 API 回传库存为 <strong>0</strong> 或<strong>无回传值</strong>，「库存」栏位自动置灰、不可填写</td></tr>
+          <tr><td>库存</td><td>数字</td><td>是</td><td>管理员手动输入；输入值不可超过第三方 API 回传库存上限，超出时栏位下方即时显示红字错误提示，「确定」按钮 disabled。若第三方 API 回传库存为 <strong>0</strong> 或<strong>无回传值</strong>，「库存」栏位自动置灰、不可填写</td></tr>
           <tr><td>商品简介</td><td>文本</td><td>是</td><td>沿用既有字段</td></tr>
         </table>
         <h3>功能逻辑</h3>
@@ -130,7 +130,7 @@
           <li>联动顺序：类别 → 厂商 → 商品 → 详情。</li>
           <li>上层变更时，下层选项需清空并重新加载。</li>
           <li>类别 / 厂商 / 商品三级数据均来自第三方提供的 API（接口文件）。</li>
-          <li>库存取最小值：保存时系统自动比较管理员输入数量与第三方 API 回传库存，取<strong>二者中的较小值</strong>作为最终上架库存，以防止超卖。</li>
+          <li><strong>库存上限验证</strong>：管理员输入库存时，系统即时与第三方 API 回传库存比对；输入值超过三方上限时，栏位下方即时显示红字「库存不可超过三方库存上限 {N}」，「确定」按钮同步 disabled，须修正后方可提交。</li>
           <li>若第三方 API 回传库存为 <strong>0</strong> 或<strong>无回传值</strong>，「库存」输入栏自动置灰、不可填写。</li>
         </ul>
         <h3>异常处理（第三方 API 连接失败）</h3>
@@ -146,15 +146,15 @@
             <td>A · 管理员填写 &gt; 三方库存</td>
             <td><code>1 000</code></td>
             <td><code>500</code></td>
-            <td><strong>500</strong></td>
-            <td>取三方值（较小值）</td>
+            <td>—</td>
+            <td>栏位下方红字提示「库存不可超过三方库存上限 500」，「确定」按钮 disabled，<strong>不可提交</strong></td>
           </tr>
           <tr>
             <td>B · 管理员填写 ≤ 三方库存</td>
             <td><code>200</code></td>
             <td><code>500</code></td>
             <td><strong>200</strong></td>
-            <td>取管理员值（较小值）</td>
+            <td>正常提交，以管理员输入值为准</td>
           </tr>
           <tr>
             <td>C · 三方回传库存为 0</td>
@@ -303,7 +303,7 @@
         <h3>弹窗字段规格</h3>
         <table>
           <tr><th>字段</th><th>类型</th><th>说明</th><th>脱敏规则</th></tr>
-          <tr><td>三方订单号</td><td>文本 + 复制</td><td>供应商回传的订单号，供对账追溯</td><td>仅显示<strong>后五码</strong>，前段以 <code>*</code> 遮蔽</td></tr>
+          <tr><td>三方订单号</td><td>文本 + 复制</td><td>供应商回传的订单号，供对账追溯；点击复制按钮可复制<strong>完整订单号</strong>（与既有复制逻辑一致）</td><td>显示时仅呈现<strong>后五码</strong>，前段以 <code>*</code> 遮蔽；复制内容为完整值</td></tr>
           <tr><td>兑换码</td><td>文本（不可复制）</td><td>可兑换的 PIN / 券码（码型商品）</td><td>仅显示<strong>后四码</strong>，前段以 <code>*</code> 遮蔽；移除复制按钮</td></tr>
           <tr><td>兑换链接</td><td>链接（不可复制）</td><td>导向供应商兑换页（链接型商品）</td><td>仅显示<strong>后四码</strong>，前段以 <code>*</code> 遮蔽；移除复制按钮</td></tr>
         </table>
@@ -312,6 +312,7 @@
           <li>兑换码 / 兑换链接依第三方 API 返回的数据显示，二者可能其一、也可能并存（取决于该商品的 API 数据）。</li>
           <li>「查看三方信息」仅 Share Treat 类型显示；其他类型维持原入口。</li>
           <li><strong>脱敏显示</strong>：三方信息弹窗中的敏感字段均需模糊处理——三方订单号仅显示后五码，兑换码 / 兑换链接仅显示后四码；兑换码与兑换链接同时移除复制按钮，防止明文外泄。</li>
+          <li><strong>三方订单号复制</strong>：点击复制按钮后，复制内容为<strong>完整三方订单号</strong>（非脱敏后的显示值），与既有复制逻辑一致。</li>
           <li><strong>审核拒绝退积分</strong>：手动审核拒绝时，系统全额退还会员本次扣减的积分；订单状态记为「审核未通过」，操作人记为执行拒绝的管理员账号，前台同步显示「已拒绝」。</li>
         </ul>
       </div>
