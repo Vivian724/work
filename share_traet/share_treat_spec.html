@@ -168,8 +168,8 @@
       <h2>需求背景</h2>
       <p>积分商城原有奖励多为免费旋转券、免费投注券等，需绑定游戏 / 投注使用，使用场景较单一。本次接入第三方「Share Treat」，引入可直接核销的生活化品牌奖励，让积分兑换更有感、使用场景更丰富，提升会员对积分的兴趣与活跃度。</p>
       <h2 style="margin-top:18px;">需求说明</h2>
-      <p style="margin-bottom:6px;"><strong>前台：</strong>新增「Share Treat」分类，会员可用积分兑换商品；兑换后在订单详情查看兑换码 / 链接去核销。状态分待审核 / 已完成 / 已拒绝，拒绝时退还积分。</p>
-      <p><strong>后台：</strong>支持上架 Share Treat 商品（数据来自第三方）、审核兑换（通过派发、拒绝退积分）、查看三方兑换信息（脱敏）。</p>
+      <p style="margin-bottom:6px;"><strong>前台：</strong>新增「Share Treat」分类，会员可用积分兑换商品；购买时填写手机号码与邮箱，三方凭此自行派发兑换信息；订单详情可查看三方状态（成功 / 失败）。状态分待审核 / 已完成 / 已拒绝，拒绝时退还积分。</p>
+      <p><strong>后台：</strong>支持上架 Share Treat 商品（数据来自第三方）、审核兑换（通过派发、拒绝退积分）、查看订单信息。</p>
     </div>
   </div>
 
@@ -197,21 +197,21 @@
     <h2>文件说明</h2>
     <p>这是 Share Treat 积分商城的<strong>会员端（前台）规格</strong>，供 QA / RD / UI 参考。</p>
     <ul>
-      <li><strong>核心改动：</strong>会员购买后，可在「订单详情」看到第三方派发的<strong>兑换信息</strong>（兑换码 / 兑换链接，或两者皆有），凭此去实体店核销；无密码字段。</li>
-      <li>后台逻辑（选品 / 上架 / 审核 / 查看三方信息）见《后台需求规格（Share Treat）》。</li>
+      <li><strong>核心改动：</strong>购买时会员需填写手机号码与邮箱，三方凭此自行派发兑换信息至会员；我方订单详情展示三方状态（成功 / 失败），不再回传兑换码 / 兑换链接。</li>
+      <li>后台逻辑（选品 / 上架 / 审核 / 查看订单信息）见《后台需求规格（Share Treat）》。</li>
     </ul>
 
-    <div class="tip" style="border-left-color:#3358d4;background:#eef2ff;"><strong>QA 验收范围：</strong>本次改动<strong>仅针对积分商城「Share Treat」类型商品</strong>，验收请聚焦以下流程：购买 / 兑换条款同意 / 兑换信息展示 / 状态（待审核·已完成·已拒绝退分）/ 已搶光 / 余额不足。<br>特别验证：① 会员使用积分购买成功后，订单详情能正常显示兑换码或兑换链接（至少其一）；② 人工审核被拒后，积分历史出现「退还积分」记录。<strong>其他商品类型不在本次范围、行为维持不变。</strong></div>
+    <div class="tip" style="border-left-color:#3358d4;background:#eef2ff;"><strong>QA 验收范围：</strong>本次改动<strong>仅针对积分商城「Share Treat」类型商品</strong>，验收请聚焦以下流程：购买 / 手机号码与邮箱填写验证 / 兑换条款同意 / 三方状态展示 / 状态（待审核·已完成·已拒绝退分）/ 已搶光 / 余额不足。<br>特别验证：① 会员购买成功后，订单详情三方状态显示「成功」，手机号码与邮箱正确回填；② 人工审核被拒后，三方状态显示「—」（未发送至 ShareTreats），积分历史出现「退还积分」记录。<strong>其他商品类型不在本次范围、行为维持不变。</strong></div>
 
     <h2 style="margin-top:22px;">变更摘要</h2>
     <table>
       <tr><th style="width:68px">页码</th><th style="width:120px">页面</th><th style="width:250px">路径</th><th>主要改动</th></tr>
       <tr><td>1</td><td>商品列表</td><td>积分商城 &gt; Share Treat 分类</td><td>沿用图片 / 价格 / 折扣 / 库存；点击商品进入商品详情。</td></tr>
       <tr><td>2</td><td>商品详情</td><td>商品列表 &gt; 点击商品卡</td><td>新增「如何兑换 / 兑换条款」入口 + 二级「兑换说明」弹窗（内容来自三方 Brand API）；积分不足时底部按钮显示「余额不足」，仅「×」可关闭。</td></tr>
-      <tr><td>3</td><td>确认订单</td><td>购买 &gt; 确认订单弹窗</td><td>新增「我已阅读并同意《如何兑换 / 兑换条款》」勾选，默认不勾、未勾时付款置灰。</td></tr>
+      <tr><td>3</td><td>确认订单</td><td>购买 &gt; 确认订单弹窗</td><td>新增「手机号码」「邮箱」必填输入框（均不允许空格）及提示文案；保留「我已阅读并同意《如何兑换 / 兑换条款》」勾选；未填写必填栏位或未勾选时付款置灰。</td></tr>
       <tr><td>4</td><td>购买成功</td><td>付款 &gt; 购买成功弹窗</td><td>移除「立即使用」按钮，仅保留「查看订单」，点击进入<strong>兑换记录</strong>页面。</td></tr>
       <tr><td>5</td><td>兑换记录</td><td>积分商城 &gt; 兑换记录</td><td>状态沿用系统既有三种（已完成 / 待审核 / 已拒绝）；自动审核直接「已完成」；人工审核先「待审核」，通过后「已完成」，拒绝则「已拒绝」（积分全额退还）。</td></tr>
-      <tr><td>6</td><td>订单详情</td><td>兑换记录 &gt; 订单详情</td><td><strong>既有页，非新增页</strong>；新增「兑换信息」区块（兑换码 / 兑换链接，或两者皆有，+ 有效期）与「如何兑换 / 兑换条款」入口。</td></tr>
+      <tr><td>6</td><td>订单详情</td><td>兑换记录 &gt; 订单详情</td><td><strong>既有页，非新增页</strong>；新增手机号码、邮箱（购买时填写值，只读）、三方状态（成功 / 失败 / 无值）三个字段。</td></tr>
       <tr><td>7</td><td>商品列表 · 已搶光</td><td>积分商城 &gt; Share Treat 分类</td><td>库存为 0 时，商品卡叠加半透明遮罩，显示「已搶光」文字；<strong>商品卡不可点击，无法进入商品详情。</strong></td></tr>
       <tr><td>8</td><td>积分历史</td><td>积分商城 &gt; 积分历史</td><td>新增两种 Share Treat 记录条目：下单扣分（付款时）、审核拒绝退分（人工审核未通过时）。</td></tr>
     </table>
@@ -455,7 +455,18 @@
               <div class="row"><span class="k">折扣</span><span class="v">-20%</span></div>
               <div class="row" style="border-bottom:none;"><span class="k">总价</span><span class="v pts"><span class="ico"></span>16</span></div>
             </div>
-            <div style="display:flex;align-items:flex-start;gap:7px;margin:12px 2px 4px;font-size:12px;color:#5b626d;line-height:1.5;">
+            <div style="margin:10px 0 0;">
+              <div style="font-size:11px;color:#6b7280;margin-bottom:3px;font-weight:700;"><span style="color:#e5484d;">*</span> 手机号码</div>
+              <div style="background:#fff;border:1px solid #d1d5db;border-radius:8px;padding:8px 10px;font-size:11px;color:#aeb6c4;">请输入</div>
+            </div>
+            <div style="margin:8px 0 0;">
+              <div style="font-size:11px;color:#6b7280;margin-bottom:3px;font-weight:700;"><span style="color:#e5484d;">*</span> 邮箱</div>
+              <div style="background:#fff;border:1px solid #d1d5db;border-radius:8px;padding:8px 10px;font-size:11px;color:#aeb6c4;">请输入</div>
+            </div>
+            <div style="margin:6px 0 0;font-size:10.5px;color:#e5484d;line-height:1.6;">
+              购买前请确保您的手机号码及邮箱正确无误，信息错误恕不退款。
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:7px;margin:10px 2px 4px;font-size:12px;color:#5b626d;line-height:1.5;">
               <span style="flex:0 0 15px;width:15px;height:15px;border:1.5px solid #c2c7d0;border-radius:4px;margin-top:1px;"></span>
               <span>我已阅读并同意<span style="color:#3358d4;font-weight:700;">《如何兑换 / 兑换条款》</span></span>
             </div>
@@ -463,14 +474,25 @@
               <span class="btn btn-ghost" style="flex:1;">返 回</span>
               <span class="btn" style="flex:1;background:#aeb6c4;color:#fff;">付 款</span>
             </div>
-            <div style="text-align:center;font-size:10.5px;color:#aeb6c4;margin-top:5px;">未勾选时「付款」置灰</div>
+            <div style="text-align:center;font-size:10.5px;color:#aeb6c4;margin-top:5px;">未填写或未勾选时「付款」置灰</div>
           </div>
         </div>
-        <div class="cap">确认订单（沿用既有样式）</div>
+        <div class="cap">确认订单（新增手机号码 / 邮箱输入框）</div>
       </div></div>
       <div class="speccol">
         <h3>说明</h3>
-        <p>沿用既有确认订单结构（商品价格 / 折扣 / 总价 / 返回 / 付款），<strong>新增「兑换条款同意」勾选</strong>，置于「付款」按钮上方。</p>
+        <p>沿用既有确认订单结构（商品价格 / 折扣 / 总价 / 返回 / 付款），<strong>新增「手机号码」「邮箱」输入框与「兑换条款同意」勾选</strong>，均置于「付款」按钮上方。三方将凭会员填写的手机号码或邮箱自行派发兑换信息，无需我方回传兑换码 / 链接。</p>
+
+        <h3>新增：手机号码 / 邮箱输入框</h3>
+        <table>
+          <tr><th>项目</th><th>规格</th></tr>
+          <tr><td>* 手机号码</td><td>必填；placeholder「请输入」；标签前方显示红色星号「*」</td></tr>
+          <tr><td>* 邮箱</td><td>必填；placeholder「请输入」；标签前方显示红色星号「*」</td></tr>
+          <tr><td>空格限制</td><td>两个输入框均<strong>不允许输入空格</strong>；前端实时去除任何空格字符（含全角空格），不弹提示、静默去除</td></tr>
+          <tr><td>手机号码格式验证</td><td>仅限菲律宾本地号码，<strong>最多 11 码</strong>；超出第 11 位自动截断；付款前验证长度须恰好为 11 码，不符时显示「<strong>格式错误</strong>」</td></tr>
+          <tr><td>邮箱格式验证</td><td>须为正确邮箱格式（如 <code>xxx@gmail.com</code>）；格式不符时显示「<strong>格式错误</strong>」</td></tr>
+          <tr><td>提示文案</td><td>输入框下方红色文字（无边框）：「购买前请确保您的手机号码及邮箱正确无误，信息错误恕不退款。」</td></tr>
+        </table>
 
         <h3>新增：兑换条款同意勾选</h3>
         <table>
@@ -478,14 +500,23 @@
           <tr><td>文案</td><td>「我已阅读并同意《如何兑换 / 兑换条款》」</td></tr>
           <tr><td>《如何兑换 / 兑换条款》</td><td>蓝字可点，弹出与第 2 页相同的「兑换说明」弹窗</td></tr>
           <tr><td>默认状态</td><td><strong>不勾选</strong>（不可预勾，须会员主动勾选）</td></tr>
-          <tr><td>付款按钮</td><td>未勾选时<strong>置灰不可点</strong>；勾选后恢复可点</td></tr>
         </table>
+
+        <h3>「付款」按钮启用条件</h3>
+        <p>以下三项<strong>同时满足</strong>，「付款」按钮方可点击；任一不满足均置灰：</p>
+        <ol>
+          <li>手机号码已填写，且格式正确（11 码）</li>
+          <li>邮箱已填写，且格式正确</li>
+          <li>「我已阅读并同意《如何兑换 / 兑换条款》」已勾选</li>
+        </ol>
+        <div class="note">格式错误提示显示于对应输入框下方，文案统一为「格式错误」。</div>
+
         <h3>功能逻辑</h3>
         <ul>
-          <li>未勾选同意：付款置灰；点击置灰按钮可轻提示「请先阅读并同意如何兑换 / 兑换条款」。</li>
+          <li>「付款」置灰时点击，轻提示「请填写手机号码及邮箱，并同意兑换条款」。</li>
           <li>「付款」前再次校验库存与积分余额；不足时提示并阻止下单。</li>
           <li>付款时同时校验三方库存数据与后台库存数据：任一方为 0 → 显示<strong>购买失败弹窗</strong>（第 4 页 · 状态 B），积分不扣除、不生成兑换记录。</li>
-          <li>库存充足 → 扣减会员积分并向后台 / 三方发起兑换（派发）。成功后进入<strong>购买成功弹窗</strong>（第 4 页 · 状态 A）。</li>
+          <li>库存充足 → 扣减会员积分并将手机号码 / 邮箱传给三方，由三方自行派发兑换信息至会员。成功后进入<strong>购买成功弹窗</strong>（第 4 页 · 状态 A）。</li>
           <li>建议服务端记录本次「同意条款」的时间戳与条款版本，便于日后查证。</li>
         </ul>
         <div class="tip">扣分与三方派发的时序、失败回滚（退积分）以后台 / 服务端为准；前台只负责呈现结果状态。</div>
@@ -541,7 +572,7 @@
           <tr><td>点击「查看订单」</td><td>进入兑换记录（第 5 页）</td></tr>
           <tr><td>点击弹窗外区域</td><td>弹窗关闭，停留在当前页面</td></tr>
         </table>
-        <div class="tip">兑换信息（兑换码 / 兑换链接）统一在订单详情查看；购买成功后「查看订单」先进入兑换记录列表，再点入具体订单详情，入口收敛、体验一致。</div>
+        <div class="tip">购买成功后「查看订单」先进入兑换记录列表，再点入具体订单详情，入口收敛、体验一致。兑换信息由 ShareTreats 直接派发至会员手机号码 / 邮箱，订单详情展示三方状态。</div>
 
         <h3>状态 B · 购买失败（已搶光）</h3>
         <p>会员按下「付款」后，后端同时校验三方库存数据与后台库存数据，任一方为 <strong>0</strong> 时，显示此失败弹窗。</p>
@@ -651,13 +682,14 @@
                 <div style="padding:11px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">订单号</div><div style="font-size:12px;font-weight:700;color:#23272e;">PR607549220693508574</div></div>
                 <div style="padding:11px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">商品名称</div><div style="font-size:12px;font-weight:700;color:#23272e;">McDonald's 中薯</div></div>
                 <div style="padding:11px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">商品价格</div><div class="pts" style="font-size:12px;font-weight:700;"><span class="ico"></span>16</div></div>
-                <div style="padding:11px 14px;margin:10px 0;background:#f7f8fa;border-radius:8px;font-size:11px;color:#8b919c;text-align:center;line-height:1.7;">审核中，发放后可查看兑换信息</div>
-                <div style="padding:10px 0;text-align:center;font-size:11px;color:#3358d4;font-weight:700;border-bottom:1px solid #f1f2f4;">如何兑换 / 兑换条款 ›</div>
+                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">手机号码</div><div style="font-size:12px;font-weight:700;color:#23272e;">+60123456789</div></div>
+                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">邮箱</div><div style="font-size:12px;font-weight:700;color:#23272e;">user@example.com</div></div>
+                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">三方状态</div><div style="font-size:12px;color:#9aa1ad;">—</div></div>
                 <div style="padding:10px 0;text-align:center;font-size:11px;color:#3358d4;font-weight:700;">对订单有疑问？联系客服</div>
               </div>
             </div>
           </div>
-          <div class="cap" style="font-size:13px;">待审核<br>兑换信息显示「审核中」占位，不展示码 / 链接</div>
+          <div class="cap" style="font-size:13px;">待审核<br>三方状态无值，不展示码 / 链接</div>
         </div>
 
         <div style="text-align:center;">
@@ -674,11 +706,14 @@
                 <div style="padding:11px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">订单号</div><div style="font-size:12px;font-weight:700;color:#23272e;">PR607688281685000670</div></div>
                 <div style="padding:11px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">商品名称</div><div style="font-size:12px;font-weight:700;color:#23272e;">VA免费旋转1</div></div>
                 <div style="padding:11px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">商品价格</div><div class="pts" style="font-size:12px;font-weight:700;"><span class="ico"></span>111</div></div>
-                <div style="padding:14px 0;text-align:center;font-size:11px;color:#3358d4;font-weight:700;">对订单有疑问？联系客服</div>
+                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">手机号码</div><div style="font-size:12px;font-weight:700;color:#23272e;">+60123456789</div></div>
+                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">邮箱</div><div style="font-size:12px;font-weight:700;color:#23272e;">user@example.com</div></div>
+                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">三方状态</div><div style="font-size:12px;color:#9aa1ad;">—</div></div>
+                <div style="padding:10px 0;text-align:center;font-size:11px;color:#3358d4;font-weight:700;">对订单有疑问？联系客服</div>
               </div>
             </div>
           </div>
-          <div class="cap" style="font-size:13px;">已拒绝<br>无兑换信息区块；积分已全额退还</div>
+          <div class="cap" style="font-size:13px;">已拒绝<br>管理员拒绝，从未发给 ShareTreats；三方状态无值；积分已全额退还</div>
         </div>
 
         <div style="text-align:center;">
@@ -695,15 +730,14 @@
                 <div style="padding:11px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">订单号</div><div style="font-size:12px;font-weight:700;color:#23272e;">PR607549220693508574</div></div>
                 <div style="padding:11px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">商品名称</div><div style="font-size:12px;font-weight:700;color:#23272e;">McDonald's 中薯</div></div>
                 <div style="padding:11px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">商品价格</div><div class="pts" style="font-size:12px;font-weight:700;"><span class="ico"></span>16</div></div>
-                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">兑换码</div><div style="font-size:12px;font-weight:700;color:#23272e;">680362</div></div>
-                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">兑换链接</div><div style="font-size:12px;font-weight:700;color:#3358d4;">https://…/r?b=60e2…c0</div></div>
-                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">有效期至</div><div style="font-size:12px;font-weight:700;color:#23272e;">2030-12-31</div></div>
-                <div style="padding:10px 0;text-align:center;font-size:11px;color:#3358d4;font-weight:700;border-bottom:1px solid #f1f2f4;">如何兑换 / 兑换条款 ›</div>
+                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">手机号码</div><div style="font-size:12px;font-weight:700;color:#23272e;">+60123456789</div></div>
+                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">邮箱</div><div style="font-size:12px;font-weight:700;color:#23272e;">user@example.com</div></div>
+                <div style="padding:9px 0;border-bottom:1px solid #f1f2f4;"><div style="font-size:10.5px;color:#9aa1ad;margin-bottom:3px;">三方状态</div><div style="font-size:12px;font-weight:700;color:#30a46c;">成功</div></div>
                 <div style="padding:10px 0;text-align:center;font-size:11px;color:#3358d4;font-weight:700;">对订单有疑问？联系客服</div>
               </div>
             </div>
           </div>
-          <div class="cap" style="font-size:13px;">已完成<br>兑换码 / 兑换链接 / 有效期完整展示</div>
+          <div class="cap" style="font-size:13px;">已完成<br>三方状态：成功</div>
         </div>
 
       </div>
@@ -712,55 +746,34 @@
     <!-- 规格说明（满版） -->
     <div style="padding:24px 34px 32px;">
       <h3 style="margin-top:0;">改动说明</h3>
-      <p><strong>订单详情为既有页面，本次不新增页面</strong>，仅在原有「步骤条 + 订单信息」之下<strong>新增「兑换信息」区块</strong>。该区块展示第三方（BIZ TREATS）派发回传的数据，是会员实际「拿到货」的地方。</p>
-      <div class="note"><strong>关键区分：「订单号」≠「兑换码」。</strong>「订单号」是识别这笔交易、用于查单 / 客服 / 对账；<strong>会员拿去实体店核销的是「兑换码 / 兑换链接」，不是订单号</strong>。两者在页面上分区块呈现，避免会员拿错。</div>
+      <p><strong>订单详情为既有页面，本次不新增页面。</strong>流程变更后，三方凭会员购买时填写的手机号码 / 邮箱自行派发兑换信息，我方不再回传兑换码 / 兑换链接。本页新增：手机号码、邮箱（会员购买时填写值）、三方状态。</p>
 
-      <h3>订单信息区块（查单用 · 既有）</h3>
+      <h3>字段规格</h3>
       <table>
-        <tr><th>字段</th><th>来源</th><th>对应 API</th><th>说明</th></tr>
-        <tr><td>订单号（自家）</td><td><strong>自家系统</strong></td><td>= 传给三方的 <code>referenceNo</code></td><td>原「兑换单号」改称「订单号」，<strong>与后台「商品兑换记录」列表的「订单号」用词一致</strong>；接三方前后都由自家生成，建议直接作为 referenceNo 传给三方，保证 1:1 对应</td></tr>
-        <tr><td>商品名称 / 价格</td><td>自家 / 后台</td><td>—</td><td>沿用</td></tr>
-        <tr><td>三方单号（可选）</td><td>三方</td><td><code>bizReferenceNo</code></td><td>默认<strong>不在会员端显示</strong>，放后台对账（后台已有「查看三方信息」）；仅当客服流程需会员报三方单号时，才以折叠 / 次要信息加入</td></tr>
+        <tr><th>字段</th><th>来源</th><th>说明</th></tr>
+        <tr><td>订单号</td><td>自家系统</td><td>与后台「商品兑换记录」列表的「订单号」用词一致</td></tr>
+        <tr><td>商品名称</td><td>后台</td><td>沿用</td></tr>
+        <tr><td>商品价格</td><td>后台</td><td>沿用，显示积分</td></tr>
+        <tr><td>手机号码</td><td>会员购买时填写</td><td>购买时输入，此处只读展示，不可修改</td></tr>
+        <tr><td>邮箱</td><td>会员购买时填写</td><td>购买时输入，此处只读展示，不可修改</td></tr>
+        <tr><td>三方状态</td><td>三方回传</td><td>见下方「按状态显示规则」</td></tr>
       </table>
-      <div class="tip"><strong>单号命名约定：</strong>自家＝「订单号」（PR… ，<code>referenceNo</code>，与后台列表一致）；三方＝「三方单号 / 供应商单号」（260… ，<code>bizReferenceNo</code>，与后台用词一致）。避免两者都叫「单号」造成混淆。</div>
-
-      <h3>兑换信息区块（换货用 · 新增）</h3>
-      <p>以下字段<strong>全部由三方派发后回传</strong>，包含兑换码、兑换链接及有效期，内容以三方实际回传为准，我方不做预设或改写。</p>
-      <table>
-        <tr><th>字段</th><th>类型</th><th>对应 API</th><th>说明</th></tr>
-        <tr><td>兑换码</td><td>文本（纯展示）</td><td><code>pin</code></td><td><strong>码型：会员出示此码给店员核销</strong>；与链接并存时，会员可同时看到兑换码与兑换链接</td></tr>
-        <tr><td>兑换链接</td><td>文本（纯展示）</td><td><code>bizRedeemUrl</code></td><td><strong>连结型：会员打开此链接兑换</strong>，导向供应商兑换页；提供「打开链接」按钮</td></tr>
-        <tr><td>有效期至</td><td>文本（纯展示）</td><td><code>pinExpiredDate</code></td><td>三方派发时回传的到期日，<strong>纯展示</strong>，不由我方计算；时间格式化沿用既有逻辑；到期后无需置灰</td></tr>
-      </table>
-
-      <h3>按商品类型（pinType）显示规则</h3>
-      <table>
-        <tr><th>类型</th><th>pinType</th><th>显示内容</th></tr>
-        <tr><td>PIN 码型</td><td><code>pin</code></td><td>仅显示<strong>兑换码</strong>（+ 有效期）</td></tr>
-        <tr><td>连结型</td><td>（url）</td><td>仅显示<strong>兑换链接</strong>（+ 有效期），可「打开链接」</td></tr>
-        <tr><td>码＋链接型</td><td><code>urlWithPin</code></td><td><strong>兑换链接 + 兑换码（两者皆有）</strong></td></tr>
-      </table>
-      <div class="tip">三方按商品决定回传 <code>pin</code> / <code>bizRedeemUrl</code> 二者其一或并存；前台按实际回传字段渲染，<strong>不要写死</strong>。无值字段不展示。</div>
 
       <h3>按状态显示规则</h3>
       <p class="mini" style="margin:0 0 8px;color:#9aa1ad;">（顺序与上方画面一致：待审核 → 已拒绝 → 已完成）</p>
       <table>
-        <tr><th>状态</th><th>触发条件</th><th>步骤条</th><th>兑换信息区块</th></tr>
-        <tr><td>待审核</td><td>后台设为人工审核，尚未派发</td><td>待审核（高亮）→ 已完成（灰）</td><td>显示「<strong>审核中，发放后可查看兑换信息</strong>」，不显示码 / 链接</td></tr>
-        <tr><td>已拒绝</td><td>后台人工审核<strong>拒绝</strong></td><td>待审核 ✓ → <strong>已拒绝（红色 ✓）</strong></td><td>不显示兑换码 / 链接；<strong>本次扣减积分已全额退还</strong>，会员如有疑问透过「联系客服」</td></tr>
-        <tr><td>已完成</td><td>自动审核 / 人工审核通过后三方已派发</td><td>两步均 ✓</td><td>按 pinType 显示兑换码 / 兑换链接（或两者）+ 有效期</td></tr>
+        <tr><th>状态</th><th>触发条件</th><th>步骤条</th><th>三方状态值</th><th>备注</th></tr>
+        <tr><td>待审核</td><td>人工审核商品，等待管理员审核中</td><td>待审核（高亮）→ 已完成（灰）</td><td><strong>无值（显示「—」）</strong></td><td>尚未发送请求给 ShareTreats，无状态回传</td></tr>
+        <tr><td>已拒绝</td><td>管理员人工审核<strong>拒绝</strong></td><td>待审核 ✓ → <strong>已拒绝（红色 ✓）</strong></td><td><strong>无值（显示「—」）</strong></td><td>管理员拒绝 = 从未发送给 ShareTreats，积分已全额退还</td></tr>
+        <tr><td>已完成</td><td>自动审核通过 / 人工审核通过 → 请求发至 ShareTreats → callback 成功</td><td>两步均 ✓</td><td><strong>成功</strong>（绿字）</td><td>ShareTreats 已将兑换信息发至会员手机 / 邮箱</td></tr>
       </table>
 
       <h3>功能逻辑</h3>
       <ul>
-        <li><strong>如何兑换 / 兑换条款</strong>：兑换信息区块下方提供蓝字入口，点击弹出与商品详情页相同的「兑换说明」弹窗（含可兑换门市清单）。会员拿到兑换码后仍可随时查阅去哪里核销。</li>
-        <li><strong>不提供复制</strong>：兑换码 / 兑换链接<strong>不提供「复制」按钮</strong>，会员直接读取使用（连结型仍可「打开链接」）。</li>
-        <li><strong>打开链接</strong>：连结型 / 码＋链接型提供「打开兑换链接」；码＋链接型同屏展示兑换码。</li>
-        <li><strong>有效期</strong>：纯展示三方回传的 <code>pinExpiredDate</code>，时间格式化沿用既有逻辑；到期后无需置灰，兑换码 / 兑换链接 / 有效期均以原样展示。</li>
-        <li><strong>手动审核</strong>：审核通过后才会有兑换数据；此前区块为「审核中」占位，审核通过后刷新自动展示（呼应列表「数据同步存在延迟」）。</li>
-        <li><strong>审核拒绝（已拒绝）</strong>：后台人工审核拒绝后，订单状态转为「已拒绝」，系统全额退还本次扣减的积分至会员账户；该状态下不产生兑换数据，故不显示兑换码 / 链接 / 有效期，也不显示「如何兑换 / 兑换条款」。</li>
-        <li><strong>拒绝原因</strong>：会员端<strong>不显示拒绝原因</strong>；已拒绝详情页下方常驻「对订单有疑问？联系客服」，会员如需了解透过客服查询即可（后台「备注」为内部字段、非必填，沿用既有逻辑）。</li>
-        <li>「联系客服」入口常驻。</li>
+        <li><strong>手机号码 / 邮箱只读</strong>：购买时填写，订单详情仅展示，不提供修改入口。</li>
+        <li><strong>审核拒绝（已拒绝）</strong>：管理员拒绝后订单状态转为「已拒绝」，系统全额退还本次扣减的积分；此时从未发送请求给 ShareTreats，三方状态无值（显示「—」）。</li>
+        <li><strong>拒绝原因</strong>：会员端<strong>不显示拒绝原因</strong>；已拒绝详情页常驻「对订单有疑问？联系客服」。</li>
+        <li>「联系客服」入口三种状态下均常驻。</li>
       </ul>
     </div>
   </div>
@@ -923,12 +936,12 @@
     <div class="paper" id="bk-top">
 <div class="block">
     <h2>变更摘要</h2>
-    <div class="tip" style="border-left-color:#3358d4;background:#eef2ff;"><strong>QA 验收范围：</strong>本次后台改动<strong>仅针对「Share Treat」类型商品</strong>，验收请聚焦 Share Treat 的新增商品 / 三级联动 / 库存取小值 / 审核（通过·拒绝退分）/ 查看三方信息（脱敏）等流程；<strong>其他商品类型不在本次范围、行为维持不变</strong>。</div>
+    <div class="tip" style="border-left-color:#3358d4;background:#eef2ff;"><strong>QA 验收范围：</strong>本次后台改动<strong>仅针对「Share Treat」类型商品</strong>，验收请聚焦 Share Treat 的新增商品 / 三级联动 / 库存取小值 / 审核（通过·拒绝退分）/ 查看订单信息 / 重新发送等流程；<strong>其他商品类型不在本次范围、行为维持不变</strong>。</div>
     <table>
       <tr><th style="width:34px">#</th><th>页面</th><th>路径</th><th>主要改动</th></tr>
       <tr><td>1</td><td>新增商品</td><td>后台 &gt; 积分商城 &gt; 商品管理 &gt; 新增商品</td><td>新增商品类别及商品类型 <strong>Share Treat</strong>；选中商品类型 Share Treat 后出现「类别 / 厂商 / 商品」三级联动 + 商品详情</td></tr>
       <tr><td>2</td><td>用户积分记录</td><td>后台 &gt; 积分商城 &gt; 用户积分记录</td><td>Share Treat 订单「原因」显示 <strong>Share Treat</strong>（商品类型）；「备注」显示商品名称</td></tr>
-      <tr><td>3</td><td>商品兑换记录</td><td>后台 &gt; 积分商城 &gt; 商品兑换记录</td><td>类型筛选新增 Share Treat；操作栏「查看三方信息」+ 弹窗；手动审核先显示审核按钮，审核可通过 / 拒绝，通过后才显示「查看三方信息」，拒绝则全额退还会员积分</td></tr>
+      <tr><td>3</td><td>商品兑换记录</td><td>后台 &gt; 积分商城 &gt; 商品兑换记录</td><td>类型筛选新增 Share Treat；操作栏「查看订单信息」+ 弹窗（显示三方订单号、三方状态、手机号码、邮箱，手机号码与邮箱各附「重新发送」按钮）；手动审核先显示审核按钮，审核可通过 / 拒绝，通过后才显示「查看订单信息」，拒绝则全额退还会员积分</td></tr>
     </table>
   </div>
 
@@ -961,19 +974,10 @@
         </table>
         <h3>功能逻辑</h3>
         <ul>
-          <li>联动顺序：类别 → 厂商 → 商品 → 详情。</li>
-          <li>上层变更时，下层选项需清空并重新加载。</li>
-          <li>类别 / 厂商 / 商品三级数据均来自第三方提供的 API（接口文件）。</li>
-          <li>库存辅助文字：选定商品后，输入框后方自动显示灰色文字「剩余库存：xxx 件」，数值实时来自第三方 API 回传，供管理员填写时参考。</li>
-          <li>库存上限验证：管理员输入值不可超过第三方 API 回传库存；超出时栏位下方即时显示红字「库存不可超过三方库存上限 {N}」，「确定」按钮同步 disabled，须修正后方可提交。</li>
-          <li>若第三方 API 回传库存为 <strong>0</strong>，辅助文字显示「剩余库存：0 件」，「库存」输入栏自动置灰、不可填写。</li>
-          <li>若第三方 API <strong>无回传值</strong>，辅助文字不显示，「库存」输入栏自动置灰、不可填写。</li>
-        </ul>
-        <h3>异常处理（第三方 API 连接失败）</h3>
-        <p>选择 Share Treat 后，若三级下拉的数据来源（第三方 API）连接失败或无响应，需弹出错误提示，并将受影响的下拉置为不可选、「确定」按钮禁止提交。</p>
-        <ul>
-          <li>错误提示（顶部 Toast）：<strong>「资料载入失败，请检查网络或稍后重试」</strong></li>
-          <li>连接失败期间「确定」按钮禁止提交，避免存入空商品。</li>
+          <li><strong>联动顺序</strong>：类别 → 厂商 → 商品 → 详情；上层变更时，下层选项清空并重新加载；三级数据均来自第三方 API。</li>
+          <li><strong>库存辅助文字</strong>：选定商品后，输入框后方自动显示灰色文字「剩余库存：xxx 件」（数值实时来自第三方 API）；API 回传库存为 <strong>0</strong> 时显示「剩余库存：0 件」，库存栏位自动置灰；API <strong>无回传值</strong>时辅助文字不显示，库存栏位自动置灰。</li>
+          <li><strong>库存上限验证</strong>：管理员输入值不可超过第三方 API 回传库存；超出时栏位下方即时显示红字「库存不可超过三方库存上限 {N}」，「确定」按钮同步 disabled，须修正后方可提交。</li>
+          <li><strong>API 连接失败</strong>：三级下拉数据加载失败时，顶部 Toast 显示「资料载入失败，请检查网络或稍后重试」，受影响的下拉置为不可选，「确定」按钮禁止提交，避免存入空商品。</li>
         </ul>
       </div>
     </div>
@@ -1029,7 +1033,7 @@
               <td style="padding:5px 8px;">user_001</td>
               <td style="padding:5px 8px;">McDonald's 中薯</td>
               <td style="padding:5px 8px;"><span style="background:#dbe4ff;color:#3358d4;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;">已完成</span></td>
-              <td style="padding:5px 8px;color:#3358d4;font-weight:700;font-size:10.5px;">查看三方信息</td>
+              <td style="padding:5px 8px;color:#3358d4;font-weight:700;font-size:10.5px;">查看订单信息</td>
             </tr>
             <tr style="background:#fafbfc;">
               <td style="padding:5px 8px;">user_002</td>
@@ -1045,79 +1049,75 @@
             </tr>
           </table>
         </div>
-        <!-- 三方信息弹窗（脱敏后）mockup -->
+        <!-- 订单信息弹窗 mockup -->
         <div style="background:#fff;border:1px solid #dde0e5;border-radius:10px;box-shadow:0 3px 16px rgba(0,0,0,.10);overflow:hidden;">
           <div style="padding:11px 16px;border-bottom:1px solid #eef0f2;display:flex;align-items:center;justify-content:space-between;background:#fafbfc;">
-            <span style="font-size:13px;font-weight:700;color:#23272e;">三方信息</span>
+            <span style="font-size:13px;font-weight:700;color:#23272e;">订单信息</span>
             <span style="font-size:16px;color:#9aa1ad;line-height:1;">×</span>
           </div>
           <div style="padding:14px 16px;">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
               <span style="font-size:11px;color:#8b919c;flex:0 0 68px;">三方订单号：</span>
-              <span style="font-size:11.5px;font-weight:700;font-family:monospace;flex:1;color:#23272e;">••••••••••••••23456</span>
-              <span style="font-size:10.5px;color:#3358d4;font-weight:700;">复制</span>
+              <span style="font-size:11.5px;font-weight:700;font-family:monospace;flex:1;color:#23272e;">ST20240630001</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-              <span style="font-size:11px;color:#8b919c;flex:0 0 68px;">兑换码：</span>
-              <span style="font-size:11.5px;font-weight:700;font-family:monospace;flex:1;color:#23272e;">••••-••••-••••-3456</span>
-              <!-- 不可复制，无复制按钮 -->
+              <span style="font-size:11px;color:#8b919c;flex:0 0 68px;">三方状态：</span>
+              <span style="font-size:11.5px;font-weight:700;color:#30a46c;">成功</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+              <span style="font-size:11px;color:#8b919c;flex:0 0 68px;">手机号码：</span>
+              <span style="font-size:11.5px;font-weight:700;font-family:monospace;flex:1;color:#23272e;">+639123456789</span>
+              <span style="font-size:10.5px;color:#3358d4;font-weight:700;cursor:pointer;">重新发送</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-size:11px;color:#8b919c;flex:0 0 68px;">兑换链接：</span>
-              <span style="font-size:11px;font-weight:700;font-family:monospace;flex:1;color:#23272e;">••••••••••••••••••••C123</span>
-              <!-- 不可复制，无复制按钮 -->
+              <span style="font-size:11px;color:#8b919c;flex:0 0 68px;">邮箱：</span>
+              <span style="font-size:11.5px;font-weight:700;font-family:monospace;flex:1;color:#23272e;">user@example.com</span>
+              <span style="font-size:10.5px;color:#9aa1ad;cursor:not-allowed;">重新发送</span>
             </div>
+            <div style="margin-top:10px;font-size:10px;color:#9aa1ad;">每日最多重新发送 2 次</div>
           </div>
         </div>
-        <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:7px;">点「查看三方信息」后弹窗（脱敏后）</div>
+        <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:7px;">点「查看订单信息」后弹窗（邮箱已达当日上限，按钮置灰）</div>
       </div></div>
       <div class="speccol">
         <h3>改动说明</h3>
-        <p>针对 Share Treat 类型商品，在类型筛选下拉新增选项，并在「操作」栏提供查看第三方（供应商）兑换信息的入口。弹窗样式参考既有「充值信息」弹窗。</p>
+        <p>针对 Share Treat 类型商品，在类型筛选下拉新增选项，并在「操作」栏提供查看订单信息的入口。弹窗样式参考既有「充值信息」弹窗。</p>
         <h3>改动点</h3>
         <ol>
           <li><strong>类型筛选下拉（最右侧）</strong>：新增选项 <strong>Share Treat</strong>，可按此类型筛选。</li>
-          <li><strong>操作栏</strong>：Share Treat 类型订单显示「<strong>查看三方信息</strong>」（对应原话费类的「查看充值信息」）。</li>
-          <li><strong>审核控制</strong>：手动审核时，操作栏<strong>先显示「审核」按钮</strong>，完成审核后才显示「查看三方信息」；自动审核直接显示「查看三方信息」。</li>
-          <li><strong>点击「查看三方信息」</strong>：弹出「三方信息」窗口，显示三方订单号、兑换码 / 兑换链接。</li>
+          <li><strong>操作栏</strong>：Share Treat 类型订单显示「<strong>查看订单信息</strong>」（对应原话费类的「查看充值信息」）。</li>
+          <li><strong>审核控制</strong>：手动审核时，操作栏<strong>先显示「审核」按钮</strong>，完成审核后才显示「查看订单信息」；自动审核直接显示「查看订单信息」。</li>
+          <li><strong>点击「查看订单信息」</strong>：弹出「订单信息」窗口，显示三方订单号、三方状态、手机号码（附「重新发送」）、邮箱（附「重新发送」）。</li>
         </ol>
 
-        <h3>审核动作（手动审核：通过 / 拒绝）</h3>
-        <p>手动审核的订单，操作栏先显示「<strong>审核</strong>」按钮。点击后进入审核处理，管理员可选择<strong>通过</strong>或<strong>拒绝</strong>，并可填写「备注」（<strong>非必填，沿用既有逻辑</strong>）。审核结果与后续行为如下：</p>
+        <h3>订单状态总览</h3>
+        <p>手动审核订单，操作栏先显示「<strong>审核</strong>」按钮，管理员可选择<strong>通过</strong>或<strong>拒绝</strong>，并可填写「备注」（非必填，沿用既有逻辑）。各状态对应行为如下：</p>
         <table>
-          <tr><th>审核结果</th><th>订单状态</th><th>积分</th><th>三方派发</th><th>操作栏</th><th>前台对应</th></tr>
-          <tr><td><strong>通过</strong></td><td>审核通过</td><td>维持已扣减</td><td>触发三方派发兑换数据</td><td>改显「查看三方信息」</td><td>已完成</td></tr>
-          <tr><td><strong>拒绝</strong></td><td><strong>审核未通过</strong></td><td><strong>全额退还本次扣减积分</strong></td><td>不派发、无兑换数据</td><td>不显示「查看三方信息」</td><td>已拒绝</td></tr>
-        </table>
-        <h3>订单状态与操作人</h3>
-        <table>
-          <tr><th>订单状态</th><th>含义</th><th>操作人显示</th></tr>
-          <tr><td>待审核</td><td>手动审核、尚未处理</td><td>—（待处理）</td></tr>
-          <tr><td>审核通过</td><td>自动审核通过，或管理员审核通过</td><td><strong>自动＝</strong><code>SYSTEM</code>；<strong>人工＝</strong>管理员账号（如 <code>vivianadmin</code>）</td></tr>
-          <tr><td>审核未通过</td><td>管理员审核拒绝</td><td>执行拒绝的管理员账号</td></tr>
-        </table>
-        <h3>前后台状态对照</h3>
-        <table>
-          <tr><th>后台（订单状态）</th><th>前台（兑换记录 / 订单详情）</th></tr>
-          <tr><td>待审核</td><td>待审核</td></tr>
-          <tr><td>审核通过</td><td>已完成</td></tr>
-          <tr><td><strong>审核未通过</strong></td><td><strong>已拒绝</strong></td></tr>
+          <tr><th>后台状态</th><th>触发条件</th><th>前台状态</th><th>积分</th><th>三方派发</th><th>操作栏</th><th>操作人</th></tr>
+          <tr><td>待审核</td><td>手动审核商品，等待管理员处理</td><td>待审核</td><td>已扣减</td><td>未派发</td><td>「审核」按钮</td><td>—</td></tr>
+          <tr><td>审核通过</td><td>自动审核通过 / 管理员人工通过</td><td>已完成</td><td>维持已扣减</td><td>触发 ShareTreats 向会员手机 / 邮箱派发兑换信息</td><td>「查看订单信息」</td><td>自动＝<code>SYSTEM</code>；人工＝管理员账号</td></tr>
+          <tr><td><strong>审核未通过</strong></td><td>管理员人工拒绝</td><td><strong>已拒绝</strong></td><td><strong>全额退还</strong></td><td>不派发</td><td>—（已退积分）</td><td>执行拒绝的管理员账号</td></tr>
         </table>
 
         <h3>弹窗字段规格</h3>
         <table>
-          <tr><th>字段</th><th>类型</th><th>说明</th><th>脱敏规则</th></tr>
-          <tr><td>三方订单号</td><td>文本 + 复制</td><td>供应商回传的订单号，供对账追溯；点击复制按钮可复制<strong>完整订单号</strong>（与既有复制逻辑一致）</td><td>显示时仅呈现<strong>后五码</strong>，前段以 <code>*</code> 遮蔽；复制内容为完整值</td></tr>
-          <tr><td>兑换码</td><td>文本（不可复制）</td><td>可兑换的 PIN / 券码（码型商品）</td><td>仅显示<strong>后四码</strong>，前段以 <code>*</code> 遮蔽；移除复制按钮</td></tr>
-          <tr><td>兑换链接</td><td>链接（不可复制）</td><td>导向供应商兑换页（链接型商品）</td><td>仅显示<strong>后四码</strong>，前段以 <code>*</code> 遮蔽；移除复制按钮</td></tr>
+          <tr><th>字段</th><th>类型</th><th>说明</th><th>操作</th></tr>
+          <tr><td>三方订单号</td><td>文本</td><td>ShareTreats 回传的订单号，供对账追溯</td><td>—</td></tr>
+          <tr><td>三方状态</td><td>文本</td><td>ShareTreats 回传的派发结果</td><td>—</td></tr>
+          <tr><td>手机号码</td><td>文本</td><td>会员购买时填写的手机号码，完整显示</td><td>「重新发送」文字按钮，点击触发 ShareTreats 重新向该手机号码派发兑换信息</td></tr>
+          <tr><td>邮箱</td><td>文本</td><td>会员购买时填写的邮箱，完整显示</td><td>「重新发送」文字按钮，点击触发 ShareTreats 重新向该邮箱派发兑换信息</td></tr>
         </table>
         <h3>功能逻辑</h3>
         <ul>
-          <li>兑换码 / 兑换链接依第三方 API 返回的数据显示，二者可能其一、也可能并存（取决于该商品的 API 数据）。</li>
-          <li>「查看三方信息」仅 Share Treat 类型显示；其他类型维持原入口。</li>
-          <li><strong>脱敏显示</strong>：三方信息弹窗中的敏感字段均需模糊处理——三方订单号仅显示后五码，兑换码 / 兑换链接仅显示后四码；兑换码与兑换链接同时移除复制按钮，防止明文外泄。</li>
-          <li><strong>三方订单号复制</strong>：点击复制按钮后，复制内容为<strong>完整三方订单号</strong>（非脱敏后的显示值），与既有复制逻辑一致。</li>
-          <li><strong>审核拒绝退积分</strong>：手动审核拒绝时，系统全额退还会员本次扣减的积分；订单状态记为「审核未通过」，操作人记为执行拒绝的管理员账号，前台同步显示「已拒绝」。</li>
+          <li><strong>重新发送</strong>：管理员点击「重新发送」后，系统重新调用 ShareTreats 接口，向对应手机号码或邮箱派发兑换信息；成功后三方状态更新为最新回传值。每个字段每日上限 <strong>2 次</strong>，达上限后「重新发送」按钮置灰、不可点击。</li>
+          <li><strong>三方状态</strong>：依后台订单状态显示，规则如下：
+            <ul style="margin-top:6px;">
+              <li><strong>待审核</strong>：尚未发送给 ShareTreats，显示「—」</li>
+              <li><strong>审核未通过</strong>：从未发送给 ShareTreats，显示「—」</li>
+              <li><strong>审核通过 · callback 成功</strong>：显示「成功」（绿字）</li>
+              <li><strong>审核通过 · callback 失败</strong>：显示「失败」（红字）</li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>

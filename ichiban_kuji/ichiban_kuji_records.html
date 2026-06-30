@@ -635,5 +635,573 @@ function goPage(p) {
 renderTable();
 </script>
 
+<!-- ============================================================
+     PAGE 3：优惠券管理 > 全部优惠券
+     路由：/coupon-management/all-coupons
+     ============================================================ -->
+<div style="margin-top:16px; border-top:3px dashed #d0d0d0; padding-top:8px; margin-bottom:4px; padding-left:24px;">
+  <span style="font-size:11px;color:#aaa;font-family:monospace;">PAGE 3 &nbsp;/coupon-management/all-coupons</span>
+</div>
+
+<style>
+.p3-pill { display:inline-flex; align-items:center; position:relative; }
+.p3-pill select {
+  height:32px; border:1px solid #d9d9d9; border-radius:16px;
+  padding:0 28px 0 12px; font-size:13px; color:#333;
+  outline:none; background:#fff; cursor:pointer;
+  appearance:none; -webkit-appearance:none;
+}
+.p3-pill select:focus { border-color:#1677ff; }
+.p3-pill::after {
+  content:'▾'; position:absolute; right:10px;
+  pointer-events:none; font-size:11px; color:#888;
+}
+.sbadge { display:inline-flex; align-items:center; padding:2px 10px; border-radius:10px; font-size:12px; }
+.sbadge-unused  { background:#f5f5f5; color:#666; border:1px solid #e8e8e8; }
+.sbadge-used    { background:#f6ffed; color:#52c41a; border:1px solid #b7eb8f; }
+.sbadge-expired { background:#fff2f0; color:#ff4d4f; border:1px solid #ffccc7; }
+</style>
+
+<div class="page">
+
+  <!-- 面包屑 -->
+  <div class="breadcrumb">
+    位置 › 优惠券管理 › <span>全部优惠券</span>
+  </div>
+
+  <!-- 统计面板 -->
+  <div style="background:#fff;border-radius:4px;border:1px solid #f0f0f0;padding:20px 24px;margin-bottom:16px;">
+    <div style="margin-bottom:16px;">
+      <div class="date-range-wrap" style="width:fit-content;">
+        <span class="date-icon">🕐</span>
+        <input type="datetime-local" id="p3StatStart" value="2026-06-30T00:00:00" step="1">
+        <span class="date-sep">～</span>
+        <input type="datetime-local" id="p3StatEnd" value="2026-06-30T23:59:59" step="1">
+      </div>
+    </div>
+    <div style="display:flex; border-top:1px solid #f5f5f5; padding-top:16px;">
+      <div style="flex:1; text-align:center; border-right:1px solid #f5f5f5;">
+        <div id="p3StatTotal" style="font-size:28px;font-weight:700;color:#1a1a1a;line-height:1.2;">8</div>
+        <div style="font-size:13px;color:#999;margin-top:6px;">优惠券发放总量</div>
+      </div>
+      <div style="flex:1; text-align:center; border-right:1px solid #f5f5f5;">
+        <div id="p3StatRate" style="font-size:28px;font-weight:700;color:#1a1a1a;line-height:1.2;">0.00%</div>
+        <div style="font-size:13px;color:#999;margin-top:6px;">优惠券使用率</div>
+      </div>
+      <div style="flex:1; text-align:center;">
+        <div id="p3StatPayout" style="font-size:28px;font-weight:700;color:#1a1a1a;line-height:1.2;">₱0.00</div>
+        <div style="font-size:13px;color:#999;margin-top:6px;">优惠券累计发放彩金</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="filter-bar" style="gap:8px; flex-wrap:wrap; align-items:center;">
+    <div class="p3-pill">
+      <select id="p3FilterType">
+        <option value="">全部优惠券</option>
+        <option value="输返券">输返券</option>
+        <option value="存送比例券">存送比例券</option>
+        <option value="彩金券">彩金券</option>
+        <option value="旋转券">旋转券</option>
+        <option value="免费投注券">免费投注券</option>
+      </select>
+    </div>
+
+    <div class="p3-pill">
+      <select id="p3FilterStatus">
+        <option value="">全部状态</option>
+        <option value="未使用">未使用</option>
+        <option value="待结算">待结算</option>
+        <option value="已使用">已使用</option>
+        <option value="已过期">已过期</option>
+      </select>
+    </div>
+
+    <div class="p3-pill">
+      <select id="p3FilterSource">
+        <option value="">全部来源</option>
+        <option value="召回活动">召回活动</option>
+        <option value="Ichiban Kuji">Ichiban Kuji</option>
+      </select>
+    </div>
+
+    <span style="font-size:13px;color:#333;white-space:nowrap;margin-left:4px;">获得时间：</span>
+    <div class="date-range-wrap">
+      <span class="date-icon">🕐</span>
+      <input type="datetime-local" id="p3DateStart" value="2026-06-01T00:00:00" step="1">
+      <span class="date-sep">～</span>
+      <input type="datetime-local" id="p3DateEnd" value="2026-06-30T23:59:59" step="1">
+    </div>
+
+    <div class="p3-pill">
+      <select id="p3FilterMemberType" style="min-width:76px;">
+        <option value="name">会员名</option>
+      </select>
+    </div>
+    <input type="text" id="p3FilterKeyword" placeholder="会员名/活动名称/优惠券ID" style="width:220px;">
+
+    <button class="btn btn-primary" onclick="p3Search()">查询</button>
+    <button class="btn btn-warning">导出</button>
+    <button class="btn btn-primary">赠送优惠券</button>
+  </div>
+
+  <!-- 表格 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>会员账号</th>
+          <th>获得时间</th>
+          <th>活动名称</th>
+          <th>获得方式</th>
+          <th>优惠券名称</th>
+          <th>优惠券ID</th>
+          <th>优惠券类别</th>
+          <th>状态</th>
+          <th>操作人</th>
+          <th>操作时间</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody id="p3TableBody"></tbody>
+    </table>
+    <div class="pagination" id="p3Pagination"></div>
+  </div>
+
+</div>
+
+<!-- PAGE 3 script：优惠券管理 -->
+<script>
+const P3_RECORDS = [
+  // 召回活动
+  { id:6717, member:'xnjobe7',        time:'2026-06-30 15:16', activity:'–', source:'召回活动',   name:'输返10%-有效期240小时奖金流水5倍流水－注单有效期48', type:'输返券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6716, member:'xnjobe6',        time:'2026-06-30 15:14', activity:'–', source:'召回活动',   name:'输返10%-有效期240小时奖金流水5倍流水－注单有效期48', type:'输返券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6715, member:'okbet4800diajb', time:'2026-06-30 14:54', activity:'–', source:'召回活动',   name:'30% Deposit Voucher (Max ₱300)',                type:'存送比例券', status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6714, member:'xnjobe2',        time:'2026-06-30 14:51', activity:'–', source:'召回活动',   name:'10% Loss Cashback',                            type:'输返券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6713, member:'facai555',       time:'2026-06-30 14:35', activity:'–', source:'召回活动',   name:'输返10%-有效期240小时奖金流水5倍流水－注单有效期48', type:'输返券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6712, member:'okbet20072zf7e', time:'2026-06-30 13:53', activity:'–', source:'召回活动',   name:'10% Loss Cashback',                            type:'输返券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6711, member:'xnjobe3',        time:'2026-06-30 13:49', activity:'–', source:'召回活动',   name:'10% Loss Cashback',                            type:'输返券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6710, member:'okbet4156929hm', time:'2026-06-30 11:43', activity:'–', source:'召回活动',   name:'输返10%-有效期240小时奖金流水5倍流水－注单有效期48', type:'输返券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  // Ichiban Kuji
+  { id:6709, member:'okbet9994fg5vz', time:'2026-06-12 16:45', activity:'苹果 Ichiban Kuji',       source:'Ichiban Kuji', name:'Free Spin ×10',         type:'旋转券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-12 17:00', remark:'–' },
+  { id:6708, member:'vivian01',       time:'2026-06-15 17:22', activity:'节日特别版 Ichiban Kuji', source:'Ichiban Kuji', name:'彩金 ₱50 (1x Turnover)', type:'彩金券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-15 18:10', remark:'–' },
+  { id:6707, member:'vivian01',       time:'2026-06-15 17:21', activity:'盲盒美术图测试2',         source:'Ichiban Kuji', name:'Free Spin ×20',         type:'旋转券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6706, member:'vivian01',       time:'2026-06-11 18:02', activity:'高价值VIP专属赏',         source:'Ichiban Kuji', name:'彩金 ₱80 (2x Turnover)', type:'彩金券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6705, member:'alice_vip3',     time:'2026-06-11 10:05', activity:'入门款 Ichiban Kuji',     source:'Ichiban Kuji', name:'Free Bet ×5',           type:'免费投注券', status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6704, member:'player_tom88',   time:'2026-06-11 14:30', activity:'高价值VIP专属赏',         source:'Ichiban Kuji', name:'彩金 ₱50 (2x Turnover)', type:'彩金券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-11 14:45', remark:'–' },
+  { id:6703, member:'jay_pm',         time:'2026-06-10 18:15', activity:'苹果 Ichiban Kuji',       source:'Ichiban Kuji', name:'Free Spin ×10',         type:'旋转券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+];
+
+let p3Filtered = [...P3_RECORDS];
+let p3Page = 1;
+const P3_PAGE_SIZE = 10;
+
+function p3Search() {
+  const type    = document.getElementById('p3FilterType').value;
+  const status  = document.getElementById('p3FilterStatus').value;
+  const source  = document.getElementById('p3FilterSource').value;
+  const keyword = document.getElementById('p3FilterKeyword').value.trim().toLowerCase();
+
+  p3Filtered = P3_RECORDS.filter(r => {
+    if (type   && r.type   !== type)   return false;
+    if (status && r.status !== status) return false;
+    if (source && r.source !== source) return false;
+    if (keyword &&
+        !r.member.toLowerCase().includes(keyword) &&
+        !r.activity.toLowerCase().includes(keyword) &&
+        !String(r.id).includes(keyword)) return false;
+    return true;
+  });
+  p3Page = 1;
+  p3RenderPage();
+}
+
+function p3Badge(s) {
+  if (s === '未使用') return `<span class="sbadge sbadge-unused">未使用</span>`;
+  if (s === '已使用') return `<span class="sbadge sbadge-used">已使用</span>`;
+  return `<span class="sbadge sbadge-expired">已过期</span>`;
+}
+
+function p3RenderPage() {
+  const start = (p3Page - 1) * P3_PAGE_SIZE;
+  const rows  = p3Filtered.slice(start, start + P3_PAGE_SIZE);
+  document.getElementById('p3TableBody').innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.member}</td>
+      <td>${r.time}</td>
+      <td>${r.activity}</td>
+      <td>${r.source}</td>
+      <td>${r.name}</td>
+      <td>${r.id}</td>
+      <td>${r.type}</td>
+      <td>${p3Badge(r.status)}</td>
+      <td>${r.operator}</td>
+      <td>${r.opTime}</td>
+      <td>${r.remark}</td>
+    </tr>
+  `).join('');
+  p3RenderPagination();
+}
+
+function p3RenderPagination() {
+  const total      = p3Filtered.length;
+  const totalPages = Math.ceil(total / P3_PAGE_SIZE);
+  const pg         = document.getElementById('p3Pagination');
+  let html = `<span class="page-total">Total ${total}</span>`;
+  html += `<div class="page-btn" onclick="p3GoPage(${p3Page-1})">‹</div>`;
+  buildPageNums(p3Page, totalPages).forEach(p => {
+    if (p === '...') html += `<div class="page-btn ellipsis">···</div>`;
+    else html += `<div class="page-btn${p === p3Page ? ' active' : ''}" onclick="p3GoPage(${p})">${p}</div>`;
+  });
+  html += `<div class="page-btn" onclick="p3GoPage(${p3Page+1})">›</div>`;
+  pg.innerHTML = html;
+}
+
+function p3GoPage(p) {
+  const totalPages = Math.ceil(p3Filtered.length / P3_PAGE_SIZE);
+  if (p < 1 || p > totalPages) return;
+  p3Page = p;
+  p3RenderPage();
+}
+
+p3Search();
+</script>
+
+<!-- ============================================================
+     PAGE 4：免費旋轉管理
+     路由：/free-spin/management
+     ============================================================ -->
+<div style="margin-top:16px; border-top:3px dashed #d0d0d0; padding-top:8px; margin-bottom:4px; padding-left:24px;">
+  <span style="font-size:11px;color:#aaa;font-family:monospace;">PAGE 4 &nbsp;/free-spin/management</span>
+</div>
+
+<div class="page">
+
+  <!-- 面包屑 -->
+  <div class="breadcrumb">
+    位置 › <span>免费旋转管理</span>
+  </div>
+
+  <!-- 子标签页 -->
+  <div class="tab-bar" id="p4TabBar">
+    <div class="tab-item" onclick="p4Switch(1)">免费项目配置</div>
+    <div class="tab-item active" onclick="p4Switch(2)">免费项目记录</div>
+    <div class="tab-item" onclick="p4Switch(3)">免费项目统计</div>
+    <div class="tab-item" onclick="p4Switch(4)">免费项目发送记录</div>
+  </div>
+
+  <!-- ── TAB 1: 免费项目配置 ── -->
+  <div id="p4t1" style="display:none">
+    <div class="action-row" style="margin-bottom:10px;">
+      <button class="btn btn-primary">+ 新增配置</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>配置名称</th>
+            <th>免费类型</th>
+            <th>游戏平台</th>
+            <th>次数</th>
+            <th>有效期（小时）</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>colorgame</td><td>免费投注</td><td>ColorGame</td><td>1</td><td>24</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-01-10 09:00:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>免费投注PT单个游戏</td><td>免费投注</td><td>PT</td><td>10</td><td>48</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-02-15 10:30:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>PT免费投注1</td><td>免费投注</td><td>PT</td><td>10</td><td>72</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-03-01 14:00:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>Free Spin ×10</td><td>免费旋转</td><td>全平台</td><td>10</td><td>240</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-05-20 11:00:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>Free Spin ×20</td><td>免费旋转</td><td>全平台</td><td>20</td><td>240</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-05-20 11:05:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>Free Spin ×30</td><td>免费旋转</td><td>全平台</td><td>30</td><td>240</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-05-20 11:10:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+        </tbody>
+      </table>
+      <div style="padding:14px 20px;text-align:right;font-size:13px;color:#999;border-top:1px solid #f0f0f0;">Total 6</div>
+    </div>
+  </div>
+
+  <!-- ── TAB 2: 免费项目记录 ── -->
+  <div id="p4t2">
+    <div class="filter-bar" style="gap:8px; flex-wrap:wrap; align-items:center;">
+      <div class="p3-pill">
+        <select id="p4FilterSpin">
+          <option value="">全部免费旋转</option>
+          <option value="免费旋转">免费旋转</option>
+          <option value="免费投注">免费投注</option>
+        </select>
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4FilterSource" style="min-width:110px;">
+          <option value="">全部来源</option>
+          <option value="邀请好友">邀请好友</option>
+          <option value="邀请转盘">邀请转盘</option>
+          <option value="充值赠送">充值赠送</option>
+          <option value="预约赠送">预约赠送</option>
+          <option value="复活节彩蛋">复活节彩蛋</option>
+          <option value="游戏挑战赛">游戏挑战赛</option>
+          <option value="预约活动">预约活动</option>
+          <option value="周卡活动">周卡活动</option>
+          <option value="Ichiban Kuji">Ichiban Kuji</option>
+        </select>
+      </div>
+
+      <span style="font-size:13px;color:#333;white-space:nowrap;margin-left:4px;">获得时间：</span>
+      <div class="date-range-wrap">
+        <span class="date-icon">🕐</span>
+        <input type="datetime-local" id="p4DateStart" value="2026-06-30T00:00:00" step="1">
+        <span class="date-sep">～</span>
+        <input type="datetime-local" id="p4DateEnd" value="2026-06-30T23:59:59" step="1">
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4FilterType" style="min-width:110px;">
+          <option value="">全部免费类型</option>
+          <option value="免费旋转">免费旋转</option>
+          <option value="免费投注">免费投注</option>
+        </select>
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4FilterSelect" style="min-width:80px;">
+          <option value="">Select</option>
+        </select>
+      </div>
+
+      <input type="text" id="p4FilterKeyword" placeholder="会员名/活动名称" style="width:160px;">
+
+      <button class="btn btn-primary" onclick="p4Search()">查询</button>
+      <button class="btn btn-primary" style="margin-left:auto;">赠送免费旋转</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>会员账号</th>
+            <th>获得时间</th>
+            <th>活动名称</th>
+            <th>获得方式</th>
+            <th>免费旋转名称</th>
+            <th>免费类型</th>
+            <th>获得次数</th>
+            <th>状态</th>
+            <th>操作人</th>
+            <th>操作时间</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody id="p4TableBody"></tbody>
+      </table>
+      <div class="pagination" id="p4Pagination"></div>
+    </div>
+  </div>
+
+  <!-- ── TAB 3: 免费项目统计 ── -->
+  <div id="p4t3" style="display:none">
+    <div style="display:flex; gap:16px; margin-bottom:16px;">
+      <div style="flex:1;background:#fff;border-radius:4px;border:1px solid #f0f0f0;padding:20px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#1a1a1a;">177</div>
+        <div style="font-size:13px;color:#999;margin-top:6px;">总发放次数</div>
+      </div>
+      <div style="flex:1;background:#fff;border-radius:4px;border:1px solid #f0f0f0;padding:20px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#52c41a;">22</div>
+        <div style="font-size:13px;color:#999;margin-top:6px;">已使用次数</div>
+      </div>
+      <div style="flex:1;background:#fff;border-radius:4px;border:1px solid #f0f0f0;padding:20px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#1677ff;">12.43%</div>
+        <div style="font-size:13px;color:#999;margin-top:6px;">整体使用率</div>
+      </div>
+      <div style="flex:1;background:#fff;border-radius:4px;border:1px solid #f0f0f0;padding:20px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#fa8c16;">17</div>
+        <div style="font-size:13px;color:#999;margin-top:6px;">发放人数</div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>来源</th>
+            <th>活动名称</th>
+            <th>发放人数</th>
+            <th>发放总次数</th>
+            <th>已使用次数</th>
+            <th>使用率</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>签到奖励</td><td>–</td><td>1</td><td>60</td><td>0</td><td>0.00%</td></tr>
+          <tr><td>手动赠送</td><td>Exclusive Reward</td><td>1</td><td>2</td><td>1</td><td>50.00%</td></tr>
+          <tr><td>召回赠送</td><td>?all4-3</td><td>1</td><td>10</td><td>0</td><td>0.00%</td></tr>
+          <tr><td>Okbet排行榜奖励</td><td>自定义</td><td>1</td><td>10</td><td>0</td><td>0.00%</td></tr>
+          <tr style="background:#f0f7ff;"><td><strong>Ichiban Kuji</strong></td><td>苹果 Ichiban Kuji</td><td>2</td><td>20</td><td>10</td><td>50.00%</td></tr>
+          <tr style="background:#f0f7ff;"><td><strong>Ichiban Kuji</strong></td><td>节日特别版 Ichiban Kuji</td><td>3</td><td>50</td><td>10</td><td>20.00%</td></tr>
+          <tr style="background:#f0f7ff;"><td><strong>Ichiban Kuji</strong></td><td>入门款 Ichiban Kuji</td><td>1</td><td>20</td><td>0</td><td>0.00%</td></tr>
+          <tr style="background:#f0f7ff;"><td><strong>Ichiban Kuji</strong></td><td>高价值VIP专属赏</td><td>1</td><td>20</td><td>0</td><td>0.00%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── TAB 4: 免费项目发送记录 ── -->
+  <div id="p4t4" style="display:none">
+    <div class="filter-bar" style="gap:8px; margin-bottom:0;">
+      <div class="date-range-wrap">
+        <span class="date-icon">🕐</span>
+        <input type="datetime-local" id="p4SendStart" value="2026-06-01T00:00:00" step="1">
+        <span class="date-sep">～</span>
+        <input type="datetime-local" id="p4SendEnd" value="2026-06-30T23:59:59" step="1">
+      </div>
+      <div class="p3-pill">
+        <select id="p4SendSource" style="min-width:110px;">
+          <option value="">全部来源</option>
+          <option value="签到奖励">签到奖励</option>
+          <option value="手动赠送">手动赠送</option>
+          <option value="召回赠送">召回赠送</option>
+          <option value="Okbet排行榜奖励">Okbet排行榜奖励</option>
+          <option value="Ichiban Kuji">Ichiban Kuji</option>
+        </select>
+      </div>
+      <button class="btn btn-primary">查询</button>
+      <button class="btn btn-warning">导出</button>
+    </div>
+    <div class="table-wrap" style="margin-top:12px;">
+      <table>
+        <thead>
+          <tr>
+            <th>发送时间</th>
+            <th>来源</th>
+            <th>活动名称</th>
+            <th>免费旋转名称</th>
+            <th>免费类型</th>
+            <th>发放人数</th>
+            <th>发放总次数</th>
+            <th>操作人</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2026-06-30 13:14:16</td><td>签到奖励</td><td>–</td><td>免费投注PT单个游戏</td><td>免费投注</td><td>1</td><td>60</td><td>SYSTEM</td></tr>
+          <tr><td>2026-06-30 15:32:03</td><td>手动赠送</td><td>Exclusive Reward</td><td>colorgame</td><td>免费投注</td><td>1</td><td>2</td><td>okbet4294kjhtj</td></tr>
+          <tr><td>2026-06-30 14:57:05</td><td>召回赠送</td><td>?all4-3</td><td>免费投注PT单个游戏</td><td>免费投注</td><td>1</td><td>10</td><td>SYSTEM</td></tr>
+          <tr><td>2026-06-30 13:16:34</td><td>Okbet排行榜奖励</td><td>自定义</td><td>PT免费投注1</td><td>免费投注</td><td>1</td><td>10</td><td>SYSTEM</td></tr>
+          <tr style="background:#f0f7ff;"><td>2026-06-15 17:22:00</td><td>Ichiban Kuji</td><td>节日特别版 Ichiban Kuji</td><td>Free Spin ×10</td><td>免费旋转</td><td>2</td><td>20</td><td>SYSTEM</td></tr>
+          <tr style="background:#f0f7ff;"><td>2026-06-12 16:45:00</td><td>Ichiban Kuji</td><td>苹果 Ichiban Kuji</td><td>Free Spin ×10</td><td>免费旋转</td><td>1</td><td>10</td><td>SYSTEM</td></tr>
+          <tr style="background:#f0f7ff;"><td>2026-06-11 18:27:00</td><td>Ichiban Kuji</td><td>节日特别版 Ichiban Kuji</td><td>Free Spin ×10</td><td>免费旋转</td><td>1</td><td>10</td><td>SYSTEM</td></tr>
+          <tr style="background:#f0f7ff;"><td>2026-06-11 18:02:00</td><td>Ichiban Kuji</td><td>高价值VIP专属赏</td><td>Free Spin ×20</td><td>免费旋转</td><td>1</td><td>20</td><td>SYSTEM</td></tr>
+          <tr style="background:#f0f7ff;"><td>2026-06-11 16:12:00</td><td>Ichiban Kuji</td><td>节日特别版 Ichiban Kuji</td><td>Free Spin ×10</td><td>免费旋转</td><td>1</td><td>10</td><td>SYSTEM</td></tr>
+          <tr style="background:#f0f7ff;"><td>2026-06-10 22:40:00</td><td>Ichiban Kuji</td><td>入门款 Ichiban Kuji</td><td>Free Spin ×20</td><td>免费旋转</td><td>1</td><td>20</td><td>SYSTEM</td></tr>
+          <tr style="background:#f0f7ff;"><td>2026-06-09 20:10:00</td><td>Ichiban Kuji</td><td>节日特别版 Ichiban Kuji</td><td>Free Spin ×30</td><td>免费旋转</td><td>1</td><td>30</td><td>SYSTEM</td></tr>
+        </tbody>
+      </table>
+      <div style="padding:14px 20px;display:flex;justify-content:flex-end;align-items:center;gap:8px;font-size:13px;color:#999;border-top:1px solid #f0f0f0;">
+        Total 11 &nbsp;
+        <div class="page-btn active">1</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PAGE 4 script -->
+<script>
+function p4Switch(n) {
+  [1,2,3,4].forEach(i => {
+    document.getElementById('p4t'+i).style.display = i===n ? '' : 'none';
+  });
+  document.getElementById('p4TabBar').querySelectorAll('.tab-item').forEach((t,i) => {
+    t.classList.toggle('active', i===n-1);
+  });
+}
+
+const P4_RECORDS = [
+  { member:'okbet4294kjhtj',  time:'2026-06-30 15:32', activity:'Exclusive Reward', source:'手动赠送',         name:'colorgame',         type:'免费投注', qty:1,  status:'未使用', operator:'okbet4294kjhtj', opTime:'2026-06-30 15:32:03', remark:'–' },
+  { member:'okbet4294kjhtj',  time:'2026-06-30 15:32', activity:'Exclusive Reward', source:'手动赠送',         name:'colorgame',         type:'免费投注', qty:1,  status:'已使用', operator:'okbet4294kjhtj', opTime:'2026-06-30 15:32:04', remark:'–' },
+  { member:'okbet62638pze7',  time:'2026-06-30 14:57', activity:'?all4-3',          source:'召回赠送',         name:'免费投注PT单个游戏', type:'免费投注', qty:10, status:'未使用', operator:'okbet62638pze7',  opTime:'2026-06-30 14:57:05', remark:'Exclusive Rewards: Signin' },
+  { member:'okbet0302zrw0q',  time:'2026-06-30 13:16', activity:'自定义',           source:'Okbet排行榜奖励', name:'PT免费投注1',        type:'免费投注', qty:10, status:'未使用', operator:'okbet0302zrw0q',  opTime:'2026-06-30 13:16:34', remark:'–' },
+  { member:'okbet00002edfr',  time:'2026-06-30 13:14', activity:'–',               source:'签到奖励',         name:'免费投注PT单个游戏', type:'免费投注', qty:10, status:'未使用', operator:'okbet00002edfr',  opTime:'2026-06-30 13:14:16', remark:'–' },
+  { member:'okbet00002edfr',  time:'2026-06-30 13:14', activity:'–',               source:'签到奖励',         name:'免费投注PT单个游戏', type:'免费投注', qty:10, status:'未使用', operator:'okbet00002edfr',  opTime:'2026-06-30 13:14:16', remark:'–' },
+  { member:'okbet00002edfr',  time:'2026-06-30 13:14', activity:'–',               source:'签到奖励',         name:'免费投注PT单个游戏', type:'免费投注', qty:10, status:'未使用', operator:'okbet00002edfr',  opTime:'2026-06-30 13:14:16', remark:'–' },
+  { member:'okbet00002edfr',  time:'2026-06-30 13:14', activity:'–',               source:'签到奖励',         name:'免费投注PT单个游戏', type:'免费投注', qty:10, status:'未使用', operator:'okbet00002edfr',  opTime:'2026-06-30 13:14:16', remark:'–' },
+  { member:'okbet00002edfr',  time:'2026-06-30 13:14', activity:'–',               source:'签到奖励',         name:'免费投注PT单个游戏', type:'免费投注', qty:10, status:'未使用', operator:'okbet00002edfr',  opTime:'2026-06-30 13:14:16', remark:'–' },
+  { member:'okbet00002edfr',  time:'2026-06-30 13:14', activity:'–',               source:'签到奖励',         name:'免费投注PT单个游戏', type:'免费投注', qty:10, status:'未使用', operator:'okbet00002edfr',  opTime:'2026-06-30 13:14:16', remark:'–' },
+  { member:'okbet9994fg5vz',  time:'2026-06-12 16:45', activity:'苹果 Ichiban Kuji',       source:'Ichiban Kuji', name:'Free Spin ×10', type:'免费旋转', qty:10, status:'已使用', operator:'SYSTEM', opTime:'2026-06-12 17:00', remark:'–' },
+  { member:'vivian01',        time:'2026-06-15 17:22', activity:'节日特别版 Ichiban Kuji', source:'Ichiban Kuji', name:'Free Spin ×10', type:'免费旋转', qty:10, status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+  { member:'vivian01',        time:'2026-06-11 18:27', activity:'节日特别版 Ichiban Kuji', source:'Ichiban Kuji', name:'Free Spin ×10', type:'免费旋转', qty:10, status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+  { member:'alice_vip3',      time:'2026-06-10 22:40', activity:'入门款 Ichiban Kuji',     source:'Ichiban Kuji', name:'Free Spin ×20', type:'免费旋转', qty:20, status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+  { member:'user_beta01',     time:'2026-06-09 20:10', activity:'节日特别版 Ichiban Kuji', source:'Ichiban Kuji', name:'Free Spin ×30', type:'免费旋转', qty:30, status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+  { member:'vivian01',        time:'2026-06-11 16:12', activity:'节日特别版 Ichiban Kuji', source:'Ichiban Kuji', name:'Free Spin ×10', type:'免费旋转', qty:10, status:'已使用', operator:'SYSTEM', opTime:'2026-06-11 16:30', remark:'–' },
+  { member:'vivian01',        time:'2026-06-11 18:02', activity:'高价值VIP专属赏',         source:'Ichiban Kuji', name:'Free Spin ×20', type:'免费旋转', qty:20, status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+];
+
+let p4Filtered = [...P4_RECORDS];
+let p4Page = 1;
+const P4_PAGE_SIZE = 10;
+
+function p4Search() {
+  const spin    = document.getElementById('p4FilterSpin').value;
+  const source  = document.getElementById('p4FilterSource').value;
+  const type    = document.getElementById('p4FilterType').value;
+  const keyword = document.getElementById('p4FilterKeyword').value.trim().toLowerCase();
+
+  p4Filtered = P4_RECORDS.filter(r => {
+    if (spin   && r.type   !== spin)   return false;
+    if (source && r.source !== source) return false;
+    if (type   && r.type   !== type)   return false;
+    if (keyword && !r.member.toLowerCase().includes(keyword) &&
+                   !r.activity.toLowerCase().includes(keyword)) return false;
+    return true;
+  });
+  p4Page = 1;
+  p4RenderPage();
+}
+
+function p4RenderPage() {
+  const start = (p4Page - 1) * P4_PAGE_SIZE;
+  const rows  = p4Filtered.slice(start, start + P4_PAGE_SIZE);
+  document.getElementById('p4TableBody').innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.member}</td>
+      <td>${r.time}</td>
+      <td>${r.activity}</td>
+      <td>${r.source}</td>
+      <td>${r.name}</td>
+      <td>${r.type}</td>
+      <td>${r.qty}</td>
+      <td>${p3Badge(r.status)}</td>
+      <td>${r.operator}</td>
+      <td>${r.opTime}</td>
+      <td>${r.remark}</td>
+    </tr>
+  `).join('');
+  p4RenderPagination();
+}
+
+function p4RenderPagination() {
+  const total      = p4Filtered.length;
+  const totalPages = Math.ceil(total / P4_PAGE_SIZE);
+  const pg         = document.getElementById('p4Pagination');
+  let html = `<span class="page-total">Total ${total}</span>`;
+  html += `<div class="page-btn" onclick="p4GoPage(${p4Page-1})">‹</div>`;
+  buildPageNums(p4Page, totalPages).forEach(p => {
+    if (p === '...') html += `<div class="page-btn ellipsis">···</div>`;
+    else html += `<div class="page-btn${p === p4Page ? ' active' : ''}" onclick="p4GoPage(${p})">${p}</div>`;
+  });
+  html += `<div class="page-btn" onclick="p4GoPage(${p4Page+1})">›</div>`;
+  pg.innerHTML = html;
+}
+
+function p4GoPage(p) {
+  const totalPages = Math.ceil(p4Filtered.length / P4_PAGE_SIZE);
+  if (p < 1 || p > totalPages) return;
+  p4Page = p;
+  p4RenderPage();
+}
+
+p4Search();
+</script>
+
 </body>
 </html>
