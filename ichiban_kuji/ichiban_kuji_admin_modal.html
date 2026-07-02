@@ -664,11 +664,11 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
                 <label><span class="req">*</span>第二层</label>
                 <select onchange="onCat2Change(this,'last')" required>
                   <option value="bonus">彩金</option>
+                  <option value="points">积分</option>
                   <option value="coupon">优惠券</option>
-                  <option value="freespin">免费旋转</option>
-                  <option value="ticket">tickets（票券）</option>
-                  <option value="pisoluck">pisoluck</option>
-                  <option value="money">MONEY</option>
+                  <option value="freespin">免费旋转券</option>
+                  <option value="freebet">免费投注券</option>
+                  <option value="tool">道具卡</option>
                 </select>
               </div>
               <div id="dynamic-fields-last" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;"></div>
@@ -741,18 +741,6 @@ function renderDynamicFields(containerId, cat2Val) {
       <div class="tier-field">
         <label><span class="req">*</span>积分数量</label>
         <input type="number" placeholder="请输入" min="0" required>
-      </div>`;
-  } else if (cat2Val === 'spin') {
-    html = `
-      <div class="tier-field" style="flex:2">
-        <label><span class="req">*</span>选择旋转券游戏</label>
-        <select required>
-          <option value="" disabled selected>请选择</option>
-          <option>J Mania Triple Jam</option>
-          <option>FC Freespins</option>
-          <option>Slot Game A</option>
-          <option>Slot Game B</option>
-        </select>
       </div>`;
   } else if (cat2Val === 'freespin') {
     // 顯示下方的旋轉券區塊
@@ -834,7 +822,7 @@ const CAT2_MAP = {
   virtual: [
     { value: 'bonus',        label: '彩金' },
     { value: 'points',       label: '积分' },
-    { value: 'spin',         label: '旋转券' },
+    { value: 'coupon',       label: '优惠券' },
     { value: 'freespin',     label: '免费旋转券' },
     { value: 'freebet',      label: '免费投注券' },
     { value: 'tool',         label: '道具卡' },

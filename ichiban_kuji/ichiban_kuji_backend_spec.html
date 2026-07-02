@@ -1,0 +1,2776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ichiban Kuji 一番赏 · 后台功能规格书</title>
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  background: #f0f2f5;
+  color: #333;
+}
+
+/* ── OVERLAY ── */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 24px 0;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* ── MODAL ── */
+.modal {
+  background: #fff;
+  border-radius: 4px;
+  width: 860px;
+  max-width: 96vw;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+.modal-header {
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-close {
+  background: none; border: none; font-size: 18px;
+  color: #999; cursor: pointer; line-height: 1;
+}
+.modal-close:hover { color: #333; }
+.modal-body { padding: 24px; }
+.modal-footer {
+  padding: 14px 24px;
+  border-top: 1px solid #f0f0f0;
+  display: flex; justify-content: center; gap: 12px;
+}
+
+/* ── FORM ROW ── */
+.form-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 0;
+}
+.form-label {
+  width: 130px;
+  flex-shrink: 0;
+  padding-top: 6px;
+  text-align: right;
+  padding-right: 12px;
+  color: #333;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.form-label .req, .tier-field label .req, .tier-upload label .req { color: #ff4d4f; margin-right: 2px; }
+.req { color: #ff4d4f; margin-right: 2px; }
+.form-control { flex: 1; }
+
+/* ── INPUTS ── */
+input[type="text"], input[type="number"], select, textarea {
+  width: 100%;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 13px;
+  color: #333;
+  outline: none;
+  height: 32px;
+  transition: border-color 0.2s;
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus { border-color: #1677ff; box-shadow: 0 0 0 2px rgba(22,119,255,0.1); }
+select { background: #fff; cursor: pointer; }
+
+.input-suffix {
+  display: flex; align-items: center;
+}
+.input-suffix input { border-radius: 4px 0 0 4px; }
+.suffix-tag {
+  background: #fafafa; border: 1px solid #d9d9d9; border-left: none;
+  padding: 0 10px; height: 32px; display: flex; align-items: center;
+  color: #999; font-size: 13px; border-radius: 0 4px 4px 0; white-space: nowrap;
+}
+
+/* ── CHECKBOX / RADIO ── */
+.checkbox-group {
+  display: flex; flex-wrap: wrap; gap: 6px 16px;
+  padding-top: 6px;
+}
+.checkbox-group label,
+.radio-group label {
+  display: flex; align-items: center; gap: 5px;
+  cursor: pointer; font-size: 13px; white-space: nowrap;
+}
+.radio-group {
+  display: flex; flex-wrap: wrap; gap: 6px 20px;
+  padding-top: 6px;
+}
+input[type="checkbox"], input[type="radio"] { cursor: pointer; accent-color: #1677ff; }
+.ichiban-label { color: #1677ff; font-weight: 600; }
+
+/* ── SECTION DIVIDER ── */
+.section-divider {
+  margin: 20px 0 16px;
+  border-top: 1px dashed #e8e8e8;
+  padding-top: 16px;
+}
+.section-title {
+  font-size: 13px; font-weight: 600; color: #1677ff;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::after {
+  content: ''; flex: 1; height: 1px; background: #f0f0f0;
+}
+
+/* ── VIP GRID ── */
+.vip-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+.vip-item {
+  display: flex; align-items: center;
+  border: 1px solid #d9d9d9; border-radius: 4px; overflow: hidden;
+  height: 32px;
+}
+.vip-tag {
+  background: #fafafa; border-right: 1px solid #d9d9d9;
+  padding: 0 10px; font-size: 12px; color: #555;
+  white-space: nowrap; height: 100%; display: flex; align-items: center;
+  min-width: 48px;
+}
+.vip-item input {
+  border: none; border-radius: 0; height: 100%; padding: 0 8px;
+  flex: 1; min-width: 0;
+}
+.vip-item input:focus { box-shadow: none; }
+
+/* ── UPLOAD BTN ── */
+.upload-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #1677ff; color: #fff; border: none;
+  padding: 5px 14px; border-radius: 4px; font-size: 13px;
+  cursor: pointer; height: 32px;
+}
+.upload-btn:hover { background: #0958d9; }
+.upload-hint { font-size: 12px; color: #ff4d4f; margin-top: 4px; }
+
+/* ── BUTTONS ── */
+.btn {
+  padding: 6px 20px; border-radius: 4px; font-size: 14px;
+  cursor: pointer; border: 1px solid transparent; height: 34px;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-primary { background: #1677ff; color: #fff; border-color: #1677ff; }
+.btn-primary:hover { background: #0958d9; }
+.btn-warning { background: #fa8c16; color: #fff; border-color: #fa8c16; }
+.btn-warning:hover { background: #d46b08; }
+.btn-default { background: #fff; color: #333; border-color: #d9d9d9; }
+.btn-default:hover { border-color: #1677ff; color: #1677ff; }
+.btn-danger-text { background: none; border: none; color: #ff4d4f; font-size: 13px; cursor: pointer; padding: 0 4px; }
+.btn-danger-text:hover { color: #cf1322; }
+
+/* ── TOTAL TICKETS BANNER ── */
+.total-banner {
+  background: #e6f4ff; border: 1px solid #91caff; border-radius: 4px;
+  padding: 10px 16px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: #0958d9;
+}
+.total-banner strong { font-size: 20px; font-weight: 700; color: #1677ff; }
+
+/* ── PRIZE TIER ── */
+.prize-tier {
+  border: 1px solid #e8e8e8; border-radius: 6px;
+  margin-bottom: 12px; overflow: hidden;
+}
+.tier-header {
+  background: #fafafa; padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.tier-badge {
+  background: #1677ff; color: #fff;
+  font-size: 12px; font-weight: 700;
+  padding: 2px 10px; border-radius: 12px;
+  min-width: 42px; text-align: center;
+}
+.tier-badge.last { background: linear-gradient(135deg, #fa8c16, #faad14); }
+.tier-name-input {
+  flex: 1; max-width: 160px;
+  border: 1px solid #d9d9d9; border-radius: 4px;
+  padding: 3px 8px; font-size: 13px; height: 28px;
+}
+.tier-name-input:focus { border-color: #1677ff; outline: none; }
+.tier-qty-wrap {
+  display: flex; align-items: center; gap: 6px; margin-left: auto;
+}
+.tier-qty-wrap label { font-size: 12px; color: #666; }
+.tier-qty-input {
+  width: 80px; border: 1px solid #d9d9d9; border-radius: 4px;
+  padding: 3px 8px; font-size: 13px; height: 28px; text-align: center;
+}
+.tier-qty-input:focus { border-color: #1677ff; outline: none; }
+.tier-qty-wrap .qty-unit { font-size: 12px; color: #999; }
+
+.tier-body { padding: 12px 16px; }
+.tier-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px 16px;
+  align-items: end;
+}
+.tier-field label {
+  display: block; font-size: 12px; color: #666; margin-bottom: 4px;
+}
+.tier-field select,
+.tier-field input[type="text"] {
+  height: 30px; font-size: 13px;
+}
+
+.tier-upload { margin-top: 10px; }
+.tier-upload label { font-size: 12px; color: #666; margin-bottom: 4px; display: block; }
+.upload-btn-sm {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #1677ff; color: #fff; border: none;
+  padding: 3px 12px; border-radius: 4px; font-size: 12px;
+  cursor: pointer; height: 28px;
+}
+.upload-btn-sm:hover { background: #0958d9; }
+
+/* LAST tier special */
+.prize-tier.last-tier { border-color: #ffd591; }
+.prize-tier.last-tier .tier-header { background: #fff7e6; border-color: #ffd591; }
+.last-note {
+  font-size: 11px; color: #fa8c16; margin-left: 6px;
+  background: rgba(250,140,22,0.08); padding: 2px 8px; border-radius: 10px;
+}
+
+/* FREESPIN ROW */
+.freespin-row {
+  display: flex; align-items: center; gap: 10px;
+  background: #fafafa; border: 1px solid #e8e8e8;
+  border-radius: 6px; padding: 10px 12px;
+}
+.freespin-row select { flex: 1; min-width: 160px; height: 30px; font-size: 13px; }
+.freespin-row .upload-btn-sm { white-space: nowrap; flex-shrink: 0; }
+.freespin-preview { width: 36px; height: 36px; object-fit: cover; border-radius: 4px; border: 1px solid #e8e8e8; display:none; }
+.freespin-filename { font-size: 12px; color: #999; flex: 0 0 auto; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ADD TIER BTN */
+.add-tier-wrap {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+.btn-add-tier {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px dashed #1677ff; color: #1677ff; background: none;
+  padding: 5px 16px; border-radius: 4px; font-size: 13px; cursor: pointer;
+  height: 32px; transition: background 0.15s;
+}
+.btn-add-tier:hover { background: #e6f4ff; }
+.tier-count-info { font-size: 12px; color: #999; }
+
+/* 移除 number input 的上下箭头 */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+/* ── HINT TEXT ── */
+.hint { font-size: 12px; color: #999; margin-top: 3px; }
+
+/* ── LIMIT PURCHASE CHECK ── */
+.limit-row {
+  display: flex; align-items: center; gap: 8px; margin-top: 8px;
+}
+
+/* ── BANNER UPLOAD ── */
+.banner-panels {
+  display: flex; gap: 16px; flex-wrap: wrap;
+}
+.banner-panel {
+  flex: 1; min-width: 280px;
+  border: 1px solid #e8e8e8; border-radius: 6px; overflow: hidden;
+}
+.banner-panel-header {
+  background: #fafafa; padding: 8px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px; color: #555; font-weight: 500;
+}
+.banner-panel-header .size-hint { font-size: 12px; color: #bbb; }
+.banner-panel-body {
+  padding: 12px; min-height: 180px; position: relative;
+  display: flex; flex-direction: column;
+}
+.banner-drop-zone {
+  flex: 1; border: 1.5px dashed #d9d9d9; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 150px; cursor: pointer; position: relative; overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+}
+.banner-drop-zone:hover { border-color: #1677ff; background: #f0f7ff; }
+.banner-drop-zone img.banner-preview {
+  width: 100%; height: 100%; object-fit: cover;
+  position: absolute; inset: 0;
+}
+.banner-drop-zone .banner-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  color: #bbb; font-size: 12px; pointer-events: none;
+}
+.banner-drop-zone .banner-placeholder .plus-icon {
+  font-size: 24px; color: #d9d9d9; line-height: 1;
+}
+.banner-panel-footer {
+  display: flex; justify-content: flex-end; padding-top: 8px;
+}
+.btn-banner-delete {
+  background: none; border: none; color: #1677ff; font-size: 13px;
+  cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0 2px;
+}
+.btn-banner-delete:hover { color: #ff4d4f; }
+.banner-field-row {
+  display: flex; align-items: flex-start; margin-bottom: 14px; gap: 0;
+}
+.banner-field-label {
+  width: 130px; flex-shrink: 0; padding-top: 4px;
+  text-align: right; padding-right: 12px;
+  color: #333; font-size: 13px;
+}
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  background: #f0f2f5;
+  color: #333;
+}
+
+.page { padding: 24px; }
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  font-size: 13px; color: #999; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 6px;
+}
+.breadcrumb span { color: #333; }
+
+/* ── TABS ── */
+.tab-bar {
+  display: flex; border-bottom: 2px solid #f0f0f0;
+  margin-bottom: 16px; gap: 0;
+}
+.tab-item {
+  padding: 10px 20px; font-size: 14px; color: #666;
+  cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; transition: color 0.2s;
+  white-space: nowrap;
+}
+.tab-item:hover { color: #1677ff; }
+.tab-item.active { color: #1677ff; border-bottom-color: #1677ff; font-weight: 600; }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  background: #fff; border-radius: 4px;
+  padding: 14px 20px; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.filter-bar input[type="text"],
+.filter-bar select {
+  height: 32px; border: 1px solid #d9d9d9; border-radius: 4px;
+  padding: 0 10px; font-size: 13px; color: #333; outline: none; background: #fff;
+}
+.filter-bar input[type="text"] { width: 160px; }
+.filter-bar select { width: 130px; cursor: pointer; }
+.filter-bar input:focus, .filter-bar select:focus { border-color: #1677ff; }
+
+.date-range-wrap {
+  display: flex; align-items: center; gap: 6px;
+  border: 1px solid #d9d9d9; border-radius: 4px;
+  padding: 0 10px; height: 32px; background: #fff;
+}
+.date-range-wrap input[type="datetime-local"] {
+  border: none; outline: none; font-size: 13px; background: transparent;
+  width: 220px; height: 28px; padding: 0;
+}
+.date-range-wrap input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+.date-sep { color: #bbb; font-size: 13px; }
+.date-icon { color: #bbb; font-size: 14px; }
+
+.btn {
+  padding: 6px 16px; border-radius: 4px; font-size: 13px;
+  cursor: pointer; border: 1px solid transparent; height: 32px;
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.btn-primary { background: #1677ff; color: #fff; border-color: #1677ff; }
+.btn-primary:hover { background: #0958d9; }
+.btn-warning { background: #fa8c16; color: #fff; border-color: #fa8c16; }
+.btn-warning:hover { background: #d46b08; }
+
+/* ── EXPORT ROW ── */
+.action-row {
+  display: flex; justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+/* ── TABLE ── */
+.table-wrap {
+  background: #fff; border-radius: 4px; overflow: hidden;
+}
+table { width: 100%; min-width: 900px; border-collapse: collapse; }
+thead tr { background: #fafafa; }
+th {
+  padding: 12px 16px; font-size: 13px; font-weight: 600;
+  color: #555; text-align: left; border-bottom: 1px solid #f0f0f0;
+  white-space: nowrap;
+}
+td {
+  padding: 13px 16px; font-size: 13px; color: #333;
+  border-bottom: 1px solid #f8f8f8; vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafcff; }
+
+/* ── TICKET QTY BADGE ── */
+.qty-badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;
+}
+.qty-1  { background: #f5f5f5; color: #666; border: 1px solid #e8e8e8; }
+.qty-5  { background: #e6f4ff; color: #1677ff; border: 1px solid #91caff; }
+.qty-all { background: #fff7e6; color: #fa8c16; border: 1px solid #ffd591; }
+
+/* ── PRIZE TIER TAG ── */
+.tier-tag {
+  display: inline-flex; align-items: center;
+  padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600;
+  background: #e6f4ff; color: #1677ff; border: 1px solid #91caff;
+}
+.tier-tag.last { background: #fff7e6; color: #fa8c16; border-color: #ffd591; }
+
+/* ── PRIZE DETAIL ── */
+.prize-detail { line-height: 1.6; }
+.prize-name   { font-weight: 500; color: #1a1a1a; }
+.prize-sub    { font-size: 12px; color: #999; margin-top: 2px; }
+
+/* ── POINTS ── */
+.points-val { font-weight: 600; color: #1a1a1a; }
+
+/* ── ORDER NO ── */
+.order-no { font-size: 12px; color: #666; font-family: monospace; }
+
+/* ── PAGINATION ── */
+.pagination {
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 14px 20px; gap: 4px; border-top: 1px solid #f0f0f0;
+}
+.page-total { font-size: 13px; color: #999; margin-right: 8px; }
+.page-btn {
+  min-width: 32px; height: 32px; border: 1px solid #d9d9d9;
+  background: #fff; border-radius: 4px; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 0 8px;
+}
+.page-btn:hover { border-color: #1677ff; color: #1677ff; }
+.page-btn.active { background: #1677ff; border-color: #1677ff; color: #fff; }
+.page-btn.ellipsis { border: none; cursor: default; color: #999; }
+.page-btn.ellipsis:hover { color: #999; border: none; }
+.btn-success { background: #52c41a; color: #fff; border-color: #52c41a; }
+.btn-success:hover { background: #389e0d; }
+.link-btn { color: #1677ff; cursor: pointer; }
+
+
+.p3-pill { display:inline-flex; align-items:center; position:relative; }
+.p3-pill select {
+  height:32px; border:1px solid #d9d9d9; border-radius:16px;
+  padding:0 28px 0 12px; font-size:13px; color:#333;
+  outline:none; background:#fff; cursor:pointer;
+  appearance:none; -webkit-appearance:none;
+}
+.p3-pill select:focus { border-color:#1677ff; }
+.p3-pill::after {
+  content:'▾'; position:absolute; right:10px;
+  pointer-events:none; font-size:11px; color:#888;
+}
+.sbadge { display:inline-flex; align-items:center; padding:2px 10px; border-radius:10px; font-size:12px; }
+.sbadge-unused  { background:#f5f5f5; color:#666; border:1px solid #e8e8e8; }
+.sbadge-used    { background:#f6ffed; color:#52c41a; border:1px solid #b7eb8f; }
+.sbadge-expired { background:#fff2f0; color:#ff4d4f; border:1px solid #ffccc7; }
+
+
+/* ── spec doc additions ── */
+.spec-nav{
+  position:sticky;top:0;z-index:2000;
+  display:flex;gap:4px;flex-wrap:wrap;background:#10141b;padding:12px 22px;
+  font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+}
+.spec-nav button{
+  background:transparent;border:none;color:#a7afba;
+  padding:10px 18px;border-radius:6px;font-size:15px;cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.spec-nav button:hover{background:#20262f;color:#fff;}
+.spec-nav button.active{background:#1677ff;color:#fff;font-weight:600;}
+.spec-view{display:none;background:#f5f6f8;min-height:100vh;}
+.spec-view.active{display:block;}
+
+.spec-view-inner{max-width:1560px;margin:0 auto;padding:34px 32px 120px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.6;}
+.spec-h1{font-size:29px;font-weight:800;margin:0 0 10px;color:#10141b;}
+.spec-sub{color:#5b6472;font-size:16px;margin:0 0 28px;max-width:75ch;}
+
+.spec-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,460px);gap:36px;align-items:start;}
+.spec-stack{display:flex;flex-direction:column;gap:28px;}
+.spec-text{font-size:15.5px;color:#1b2028;min-width:0;}
+.spec-split > .spec-screen-card{min-width:0;overflow-x:auto;}
+.spec-text h3{font-size:18px;font-weight:700;margin:32px 0 12px;color:#10141b;}
+.spec-text h3:first-child{margin-top:0;}
+.spec-lead{color:#5b6472;font-size:15px;margin:0 0 16px;line-height:1.65;}
+
+.spec-screen-card{background:#fff;border:1px solid #e2e6ec;border-radius:10px;overflow:hidden;box-shadow:0 1px 2px rgba(16,20,27,.04),0 10px 22px -16px rgba(16,20,27,.24);}
+.spec-screen-card > .page, .spec-screen-card > .overlay{margin:0;}
+
+.spec-table-wrap{overflow-x:auto;margin:0 0 20px;border:1px solid #e2e6ec;border-radius:8px;}
+.spec-table-wrap table{width:100%;border-collapse:collapse;font-size:14.5px;background:#fff;min-width:0;}
+.spec-table-wrap th{text-align:left;background:#fafbfc;color:#5b6472;font-weight:600;font-size:13px;letter-spacing:.02em;padding:11px 14px;border-bottom:1px solid #e2e6ec;white-space:nowrap;}
+.spec-table-wrap td{padding:11px 14px;border-bottom:1px solid #e2e6ec;color:#1b2028;vertical-align:top;line-height:1.55;}
+.spec-table-wrap tr:last-child td{border-bottom:none;}
+.spec-req{color:#e5484d;font-weight:700;}
+.spec-field{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13.5px;color:#10141b;}
+.spec-tag{display:inline-block;font-size:13px;padding:3px 9px;border-radius:99px;background:#eaf2ff;color:#1677ff;font-weight:600;white-space:nowrap;}
+
+.spec-rule-box{background:#eaf2ff;border:1px solid #bcd8ff;border-radius:8px;padding:18px 20px;margin:0 0 20px;font-size:14.5px;}
+.spec-rule-box .spec-rule-title{font-weight:700;color:#1677ff;font-size:13px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;}
+.spec-rule-box ol,.spec-rule-box ul{margin:0;padding-left:20px;}
+.spec-rule-box li{margin-bottom:9px;color:#1c2a44;line-height:1.6;}
+.spec-rule-box li:last-child{margin-bottom:0;}
+.spec-rule-box .spec-field{color:#0b56d6;}
+
+.spec-pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px;}
+.spec-pill{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13px;background:#fff;border:1px solid #cdd3dc;color:#5b6472;padding:6px 11px;border-radius:6px;}
+.spec-pill.action{background:#10141b;color:#fff;border-color:#10141b;}
+
+.spec-gloss{display:flex;flex-direction:column;border:1px solid #e2e6ec;border-radius:8px;overflow:hidden;background:#fff;max-width:980px;}
+.spec-gloss-row{display:grid;grid-template-columns:190px 1fr;gap:20px;padding:18px 20px;border-bottom:1px solid #e2e6ec;}
+.spec-gloss-row:last-child{border-bottom:none;}
+.spec-gloss-term{font-weight:700;font-size:15.5px;color:#10141b;}
+.spec-gloss-def{font-size:15px;color:#5b6472;line-height:1.65;}
+.spec-gloss-def .spec-field{color:#1677ff;}
+
+.spec-qa-list{display:flex;flex-direction:column;gap:12px;max-width:980px;}
+.spec-qa-item{display:flex;gap:14px;align-items:flex-start;background:#fff4e8;border:1px solid #ffdca8;border-radius:8px;padding:16px 18px;font-size:15px;color:#5c3d10;line-height:1.6;}
+.spec-qa-item .spec-qa-mark{flex:none;width:22px;height:22px;border-radius:50%;background:#fa8c16;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+@media (max-width:1200px){ .spec-split{grid-template-columns:minmax(0,1fr);} }
+#mergeView1 .overlay{position:static !important;inset:auto !important;padding:0 !important;background:transparent !important;display:block !important;}
+#mergeView1 .modal{width:100% !important;max-width:100% !important;box-shadow:none !important;}
+
+</style>
+</head>
+<body>
+
+<div class="spec-nav" id="mergeNav">
+  <button onclick="mergeGo(0)">名词定义</button>
+  <button onclick="mergeGo(1)">商品配置</button>
+  <button onclick="mergeGo(2)">用户积分纪录</button>
+  <button onclick="mergeGo(3)">商品兑换纪录</button>
+  <button onclick="mergeGo(4)">优惠券管理</button>
+  <button onclick="mergeGo(5)">免费旋转管理</button>
+  <button onclick="mergeGo(6)">待确认事项</button>
+</div>
+
+<div class="spec-view" id="mergeView0">
+<div class="spec-view-inner">
+  <div class="spec-h1">名词定义与共同业务规则</div>
+  <p class="spec-sub">阅读各分页签前，先对齐以下贯穿全文的关键规则。</p>
+  <div class="spec-gloss">
+    <div class="spec-gloss-row"><div class="spec-gloss-term">一番赏 / Ichiban Kuji</div><div class="spec-gloss-def">玩家以积分购买「一番赏」商品，依券数（单抽／五连／全包）抽取对应奖级的奖品。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">奖级</div><div class="spec-gloss-def">A赏～G赏（可自订数量与名称，最多 7 级）＋ <span class="spec-field">Last赏</span>（固定 1 张，最后一抽自动触发，不可删除）。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">券数</div><div class="spec-gloss-def">该商品的总抽奖张数，＝各奖级数量加总（含 Last赏的 1 张），系统自动加总显示。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">来源＝积分购买</div><div class="spec-gloss-def">所有一番赏商品的取得方式，在后台一律归类为 <span class="spec-field">积分购买</span> 来源，不会单独列出「Ichiban Kuji」来源选项。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">活动名称＝商品名称</div><div class="spec-gloss-def">各记录／报表页的「活动名称」字段，来源为积分购买时取自「商品配置」中<strong>商品类型＝Ichiban Kuji</strong> 的该笔商品的「商品名称」字段值（即玩家实际购买的一番赏商品名称）；若为其他非一番赏类型的一般积分购买项目，显示「–」。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">奖品清单格式</div><div class="spec-gloss-def">「备注」／「奖品」字段统一采用「{奖级} {奖品类型}{数值}」格式，例如「B赏 彩金500.00」「E赏 旋转券×20」；一笔纪录若中出多个奖品，以顿号「，」分隔，重复品项自动合并显示为「×N」，Last赏永远排最前面。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">状态字段</div><div class="spec-gloss-def">全文出现的「状态」栏位固定使用纯文本值：<span class="spec-field">未使用</span> ／ <span class="spec-field">已使用</span> ／ <span class="spec-field">已过期</span>（优惠券／免费旋转类）、<span class="spec-field">已发送</span> ／ <span class="spec-field">待发送</span>（发送记录类），不使用任何色块或图示。</div></div>
+  </div>
+
+  <div class="spec-rule-box" style="max-width:900px;margin-top:20px;">
+    <div class="spec-rule-title">后台记录页共同业务规则</div>
+    <ol>
+      <li>一番赏商品皆通过「积分」购买产生，因此各记录页「来源」／「获得方式」字段一律显示为 <span class="spec-field">积分购买</span>；系统不会单独列出「Ichiban Kuji」这个来源选项</li>
+      <li>「活动名称」字段：来自一番赏购买 → 显示<strong>商品名称</strong>；其他一般积分购买项目 → 显示 <span class="spec-field">–</span></li>
+      <li>「状态」字段一律为<strong>纯文本</strong>呈现，不使用色块样式</li>
+      <li>所有列表皆采用前端分页，预设每页 10 笔；查询条件变更后会自动跳回第 1 页</li>
+    </ol>
+  </div>
+</div>
+</div>
+<div class="spec-view" id="mergeView1"><div class="spec-view-inner">
+  <div class="spec-h1">商品配置（新增／编辑商品弹窗）</div>
+  <p class="spec-sub">参照文件：<span class="spec-field">ichiban_kuji_admin_modal.html</span>——画面较窄，采左右并排：画面在左、规格文字在右。</p>
+  <div class="spec-split">
+    <div class="spec-screen-card" style="background:#f0f2f5;">
+      <div class="overlay">
+  <div class="modal">
+    <div class="modal-header">
+      新增商品
+      <button class="modal-close" onclick="this.closest('.overlay').style.display='none'">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- 币种 -->
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>币种：</div>
+        <div class="form-control">
+          <select style="max-width:180px;">
+            <option>菲律宾比索</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 商品类别 checkbox -->
+      <div class="form-row">
+        <div class="form-label">商品类别：</div>
+        <div class="form-control">
+          <div class="checkbox-group">
+            <label><input type="checkbox"> FREESPIN</label>
+            <label><input type="checkbox"> MONEY</label>
+            <label><input type="checkbox"> COUPON</label>
+            <label><input type="checkbox"> tickets（票券）</label>
+            <label><input type="checkbox"> 实物</label>
+            <label><input type="checkbox"> 彩金</label>
+            <label><input type="checkbox"> 优惠券</label>
+            <label><input type="checkbox"> 免费旋转</label>
+            <label><input type="checkbox"> 话费</label>
+            <label><input type="checkbox"> 流量</label>
+            <label><input type="checkbox"> pisoluck</label>
+            <label><input type="checkbox"> 免费投注</label>
+            <label><input type="checkbox"> 盲盒</label>
+            <label><input type="checkbox"> 道具卡</label>
+            <label><input type="checkbox" checked class="ichiban-cb"> <span class="ichiban-label">Ichiban Kuji</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品名称 -->
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>商品名称：</div>
+        <div class="form-control">
+          <input type="text" placeholder="请输入商品名称">
+        </div>
+      </div>
+
+      <!-- 商品类型 radio -->
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>商品类型：</div>
+        <div class="form-control">
+          <div class="radio-group">
+            <label><input type="radio" name="productType" value="real"> 实物</label>
+            <label><input type="radio" name="productType" value="bonus"> 彩金</label>
+            <label><input type="radio" name="productType" value="coupon"> 优惠券</label>
+            <label><input type="radio" name="productType" value="freespin"> 免费旋转</label>
+            <label><input type="radio" name="productType" value="phone"> 话费</label>
+            <label><input type="radio" name="productType" value="data"> 流量</label>
+            <label><input type="radio" name="productType" value="pisoluck"> pisoluck</label>
+            <label><input type="radio" name="productType" value="ticket"> 票券</label>
+            <label><input type="radio" name="productType" value="blind"> 盲盒</label>
+            <label><input type="radio" name="productType" value="freebet"> 免费投注</label>
+            <label><input type="radio" name="productType" value="tool"> 道具卡</label>
+            <label><input type="radio" name="productType" value="ichiban" checked> <span class="ichiban-label">Ichiban Kuji</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品图片 -->
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>商品图片：</div>
+        <div class="form-control">
+          <button class="upload-btn">📁 选择文件</button>
+          <div class="upload-hint">尺寸750×750，最多可上传6张图，默认第一张图为封面图</div>
+        </div>
+      </div>
+
+      <!-- 购买价格 -->
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>购买价格：</div>
+        <div class="form-control">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <label><input type="radio" name="priceType" checked> 积分</label>
+          </div>
+          <div class="input-suffix">
+            <input type="number" placeholder="请输入" style="max-width:300px;border-radius:4px 0 0 4px;">
+            <span class="suffix-tag">积分</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 排序 -->
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>排序：</div>
+        <div class="form-control">
+          <input type="number" value="1" style="max-width:100px;">
+        </div>
+      </div>
+
+      <!-- 单个会员限购数 -->
+      <div class="form-row">
+        <div class="form-label">单个会员限购数：</div>
+        <div class="form-control">
+          <div class="vip-grid">
+            <div class="vip-item"><span class="vip-tag">VIP0</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP1</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP2</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP3</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP4</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP5</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP6</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP7</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP8</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP9</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP10</span><input type="number" value="0"></div>
+          </div>
+          <div class="limit-row">
+            <input type="checkbox" id="limitCheck">
+            <label for="limitCheck" style="font-size:13px;color:#1677ff;cursor:pointer;">限购</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 是否限时抢购 -->
+      <div class="form-row">
+        <div class="form-label"><span class="req">*</span>是否限时抢购：</div>
+        <div class="form-control">
+          <div class="radio-group">
+            <label><input type="radio" name="flashSale" value="no" checked onchange="toggleFlashSale(this)"> 否</label>
+            <label><input type="radio" name="flashSale" value="yes" onchange="toggleFlashSale(this)"> 是</label>
+          </div>
+          <div id="flashSaleRange" style="display:none;margin-top:8px;">
+            <div style="display:flex;align-items:center;gap:8px;border:1px solid #d9d9d9;border-radius:4px;padding:6px 12px;max-width:420px;background:#fff;">
+              <span style="color:#bbb;font-size:15px;">🕐</span>
+              <input type="datetime-local" style="border:none;outline:none;font-size:13px;color:#333;flex:1;background:transparent;" id="flashStart">
+              <span style="color:#999;font-size:13px;">～</span>
+              <input type="datetime-local" style="border:none;outline:none;font-size:13px;color:#333;flex:1;background:transparent;" id="flashEnd">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 审核模式 -->
+      <div class="form-row">
+        <div class="form-label">审核模式：</div>
+        <div class="form-control">
+          <div class="radio-group">
+            <label style="color:#bbb;cursor:not-allowed;"><input type="radio" name="auditMode" checked disabled> 自动审核</label>
+            <label style="color:#bbb;cursor:not-allowed;"><input type="radio" name="auditMode" disabled> 手动审核</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 顶部图配置 -->
+      <div style="margin-top:16px;">
+        <div class="banner-field-row">
+          <div class="banner-field-label"><span class="req">*</span>顶部图：</div>
+          <div style="flex:1;">
+            <div class="banner-panels">
+              <!-- PC 端 -->
+              <div class="banner-panel">
+                <div class="banner-panel-header">
+                  <span>PC 端</span>
+                  <span class="size-hint">建议尺寸 1400×800px</span>
+                </div>
+                <div class="banner-panel-body">
+                  <div class="banner-drop-zone" onclick="document.getElementById('bannerPcInput').click()">
+                    <img class="banner-preview" id="bannerPcPreview" src="" style="display:none;">
+                    <div class="banner-placeholder" id="bannerPcPlaceholder">
+                      <span class="plus-icon">＋</span>
+                      <span>点击上传图片</span>
+                    </div>
+                  </div>
+                  <input type="file" id="bannerPcInput" accept="image/*" style="display:none;"
+                    onchange="previewBanner(this,'bannerPcPreview','bannerPcPlaceholder')">
+                  <div class="banner-panel-footer">
+                    <button type="button" class="btn-banner-delete" onclick="clearBanner('bannerPcInput','bannerPcPreview','bannerPcPlaceholder')">
+                      <svg viewBox="64 64 896 896" width="13" height="13" fill="currentColor" style="vertical-align:-1px;margin-right:4px;"><path d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"/></svg>删除
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- H5 端 -->
+              <div class="banner-panel">
+                <div class="banner-panel-header">
+                  <span>H5 端</span>
+                  <span class="size-hint">建议尺寸 390×320px</span>
+                </div>
+                <div class="banner-panel-body">
+                  <div class="banner-drop-zone" onclick="document.getElementById('bannerH5Input').click()">
+                    <img class="banner-preview" id="bannerH5Preview" src="" style="display:none;">
+                    <div class="banner-placeholder" id="bannerH5Placeholder">
+                      <span class="plus-icon">＋</span>
+                      <span>点击上传图片</span>
+                    </div>
+                  </div>
+                  <input type="file" id="bannerH5Input" accept="image/*" style="display:none;"
+                    onchange="previewBanner(this,'bannerH5Preview','bannerH5Placeholder')">
+                  <div class="banner-panel-footer">
+                    <button type="button" class="btn-banner-delete" onclick="clearBanner('bannerH5Input','bannerH5Preview','bannerH5Placeholder')">
+                      <svg viewBox="64 64 896 896" width="13" height="13" fill="currentColor" style="vertical-align:-1px;margin-right:4px;"><path d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"/></svg>删除
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /顶部图配置 -->
+
+      <!-- 规则弹窗图配置 -->
+      <div style="margin-top:16px;">
+        <div class="banner-field-row">
+          <div class="banner-field-label"><span class="req">*</span>规则弹窗图：</div>
+          <div style="flex:1;">
+            <div class="banner-panels">
+              <!-- PC 端 -->
+              <div class="banner-panel">
+                <div class="banner-panel-header">
+                  <span>PC 端</span>
+                  <span class="size-hint">建议尺寸 356×422px</span>
+                </div>
+                <div class="banner-panel-body">
+                  <div class="banner-drop-zone" onclick="document.getElementById('rulePcInput').click()">
+                    <img class="banner-preview" id="rulePcPreview" src="" style="display:none;">
+                    <div class="banner-placeholder" id="rulePcPlaceholder">
+                      <span class="plus-icon">＋</span>
+                      <span>点击上传图片</span>
+                    </div>
+                  </div>
+                  <input type="file" id="rulePcInput" accept="image/*" style="display:none;"
+                    onchange="previewBanner(this,'rulePcPreview','rulePcPlaceholder')">
+                  <div class="banner-panel-footer">
+                    <button type="button" class="btn-banner-delete" onclick="clearBanner('rulePcInput','rulePcPreview','rulePcPlaceholder')">
+                      <svg viewBox="64 64 896 896" width="13" height="13" fill="currentColor" style="vertical-align:-1px;margin-right:4px;"><path d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"/></svg>删除
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- H5 端 -->
+              <div class="banner-panel">
+                <div class="banner-panel-header">
+                  <span>H5 端</span>
+                  <span class="size-hint">建议尺寸 356×422px</span>
+                </div>
+                <div class="banner-panel-body">
+                  <div class="banner-drop-zone" onclick="document.getElementById('ruleH5Input').click()">
+                    <img class="banner-preview" id="ruleH5Preview" src="" style="display:none;">
+                    <div class="banner-placeholder" id="ruleH5Placeholder">
+                      <span class="plus-icon">＋</span>
+                      <span>点击上传图片</span>
+                    </div>
+                  </div>
+                  <input type="file" id="ruleH5Input" accept="image/*" style="display:none;"
+                    onchange="previewBanner(this,'ruleH5Preview','ruleH5Placeholder')">
+                  <div class="banner-panel-footer">
+                    <button type="button" class="btn-banner-delete" onclick="clearBanner('ruleH5Input','ruleH5Preview','ruleH5Placeholder')">
+                      <svg viewBox="64 64 896 896" width="13" height="13" fill="currentColor" style="vertical-align:-1px;margin-right:4px;"><path d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"/></svg>删除
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /规则弹窗图配置 -->
+
+      <!-- ═══════════════════════════════════════
+           一番赏奖级配置区块
+           ═══════════════════════════════════════ -->
+      <div class="section-divider">
+        <div class="section-title">Ichiban Kuji 奖级配置</div>
+
+        <!-- 总券数 banner -->
+        <div class="total-banner">
+          🎫 总券数：<strong id="totalCount">0</strong> 张
+          <span style="color:#666;font-size:12px;margin-left:4px;">（各奖级数量自动加总）</span>
+        </div>
+
+        <!-- 新增奖级按钮 -->
+        <div class="add-tier-wrap">
+          <button class="btn-add-tier" onclick="addTier()">＋ 新增奖级</button>
+          <span class="tier-count-info" id="tierCountInfo">目前 1 个奖级（最多 G赏，共 7 级）</span>
+        </div>
+
+        <!-- 奖级列表 -->
+        <div id="tierList"></div>
+
+        <!-- Last 赏（固定，不可删除）-->
+        <div class="prize-tier last-tier" id="lastTier">
+          <div class="tier-header">
+            <div style="display:flex;align-items:center;gap:8px;flex:1;">
+              <span class="req">*</span><input class="tier-name-input" type="text" value="Last赏" placeholder="奖级名称" style="max-width:120px;" required>
+              <div style="display:flex;align-items:center;gap:5px;background:#fff7e6;border:1px solid #ffd591;border-radius:4px;padding:0 10px;height:28px;">
+                <span style="font-size:12px;color:#fa8c16;white-space:nowrap;">数量</span>
+                <input type="number" value="1" disabled style="width:40px;border:none;background:transparent;text-align:center;font-size:13px;font-weight:600;color:#fa8c16;outline:none;">
+                <span style="font-size:12px;color:#fa8c16;">张</span>
+              </div>
+              <span class="last-note">🏆 压轴奖：最后一抽自动触发，固定 1 张</span>
+            </div>
+          </div>
+          <div class="tier-body" id="tbody-last">
+            <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;">
+              <div class="tier-field" style="min-width:130px;">
+                <label><span class="req">*</span>第一层</label>
+                <select onchange="onCat1Change(this,'last')" required>
+                  <option value="virtual">虚拟物品</option>
+                  <option value="real">实物</option>
+                </select>
+              </div>
+              <div class="tier-field" style="min-width:130px;" id="cat2-wrap-last">
+                <label><span class="req">*</span>第二层</label>
+                <select onchange="onCat2Change(this,'last')" required>
+                  <option value="bonus">彩金</option>
+                  <option value="points">积分</option>
+                  <option value="coupon">优惠券</option>
+                  <option value="freespin">免费旋转券</option>
+                  <option value="freebet">免费投注券</option>
+                  <option value="tool">道具卡</option>
+                </select>
+              </div>
+              <div id="dynamic-fields-last" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;"></div>
+              <div class="tier-field" id="prize-name-wrap-last" style="min-width:130px;display:none;">
+                <label><span class="req">*</span>奖品名称</label>
+                <input type="text" placeholder="请输入奖品名称">
+              </div>
+            </div>
+            <div class="tier-upload" style="margin-top:10px;">
+              <label><span class="req">*</span>奖品图片</label>
+              <button class="upload-btn-sm">📁 选择文件</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /section-divider -->
+
+    </div><!-- /modal-body -->
+
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="submitForm()">确定</button>
+      <button class="btn btn-warning" onclick="this.closest('.overlay').style.display='none'">取消</button>
+    </div>
+  </div>
+</div>
+    </div>
+    
+<div class="spec-text">
+  <h3>入口与结构</h3>
+  <p class="spec-lead">此弹窗由「一番赏商品配置」列表页点击「新增商品」或「编辑」触发，标题为「新增商品」／「编辑商品」；表单分为基本字段、顶部图配置、规则弹窗图配置、Ichiban Kuji 奖级配置 4 大区块。</p>
+
+  <h3>2.1 基本字段</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>字段</th><th>必填</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">币种</td><td><span class="spec-req">●</span></td><td>下拉单选，目前仅「菲律宾比索」一个选项，为后续多币别预留字段</td></tr>
+        <tr><td class="spec-field">商品类别</td><td>–</td><td>多选 checkbox，用于后台商品列表的分类筛选；新增一番赏商品时须勾选「Ichiban Kuji」，不影响抽奖逻辑</td></tr>
+        <tr><td class="spec-field">商品名称</td><td><span class="spec-req">●</span></td><td>纯文本，会显示在玩家端商品卡片、后台各笔购买纪录的「商品名称」／「活动名称」字段</td></tr>
+        <tr><td class="spec-field">商品类型</td><td><span class="spec-req">●</span></td><td>单选 radio，决定商品的抽奖／发放机制；选中「Ichiban Kuji」才会显示下方奖级配置区块</td></tr>
+        <tr><td class="spec-field">商品图片</td><td><span class="spec-req">●</span></td><td>尺寸 750×750px，最多可上传 6 张，预设第一张为封面图</td></tr>
+        <tr><td class="spec-field">购买价格</td><td><span class="spec-req">●</span></td><td>目前锁定计价方式为「积分」，此数值＝单抽需扣除的积分</td></tr>
+        <tr><td class="spec-field">排序</td><td><span class="spec-req">●</span></td><td>数字，越小排序越前面</td></tr>
+        <tr><td class="spec-field">单个会员限购数</td><td>–</td><td>依 VIP0～VIP10 分别设置，需勾选「限购」才生效</td></tr>
+        <tr><td class="spec-field">是否限时抢购</td><td><span class="spec-req">●</span></td><td>选「是」需设置起讫时间，超出时间应下架／不可购买</td></tr>
+        <tr><td class="spec-field">审核模式</td><td>–</td><td>目前锁定仅自动审核，手动审核尚未开放</td></tr>
+        <tr><td class="spec-field">顶部图（PC／H5）</td><td><span class="spec-req">●</span></td><td>PC 建议 1400×800px，H5 建议 390×320px</td></tr>
+        <tr><td class="spec-field">规则弹窗图（PC／H5）</td><td><span class="spec-req">●</span></td><td>均建议 356×422px</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>2.2 奖级配置规则</h3>
+  <div class="spec-rule-box">
+    <ul>
+      <li><strong>总券数</strong>＝所有一般奖级数量总和 ＋ Last赏固定 1 张，自动加总显示</li>
+      <li><strong>奖级数量上限</strong>：一般奖级最多到 G赏（7 级），加上固定 Last赏，共 8 级；达上限「＋新增奖级」会跳出提示</li>
+      <li><strong>奖级下限</strong>：一般奖级至少保留 1 个，仅剩 1 个时隐藏删除按钮</li>
+      <li><strong>命名规则</strong>：新增奖级依序自动命名 A赏→G赏，名称可手动修改</li>
+      <li><strong>Last赏</strong>：固定显示在列表最下方，数量锁定为 1 且不可编辑、不可删除，代表最后一抽必定触发</li>
+      <li>每个奖级需填：名称、数量、第一层分类、第二层分类、对应动态字段、奖品图片，缺一不可</li>
+    </ul>
+  </div>
+
+  <p class="spec-lead">第一层「虚拟物品／实物」；选实物则第二层隐藏、直接显示商品简介。第二层 → 动态字段：</p>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>第二层分类</th><th>对应动态字段</th></tr></thead>
+      <tbody>
+        <tr><td><span class="spec-tag">彩金</span></td><td>流水倍数＋金额（均必填）</td></tr>
+        <tr><td><span class="spec-tag">积分</span></td><td>积分数量（必填）</td></tr>
+        <tr><td><span class="spec-tag">优惠券</span></td><td>「选择优惠券」下拉（必填）</td></tr>
+        <tr><td><span class="spec-tag">免费旋转券</span></td><td>展开「旋转券配置」子区块，可新增多笔（游戏＋张数），可各别删除并自动重新编号</td></tr>
+        <tr><td><span class="spec-tag">免费投注券</span></td><td>「选择免费投注券」下拉（必填）</td></tr>
+        <tr><td><span class="spec-tag">道具卡</span></td><td>「选择道具卡」下拉（必填）</td></tr>
+        <tr><td>实物（第一层）</td><td>商品简介＋奖品名称（均必填）——唯一会显示「奖品名称」的分类</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="spec-lead">每个奖级不论第二层为何，底部都需上传一张「奖品图片」（必填）。</p>
+
+  <h3>2.3 送出验证</h3>
+  <div class="spec-rule-box">
+    <ul>
+      <li>点击「确定」时扫描所有标示必填的字段</li>
+      <li>空值必填字段边框变红、自动卷动＋聚焦到第一个未填字段，中断送出</li>
+      <li>已停用（disabled）字段（如 Last赏数量、手动审核选项）不列入必填检查</li>
+      <li>全部通过后跳出「验证通过，提交成功」提示（原型未串接实际后端）</li>
+    </ul>
+  </div>
+
+  <h3>底部操作</h3>
+  <p class="spec-lead"><span class="spec-field">确定</span>：执行送出验证，通过后提交表单；<span class="spec-field">取消</span>：直接关闭弹窗，不保存任何变更。</p>
+</div>
+
+  </div>
+</div></div>
+<div class="spec-view" id="mergeView2"><div class="spec-view-inner">
+  <div class="spec-h1">用户积分纪录</div>
+  <p class="spec-sub">路径：积分商城 ＞ 用户积分纪录。一番赏购买会在此产生一笔扣分纪录。</p>
+  <div class="spec-stack">
+    <div class="spec-screen-card">
+      <div class="page">
+
+  <!-- 面包屑 -->
+  <div class="breadcrumb">
+    位置 › <span>用户积分纪录</span>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="filter-bar" style="justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <select id="p2FilterProduct">
+        <option value="">积分兑换商品</option>
+        <option>苹果 Ichiban Kuji</option>
+        <option>节日特别版 Ichiban Kuji</option>
+        <option>高价值VIP专属赏</option>
+        <option>入门款 Ichiban Kuji</option>
+        <option>盲盒美术图测试2</option>
+      </select>
+
+      <input type="text" id="p2FilterMember" placeholder="会员名">
+
+      <div class="date-range-wrap">
+        <span class="date-icon">🕐</span>
+        <input type="datetime-local" id="p2DateStart" value="2026-06-15T00:00:00" step="1">
+        <span class="date-sep">～</span>
+        <input type="datetime-local" id="p2DateEnd" value="2026-06-16T23:59:59" step="1">
+      </div>
+
+      <button class="btn btn-primary" onclick="p2RenderTable()">
+        <svg viewBox="0 0 1024 1024" width="13" height="13" fill="currentColor"><path d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.3 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"/></svg>
+        搜索
+      </button>
+    </div>
+
+    <button class="btn btn-warning">导出</button>
+  </div>
+
+  <!-- 表格 -->
+  <div class="table-wrap">
+    <div style="overflow-x:auto;"><table>
+      <thead>
+        <tr>
+          <th>会员名</th>
+          <th>创建时间</th>
+          <th>积分</th>
+          <th>当前总积分</th>
+          <th>操作人</th>
+          <th>原因</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody id="p2TableBody"></tbody>
+    </table></div>
+    <div class="pagination" id="p2Pagination"></div>
+  </div>
+
+</div>
+    </div>
+    
+<div class="spec-text">
+  <h3>页面位置</h3>
+  <p class="spec-lead">面包屑：位置 › 用户积分纪录。此页记录「全站」会员积分的每一笔增减，不限一番赏，一番赏购买会在此产生一笔扣分纪录。</p>
+
+  <h3>栏位字段（全部 7 栏）</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>字段</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">会员名</td><td>触发本笔积分变动的会员帐号</td></tr>
+        <tr><td class="spec-field">创建时间</td><td>本笔纪录产生的时间戳，格式 YYYY-MM-DD HH:mm</td></tr>
+        <tr><td class="spec-field">积分</td><td>本次变动数值；扣款（购买）以负数显示，例如「-500」；若为其他来源的加分则显示正数</td></tr>
+        <tr><td class="spec-field">当前总积分</td><td>本次变动后，该会员的积分余额（非变动前）</td></tr>
+        <tr><td class="spec-field">操作人</td><td>系统自动扣点固定显示为 <span class="spec-field">SYSTEM</span>；若为人工调整则显示实际操作人帐号</td></tr>
+        <tr><td class="spec-field">原因</td><td>＝本次购买的商品名称，与「活动名称＝商品名称」规则一致</td></tr>
+        <tr><td class="spec-field">备注</td><td>＝本次抽奖实际中出的所有奖品清单，格式见「名词定义」页「奖品清单格式」，例：「B赏 彩金500.00，E赏 旋转券×20」</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>筛选栏位</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>控件</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">积分兑换商品</td><td>下拉单选，依商品名称筛选，选项来自所有可积分兑换的商品清单</td></tr>
+        <tr><td class="spec-field">会员名</td><td>文本输入，比对会员帐号（模糊比对）</td></tr>
+        <tr><td class="spec-field">获得时间区间</td><td>起讫日期时间选择器，预设为最近一天</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>操作按钮</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>按钮</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">搜索</td><td>套用上方筛选条件重新查询，并自动跳回第 1 页</td></tr>
+        <tr><td class="spec-field">导出</td><td>将当前筛选结果汇出（原型未串接实际档案下载）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>分页</h3>
+  <p class="spec-lead">画面下方固定显示「Total 笔数」与页码按钮，预设每页 10 笔；筛选条件变更后自动跳回第 1 页。</p>
+</div>
+
+  </div>
+</div></div>
+<div class="spec-view" id="mergeView3"><div class="spec-view-inner">
+  <div class="spec-h1">商品兑换纪录</div>
+  <p class="spec-sub">路径：商品兑换记录 ＞ Ichiban Kuji 抽奖记录页签。一笔纪录＝一次购买（单抽／五连／全包）。</p>
+  <div class="spec-stack">
+    <div class="spec-screen-card">
+      <div class="page">
+
+  <!-- 面包屑 -->
+  <div class="breadcrumb">
+    位置 › <span>商品兑换记录</span>
+  </div>
+
+  <!-- 标签页 -->
+  <div class="tab-bar">
+    <div class="tab-item">商品兑换记录</div>
+    <div class="tab-item">盲盒抽奖记录</div>
+    <div class="tab-item active">Ichiban Kuji 抽奖记录</div>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="filter-bar">
+    <select id="filterCoin">
+      <option value="">选择币别</option>
+      <option value="PHP">菲律宾比索</option>
+    </select>
+
+    <input type="text" id="filterMember" placeholder="会员名">
+
+    <div class="date-range-wrap">
+      <span class="date-icon">🕐</span>
+      <input type="datetime-local" id="dateStart" value="2026-06-09T00:00:00" step="1">
+      <span class="date-sep">～</span>
+      <input type="datetime-local" id="dateEnd" value="2026-06-16T23:59:59" step="1">
+    </div>
+
+    <select id="filterProduct">
+      <option value="">全部商品</option>
+      <option>苹果 Ichiban Kuji</option>
+      <option>节日特别版 Ichiban Kuji</option>
+      <option>高价值VIP专属赏</option>
+      <option>入门款 Ichiban Kuji</option>
+    </select>
+
+    <select id="filterPrizeType">
+      <option value="">全部奖品</option>
+      <option value="彩金">彩金</option>
+      <option value="积分">积分</option>
+      <option value="旋转券">旋转券</option>
+      <option value="免费旋转券">免费旋转券</option>
+      <option value="免费投注券">免费投注券</option>
+      <option value="道具卡">道具卡</option>
+    </select>
+
+    <button class="btn btn-primary" onclick="renderTable()">
+      <svg viewBox="0 0 1024 1024" width="13" height="13" fill="currentColor"><path d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.3 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"/></svg>
+      搜索
+    </button>
+  </div>
+
+  <!-- 导出 -->
+  <div class="action-row">
+    <button class="btn btn-warning">导出</button>
+  </div>
+
+  <!-- 表格 -->
+  <div class="table-wrap">
+    <div style="overflow-x:auto;"><table>
+      <thead>
+        <tr>
+          <th>订单号</th>
+          <th>会员名</th>
+          <th>创建时间</th>
+          <th>币种</th>
+          <th>商品名称</th>
+          <th>券数</th>
+          <th>购买积分</th>
+          <th>奖品</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table></div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+</div>
+    </div>
+    
+<div class="spec-text">
+  <h3>页面位置</h3>
+  <p class="spec-lead">面包屑：位置 › 商品兑换记录，共 3 个子页签：商品兑换记录／盲盒抽奖记录／Ichiban Kuji 抽奖记录（一番赏专属，当前页签）。一笔纪录＝一次购买（可能是单抽／五连／全包）。</p>
+
+  <h3>栏位字段（全部 8 栏）</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>字段</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">订单号</td><td>本次购买交易的系统唯一编号</td></tr>
+        <tr><td class="spec-field">会员名</td><td>购买人帐号</td></tr>
+        <tr><td class="spec-field">创建时间</td><td>下单时间</td></tr>
+        <tr><td class="spec-field">币种</td><td>本笔订单结算的币别</td></tr>
+        <tr><td class="spec-field">商品名称</td><td>本次购买的一番赏商品</td></tr>
+        <tr><td class="spec-field">券数</td><td>单张（1 抽）／五连（5 抽）／全包（买下商品所有剩余券数，一次抽完含 Last赏）</td></tr>
+        <tr><td class="spec-field">购买积分</td><td>本笔订单实际扣除的积分总额</td></tr>
+        <tr><td class="spec-field">奖品</td><td>本次抽中的所有奖品清单，格式见「名词定义」页「奖品清单格式」；重复品项自动合并显示「×N」；全包订单通常会列出该商品全部奖级（含 Last赏）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>筛选栏位</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>控件</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">选择币别</td><td>下拉单选</td></tr>
+        <tr><td class="spec-field">会员名</td><td>文本输入</td></tr>
+        <tr><td class="spec-field">获得时间区间</td><td>起讫日期时间选择器</td></tr>
+        <tr><td class="spec-field">全部商品</td><td>下拉单选，依商品名称筛选</td></tr>
+        <tr><td class="spec-field">全部奖品</td><td>下拉单选：彩金／积分／旋转券／免费旋转券／免费投注券／道具卡</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>操作按钮</h3>
+  <p class="spec-lead"><span class="spec-field">搜索</span>：套用筛选条件重新查询；<span class="spec-field">导出</span>：汇出当前筛选结果（原型未串接实际档案下载）。</p>
+
+  <h3>排版细节</h3>
+  <p class="spec-lead">「奖品」栏位内容较长时，画面内会出现横向卷动条，不会挤压文字异常换行；分页预设每页 10 笔。</p>
+</div>
+
+  </div>
+</div></div>
+<div class="spec-view" id="mergeView4"><div class="spec-view-inner">
+  <div class="spec-h1">优惠券管理</div>
+  <p class="spec-sub">此页汇总全站所有来源发出的优惠券（不限一番赏）。</p>
+  <div class="spec-stack">
+    <div class="spec-screen-card">
+      <div class="page">
+
+  <!-- 面包屑 -->
+  <div class="breadcrumb">
+    位置 › 优惠券管理 › <span>全部优惠券</span>
+  </div>
+
+  <!-- 统计面板 -->
+  <div style="background:#fff;border-radius:4px;border:1px solid #f0f0f0;padding:20px 24px;margin-bottom:16px;">
+    <div style="margin-bottom:16px;">
+      <div class="date-range-wrap" style="width:fit-content;">
+        <span class="date-icon">🕐</span>
+        <input type="datetime-local" id="p3StatStart" value="2026-06-30T00:00:00" step="1">
+        <span class="date-sep">～</span>
+        <input type="datetime-local" id="p3StatEnd" value="2026-06-30T23:59:59" step="1">
+      </div>
+    </div>
+    <div style="display:flex; border-top:1px solid #f5f5f5; padding-top:16px;">
+      <div style="flex:1; text-align:center; border-right:1px solid #f5f5f5;">
+        <div id="p3StatTotal" style="font-size:28px;font-weight:700;color:#1a1a1a;line-height:1.2;">7</div>
+        <div style="font-size:13px;color:#999;margin-top:6px;">优惠券发放总量</div>
+      </div>
+      <div style="flex:1; text-align:center; border-right:1px solid #f5f5f5;">
+        <div id="p3StatRate" style="font-size:28px;font-weight:700;color:#1a1a1a;line-height:1.2;">42.86%</div>
+        <div style="font-size:13px;color:#999;margin-top:6px;">优惠券使用率</div>
+      </div>
+      <div style="flex:1; text-align:center;">
+        <div id="p3StatPayout" style="font-size:28px;font-weight:700;color:#1a1a1a;line-height:1.2;">₱180.00</div>
+        <div style="font-size:13px;color:#999;margin-top:6px;">优惠券累计发放彩金</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="filter-bar" style="gap:8px; flex-wrap:wrap; align-items:center;">
+    <div class="p3-pill">
+      <select id="p3FilterType">
+        <option value="">全部优惠券</option>
+        <option value="输返券">输返券</option>
+        <option value="存送比例券">存送比例券</option>
+        <option value="彩金券">彩金券</option>
+        <option value="旋转券">旋转券</option>
+        <option value="免费投注券">免费投注券</option>
+      </select>
+    </div>
+
+    <div class="p3-pill">
+      <select id="p3FilterStatus">
+        <option value="">全部状态</option>
+        <option value="未使用">未使用</option>
+        <option value="待结算">待结算</option>
+        <option value="已使用">已使用</option>
+        <option value="已过期">已过期</option>
+      </select>
+    </div>
+
+    <div class="p3-pill">
+      <select id="p3FilterSource">
+        <option value="">全部来源</option>
+        <option value="积分购买">积分购买</option>
+      </select>
+    </div>
+
+    <span style="font-size:13px;color:#333;white-space:nowrap;margin-left:4px;">获得时间：</span>
+    <div class="date-range-wrap">
+      <span class="date-icon">🕐</span>
+      <input type="datetime-local" id="p3DateStart" value="2026-06-01T00:00:00" step="1">
+      <span class="date-sep">～</span>
+      <input type="datetime-local" id="p3DateEnd" value="2026-06-30T23:59:59" step="1">
+    </div>
+
+    <div class="p3-pill">
+      <select id="p3FilterMemberType" style="min-width:76px;">
+        <option value="name">会员名</option>
+      </select>
+    </div>
+    <input type="text" id="p3FilterKeyword" placeholder="会员名/活动名称/优惠券ID" style="width:220px;">
+
+    <button class="btn btn-primary" onclick="p3Search()">查询</button>
+    <button class="btn btn-warning">导出</button>
+    <button class="btn btn-primary">赠送优惠券</button>
+  </div>
+
+  <!-- 表格 -->
+  <div class="table-wrap">
+    <div style="overflow-x:auto;"><table>
+      <thead>
+        <tr>
+          <th>会员账号</th>
+          <th>获得时间</th>
+          <th>活动名称</th>
+          <th>获得方式</th>
+          <th>优惠券名称</th>
+          <th>优惠券ID</th>
+          <th>优惠券类别</th>
+          <th>状态</th>
+          <th>操作人</th>
+          <th>操作时间</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody id="p3TableBody"></tbody>
+    </table></div>
+    <div class="pagination" id="p3Pagination"></div>
+  </div>
+
+</div>
+    </div>
+    
+<div class="spec-text">
+  <h3>页面位置</h3>
+  <p class="spec-lead">面包屑：位置 › 优惠券管理 › 全部优惠券。此页汇总全站所有来源发出的优惠券（不限一番赏），一番赏奖级中开出的「彩金券／旋转券／免费投注券」等虚拟奖品，若属于优惠券性质，会在此页留下对应纪录。</p>
+
+  <h3>统计面板（3 项指标）</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>指标</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">优惠券发放总量</td><td>依「获得时间」查询区间统计的发放张数总和</td></tr>
+        <tr><td class="spec-field">优惠券使用率</td><td>已使用张数 ÷ 发放总量</td></tr>
+        <tr><td class="spec-field">优惠券累计发放彩金</td><td>该区间内所有彩金类优惠券的金额加总</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>栏位字段（全部 11 栏）</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>字段</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">会员账号</td><td>领取该优惠券的会员</td></tr>
+        <tr><td class="spec-field">获得时间</td><td>该券被发放给会员的时间</td></tr>
+        <tr><td class="spec-field">活动名称</td><td>见「名词定义」共同业务规则第 2 点：一番赏来源显示商品名称，其他一般项目显示「–」</td></tr>
+        <tr><td class="spec-field">获得方式</td><td>见共同业务规则第 1 点：一番赏产生的一律为「积分购买」</td></tr>
+        <tr><td class="spec-field">优惠券名称</td><td>该张券的显示名称，例如「彩金 ₱50 (1x Turnover)」</td></tr>
+        <tr><td class="spec-field">优惠券ID</td><td>系统内部唯一编号</td></tr>
+        <tr><td class="spec-field">优惠券类别</td><td>输返券／存送比例券／彩金券／旋转券／免费投注券，共 5 类</td></tr>
+        <tr><td class="spec-field">状态</td><td>纯文本：未使用／已使用／已过期</td></tr>
+        <tr><td class="spec-field">操作人</td><td>该券被使用或处理时的操作人，未使用时显示「–」</td></tr>
+        <tr><td class="spec-field">操作时间</td><td>对应操作人的操作时间，未使用时显示「–」</td></tr>
+        <tr><td class="spec-field">备注</td><td>额外说明，通常为「–」</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>筛选栏位</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>控件</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">全部优惠券</td><td>下拉单选，依优惠券类别筛选</td></tr>
+        <tr><td class="spec-field">全部状态</td><td>下拉单选：未使用／待结算／已使用／已过期</td></tr>
+        <tr><td class="spec-field">全部来源</td><td>下拉单选，一番赏对应「积分购买」</td></tr>
+        <tr><td class="spec-field">获得时间区间</td><td>起讫日期时间选择器</td></tr>
+        <tr><td class="spec-field">会员名／活动名称／优惠券ID</td><td>关键字文本输入，三种字段皆可比对</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>操作按钮</h3>
+  <div class="spec-pill-row">
+    <span class="spec-pill action">查询</span><span class="spec-pill action">导出</span><span class="spec-pill action">赠送优惠券</span>
+  </div>
+  <p class="spec-lead"><span class="spec-field">查询</span>：套用筛选条件重新查询；<span class="spec-field">导出</span>：汇出当前筛选结果；<span class="spec-field">赠送优惠券</span>：开启弹窗手动派发优惠券给指定会员（原型未展开此弹窗内容）。</p>
+</div>
+
+  </div>
+</div></div>
+<div class="spec-view" id="mergeView5"><div class="spec-view-inner">
+  <div class="spec-h1">免费旋转管理</div>
+  <p class="spec-sub">路径：免费旋转管理，内含 4 个子页签，可直接点击画面上方分页签切换。</p>
+  <div class="spec-stack">
+    <div class="spec-screen-card">
+      <div class="page">
+
+  <!-- 面包屑 -->
+  <div class="breadcrumb">
+    位置 › <span>免费旋转管理</span>
+  </div>
+
+  <!-- 子标签页 -->
+  <div class="tab-bar" id="p4TabBar">
+    <div class="tab-item" onclick="p4Switch(1)">免费项目配置</div>
+    <div class="tab-item active" onclick="p4Switch(2)">免费项目记录</div>
+    <div class="tab-item" onclick="p4Switch(3)">免费项目统计</div>
+    <div class="tab-item" onclick="p4Switch(4)">免费项目发送记录</div>
+  </div>
+
+  <!-- ── TAB 1: 免费项目配置 ── -->
+  <div id="p4t1" style="display:none">
+    <div class="action-row" style="margin-bottom:10px;">
+      <button class="btn btn-primary">+ 新增配置</button>
+    </div>
+    <div class="table-wrap">
+      <div style="overflow-x:auto;"><table>
+        <thead>
+          <tr>
+            <th>配置名称</th>
+            <th>免费类型</th>
+            <th>游戏平台</th>
+            <th>次数</th>
+            <th>有效期（小时）</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>colorgame</td><td>免费投注</td><td>ColorGame</td><td>1</td><td>24</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-01-10 09:00:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>免费投注PT单个游戏</td><td>免费投注</td><td>PT</td><td>10</td><td>48</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-02-15 10:30:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>PT免费投注1</td><td>免费投注</td><td>PT</td><td>10</td><td>72</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-03-01 14:00:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>Free Spin ×10</td><td>免费旋转</td><td>全平台</td><td>10</td><td>240</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-05-20 11:00:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>Free Spin ×20</td><td>免费旋转</td><td>全平台</td><td>20</td><td>240</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-05-20 11:05:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>Free Spin ×30</td><td>免费旋转</td><td>全平台</td><td>30</td><td>240</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-05-20 11:10:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+        </tbody>
+      </table></div>
+      <div style="padding:14px 20px;text-align:right;font-size:13px;color:#999;border-top:1px solid #f0f0f0;">Total 6</div>
+    </div>
+  </div>
+
+  <!-- ── TAB 2: 免费项目记录 ── -->
+  <div id="p4t2">
+    <div class="filter-bar" style="gap:8px; flex-wrap:wrap; align-items:center;">
+      <div class="p3-pill">
+        <select id="p4FilterSpin">
+          <option value="">全部免费旋转</option>
+          <option value="免费旋转">免费旋转</option>
+          <option value="免费投注">免费投注</option>
+          <option value="道具卡">道具卡</option>
+        </select>
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4FilterSource" style="min-width:110px;">
+          <option value="">全部来源</option>
+          <option value="积分购买">积分购买</option>
+        </select>
+      </div>
+
+      <span style="font-size:13px;color:#333;white-space:nowrap;margin-left:4px;">获得时间：</span>
+      <div class="date-range-wrap">
+        <span class="date-icon">🕐</span>
+        <input type="datetime-local" id="p4DateStart" value="2026-06-30T00:00:00" step="1">
+        <span class="date-sep">～</span>
+        <input type="datetime-local" id="p4DateEnd" value="2026-06-30T23:59:59" step="1">
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4FilterType" style="min-width:110px;">
+          <option value="">全部免费类型</option>
+          <option value="免费旋转">免费旋转</option>
+          <option value="免费投注">免费投注</option>
+          <option value="道具卡">道具卡</option>
+        </select>
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4FilterSelect" style="min-width:80px;">
+          <option value="">Select</option>
+        </select>
+      </div>
+
+      <input type="text" id="p4FilterKeyword" placeholder="会员名/活动名称" style="width:160px;">
+
+      <button class="btn btn-primary" onclick="p4Search()">查询</button>
+      <button class="btn btn-primary" style="margin-left:auto;">赠送免费旋转</button>
+    </div>
+
+    <div class="table-wrap">
+      <div style="overflow-x:auto;"><table>
+        <thead>
+          <tr>
+            <th>会员账号</th>
+            <th>获得时间</th>
+            <th>活动名称</th>
+            <th>获得方式</th>
+            <th>免费旋转名称</th>
+            <th>免费类型</th>
+            <th>获得次数</th>
+            <th>状态</th>
+            <th>操作人</th>
+            <th>操作时间</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody id="p4TableBody"></tbody>
+      </table></div>
+      <div class="pagination" id="p4Pagination"></div>
+    </div>
+  </div>
+
+  <!-- ── TAB 3: 免费项目统计 ── -->
+  <div id="p4t3" style="display:none">
+    <div class="filter-bar" style="gap:8px; flex-wrap:wrap; align-items:center;">
+      <div class="p3-pill">
+        <select id="p4StatStatus" style="min-width:96px;">
+          <option value="">所有状态</option>
+          <option value="已使用">已使用</option>
+          <option value="未使用">未使用</option>
+          <option value="已过期">已过期</option>
+        </select>
+      </div>
+
+      <span style="font-size:13px;color:#333;white-space:nowrap;margin-left:4px;">使用时间：</span>
+      <div class="date-range-wrap">
+        <span class="date-icon">🕐</span>
+        <input type="datetime-local" id="p4StatDateStart" value="2026-07-02T00:00:00" step="1">
+        <span class="date-sep">～</span>
+        <input type="datetime-local" id="p4StatDateEnd" value="2026-07-02T23:59:59" step="1">
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4StatType" style="min-width:110px;">
+          <option value="">全部免费类型</option>
+          <option value="免费旋转">免费旋转</option>
+          <option value="道具卡">道具卡</option>
+          <option value="免费投注">免费投注</option>
+        </select>
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4StatSelect" style="min-width:80px;">
+          <option value="">Select</option>
+        </select>
+      </div>
+
+      <input type="text" id="p4StatKeyword" placeholder="会员名/活动名称" style="width:160px;">
+
+      <button class="btn btn-primary" onclick="p4StatSearch()">查询</button>
+      <button class="btn btn-warning">导出</button>
+    </div>
+
+    <div class="table-wrap">
+      <div style="overflow-x:auto;"><table>
+        <thead>
+          <tr>
+            <th>会员账号</th>
+            <th>免费旋转名称</th>
+            <th>免费类型</th>
+            <th>厂商</th>
+            <th>状态</th>
+            <th>使用时间</th>
+            <th>绑定游戏</th>
+            <th>获得次数</th>
+          </tr>
+        </thead>
+        <tbody id="p4StatTableBody"></tbody>
+      </table></div>
+      <div class="pagination" id="p4StatPagination"></div>
+    </div>
+  </div>
+
+  <!-- ── TAB 4: 免费项目发送记录 ── -->
+  <div id="p4t4" style="display:none">
+    <div class="filter-bar" style="gap:8px; flex-wrap:wrap; align-items:center;">
+      <div class="p3-pill">
+        <select id="p4SendStatus" style="min-width:96px;">
+          <option value="">所有状态</option>
+          <option value="已发送">已发送</option>
+          <option value="待发送">待发送</option>
+        </select>
+      </div>
+
+      <span style="font-size:13px;color:#333;white-space:nowrap;margin-left:4px;">发送时间：</span>
+      <div class="date-range-wrap">
+        <span class="date-icon">🕐</span>
+        <input type="datetime-local" id="p4SendDateStart" value="2026-07-02T00:00:00" step="1">
+        <span class="date-sep">～</span>
+        <input type="datetime-local" id="p4SendDateEnd" value="2026-07-02T23:59:59" step="1">
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4SendType" style="min-width:110px;">
+          <option value="">全部免费类型</option>
+          <option value="免费旋转">免费旋转</option>
+          <option value="道具卡">道具卡</option>
+          <option value="免费投注">免费投注</option>
+        </select>
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4SendSelect" style="min-width:80px;">
+          <option value="">Select</option>
+        </select>
+      </div>
+
+      <input type="text" id="p4SendKeyword" placeholder="会员名/免费名称" style="width:160px;">
+
+      <button class="btn btn-primary" onclick="p4SendSearch()">查询</button>
+      <button class="btn btn-warning">批量重新发送</button>
+      <button class="btn btn-success">导出</button>
+    </div>
+
+    <div class="table-wrap" style="margin-top:12px;">
+      <div style="overflow-x:auto;"><table>
+        <thead>
+          <tr>
+            <th>会员账号</th>
+            <th>免费旋转名称</th>
+            <th>免费类型</th>
+            <th>免费旋转券编号</th>
+            <th>状态</th>
+            <th>发送时间</th>
+            <th>操作</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody id="p4SendTableBody"></tbody>
+      </table></div>
+      <div class="pagination" id="p4SendPagination"></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+    
+<div class="spec-text">
+  <h3>页面位置</h3>
+  <p class="spec-lead">面包屑：位置 › 免费旋转管理，共 4 个子页签：免费项目配置／免费项目记录／免费项目统计／免费项目发送记录，可直接点击画面上方分页签切换。「免费项目配置」为免费旋转／免费投注券的通用设置列表（设定各家游戏商的免费次数、有效期等），与一番赏无直接字段关联，本次规格不展开说明；以下三个子页签涵盖一番赏奖级中「免费旋转券」「免费投注券」「道具卡」三种奖品类型的记录，皆以「免费类型」字段区分，并未各自独立成页。</p>
+
+  <h3>3.4.1 免费项目记录 — 栏位字段（全部 11 栏）</h3>
+  <p class="spec-lead">记录会员「获得」一笔免费旋转券的当下资讯。</p>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>字段</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">会员账号</td><td>获得该免费旋转券的会员</td></tr>
+        <tr><td class="spec-field">获得时间</td><td>该券被发放给会员的时间</td></tr>
+        <tr><td class="spec-field">活动名称</td><td>见共同业务规则第 2 点：一番赏来源显示商品名称</td></tr>
+        <tr><td class="spec-field">获得方式</td><td>见共同业务规则第 1 点：一番赏产生的一律为「积分购买」</td></tr>
+        <tr><td class="spec-field">免费旋转名称</td><td>该免费旋转项目的名称，例如「Free Spin ×10」</td></tr>
+        <tr><td class="spec-field">免费类型</td><td>免费旋转／免费投注／道具卡——三种奖品类型共用此三个页面，不另外分开</td></tr>
+        <tr><td class="spec-field">获得次数</td><td>该笔免费旋转的总可用次数</td></tr>
+        <tr><td class="spec-field">状态</td><td>纯文本：未使用／已使用／已过期</td></tr>
+        <tr><td class="spec-field">操作人</td><td>该笔纪录的操作人，系统产生显示「–」或「SYSTEM」</td></tr>
+        <tr><td class="spec-field">操作时间</td><td>对应操作人的操作时间</td></tr>
+        <tr><td class="spec-field">备注</td><td>额外说明，通常为「–」</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="spec-pill-row">
+    <span class="spec-pill">全部免费旋转</span><span class="spec-pill">全部来源</span><span class="spec-pill">获得时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select</span><span class="spec-pill">会员名／活动名称</span>
+    <span class="spec-pill action">查询</span><span class="spec-pill action">赠送免费旋转</span>
+  </div>
+  <p class="spec-lead"><span class="spec-field">查询</span>：套用筛选条件重新查询；<span class="spec-field">赠送免费旋转</span>：开启弹窗手动派发免费旋转给指定会员（原型未展开此弹窗内容）；<span class="spec-field">Select</span> 下拉用途尚未定义，详见「待确认事项」。</p>
+
+  <h3>3.4.2 免费项目统计 — 栏位字段（全部 8 栏）</h3>
+  <p class="spec-lead">记录免费旋转券「实际被使用」时对应到哪个游戏平台／游戏，用来追踪玩家在哪个游戏商、哪一款游戏消耗掉这些免费次数。</p>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>字段</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">会员账号</td><td>使用该免费旋转的会员</td></tr>
+        <tr><td class="spec-field">免费旋转名称</td><td>同记录页</td></tr>
+        <tr><td class="spec-field">免费类型</td><td>免费旋转／免费投注／道具卡——三种奖品类型共用此三个页面，不另外分开</td></tr>
+        <tr><td class="spec-field">厂商</td><td>免费旋转对应的游戏供应商；一番赏发出的免费旋转券此栏通常为「–」，因奖级设置只挑选「免费旋转游戏」而非绑定特定厂商</td></tr>
+        <tr><td class="spec-field">状态</td><td>纯文本：已使用／未使用／已过期</td></tr>
+        <tr><td class="spec-field">使用时间</td><td>实际使用的时间戳；未使用则为「–」</td></tr>
+        <tr><td class="spec-field">绑定游戏</td><td>实际使用该免费旋转的游戏名称；未使用则为「–」</td></tr>
+        <tr><td class="spec-field">获得次数</td><td>该笔免费旋转的总次数</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="spec-pill-row">
+    <span class="spec-pill">所有状态</span><span class="spec-pill">使用时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select</span><span class="spec-pill">会员名／活动名称</span>
+    <span class="spec-pill action">查询</span><span class="spec-pill action">导出</span>
+  </div>
+
+  <h3>3.4.3 免费项目发送记录 — 栏位字段（全部 8 栏）</h3>
+  <p class="spec-lead">记录系统「发送」免费旋转券给会员的执行结果，重点在发送是否成功。</p>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>字段</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">会员账号</td><td>接收该券的会员</td></tr>
+        <tr><td class="spec-field">免费旋转名称</td><td>同记录页</td></tr>
+        <tr><td class="spec-field">免费类型</td><td>免费旋转／免费投注／道具卡——三种奖品类型共用此三个页面，不另外分开</td></tr>
+        <tr><td class="spec-field">免费旋转券编号</td><td>该张券的系统唯一编号，用于追踪发送状态</td></tr>
+        <tr><td class="spec-field">状态</td><td>纯文本：已发送／待发送</td></tr>
+        <tr><td class="spec-field">发送时间</td><td>系统执行发送的时间</td></tr>
+        <tr><td class="spec-field">操作</td><td>状态为「待发送」时显示「重新发送」连结，点击可重新触发一次发送；「已发送」则不显示任何操作</td></tr>
+        <tr><td class="spec-field">备注</td><td>一番赏产生的纪录会标注「积分购买」，方便与其他来源（签到奖励、手动赠送等）区分</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="spec-pill-row">
+    <span class="spec-pill">所有状态</span><span class="spec-pill">发送时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select</span><span class="spec-pill">会员名／免费名称</span>
+    <span class="spec-pill action">查询</span><span class="spec-pill action">批量重新发送</span><span class="spec-pill action">导出</span>
+  </div>
+  <p class="spec-lead"><span class="spec-field">批量重新发送</span>：对当前筛选结果中所有「待发送」的纪录一次性重新触发发送。</p>
+</div>
+
+  </div>
+</div></div>
+<div class="spec-view" id="mergeView6">
+<div class="spec-view-inner">
+  <div class="spec-h1">待确认事项</div>
+  <p class="spec-sub">原型中尚未定义清楚的地方，供对齐后端与产品需求时使用。</p>
+  <div class="spec-qa-list">
+    <div class="spec-qa-item"><span class="spec-qa-mark">?</span>「免费旋转管理」页签中，「免费项目记录」「免费项目统计」「免费项目发送记录」三个页面各有一个「Select」下拉，用途尚未定义（原型中皆为空白占位选单，位置固定在「全部免费类型」之后、会员名输入框之前）——待补实际后台的选项内容</div>
+    <div class="spec-qa-item"><span class="spec-qa-mark">?</span>「免费项目配置」页签与一番赏奖级中「免费旋转券」设置的对应关系，是否需要互相关联／自动带入</div>
+    <div class="spec-qa-item"><span class="spec-qa-mark">?</span>「积分购买」来源下，一般商品与一番赏商品的区分逻辑，目前仅以「活动名称是否为 – 」隐含区分，是否需要额外的商品类型字段供后端筛选</div>
+  </div>
+
+  <h3 style="margin-top:32px;">已确认事项</h3>
+  <div class="spec-rule-box" style="max-width:980px;">
+    <ul>
+      <li>道具卡、免费投注券等其他奖品类型，<strong>不会</strong>独立开设记录／统计页面，而是并入「免费旋转管理」既有的记录／统计／发送记录三个页面中，与免费旋转券一起以「免费类型」字段区分（免费旋转／免费投注／道具卡）</li>
+      <li>「活动名称」字段的取值来源已确认：来自「商品配置」中商品类型＝Ichiban Kuji 的该笔商品的「商品名称」字段值，详见「名词定义」页</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<script>
+
+const TIER_NAMES = ['A赏','B赏','C赏','D赏','E赏','F赏','G赏'];
+let tiers = []; // [{id, name, qty}]
+let nextId = 0;
+
+function addTier() {
+  if (tiers.length >= 8) {
+    alert('最多可新增至 G赏，共 7 个奖级');
+    return;
+  }
+  const id = nextId++;
+  const defaultName = TIER_NAMES[tiers.length];
+  tiers.push({ id, name: defaultName });
+  renderTiers();
+}
+
+function removeTier(id) {
+  if (tiers.length <= 1) {
+    alert('至少需要保留 1 个奖级');
+    return;
+  }
+  tiers = tiers.filter(t => t.id !== id);
+  // re-assign default names only for un-customized
+  renderTiers();
+}
+
+// 动态栏位：依第二层选择渲染不同栏位
+function renderDynamicFields(containerId, cat2Val) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  let html = '';
+  if (cat2Val === 'bonus') {
+    html = `
+      <div class="tier-field">
+        <label><span class="req">*</span>流水倍数</label>
+        <input type="number" placeholder="请输入" min="0" required>
+      </div>
+      <div class="tier-field">
+        <label><span class="req">*</span>金额</label>
+        <input type="number" placeholder="请输入" min="0" required>
+      </div>`;
+  } else if (cat2Val === 'points') {
+    html = `
+      <div class="tier-field">
+        <label><span class="req">*</span>积分数量</label>
+        <input type="number" placeholder="请输入" min="0" required>
+      </div>`;
+  } else if (cat2Val === 'freespin') {
+    // 显示下方的旋转券区块
+    const tierId = containerId.replace('dynamic-fields-', '');
+    const extra = document.getElementById('freespin-extra-' + tierId);
+    if (extra) {
+      extra.style.display = 'block';
+      const list = document.getElementById('freespin-list-extra-' + tierId);
+      if (list && list.children.length === 0) addFreespinRow('extra-' + tierId);
+    }
+  } else if (cat2Val === 'real') {
+    html = `
+      <div class="tier-field" style="flex:2">
+        <label><span class="req">*</span>商品简介</label>
+        <input type="text" placeholder="请输入商品简介" required>
+      </div>`;
+  } else if (cat2Val === 'coupon') {
+    html = `
+      <div class="tier-field" style="flex:2">
+        <label><span class="req">*</span>选择优惠券</label>
+        <select>
+          <option value="">请选择</option>
+          <option>优惠券 A</option>
+          <option>优惠券 B</option>
+        </select>
+      </div>`;
+  } else if (cat2Val === 'ticket') {
+    html = `
+      <div class="tier-field" style="flex:2">
+        <label><span class="req">*</span>选择票券</label>
+        <select>
+          <option value="">请选择</option>
+          <option>票券 A</option>
+        </select>
+      </div>`;
+  } else if (cat2Val === 'freebet') {
+    html = `
+      <div class="tier-field" style="flex:2">
+        <label><span class="req">*</span>选择免费投注券</label>
+        <select required>
+          <option value="" disabled selected>请选择</option>
+          <option>免费投注券 A</option>
+          <option>免费投注券 B</option>
+        </select>
+      </div>`;
+  } else if (cat2Val === 'tool') {
+    html = `
+      <div class="tier-field" style="flex:2">
+        <label><span class="req">*</span>选择道具卡</label>
+        <select required>
+          <option value="" disabled selected>请选择</option>
+          <option>道具卡 A</option>
+          <option>道具卡 B</option>
+        </select>
+      </div>`;
+  }
+  container.innerHTML = html;
+
+  // 奖品名称：只在实物(real)时显示
+  const SHOW_NAME_CATS = ['real'];
+  const tierId = containerId.replace('dynamic-fields-', '');
+  const nameWrap = document.getElementById('prize-name-wrap-' + tierId);
+  if (nameWrap) {
+    const show = SHOW_NAME_CATS.includes(cat2Val);
+    nameWrap.style.display = show ? '' : 'none';
+    const inp = nameWrap.querySelector('input');
+    if (inp) inp.required = show;
+  }
+}
+
+// 第一层 虚拟物品/实物 选项
+const CAT1_OPTIONS = [
+  { value: 'virtual', label: '虚拟物品' },
+  { value: 'real',    label: '实物' },
+];
+
+// 第二层：依第一层决定
+const CAT2_MAP = {
+  virtual: [
+    { value: 'bonus',        label: '彩金' },
+    { value: 'points',       label: '积分' },
+    { value: 'coupon',       label: '优惠券' },
+    { value: 'freespin',     label: '免费旋转券' },
+    { value: 'freebet',      label: '免费投注券' },
+    { value: 'tool',         label: '道具卡' },
+  ],
+  real: [
+    { value: 'real', label: '实物商品' },
+  ],
+};
+
+function tierFieldsHtml(tierId, isLast) {
+  return `
+    <div class="tier-body" id="tbody-${tierId}">
+      <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;">
+        <div class="tier-field" style="min-width:130px;">
+          <label><span class='req'>*</span>第一层</label>
+          <select onchange="onCat1Change(this,'${tierId}')" required>
+            ${CAT1_OPTIONS.map(o=>`<option value="${o.value}">${o.label}</option>`).join('')}
+          </select>
+        </div>
+        <div class="tier-field" style="min-width:130px;" id="cat2-wrap-${tierId}">
+          <label><span class='req'>*</span>第二层</label>
+          <select onchange="onCat2Change(this,'${tierId}')" required>
+            ${(CAT2_MAP['virtual']||[]).map(o=>`<option value="${o.value}">${o.label}</option>`).join('')}
+          </select>
+        </div>
+        <div id="dynamic-fields-${tierId}" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;"></div>
+        <div class="tier-field" id="prize-name-wrap-${tierId}" style="min-width:130px;display:none;">
+          <label><span class='req'>*</span>奖品名称</label>
+          <input type="text" placeholder="请输入奖品名称">
+        </div>
+      </div>
+      <div class="tier-upload" style="margin-top:10px;">
+        <label><span class="req">*</span>奖品图片</label>
+        <button class="upload-btn-sm">📁 选择文件</button>
+      </div>
+      <div id="freespin-extra-${tierId}" style="margin-top:12px;display:none;">
+        <div style="font-size:12px;color:#1677ff;font-weight:600;margin-bottom:8px;">旋转券配置</div>
+        <div id="freespin-list-extra-${tierId}" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
+        <button type="button" class="btn-add-tier" style="height:30px;font-size:12px;" onclick="addFreespinRow('extra-${tierId}')">＋ 新增旋转券</button>
+      </div>
+    </div>
+  `;
+}
+
+function onCat1Change(sel, tierId) {
+  const cat1Val = sel.value;
+  const cat2Wrap = document.getElementById('cat2-wrap-' + tierId);
+  const opts = CAT2_MAP[cat1Val] || [];
+  if (cat1Val === 'real') {
+    // 实物：隐藏第二层，直接显示商品简介
+    cat2Wrap.style.display = 'none';
+    renderDynamicFields('dynamic-fields-' + tierId, 'real');
+  } else {
+    cat2Wrap.style.display = '';
+    cat2Wrap.querySelector('select').innerHTML = opts.map(o=>`<option value="${o.value}">${o.label}</option>`).join('');
+    const firstVal = opts[0] ? opts[0].value : '';
+    renderDynamicFields('dynamic-fields-' + tierId, firstVal);
+  }
+}
+
+function onCat2Change(sel, tierId) {
+  // 隐藏旋转券区块（切换到其他类型时）
+  const extra = document.getElementById('freespin-extra-' + tierId);
+  if (extra) extra.style.display = 'none';
+  renderDynamicFields('dynamic-fields-' + tierId, sel.value);
+}
+
+function renderTiers() {
+  const list = document.getElementById('tierList');
+  list.innerHTML = tiers.map((t, idx) => `
+    <div class="prize-tier" id="tier-${t.id}">
+      <div class="tier-header">
+        <div style="display:flex;align-items:center;gap:8px;flex:1;">
+          <span class="req">*</span><input class="tier-name-input" type="text" value="${t.name}"
+            onchange="tiers[${idx}].name = this.value"
+            placeholder="奖级名称" style="max-width:120px;" required>
+          <div style="display:flex;align-items:center;gap:5px;background:#f5f7fa;border:1px solid #e4e7ed;border-radius:4px;padding:0 10px;height:28px;">
+            <span style="font-size:12px;color:#666;white-space:nowrap;">数量</span>
+            <input class="tier-qty-input" type="number" min="1" value="${t.qty||1}"
+              oninput="tiers[${idx}].qty = parseInt(this.value)||0; updateTotal();"
+              placeholder="0" style="width:56px;border:none;background:transparent;text-align:center;font-size:13px;font-weight:600;color:#333;outline:none;" required>
+            <span style="font-size:12px;color:#999;">张</span>
+          </div>
+        </div>
+        ${tiers.length > 1 ? `<button class="btn-danger-text" onclick="removeTier(${t.id})">✕ 删除</button>` : ''}
+      </div>
+      ${tierFieldsHtml(t.id, false)}
+    </div>
+  `).join('');
+
+  // init dynamic fields for each tier
+  tiers.forEach(t => {
+    renderDynamicFields('dynamic-fields-' + t.id, 'bonus');
+  });
+
+  updateTotal();
+  updateTierInfo();
+}
+
+function updateTotal() {
+  const sum = tiers.reduce((acc, t) => acc + (parseInt(t.qty) || 0), 0) + 1; // +1 for Last赏
+  document.getElementById('totalCount').textContent = sum;
+}
+
+function updateTierInfo() {
+  const remaining = 8 - tiers.length;
+  document.getElementById('tierCountInfo').textContent =
+    `目前 ${tiers.length} 个奖级（最多 H赏，共 8 级，还可新增 ${remaining} 个）`;
+}
+
+let freespinRowId = 0;
+
+function addFreespinRow(containerId) {
+  const list = document.getElementById('freespin-list-' + containerId);
+  if (!list) return;
+  const rowId = 'fs-' + containerId + '-' + (freespinRowId++);
+  const div = document.createElement('div');
+  div.className = 'freespin-row';
+  div.id = rowId;
+  div.innerHTML = `
+    <span style="font-size:12px;color:#999;white-space:nowrap;">旋转券 ${list.children.length + 1}</span>
+    <select required>
+      <option value="" disabled selected>选择免费旋转游戏</option>
+      <option>J Mania Triple Jam</option>
+      <option>FC Freespins</option>
+      <option>Slot Game A</option>
+      <option>Slot Game B</option>
+    </select>
+    <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+      <span style="font-size:12px;color:#666;white-space:nowrap;"><span style="color:#ff4d4f;">*</span> 张数</span>
+      <input type="number" min="1" placeholder="0" required
+        style="width:60px;height:30px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px;text-align:center;">
+      <span style="font-size:12px;color:#999;">张</span>
+    </div>
+
+    <button type="button" class="btn-danger-text" onclick="removeFreespinRow('${rowId}', '${containerId}')">✕ 删除</button>
+  `;
+  list.appendChild(div);
+  updateFreespinNumbers(containerId);
+}
+
+function removeFreespinRow(rowId, containerId) {
+  const el = document.getElementById(rowId);
+  if (el) el.remove();
+  updateFreespinNumbers(containerId);
+}
+
+function updateFreespinNumbers(containerId) {
+  const list = document.getElementById('freespin-list-' + containerId);
+  if (!list) return;
+  Array.from(list.children).forEach((row, i) => {
+    const label = row.querySelector('span');
+    if (label) label.textContent = '旋转券 ' + (i + 1);
+  });
+}
+
+function triggerFsUpload(rowId) {
+  const input = document.getElementById('file-' + rowId);
+  if (input) input.click();
+}
+
+function previewFsImage(input, rowId) {
+  const file = input.files[0];
+  if (!file) return;
+  const prev = document.getElementById('prev-' + rowId);
+  const fname = document.getElementById('fname-' + rowId);
+  if (prev) { prev.src = URL.createObjectURL(file); prev.style.display = 'block'; }
+  if (fname) fname.textContent = file.name;
+}
+
+function toggleFlashSale(el) {
+  document.getElementById('flashSaleRange').style.display =
+    el.value === 'yes' ? 'block' : 'none';
+}
+
+function previewBanner(input, previewId, placeholderId) {
+  const file = input.files[0];
+  if (!file) return;
+  const prev = document.getElementById(previewId);
+  const ph = document.getElementById(placeholderId);
+  prev.src = URL.createObjectURL(file);
+  prev.style.display = 'block';
+  ph.style.display = 'none';
+}
+
+function clearBanner(inputId, previewId, placeholderId) {
+  const input = document.getElementById(inputId);
+  const prev = document.getElementById(previewId);
+  const ph = document.getElementById(placeholderId);
+  input.value = '';
+  prev.src = '';
+  prev.style.display = 'none';
+  ph.style.display = 'flex';
+}
+
+// Init with A赏
+addTier();
+// Init Last赏 dynamic fields
+renderDynamicFields('dynamic-fields-last', 'bonus');
+
+function submitForm() {
+  // 收集所有必填栏位
+  const modal = document.querySelector('.modal-body');
+  const inputs = modal.querySelectorAll('input[required], select[required]');
+  let firstEmpty = null;
+  let allValid = true;
+
+  inputs.forEach(el => {
+    const isEmpty = el.disabled ? false : (el.value === '' || el.value === null);
+    if (isEmpty) {
+      el.style.borderColor = '#ff4d4f';
+      el.style.boxShadow = '0 0 0 2px rgba(255,77,79,0.1)';
+      if (!firstEmpty) firstEmpty = el;
+      allValid = false;
+    } else {
+      el.style.borderColor = '';
+      el.style.boxShadow = '';
+    }
+  });
+
+  if (!allValid) {
+    firstEmpty && firstEmpty.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    firstEmpty && firstEmpty.focus();
+    return;
+  }
+  alert('✅ 验证通过，提交成功！');
+}
+
+
+
+/* ── 共享工具函数 Shared Utilities ── */
+
+/**
+ * formatPrizeLabel(tier, prizeType, prize)
+ * 输出格式：{TIER大写} {类型}{金额.00} 或 {TIER大写} {类型}×{数量}
+ * 例：B赏 彩金500.00 / LAST赏 彩金5000.00 / E赏 旋转券×20
+ */
+function formatPrizeLabel(tier, prizeType, prize) {
+  let val;
+  if (prizeType === '彩金' || prizeType === '积分') {
+    const m = prize.match(/[\d,]+(?:\.\d+)?/);
+    const num = m ? parseFloat(m[0].replace(/,/g, '')) : 0;
+    val = prizeType + (prizeType === '彩金' ? num.toFixed(2) : num);
+  } else {
+    const m = prize.match(/×\s*(\d+)/);
+    val = prizeType + (m ? '×' + m[1] : '');
+  }
+  return tier.toUpperCase() + ' ' + val;
+}
+
+/**
+ * renderPrizes(prizes)
+ * 同 prizeLabel 的多个奖品合并输出，重复品项自动加 ×N
+ * 例：[C赏 积分500.00, C赏 积分500.00, E赏 旋转券×20] → "C赏 积分500.00 ×2，E赏 旋转券×20"
+ */
+function renderPrizes(prizes) {
+  const sorted = [...prizes].sort((a, b) => {
+    const au = a.tier.toUpperCase();
+    const bu = b.tier.toUpperCase();
+    if (au.startsWith('LAST')) return -1;
+    if (bu.startsWith('LAST')) return 1;
+    const la = au.replace('赏', '');
+    const lb = bu.replace('赏', '');
+    return la < lb ? -1 : la > lb ? 1 : 0;
+  });
+  const labels = sorted.map(p => formatPrizeLabel(p.tier, p.prizeType, p.prize));
+  const counts = {};
+  labels.forEach(l => { counts[l] = (counts[l] || 0) + 1; });
+  const seen = new Set();
+  const result = [];
+  labels.forEach(l => {
+    if (!seen.has(l)) {
+      seen.add(l);
+      result.push(counts[l] > 1 ? l + ' ×' + counts[l] : l);
+    }
+  });
+  return result.join('，');
+}
+
+function buildPageNums(cur, total) {
+  if (total <= 7) return Array.from({length: total}, (_, i) => i + 1);
+  const pages = [];
+  if (cur <= 4) {
+    for (let i = 1; i <= 5; i++) pages.push(i);
+    pages.push('...'); pages.push(total);
+  } else if (cur >= total - 3) {
+    pages.push(1); pages.push('...');
+    for (let i = total - 4; i <= total; i++) pages.push(i);
+  } else {
+    pages.push(1); pages.push('...');
+    for (let i = cur - 1; i <= cur + 1; i++) pages.push(i);
+    pages.push('...'); pages.push(total);
+  }
+  return pages;
+}
+
+
+/*
+  备注栏显示规则：
+  - 原因列：商品名称（如"苹果 Ichiban Kuji"）
+  - 备注列：奖品列表，格式 {TIER大写} {类型}{值}，多个用逗号分隔
+    彩金/积分  → B赏 彩金500.00
+    数量类     → E赏 旋转券×20
+*/
+const P2_RECORDS = [
+  {
+    member: 'xnjobe3', time: '2026-06-16 09:53', points: -366, total: 481150,
+    operator: 'SYSTEM',
+    reason: '苹果 Ichiban Kuji',
+    prizes: [
+      { tier: 'A赏', prizeType: '免费旋转券', prize: '免费旋转券 × 20' },
+      { tier: 'C赏', prizeType: '道具卡',     prize: '道具卡 × 3'       },
+      { tier: 'E赏', prizeType: '旋转券',     prize: '旋转券 × 10'      },
+    ]
+  },
+  {
+    member: 'vivian01', time: '2026-06-15 17:22', points: -500, total: 316140,
+    operator: 'SYSTEM',
+    reason: '节日特别版 Ichiban Kuji',
+    prizes: [
+      { tier: 'B赏',    prizeType: '彩金',       prize: '彩金 50（1x Turnover）' },
+      { tier: 'C赏',    prizeType: '积分',       prize: '积分 50'                },
+      { tier: 'D赏',    prizeType: '积分',       prize: '积分 20'                },
+      { tier: 'E赏',    prizeType: '免费旋转券', prize: '免费旋转券 × 10'         },
+      { tier: 'Last赏', prizeType: '道具卡',     prize: '道具卡 × 3'              },
+    ]
+  },
+  {
+    member: 'vivian01', time: '2026-06-15 17:21', points: -1, total: 316640,
+    operator: 'SYSTEM',
+    reason: '盲盒美术图测试2',
+    prizes: [
+      { tier: 'C赏', prizeType: '积分', prize: '积分 50' },
+    ]
+  },
+];
+
+let p2Filtered = [...P2_RECORDS];
+let p2Page = 1;
+const P2_PAGE_SIZE = 10;
+
+function p2RenderTable() {
+  const member = document.getElementById('p2FilterMember').value.trim().toLowerCase();
+  p2Filtered = P2_RECORDS.filter(r => {
+    if (member && !r.member.toLowerCase().includes(member)) return false;
+    return true;
+  });
+  p2Page = 1;
+  p2RenderPage();
+}
+
+function p2RenderPage() {
+  const start = (p2Page - 1) * P2_PAGE_SIZE;
+  const rows  = p2Filtered.slice(start, start + P2_PAGE_SIZE);
+  document.getElementById('p2TableBody').innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.member}</td>
+      <td>${r.time}</td>
+      <td>${r.points > 0 ? '+' : ''}${r.points}</td>
+      <td>${r.total}</td>
+      <td>${r.operator}</td>
+      <td>${r.reason}</td>
+      <td>${renderPrizes(r.prizes)}</td>
+    </tr>
+  `).join('');
+  p2RenderPagination();
+}
+
+function p2RenderPagination() {
+  const total      = p2Filtered.length;
+  const totalPages = Math.ceil(total / P2_PAGE_SIZE);
+  const pg         = document.getElementById('p2Pagination');
+  let html = `<span class="page-total">Total ${total}</span>`;
+  html += `<div class="page-btn" onclick="p2GoPage(${p2Page-1})">‹</div>`;
+  buildPageNums(p2Page, totalPages).forEach(p => {
+    if (p === '...') html += `<div class="page-btn ellipsis">···</div>`;
+    else html += `<div class="page-btn${p === p2Page ? ' active' : ''}" onclick="p2GoPage(${p})">${p}</div>`;
+  });
+  html += `<div class="page-btn" onclick="p2GoPage(${p2Page+1})">›</div>`;
+  pg.innerHTML = html;
+}
+
+function p2GoPage(p) {
+  const totalPages = Math.ceil(p2Filtered.length / P2_PAGE_SIZE);
+  if (p < 1 || p > totalPages) return;
+  p2Page = p;
+  p2RenderPage();
+}
+
+p2RenderTable();
+
+
+/*
+  奖品列显示规则：prizes 数组 → renderPrizes()
+  单张/五连：prizes 1 项
+  全包：prizes 多项，重复品项自动合并 ×N
+*/
+const RECORDS = [
+  { order:'PR605996359563974932', member:'okbet9994fg5vz', time:'2026-06-12 16:45', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'all', points:80, prizes:[
+    { tier:'A赏',    prizeType:'彩金',       prize:'彩金 Cash 100（1x Turnover）' },
+    { tier:'B赏',    prizeType:'免费旋转券', prize:'免费旋转券 × 10'               },
+    { tier:'C赏',    prizeType:'积分',       prize:'积分 50'                       },
+    { tier:'C赏',    prizeType:'积分',       prize:'积分 50'                       },
+    { tier:'D赏',    prizeType:'道具卡',     prize:'道具卡 × 2'                     },
+    { tier:'Last赏', prizeType:'彩金',       prize:'彩金 Cash 100（1x Turnover）' },
+  ]},
+  { order:'PR605840546270849300', member:'okbet04597i9j3', time:'2026-06-11 20:05', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'5',   points:25,   prizes:[
+    { tier:'A赏', prizeType:'彩金', prize:'彩金 Cash 100（1x Turnover）' },
+  ]},
+  { order:'PR605830768509364500', member:'vivian01',       time:'2026-06-11 18:27', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'1',   points:50, prizes:[
+    { tier:'B赏', prizeType:'彩金', prize:'彩金 50（1x Turnover）' },
+  ]},
+  { order:'PR605830753728637204', member:'vivian01',       time:'2026-06-11 18:27', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'1',   points:50, prizes:[
+    { tier:'C赏', prizeType:'积分', prize:'积分 50' },
+  ]},
+  { order:'PR605830739937765652', member:'vivian01',       time:'2026-06-11 18:27', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'1',   points:50, prizes:[
+    { tier:'D赏', prizeType:'积分', prize:'积分 20' },
+  ]},
+  { order:'PR605828198642526484', member:'vivian01',       time:'2026-06-11 18:02', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
+    { tier:'A赏', prizeType:'彩金', prize:'彩金 ₱80（2x Turnover）' },
+  ]},
+  { order:'PR605828183543032084', member:'vivian01',       time:'2026-06-11 18:02', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
+    { tier:'E赏', prizeType:'旋转券', prize:'旋转券 × 20' },
+  ]},
+  { order:'PR605820423443097876', member:'vivian01',       time:'2026-06-11 16:45', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'1',   points:5,   prizes:[
+    { tier:'B赏', prizeType:'免费旋转券', prize:'免费旋转券 × 10' },
+  ]},
+  { order:'PR605817703537617172', member:'vivian01',       time:'2026-06-11 16:18', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'1',   points:5,   prizes:[
+    { tier:'C赏', prizeType:'免费投注券', prize:'免费投注券 × 5' },
+  ]},
+  { order:'PR605817154788436244', member:'vivian01',       time:'2026-06-11 16:12', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'all', points:500, prizes:[
+    { tier:'B赏',    prizeType:'彩金',       prize:'彩金 50（1x Turnover）' },
+    { tier:'C赏',    prizeType:'积分',       prize:'积分 50'                 },
+    { tier:'D赏',    prizeType:'积分',       prize:'积分 20'                 },
+    { tier:'E赏',    prizeType:'免费旋转券', prize:'免费旋转券 × 10'          },
+    { tier:'Last赏', prizeType:'道具卡',     prize:'道具卡 × 3'               },
+  ]},
+  { order:'PR605800234891723001', member:'player_tom88',   time:'2026-06-11 14:30', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
+    { tier:'A赏', prizeType:'彩金', prize:'彩金 50（2x Turnover）' },
+  ]},
+  { order:'PR605799812345678900', member:'player_tom88',   time:'2026-06-11 14:28', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
+    { tier:'F赏', prizeType:'旋转券', prize:'旋转券 × 10' },
+  ]},
+  { order:'PR605780001122334455', member:'alice_vip3',     time:'2026-06-11 10:05', coin:'PHP', product:'入门款 Ichiban Kuji',     qty:'1',   points:10,  prizes:[
+    { tier:'D赏', prizeType:'积分', prize:'积分 20' },
+  ]},
+  { order:'PR605770099887766554', member:'alice_vip3',     time:'2026-06-10 22:40', coin:'PHP', product:'入门款 Ichiban Kuji',     qty:'all', points:80,  prizes:[
+    { tier:'A赏',    prizeType:'积分',       prize:'积分 20'           },
+    { tier:'B赏',    prizeType:'道具卡',     prize:'道具卡 × 1'          },
+    { tier:'C赏',    prizeType:'积分',       prize:'积分 100'            },
+    { tier:'C赏',    prizeType:'积分',       prize:'积分 100'            },
+    { tier:'Last赏', prizeType:'免费旋转券', prize:'免费旋转券 × 20'     },
+  ]},
+  { order:'PR605760123456789012', member:'jay_pm',         time:'2026-06-10 18:15', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'5',   points:25, prizes:[
+    { tier:'G赏', prizeType:'道具卡', prize:'道具卡 × 2' },
+  ]},
+  { order:'PR605750987654321098', member:'jay_pm',         time:'2026-06-10 15:00', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'1',   points:5, prizes:[
+    { tier:'A赏', prizeType:'彩金', prize:'彩金 ₱30（3x）' },
+  ]},
+  { order:'PR605740112233445566', member:'user_beta01',    time:'2026-06-10 11:22', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'1',   points:50, prizes:[
+    { tier:'B赏', prizeType:'免费投注券', prize:'免费投注券 × 8' },
+  ]},
+  { order:'PR605730223344556677', member:'user_beta01',    time:'2026-06-09 20:10', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'5',   points:250, prizes:[
+    { tier:'E赏', prizeType:'免费旋转券', prize:'免费旋转券 × 30' },
+  ]},
+  { order:'PR605720334455667788', member:'olivia_admin',   time:'2026-06-09 14:33', coin:'PHP', product:'高价值VIP专属赏',         qty:'1',   points:100, prizes:[
+    { tier:'C赏', prizeType:'道具卡', prize:'道具卡 × 5' },
+  ]},
+  { order:'PR605710445566778899', member:'olivia_admin',   time:'2026-06-08 09:00', coin:'PHP', product:'高价值VIP专属赏',         qty:'all', points:800, prizes:[
+    { tier:'A赏',    prizeType:'彩金',   prize:'彩金 ₱80（2x Turnover）'   },
+    { tier:'B赏',    prizeType:'旋转券', prize:'旋转券 × 20'                  },
+    { tier:'C赏',    prizeType:'道具卡', prize:'道具卡 × 5'                   },
+    { tier:'D赏',    prizeType:'积分',   prize:'积分 99'                     },
+    { tier:'Last赏', prizeType:'彩金',   prize:'彩金 ₱99（3x Turnover）'  },
+  ]},
+];
+
+const PAGE_SIZE = 10;
+let currentPage = 1;
+let filteredData = [...RECORDS];
+
+function qtyBadge(qty) {
+  if (qty === '1')   return '单张';
+  if (qty === '5')   return '五连';
+  if (qty === 'all') return '全包';
+  return qty;
+}
+
+function renderTable() {
+  const coin      = document.getElementById('filterCoin').value;
+  const member    = document.getElementById('filterMember').value.trim().toLowerCase();
+  const product   = document.getElementById('filterProduct').value;
+  const prizeType = document.getElementById('filterPrizeType').value;
+
+  filteredData = RECORDS.filter(r => {
+    if (coin      && r.coin !== coin)                           return false;
+    if (member    && !r.member.toLowerCase().includes(member)) return false;
+    if (product   && r.product !== product)                    return false;
+    if (prizeType && !r.prizes.some(p => p.prizeType === prizeType)) return false;
+    return true;
+  });
+
+  currentPage = 1;
+  renderPage();
+}
+
+function renderPage() {
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const rows  = filteredData.slice(start, start + PAGE_SIZE);
+  const tbody = document.getElementById('tableBody');
+
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td class="order-no">${r.order}</td>
+      <td>${r.member}</td>
+      <td>${r.time}</td>
+      <td>菲律宾比索</td>
+      <td>${r.product}</td>
+      <td>${qtyBadge(r.qty)}</td>
+      <td><span class="points-val">${r.points}</span></td>
+      <td>${renderPrizes(r.prizes)}</td>
+    </tr>
+  `).join('');
+
+  renderPagination();
+}
+
+function renderPagination() {
+  const total      = filteredData.length;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const pg         = document.getElementById('pagination');
+
+  let html = `<span class="page-total">Total ${total}</span>`;
+  html += `<div class="page-btn" onclick="goPage(${currentPage-1})">‹</div>`;
+
+  buildPageNums(currentPage, totalPages).forEach(p => {
+    if (p === '...') {
+      html += `<div class="page-btn ellipsis">···</div>`;
+    } else {
+      html += `<div class="page-btn${p === currentPage ? ' active' : ''}" onclick="goPage(${p})">${p}</div>`;
+    }
+  });
+
+  html += `<div class="page-btn" onclick="goPage(${currentPage+1})">›</div>`;
+  pg.innerHTML = html;
+}
+
+function goPage(p) {
+  const totalPages = Math.ceil(filteredData.length / PAGE_SIZE);
+  if (p < 1 || p > totalPages) return;
+  currentPage = p;
+  renderPage();
+}
+
+renderTable();
+
+
+const P3_RECORDS = [
+  { id:6709, member:'okbet9994fg5vz', time:'2026-06-12 16:45', activity:'苹果 Ichiban Kuji',       source:'积分购买', name:'Free Spin ×10',         type:'旋转券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-12 17:00', remark:'–' },
+  { id:6708, member:'vivian01',       time:'2026-06-15 17:22', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'彩金 ₱50 (1x Turnover)', type:'彩金券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-15 18:10', remark:'–' },
+  { id:6707, member:'vivian01',       time:'2026-06-15 17:21', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'Free Spin ×20',         type:'旋转券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6706, member:'vivian01',       time:'2026-06-11 18:02', activity:'高价值VIP专属赏',         source:'积分购买', name:'彩金 ₱80 (2x Turnover)', type:'彩金券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6705, member:'alice_vip3',     time:'2026-06-11 10:05', activity:'入门款 Ichiban Kuji',     source:'积分购买', name:'Free Bet ×5',           type:'免费投注券', status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6704, member:'player_tom88',   time:'2026-06-11 14:30', activity:'高价值VIP专属赏',         source:'积分购买', name:'彩金 ₱50 (2x Turnover)', type:'彩金券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-11 14:45', remark:'–' },
+  { id:6703, member:'jay_pm',         time:'2026-06-10 18:15', activity:'苹果 Ichiban Kuji',       source:'积分购买', name:'Free Spin ×10',         type:'旋转券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+];
+
+let p3Filtered = [...P3_RECORDS];
+let p3Page = 1;
+const P3_PAGE_SIZE = 10;
+
+function p3Search() {
+  const type    = document.getElementById('p3FilterType').value;
+  const status  = document.getElementById('p3FilterStatus').value;
+  const source  = document.getElementById('p3FilterSource').value;
+  const keyword = document.getElementById('p3FilterKeyword').value.trim().toLowerCase();
+
+  p3Filtered = P3_RECORDS.filter(r => {
+    if (type   && r.type   !== type)   return false;
+    if (status && r.status !== status) return false;
+    if (source && r.source !== source) return false;
+    if (keyword &&
+        !r.member.toLowerCase().includes(keyword) &&
+        !r.activity.toLowerCase().includes(keyword) &&
+        !String(r.id).includes(keyword)) return false;
+    return true;
+  });
+  p3Page = 1;
+  p3RenderPage();
+}
+
+function p3RenderPage() {
+  const start = (p3Page - 1) * P3_PAGE_SIZE;
+  const rows  = p3Filtered.slice(start, start + P3_PAGE_SIZE);
+  document.getElementById('p3TableBody').innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.member}</td>
+      <td>${r.time}</td>
+      <td>${r.activity}</td>
+      <td>${r.source}</td>
+      <td>${r.name}</td>
+      <td>${r.id}</td>
+      <td>${r.type}</td>
+      <td>${r.status}</td>
+      <td>${r.operator}</td>
+      <td>${r.opTime}</td>
+      <td>${r.remark}</td>
+    </tr>
+  `).join('');
+  p3RenderPagination();
+}
+
+function p3RenderPagination() {
+  const total      = p3Filtered.length;
+  const totalPages = Math.ceil(total / P3_PAGE_SIZE);
+  const pg         = document.getElementById('p3Pagination');
+  let html = `<span class="page-total">Total ${total}</span>`;
+  html += `<div class="page-btn" onclick="p3GoPage(${p3Page-1})">‹</div>`;
+  buildPageNums(p3Page, totalPages).forEach(p => {
+    if (p === '...') html += `<div class="page-btn ellipsis">···</div>`;
+    else html += `<div class="page-btn${p === p3Page ? ' active' : ''}" onclick="p3GoPage(${p})">${p}</div>`;
+  });
+  html += `<div class="page-btn" onclick="p3GoPage(${p3Page+1})">›</div>`;
+  pg.innerHTML = html;
+}
+
+function p3GoPage(p) {
+  const totalPages = Math.ceil(p3Filtered.length / P3_PAGE_SIZE);
+  if (p < 1 || p > totalPages) return;
+  p3Page = p;
+  p3RenderPage();
+}
+
+p3Search();
+
+
+function p4Switch(n) {
+  [1,2,3,4].forEach(i => {
+    document.getElementById('p4t'+i).style.display = i===n ? '' : 'none';
+  });
+  document.getElementById('p4TabBar').querySelectorAll('.tab-item').forEach((t,i) => {
+    t.classList.toggle('active', i===n-1);
+  });
+}
+
+const P4_RECORDS = [
+  { member:'okbet9994fg5vz',  time:'2026-06-12 16:45', activity:'苹果 Ichiban Kuji',       source:'积分购买', name:'Free Spin ×10', type:'免费旋转', qty:10, status:'已使用', operator:'SYSTEM', opTime:'2026-06-12 17:00', remark:'–' },
+  { member:'vivian01',        time:'2026-06-15 17:22', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'Free Spin ×10', type:'免费旋转', qty:10, status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+  { member:'vivian01',        time:'2026-06-11 18:27', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'Free Spin ×10', type:'免费旋转', qty:10, status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+  { member:'alice_vip3',      time:'2026-06-10 22:40', activity:'入门款 Ichiban Kuji',     source:'积分购买', name:'Free Spin ×20', type:'免费旋转', qty:20, status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+  { member:'user_beta01',     time:'2026-06-09 20:10', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'Free Spin ×30', type:'免费旋转', qty:30, status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+  { member:'vivian01',        time:'2026-06-11 16:12', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'Free Spin ×10', type:'免费旋转', qty:10, status:'已使用', operator:'SYSTEM', opTime:'2026-06-11 16:30', remark:'–' },
+  { member:'vivian01',        time:'2026-06-11 18:02', activity:'高价值VIP专属赏',         source:'积分购买', name:'Free Spin ×20', type:'免费旋转', qty:20, status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+  { member:'alice_vip3',      time:'2026-06-11 10:05', activity:'入门款 Ichiban Kuji',     source:'积分购买', name:'Free Bet ×5',   type:'免费投注', qty:5,  status:'未使用', operator:'–',      opTime:'–',                remark:'–' },
+  { member:'okbet9994fg5vz',  time:'2026-06-12 16:45', activity:'苹果 Ichiban Kuji',       source:'积分购买', name:'道具卡 ×2',      type:'道具卡',   qty:2,  status:'已使用', operator:'SYSTEM', opTime:'2026-06-12 17:00', remark:'–' },
+  { member:'vivian01',        time:'2026-06-11 16:12', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'道具卡 ×3',      type:'道具卡',   qty:3,  status:'已使用', operator:'SYSTEM', opTime:'2026-06-11 16:30', remark:'–' },
+];
+
+let p4Filtered = [...P4_RECORDS];
+let p4Page = 1;
+const P4_PAGE_SIZE = 10;
+
+function p4Search() {
+  const spin    = document.getElementById('p4FilterSpin').value;
+  const source  = document.getElementById('p4FilterSource').value;
+  const type    = document.getElementById('p4FilterType').value;
+  const keyword = document.getElementById('p4FilterKeyword').value.trim().toLowerCase();
+
+  p4Filtered = P4_RECORDS.filter(r => {
+    if (spin   && r.type   !== spin)   return false;
+    if (source && r.source !== source) return false;
+    if (type   && r.type   !== type)   return false;
+    if (keyword && !r.member.toLowerCase().includes(keyword) &&
+                   !r.activity.toLowerCase().includes(keyword)) return false;
+    return true;
+  });
+  p4Page = 1;
+  p4RenderPage();
+}
+
+function p4RenderPage() {
+  const start = (p4Page - 1) * P4_PAGE_SIZE;
+  const rows  = p4Filtered.slice(start, start + P4_PAGE_SIZE);
+  document.getElementById('p4TableBody').innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.member}</td>
+      <td>${r.time}</td>
+      <td>${r.activity}</td>
+      <td>${r.source}</td>
+      <td>${r.name}</td>
+      <td>${r.type}</td>
+      <td>${r.qty}</td>
+      <td>${r.status}</td>
+      <td>${r.operator}</td>
+      <td>${r.opTime}</td>
+      <td>${r.remark}</td>
+    </tr>
+  `).join('');
+  p4RenderPagination();
+}
+
+function p4RenderPagination() {
+  const total      = p4Filtered.length;
+  const totalPages = Math.ceil(total / P4_PAGE_SIZE);
+  const pg         = document.getElementById('p4Pagination');
+  let html = `<span class="page-total">Total ${total}</span>`;
+  html += `<div class="page-btn" onclick="p4GoPage(${p4Page-1})">‹</div>`;
+  buildPageNums(p4Page, totalPages).forEach(p => {
+    if (p === '...') html += `<div class="page-btn ellipsis">···</div>`;
+    else html += `<div class="page-btn${p === p4Page ? ' active' : ''}" onclick="p4GoPage(${p})">${p}</div>`;
+  });
+  html += `<div class="page-btn" onclick="p4GoPage(${p4Page+1})">›</div>`;
+  pg.innerHTML = html;
+}
+
+function p4GoPage(p) {
+  const totalPages = Math.ceil(p4Filtered.length / P4_PAGE_SIZE);
+  if (p < 1 || p > totalPages) return;
+  p4Page = p;
+  p4RenderPage();
+}
+
+p4Search();
+
+/* ── TAB 3: 免费项目统计（示意：仅呈现一番赏/积分购买相关资料） ── */
+const P4_STAT_RECORDS = [
+  { member:'okbet9994fg5vz', name:'Free Spin ×10', type:'免费旋转', vendor:'–', status:'已使用', time:'2026-06-12 17:00:00', game:'–', qty:10 },
+  { member:'vivian01',       name:'Free Spin ×10', type:'免费旋转', vendor:'–', status:'已使用', time:'2026-06-11 16:30:00', game:'–', qty:10 },
+  { member:'okbet9994fg5vz', name:'道具卡 ×2',      type:'道具卡',   vendor:'–', status:'已使用', time:'2026-06-12 17:00:00', game:'–', qty:2  },
+  { member:'vivian01',       name:'道具卡 ×3',      type:'道具卡',   vendor:'–', status:'已使用', time:'2026-06-11 16:30:00', game:'–', qty:3  },
+  { member:'alice_vip3',     name:'Free Bet ×5',   type:'免费投注', vendor:'–', status:'已使用', time:'2026-06-11 10:20:00', game:'–', qty:5  },
+];
+
+let p4StatFiltered = [...P4_STAT_RECORDS];
+let p4StatPage = 1;
+const P4_STAT_PAGE_SIZE = 10;
+
+function p4StatSearch() {
+  const status  = document.getElementById('p4StatStatus').value;
+  const type    = document.getElementById('p4StatType').value;
+  const keyword = document.getElementById('p4StatKeyword').value.trim().toLowerCase();
+
+  p4StatFiltered = P4_STAT_RECORDS.filter(r => {
+    if (status  && r.status !== status) return false;
+    if (type    && r.type   !== type)   return false;
+    if (keyword && !r.member.toLowerCase().includes(keyword) &&
+                   !r.name.toLowerCase().includes(keyword)) return false;
+    return true;
+  });
+  p4StatPage = 1;
+  p4StatRenderPage();
+}
+
+function p4StatRenderPage() {
+  const start = (p4StatPage - 1) * P4_STAT_PAGE_SIZE;
+  const rows  = p4StatFiltered.slice(start, start + P4_STAT_PAGE_SIZE);
+  document.getElementById('p4StatTableBody').innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.member}</td>
+      <td>${r.name}</td>
+      <td>${r.type}</td>
+      <td>${r.vendor}</td>
+      <td>${r.status}</td>
+      <td>${r.time}</td>
+      <td>${r.game}</td>
+      <td>${r.qty}</td>
+    </tr>
+  `).join('');
+  const pg = document.getElementById('p4StatPagination');
+  pg.innerHTML = `<span class="page-total">Total ${p4StatFiltered.length}</span><div class="page-btn active">1</div>`;
+}
+
+p4StatSearch();
+
+/* ── TAB 4: 免费项目发送记录（示意：仅呈现一番赏/积分购买相关资料） ── */
+const P4_SEND_RECORDS = [
+  { member:'okbet9994fg5vz', name:'Free Spin ×10', type:'免费旋转', code:'T31509991234500001', status:'已发送', time:'2026-06-12 16:45:00', remark:'积分购买' },
+  { member:'vivian01',       name:'Free Spin ×10', type:'免费旋转', code:'T31509991234500002', status:'已发送', time:'2026-06-15 17:22:00', remark:'积分购买' },
+  { member:'vivian01',       name:'Free Spin ×10', type:'免费旋转', code:'T31509991234500003', status:'已发送', time:'2026-06-11 18:27:00', remark:'积分购买' },
+  { member:'alice_vip3',     name:'Free Spin ×20', type:'免费旋转', code:'T31509991234500004', status:'已发送', time:'2026-06-10 22:40:00', remark:'积分购买' },
+  { member:'user_beta01',    name:'Free Spin ×30', type:'免费旋转', code:'T31509991234500005', status:'已发送', time:'2026-06-09 20:10:00', remark:'积分购买' },
+  { member:'vivian01',       name:'Free Spin ×10', type:'免费旋转', code:'T31509991234500006', status:'已发送', time:'2026-06-11 16:12:00', remark:'积分购买' },
+  { member:'vivian01',       name:'Free Spin ×20', type:'免费旋转', code:'T31509991234500007', status:'已发送', time:'2026-06-11 18:02:00', remark:'积分购买' },
+  { member:'alice_vip3',     name:'Free Bet ×5',   type:'免费投注', code:'T31509991234500008', status:'已发送', time:'2026-06-11 10:05:00', remark:'积分购买' },
+  { member:'okbet9994fg5vz', name:'道具卡 ×2',      type:'道具卡',   code:'T31509991234500009', status:'已发送', time:'2026-06-12 16:45:00', remark:'积分购买' },
+  { member:'vivian01',       name:'道具卡 ×3',      type:'道具卡',   code:'T31509991234500010', status:'已发送', time:'2026-06-11 16:12:00', remark:'积分购买' },
+];
+
+let p4SendFiltered = [...P4_SEND_RECORDS];
+let p4SendPage = 1;
+const P4_SEND_PAGE_SIZE = 10;
+
+function p4SendSearch() {
+  const status  = document.getElementById('p4SendStatus').value;
+  const type    = document.getElementById('p4SendType').value;
+  const keyword = document.getElementById('p4SendKeyword').value.trim().toLowerCase();
+
+  p4SendFiltered = P4_SEND_RECORDS.filter(r => {
+    if (status  && r.status !== status) return false;
+    if (type    && r.type   !== type)   return false;
+    if (keyword && !r.member.toLowerCase().includes(keyword) &&
+                   !r.name.toLowerCase().includes(keyword)) return false;
+    return true;
+  });
+  p4SendPage = 1;
+  p4SendRenderPage();
+}
+
+function p4SendRenderPage() {
+  const start = (p4SendPage - 1) * P4_SEND_PAGE_SIZE;
+  const rows  = p4SendFiltered.slice(start, start + P4_SEND_PAGE_SIZE);
+  document.getElementById('p4SendTableBody').innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.member}</td>
+      <td>${r.name}</td>
+      <td>${r.type}</td>
+      <td class="order-no">${r.code}</td>
+      <td>${r.status}</td>
+      <td>${r.time}</td>
+      <td>${r.status === '待发送' ? '<span class="link-btn">重新发送</span>' : '–'}</td>
+      <td>${r.remark}</td>
+    </tr>
+  `).join('');
+  const pg = document.getElementById('p4SendPagination');
+  pg.innerHTML = `<span class="page-total">Total ${p4SendFiltered.length}</span><div class="page-btn active">1</div>`;
+}
+
+p4SendSearch();
+
+</script>
+
+<script>
+function mergeGo(n) {
+  for (let i = 0; i <= 6; i++) {
+    const el = document.getElementById('mergeView' + i);
+    if (el) el.classList.toggle('active', i === n);
+  }
+  document.getElementById('mergeNav').querySelectorAll('button').forEach((b, i) => {
+    b.classList.toggle('active', i === n);
+  });
+}
+mergeGo(0);
+</script>
+
+</body>
+</html>
