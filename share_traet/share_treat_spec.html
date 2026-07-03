@@ -148,7 +148,7 @@
   .cols.stack{flex-wrap:wrap;gap:22px;}
   .cols.stack .imgcol{flex:0 0 100%;max-width:100%;border-right:none;
     border-bottom:none;padding:0;}
-  .cols.stack .imgcol .stick{position:static;max-width:980px;margin:0 auto;width:100%;}
+  .cols.stack .imgcol .stick{position:static;max-width:980px;margin:0 auto;width:100%;zoom:1.6;}
   .cols.stack .imgcol img{max-width:980px;margin:0 auto;}
   .cols.stack .imgcol .cap{text-align:center;}
   .cols.stack .speccol{flex:0 0 100%;max-width:100%;}
@@ -978,7 +978,7 @@
           <tr><th>兑换记录状态</th><th>积分历史应有记录</th></tr>
           <tr><td>待审核</td><td>扣分记录（1 笔）；退分记录尚未产生</td></tr>
           <tr><td>已完成</td><td>扣分记录（1 笔）；无退分记录</td></tr>
-          <tr><td>已拒绝<br><span style="font-size:11px;color:#4b5563;">（人工拒绝 or 兑换失败）</span></td><td>扣分记录（1 笔）＋退分记录（1 笔），两笔金额相同</td></tr>
+          <tr><td>已拒绝<br><span style="color:#4b5563;">（人工拒绝 or 兑换失败）</span></td><td>扣分记录（1 笔）＋退分记录（1 笔），两笔金额相同</td></tr>
         </table>
 
         <h3>功能逻辑</h3>
@@ -1011,7 +1011,7 @@
       <tr><th style="width:34px">#</th><th>页面</th><th>路径</th><th>主要改动</th></tr>
       <tr><td>1</td><td>新增商品</td><td>后台 &gt; 积分商城 &gt; 商品管理 &gt; 新增商品</td><td>新增商品类别及商品类型 <strong>Share Treat</strong>；选中商品类型 Share Treat 后出现「类别 / 厂商 / 商品」三级联动 + 商品详情</td></tr>
       <tr><td>2</td><td>用户积分记录</td><td>后台 &gt; 积分商城 &gt; 用户积分记录</td><td>Share Treat 订单「原因」显示 <strong>Share Treat</strong>（商品类型）；「备注」显示商品名称</td></tr>
-      <tr><td>3</td><td>商品兑换记录</td><td>后台 &gt; 积分商城 &gt; 商品兑换记录</td><td>类型筛选新增 Share Treat；<strong>列表「充值状态」列改为「三方状态」列（成功 / 失败 / 处理中 / —）</strong>；<strong>搜索栏新增「三方状态」筛选下拉</strong>；操作栏「查看订单信息」+ 弹窗（显示三方订单号、三方状态、手机号码、邮箱，手机号码与邮箱各附「重新发送」按钮）；手动审核先显示审核按钮，审核可通过 / 拒绝，通过后才显示「查看订单信息」，拒绝则全额退还会员积分；<strong>兑换失败（审核通过＋三方状态失败）自动退分，订单状态维持「审核通过」、前台显示「已拒绝」</strong></td></tr>
+      <tr><td>3</td><td>商品兑换记录</td><td>后台 &gt; 积分商城 &gt; 商品兑换记录</td><td>类型筛选新增 Share Treat；<strong>搜索栏新增「审核状态」筛选下拉（全部 / 待审核 / 审核通过 / 审核未通过；未发货 / 已发货为其他商品类型专属）</strong>；<strong>列表「充值状态」列改为「回传状态」列（成功 / 失败 / 处理中 / —）</strong>；<strong>搜索栏新增「回传状态」筛选下拉（全部 / 成功 / 失败 / 处理中）</strong>；操作栏「查看订单信息」+ 弹窗（显示三方订单号、回传状态、手机号码、邮箱，手机号码与邮箱各附「重新发送」按钮）；手动审核先显示审核按钮，审核可通过 / 拒绝，通过后才显示「查看订单信息」，拒绝则全额退还会员积分；<strong>兑换失败（审核通过＋回传状态失败）自动退分，审核状态维持「审核通过」、前台显示「已拒绝」</strong></td></tr>
     </table>
   </div>
 
@@ -1086,7 +1086,10 @@
           <!-- 筛选栏：对应真实后台 filter bar，箭头处新增 Share Treat 类型选项 -->
           <div style="padding:7px 10px;display:flex;gap:5px;border-bottom:1px solid #eef0f2;align-items:center;flex-wrap:wrap;">
             <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 7px;font-size:11px;color:#4b5563;">选择币别 ▾</span>
-            <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 7px;font-size:11px;color:#3f4854;">全部 ▾</span>
+            <span style="background:#eef2ff;border:1.5px solid #3358d4;border-radius:4px;padding:2px 7px;font-size:11px;color:#3358d4;font-weight:700;position:relative;">
+              全部 ▾
+              <span style="position:absolute;top:-7px;right:-4px;background:#e5484d;color:#fff;font-size:7px;border-radius:3px;padding:0 3px;line-height:13px;font-weight:700;">审核状态</span>
+            </span>
             <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 16px;font-size:11px;color:#8b919c;">会员名</span>
             <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 7px;font-size:11px;color:#8b919c;">日期范围</span>
             <span style="background:#eef2ff;border:1.5px solid #3358d4;border-radius:4px;padding:2px 7px;font-size:11px;color:#3358d4;font-weight:700;position:relative;">
@@ -1094,27 +1097,34 @@
               <span style="position:absolute;top:-7px;right:-4px;background:#e5484d;color:#fff;font-size:7px;border-radius:3px;padding:0 3px;line-height:13px;font-weight:700;">NEW</span>
             </span>
             <span style="background:#eef2ff;border:1.5px solid #3358d4;border-radius:4px;padding:2px 7px;font-size:11px;color:#3358d4;font-weight:700;position:relative;">
-              三方状态 ▾
+              回传状态 ▾
               <span style="position:absolute;top:-7px;right:-4px;background:#e5484d;color:#fff;font-size:7px;border-radius:3px;padding:0 3px;line-height:13px;font-weight:700;">NEW</span>
             </span>
             <span style="background:#3358d4;border-radius:4px;padding:2px 9px;font-size:11px;color:#fff;font-weight:600;">搜索</span>
           </div>
           <table style="font-size:12px;margin:0;">
             <tr style="background:#f6f7f9;">
-              <th style="padding:5px 8px;">会员</th><th style="padding:5px 8px;">商品</th><th style="padding:5px 8px;">订单状态</th><th style="padding:5px 8px;">三方状态</th><th style="padding:5px 8px;">操作</th>
+              <th style="padding:5px 8px;">会员</th><th style="padding:5px 8px;">商品</th><th style="padding:5px 8px;">审核状态</th><th style="padding:5px 8px;">回传状态</th><th style="padding:5px 8px;">操作</th>
             </tr>
             <tr>
-              <td style="padding:5px 8px;">user_001</td>
-              <td style="padding:5px 8px;">McDonald's 中薯</td>
-              <td style="padding:5px 8px;"><span style="background:#dbe4ff;color:#3358d4;border-radius:4px;padding:1px 6px;font-size:11.5px;font-weight:700;">审核通过</span></td>
-              <td style="padding:5px 8px;color:#30a46c;font-weight:700;">成功</td>
-              <td style="padding:5px 8px;color:#3358d4;font-weight:700;font-size:12px;">查看订单信息</td>
+              <td style="padding:5px 8px;">user_002</td>
+              <td style="padding:5px 8px;">VP 道具卡</td>
+              <td style="padding:5px 8px;"><span style="background:#fff3da;color:#b5790a;border-radius:4px;padding:1px 6px;font-size:11.5px;font-weight:700;">待审核</span></td>
+              <td style="padding:5px 8px;color:#4b5563;">—</td>
+              <td style="padding:5px 8px;color:#3358d4;font-weight:700;font-size:12px;">审核</td>
             </tr>
-            <tr style="background:#fafbfc;">
+            <tr>
               <td style="padding:5px 8px;">member88899</td>
               <td style="padding:5px 8px;">Smart 50</td>
               <td style="padding:5px 8px;"><span style="background:#dbe4ff;color:#3358d4;border-radius:4px;padding:1px 6px;font-size:11.5px;font-weight:700;">审核通过</span></td>
               <td style="padding:5px 8px;color:#4b5563;font-weight:700;">处理中</td>
+              <td style="padding:5px 8px;color:#3358d4;font-weight:700;font-size:12px;">查看订单信息</td>
+            </tr>
+            <tr style="background:#fafbfc;">
+              <td style="padding:5px 8px;">user_001</td>
+              <td style="padding:5px 8px;">McDonald's 中薯</td>
+              <td style="padding:5px 8px;"><span style="background:#dbe4ff;color:#3358d4;border-radius:4px;padding:1px 6px;font-size:11.5px;font-weight:700;">审核通过</span></td>
+              <td style="padding:5px 8px;color:#30a46c;font-weight:700;">成功</td>
               <td style="padding:5px 8px;color:#3358d4;font-weight:700;font-size:12px;">查看订单信息</td>
             </tr>
             <tr>
@@ -1125,13 +1135,6 @@
               <td style="padding:5px 8px;color:#3358d4;font-weight:700;font-size:12px;">查看订单信息</td>
             </tr>
             <tr style="background:#fafbfc;">
-              <td style="padding:5px 8px;">user_002</td>
-              <td style="padding:5px 8px;">VP 道具卡</td>
-              <td style="padding:5px 8px;"><span style="background:#fff3da;color:#b5790a;border-radius:4px;padding:1px 6px;font-size:11.5px;font-weight:700;">待审核</span></td>
-              <td style="padding:5px 8px;color:#4b5563;">—</td>
-              <td style="padding:5px 8px;color:#3358d4;font-weight:700;font-size:12px;">审核</td>
-            </tr>
-            <tr>
               <td style="padding:5px 8px;">vivian01</td>
               <td style="padding:5px 8px;">VA免费旋转1</td>
               <td style="padding:5px 8px;"><span style="background:#eceef1;color:#4b5563;border-radius:4px;padding:1px 6px;font-size:11.5px;font-weight:700;">审核未通过</span></td>
@@ -1152,7 +1155,7 @@
               <span style="font-size:11.5px;font-weight:700;font-family:monospace;flex:1;color:#23272e;">ST20240630001</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-              <span style="font-size:11px;color:#4b5563;flex:0 0 68px;">三方状态：</span>
+              <span style="font-size:11px;color:#4b5563;flex:0 0 68px;">回传状态：</span>
               <span style="font-size:11.5px;font-weight:700;color:#30a46c;">成功</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
@@ -1168,72 +1171,92 @@
             <div style="margin-top:10px;font-size:13px;color:#4b5563;">每日最多重新发送 2 次</div>
           </div>
         </div>
-        <div style="font-size:14.5px;color:#33404d;text-align:center;margin-top:9px;font-weight:600;">三方状态＝<b style="color:#30a46c;">成功</b>时的弹窗：手机、邮箱才显示「重新发送」</div>
+        <div style="font-size:14.5px;color:#33404d;text-align:center;margin-top:9px;font-weight:600;">回传状态＝<b style="color:#30a46c;">成功</b>时的弹窗：手机、邮箱才显示「重新发送」</div>
         <div style="border:1px solid #f3c0c1;background:#fdecec;border-radius:8px;padding:12px 15px;margin-top:10px;font-size:14.5px;color:#8f3336;line-height:1.7;">
-          弹窗内的「重新发送」按钮，<b style="color:#dd3b40;">仅当三方状态＝成功时才出现</b>；三方状态<b>非成功</b>（处理中、失败等）时，手机号码、邮箱后方<b>不显示该按钮</b>，仅展示号码 / 邮箱本身。
+          弹窗内的「重新发送」按钮，<b style="color:#dd3b40;">仅当回传状态＝成功时才出现</b>；回传状态<b>非成功</b>（处理中、失败等）时，手机号码、邮箱后方<b>不显示该按钮</b>，仅展示号码 / 邮箱本身。
         </div>
       </div></div>
       <div class="speccol">
-        <h3><span style="color:#e5484d;font-weight:800;font-size:16px;">6/30 調整：</span>改动说明</h3>
-        <p>针对 Share Treat 类型商品：① 类型筛选下拉新增选项；② <strong>将列表既有「充值状态」列改为「三方状态」列</strong>（显示 ShareTreats 回传结果）；③ 搜索栏新增「三方状态」筛选下拉；④「操作」栏提供查看订单信息入口。弹窗样式参考既有「充值信息」弹窗。</p>
-        <h3><span style="color:#e5484d;font-weight:800;font-size:16px;">6/30 調整：</span>改动点</h3>
+        <h3>改动说明</h3>
+        <p>针对 Share Treat 类型商品：① 类型筛选下拉新增选项；② 搜索栏新增「<strong>审核状态</strong>」筛选下拉；③ <strong>将列表既有「充值状态」列改为「回传状态」列</strong>（显示 ShareTreats 回传结果）；④ 搜索栏新增「<strong>回传状态</strong>」筛选下拉；⑤「操作」栏提供查看订单信息入口。弹窗样式参考既有「充值信息」弹窗。</p>
+
+        <h3>改动点</h3>
         <ol>
           <li><strong>类型筛选下拉</strong>：新增选项 <strong>Share Treat</strong>，可按此类型筛选。</li>
-          <li><strong>「三方状态」列（由「充值状态」列改名沿用）</strong>：显示 ShareTreats 回传结果 —— <strong>成功</strong>（绿）/ <strong>失败</strong>（红）/ <strong>处理中</strong>（灰）/ <strong>—</strong>（未派发）。</li>
-          <li><strong>搜索栏新增「三方状态」筛选下拉</strong>：选项为 <strong>成功 / 失败 / 处理中</strong>，可按三方状态筛选订单。</li>
+          <li><strong>搜索栏新增「审核状态」筛选下拉</strong>：Share Treat 适用选项为 <strong>全部 / 待审核 / 审核通过 / 审核未通过</strong>（未发货 / 已发货为其他商品类型专属，不适用于 Share Treat）。</li>
+          <li><strong>「回传状态」列（由「充值状态」列改名沿用）</strong>：显示 ShareTreats 回传结果 —— <strong>成功</strong>（绿）/ <strong>失败</strong>（红）/ <strong>处理中</strong>（灰）/ <strong>—</strong>（未派发）。</li>
+          <li><strong>搜索栏新增「回传状态」筛选下拉</strong>：选项为 <strong>全部 / 成功 / 失败 / 处理中</strong>，可按回传状态筛选订单。</li>
           <li><strong>操作栏</strong>：Share Treat 类型订单显示「<strong>查看订单信息</strong>」（对应原话费类的「查看充值信息」）。</li>
           <li><strong>审核控制</strong>：手动审核时，操作栏<strong>先显示「审核」按钮</strong>，完成审核后才显示「查看订单信息」；自动审核直接显示「查看订单信息」。</li>
-          <li><strong>操作栏按状态区分</strong>：<strong>仅「待审核」＝「审核」按钮</strong>；<strong>其余状态（审核通过 / 审核未通过）一律＝「查看订单信息」</strong>。人工拒绝的订单三方订单号＝无、三方状态＝—，但会员手机 / 邮箱仍可查看。</li>
-          <li><strong>点击「查看订单信息」</strong>：弹出「订单信息」窗口，显示三方订单号、三方状态、手机号码（附「重新发送」）、邮箱（附「重新发送」）。</li>
+          <li><strong>操作栏按状态区分</strong>：<strong>仅「待审核」＝「审核」按钮</strong>；<strong>其余状态一律＝「查看订单信息」</strong>。人工拒绝的订单三方订单号＝无、回传状态＝—，但会员手机 / 邮箱仍可查看。</li>
+          <li><strong>点击「查看订单信息」</strong>：弹出「订单信息」窗口，显示三方订单号、回传状态、手机号码、邮箱；「重新发送」按钮<strong>仅回传状态＝成功时显示</strong>。</li>
         </ol>
 
-        <h3><span style="color:#e5484d;font-weight:800;font-size:16px;">6/30 調整：</span>订单状态总览</h3>
-        <p>本页有<strong>两条独立的状态</strong>：<br>
-        ① <strong>后台订单状态</strong>——只反映<strong>我方审核结果</strong>：待审核 / 审核通过 / 审核未通过。<br>
-        ② <strong>三方状态</strong>——由 <strong>ShareTreats 回传</strong>独立决定：—（未派发）/ 处理中 / 成功 / 失败。<br>
-        两者<strong>组合</strong>后，决定前台画面、积分与操作栏。手动审核订单先显示「审核」按钮（可通过 / 拒绝、填备注）。完整组合如下：</p>
+        <h3>审核状态说明（Share Treat 适用）</h3>
+        <p>Share Treat 订单的审核状态共三种值（<strong>未发货 / 已发货为其他商品类型专属，不适用于 Share Treat</strong>）：</p>
         <table>
-          <tr><th>后台订单状态<br>（我方审核）</th><th>三方状态<br>（三方回传）</th><th>前台画面</th><th>积分</th><th>操作栏</th><th>说明</th></tr>
-          <tr><td>待审核</td><td>—</td><td>待审核</td><td>已扣减</td><td>「审核」按钮</td><td>人工审核中，尚未派发给三方</td></tr>
-          <tr><td>审核通过</td><td><strong>处理中</strong></td><td>待审核</td><td>已扣减</td><td>「查看订单信息」</td><td>已派发，等 ShareTreats 回传 callback</td></tr>
-          <tr><td>审核通过</td><td style="color:#30a46c;font-weight:700;">成功</td><td>已完成</td><td>已扣减</td><td>「查看订单信息」</td><td>兑换成功，兑换信息已发至会员</td></tr>
-          <tr><td>审核通过</td><td style="color:#dd3b40;font-weight:700;">失败</td><td><strong>已拒绝</strong></td><td><strong>全额退还</strong></td><td>「查看订单信息」</td><td><strong>兑换失败</strong>：三方回滚、自动退分；<strong>订单状态仍为审核通过</strong>，前台显示已拒绝</td></tr>
-          <tr><td><strong>审核未通过</strong></td><td>—</td><td><strong>已拒绝</strong></td><td><strong>全额退还</strong></td><td>「查看订单信息」</td><td>管理员人工拒绝，积分已全额退还。点「查看订单信息」可看<strong>会员填写的手机 / 邮箱</strong>；因从未派发给三方，弹窗内<strong>三方订单号＝无、三方状态＝—、无「重新发送」</strong></td></tr>
+          <tr><th>审核状态值</th><th>含义</th><th>回传状态</th></tr>
+          <tr><td><strong>待审核</strong></td><td>订单已提交，等待管理员人工审核（手动审核模式）或系统自动处理（自动审核模式）；此时尚未派发给 ShareTreats</td><td>—</td></tr>
+          <tr><td><strong>审核通过</strong></td><td>我方审核通过，系统即向 ShareTreats 发起派发请求；回传状态将依 callback 结果更新为处理中 → 成功 / 失败</td><td>处理中 → 成功 / 失败</td></tr>
+          <tr><td><strong>审核未通过</strong></td><td>管理员人工拒绝，积分全额退还，从未向 ShareTreats 发送请求</td><td>—</td></tr>
+        </table>
+
+        <h3>回传状态说明</h3>
+        <p>回传状态由 <strong>ShareTreats 回传</strong>独立决定，与审核状态并行显示：</p>
+        <table>
+          <tr><th>回传状态值</th><th>含义</th></tr>
+          <tr><td><strong>—</strong></td><td>尚未派发给 ShareTreats（待审核 / 审核未通过时）</td></tr>
+          <tr><td><strong>处理中</strong>（灰）</td><td>请求已送出，ShareTreats 尚未回传 callback</td></tr>
+          <tr><td style="color:#30a46c;font-weight:700;">成功</td><td>callback 回传成功，兑换信息已发至会员；前台画面「已完成」</td></tr>
+          <tr><td style="color:#dd3b40;font-weight:700;">失败</td><td>callback 回传失败，兑换失败；系统自动全额退还积分；前台画面「已拒绝」</td></tr>
+        </table>
+
+        <h3>审核状态 × 回传状态 组合总览（Share Treat）</h3>
+        <p>两者<strong>组合</strong>后，决定前台画面、积分与操作栏：</p>
+        <table>
+          <tr><th>审核状态</th><th>回传状态</th><th>前台画面</th><th>积分</th><th>操作栏</th><th>说明</th></tr>
+          <tr><td>待审核</td><td>—</td><td>待审核</td><td>已扣减</td><td>「审核」按钮</td><td>人工审核中，尚未派发给 ShareTreats</td></tr>
+          <tr><td>审核通过</td><td><strong>处理中</strong></td><td>待审核</td><td>已扣减</td><td>「查看订单信息」</td><td>审核通过后系统立即向 ShareTreats 发出派发请求，等待 callback 回传</td></tr>
+          <tr><td>审核通过</td><td style="color:#30a46c;font-weight:700;">成功</td><td>已完成</td><td>已扣减</td><td>「查看订单信息」</td><td>兑换成功，兑换信息已发至会员手机 / 邮箱</td></tr>
+          <tr><td>审核通过</td><td style="color:#dd3b40;font-weight:700;">失败</td><td><strong>已拒绝</strong></td><td><strong>全额退还</strong></td><td>「查看订单信息」</td><td><strong>兑换失败</strong>：ShareTreats 回滚、系统自动全额退分；审核状态仍维持「审核通过」；前台显示「已拒绝」</td></tr>
+          <tr><td><strong>审核未通过</strong></td><td>—</td><td><strong>已拒绝</strong></td><td><strong>全额退还</strong></td><td>「查看订单信息」</td><td>管理员人工拒绝，积分已全额退还；弹窗内<strong>三方订单号＝无、回传状态＝—、无「重新发送」</strong></td></tr>
         </table>
         <div class="note">
           <strong>关键交互：</strong><br>
-          · <strong>「审核通过」可对应三种三方状态</strong>（处理中 / 成功 / 失败）——因为我方审核通过 ≠ 三方兑换成功，两者独立。<br>
-          · <strong>「兑换失败」＝审核通过＋三方状态失败</strong>：订单状态<strong>不</strong>变成审核未通过，仍是「审核通过」；系统自动退分，前台画面显示「已拒绝」。<br>
-          · <strong>前台「已拒绝」有两种来源</strong>：① 审核未通过（人工拒绝，三方状态＝—）；② 审核通过＋三方失败（兑换失败）。两者积分均全额退还。<br>
-          · <strong>操作栏</strong>：<strong>仅「待审核」显示「审核」按钮；其余状态（审核通过 / 审核未通过）一律显示「查看订单信息」</strong>。人工拒绝的订单虽无三方订单号 / 状态，但会员手机、邮箱仍可查看。<br>
+          · <strong>「审核通过」对应三种回传状态</strong>（处理中 / 成功 / 失败）——审核通过后系统立即发出请求，回传状态直接进入处理中，不存在 — 的过渡态。<br>
+          · <strong>「兑换失败」＝审核通过＋回传失败</strong>：审核状态<strong>维持「审核通过」</strong>，不会变成审核未通过；系统自动全额退分，前台画面显示「已拒绝」。<br>
+          · <strong>前台「已拒绝」有两种来源</strong>：① 审核未通过（人工拒绝，回传状态＝—）；② 审核通过＋回传失败（兑换失败，审核状态仍为「审核通过」）。两者积分均全额退还。<br>
+          · <strong>操作栏</strong>：<strong>仅「待审核」显示「审核」按钮；其余所有审核状态（审核通过 / 审核未通过）一律显示「查看订单信息」</strong>。人工拒绝的订单虽无三方订单号 / 回传状态，但会员手机、邮箱仍可查看。<br>
           · <strong>积分退还</strong>：只要退分即为<strong>全额退还</strong>（人工拒绝、兑换失败皆同），不分自动 / 手动。<br>
           · <strong>操作人</strong>：自动审核＝<code>SYSTEM</code>；人工审核通过 / 拒绝＝管理员账号；兑换失败退分＝<code>SYSTEM</code>（三方回调触发）。
         </div>
 
-        <h3><span style="color:#e5484d;font-weight:800;font-size:16px;">6/30 調整：</span>弹窗字段规格</h3>
+        <h3>弹窗字段规格</h3>
         <table>
           <tr><th>字段</th><th>类型</th><th>说明</th><th>操作</th></tr>
-          <tr><td>三方订单号</td><td>文本</td><td>ShareTreats 回传的订单号，供对账追溯</td><td>—</td></tr>
-          <tr><td>三方状态</td><td>文本</td><td>ShareTreats 回传的派发结果</td><td>—</td></tr>
-          <tr><td>手机号码</td><td>文本</td><td>会员购买时填写的手机号码，完整显示</td><td>「重新发送」文字按钮 —— <strong>仅三方状态＝成功时显示</strong>；失败 / 处理中 / — 时<strong>不显示此按钮</strong>。点击触发 ShareTreats 重发至该手机号码</td></tr>
-          <tr><td>邮箱</td><td>文本</td><td>会员购买时填写的邮箱，完整显示</td><td>「重新发送」文字按钮 —— <strong>仅三方状态＝成功时显示</strong>；失败 / 处理中 / — 时<strong>不显示此按钮</strong>。点击触发 ShareTreats 重发至该邮箱</td></tr>
+          <tr><td>三方订单号</td><td>文本</td><td>ShareTreats 回传的订单号，供对账追溯；审核未通过（请求从未发出）及尚未派发时显示「—」。</td><td>—</td></tr>
+          <tr><td>回传状态</td><td>文本</td><td>ShareTreats 回传的派发结果（成功 / 失败 / 处理中 / —）</td><td>—</td></tr>
+          <tr><td>手机号码</td><td>文本</td><td>会员购买时填写的手机号码，完整显示</td><td>「重新发送」文字按钮 —— <strong>仅回传状态＝成功时显示</strong>；失败 / 处理中 / — 时<strong>不显示此按钮</strong>。点击触发 ShareTreats 重发至该手机号码</td></tr>
+          <tr><td>邮箱</td><td>文本</td><td>会员购买时填写的邮箱，完整显示</td><td>「重新发送」文字按钮 —— <strong>仅回传状态＝成功时显示</strong>；失败 / 处理中 / — 时<strong>不显示此按钮</strong>。点击触发 ShareTreats 重发至该邮箱</td></tr>
         </table>
-        <h3><span style="color:#e5484d;font-weight:800;font-size:16px;">6/30 調整：</span>功能逻辑</h3>
+
+        <h3>功能逻辑</h3>
         <ul>
-          <li><strong>三方状态列取值时机</strong>：订单<strong>审核通过后（自动审核 / 人工审核皆同）</strong>，系统向 ShareTreats 发起派发并取其回传状态，直接填入列表「三方状态」列 —— 已送出待回传显示<strong>处理中</strong>，callback 回来后转<strong>成功</strong>或<strong>失败</strong>；未审核通过（待审核 / 人工拒绝）则为<strong>—</strong>。</li>
-          <li><strong>三方状态筛选</strong>：搜索栏「三方状态」下拉可选 <strong>成功 / 失败 / 处理中</strong>，按三方状态过滤列表。</li>
-          <li><strong>重新发送（仅限三方状态＝成功）</strong>：<strong>仅当三方状态为「成功」时，手机号码 / 邮箱后方才显示「重新发送」按钮</strong>，用途是<strong>把已成功的兑换信息再发一次给会员</strong>（例如会员遗失简讯 / 邮件、误删）。管理员点击后，<strong>系统调用 ShareTreats Resend 接口</strong>，请 ShareTreats 再次向该手机号码 / 邮箱派发（发码方仍为 ShareTreats，我方不持有兑换码）。三方状态<strong>非成功</strong>（处理中、失败等）时，弹窗内<strong>不显示「重新发送」按钮</strong>；三方状态为成功、但已达每日上限时，按钮置灰不可点。（注：待审核订单操作栏显示「审核」按钮、不进入本弹窗。）
-            <div class="note" style="border-left:3px solid #b7791a;background:#fbf1dd;padding:12px 15px;margin-top:8px;color:#7a5312;font-size:14.5px;line-height:1.7;">
+          <li><strong>回传状态列取值时机</strong>：审核通过后系统立即向 ShareTreats 发起请求，回传状态直接进入<strong>处理中</strong>，callback 回来后转<strong>成功</strong>或<strong>失败</strong>；未派发（待审核 / 审核未通过）时一律显示<strong>—</strong>。</li>
+          <li><strong>审核状态筛选</strong>：搜索栏「审核状态」下拉 Share Treat 适用选项为 <strong>全部 / 待审核 / 审核通过 / 审核未通过</strong>，按审核状态过滤列表。</li>
+          <li><strong>回传状态筛选</strong>：搜索栏「回传状态」下拉可选 <strong>全部 / 成功 / 失败 / 处理中</strong>，按回传状态过滤列表。</li>
+          <li><strong>重新发送（仅限回传状态＝成功）</strong>：<strong>仅当回传状态为「成功」时，手机号码 / 邮箱后方才显示「重新发送」按钮</strong>，用途是<strong>把已成功的兑换信息再发一次给会员</strong>（例如会员遗失简讯 / 邮件、误删）。管理员点击后，<strong>系统调用 ShareTreats Resend 接口</strong>，请 ShareTreats 再次向该手机号码 / 邮箱派发（发码方仍为 ShareTreats，我方不持有兑换码）。回传状态<strong>非成功</strong>（处理中、失败等）时，弹窗内<strong>不显示「重新发送」按钮</strong>；回传状态为成功、但已达每日上限时，按钮置灰不可点。（注：待审核订单操作栏显示「审核」按钮、不进入本弹窗。）
+            <div class="note" style="border-left:3px solid #b7791a;background:#fbf1dd;padding:12px 15px;margin-top:8px;color:#7a5312;line-height:1.7;">
               <strong>⚠ 待开发确认（对接 ShareTreats API）：</strong>ShareTreats 提供两支重发接口 —— SMS <code>POST /api/v3/sms/resend/{referenceNo}</code>、Email <code>POST /api/v3/email/resend</code>。<strong>每日重发次数上限（SMS 文件写 2 次 / 日）与计算范围（整笔订单共用 or 手机、邮箱各自计）、剩余次数是否以三方回传值为准</strong>，请开发对照三方文件确认后，再回填本规格。凭 <code>reference_no</code>（＝三方订单号）指定重发笔。</div>
           </li>
-          <li><strong>兑换失败自动退分</strong>：callback 回传失败＝兑换失败，三方已回滚，<strong>系统自动全额退还会员本次扣减的积分</strong>，无需管理员操作。此时<strong>后台订单状态维持「审核通过」</strong>（我方确实已审核通过）、<strong>三方状态显示「失败」</strong>、<strong>前台画面显示「已拒绝」</strong>；会员可用退回积分重新购买。故失败不提供「重新发送」，也无「填错改址补发」需求。</li>
-          <li><strong>三方状态</strong>：依后台订单状态显示，规则如下：
+          <li><strong>兑换失败自动退分</strong>：callback 回传失败＝兑换失败，三方已回滚，<strong>系统自动全额退还会员本次扣减的积分</strong>，无需管理员操作。此时<strong>后台审核状态维持「审核通过」</strong>（我方确实已完成审核并派发）、<strong>回传状态显示「失败」</strong>、<strong>前台画面显示「已拒绝」</strong>；会员可用退回积分重新购买。故失败不提供「重新发送」，也无「填错改址补发」需求。</li>
+          <li><strong>回传状态映射规则</strong>：
             <ul style="margin-top:6px;">
-              <li><strong>待审核</strong>：尚未发送给 ShareTreats，显示「—」</li>
-              <li><strong>审核通过 · 等待 callback</strong>：请求已送出、ShareTreats 尚未回传，显示「处理中」（灰字）</li>
+              <li><strong>待审核</strong>：尚未审核，未发送给 ShareTreats，显示「—」</li>
+              <li><strong>审核未通过</strong>：人工拒绝，从未发送给 ShareTreats，显示「—」</li>
+              <li><strong>审核通过 · 等待 callback</strong>：审核通过后系统立即发出请求，尚未收到 ShareTreats 回传，显示「处理中」（灰字）</li>
               <li><strong>审核通过 · callback 成功</strong>：显示「成功」（绿字），前台画面「已完成」</li>
-              <li><strong>审核通过 · callback 失败（兑换失败）</strong>：显示「失败」（红字），<strong>系统自动全额退还积分</strong>；<strong>后台订单状态维持「审核通过」</strong>，前台画面显示「已拒绝」；不走「重新发送」</li>
-              <li><strong>审核未通过 · 人工拒绝</strong>：从未发送给 ShareTreats，显示「—」</li>
+              <li><strong>审核通过 · callback 失败（兑换失败）</strong>：显示「失败」（红字），<strong>系统自动全额退还积分</strong>；<strong>后台审核状态维持「审核通过」</strong>，前台画面显示「已拒绝」；不走「重新发送」</li>
             </ul>
           </li>
         </ul>

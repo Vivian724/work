@@ -593,8 +593,9 @@ tr:hover td { background: #fafcff; }
     <div class="spec-gloss-row"><div class="spec-gloss-term">一番赏 / Ichiban Kuji</div><div class="spec-gloss-def">玩家以积分购买「一番赏」商品，依券数（单抽／五连／全包）抽取对应奖级的奖品。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">奖级</div><div class="spec-gloss-def">A赏～G赏（可自订数量与名称，最多 7 级）＋ <span class="spec-field">Last赏</span>（固定 1 张，最后一抽自动触发，不可删除）。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">券数</div><div class="spec-gloss-def">该商品的总抽奖张数，＝各奖级数量加总（含 Last赏的 1 张），系统自动加总显示。</div></div>
-    <div class="spec-gloss-row"><div class="spec-gloss-term">来源＝积分购买</div><div class="spec-gloss-def">所有一番赏商品的取得方式，在后台一律归类为 <span class="spec-field">积分购买</span> 来源，不会单独列出「Ichiban Kuji」来源选项。</div></div>
-    <div class="spec-gloss-row"><div class="spec-gloss-term">活动名称＝商品名称</div><div class="spec-gloss-def">各记录／报表页的「活动名称」字段，来源为积分购买时取自「商品配置」中<strong>商品类型＝Ichiban Kuji</strong> 的该笔商品的「商品名称」字段值（即玩家实际购买的一番赏商品名称）；若为其他非一番赏类型的一般积分购买项目，显示「–」。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">来源＝积分购买</div><div class="spec-gloss-def"><span class="spec-field">积分购买</span> 是前台「积分商城」<strong>所有商品类别通用</strong>的购买方式，并非一番赏专属——积分商城里任何商品类型的商品都是用积分购买。因此后台「来源」字段只会显示「积分购买」，不会出现「Ichiban Kuji」这个来源选项；真正用来判断「这是一番赏商品」的字段是商品配置里的 <strong>商品类型＝Ichiban Kuji</strong>（详见下一条）。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">一番赏的判断依据</div><div class="spec-gloss-def">一笔积分购买是否属于「一番赏」，由「商品配置」弹窗中的两个字段决定：<strong>商品类型</strong>（单选 radio，决定该商品用哪一套逻辑／是否显示奖级配置区块，一番赏须选中「Ichiban Kuji」）与 <strong>商品类别</strong>（多选 checkbox，纯粹给前台商城分类展示用，与抽奖逻辑无关，也可勾选「Ichiban Kuji」）。各记录页统一以「商品类型＝Ichiban Kuji」作为判断条件。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">活动名称＝商品名称</div><div class="spec-gloss-def">各记录／报表页的「活动名称」字段，取自「商品配置」中<strong>商品类型＝Ichiban Kuji</strong> 的该笔商品的「商品名称」字段值（即玩家实际购买的一番赏商品名称）；若该笔积分购买对应的商品「商品类型」不是 Ichiban Kuji（即非一番赏的一般商品），则显示「–」。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">奖品清单格式</div><div class="spec-gloss-def">「备注」／「奖品」字段统一采用「{奖级} {奖品类型}{数值}」格式，例如「B赏 彩金500.00」「E赏 旋转券×20」；一笔纪录若中出多个奖品，以顿号「，」分隔，重复品项自动合并显示为「×N」，Last赏永远排最前面。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">状态字段</div><div class="spec-gloss-def">全文出现的「状态」栏位固定使用纯文本值：<span class="spec-field">未使用</span> ／ <span class="spec-field">已使用</span> ／ <span class="spec-field">已过期</span>（优惠券／免费旋转类）、<span class="spec-field">已发送</span> ／ <span class="spec-field">待发送</span>（发送记录类），不使用任何色块或图示。</div></div>
   </div>
@@ -1703,7 +1704,18 @@ tr:hover td { background: #fafcff; }
     
 <div class="spec-text">
   <h3>页面位置</h3>
-  <p class="spec-lead">面包屑：位置 › 免费旋转管理，共 4 个子页签：免费项目配置／免费项目记录／免费项目统计／免费项目发送记录，可直接点击画面上方分页签切换。「免费项目配置」为免费旋转／免费投注券的通用设置列表（设定各家游戏商的免费次数、有效期等），与一番赏无直接字段关联，本次规格不展开说明；以下三个子页签涵盖一番赏奖级中「免费旋转券」「免费投注券」「道具卡」三种奖品类型的记录，皆以「免费类型」字段区分，并未各自独立成页。</p>
+  <p class="spec-lead">面包屑：位置 › 免费旋转管理，共 4 个子页签：免费项目配置／免费项目记录／免费项目统计／免费项目发送记录，可直接点击画面上方分页签切换。</p>
+
+  <h3>3.4.0 免费项目配置 — 与一番赏的关联（已确认）</h3>
+  <div class="spec-rule-box">
+    <div class="spec-rule-title">关键关联</div>
+    <ul>
+      <li>此页签是「免费旋转券／免费投注券／道具卡」三种免费项目的<strong>后台主档配置列表</strong>，每一笔即一个可发放的「免费项目」（例：FKG_S、JB_S免费旋转、南西测试_道具卡B3/D1/D30、南西测试_MiniG免费投注）</li>
+      <li>此列表就是「商品配置」弹窗中一番赏奖级第二层选择「免费旋转券」「免费投注券」「道具卡」时，下拉选单（选择免费旋转游戏／选择免费投注券／选择道具卡）实际的<strong>资料来源</strong>——即两处彼此关联，非各自独立的静态选单</li>
+      <li>顶部「是否开启免费旋转」总开关控制整个免费旋转功能是否启用</li>
+    </ul>
+  </div>
+  <p class="spec-lead">栏位：币种、厂商（FunkyGame／Jumbo_S／Vertex Play／Mini Games 等游戏／道具供应商）、免费名称、操作人、免费类型（免费旋转／免费投注／道具卡）、创建时间、操作（编辑／删除）。筛选栏：全部币别、Select（推测为栏位类型选择器，配对「免费名称」输入框，用法待与「免费项目记录」页签的 Select 一并确认）、全部免费类型、免费名称。「新增免费项目」按钮开启新增表单。</p>
 
   <h3>3.4.1 免费项目记录 — 栏位字段（全部 11 栏）</h3>
   <p class="spec-lead">记录会员「获得」一笔免费旋转券的当下资讯。</p>
@@ -1726,10 +1738,10 @@ tr:hover td { background: #fafcff; }
     </table>
   </div>
   <div class="spec-pill-row">
-    <span class="spec-pill">全部免费旋转</span><span class="spec-pill">全部来源</span><span class="spec-pill">获得时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select</span><span class="spec-pill">会员名／活动名称</span>
+    <span class="spec-pill">全部免费旋转</span><span class="spec-pill">全部来源</span><span class="spec-pill">获得时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select（会员名／活动名称）＋关键字输入框</span>
     <span class="spec-pill action">查询</span><span class="spec-pill action">赠送免费旋转</span>
   </div>
-  <p class="spec-lead"><span class="spec-field">查询</span>：套用筛选条件重新查询；<span class="spec-field">赠送免费旋转</span>：开启弹窗手动派发免费旋转给指定会员（原型未展开此弹窗内容）；<span class="spec-field">Select</span> 下拉用途尚未定义，详见「待确认事项」。</p>
+  <p class="spec-lead"><span class="spec-field">查询</span>：套用筛选条件重新查询；<span class="spec-field">赠送免费旋转</span>：开启弹窗手动派发免费旋转给指定会员（原型未展开此弹窗内容）。<strong>已确认</strong>：「Select」并非独立筛选条件，而是配对右侧关键字输入框的「搜索栏位类型」选择器，可切换要用「会员名」或「活动名称」去比对输入框的关键字。</p>
 
   <h3>3.4.2 免费项目统计 — 栏位字段（全部 8 栏）</h3>
   <p class="spec-lead">记录免费旋转券「实际被使用」时对应到哪个游戏平台／游戏，用来追踪玩家在哪个游戏商、哪一款游戏消耗掉这些免费次数。</p>
@@ -1749,7 +1761,7 @@ tr:hover td { background: #fafcff; }
     </table>
   </div>
   <div class="spec-pill-row">
-    <span class="spec-pill">所有状态</span><span class="spec-pill">使用时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select</span><span class="spec-pill">会员名／活动名称</span>
+    <span class="spec-pill">所有状态</span><span class="spec-pill">使用时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select（推测同会员名／活动名称）＋关键字输入框</span>
     <span class="spec-pill action">查询</span><span class="spec-pill action">导出</span>
   </div>
 
@@ -1771,7 +1783,7 @@ tr:hover td { background: #fafcff; }
     </table>
   </div>
   <div class="spec-pill-row">
-    <span class="spec-pill">所有状态</span><span class="spec-pill">发送时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select</span><span class="spec-pill">会员名／免费名称</span>
+    <span class="spec-pill">所有状态</span><span class="spec-pill">发送时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select（推测同会员名／免费名称）＋关键字输入框</span>
     <span class="spec-pill action">查询</span><span class="spec-pill action">批量重新发送</span><span class="spec-pill action">导出</span>
   </div>
   <p class="spec-lead"><span class="spec-field">批量重新发送</span>：对当前筛选结果中所有「待发送」的纪录一次性重新触发发送。</p>
@@ -1784,9 +1796,8 @@ tr:hover td { background: #fafcff; }
   <div class="spec-h1">待确认事项</div>
   <p class="spec-sub">原型中尚未定义清楚的地方，供对齐后端与产品需求时使用。</p>
   <div class="spec-qa-list">
-    <div class="spec-qa-item"><span class="spec-qa-mark">?</span>「免费旋转管理」页签中，「免费项目记录」「免费项目统计」「免费项目发送记录」三个页面各有一个「Select」下拉，用途尚未定义（原型中皆为空白占位选单，位置固定在「全部免费类型」之后、会员名输入框之前）——待补实际后台的选项内容</div>
-    <div class="spec-qa-item"><span class="spec-qa-mark">?</span>「免费项目配置」页签与一番赏奖级中「免费旋转券」设置的对应关系，是否需要互相关联／自动带入</div>
-    <div class="spec-qa-item"><span class="spec-qa-mark">?</span>「积分购买」来源下，一般商品与一番赏商品的区分逻辑，目前仅以「活动名称是否为 – 」隐含区分，是否需要额外的商品类型字段供后端筛选</div>
+    <div class="spec-qa-item"><span class="spec-qa-mark">?</span>「免费项目记录」页签已确认 Select＝会员名／活动名称的栏位类型选择器；「免费项目统计」「免费项目发送记录」「免费项目配置」三个页签的 Select 是否也是同一种用途，仍待逐一截图核对（目前仅依画面结构推测雷同）</div>
+    <div class="spec-qa-item"><span class="spec-qa-mark">?</span>「积分购买」既然是积分商城全站通用的购买方式，后端在写入一笔购买纪录时，是否会额外储存「商品类型」这个判断栏位，或是每次都要即时反查商品配置表才能判断是否为一番赏</div>
   </div>
 
   <h3 style="margin-top:32px;">已确认事项</h3>
@@ -1794,6 +1805,9 @@ tr:hover td { background: #fafcff; }
     <ul>
       <li>道具卡、免费投注券等其他奖品类型，<strong>不会</strong>独立开设记录／统计页面，而是并入「免费旋转管理」既有的记录／统计／发送记录三个页面中，与免费旋转券一起以「免费类型」字段区分（免费旋转／免费投注／道具卡）</li>
       <li>「活动名称」字段的取值来源已确认：来自「商品配置」中商品类型＝Ichiban Kuji 的该笔商品的「商品名称」字段值，详见「名词定义」页</li>
+      <li>「免费项目记录」页签的「Select」已确认：<strong>不是</strong>独立筛选条件，而是配对右侧关键字输入框的「搜索栏位类型」选择器，可选「会员名」或「活动名称」</li>
+      <li>「免费项目配置」页签与一番赏奖级「免费旋转券／免费投注券／道具卡」设置的对应关系已确认：<strong>直接关联</strong>，商品配置弹窗中这三种第二层分类的下拉选单，其选项内容就是来自「免费项目配置」这份主档列表，两者非各自独立</li>
+      <li>「积分购买」来源已确认<strong>并非一番赏专属</strong>，而是前台积分商城所有商品类别通用的购买方式；真正判断「这是一番赏商品」的字段是商品配置里的「商品类型＝Ichiban Kuji」，而非「来源」字段</li>
     </ul>
   </div>
 </div>
