@@ -632,7 +632,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
         <!-- 新增奖级按鈕 -->
         <div class="add-tier-wrap">
           <button class="btn-add-tier" onclick="addTier()">＋ 新增奖级</button>
-          <span class="tier-count-info" id="tierCountInfo">目前 1 个奖级（最多 G赏，共 7 级）</span>
+          <span class="tier-count-info" id="tierCountInfo">目前 1 个奖级（最多 9 级：S赏、A赏～H赏）</span>
         </div>
 
         <!-- 獎級列表 -->
@@ -696,13 +696,13 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
 </div>
 
 <script>
-const TIER_NAMES = ['A赏','B赏','C赏','D赏','E赏','F赏','G赏'];
+const TIER_NAMES = ['S赏','A赏','B赏','C赏','D赏','E赏','F赏','G赏','H赏'];
 let tiers = []; // [{id, name, qty}]
 let nextId = 0;
 
 function addTier() {
-  if (tiers.length >= 8) {
-    alert('最多可新增至 G赏，共 7 个奖级');
+  if (tiers.length >= 9) {
+    alert('最多可新增至 9 个奖级（S赏、A赏～H赏）');
     return;
   }
   const id = nextId++;
@@ -716,8 +716,12 @@ function removeTier(id) {
     alert('至少需要保留 1 个奖级');
     return;
   }
-  tiers = tiers.filter(t => t.id !== id);
-  // re-assign default names only for un-customized
+  const idx = tiers.findIndex(t => t.id === id);
+  tiers.splice(idx, 1);
+  // 被删除位置「之后」的奖级依新顺位自动递补重新命名；之前的奖级名称不受影响
+  for (let i = idx; i < tiers.length; i++) {
+    tiers[i].name = TIER_NAMES[i];
+  }
   renderTiers();
 }
 
@@ -928,9 +932,9 @@ function updateTotal() {
 }
 
 function updateTierInfo() {
-  const remaining = 8 - tiers.length;
+  const remaining = 9 - tiers.length;
   document.getElementById('tierCountInfo').textContent =
-    `目前 ${tiers.length} 个奖级（最多 H赏，共 8 级，还可新增 ${remaining} 个）`;
+    `目前 ${tiers.length} 个奖级（最多 9 级：S赏、A赏～H赏，还可新增 ${remaining} 个）`;
 }
 
 let freespinRowId = 0;

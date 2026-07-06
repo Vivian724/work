@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>一番赏 H5</title>
+<title>ICHIBAN KUJI H5</title>
 <style>
 /* ============================================================
    日系·和纸风一番赏 H5  ── A 单列 / B 双列，两台并排同时显示
@@ -60,6 +60,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .seg button.on{background:var(--sumi);color:#fff;border-color:var(--sumi)}
 .seg button.all{border-color:var(--kin);color:var(--kin-d)}
 .seg button.all.on{background:linear-gradient(135deg,#C9A24B,#9c7a2c);color:#fff;border-color:var(--kin-d)}
+.seg button:disabled{background:#f1ede6;color:#b8ada0;border-color:#e4ded4;cursor:not-allowed}
 .ticket-btn{width:100%;border:none;cursor:pointer;display:flex;align-items:stretch;background:var(--shu);color:#fff;border-radius:7px;overflow:hidden;box-shadow:0 2px 0 var(--shu-d);padding:0}
 .ticket-btn:active{transform:translateY(1px);box-shadow:0 1px 0 var(--shu-d)}
 .ticket-btn .stub{flex:0 0 84px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 6px;border-right:2px dashed rgba(255,255,255,.55);background:rgba(0,0,0,.08)}
@@ -123,7 +124,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .ic{border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 
 /* B 版双列 */
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}
 .gfeat{grid-column:1/-1;display:flex;gap:13px;align-items:center;background:linear-gradient(135deg,#FBF3DC,#F3E4B8);border:1.5px solid var(--kin);border-radius:9px;padding:12px;position:relative;overflow:hidden;box-shadow:0 3px 14px rgba(176,138,60,.3);margin-bottom:2px}
 .gfeat::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 90% 8%,rgba(255,240,200,.6),transparent 40%)}
 .gfeat .g-img{background:#fff;border:1px solid var(--line-2);border-radius:9px;padding:6px;box-shadow:0 1px 5px rgba(0,0,0,.07);flex-shrink:0;z-index:2}
@@ -132,11 +133,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .gfeat .info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;z-index:2}
 .gfeat .f-name{font-size:17px;font-weight:700;line-height:1.2}
 .gfeat .f-type{font-size:11px;color:var(--ai);border:1px solid var(--ai);border-radius:3px;padding:0 6px;align-self:flex-start}
+.gfeat .f-desc{font-size:11px;color:var(--sumi-2);line-height:1.35}
 .gfeat .f-note{font-size:11px;color:var(--kin-d)}
 .gfeat .f-zan{font-size:11px;color:var(--sumi-2);margin-top:3px;padding-top:7px;border-top:1px dashed rgba(176,138,60,.45)}
 .gfeat .f-zan b{font-family:"Songti SC",serif;font-size:20px;color:var(--shu)}
 .gfeat .r-ribbon{position:absolute;top:0;right:0;background:linear-gradient(135deg,#D9B45A,#9c7a2c);color:#fff;font-size:10px;letter-spacing:1px;padding:3px 11px;border-radius:0 0 0 8px;z-index:3}
-.gcard{background:var(--fuda);border:1px solid var(--line-2);border-radius:9px;padding:8px;position:relative;overflow:hidden}
+.gcard{background:var(--fuda);border:1px solid var(--line-2);border-radius:9px;padding:8px;position:relative;overflow:hidden;height:100%;display:flex;flex-direction:column}
 .gcard.sold{opacity:.55;filter:grayscale(.4)}
 .gcard.hi{border:1.5px solid var(--kin);background:linear-gradient(160deg,#FDF6E1,#F4E6BD);box-shadow:0 3px 12px rgba(176,138,60,.28)}
 .gcard.hi::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 92% 6%,rgba(255,242,205,.75),transparent 38%)}
@@ -152,7 +154,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .gcard .g-img .ph,.gcard .g-img .ic{width:92px;height:92px}
 .gcard .g-img .ic span{font-size:38px}
 .gcard .g-name{font-size:12.5px;font-weight:600;line-height:1.3;min-height:32px}
-.gcard .g-type{font-size:10px;color:var(--ai);margin-top:2px}
+.gcard .g-type{font-size:10px;color:var(--ai);margin-top:auto;padding-top:2px}
+.gcard .g-desc{font-size:10px;color:var(--sumi-2);margin-top:2px;line-height:1.3}
 .gcard .uptag{font-size:9px;color:#fff;background:linear-gradient(135deg,#D9B45A,#9c7a2c);border:none;border-radius:3px;padding:1px 6px;position:relative;z-index:2}
 
 .sold-chip{font-family:"Songti SC",serif;color:var(--shu);border:1.5px solid var(--shu);border-radius:4px;font-size:11px;padding:1px 7px;transform:rotate(-5deg)}
@@ -206,63 +209,70 @@ const ART={
   physical:{kind:'photo'},
 };
 const TIERS=[
-  {sho:'A',name:'招财猫 大号公仔',type:'实物',art:'physical',total:2,left:1,hi:true},
-  {sho:'B',name:'5,000（流水x3）',type:'彩金',art:'bonus',total:5,left:2,hi:true},
-  {sho:'C',name:'免费旋转 ×30',type:'免费旋转',art:'freespin',total:8,left:4,mid:true},
-  {sho:'D',name:'免费投注 ₱50',type:'免费投注',art:'freebet',total:10,left:5,mid:true},
-  {sho:'E',name:'旋转券 ×10',type:'旋转券',art:'spintok',total:12,left:6},
-  {sho:'F',name:'1,000',type:'积分',art:'point',total:15,left:8},
-  {sho:'G',name:'道具卡 · 加倍卡',type:'道具卡',art:'tool',total:20,left:11},
-  {sho:'H',name:'1,000（流水x1）',type:'彩金',art:'bonus',total:27,left:12},
+  {sho:'S',name:'招财猫 铂金典藏摆件',type:'Physical Item',desc:'限量镀铂工艺，附收藏编号证书，全球限量999台',art:'physical',total:1,left:1,hi:true},
+  {sho:'A',name:'招财猫 大号公仔',type:'Physical Item',desc:'陶瓷材质，高约30cm，附赠专属收藏证书',art:'physical',total:2,left:1,hi:true},
+  {sho:'B',name:'5,000.00（流水x3）',type:'E-Credit',art:'bonus',total:5,left:2,mid:true},
+  {sho:'C',name:'免费旋转 ×30',type:'Free Spins',art:'freespin',total:8,left:4,mid:true},
+  {sho:'D',name:'免费投注 ₱50',type:'Free Bet',art:'freebet',total:10,left:5},
+  {sho:'E',name:'旋转券 ×10',type:'Free Spins',art:'spintok',total:12,left:6},
+  {sho:'F',name:'1,000',type:'Points',art:'point',total:15,left:8},
+  {sho:'G',name:'道具卡 · 加倍卡',type:'Voucher',art:'tool',total:20,left:11},
+  {sho:'H',name:'1,000.00（流水x1）',type:'E-Credit',art:'bonus',total:27,left:12},
 ];
-const LAST={sho:'楽',name:'招财猫 黄金开运摆件',type:'实物',art:'physical',total:1,left:1};
+const LAST={sho:'楽',name:'招财猫 黄金开运摆件',type:'Physical Item',desc:'限量典藏版，镀金工艺，附精美礼盒包装',art:'physical',total:1,left:1};
 const COST=95;
 
 function artImg(key){const a=ART[key];return a.kind==='photo'
-  ?`<div class="ph">实物图</div>`
+  ?`<div class="ph">Item Photo</div>`
   :`<div class="ic" style="background:${a.bg}"><span style="color:${a.fg}">${a.glyph}</span></div>`;}
 function badge(t,isLast,gold){return isLast
-  ?`<span class="seal2 gold serif"><span class="a">楽</span><span class="s">LAST</span></span>`
-  :`<span class="seal2 ${gold?'gold':''} serif"><span class="a">${t.sho}</span><span class="s">赏</span></span>`;}
+  ?`<span class="seal2 gold serif"><span class="s">LAST</span></span>`
+  :`<span class="seal2 ${gold?'gold':''} serif"><span class="a">${t.sho}</span><span class="s">Tier</span></span>`;}
 function revealBadge(t,isLast){return isLast
-  ?`<span class="rseal gold serif"><span class="a">楽</span><span class="s">LAST</span></span>`
-  :`<span class="rseal serif"><span class="a">${t.sho}</span><span class="s">赏</span></span>`;}
+  ?`<span class="rseal gold serif"><span class="s">LAST</span></span>`
+  :`<span class="rseal serif"><span class="a">${t.sho}</span><span class="s">Tier</span></span>`;}
 
 function deviceHTML(){return `
-  <div class="topbar"><div class="icon-btn">‹</div><div class="title serif">一番赏</div></div>
+  <div class="topbar"><div class="icon-btn">‹</div><div class="title serif">ICHIBAN KUJI</div></div>
   <div class="banner">
-    <div class="kv"><div class="kv-ph">主视觉 KV 图<br><small>建议 1080×600</small></div>
-      <div class="scrim"></div><div class="nobori serif">一番赏</div>
+    <div class="kv"><div class="kv-ph">Main KV Banner</div>
+      <div class="scrim"></div><div class="nobori serif">ICHIBAN KUJI</div>
       <div class="kv-text"><div class="kv-title serif">招财猫 开运赏</div></div>
       <button class="kv-rules" onclick="var d=this.closest('.device');d.querySelector('.rules-ov').classList.add('show');d.scrollIntoView({behavior:'smooth',block:'start'})">📋 Rules</button></div>
     <div class="noren-edge"></div>
-    <div class="b-stock"><div class="r1"><span>剩 <b class="js-zan">49</b> / 100 张</span></div>
+    <div class="b-stock"><div class="r1"><span>Remaining <b class="js-zan">49</b>/100 Draws</span></div>
       <div class="stock-bar"><div class="stock-fill js-fill" style="width:49%"></div></div></div>
   </div>
   <div class="draw-zone">
     <div class="seg js-seg">
-      <button class="on" data-n="1">单张</button><button data-n="5">五连<span class="x"> ×5</span></button>
-      <button data-n="10">十连<span class="x"> ×10</span></button><button class="all" data-n="all">全包</button></div>
-    <button class="ticket-btn js-tear"><div class="stub"><span class="s1">ICHIBAN</span><span class="s2">券</span></div>
-      <div class="main"><span class="t1">▼ 沿虚线撕开 ▼</span><span class="t2">撕券抽赏 <small class="js-cost">95 积分</small></span></div></button>
-    <div class="dz-foot"><span>每张 95 积分 · 必中一赏</span><span class="mine">积分 <b class="js-pts2">316,149</b></span></div>
+      <button class="on" data-n="1">1 Draw</button><button data-n="5">5 Draws</button>
+      <button data-n="10">10 Draws</button><button class="all" data-n="all">Draw All</button></div>
+    <button class="ticket-btn js-tear"><div class="stub"><span class="s1">ICHIBAN</span></div>
+      <div class="main"><span class="t2">Draw Now <small class="js-cost">95 Points</small></span></div></button>
+    <div class="dz-foot"><span>95 Points per Ticket. Every Ticket Wins a Prize.</span><span class="mine">Points <b class="js-pts2">316,149</b></span></div>
   </div>
-  <div class="pool"><div class="noren"><div class="band serif">奖品一览</div></div><div class="js-pool"></div></div>
+  <div class="pool"><div class="noren"><div class="band serif">All Prizes</div></div><div class="js-pool"></div></div>
   <div class="rules-ov"><div class="rules-box">
-    <div class="rules-hd"><div class="rules-htitle serif">活动规则</div>
+    <div class="rules-hd"><div class="rules-htitle serif">Event Rules</div>
       <div class="icon-btn" onclick="this.closest('.rules-ov').classList.remove('show')">✕</div></div>
     <div class="rules-bd">
-      <div class="rules-row"><div class="rules-dot">1</div><div class="rules-txt">每张抽券售价 <b>95 积分</b>，必中一赏，抽奖结果当场揭晓。</div></div>
-      <div class="rules-row"><div class="rules-dot">2</div><div class="rules-txt"><b>Last赏</b>（压轴大奖）将在最后一张券被抽出时自动触发。</div></div>
-      <div class="rules-row"><div class="rules-dot">3</div><div class="rules-txt">各赏位数量有限，售罄后不再补充，请尽早参与。</div></div>
-      <div class="rules-row"><div class="rules-dot">4</div><div class="rules-txt">奖品以实际派发为准，实物奖品将另行通知配送事宜。</div></div>
-      <div class="rules-row"><div class="rules-dot">5</div><div class="rules-txt">积分余额不足时无法购券，请确认余额后再操作。</div></div>
+      <div class="rules-row"><div class="rules-dot">1</div><div class="rules-txt">Each ticket costs <b>95 Points</b> and guarantees a prize; results are revealed instantly.</div></div>
+      <div class="rules-row"><div class="rules-dot">2</div><div class="rules-txt">The <b>Last Prize</b> (grand finale prize) is automatically awarded to whoever draws the very last ticket.</div></div>
+      <div class="rules-row"><div class="rules-dot">3</div><div class="rules-txt">Each prize tier has limited stock and will not be restocked once sold out — join early.</div></div>
+      <div class="rules-row"><div class="rules-dot">4</div><div class="rules-txt">Prizes are subject to actual distribution; physical prizes will be arranged for delivery separately.</div></div>
+      <div class="rules-row"><div class="rules-dot">5</div><div class="rules-txt">Tickets cannot be purchased if your Points balance is insufficient — please check your balance before proceeding.</div></div>
     </div>
   </div></div>
   <div class="overlay js-overlay"><div class="result">
-    <div class="result-head serif js-rhead">开奖结果</div>
+    <div class="result-head serif js-rhead">Draw Results</div>
     <div class="result-body js-rbody"></div>
-    <div class="result-foot"><button class="btn-ok js-ok">收下</button></div></div></div>`;}
+    <div class="result-foot"><button class="btn-ok js-ok">Claim</button></div></div></div>
+  <div class="overlay js-soldout-overlay"><div class="result">
+    <div class="result-head serif">Sorry, All Prizes Are Gone</div>
+    <div class="result-body" style="text-align:center;padding:28px 10px 8px;color:#5c4a38;font-size:14.5px;line-height:1.9;">
+      All Ichiban Kuji prizes for this event have been claimed.<br>Thank you for playing!<br>Check out more great items in the Points Mall.
+    </div>
+    <div class="result-foot"><button class="btn-ok js-soldout-ok">Got It</button></div></div></div>`;}
 
 function createApp(rootId){
   const root=document.getElementById(rootId);
@@ -276,46 +286,69 @@ function createApp(rootId){
   const grand=()=>tiers.reduce((s,t)=>s+t.total,0)+last.total;
   const curN=()=>drawN==='all'?normalLeft():drawN;
 
-  function featB(t,ribbon,note){return `<div class="gfeat"><div class="r-ribbon serif">${ribbon}</div>
+  function featB(t,ribbon,note){const isPhysical=t.art==='physical';
+    return `<div class="gfeat"><div class="r-ribbon serif">${ribbon}</div>
     <div class="g-img">${artImg(t.art)}</div><div class="info">${badge(t,true)}
-      <div class="f-name serif">Last赏 · ${t.name}</div><span class="f-type">${t.type}</span>
-      <div class="f-note">${note}</div><div class="f-zan">剩 <b>${t.left}</b> / ${t.total} 张</div></div></div>`;}
+      <div class="f-name serif">Last Prize · ${t.name}</div>${isPhysical
+        ?`<div class="f-desc">${t.desc}</div><span class="f-type">${t.type}</span>`
+        :`<span class="f-type">${t.type}</span>`}
+      <div class="f-note">${note}</div><div class="f-zan">Remaining <b>${t.left}</b>/${t.total} Draws</div></div></div>`;}
   function cardB(t,{hi,mid}={}){
     const sold=t.left<=0, low=t.left>0&&t.left/t.total<=.34;
+    const isPhysical=t.art==='physical';
     return `<div class="gcard ${hi?'hi':''} ${mid?'mid':''} ${sold?'sold':''}"><div class="g-top">${badge(t,false,hi)}
-      ${hi?'<span class="uptag">★ 上位赏</span>':''}${mid?'<span class="midtag">人气</span>':''}<div class="g-zan">${sold?'<span class="sold-chip serif">售罄</span>':
-        `<span class="lbl">剩</span><span class="num ${low?'low':''}">${t.left}</span><span class="tot">/${t.total}</span>`}</div></div>
-      <div class="g-img">${artImg(t.art)}</div><div class="g-name">${t.name}</div><div class="g-type">${t.type}</div></div>`;
+      ${hi?'<span class="uptag">★ Top Tier</span>':''}${mid?'<span class="midtag">Popular</span>':''}<div class="g-zan">${sold?'<span class="sold-chip serif">Sold Out</span>':
+        `<span class="lbl">Remaining</span><span class="num ${low?'low':''}">${t.left}</span><span class="tot">/${t.total}</span>`}</div></div>
+      <div class="g-img">${artImg(t.art)}</div><div class="g-name">${t.name}</div>${isPhysical
+        ?`<div class="g-desc">${t.desc}</div><div class="g-type">${t.type}</div>`
+        :`<div class="g-type">${t.type}</div>`}</div>`;
   }
   function renderPool(){
-    $('.js-pool').innerHTML=`<div class="grid">${featB(last,'压轴大奖','抽走最后一张券者自动获得')}
+    $('.js-pool').innerHTML=`<div class="grid">${featB(last,'Final Prize','Awarded to the Player Who Draws the Last Ticket')}
       ${tiers.map(t=>cardB(t,{hi:t.hi,mid:t.mid})).join('')}</div>`;
     updateStock();
   }
+  function updateSegButtons(){
+    const left=normalLeft();
+    const seg=$('.js-seg');
+    seg.querySelectorAll('button').forEach(b=>{
+      const n=b.dataset.n;
+      const disable=(n==='5'&&left<5)||(n==='10'&&left<10);
+      b.disabled=disable;
+    });
+    const curBtn=seg.querySelector(`button[data-n="${drawN}"]`);
+    if(curBtn&&curBtn.disabled){
+      drawN=1;
+      seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+      seg.querySelector('button[data-n="1"]').classList.add('on');
+    }
+  }
+  function showSoldOutAlert(){$('.js-soldout-overlay').classList.add('show');}
   function updateStock(){
+    updateSegButtons();
     const left=totalLeft(),tot=grand();
     $('.js-zan').textContent=left;
     $('.js-fill').style.width=(left/tot*100)+'%';
     $('.js-pts2').textContent=points.toLocaleString();
-    $('.js-cost').textContent=(COST*curN()).toLocaleString()+' 积分';
+    $('.js-cost').textContent=(COST*curN()).toLocaleString()+' Points';
   }
   function showResult(results,lastTriggered){
-    $('.js-rhead').textContent='抽出 '+results.length+' 张';
-    let html=lastTriggered?'<div class="last-hit serif">★ 恭喜抽中 Last赏 ★</div>':'';
+    $('.js-rhead').textContent='Draws '+results.length+' Tickets';
+    let html=lastTriggered?'<div class="last-hit serif">★ Congratulations! You Won the Last Prize! ★</div>':'';
     if(results.length>12){
       const agg={};
       results.forEach(r=>{const k=r.isLast?'L':r.tier.sho;(agg[k]=agg[k]||{tier:r.tier,isLast:r.isLast,n:0}).n++;});
       const aggList=Object.values(agg).sort((a,b)=>a.isLast?-1:b.isLast?1:0);
       aggList.forEach(g=>{html+=`<div class="sum-row">
-        <div class="nm">${badge(g.tier,g.isLast)} ${g.isLast?'Last赏 · ':''}${g.tier.name}</div><div class="cnt">×${g.n}</div></div>`;});
+        <div class="nm">${badge(g.tier,g.isLast)} ${g.isLast?'Last Prize · ':''}${g.tier.name}</div><div class="cnt">×${g.n}</div></div>`;});
       $('.js-rbody').innerHTML=html;
     }else{
       html+='<div class="rk-grid">';
       results.forEach((r,i)=>{const t=r.tier;
         html+=`<div class="rk" data-i="${i}"><div class="reveal">${revealBadge(t,r.isLast)}
-          <div class="r-txt"><div class="nm">${r.isLast?'Last赏·':''}${t.name}</div><div class="ty">${t.type}</div></div>
+          <div class="r-txt"><div class="nm">${r.isLast?'Last Prize · ':''}${t.name}</div><div class="ty">${t.type}</div></div>
           </div>
-          <div class="cover serif">一番赏 <span class="arrow">撕▶</span></div></div>`;});
+          <div class="cover serif">OK ICHIBAN <span class="arrow">Draw ▶</span></div></div>`;});
       html+='</div>';
       $('.js-rbody').innerHTML=html;
       results.forEach((r,i)=>setTimeout(()=>{const el=$(`.rk[data-i="${i}"]`);if(el)el.classList.add('torn');},300+i*280));
@@ -326,7 +359,7 @@ function createApp(rootId){
   function draw(){
     if(totalLeft()<=0)return;
     const want=Math.min(curN(),normalLeft()); if(want<=0)return;
-    const cost=COST*want; if(points<cost){alert('积分不足');return;}
+    const cost=COST*want; if(points<cost){alert('Insufficient Points');return;}
     let pool=[]; tiers.forEach((t,i)=>{for(let k=0;k<t.left;k++)pool.push(i);});
     const results=[]; let lastTriggered=false;
     for(let d=0;d<want;d++){
@@ -344,9 +377,44 @@ function createApp(rootId){
     b.classList.add('on'); drawN=b.dataset.n==='all'?'all':parseInt(b.dataset.n); updateStock();});
   $('.js-tear').addEventListener('click',draw);
   $('.js-ok').addEventListener('click',()=>{$('.js-overlay').classList.remove('show');
-    if(totalLeft()<=0){const b=$('.js-tear');b.disabled=true;b.querySelector('.main').innerHTML='<span class="t2">已全部抽完</span>';}});
+    if(totalLeft()<=0){const b=$('.js-tear');b.disabled=true;b.querySelector('.main').innerHTML='<span class="t2">Sold Out</span>';
+      showSoldOutAlert();}});
+  $('.js-soldout-ok').addEventListener('click',()=>{$('.js-soldout-overlay').classList.remove('show');});
 
   renderPool();
+
+  /* ── spec-doc deep link：透过网址参数直接呈现特定画面状态，方便规格书用 iframe 嵌入示例 ──
+     ?soldout=1                 全部售罄状态
+     ?modal=rules               活动规则弹窗
+     ?modal=result-single       开奖结果－逐张揭晓模式示例（2张，未含Last赏）
+     ?modal=result-last         开奖结果－逐张揭晓模式示例，含Last赏（庆祝横幅）
+     ?modal=result-agg          开奖结果－汇总列表模式示例（>12张）
+     ?modal=soldout-alert       已抽完提醒弹窗（单独示例，不改变背后卡片库存）
+     以上参数只影响画面初始状态，不影响一般无参数时的正常使用流程 */
+  const qp = new URLSearchParams(location.search);
+  if (qp.get('soldout') === '1') {
+    tiers.forEach(t => t.left = 0); last.left = 0;
+    renderPool();
+    const b = $('.js-tear'); b.disabled = true; b.querySelector('.main').innerHTML = '<span class="t2">Sold Out</span>';
+    showSoldOutAlert();
+  }
+  const modal = qp.get('modal');
+  if (modal === 'rules') {
+    $('.rules-ov').classList.add('show');
+  } else if (modal === 'soldout-alert') {
+    showSoldOutAlert();
+  } else if (modal === 'result-single') {
+    showResult([{ tier: tiers[1] }, { tier: tiers[3] }], false);
+  } else if (modal === 'result-last') {
+    showResult([{ tier: tiers[1] }, { tier: last, isLast: true }], true);
+  } else if (modal === 'result-agg') {
+    const fake = [];
+    for (let i = 0; i < 8; i++) fake.push({ tier: tiers[7] });
+    for (let i = 0; i < 4; i++) fake.push({ tier: tiers[4] });
+    fake.push({ tier: tiers[3] });
+    fake.push({ tier: last, isLast: true });
+    showResult(fake, true);
+  }
 }
 
 createApp('dev-B');
