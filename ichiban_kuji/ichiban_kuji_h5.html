@@ -70,6 +70,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .ticket-btn .main .t1{font-size:11px;letter-spacing:3px;opacity:.9}
 .ticket-btn .main .t2{font-family:"Songti SC",serif;font-size:19px;font-weight:700;letter-spacing:2px;margin-top:3px}
 .ticket-btn .main .t2 small{font-size:12px;font-weight:400;opacity:.9}
+.ticket-btn .main .t2.state{font-size:15px;letter-spacing:.5px;white-space:nowrap}
 .ticket-btn[disabled]{background:#b3a69a;box-shadow:0 2px 0 #968a7d;cursor:not-allowed}
 .dz-foot{display:flex;justify-content:space-between;margin-top:9px;font-size:11px;color:var(--sumi-2)}
 .dz-foot .mine b{color:var(--sumi);font-size:12px}
@@ -141,7 +142,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .gfeat .f-zan b{font-family:"Songti SC",serif;font-size:20px;color:var(--shu)}
 .gfeat .r-ribbon{position:absolute;top:0;right:0;background:linear-gradient(135deg,#D9B45A,#9c7a2c);color:#fff;font-size:10px;letter-spacing:1px;padding:3px 11px;border-radius:0 0 0 8px;z-index:3}
 .gcard{background:var(--fuda);border:1px solid var(--line-2);border-radius:9px;padding:8px;position:relative;overflow:hidden;height:100%;display:flex;flex-direction:column}
-.gcard.sold{opacity:.55;filter:grayscale(.4)}
+.gcard.sold{filter:grayscale(.35)}
+.gcard.sold::before{content:'';position:absolute;inset:0;background:rgba(238,231,219,.7);z-index:4;border-radius:inherit;pointer-events:auto}
 .gcard.hi{border:1.5px solid var(--kin);background:linear-gradient(160deg,#FDF6E1,#F4E6BD);box-shadow:0 3px 12px rgba(176,138,60,.28)}
 .gcard.hi::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 92% 6%,rgba(255,242,205,.75),transparent 38%)}
 .gcard.mid{border:1px solid #E3CF9A;background:#FBF7EC}
@@ -161,7 +163,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .gcard .g-desc{font-size:10px;color:var(--sumi-2);margin-top:2px;line-height:1.3}
 .gcard .uptag{font-size:9px;color:#fff;background:linear-gradient(135deg,#D9B45A,#9c7a2c);border:none;border-radius:3px;padding:1px 6px;position:relative;z-index:2;white-space:nowrap}
 
-.sold-chip{font-family:"Songti SC",serif;color:var(--shu);border:1.5px solid var(--shu);border-radius:4px;font-size:11px;padding:1px 7px;transform:rotate(-5deg)}
 
 /* 弹窗（置中）*/
 .overlay{position:absolute;inset:0;background:rgba(42,39,35,.78);display:none;align-items:flex-start;justify-content:center;padding:430px 24px 8px;z-index:50}
@@ -214,13 +215,13 @@ const ART={
 const TIERS=[
   {sho:'S',name:'招财猫 铂金典藏摆件',type:'Physical Item',desc:'限量镀铂工艺，附收藏编号证书，全球限量999台',art:'physical',total:1,left:1,hi:true},
   {sho:'A',name:'招财猫 大号公仔',type:'Physical Item',desc:'陶瓷材质，高约30cm，附赠专属收藏证书',art:'physical',total:2,left:1,hi:true},
-  {sho:'B',name:'5,000.00（流水x3）',type:'E-Credit',art:'bonus',total:5,left:2,mid:true},
-  {sho:'C',name:'免费旋转 ×30',type:'Free Spins',art:'freespin',total:8,left:4,mid:true},
-  {sho:'D',name:'免费投注 ₱50',type:'Free Bet',art:'freebet',total:10,left:5},
+  {sho:'B',name:'5,000.00',type:'E-Credit',art:'bonus',total:5,left:2,mid:true},
+  {sho:'C',name:'J Mania Triple Jam',type:'Free Spins',art:'freespin',total:8,left:4,mid:true},
+  {sho:'D',name:'MiniG Free Bet',type:'Free Bet',art:'freebet',total:10,left:5},
   {sho:'E',name:'旋转券 ×10',type:'Free Spins',art:'spintok',total:12,left:6},
   {sho:'F',name:'1,000',type:'Points',art:'point',total:15,left:8},
-  {sho:'G',name:'道具卡 · 加倍卡',type:'Voucher',art:'tool',total:20,left:11},
-  {sho:'H',name:'1,000.00（流水x1）',type:'E-Credit',art:'bonus',total:27,left:12},
+  {sho:'G',name:'加倍卡',type:'Voucher',art:'tool',total:20,left:11},
+  {sho:'H',name:'1,000.00',type:'E-Credit',art:'bonus',total:27,left:12},
 ];
 const LAST={sho:'楽',name:'招财猫 黄金开运摆件',type:'Physical Item',desc:'限量典藏版，镀金工艺，附精美礼盒包装',art:'physical',total:1,left:1};
 const COST=95;
@@ -236,11 +237,11 @@ function revealBadge(t,isLast){return isLast
   :`<span class="rseal serif"><span class="a">${t.sho}</span><span class="s">Tier</span></span>`;}
 
 function deviceHTML(){return `
-  <div class="topbar"><div class="icon-btn">‹</div><div class="title serif">ICHIBAN KUJI</div></div>
+  <div class="topbar"><div class="icon-btn">‹</div><div class="title serif"></div></div>
   <div class="banner">
-    <div class="kv"><div class="kv-ph">Main KV Banner</div>
-      <div class="scrim"></div><div class="nobori serif">ICHIBAN KUJI</div>
-      <div class="kv-text"><div class="kv-title serif">招财猫 开运赏</div></div>
+    <div class="kv"><div class="kv-ph"></div>
+      <div class="scrim"></div>
+      <div class="kv-text"><div class="kv-title serif">ICHIBAN Lucky Draw</div></div>
       <button class="kv-rules" onclick="var d=this.closest('.device');d.querySelector('.rules-ov').classList.add('show');d.scrollIntoView({behavior:'smooth',block:'start'})">📋 Rules</button></div>
     <div class="noren-edge"></div>
     <div class="b-stock"><div class="r1"><span>Remaining <b class="js-zan">49</b>/100 Draws</span></div>
@@ -282,9 +283,9 @@ function deviceHTML(){return `
     <div class="result-body js-rbody"></div>
     <div class="result-foot"><button class="btn-ok js-ok">Claim</button></div></div></div>
   <div class="overlay js-soldout-overlay"><div class="result">
-    <div class="result-head serif">Sorry, All Prizes Are Gone</div>
+    <div class="result-head serif">All Prizes Drawn</div>
     <div class="result-body" style="text-align:center;padding:28px 10px 8px;color:#5c4a38;font-size:14.5px;line-height:1.9;">
-      All Ichiban Kuji prizes for this event have been claimed.<br>Thank you for playing!<br>Check out more great items in the Points Mall.
+      All prizes in Ichiban Lucky Draw have been drawn. Explore more rewards in the Points Mall.
     </div>
     <div class="result-foot"><button class="btn-ok js-soldout-ok">Got It</button></div></div></div>`;}
 
@@ -311,8 +312,7 @@ function createApp(rootId){
     const sold=t.left<=0, low=t.left>0&&t.left/t.total<=.34;
     const isPhysical=t.art==='physical';
     return `<div class="gcard ${hi?'hi':''} ${mid?'mid':''} ${sold?'sold':''}"><div class="g-top">${badge(t,false,hi)}
-      <div class="g-zan">${sold?'<span class="sold-chip serif">Sold Out</span>':
-        `<span class="lbl">Remaining</span><span class="num ${low?'low':''}">${t.left}</span><span class="tot">/${t.total}</span>`}</div></div>
+      <div class="g-zan"><span class="lbl">Remaining</span><span class="num ${low?'low':''}">${t.left}</span><span class="tot">/${t.total}</span></div></div>
       <div class="g-tagrow">${hi?'<span class="uptag">★ Top Tier</span>':mid?'<span class="midtag">Popular</span>':''}</div>
       <div class="g-img">${artImg(t.art)}</div><div class="g-name">${t.name}</div>${isPhysical
         ?`<div class="g-desc">${t.desc}</div><div class="g-type">${t.type}</div>`
@@ -325,12 +325,14 @@ function createApp(rootId){
   }
   function updateSegButtons(){
     const left=normalLeft();
+    const soldOut=totalLeft()<=0;
     const seg=$('.js-seg');
     seg.querySelectorAll('button').forEach(b=>{
       const n=b.dataset.n;
-      const disable=(n==='5'&&left<5)||(n==='10'&&left<10);
+      const disable=soldOut||(n==='5'&&left<5)||(n==='10'&&left<10);
       b.disabled=disable;
     });
+    if(soldOut)return;
     const curBtn=seg.querySelector(`button[data-n="${drawN}"]`);
     if(curBtn&&curBtn.disabled){
       drawN=1;
@@ -339,18 +341,31 @@ function createApp(rootId){
     }
   }
   function showSoldOutAlert(){$('.js-soldout-overlay').classList.add('show');}
+  function refreshTearButton(){
+    const b=$('.js-tear');
+    if(totalLeft()<=0){
+      b.disabled=true; b.querySelector('.main').innerHTML='<span class="t2 state">Sold Out</span>';
+      return;
+    }
+    const cost=COST*curN();
+    if(points<cost){
+      b.disabled=true; b.querySelector('.main').innerHTML='<span class="t2 state">Insufficient Balance</span>';
+    }else{
+      b.disabled=false; b.querySelector('.main').innerHTML=`<span class="t2">Draw Now <small class="js-cost">${cost.toLocaleString()} Points</small></span>`;
+    }
+  }
   function updateStock(){
     updateSegButtons();
     const left=totalLeft(),tot=grand();
     $('.js-zan').textContent=left;
     $('.js-fill').style.width=(left/tot*100)+'%';
     $('.js-pts2').textContent=points.toLocaleString();
-    $('.js-cost').textContent=(COST*curN()).toLocaleString()+' Points';
+    refreshTearButton();
   }
-  function showResult(results,lastTriggered){
+  function showResult(results,lastTriggered,forceAgg){
     $('.js-rhead').textContent='Draws '+results.length+' Tickets';
     let html=lastTriggered?'<div class="last-hit serif">★ Congratulations! You Won the Last Prize! ★</div>':'';
-    if(results.length>12){
+    if(forceAgg){
       const agg={};
       results.forEach(r=>{const k=r.isLast?'L':r.tier.sho;(agg[k]=agg[k]||{tier:r.tier,isLast:r.isLast,n:0}).n++;});
       const aggList=Object.values(agg).sort((a,b)=>a.isLast?-1:b.isLast?1:0);
@@ -374,7 +389,8 @@ function createApp(rootId){
   function draw(){
     if(totalLeft()<=0)return;
     const want=Math.min(curN(),normalLeft()); if(want<=0)return;
-    const cost=COST*want; if(points<cost){alert('Insufficient Points');return;}
+    const cost=COST*want; if(points<cost){alert('Insufficient Balance');return;}
+    $('.js-tear').disabled=true; // 防连点：送出后立即锁住，直到玩家点 Claim 关闭结果弹窗才解锁
     let pool=[]; tiers.forEach((t,i)=>{for(let k=0;k<t.left;k++)pool.push(i);});
     const results=[]; let lastTriggered=false;
     for(let d=0;d<want;d++){
@@ -384,7 +400,7 @@ function createApp(rootId){
         if(pool.length===0&&last.left>0){last.left--;lastTriggered=true;results.push({tier:last,isLast:true});}
       }
     }
-    points-=cost; renderPool(); showResult(results,lastTriggered);
+    points-=cost; renderPool(); showResult(results,lastTriggered,drawN==='all');
   }
 
   $('.js-seg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
@@ -392,26 +408,33 @@ function createApp(rootId){
     b.classList.add('on'); drawN=b.dataset.n==='all'?'all':parseInt(b.dataset.n); updateStock();});
   $('.js-tear').addEventListener('click',draw);
   $('.js-ok').addEventListener('click',()=>{$('.js-overlay').classList.remove('show');
-    if(totalLeft()<=0){const b=$('.js-tear');b.disabled=true;b.querySelector('.main').innerHTML='<span class="t2">Sold Out</span>';
-      showSoldOutAlert();}});
+    refreshTearButton();
+    if(totalLeft()<=0)showSoldOutAlert();});
   $('.js-soldout-ok').addEventListener('click',()=>{$('.js-soldout-overlay').classList.remove('show');});
 
   renderPool();
 
   /* ── spec-doc deep link：透过网址参数直接呈现特定画面状态，方便规格书用 iframe 嵌入示例 ──
      ?soldout=1                 全部售罄状态
+     ?insufficient=1            积分不足状态（撕券按钮显示 Insufficient Balance，同售罄一样反灰停用）
      ?modal=rules               活动规则弹窗
      ?modal=result-single       开奖结果－逐张揭晓模式示例（2张，未含Last赏）
      ?modal=result-last         开奖结果－逐张揭晓模式示例，含Last赏（庆祝横幅）
-     ?modal=result-agg          开奖结果－汇总列表模式示例（>12张）
+     ?modal=result-agg          开奖结果－汇总列表模式示例（模拟「全包」大量张数的情况，14张）
+     ?modal=result-all-small    开奖结果－「全包」张数很少（3张）时仍走汇总列表模式的示例
      ?modal=soldout-alert       已抽完提醒弹窗（单独示例，不改变背后卡片库存）
      以上参数只影响画面初始状态，不影响一般无参数时的正常使用流程 */
   const qp = new URLSearchParams(location.search);
   if (qp.get('soldout') === '1') {
     tiers.forEach(t => t.left = 0); last.left = 0;
     renderPool();
-    const b = $('.js-tear'); b.disabled = true; b.querySelector('.main').innerHTML = '<span class="t2">Sold Out</span>';
-    showSoldOutAlert();
+    // 注意：此参数只呈现「售罄后的主画面持续停用状态」，故意不叫用 showSoldOutAlert()，
+    // 避免提醒弹窗把这个专门展示背景页面状态的画面示例盖住／裁切不完整；
+    // 提醒弹窗本身的示例由另一个独立参数 ?modal=soldout-alert 呈现（见下方 modal 分支）
+  }
+  if (qp.get('insufficient') === '1') {
+    points = 0;
+    updateStock();
   }
   const modal = qp.get('modal');
   if (modal === 'rules') {
@@ -428,7 +451,9 @@ function createApp(rootId){
     for (let i = 0; i < 4; i++) fake.push({ tier: tiers[4] });
     fake.push({ tier: tiers[3] });
     fake.push({ tier: last, isLast: true });
-    showResult(fake, true);
+    showResult(fake, true, true);
+  } else if (modal === 'result-all-small') {
+    showResult([{ tier: tiers[6] }, { tier: tiers[7] }, { tier: last, isLast: true }], true, true);
   }
 }
 
