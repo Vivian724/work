@@ -90,6 +90,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .rules-dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;margin-top:2px;background:rgba(198,54,47,.08);border:1px solid rgba(198,54,47,.22);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--shu);font-weight:700}
 .rules-txt{font-size:11.5px;color:var(--sumi-2);line-height:1.7}
 .rules-txt b{color:var(--sumi)}
+.rules-sec-title{font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--shu-d);margin:16px 0 4px;text-transform:uppercase}
+.rules-sec-title:first-child{margin-top:0}
 /* 新撕券区 */
 .tkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
 .tkt-card{border:none;cursor:pointer;border-radius:7px;background:var(--shu);color:#fff;box-shadow:0 2px 0 var(--shu-d);padding:9px 12px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;overflow:hidden;font-family:inherit}
@@ -128,8 +130,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .gfeat{grid-column:1/-1;display:flex;gap:13px;align-items:center;background:linear-gradient(135deg,#FBF3DC,#F3E4B8);border:1.5px solid var(--kin);border-radius:9px;padding:12px;position:relative;overflow:hidden;box-shadow:0 3px 14px rgba(176,138,60,.3);margin-bottom:2px}
 .gfeat::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 90% 8%,rgba(255,240,200,.6),transparent 40%)}
 .gfeat .g-img{background:#fff;border:1px solid var(--line-2);border-radius:9px;padding:6px;box-shadow:0 1px 5px rgba(0,0,0,.07);flex-shrink:0;z-index:2}
-.gfeat .g-img .ph,.gfeat .g-img .ic{width:104px;height:104px;flex-shrink:0;box-shadow:none}
-.gfeat .g-img .ic span{font-size:46px}
+.gfeat .g-img .ph,.gfeat .g-img .ic{width:120px;height:120px;flex-shrink:0;box-shadow:none}
+.gfeat .g-img .ic span{font-size:50px}
 .gfeat .info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;z-index:2}
 .gfeat .f-name{font-size:17px;font-weight:700;line-height:1.2}
 .gfeat .f-type{font-size:11px;color:var(--ai);border:1px solid var(--ai);border-radius:3px;padding:0 6px;align-self:flex-start}
@@ -143,20 +145,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .gcard.hi{border:1.5px solid var(--kin);background:linear-gradient(160deg,#FDF6E1,#F4E6BD);box-shadow:0 3px 12px rgba(176,138,60,.28)}
 .gcard.hi::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 92% 6%,rgba(255,242,205,.75),transparent 38%)}
 .gcard.mid{border:1px solid #E3CF9A;background:#FBF7EC}
-.gcard .midtag{font-size:9px;color:var(--kin-d);border:1px solid #D9B45A;background:#fff;border-radius:3px;padding:1px 5px;position:relative;z-index:2}
-.gcard .g-top{display:flex;align-items:center;gap:6px;margin-bottom:8px}
-.gcard .g-zan{margin-left:auto;display:flex;align-items:baseline;gap:2px}
+.gcard .midtag{font-size:9px;color:var(--kin-d);border:1px solid #D9B45A;background:#fff;border-radius:3px;padding:1px 5px;position:relative;z-index:2;white-space:nowrap}
+.gcard .g-top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px}
+.gcard .g-tagrow{min-height:16px;display:flex;align-items:center;margin-bottom:8px}
+.gcard .g-zan{display:flex;align-items:baseline;gap:2px;white-space:nowrap}
 .gcard .g-zan .lbl{font-size:10px;color:var(--sumi-2)}
 .gcard .g-zan .num{font-family:"Songti SC",serif;font-size:19px;font-weight:700;color:var(--sumi)}
 .gcard .g-zan .num.low{color:var(--shu)}
 .gcard .g-zan .tot{font-size:10px;color:var(--sumi-2)}
 .gcard .g-img{margin-bottom:7px;display:flex;justify-content:center}
-.gcard .g-img .ph,.gcard .g-img .ic{width:92px;height:92px}
-.gcard .g-img .ic span{font-size:38px}
+.gcard .g-img .ph,.gcard .g-img .ic{width:112px;height:112px}
+.gcard .g-img .ic span{font-size:44px}
 .gcard .g-name{font-size:12.5px;font-weight:600;line-height:1.3;min-height:32px}
 .gcard .g-type{font-size:10px;color:var(--ai);margin-top:auto;padding-top:2px}
 .gcard .g-desc{font-size:10px;color:var(--sumi-2);margin-top:2px;line-height:1.3}
-.gcard .uptag{font-size:9px;color:#fff;background:linear-gradient(135deg,#D9B45A,#9c7a2c);border:none;border-radius:3px;padding:1px 6px;position:relative;z-index:2}
+.gcard .uptag{font-size:9px;color:#fff;background:linear-gradient(135deg,#D9B45A,#9c7a2c);border:none;border-radius:3px;padding:1px 6px;position:relative;z-index:2;white-space:nowrap}
 
 .sold-chip{font-family:"Songti SC",serif;color:var(--shu);border:1.5px solid var(--shu);border-radius:4px;font-size:11px;padding:1px 7px;transform:rotate(-5deg)}
 
@@ -253,14 +256,25 @@ function deviceHTML(){return `
   </div>
   <div class="pool"><div class="noren"><div class="band serif">All Prizes</div></div><div class="js-pool"></div></div>
   <div class="rules-ov"><div class="rules-box">
-    <div class="rules-hd"><div class="rules-htitle serif">Event Rules</div>
+    <div class="rules-hd"><div class="rules-htitle serif"></div>
       <div class="icon-btn" onclick="this.closest('.rules-ov').classList.remove('show')">✕</div></div>
     <div class="rules-bd">
-      <div class="rules-row"><div class="rules-dot">1</div><div class="rules-txt">Each ticket costs <b>95 Points</b> and guarantees a prize; results are revealed instantly.</div></div>
-      <div class="rules-row"><div class="rules-dot">2</div><div class="rules-txt">The <b>Last Prize</b> (grand finale prize) is automatically awarded to whoever draws the very last ticket.</div></div>
-      <div class="rules-row"><div class="rules-dot">3</div><div class="rules-txt">Each prize tier has limited stock and will not be restocked once sold out — join early.</div></div>
-      <div class="rules-row"><div class="rules-dot">4</div><div class="rules-txt">Prizes are subject to actual distribution; physical prizes will be arranged for delivery separately.</div></div>
-      <div class="rules-row"><div class="rules-dot">5</div><div class="rules-txt">Tickets cannot be purchased if your Points balance is insufficient — please check your balance before proceeding.</div></div>
+      <div class="rules-sec-title">General Mechanics</div>
+      <div class="rules-row"><div class="rules-dot">1</div><div class="rules-txt">Users may spend <b>500 points</b> for each draw, or spend the corresponding number of points based on the selected number of draws.</div></div>
+      <div class="rules-row"><div class="rules-dot">2</div><div class="rules-txt">This campaign uses an inventory-based random draw mechanism. Each draw will be randomly selected from the prizes that still have remaining stock in the current prize group.</div></div>
+      <div class="rules-row"><div class="rules-dot">3</div><div class="rules-txt">The winning probability of each prize is based on its current remaining inventory proportion within the total remaining inventory of the prize group.</div></div>
+      <div class="rules-row"><div class="rules-dot">4</div><div class="rules-txt">When a prize's inventory reaches 0, it will no longer be included in future draws.</div></div>
+      <div class="rules-row"><div class="rules-dot">5</div><div class="rules-txt">Users can continue drawing as long as there is remaining prize inventory in the prize group.</div></div>
+      <div class="rules-row"><div class="rules-dot">6</div><div class="rules-txt">Once all prizes in the prize group have been fully claimed, the campaign prize inventory will be considered fully depleted, and no further draws can be made.</div></div>
+      <div class="rules-row"><div class="rules-dot">7</div><div class="rules-txt">The <b>Last Prize</b> will be awarded to the user who draws the final remaining prize from the prize group.</div></div>
+      <div class="rules-sec-title">Terms &amp; Conditions</div>
+      <div class="rules-row"><div class="rules-dot">1</div><div class="rules-txt">This promotion is available to select eligible OKBet members only.</div></div>
+      <div class="rules-row"><div class="rules-dot">2</div><div class="rules-txt">Users must have sufficient points to participate in the draw. Points used for each draw will be deducted immediately and cannot be refunded once the draw is completed.</div></div>
+      <div class="rules-row"><div class="rules-dot">3</div><div class="rules-txt">All prizes are subject to availability based on the remaining campaign inventory.</div></div>
+      <div class="rules-row"><div class="rules-dot">4</div><div class="rules-txt">In the event of suspected fraudulent, abusive, or suspicious activities, OKBet reserves the right to disqualify the participant, close the player's account, and forfeit any associated winnings, bonuses, or rewards.</div></div>
+      <div class="rules-row"><div class="rules-dot">5</div><div class="rules-txt">The following individuals are not eligible to participate in this promotion: employees of OKBet, their immediate family members up to the second degree of affinity, operators of gaming sites, banned individuals, as well as government officials or employees.</div></div>
+      <div class="rules-row"><div class="rules-dot">6</div><div class="rules-txt">OKBet retains the right to modify, suspend, or terminate this promotion without prior notice, subject to PAGCOR approval where applicable.</div></div>
+      <div class="rules-row"><div class="rules-dot">7</div><div class="rules-txt">All materials, points, bonuses, and prizes under this campaign will be shouldered by OKBet.</div></div>
     </div>
   </div></div>
   <div class="overlay js-overlay"><div class="result">
@@ -297,8 +311,9 @@ function createApp(rootId){
     const sold=t.left<=0, low=t.left>0&&t.left/t.total<=.34;
     const isPhysical=t.art==='physical';
     return `<div class="gcard ${hi?'hi':''} ${mid?'mid':''} ${sold?'sold':''}"><div class="g-top">${badge(t,false,hi)}
-      ${hi?'<span class="uptag">★ Top Tier</span>':''}${mid?'<span class="midtag">Popular</span>':''}<div class="g-zan">${sold?'<span class="sold-chip serif">Sold Out</span>':
+      <div class="g-zan">${sold?'<span class="sold-chip serif">Sold Out</span>':
         `<span class="lbl">Remaining</span><span class="num ${low?'low':''}">${t.left}</span><span class="tot">/${t.total}</span>`}</div></div>
+      <div class="g-tagrow">${hi?'<span class="uptag">★ Top Tier</span>':mid?'<span class="midtag">Popular</span>':''}</div>
       <div class="g-img">${artImg(t.art)}</div><div class="g-name">${t.name}</div>${isPhysical
         ?`<div class="g-desc">${t.desc}</div><div class="g-type">${t.type}</div>`
         :`<div class="g-type">${t.type}</div>`}</div>`;
