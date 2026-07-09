@@ -1500,33 +1500,62 @@ tr:hover td { background: #fafcff; }
 
   <!-- ── TAB 1: 免费项目配置 ── -->
   <div id="p4t1" style="display:none">
-    <div class="action-row" style="margin-bottom:10px;">
-      <button class="btn btn-primary">+ 新增配置</button>
+    <div class="filter-bar" style="gap:8px; flex-wrap:wrap; align-items:center;">
+      <div class="p3-pill">
+        <select id="p4CfgCurrency" style="min-width:96px;">
+          <option value="">全部币别</option>
+          <option value="PHP">PHP</option>
+        </select>
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4CfgVendor" style="min-width:150px;">
+          <option value="">Select</option>
+          <option value="FunkyGame">FunkyGame</option>
+          <option value="JILI">JILI</option>
+          <option value="JILIFISH">JILIFISH</option>
+          <option value="AdvantPlay">AdvantPlay</option>
+          <option value="Playtech">Playtech</option>
+          <option value="PlayStar Gaming">PlayStar Gaming</option>
+          <option value="FC Gaming">FC Gaming</option>
+        </select>
+      </div>
+
+      <div class="p3-pill">
+        <select id="p4CfgType" style="min-width:110px;">
+          <option value="">全部免费类型</option>
+          <option value="免费旋转">免费旋转</option>
+          <option value="免费投注">免费投注</option>
+          <option value="道具卡">道具卡</option>
+        </select>
+      </div>
+
+      <input type="text" id="p4CfgKeyword" placeholder="免费名称" style="width:160px;">
+
+      <button class="btn btn-primary">查询</button>
+      <button class="btn btn-primary" style="margin-left:auto;">+ 新增免费项目</button>
     </div>
     <div class="table-wrap">
       <div style="overflow-x:auto;"><table>
         <thead>
           <tr>
-            <th>配置名称</th>
+            <th>币种</th>
+            <th>厂商</th>
+            <th>免费名称</th>
+            <th>操作人</th>
             <th>免费类型</th>
-            <th>游戏平台</th>
-            <th>次数</th>
-            <th>有效期（小时）</th>
-            <th>状态</th>
             <th>创建时间</th>
             <th>操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>colorgame</td><td>免费投注</td><td>ColorGame</td><td>1</td><td>24</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-01-10 09:00:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
-          <tr><td>免费投注PT单个游戏</td><td>免费投注</td><td>PT</td><td>10</td><td>48</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-02-15 10:30:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
-          <tr><td>PT免费投注1</td><td>免费投注</td><td>PT</td><td>10</td><td>72</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-03-01 14:00:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
-          <tr><td>Free Spin ×10</td><td>免费旋转</td><td>全平台</td><td>10</td><td>240</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-05-20 11:00:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
-          <tr><td>Free Spin ×20</td><td>免费旋转</td><td>全平台</td><td>20</td><td>240</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-05-20 11:05:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
-          <tr><td>Free Spin ×30</td><td>免费旋转</td><td>全平台</td><td>30</td><td>240</td><td><span class="sbadge sbadge-used">启用</span></td><td>2026-05-20 11:10:00</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>PHP</td><td>FunkyGame</td><td>FKG_S</td><td>wadeyu</td><td>免费旋转</td><td>2026/07/02 11:17:37</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>PHP</td><td>FunkyGame</td><td>FKG_S test v2</td><td>russelAdmin01</td><td>免费旋转</td><td>2026/07/01 18:10:13</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>PHP</td><td>Jumbo_S</td><td>JB_S免费旋转_更新版</td><td>justinAdmin</td><td>免费旋转</td><td>2026/07/01 16:30:25</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
+          <tr><td>PHP</td><td>Jumbo_S</td><td>Jumbo_S</td><td>wadeyu</td><td>免费旋转</td><td>2026/07/01 15:32:16</td><td><span style="color:#1677ff;cursor:pointer;">编辑</span></td></tr>
         </tbody>
       </table></div>
-      <div style="padding:14px 20px;text-align:right;font-size:13px;color:#999;border-top:1px solid #f0f0f0;">Total 6</div>
+      <div style="padding:14px 20px;text-align:right;font-size:13px;color:#999;border-top:1px solid #f0f0f0;">Total 359</div>
     </div>
   </div>
 
@@ -1567,8 +1596,9 @@ tr:hover td { background: #fafcff; }
       </div>
 
       <div class="p3-pill">
-        <select id="p4FilterSelect" style="min-width:80px;">
-          <option value="">Select</option>
+        <select id="p4FilterSelect" style="min-width:96px;">
+          <option value="member">会员名</option>
+          <option value="activity">活动名称</option>
         </select>
       </div>
 
@@ -1631,8 +1661,9 @@ tr:hover td { background: #fafcff; }
       </div>
 
       <div class="p3-pill">
-        <select id="p4StatSelect" style="min-width:80px;">
-          <option value="">Select</option>
+        <select id="p4StatSelect" style="min-width:96px;">
+          <option value="member">会员名</option>
+          <option value="activity">活动名称</option>
         </select>
       </div>
 
@@ -1691,8 +1722,9 @@ tr:hover td { background: #fafcff; }
       </div>
 
       <div class="p3-pill">
-        <select id="p4SendSelect" style="min-width:80px;">
-          <option value="">Select</option>
+        <select id="p4SendSelect" style="min-width:96px;">
+          <option value="member">会员名</option>
+          <option value="name">免费名称</option>
         </select>
       </div>
 
@@ -1739,7 +1771,8 @@ tr:hover td { background: #fafcff; }
       <li>顶部「是否开启免费旋转」总开关控制整个免费旋转功能是否启用</li>
     </ul>
   </div>
-  <p class="spec-lead">栏位：币种、厂商（FunkyGame／Jumbo_S／Vertex Play／Mini Games 等游戏／道具供应商）、免费名称、操作人、免费类型（免费旋转／免费投注／道具卡）、创建时间、操作（编辑／删除）。筛选栏：全部币别、Select（推测为栏位类型选择器，配对「免费名称」输入框，用法待与「免费项目记录」页签的 Select 一并确认）、全部免费类型、免费名称。「新增免费项目」按钮开启新增表单。</p>
+  <p class="spec-lead">栏位：币种、厂商（FunkyGame／Jumbo_S／Vertex Play／Mini Games 等游戏／道具供应商）、免费名称、操作人、免费类型（免费旋转／免费投注／道具卡）、创建时间、操作（编辑／删除）。筛选栏：全部币别、Select、全部免费类型、免费名称。「新增免费项目」按钮开启新增表单。</p>
+  <p class="spec-lead"><strong>已确认</strong>：此页签的 Select 是「厂商／游戏平台」筛选器，选项为后台已串接的供应商清单（如 FunkyGame、JILI、JILIFISH、AdvantPlay、Playtech、PlayStar Gaming、FC Gaming 等），用于依游戏供应商过滤配置列表，<strong>与「免费项目记录」「免费项目统计」「免费项目发送记录」三个页签的 Select 是不同用途的两种组件</strong>，并非同一种「会员名／活动名称」栏位类型选择器，不需比照统一。</p>
 
   <h3>3.4.1 免费项目记录 — 栏位字段（全部 11 栏）</h3>
   <p class="spec-lead">记录会员「获得」一笔免费旋转券的当下资讯。</p>
@@ -1785,9 +1818,10 @@ tr:hover td { background: #fafcff; }
     </table>
   </div>
   <div class="spec-pill-row">
-    <span class="spec-pill">所有状态</span><span class="spec-pill">使用时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select（推测同会员名／活动名称）＋关键字输入框</span>
+    <span class="spec-pill">所有状态</span><span class="spec-pill">使用时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select（会员名／活动名称）＋关键字输入框</span>
     <span class="spec-pill action">查询</span><span class="spec-pill action">导出</span>
   </div>
+  <p class="spec-lead"><strong>已确认</strong>：与「免费项目记录」页签同一种「搜索栏位类型」选择器，可切换用「会员名」或「活动名称」比对关键字输入框；本页表格未显示「活动名称」栏位，但后端筛选仍支持依活动名称查出该活动下所有已使用的免费旋转纪录。</p>
 
   <h3>3.4.3 免费项目发送记录 — 栏位字段（全部 8 栏）</h3>
   <p class="spec-lead">记录系统「发送」免费旋转券给会员的执行结果，重点在发送是否成功。</p>
@@ -1807,10 +1841,10 @@ tr:hover td { background: #fafcff; }
     </table>
   </div>
   <div class="spec-pill-row">
-    <span class="spec-pill">所有状态</span><span class="spec-pill">发送时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select（推测同会员名／免费名称）＋关键字输入框</span>
+    <span class="spec-pill">所有状态</span><span class="spec-pill">发送时间区间</span><span class="spec-pill">全部免费类型</span><span class="spec-pill">Select（会员名／免费名称）＋关键字输入框</span>
     <span class="spec-pill action">查询</span><span class="spec-pill action">批量重新发送</span><span class="spec-pill action">导出</span>
   </div>
-  <p class="spec-lead"><span class="spec-field">批量重新发送</span>：对当前筛选结果中所有「待发送」的纪录一次性重新触发发送。</p>
+  <p class="spec-lead"><strong>已确认</strong>：同为「搜索栏位类型」选择器，可切换用「会员名」或「免费名称」比对关键字输入框——此页的第二个选项是「免费名称」，对应字段表中的「免费旋转名称」，与记录／统计两页的「活动名称」选项不同。<span class="spec-field">批量重新发送</span>：对当前筛选结果中所有「待发送」的纪录一次性重新触发发送。</p>
 </div>
 
   </div>
@@ -1820,7 +1854,6 @@ tr:hover td { background: #fafcff; }
   <div class="spec-h1">待确认事项</div>
   <p class="spec-sub">原型中尚未定义清楚的地方，供对齐后端与产品需求时使用。</p>
   <div class="spec-qa-list">
-    <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">「免费项目统计」「免费项目发送记录」「免费项目配置」三个页签的 Select 是否与「免费项目记录」页签同为「会员名／活动名称」栏位类型选择器，仍待逐一截图核对（目前仅依画面结构推测雷同）</span></div>
     <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">「积分购买」既然是积分商城全站通用的购买方式，后端在写入一笔购买纪录时，是否会额外储存「商品类型」这个判断栏位，或是每次都要即时反查商品配置表才能判断是否为一番赏</span></div>
     <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">「旋转券」分类不一致：「商品配置」弹窗第二层实际只有 6 个选项（彩金／积分／优惠券／免费旋转券／免费投注券／道具卡，见 2.2 节），<strong>没有「旋转券」这个选项</strong>；但「旋转券」这个名称同时出现在：H5 demo 的 E赏示例、H5 前台文案中英翻译表（视为独立分类，图示与「免费旋转」不同）、用户积分纪录「备注」栏位范例（「E赏 旋转券×20」）、优惠券管理「优惠券类别」下拉（输返券／存送比例券／彩金券／<strong>旋转券</strong>／免费投注券）、免费旋转记录页签的筛选下拉。需要产品确认：「旋转券」究竟是①「商品配置」漏列的第 7 个第二层分类（需要补上），还是②只存在于优惠券／记录层级的既有概念、H5 demo 的 E赏拿来当奖级第二层用是用错了分类（应改成上述 6 个分类之一）。目前 H5 demo 的 E赏暂时保留原样未修改，避免在未确认前擅自变更</span></div>
   </div>
@@ -1855,9 +1888,25 @@ tr:hover td { background: #fafcff; }
   <div class="spec-split">
     <div class="spec-screen-card">
       <iframe src="ichiban_kuji_h5.html" style="border:none;width:100%;height:2400px;display:block;"></iframe>
+      <p class="spec-caption" style="text-align:center;">情境 A｜正常状态：库存充足、积分充足，四个张数按钮与撕券按钮皆可正常点击（demo 默认值，无网址参数）</p>
+      <iframe src="ichiban_kuji_h5.html?lowqty=1" style="border:none;width:100%;height:2400px;display:block;"></iframe>
+      <p class="spec-caption" style="text-align:center;">情境 B｜一般奖级剩余总和只剩 7 张（<span class="spec-field">?lowqty=1</span>）：往下滑到撕券区可见「十连」反灰停用、「五连」仍可选</p>
+      <iframe src="ichiban_kuji_h5.html?insufficient=1" style="border:none;width:100%;height:2400px;display:block;"></iframe>
+      <p class="spec-caption" style="text-align:center;">情境 C｜积分不足（<span class="spec-field">?insufficient=1</span>，与 2-6 同一参数）：撕券按钮主动反灰并显示「Insufficient Balance」，其余画面（含奖品一览）正常不受影响</p>
+      <iframe src="ichiban_kuji_h5.html?lowstock=1" style="border:none;width:100%;height:2400px;display:block;"></iframe>
+      <p class="spec-caption" style="text-align:center;">情境 D｜单一奖级售罄／低库存（<span class="spec-field">?lowstock=1</span>）：往下滑到奖品一览可见 S赏卡片盖上半透明售罄遮罩、B赏「剩余」数字变警示红色，此时一般奖级剩余总和仍充足，撕券区维持情境 A 的正常可点击状态</p>
     </div>
     <div class="spec-text">
-      <p class="spec-lead">玩家由积分商城点进「商品类型＝Ichiban Kuji」的商品后，直接进入此单页画面，由上而下依序：顶部导航→主视觉 banner→抽奖操作区→奖品一览。资料对照表见第 6 节。<strong>若该商品配置了「是否限时抢购＝是」，倒数／角标显示在「积分商城」商品列表页（不在本节涵盖范围内）；玩家点击进入后看到的就是本节说明的画面</strong>——<strong>已确认</strong>本画面不需要显示任何限时抢购倒数计时，也不显示「单个会员限购数」相关的限购字样／已购张数提示，这两项提示都只出现在积分商城列表页，不在本画面重复呈现。</p>
+      <p class="spec-lead">玩家由积分商城点进「商品类型＝Ichiban Kuji」的商品后，直接进入此单页画面，由上而下依序：顶部导航→主视觉 banner→抽奖操作区→奖品一览。资料对照表见第 6 节。<strong>若该商品配置了「是否限时抢购＝是」，倒数／角标显示在「积分商城」商品列表页（不在本节涵盖范围内）；玩家点击进入后看到的就是本节说明的画面</strong>——<strong>已确认</strong>本画面不需要显示任何限时抢购倒数计时，也不显示「单个会员限购数」相关的限购字样／已购张数提示，这两项提示都只出现在积分商城列表页，不在本画面重复呈现。左侧共 4 张示意图分别对应情境 A～D，每张都可透过网址参数直接重现。</p>
+
+      <div class="spec-rule-box">
+        <div class="spec-rule-title">进入本页的第二个入口：积分商城首页 Banner（已确认）</div>
+        <ul>
+          <li>除了「商品列表／推荐区」的商品卡片外，积分商城首页另有一个可由后台配置图片＋跳转目标商品的「Banner」区块（后台设定与图片素材管理不在本文件范围内），点击后会直接导向后台设定的目标商品——若该目标恰好设定成本一番赏商品，效果等同于玩家直接进入本节画面</li>
+          <li><strong>关键差异</strong>：商品列表卡片本身在商品售罄时会加上「已抢光」遮罩（积分商城既有规则，不在本文件范围内）；但 Banner 是后台设定好之后<strong>持续显示、可持续点击</strong>的独立入口，<strong>不会</strong>因为目标商品卖光而自动失效、变灰或被遮罩——也就是说，玩家仍然可能透过 Banner 点进一个当下已经全部售罄的一番赏商品</li>
+          <li><strong>已确认结论</strong>：Banner 本身<strong>不需要</strong>额外开发售罄判断或遮罩逻辑；因为不论玩家是从商品列表卡片、Banner、或任何其他连结进入本画面，只要页面载入当下该商品已全部售罄，本画面既有的「已抽完提醒」自动跳出＋强制导回积分商城逻辑（见全局规则、2-5、B-14）就会统一处理，效果一致。换言之，Banner 这个新入口<strong>沿用</strong> B-14 既有规则，不需要另外定义一套售罄行为</li>
+        </ul>
+      </div>
 
       <h3>情境 A｜正常状态（尚有库存、积分充足）</h3>
       <ul class="spec-plain">
@@ -1868,15 +1917,15 @@ tr:hover td { background: #fafcff; }
 
       <h3>情境 B｜一般奖级剩余总和低于「五连」／「十连」所需张数</h3>
       <ul class="spec-plain">
-          <li>剩余总和 <span class="spec-field">＜ 5</span> 张时，「五连」按钮反灰停用；剩余总和 <span class="spec-field">＜ 10</span> 张时，「十连」按钮反灰停用，两者各自独立判断（例如剩 7 张：五连可选、十连反灰）；反灰后玩家无法点击该按钮，也不会成交</li>
-          <li>若玩家原本选中的按钮因剩余量下降而被反灰（例如原选十连，抽到只剩 4 张），画面自动切回「单张」为选中状态，撕券按钮金额同步重算</li>
+          <li>剩余总和 <span class="spec-field">＜ 5</span> 张时，「五连」按钮反灰停用；剩余总和 <span class="spec-field">＜ 10</span> 张时，「十连」按钮反灰停用，两者各自独立判断（例如剩 7 张：五连可选、十连反灰，示例见左侧第 2 张图 <span class="spec-field">?lowqty=1</span>）；反灰后玩家无法点击该按钮，也不会成交</li>
+          <li>若玩家原本选中的按钮因剩余量下降而被反灰（例如原选十连，抽到只剩 4 张），画面自动切回「单张」为选中状态，撕券按钮金额同步重算——这是使用中动态触发的转场，demo 网址参数只能呈现固定的库存快照，无法呈现这个切换瞬间，需要实际操作撕券才能观察到</li>
           <li>「全包」不受此限制，只要剩余总和 <span class="spec-field">＞ 0</span> 就可选，张数即时等于当下剩余总和（见情境 A）</li>
-          <li><strong>剩余总和归零（全部售罄）时的例外</strong>：「单张」「五连」「十连」「全包」<strong>四个张数按钮全部反灰停用</strong>，不再只反灰五连／十连——因为此时已无任何张数可选，与撕券按钮一起呈现停用状态，避免玩家看到「单张」按钮仍是可点击的深色选中样式，误以为还能购买（见 2-5 全部售罄状态）</li>
+          <li><strong>剩余总和归零（全部售罄）时的例外</strong>：「单张」「五连」「十连」「全包」<strong>四个张数按钮全部反灰停用</strong>，不再只反灰五连／十连——因为此时已无任何张数可选，与撕券按钮一起呈现停用状态，避免玩家看到「单张」按钮仍是可点击的深色选中样式，误以为还能购买（见 2-5 全部售罄状态，示例见 <span class="spec-field">?soldout=1</span>）</li>
         </ul>
 
       <h3>情境 C｜积分不足</h3>
       <ul class="spec-plain">
-          <li><strong>撕券按钮比照「售罄」的呈现方式主动反灰停用</strong>：不需等玩家点击才校验，只要「玩家积分 <span class="spec-field">＜</span> 当下选定张数应扣金额」，撕券按钮立即变为停用状态，文字改显示官方英文文案 <span class="spec-field">Insufficient Balance</span>（与「Sold Out」共用同一套遮罩／灰底样式），玩家看到按钮当下就知道余额不够，不需要点了才被提示；<strong>只有</strong>撕券按钮这个范围需要处理，不影响页面其他区域（奖品一览的卡片不受玩家个人余额影响，维持正常显示）</li>
+          <li><strong>撕券按钮比照「售罄」的呈现方式主动反灰停用</strong>：不需等玩家点击才校验，只要「玩家积分 <span class="spec-field">＜</span> 当下选定张数应扣金额」，撕券按钮立即变为停用状态，文字改显示官方英文文案 <span class="spec-field">Insufficient Balance</span>（与「Sold Out」共用同一套遮罩／灰底样式），玩家看到按钮当下就知道余额不够，不需要点了才被提示；<strong>只有</strong>撕券按钮这个范围需要处理，不影响页面其他区域（奖品一览的卡片不受玩家个人余额影响，维持正常显示，示例见左侧第 3 张图与 2-6 <span class="spec-field">?insufficient=1</span>，两处是同一份 demo 逻辑）</li>
           <li>切换张数按钮（单张／五连／十连／全包）导致应扣金额重新计算时，会同步重新校验余额是否足够，即时在「反灰停用」与「正常可点击」两种状态间切换，不需要刷新页面</li>
           <li>判断优先级：一般奖级剩余总和＝0（已全部售罄）的优先级<strong>高于</strong>积分不足——若两个条件同时成立，撕券按钮文字固定显示「Sold Out」（此为既有正式文案，维持不变），不是积分不足的反灰效果</li>
           <li>撕券按钮反灰停用期间无法点击，理论上不会再触发到点击当下才跳出的系统提示；程式内仍保留一道点击当下的余额校验作为防御性判断（例如极端情况下积分刚好在按钮重新整理前被其他地方扣掉），触发时以系统提示「Insufficient Balance」呈现</li>
@@ -1884,8 +1933,9 @@ tr:hover td { background: #fafcff; }
 
       <h3>情境 D｜单一奖级已售罄（整体尚未结束）</h3>
       <ul class="spec-plain">
-          <li><strong>简化做法：维持卡片原本样式不变，只在卡片上加一层半透明遮罩</strong>——不需要为每个已售罄的奖级卡片额外显示「Sold Out」印章文字或改变栏位内容，「剩余」数字栏位照常显示实际剩余量（此时会是 0／总量），卡片本身的图片、名称、简介、标签都维持原本排版，<strong>不做</strong>内容替换，只在整张卡片上覆盖一层半透明遮罩（同时搭配去彩度效果），让玩家一眼看出这个奖级已经不能抽，不需要逐一读卡片上的文字才能判断</li>
+          <li><strong>简化做法：维持卡片原本样式不变，只在卡片上加一层半透明遮罩</strong>——不需要为每个已售罄的奖级卡片额外显示「Sold Out」印章文字或改变栏位内容，「剩余」数字栏位照常显示实际剩余量（此时会是 0／总量），卡片本身的图片、名称、简介、标签都维持原本排版，<strong>不做</strong>内容替换，只在整张卡片上覆盖一层半透明遮罩（同时搭配去彩度效果），让玩家一眼看出这个奖级已经不能抽，不需要逐一读卡片上的文字才能判断（示例见左侧第 4 张图 <span class="spec-field">?lowstock=1</span> 里的 S赏卡片）</li>
           <li>不影响玩家继续抽其他仍有库存的奖级</li>
+          <li><strong>低库存提示（尚未售罄）</strong>：当某奖级「剩余 ÷ 总量」≤ <span class="spec-field">34%</span> 时（此数值为 H5 demo 目前写死的实作值，非产品明确定义的正式规格，见待确认事项），卡片上的「剩余」数字会由预设深色改为警示红色（与整体视觉的朱红色主色一致），提示玩家该奖级快抽完；此效果只改变数字颜色，不加遮罩、不影响卡片可点击性／抽奖池运作，与「已售罄」的半透明遮罩是两种独立视觉状态，不会同时触发在同一张卡片上（剩余量到 0 时即切换为售罄遮罩，数字警示色规则自然不再适用；示例见左侧第 4 张图里的 B赏卡片，剩 1/5＝20%）</li>
         </ul>
     </div>
   </div>
@@ -1907,8 +1957,8 @@ tr:hover td { background: #fafcff; }
           <li><strong>触发条件</strong>：玩家本次选的是「单张／五连／十连」（非全包），最多开出 11 张（10 张＋Last赏），判断依据是「选的按钮」，不是出券数量门槛（详见 2-3）</li>
           <li>标题固定格式「抽出 <span class="spec-field">{张数}</span> 张」</li>
           <li>每张卡片初始为封面「一番赏 撕▶」，依序错开撕开动画（第 1 张延迟 300ms，之后每张间隔 280ms，单张撕开动画本身 1.1 秒 ease），逐一露出奖级徽章、奖品名称与分类</li>
-          <li><strong>卡片排列方式</strong>：固定 2 栏由左到右、由上到下排列（第 1 张在左上，第 2 张在右上，第 3 张换行到左下，以此类推）；排列顺序＝<strong>本次实际抽奖的先后顺序</strong>，也就是玩家这次選的每一张券依序开出哪个奖级，就照那个顺序放，<strong>不会</strong>额外按奖级、稀有度或英文字母排序，纯粹反映真实抽取过程</li>
-          <li><strong>若本次中出 Last赏</strong>：因为 Last赏一定是在「抽空一般奖级池」的那一张才会触发，所以在逐张揭晓模式里 Last赏永远是<strong>最后一张</strong>（也就是排列顺序中最后一格，例如范例图的 2 张情境会落在右下），<strong>这点与汇总列表模式不同</strong>——汇总列表模式是刻意把 Last赏「固定置顶」，逐张模式则完全不特别处理排序，Last赏排最后只是抽奖顺序自然的结果</li>
+          <li><strong>卡片排列方式</strong>：固定 2 栏由左到右、由上到下排列（第 1 张在左上，第 2 张在右上，第 3 张换行到左下，以此类推）；排列顺序＝<strong>本次实际抽奖的先后顺序</strong>，也就是玩家这次選的每一张券依序开出哪个奖级，就照那个顺序放，<strong>不会</strong>额外按奖级、稀有度或英文字母排序，纯粹反映真实抽取过程（<strong>Last赏为唯一例外</strong>，见下一点）</li>
+          <li><strong>若本次中出 Last赏（已确认）</strong>：Last赏卡片<strong>固定排在「第一排左边」，也就是第 1 格</strong>，<strong>不是</strong>排在最后一格。因为 Last赏一定是在「抽空一般奖级池」的那一张才会触发（时间上必定是本次最后开出的一张），系统会把它从原本的时间顺序「提前」搬到第 1 格；其余卡片（<strong>包含原本排第 1 格的那一张</strong>）仍照本次实际抽奖的先后顺序，全部各往后移一格，依次接续排在第 2 格、第 3 格……以此类推。<strong>这点与汇总列表模式一致</strong>——汇总列表模式是把 Last赏摆在整个列表最前面（第一列），逐张模式则是摆在「第一排左边」（第 1 格），两边都固定放在最前面，只是「列表最前面」与「格子最前面」的呈现方式不同</li>
           <li>点击「收下」→ 关闭弹窗，依全局规则判定是否切换「已全部抽完」状态</li>
         </ul>
     </div>
@@ -1919,13 +1969,17 @@ tr:hover td { background: #fafcff; }
       <div style="height:520px;overflow:hidden;position:relative;">
         <iframe src="ichiban_kuji_h5.html?modal=result-last" style="border:none;width:100%;height:900px;display:block;position:absolute;top:-380px;left:0;" scrolling="no"></iframe>
       </div>
+      <p class="spec-caption">上：本次开 2 张（1 张一般奖品＋Last赏），Last赏固定移到左边第 1 格，原本第 1 个开出的一般奖品被挤到右边第 2 格；下：本次开 6 张（5 张一般奖品＋Last赏），一般奖品仍照抽奖顺序接续排在第 2～6 格</p>
+      <div style="height:620px;overflow:hidden;position:relative;">
+        <iframe src="ichiban_kuji_h5.html?modal=result-last-multi" style="border:none;width:100%;height:900px;display:block;position:absolute;top:-380px;left:0;" scrolling="no"></iframe>
+      </div>
     </div>
     <div class="spec-text">
       <h3>2-2 开奖结果弹窗－中 Last赏</h3>
       <ul class="spec-plain">
           <li><strong>触发条件</strong>：本次抽出结果中包含 Last赏（无论逐张或汇总模式皆适用）</li>
           <li>弹窗顶部固定加上「★ 恭喜抽中 Last赏 ★」金色横幅，弹窗打开当下即显示，无进场动画</li>
-          <li>逐张模式下 Last赏卡片一样会经历撕开动画，与其他奖级卡片同一套时间规则；卡片排列位置固定是<strong>最后一格</strong>（不会提前或置顶），细节见 2-1「卡片排列方式」</li>
+          <li>逐张模式下 Last赏卡片一样会经历撕开动画，与其他奖级卡片同一套时间规则；卡片排列位置<strong>固定是第一排左边（第 1 格）</strong>，细节与调整说明见 2-1「若本次中出 Last赏」</li>
         </ul>
     </div>
   </div>
@@ -1939,15 +1993,27 @@ tr:hover td { background: #fafcff; }
       <div style="height:520px;overflow:hidden;position:relative;">
         <iframe src="ichiban_kuji_h5.html?modal=result-all-small" style="border:none;width:100%;height:900px;display:block;position:absolute;top:-380px;left:0;" scrolling="no"></iframe>
       </div>
+      <p class="spec-caption">上：模拟全包一次中到<strong>全部 9 个一般奖级＋Last赏（共 10 列）</strong>，列表总高度超过弹窗上限，可以看到「Draws … Tickets」标题与底部「Claim」按钮维持不动，只有中间的奖品列表出现滑动——用滑鼠滚轮或触控拖动即可在 iframe 里体验</p>
+      <div style="height:520px;overflow:hidden;position:relative;">
+        <iframe src="ichiban_kuji_h5.html?modal=result-agg-overflow" style="border:none;width:100%;height:900px;display:block;position:absolute;top:-380px;left:0;" scrolling="no"></iframe>
+      </div>
     </div>
     <div class="spec-text">
       <h3>2-3 开奖结果弹窗－汇总列表模式</h3>
       <ul class="spec-plain">
-          <li><strong>触发条件：玩家本次选的是「全包」</strong>——不论最终实际抽出几张（哪怕全包当下只剩 1～2 张），一律固定走汇总列表模式，<strong>不会</strong>因为张数少而改用逐张撕票模式（示例见 <span class="spec-field">?modal=result-all-small</span>）</li>
-          <li><strong>单张／五连／十连一律走「逐张揭晓」个卡模式（2-1／2-2），不会出现汇总列表</strong>：这三种选项最多只会开出 11 张（10 张＋Last赏 1 张），数量上限本来就在个卡模式的合理呈现范围内，因此显示模式单纯由「玩家选的张数按钮」决定，不是另外再算一次实际出券数的门槛值</li>
-          <li>按奖级代号分组统计中出次数，格式「徽章＋奖品名称 … ×数量」</li>
-          <li>Last赏若中出，固定置顶显示，不参与排序比较</li>
-          <li>此模式<strong>无</strong>撕票动画，弹窗打开即完整显示所有列</li>
+          <li><strong>什么时候会看到这个模式</strong>：玩家这次选的是「全包」，就一定是汇总列表模式——不管全包当下实际抽出的张数是多是少（哪怕只剩 1～2 张），都固定用这个模式显示，<strong>不会</strong>因为张数少就改成一张一张撕票（示例见 <span class="spec-field">?modal=result-all-small</span>）</li>
+          <li><strong>单张／五连／十连不会用到这个模式</strong>：这三种选项最多只会开出 11 张（10 张一般奖品＋Last赏 1 张），张数不多，所以固定用「逐张揭晓」一张一张撕票的方式呈现（见 2-1／2-2）——只看玩家选的是哪一个按钮，不是看实际开出几张来决定用哪种模式</li>
+          <li><strong>怎么统计显示</strong>：同一个奖级中出几次，就合并成一行，格式是「徽章＋奖品名称……×次数」，例如「B赏 5,000.00 ×3」</li>
+          <li><strong>Last赏永远放第一行</strong>：如果这次全包也中到 Last赏，不管它实际是第几张开出的，都固定摆在整份列表最顶端，不跟其他奖品一起比中出次数、也不参与排序</li>
+          <li>这个模式<strong>没有</strong>撕票动画，弹窗一打开就直接显示完整的列表内容</li>
+          <li><strong>列表内容太长时可以上下滑动（已确认，明确定义如下）</strong>：全包一次开出的奖品种类通常比较多，弹窗本身有<strong>整体高度上限</strong>（demo 实作值 <span class="spec-field">440px</span>，正式视觉稍后可能调整，但「有固定上限」这个前提不变）；当汇总列表的行数把内容撑到超过这个上限时：
+            <ul style="margin:8px 0 0;padding-left:20px;">
+              <li>弹窗<strong>只分成三块</strong>：顶部标题「抽出 N 张」／中间奖品列表／底部「收下」按钮，三块各自的高度先照实际内容算好，<strong>标题跟按钮永远维持固定、不会被滑走</strong></li>
+              <li>剩下的空间全部分给<strong>中间的奖品列表</strong>；当列表实际内容比这块剩余空间还高时，<strong>只有这一块区域</strong>会出现上下滑动（滑轮／触控拖动皆可），标题跟按钮不受影响，不会跟著滑动或消失</li>
+              <li>行数不多、内容没超过弹窗高度时（如上方 14 张、3 张的示例），中间区域<strong>不会</strong>出现滑动痕迹，跟一般弹窗没有差异——是否出现滑动，纯粹取决于内容实际高度是否超过剩余空间，<strong>不是</strong>用固定的「超过几行就滑动」这种笔数门槛去判断</li>
+              <li>范例见下方第 3 张示意图：模拟一次全包同时中到<strong>全部 9 个一般奖级＋Last赏（共 10 列）</strong>，内容明显超出弹窗高度，可实际滑动中间列表验证</li>
+            </ul>
+          </li>
         </ul>
     </div>
   </div>
@@ -1986,9 +2052,9 @@ tr:hover td { background: #fafcff; }
           <li><strong>触发时机（两种，效果相同）</strong>：①玩家自己这次撕券正好抽空一般奖级池，点击「收下」关闭开奖结果弹窗的当下（见 B-13）；②玩家从「积分商城」点进一个当下已是「全部售罄」状态的商品，页面载入当下（见 B-14），不需玩家先操作过撕券</li>
           <li><strong>画面状态</strong>：撕券按钮文字固定替换为「已全部抽完」（Sold Out）并停用，玩家无法再购买；<strong>同时</strong>自动跳出「已抽完提醒」弹窗</li>
           <li><strong>提醒弹窗文案（已确认最终英文版本）</strong>：标题「All Prizes Drawn」；内文「All prizes in Ichiban Lucky Draw have been drawn. Explore more rewards in the Points Mall.」；按钮「Got It」，请以 <span class="spec-field">ichiban_kuji_h5.html</span> 程式码中的实际文字为准</li>
-          <li><strong>关闭后行为（与其他弹窗不同，此为唯一例外）</strong>：点击「我知道了」关闭本弹窗后，玩家会被<strong>导回「积分商城」列表页</strong>，且该一番赏商品的卡片会加上「已抢光」遮罩（与积分商城其他售罄商品的呈现方式一致）——这是本活动所有弹窗中<strong>唯一</strong>会造成页面跳转的情况，其余弹窗（开奖结果、活动规则）关闭后仍停留在原画面，见全局规则</li>
+          <li><strong>关闭后行为（与其他弹窗不同，此为唯一例外，已实作）</strong>：点击「Got It」关闭本弹窗后，玩家会被<strong>强制导回「积分商城」列表页</strong>，且该一番赏商品的卡片会加上「已抢光」遮罩（与积分商城其他售罄商品的呈现方式一致）——这是本活动所有弹窗中<strong>唯一</strong>会造成页面跳转的情况，其余弹窗（开奖结果、活动规则）关闭后仍停留在原画面，见全局规则</li>
           <li>本弹窗<strong>只在上述两种时机各出现一次</strong>，不会每次玩家操作画面（例如滚动查看奖品一览）就重复弹出</li>
-          <li>「积分商城」列表页与「已抢光」遮罩的实际画面不在本文件涵盖范围内（积分商城为独立页面，见「前台＿积分商城」分页开头的适用范围说明），本节 demo 因此仍停留在原画面，只做<strong>文字说明</strong>预期的正式行为，未实作真正跳转</li>
+          <li>「积分商城」列表页与「已抢光」遮罩的实际画面不在本文件涵盖范围内（积分商城为独立页面，见「前台＿积分商城」分页开头的适用范围说明）；<span class="spec-field">ichiban_kuji_h5.html</span> 中「Got It」已实作以 <span class="spec-field">history.back()</span> 模拟返回上一页（因为本页原本就是从积分商城banner点进来的），正式开发请改为导向积分商城的实际路由／网址，效果需一致（强制离开本页，不可停留）</li>
         </ul>
     </div>
   </div>
@@ -2104,11 +2170,13 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">B-9b</td><td>一般奖级剩余总和＝0，<strong>同时</strong>玩家积分也不足以负担应扣金额</td><td>查看撕券按钮</td><td>「Sold Out」优先于「Insufficient Balance」，撕券按钮固定显示「Sold Out」</td></tr>
         <tr><td class="spec-field">B-10</td><td>汇总列表模式中，Last赏与其他奖级同时中出，且其他奖级中出次数更多</td><td>开启结果弹窗</td><td>Last赏固定排在列表最上方，不受中出次数多寡影响排序</td></tr>
         <tr><td class="spec-field">B-11</td><td>逐张揭晓模式，某几张卡片尚在等待撕开动画排程（见第 4 节时间表）</td><td>提前点击／滑动尚未轮到的卡片</td><td>目前 demo 无提前撕开的交互设计，点击应无反应，卡片仍依原定的 300ms＋i×280ms 排程自动撕开；若正式需求要支援手动提前撕开，需另外定义</td></tr>
-        <tr><td class="spec-field">B-12</td><td>单一奖级（非 Last赏）已售罄，但一般奖级剩余总和仍 &gt; 0</td><td>浏览奖品一览／尝试抽奖</td><td>该奖级卡片显示「售罄」，但<strong>不影响</strong>抽奖池运作（该奖级剩余量本就是 0，不会被抽到）；撕券按钮维持可用</td></tr>
-        <tr><td class="spec-field">B-13</td><td>本次撕券使一般奖级剩余总和归零（与 B-4 同一时刻）</td><td>点击「收下」关闭开奖结果弹窗</td><td>撕券按钮同步切换为「已全部抽完」并停用；<strong>同时</strong>自动跳出「已抽完提醒」弹窗（见 2-5），需玩家点击「我知道了」才关闭；<strong>关闭后导回积分商城列表页</strong>，该商品卡片加上「已抢光」遮罩（demo 因积分商城页面不在本文件范围内，未实作真正跳转，仅维持原页）</td></tr>
-        <tr><td class="spec-field">B-14</td><td>玩家透过积分商城点进一个「已抽完」的一番赏商品（页面载入当下商品即已售罄）</td><td>页面载入</td><td>抽奖主画面照常渲染（奖品一览各奖级皆显示「售罄」），撕券按钮直接呈现「已全部抽完」停用状态，并<strong>立即</strong>自动跳出「已抽完提醒」弹窗，无需等玩家操作；关闭后同样导回积分商城列表页</td></tr>
-        <tr><td class="spec-field">B-15</td><td>逐张揭晓模式，本次抽出 3 张以上（2 栏排列会换行）</td><td>开启结果弹窗</td><td>卡片按「本次实际抽奖顺序」由左到右、由上到下排列（第 1 张左上、第 2 张右上、第 3 张换行到左下…），<strong>不</strong>依奖级代号或稀有度重新排序</td></tr>
-        <tr><td class="spec-field">B-16</td><td>逐张揭晓模式中出 Last赏</td><td>开启结果弹窗</td><td>Last赏固定出现在排列的<strong>最后一格</strong>（因为它必定是本次最后一张开出的），<strong>不会</strong>像汇总列表模式那样被移到最前面</td></tr>
+        <tr><td class="spec-field">B-12</td><td>单一奖级（非 Last赏）已售罄，但一般奖级剩余总和仍 &gt; 0</td><td>浏览奖品一览／尝试抽奖</td><td>该奖级卡片显示「售罄」，但<strong>不影响</strong>抽奖池运作（该奖级剩余量本就是 0，不会被抽到）；撕券按钮维持可用（示例见 <span class="spec-field">?lowstock=1</span> 里的 S赏卡片）</td></tr>
+        <tr><td class="spec-field">B-13</td><td>本次撕券使一般奖级剩余总和归零（与 B-4 同一时刻）</td><td>点击「收下」关闭开奖结果弹窗</td><td>撕券按钮同步切换为「已全部抽完」并停用；<strong>同时</strong>自动跳出「已抽完提醒」弹窗（见 2-5），需玩家点击「Got It」才关闭；<strong>关闭后强制导回积分商城列表页</strong>，该商品卡片加上「已抢光」遮罩（demo 中以 <span class="spec-field">history.back()</span> 模拟跳转，因积分商城页面不在本文件范围内）</td></tr>
+        <tr><td class="spec-field">B-14</td><td>玩家透过积分商城点进一个「已抽完」的一番赏商品（页面载入当下商品即已售罄），<strong>不论是从商品列表卡片或首页 Banner 点进来，效果都相同</strong>（见 1. 抽奖主画面「进入本页的第二个入口」）</td><td>页面载入</td><td>抽奖主画面照常渲染（奖品一览各奖级皆显示「售罄」），撕券按钮直接呈现「已全部抽完」停用状态，并<strong>立即</strong>自动跳出「已抽完提醒」弹窗，无需等玩家操作（demo 验证见 <span class="spec-field">?soldout=1&modal=soldout-alert</span> 组合参数）；关闭后同样强制导回积分商城列表页；<strong>Banner 本身不需要额外的售罄遮罩／失效判断</strong>，此逻辑已统一由本页处理</td></tr>
+        <tr><td class="spec-field">B-15</td><td>逐张揭晓模式，本次抽出 3 张以上（2 栏排列会换行）</td><td>开启结果弹窗</td><td>卡片按「本次实际抽奖顺序」由左到右、由上到下排列（第 1 张左上、第 2 张右上、第 3 张换行到左下…），<strong>不</strong>依奖级代号或稀有度重新排序（Last赏为唯一例外，见 B-16）</td></tr>
+        <tr><td class="spec-field">B-16</td><td>逐张揭晓模式中出 Last赏</td><td>开启结果弹窗</td><td>Last赏固定出现在<strong>第一排左边（第 1 格）</strong>，<strong>不是</strong>最后一格；虽然它必定是本次最后一张开出的，但会从时间顺序「提前」搬到第 1 格，其余卡片（含原本排第 1 格的那一张）全部各往后移一格——与汇总列表模式（Last赏置顶整个列表）是一致的「固定放最前面」规则，只是逐张模式放的是「格子最前面」（示例见 <span class="spec-field">?modal=result-last-multi</span>）</td></tr>
+        <tr><td class="spec-field">B-17</td><td>某奖级「剩余 ÷ 总量」≤ 34%，但尚未归零（例：剩 1／5）</td><td>浏览奖品一览</td><td>该奖级卡片「剩余」数字改为警示红色，卡片其余部分（图片／名称／标签／可点击性）维持正常，<strong>不</strong>加半透明遮罩——与 B-12 的「已售罄」是两种独立视觉状态，不会同时出现在同一张卡片上（示例见 <span class="spec-field">?lowstock=1</span> 里的 B赏卡片）</td></tr>
+        <tr><td class="spec-field">B-18</td><td>「全包」汇总列表模式中，中出的奖级种类很多，列表内容超过弹窗高度上限（demo 值 440px）</td><td>开启结果弹窗</td><td>弹窗只有<strong>中间的奖品列表区域</strong>出现上下滑动，标题「抽出 N 张」与底部「收下」按钮维持固定不动、不随之滑动或消失；行数不多、内容未超过高度上限时则不会出现滑动痕迹（示例见 <span class="spec-field">?modal=result-agg-overflow</span>，模拟全部 9 个一般奖级＋Last赏共 10 列）</td></tr>
       </tbody>
     </table>
   </div>
@@ -2122,8 +2190,10 @@ tr:hover td { background: #fafcff; }
     <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">多台装置／多人同时抢最后剩余库存时，后端并发扣库存锁定机制已列在第 3 节待确认事项，但<strong>前端</strong>在「送出请求後才发现库存已被别人抽完」这种情境下要显示什么文案／画面，目前也尚未定义，需一并确认</span></div>
     <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">其余奖励类型的数字（免费旋转次数、免费投注张数、道具卡张数、旋转券张数等）是否也一律视为整数处理，以及积分／彩金以外若未来新增其他货币或虚拟资产类型时的格式规范，需一并纳入（积分整数、彩金两位小数、千分位逗号的既定规则见全局规则）</span></div>
     <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">顶部导航标题与 banner 品牌文字最新已改为：只保留返回箭头＋「Rules」按钮，banner 上固定显示「ICHIBAN Lucky Draw」一句话，<strong>不再</strong>依「商品配置」的「商品名称」欄位逐商品显示——需要确认这是否为<strong>永久</strong>规则（所有一番赏商品共用同一句固定文案，玩家无法从 banner 文字分辨是哪一档活动，只能靠上传的 KV 图分辨），还是之后仍要恢复成可依商品名称显示；若永久固定，「商品配置」里的「商品名称」欄位在 H5 画面上是否就完全不再使用（后台记录／积分商城列表页仍会用到，只是不出现在这个 H5 画面）</span></div>
+    <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">奖品一览卡片新增说明的「低库存警示色」（剩余 ÷ 总量 ≤ 34% 时数字变警示色，见情境 D）：34% 这个数值目前只是 H5 demo 里写死的实作细节，<strong>不是</strong>产品明确定义过的正式门槛，需要产品确认最终数值（或改用固定「剩余 ≤ N 张」的绝对数量门槛，而非比例），并同步确认此规则是否也要套用在「商品配置」后台预览、积分商城列表页等其他会显示剩余量的地方</span></div>
   </div>
   <p class="spec-lead" style="margin-top:20px;">一番赏中奖后，对「兑换记录」「积分历史」「资金详情」「我的优惠券」等积分商城既有页面的影响，已独立整理到「<span class="spec-field">前台＿其他页面</span>」分页，不在本页重复。</p>
+  <p class="spec-lead" style="margin-top:20px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:8px;padding:14px 18px;"><strong>本次盘点复核已修正的实作缺陷</strong>（不影响本页任何文字规则，纯粹是原型程式码与既有规则本身有落差，特此记录）：①「用户积分纪录」备注／「商品兑换记录」奖品栏共用的 <span class="spec-field">renderPrizes()</span> 排序函式，原本用字母序排列奖级，会把 S赏误排到 H赏之后，与「S赏固定排最上方、次序在 A赏之前」的规则矛盾，现已改为 Last赏→S赏→A～H赏 的固定权重排序；②「商品兑换记录」的 <span class="spec-field">qtyBadge()</span> 只认得单张／五连／全包三种值，缺「十连」对应的中文显示，现已补上；③「免费项目统计」「免费项目发送记录」两个页签原本的分页栏是写死的假分页（永远只显示 1 个按钮），未依全站「每页 10 笔可翻页」规则实作，现已改用与其他记录页一致的翻页元件。</p>
 </div></div>
 
 <div class="spec-view" id="mergeView8"><div class="spec-view-inner">
@@ -2134,33 +2204,74 @@ tr:hover td { background: #fafcff; }
   <h3>1. 前台「兑换记录」／「积分历史」对应关系</h3>
   <p class="spec-lead">路径：积分商城 ＞ 兑换记录 ／ 积分历史。这是积分商城<strong>全站通用</strong>的订单查询系统，服务所有可兑换商品，<strong>不是</strong>为一番赏专属设计；其资料模型是「一笔购买＝一个商品＝一笔记录」，与一番赏「一次抽奖可能同时开出多个奖品」的情境不同，因此一番赏的每一次抽奖都需要拆成多笔记录写入这套通用系统。</p>
   <ul class="spec-plain">
-      <li><strong>拆分规则</strong>：本次抽奖实际开出几个奖品（含 Last赏视为额外 1 个），「兑换记录」就产生几笔<strong>各自独立</strong>的记录，<strong>不会</strong>合并成一笔——这点与「商品兑换记录 ▸ Ichiban Kuji 抽奖记录」（后台管理端，见前面章节）不同：后台那份是「1 笔购买＝1 笔纪录」，把本次所有奖品列在同一笔纪录的「奖品」栏位里；前台玩家看到的「兑换记录」则是拆开个别显示，两者是<strong>同一份底层抽奖资料的两种不同呈现方式</strong>，不是两套独立资料。核心概念：<strong>一番赏「一张卷」＝「一个赏」＝商品配置里「一次扣除的积分」＝独立系统里的「一个商品」</strong>，玩家买五连即同时购买 5 个商品，购买五张卷各自扣款、各自成立一笔独立记录，逻辑上完全不冲突</li>
+      <li><strong>拆分规则</strong>：本次抽奖开出几个奖品（含 Last赏视为额外 1 个），「兑换记录」就产生几笔各自独立的记录，不会合并成一笔。
+        <ul style="margin:8px 0 0;padding-left:20px;">
+          <li>后台「商品兑换记录 ▸ Ichiban Kuji 抽奖记录」是「1 笔购买＝1 笔纪录」，把本次所有奖品列在同一笔纪录的「奖品」栏位里；前台「兑换记录」则是拆开个别显示——两者是<strong>同一份底层资料的两种呈现方式</strong>，不是两套独立资料</li>
+          <li>核心概念：一番赏「一张卷」＝「一个赏」＝商品配置里「一次扣除的积分」＝独立系统里的「一个商品」。玩家买五连即同时购买 5 个商品，各自扣款、各自成立一笔独立记录，逻辑上不冲突</li>
+        </ul>
+      </li>
       <li><strong>列表页栏位</strong>（对照截图）：商品图片＝该奖品图片；商品名称；积分金额（红色星形积分图示＋数字）；右侧状态按钮；列表上方有资料同步延迟的提示文字</li>
-      <li><strong>「状态」筛选下拉，选项扩充</strong>：原本为「全部／待审核／已完成／已拒绝」，本次扩充为<strong>全部／待审核／已完成／已拒绝／待发货／已发货</strong>——新增的「待发货」「已发货」用于一番赏<strong>实物商品</strong>（第一层＝实体）中奖后的寄送流程追踪，虚拟奖品（彩金／积分／优惠券等）不会出现这两个状态。互动方式<strong>不变</strong>，沿用「我的 ▸ 资金详情 ▸ 记录」页签既有的同款下拉组件（点击后收在原地展开，锚点在按钮下方，选中项蓝底白字，选完自动收合），画面示意见下方</li>
-      <li><strong>新增「商品类型」筛选</strong>：在「状态」下拉<strong>下方</strong>新增一排<strong>水平滑动的选项列</strong>（维持滑动列形式，不是下拉选单），用来筛选这笔记录属于积分商城里的哪一种商品类型，让玩家可以只看「Ichiban Kuji」自己的兑换记录，不会被 Smart Load 话费充值、一般优惠券、其他商城商品等不相干的记录淹没。选项<strong>直接沿用</strong>「商品配置」弹窗既有的<span class="spec-field">商品类别</span>多选 checkbox 清单，<strong>资料来源路径</strong>：<span class="spec-field">后台 ＞ 积分商城 ＞ 商品管理 ＞ 新增商品</span>（见「商品配置」分页 2.1 节，同一份资料来源，不另外新建一套分类）；互动与样式沿用<strong>积分商城首页</strong>「限时抢购」区块下方已经在用的同款商品分类滑动列组件，选项可左右滑动查看，点击直接套用筛选，不需要额外跳出弹窗，画面示意见下方</li>
-      <li><strong>技术前提</strong>：「商品类别」本来就是「商品配置」里每个商品自己会勾选的既有栏位（见「商品配置」分页 2.1 节，新增一番赏商品时须勾选「Ichiban Kuji」），<strong>不是</strong>要新增一个栏位，而是要确认「兑换记录」这套通用查询系统目前查询时<strong>有没有</strong>带出／能否依这个栏位做筛选（可能需要跟商品配置做关联查询）——这点需要后端确认技术上是否可行，若目前查询完全没有带这个栏位，才需要额外新增</li>
-      <li><strong>状态判断</strong>：由该奖级的「审核模式」栏位决定（见「商品配置」2.1 节）。一番赏目前<strong>固定仅自动审核</strong>，因此一番赏产生的兑换记录审核阶段会直接通过，理论上<strong>不会</strong>出现「待审核」／「已拒绝」状态（这两种状态目前只会发生在积分商城里其他支援人工审核的商品，与一番赏无关）；若日后一番赏也开放手动审核，需另外定义流程，见待确认事项。<strong>「待发货」／「已发货」</strong>与审核状态是<strong>不同维度</strong>：一番赏的<strong>实物商品</strong>奖级中奖后需要走既有的寄送流程，理论上会经过「待发货 → 已发货」，虚拟奖品（彩金／积分／优惠券等）没有寄送流程，不会出现这两个状态；两个维度实际如何呈现（例如实物赏是否直接跳过「已完成」改显示「待发货」），需要与积分商城既有系统的实作方式确认，见待确认事项</li>
-      <li><strong>订单详情页</strong>：点击列表任一笔记录进入，包含状态流程图（「待审核 → 已完成」或「待审核 → 已拒绝」两种路径）、兑换单号、商品名称、<strong>商品价格</strong>＝该商品在「商品配置」设定的<span class="spec-field">购买价格</span>（一张卷＝一次抽＝一次扣除的积分数），<strong>每笔拆分记录都各自显示同一个单抽购买价格</strong>，不是 0、也不是总花费平均分摊——例如后台配置单抽购买价格为 500 积分，玩家五连抽出的 5 笔记录，商品价格栏位都各自显示「500」</li>
-      <li><strong>已拒绝＝退积分</strong>：若某笔记录最终状态为「已拒绝」，对应的积分会退还给玩家，并在「积分历史」新增一笔<strong>收入</strong>记录，文案格式「Points refunded after product review rejection」</li>
-      <li><strong>积分历史页面</strong>：分「全部／收入／支出」三个分页签，<strong>仅显示近 30 日</strong>资料，每笔记录格式「Redeem <span class="spec-field">{商品名称}</span>」＋时间戳＋金额（支出为负数红字，收入为正数绿字）</li>
+      <li><strong>「商品名称」栏位＝该笔奖品自己的名称</strong>（已确认），规则与「商品配置」2.2.1 节「H5 前台奖品一览卡片排版」一致：
+        <ul style="margin:8px 0 0;padding-left:20px;">
+          <li>彩金／积分类 → 直接显示数值本身（如「5,000.00」「1,000」）</li>
+          <li>优惠券／免费旋转券／免费投注券／道具卡 → 显示该券主档名称（如「J Mania Triple Jam」）</li>
+          <li>实物 → 显示该奖级填写的「奖品名称」（如「招财猫 铂金典藏摆件」），如范例截图所示</li>
+          <li>请与「商品配置」里整个活动本身的「商品名称」区分：后者是「这一整个活动叫什么」（如「苹果 Ichiban Kuji」，即「活动名称」栏位的资料来源），前者是「这一笔奖品叫什么」——两者不同栏位、取值来源也不同，不要混用</li>
+        </ul>
+      </li>
+      <li><strong>「状态」筛选，入口改版＋选项扩充</strong>：全部／待审核／已完成／已拒绝／待发货／已发货（原本只有前 4 项）。
+        <ul style="margin:8px 0 0;padding-left:20px;">
+          <li>「待发货」「已发货」只用于一番赏<strong>实物商品</strong>，<strong>已确认</strong>不再往下细分子状态（如范例截图，实物赏中奖后直接以「待发货」取代「已完成」显示）；虚拟奖品（彩金／积分／优惠券等）不会出现这两个状态。这是积分商城既有系统本来就有的既定逻辑，一番赏沿用即可，不需要额外定义新流程</li>
+          <li>入口样式改为圆形图标按钮（不加红点提示），与「商品类型」滑动列合并为同一排、固定在最右侧，不再独占一整排留下大片空白</li>
+          <li>点击后沿用「兑换记录」页本身既有的 bottom sheet 弹窗（取消／确认＋选项清单，选中项蓝字），互动逻辑完全不变，只是入口从下拉框换成图标按钮，画面示意见下方</li>
+        </ul>
+      </li>
+      <li><strong>新增「商品类型」筛选</strong>：与「状态」筛选图标按钮合并为同一排，左侧新增一段水平滑动的选项列，筛选这笔记录属于积分商城里的哪一种商品类型，让玩家可以只看「Ichiban Kuji」自己的兑换记录，不被其他不相干的记录淹没。
+        <ul style="margin:8px 0 0;padding-left:20px;">
+          <li>选项直接沿用「商品配置」弹窗既有的<span class="spec-field">商品类别</span>多选 checkbox 清单（资料来源：<span class="spec-field">后台 ＞ 积分商城 ＞ 商品管理 ＞ 新增商品</span>，见 2.1 节，同一份资料来源，不另建一套分类）；互动与样式沿用积分商城首页「限时抢购」区块下方已在用的同款滑动列组件</li>
+          <li><strong>已确认不需要清理／合并</strong>：即使清单混合了英文缩写旧分类（FREESPIN／MONEY／COUPON）与中文新分类（免费旋转／彩金／优惠券），也直接照后台目前实际勾选的商品类别原样显示，后台配置什么、前台就显示什么，不做归并整理</li>
+          <li><strong>可滑动的视觉提示</strong>：本次改版右侧多了「状态」图标按钮，可用宽度变窄，容易让人误以为选项到「优惠券」或「积分」就结束。最后一个完整显示的选项之后，要让下一个选项露出局部文字（被容器边界裁切、<strong>不加</strong>白色渐层淡出），提示玩家还能往左滑——渐层会把露出的文字模糊到看不清，玩家反而会误判已经到底</li>
+        </ul>
+      </li>
+      <li><strong>筛选互动逻辑</strong>（「状态」＋「商品类型」共通规则，供开发实作参考）：
+        <ol style="margin:8px 0 0;padding-left:20px;">
+          <li><strong>进入页面（初始状态）</strong>：「状态」与「商品类型」两个筛选条件预设都是「全部」，列表显示该玩家全部的兑换记录，不做任何筛选</li>
+          <li><strong>套用筛选</strong>：玩家点击「状态」图标按钮，从 bottom sheet 选单选择「待审核」并确认后，列表立即依「状态＝待审核」重新查询并只显示待审核的记录；「商品类型」滑动列同理。两个筛选条件各自独立、同时生效（AND 关系）——例如「状态＝待审核」＋「商品类型＝Ichiban Kuji」只显示两者皆符合的记录</li>
+          <li><strong>筛选状态需要保留在当前页面存活期间</strong>：套用「待审核」筛选后，只要玩家还停留在这页，「状态」都会持续显示／维持在「待审核」，不会因为再次点击就跳回「全部」——筛选值是页面当前的前端状态变量，不是「点一次就失效」的单次动作</li>
+          <li><strong>不做持久化，离开或刷新即重置</strong>：筛选条件只存在于当前这次页面浏览中（前端记忆体变量），不写入 localStorage／cookie／URL 参数。玩家刷新页面、或离开兑换记录页后重新进入，「状态」与「商品类型」都会重新回到预设值「全部」</li>
+        </ol>
+      </li>
+      <li><strong>技术前提</strong>：「商品类别」本来就是「商品配置」里每个商品自己会勾选的既有栏位（见 2.1 节），不是要新增栏位，而是要确认「兑换记录」这套通用查询系统目前查询时能否依这个栏位做筛选（可能需要跟商品配置做关联查询）——需要后端确认技术上是否可行</li>
+      <li><strong>状态判断</strong>（已确认）：由该<strong>商品</strong>在「商品配置」弹窗设定的「审核模式」决定（自动审核／手动审核，见 2.1 节），与积分商城其他商品共用同一套机制，不是锁定仅自动。
+        <ul style="margin:8px 0 0;padding-left:20px;">
+          <li>审核模式是<strong>商品层级</strong>的设置：同一个一番赏商品，不论玩家单抽／五连／十连／全包，本次拆分出的所有记录一律套用同一套结果——自动审核直接「已完成」；手动审核则一开始全部「待审核」，人工审核后各自转为「已完成」或「已拒绝」，不会出现同一次抽奖部分记录已完成、部分记录待审核的情况</li>
+          <li>目前「商品配置」弹窗里手动审核选项暂时反灰锁定（见 2.1 节），是现阶段 UI 尚未开放此功能的限制，不代表业务规则写死仅自动；<strong>已与运营确认</strong>：目前一番赏商品实务上一律设定为自动审核，手动审核只是系统保留的能力，暂不会真的启用</li>
+          <li><strong>奖励发放时机</strong>（若日后采用手动审核，已确认）：状态仍为「待审核」期间，对应虚拟奖励（彩金／积分／优惠券／免费旋转券／免费投注券／道具卡）尚不会出现在「资金详情」「积分历史」「我的优惠券」等专属页面；要等状态转为「已完成」后才会实际发放（例如免费旋转券要等已完成后才出现在「我的优惠券」未使用分页），被拒绝则不发放、直接走「已拒绝＝退积分」流程（见下方）</li>
+          <li>「待发货」／「已发货」与审核状态是<strong>不同维度</strong>：一番赏实物商品中奖后需要走既有寄送流程，理论上会经过「待发货 → 已发货」，虚拟奖品没有寄送流程不会出现这两个状态；两个维度实际如何呈现，需要与积分商城既有系统的实作方式确认，见待确认事项</li>
+        </ul>
+      </li>
+      <li><strong>兑换单号＝共用后台同一笔购买的订单号</strong>（已确认）：同一次购买（不论单抽／五连／十连／全包）拆分出的所有前台记录，「兑换单号」栏位全部显示相同的值，直接沿用后台那一笔购买的订单号（例如订单号 <span class="spec-field">PR605996359563974932</span>，五连拆成的 5 笔前台记录都显示同一个单号，如范例截图所示），不会为每笔拆分记录另外生成新的单号。因此前台任一笔拆分记录都能直接用这个共用单号，反查回后台完整的购买交易，不需要额外新增关联栏位</li>
+      <li><strong>订单详情页</strong>：点击列表任一笔记录进入，包含状态流程图（「待审核 → 已完成」或「待审核 → 已拒绝」两种路径）、兑换单号（规则同上）、商品名称（该笔奖品自己的名称，规则同上方「列表页栏位」）、<strong>商品价格</strong>＝该商品的<span class="spec-field">购买价格</span>（一张卷＝一次抽＝一次扣除的积分数）——每笔拆分记录都各自显示同一个单抽购买价格，不是 0、也不是总花费平均分摊，例如单抽 500 积分，五连拆出的 5 笔记录各自都显示「500」</li>
+      <li><strong>已拒绝＝退积分</strong>：若某笔记录最终状态为「已拒绝」，对应积分会退还给玩家，并在「积分历史」新增一笔<strong>收入</strong>记录，文案格式「Points refunded after product review rejection」</li>
+      <li><strong>积分历史页面</strong>：分「全部／收入／支出」三个分页签，仅显示近 30 日资料，每笔记录格式「Redeem <span class="spec-field">{商品名称}</span>」＋时间戳＋金额（支出为负数红字，收入为正数绿字）</li>
     </ul>
 
   <style>
-    .exch-mock{width:340px;margin:4px auto 8px;background:#f2f3f5;border:1px solid #e2e6ec;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(16,20,27,.04),0 10px 22px -16px rgba(16,20,27,.24);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}
+    .exch-mock{width:372px;margin:4px auto 8px;background:#f2f3f5;border:1px solid #e2e6ec;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(16,20,27,.04),0 10px 22px -16px rgba(16,20,27,.24);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}
     .exch-mock .exch-topbar{position:relative;text-align:center;padding:14px 12px;font-size:15px;font-weight:700;color:#1a1a1a;background:#fff;border-bottom:1px solid #f0f0f0;}
     .exch-mock .exch-topbar .exch-back{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:#333;}
-    .exch-mock .exch-filters{display:flex;gap:8px;padding:12px 14px 4px;background:#fff;position:relative;}
-    .exch-mock .exch-dd{flex:1;display:flex;align-items:center;justify-content:space-between;border:1px solid #e4e4e4;border-radius:8px;padding:8px 12px;font-size:12px;color:#333;background:#fafafa;}
-    .exch-mock .exch-dd .exch-caret{color:#999;font-size:11px;margin-left:6px;}
-    .exch-mock .exch-dd.open{border:1.5px solid #3355dd;color:#3355dd;background:#fff;position:relative;}
-    .exch-mock .exch-panel{position:absolute;top:44px;left:14px;width:110px;background:#fff;border-radius:10px;box-shadow:0 6px 20px rgba(16,20,27,.18);padding:6px;z-index:5;}
-    .exch-mock .exch-popt{text-align:center;font-size:11.5px;color:#555;padding:7px 0;border-radius:8px;}
-    .exch-mock .exch-popt.on{background:#3355dd;color:#fff;font-weight:600;}
-    .exch-mock .exch-chiprow{display:flex;gap:8px;padding:10px 0 6px 14px;overflow-x:hidden;background:#fff;position:relative;}
+    .exch-mock .exch-barrow{display:flex;align-items:center;gap:6px;padding:12px 10px;background:#fff;}
+    .exch-mock .exch-chiprow{flex:1;display:flex;gap:8px;overflow-x:hidden;min-width:0;position:relative;}
     .exch-mock .exch-chip{flex:0 0 auto;padding:6px 14px;border-radius:16px;font-size:11px;white-space:nowrap;background:#f2f2f2;color:#555;}
     .exch-mock .exch-chip.on{background:#3355dd;color:#fff;font-weight:600;}
     .exch-mock .exch-chip.new{outline:1.5px dashed #fa8c16;outline-offset:-1px;}
-    .exch-mock .exch-chiprow::after{content:'';position:absolute;right:0;top:0;bottom:0;width:24px;background:linear-gradient(90deg,rgba(255,255,255,0),#fff);}
+    .exch-mock .exch-iconbtn{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#f2f2f2;display:flex;align-items:center;justify-content:center;font-size:12px;color:#555;}
+    .exch-sheet{width:372px;margin:10px auto 8px;background:#fff;border-radius:14px 14px 0 0;overflow:hidden;box-shadow:0 1px 2px rgba(16,20,27,.04),0 10px 22px -16px rgba(16,20,27,.24);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}
+    .exch-sheet .sheet-head{display:flex;justify-content:space-between;padding:14px 16px;font-size:12.5px;border-bottom:1px solid #f0f0f0;}
+    .exch-sheet .sheet-head .cancel{color:#999;}
+    .exch-sheet .sheet-head .confirm{color:#3355dd;font-weight:600;}
+    .exch-sheet .sheet-opt{text-align:center;font-size:13px;color:#333;padding:13px 0;}
+    .exch-sheet .sheet-opt.on{color:#3355dd;font-weight:700;}
     .exch-mock .exch-warn{margin:8px 14px 12px;font-size:10.5px;color:#e5484d;line-height:1.55;background:#fff;}
     .exch-mock .exch-list{padding:0 12px 14px;display:flex;flex-direction:column;gap:10px;}
     .exch-mock .exch-item{display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:10px;box-shadow:0 1px 2px rgba(16,20,27,.05);position:relative;}
@@ -2175,25 +2286,17 @@ tr:hover td { background: #fafcff; }
   </style>
   <div class="exch-mock">
     <div class="exch-topbar"><span class="exch-back">‹</span>兑换记录</div>
-    <div class="exch-filters">
-      <div class="exch-dd open">全部<span class="exch-caret">⌄</span></div>
-      <div class="exch-panel">
-        <div class="exch-popt on">全部</div>
-        <div class="exch-popt">待审核</div>
-        <div class="exch-popt">已完成</div>
-        <div class="exch-popt">已拒绝</div>
-        <div class="exch-popt">待发货</div>
-        <div class="exch-popt">已发货</div>
+    <div class="exch-barrow">
+      <div class="exch-chiprow">
+        <div class="exch-chip on new">全部</div>
+        <div class="exch-chip new">Ichiban Kuji</div>
+        <div class="exch-chip new">彩金</div>
+        <div class="exch-chip new">积分</div>
+        <div class="exch-chip new">优惠券</div>
+        <div class="exch-chip new">免费旋转</div>
+        <div class="exch-chip new">道具卡</div>
       </div>
-    </div>
-    <div class="exch-chiprow">
-      <div class="exch-chip on new">全部</div>
-      <div class="exch-chip new">Ichiban Kuji</div>
-      <div class="exch-chip new">彩金</div>
-      <div class="exch-chip new">积分</div>
-      <div class="exch-chip new">优惠券</div>
-      <div class="exch-chip new">免费旋转</div>
-      <div class="exch-chip new">道具卡</div>
+      <div class="exch-iconbtn">☰</div>
     </div>
     <div class="exch-warn">*订单记录数据同步存在延迟，若您未发现最新订单记录，请稍后再试。</div>
     <div class="exch-list">
@@ -2215,7 +2318,17 @@ tr:hover td { background: #fafcff; }
         <div class="exch-status pending">待审核</div></div>
     </div>
   </div>
-  <p class="spec-caption" style="text-align:center;">上方「状态」下拉：互动样式沿用「我的 ▸ 资金详情 ▸ 记录」页签既有的同款下拉组件（点击后收在原地展开，锚点在按钮下方，选中项蓝底白字，选完自动收合），选项已扩充为 6 项（全部／待审核／已完成／已拒绝／待发货／已发货）。下方「商品类型」：<strong>维持水平滑动的选项列</strong>（虚线框标示新增），不是下拉选单，选项可左右滑动查看，点击直接套用筛选</p>
+  <p class="spec-caption" style="text-align:center;">「商品类型」滑动列与「状态」筛选<strong>合并为同一排</strong>：商品类型滑动列在左侧维持水平滑动不变（虚线框标示新增），「状态」筛选入口改为<strong>圆形图标按钮</strong>固定在同一排最右侧（不加红点提示），不再像先前那样让状态筛选独占一整排、留下大片空白</p>
+  <div class="exch-sheet">
+    <div class="sheet-head"><span class="cancel">取消</span><span class="confirm">确认</span></div>
+    <div class="sheet-opt on">全部</div>
+    <div class="sheet-opt">待审核</div>
+    <div class="sheet-opt">已完成</div>
+    <div class="sheet-opt">已拒绝</div>
+    <div class="sheet-opt">待发货</div>
+    <div class="sheet-opt">已发货</div>
+  </div>
+  <p class="spec-caption" style="text-align:center;">点击图标按钮后<strong>呼出「兑换记录」页本身既有的 bottom sheet 弹窗</strong>（取消／确认＋选项清单，选中项蓝字），互动逻辑完全不变，只是入口从下拉框改成图标按钮；选项清单由原本 4 项扩充为 6 项：全部／待审核／已完成／已拒绝／待发货／已发货</p>
   <hr style="border:none;border-top:1px solid #e2e6ec;margin:32px 0;">
 
   <h3>2. 中奖后依奖励类型对应影响的前台其他页面</h3>
@@ -2224,7 +2337,7 @@ tr:hover td { background: #fafcff; }
     <table>
       <thead><tr><th>商品配置第二层分类</th><th>对应影响的前台页面</th><th>说明</th></tr></thead>
       <tbody>
-        <tr><td class="spec-field">彩金</td><td>我的 ＞ 资金详情</td><td>中奖后除兑换记录外，也会在「资金详情」新增一笔入帐记录，对应该笔彩金金额</td></tr>
+        <tr><td class="spec-field">彩金</td><td>我的 ＞ 资金详情</td><td>中奖后除兑换记录外，也会在「资金详情 ▸ 交易记录」分页新增一笔入帐记录，对应该笔彩金金额，归类在<strong>「促销」</strong>类别下；文案格式（已确认）为「<span class="spec-field">活动奖励领取：{商品名称}</span>」（如范例截图），此处 <span class="spec-field">{商品名称}</span> 采用「商品配置」中<strong>该一番赏活动本身</strong>的商品名称（与「活动名称＝商品名称」全局规则一致，例如「活动奖励领取：苹果 Ichiban Kuji」）——<strong>注意</strong>这跟「兑换记录」栏位里显示「该笔奖品自己名称」的规则不同（见第 1 节「商品名称」栏位说明），两处字段名称相同但取值来源不同，请勿混用</td></tr>
         <tr><td class="spec-field">积分</td><td>积分商城 ＞ 积分历史</td><td>中奖后在「积分历史」的<strong>收入</strong>分页新增一笔记录，对应该笔积分数量——与前段「已拒绝退积分」是不同情境：那笔是审核被拒后的退款，这笔是抽中当下直接获得的收入</td></tr>
         <tr><td class="spec-field">优惠券</td><td>我的 ＞ 优惠券</td><td>中奖后在「我的优惠券」新增一张对应的优惠券</td></tr>
         <tr><td class="spec-field">免费投注券</td><td>我的 ＞ 优惠券</td><td>中奖后在「我的优惠券」新增一张对应的免费投注券，依券种分类筛选显示</td></tr>
@@ -2233,17 +2346,116 @@ tr:hover td { background: #fafcff; }
       </tbody>
     </table>
   </div>
+  <style>
+    .fund-mock,.coupon-mock{width:372px;margin:4px auto 8px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(16,20,27,.04),0 10px 22px -16px rgba(16,20,27,.24);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}
+    .fund-mock .fm-top,.coupon-mock .cm-top{position:relative;text-align:center;padding:14px 12px;font-size:15px;font-weight:700;color:#1a1a1a;background:#fff;border-bottom:1px solid #f0f0f0;}
+    .fund-mock .fm-back,.coupon-mock .cm-back{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:#333;}
+    .coupon-mock .cm-rule{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;color:#3355dd;}
+    .fund-mock .fm-tabs{display:flex;gap:8px;padding:12px 14px 6px;}
+    .fund-mock .fm-tab{flex:1;text-align:center;padding:8px 0;border-radius:16px;font-size:12.5px;color:#666;background:#f2f3f5;}
+    .fund-mock .fm-tab.on{background:#3355dd;color:#fff;font-weight:600;}
+    .fund-mock .fm-filters{display:flex;gap:8px;padding:6px 14px 10px;align-items:center;}
+    .fund-mock .fm-date{flex:1;border:1px solid #e2e6ec;border-radius:8px;padding:7px 10px;font-size:11px;color:#333;}
+    .fund-mock .fm-sel{border:1px solid #3355dd;border-radius:8px;padding:7px 12px;font-size:11.5px;color:#3355dd;white-space:nowrap;}
+    .fund-mock .fm-range{display:flex;gap:14px;padding:2px 14px 10px;font-size:12px;color:#999;}
+    .fund-mock .fm-range .on{color:#3355dd;font-weight:600;border-bottom:2px solid #3355dd;padding-bottom:2px;}
+    .fund-mock .fm-list{padding:2px 14px 16px;}
+    .fund-mock .fm-item{background:#fff;border:1px solid #f0f0f0;border-radius:12px;padding:14px;box-shadow:0 1px 2px rgba(16,20,27,.04);display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+    .fund-mock .fm-name{font-size:13.5px;font-weight:700;color:#1a1a1a;line-height:1.4;}
+    .fund-mock .fm-time{font-size:11px;color:#999;margin-top:6px;}
+    .fund-mock .fm-amt{font-size:16px;font-weight:700;color:#2fa84f;white-space:nowrap;}
+    .coupon-mock .cm-tabs{display:flex;gap:16px;padding:12px 16px 10px;border-bottom:1px solid #f0f0f0;font-size:12.5px;color:#999;}
+    .coupon-mock .cm-tabs .on{color:#3355dd;font-weight:700;border-bottom:2px solid #3355dd;padding-bottom:8px;margin-bottom:-11px;}
+    .coupon-mock .cm-list{padding:12px 14px;display:flex;flex-direction:column;gap:10px;}
+    .coupon-mock .cm-card{border:1px solid #f0f0f0;border-radius:12px;padding:12px;position:relative;box-shadow:0 1px 2px rgba(16,20,27,.04);}
+    .coupon-mock .cm-row{display:flex;gap:10px;align-items:center;}
+    .coupon-mock .cm-icon{flex:0 0 60px;width:60px;height:60px;border-radius:8px;background:linear-gradient(135deg,#f7941d,#f15a24);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;text-align:center;line-height:1.3;position:relative;}
+    .coupon-mock .cm-x{position:absolute;top:-6px;left:-6px;background:#6b3fa0;color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;font-weight:700;}
+    .coupon-mock .cm-body{flex:1;min-width:0;}
+    .coupon-mock .cm-name{font-size:13.5px;font-weight:700;color:#1a1a1a;margin-bottom:4px;}
+    .coupon-mock .cm-sub{font-size:11px;color:#999;margin-bottom:4px;}
+    .coupon-mock .cm-date{font-size:11px;color:#e5484d;line-height:1.6;}
+    .coupon-mock .cm-btnwrap{margin-top:8px;text-align:right;}
+    .coupon-mock .cm-btn{display:inline-block;background:#3355dd;color:#fff;font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;}
+    .coupon-mock .cm-pct{position:absolute;top:12px;right:12px;text-align:right;}
+    .coupon-mock .cm-pct b{font-size:20px;color:#e5484d;display:block;line-height:1;}
+    .coupon-mock .cm-pct span{font-size:10px;color:#999;}
+  </style>
+
+  <div class="spec-split">
+    <div class="spec-screen-card" style="background:#f2f3f5;padding:22px 0;">
+      <div class="fund-mock">
+        <div class="fm-top"><span class="fm-back">‹</span>记录</div>
+        <div class="fm-tabs"><div class="fm-tab">存款</div><div class="fm-tab">提款</div><div class="fm-tab on">交易记录</div></div>
+        <div class="fm-filters">
+          <div class="fm-date">2026/07/09 ～ 2026/07/09</div>
+          <div class="fm-sel">促销 ▾</div>
+        </div>
+        <div class="fm-range"><span>今天</span><span>昨天</span><span class="on">最近一周</span></div>
+        <div class="fm-list">
+          <div class="fm-item">
+            <div><div class="fm-name">活动奖励领取：苹果 Ichiban Kuji</div><div class="fm-time">2026/07/09 14:26:00</div></div>
+            <div class="fm-amt">+500.00</div>
+          </div>
+        </div>
+      </div>
+      <p class="spec-caption" style="text-align:center;">示意画面（对照截图重建），实际视觉以 UI 设计出图为准</p>
+    </div>
+    <div class="spec-text">
+      <h3>资金详情 ▸ 交易记录（促销类别）</h3>
+      <ul class="spec-plain">
+        <li>路径：我 ＞ 资金详情 ＞ 交易记录，筛选类别选「促销」。一番赏的<strong>彩金</strong>类奖品中奖后，除了「兑换记录」外，也会在这里同步新增一笔入帐记录</li>
+        <li>文案格式（已确认）：<span class="spec-field">活动奖励领取：{商品名称}</span>，如上图「活动奖励领取：苹果 Ichiban Kuji」，金额以绿色正数呈现</li>
+        <li>此处 <span class="spec-field">{商品名称}</span> 采用「商品配置」中<strong>该一番赏活动本身</strong>的商品名称（与「活动名称＝商品名称」全局规则一致），<strong>不是</strong>该笔奖品自己的数值——这跟「兑换记录」栏位显示「该笔奖品自己名称」的规则不同（见第 1 节），两处字段名称相同但取值来源不同，请勿混用</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="spec-split" style="margin-top:32px;">
+    <div class="spec-screen-card" style="background:#f2f3f5;padding:22px 0;">
+      <div class="coupon-mock">
+        <div class="cm-top"><span class="cm-back">‹</span>我的优惠券<span class="cm-rule">规则</span></div>
+        <div class="cm-tabs"><span class="on">未使用(2)</span><span>待结算(0)</span><span>已使用(1)</span><span>已过期(18)</span></div>
+        <div class="cm-list">
+          <div class="cm-card">
+            <div class="cm-row">
+              <div class="cm-icon"><span class="cm-x">×1</span>FREE<br>SPIN</div>
+              <div class="cm-body">
+                <div class="cm-name">J Mania Triple Jam</div>
+                <div class="cm-date">获得日期：07/09/2026 18:10:52</div>
+                <div class="cm-date">失效日期：07/10/2026 18:10:52</div>
+              </div>
+            </div>
+            <div class="cm-btnwrap"><span class="cm-btn">立即使用</span></div>
+          </div>
+          <div class="cm-card">
+            <div class="cm-pct"><b>10%</b><span>输返券</span></div>
+            <div class="cm-name" style="max-width:230px;">输返 10%－有效期 240 小时</div>
+            <div class="cm-sub">单笔奖金上限 ₱100，5x 流水要求</div>
+            <div class="cm-date">获得日期：07/09/2026 18:10:40</div>
+            <div class="cm-date">失效日期：07/19/2026 18:10:40</div>
+            <div class="cm-btnwrap"><span class="cm-btn">立即使用</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="spec-caption" style="text-align:center;">示意画面（对照截图重建）：第 1 张是一番赏 C赏中出的免费旋转券范例，第 2 张是站内其他来源的优惠券，用来示意「我的优惠券」本来就混合多来源券种、不是一番赏专属页面</p>
+    </div>
+    <div class="spec-text">
+      <h3>我的优惠券（统一入口）</h3>
+      <ul class="spec-plain">
+        <li>路径：我 ＞ 优惠券。<strong>已确认</strong>：优惠券／免费投注券／免费旋转券／道具卡这四种类型的一番赏奖品，一律进入<strong>同一个</strong>「我的优惠券」页面（未使用／待结算／已使用／已过期四个分页签＋卡片式列表），<strong>不是</strong>四个各自独立的子页签入口</li>
+        <li>页面内每张券各自标示获得日期／失效日期，可点击「立即使用」；与「兑换记录」各自产生独立纪录（见第 1 节）是并存关系，不是互相取代</li>
+        <li>这个页面本来就是积分商城<strong>全站通用</strong>的既有系统，一番赏发出的券只是众多来源之一，会跟其他活动发出的券混在同一个列表里（如上图第 2 张范例），不会另外切一个「一番赏专属」的子页签</li>
+      </ul>
+    </div>
+  </div>
+
   <p class="spec-lead">「实物商品」（第一层＝实物）不适用本表，实物赏仅产生「兑换记录」，走既有的实物寄送／核销流程，不额外对应上述任何页面。</p>
   <hr style="border:none;border-top:1px solid #e2e6ec;margin:32px 0;">
 
   <h3>待确认事项</h3>
   <div class="spec-qa-list" style="margin-top:0;">
-    <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">「兑换记录」每笔的<strong>「商品名称」</strong>，确认是显示<strong>该笔奖品自己的名称</strong>（如「招财猫 铂金典藏摆件」），还是显示整个一番赏活动的商品名称（如 banner 上的名称）？截图范例看起来像是显示各自独立的商品名称，但需要产品明确定义，因为会影响拆分逻辑要从哪个栏位取值</span></div>
-    <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">一番赏目前锁定仅自动审核，兑换记录理论上不会出现「待审核」／「已拒绝」；但若日后开放人工审核，「一次抽奖开出多个奖品、每笔记录各自独立送审」的情况下，是否可能同一次抽奖里<strong>部分奖品通过、部分被拒绝</strong>？若是，玩家在 H5 画面当下已经看到「抽中」该奖品的开奖动画与结果，事后才被后台拒绝退积分，这种「先看到中奖、事后又被取消」的体验落差要怎么处理（要另外跳提示通知玩家吗？），需要产品定义</span></div>
-    <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">后台「商品兑换记录 ▸ Ichiban Kuji 抽奖记录」（1 笔＝1 次购买）与前台「兑换记录」（拆分成 N 笔）虽然是同一份底层资料，但两边呈现的笔数不同——是否需要让这两边的记录带有可互相对照的关联编号，方便客服／稽核在处理玩家申诉时，能从前台单一奖品记录反查回后台完整的那一次购买交易，需要产品与后端确认</span></div>
-    <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">第 2 节「我的 ▸ 资金详情」「我的 ▸ 优惠券」这两个既有页面，目前只确认了<strong>会</strong>因一番赏中奖而产生对应记录，但尚未有实际截图核对：资金详情该笔记录的栏位格式／文案（例如是否与积分历史的「Redeem {商品名称}」同一套命名规则）、我的优惠券里免费旋转券／免费投注券／道具卡／优惠券这四种类型是否显示在同一个列表用分类筛选、还是各自独立子页签，需要补充截图后再确认细节</span></div>
-    <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">第 1 节「兑换记录」新增的「商品类型」滑动选项列，选项已确认<strong>直接沿用</strong>「商品配置」既有的商品类别 checkbox 清单（全部／FREESPIN／MONEY／COUPON／tickets（票券）／实物／彩金／优惠券／免费旋转／话费／流量／pisoluck／免费投注／盲盒／道具卡／Ichiban Kuji），不用另外定案；但仍有两点待确认：①「兑换记录」这套通用查询系统技术上能否依商品类别做筛选（需后端确认是否要新增关联查询）；②这份清单混合了英文缩写旧分类（FREESPIN／MONEY／COUPON）与新的中文分类（免费旋转／彩金／优惠券），若原样显示给玩家看容易造成混淆，是否需要先清理／合并重复分类再上线，需要产品决定</span></div>
-    <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">第 1 节「状态」下拉新增的「待发货」「已发货」两个选项，与既有「待审核／已完成／已拒绝」的审核状态是不同维度（发货状态 vs 审核状态）——一番赏<strong>实物商品</strong>奖级中奖后实际会怎么呈现（例如是否直接从「已完成」再细分出发货子状态，还是发货状态取代「已完成」显示），需要跟积分商城既有系统的实物商品发货流程实作方式确认，才能定案</span></div>
+    <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text">第 1 节「兑换记录」新增的「商品类型」滑动选项列，选项内容与是否需要清理已确认（见第 1 节「新增「商品类型」筛选」）；仍剩一点纯技术问题待确认：「兑换记录」这套通用查询系统目前查询时<strong>有没有</strong>带出商品类别栏位、技术上能否依此栏位做筛选（可能需要跟商品配置做关联查询），需要后端确认是否要新增查询逻辑</span></div>
   </div>
 </div></div>
 
@@ -2626,15 +2838,17 @@ function formatPrizeLabel(tier, prizeType, prize) {
  * 同 prizeLabel 的多个奖品合并输出，重复品项自动加 ×N
  * 例：[C赏 积分500.00, C赏 积分500.00, E赏 旋转券×20] → "C赏 积分500.00 ×2，E赏 旋转券×20"
  */
+// 奖级排序权重：Last赏最前，其次 S赏，再依 A赏～H赏字母序（与「商品配置」S→A→B→…→H→Last 的显示顺序保持一致）
+const TIER_SORT_ORDER = ['S', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+function tierSortRank(tierUpper) {
+  if (tierUpper.startsWith('LAST')) return -1;
+  const letter = tierUpper.replace('赏', '');
+  const idx = TIER_SORT_ORDER.indexOf(letter);
+  return idx === -1 ? 99 : idx;
+}
 function renderPrizes(prizes) {
   const sorted = [...prizes].sort((a, b) => {
-    const au = a.tier.toUpperCase();
-    const bu = b.tier.toUpperCase();
-    if (au.startsWith('LAST')) return -1;
-    if (bu.startsWith('LAST')) return 1;
-    const la = au.replace('赏', '');
-    const lb = bu.replace('赏', '');
-    return la < lb ? -1 : la > lb ? 1 : 0;
+    return tierSortRank(a.tier.toUpperCase()) - tierSortRank(b.tier.toUpperCase());
   });
   const labels = sorted.map(p => formatPrizeLabel(p.tier, p.prizeType, p.prize));
   const counts = {};
@@ -3039,17 +3253,20 @@ let p4Page = 1;
 const P4_PAGE_SIZE = 10;
 
 function p4Search() {
-  const spin    = document.getElementById('p4FilterSpin').value;
-  const source  = document.getElementById('p4FilterSource').value;
-  const type    = document.getElementById('p4FilterType').value;
-  const keyword = document.getElementById('p4FilterKeyword').value.trim().toLowerCase();
+  const spin      = document.getElementById('p4FilterSpin').value;
+  const source    = document.getElementById('p4FilterSource').value;
+  const type      = document.getElementById('p4FilterType').value;
+  const fieldType = document.getElementById('p4FilterSelect').value; // member | activity
+  const keyword   = document.getElementById('p4FilterKeyword').value.trim().toLowerCase();
 
   p4Filtered = P4_RECORDS.filter(r => {
     if (spin   && r.type   !== spin)   return false;
     if (source && r.source !== source) return false;
     if (type   && r.type   !== type)   return false;
-    if (keyword && !r.member.toLowerCase().includes(keyword) &&
-                   !r.activity.toLowerCase().includes(keyword)) return false;
+    if (keyword) {
+      const target = fieldType === 'activity' ? r.activity : r.member;
+      if (!target.toLowerCase().includes(keyword)) return false;
+    }
     return true;
   });
   p4Page = 1;
@@ -3102,11 +3319,11 @@ p4Search();
 
 /* ── TAB 3: 免费项目统计（示意：仅呈现一番赏/积分购买相关资料） ── */
 const P4_STAT_RECORDS = [
-  { member:'okbet9994fg5vz', name:'Free Spin ×10', type:'免费旋转', vendor:'–', status:'已使用', time:'2026-06-12 17:00:00', game:'–', qty:10 },
-  { member:'vivian01',       name:'Free Spin ×10', type:'免费旋转', vendor:'–', status:'已使用', time:'2026-06-11 16:30:00', game:'–', qty:10 },
-  { member:'okbet9994fg5vz', name:'道具卡 ×2',      type:'道具卡',   vendor:'–', status:'已使用', time:'2026-06-12 17:00:00', game:'–', qty:2  },
-  { member:'vivian01',       name:'道具卡 ×3',      type:'道具卡',   vendor:'–', status:'已使用', time:'2026-06-11 16:30:00', game:'–', qty:3  },
-  { member:'alice_vip3',     name:'Free Bet ×5',   type:'免费投注', vendor:'–', status:'已使用', time:'2026-06-11 10:20:00', game:'–', qty:5  },
+  { member:'okbet9994fg5vz', activity:'苹果 Ichiban Kuji',       name:'Free Spin ×10', type:'免费旋转', vendor:'–', status:'已使用', time:'2026-06-12 17:00:00', game:'–', qty:10 },
+  { member:'vivian01',       activity:'节日特别版 Ichiban Kuji', name:'Free Spin ×10', type:'免费旋转', vendor:'–', status:'已使用', time:'2026-06-11 16:30:00', game:'–', qty:10 },
+  { member:'okbet9994fg5vz', activity:'苹果 Ichiban Kuji',       name:'道具卡 ×2',      type:'道具卡',   vendor:'–', status:'已使用', time:'2026-06-12 17:00:00', game:'–', qty:2  },
+  { member:'vivian01',       activity:'节日特别版 Ichiban Kuji', name:'道具卡 ×3',      type:'道具卡',   vendor:'–', status:'已使用', time:'2026-06-11 16:30:00', game:'–', qty:3  },
+  { member:'alice_vip3',     activity:'入门款 Ichiban Kuji',     name:'Free Bet ×5',   type:'免费投注', vendor:'–', status:'已使用', time:'2026-06-11 10:20:00', game:'–', qty:5  },
 ];
 
 let p4StatFiltered = [...P4_STAT_RECORDS];
@@ -3114,15 +3331,18 @@ let p4StatPage = 1;
 const P4_STAT_PAGE_SIZE = 10;
 
 function p4StatSearch() {
-  const status  = document.getElementById('p4StatStatus').value;
-  const type    = document.getElementById('p4StatType').value;
-  const keyword = document.getElementById('p4StatKeyword').value.trim().toLowerCase();
+  const status    = document.getElementById('p4StatStatus').value;
+  const type      = document.getElementById('p4StatType').value;
+  const fieldType = document.getElementById('p4StatSelect').value; // member | activity
+  const keyword   = document.getElementById('p4StatKeyword').value.trim().toLowerCase();
 
   p4StatFiltered = P4_STAT_RECORDS.filter(r => {
     if (status  && r.status !== status) return false;
     if (type    && r.type   !== type)   return false;
-    if (keyword && !r.member.toLowerCase().includes(keyword) &&
-                   !r.name.toLowerCase().includes(keyword)) return false;
+    if (keyword) {
+      const target = fieldType === 'activity' ? r.activity : r.member;
+      if (!target.toLowerCase().includes(keyword)) return false;
+    }
     return true;
   });
   p4StatPage = 1;
@@ -3144,8 +3364,28 @@ function p4StatRenderPage() {
       <td>${r.qty}</td>
     </tr>
   `).join('');
-  const pg = document.getElementById('p4StatPagination');
-  pg.innerHTML = `<span class="page-total">Total ${p4StatFiltered.length}</span><div class="page-btn active">1</div>`;
+  p4StatRenderPagination();
+}
+
+function p4StatRenderPagination() {
+  const total      = p4StatFiltered.length;
+  const totalPages = Math.ceil(total / P4_STAT_PAGE_SIZE);
+  const pg         = document.getElementById('p4StatPagination');
+  let html = `<span class="page-total">Total ${total}</span>`;
+  html += `<div class="page-btn" onclick="p4StatGoPage(${p4StatPage-1})">‹</div>`;
+  buildPageNums(p4StatPage, totalPages).forEach(p => {
+    if (p === '...') html += `<div class="page-btn ellipsis">···</div>`;
+    else html += `<div class="page-btn${p === p4StatPage ? ' active' : ''}" onclick="p4StatGoPage(${p})">${p}</div>`;
+  });
+  html += `<div class="page-btn" onclick="p4StatGoPage(${p4StatPage+1})">›</div>`;
+  pg.innerHTML = html;
+}
+
+function p4StatGoPage(p) {
+  const totalPages = Math.ceil(p4StatFiltered.length / P4_STAT_PAGE_SIZE);
+  if (p < 1 || p > totalPages) return;
+  p4StatPage = p;
+  p4StatRenderPage();
 }
 
 p4StatSearch();
@@ -3169,15 +3409,18 @@ let p4SendPage = 1;
 const P4_SEND_PAGE_SIZE = 10;
 
 function p4SendSearch() {
-  const status  = document.getElementById('p4SendStatus').value;
-  const type    = document.getElementById('p4SendType').value;
-  const keyword = document.getElementById('p4SendKeyword').value.trim().toLowerCase();
+  const status    = document.getElementById('p4SendStatus').value;
+  const type      = document.getElementById('p4SendType').value;
+  const fieldType = document.getElementById('p4SendSelect').value; // member | name
+  const keyword   = document.getElementById('p4SendKeyword').value.trim().toLowerCase();
 
   p4SendFiltered = P4_SEND_RECORDS.filter(r => {
     if (status  && r.status !== status) return false;
     if (type    && r.type   !== type)   return false;
-    if (keyword && !r.member.toLowerCase().includes(keyword) &&
-                   !r.name.toLowerCase().includes(keyword)) return false;
+    if (keyword) {
+      const target = fieldType === 'name' ? r.name : r.member;
+      if (!target.toLowerCase().includes(keyword)) return false;
+    }
     return true;
   });
   p4SendPage = 1;
@@ -3199,8 +3442,28 @@ function p4SendRenderPage() {
       <td>${r.remark}</td>
     </tr>
   `).join('');
-  const pg = document.getElementById('p4SendPagination');
-  pg.innerHTML = `<span class="page-total">Total ${p4SendFiltered.length}</span><div class="page-btn active">1</div>`;
+  p4SendRenderPagination();
+}
+
+function p4SendRenderPagination() {
+  const total      = p4SendFiltered.length;
+  const totalPages = Math.ceil(total / P4_SEND_PAGE_SIZE);
+  const pg         = document.getElementById('p4SendPagination');
+  let html = `<span class="page-total">Total ${total}</span>`;
+  html += `<div class="page-btn" onclick="p4SendGoPage(${p4SendPage-1})">‹</div>`;
+  buildPageNums(p4SendPage, totalPages).forEach(p => {
+    if (p === '...') html += `<div class="page-btn ellipsis">···</div>`;
+    else html += `<div class="page-btn${p === p4SendPage ? ' active' : ''}" onclick="p4SendGoPage(${p})">${p}</div>`;
+  });
+  html += `<div class="page-btn" onclick="p4SendGoPage(${p4SendPage+1})">›</div>`;
+  pg.innerHTML = html;
+}
+
+function p4SendGoPage(p) {
+  const totalPages = Math.ceil(p4SendFiltered.length / P4_SEND_PAGE_SIZE);
+  if (p < 1 || p > totalPages) return;
+  p4SendPage = p;
+  p4SendRenderPage();
 }
 
 p4SendSearch();

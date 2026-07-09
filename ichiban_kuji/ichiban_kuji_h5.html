@@ -373,15 +373,20 @@ function createApp(rootId){
         <div class="nm">${badge(g.tier,g.isLast)} ${g.isLast?'Last Prize · ':''}${g.tier.name}</div><div class="cnt">×${g.n}</div></div>`;});
       $('.js-rbody').innerHTML=html;
     }else{
+      // Last赏固定排在「第一排左边」＝第 1 格（不是最后一格）：把它从原本的抽奖顺序末端搬到最前面，
+      // 其余卡片（包含原本第 1 张）仍照实际抽奖顺序，全部各往后递补一格
+      const ordered=[...results];
+      const lastIdx=ordered.findIndex(r=>r.isLast);
+      if(lastIdx>0){const [lastItem]=ordered.splice(lastIdx,1);ordered.unshift(lastItem);}
       html+='<div class="rk-grid">';
-      results.forEach((r,i)=>{const t=r.tier;
+      ordered.forEach((r,i)=>{const t=r.tier;
         html+=`<div class="rk" data-i="${i}"><div class="reveal">${revealBadge(t,r.isLast)}
           <div class="r-txt"><div class="nm">${r.isLast?'Last Prize · ':''}${t.name}</div><div class="ty">${t.type}</div></div>
           </div>
           <div class="cover serif">OK ICHIBAN <span class="arrow">Draw ▶</span></div></div>`;});
       html+='</div>';
       $('.js-rbody').innerHTML=html;
-      results.forEach((r,i)=>setTimeout(()=>{const el=$(`.rk[data-i="${i}"]`);if(el)el.classList.add('torn');},300+i*280));
+      ordered.forEach((r,i)=>setTimeout(()=>{const el=$(`.rk[data-i="${i}"]`);if(el)el.classList.add('torn');},300+i*280));
     }
     $('.js-overlay').classList.add('show');
     root.scrollIntoView({behavior:'smooth',block:'start'});
@@ -410,19 +415,31 @@ function createApp(rootId){
   $('.js-ok').addEventListener('click',()=>{$('.js-overlay').classList.remove('show');
     refreshTearButton();
     if(totalLeft()<=0)showSoldOutAlert();});
-  $('.js-soldout-ok').addEventListener('click',()=>{$('.js-soldout-overlay').classList.remove('show');});
+  // 已确认（spec 2-5）：「已抽完提醒」弹窗是全场唯一会造成页面跳转的弹窗——
+  // 不论是玩家自己这次撕券刚好抽空（见上方 .js-ok 内的判断），或是从积分商城点进时该商品已经售罄（见下方页面载入检查），
+  // 点击 Got It 一律强制导回「积分商城」列表页；积分商城是独立页面、不在本文件范围内，
+  // 故以 history.back() 模拟「返回上一页」，正式开发应改为导向积分商城实际路由/网址
+  $('.js-soldout-ok').addEventListener('click',()=>{$('.js-soldout-overlay').classList.remove('show');
+    history.back();});
 
   renderPool();
 
   /* ── spec-doc deep link：透过网址参数直接呈现特定画面状态，方便规格书用 iframe 嵌入示例 ──
-     ?soldout=1                 全部售罄状态
-     ?insufficient=1            积分不足状态（撕券按钮显示 Insufficient Balance，同售罄一样反灰停用）
+     ?lowqty=1                  情境B：一般奖级剩余总和压到7张，示范「五连」可选／「十连」反灰
+     ?lowstock=1                情境D：S赏售罄（半透明遮罩）＋B赏剩1/5（低库存警示红字），其余正常
+     ?soldout=1                 情境B例外／2-5：全部售罄状态（四个张数按钮与撕券按钮全部反灰），
+                                 此参数刻意跳过自动弹窗，只展示背景停用状态；真实情况（无此参数、单纯页面载入时已经售罄）
+                                 会自动跳出「已抽完提醒」弹窗（同 ?modal=soldout-alert 呈现的内容），见下方一般载入检查
+     ?insufficient=1            情境C／2-6：积分不足状态（撕券按钮显示 Insufficient Balance，同售罄一样反灰停用）
      ?modal=rules               活动规则弹窗
      ?modal=result-single       开奖结果－逐张揭晓模式示例（2张，未含Last赏）
-     ?modal=result-last         开奖结果－逐张揭晓模式示例，含Last赏（庆祝横幅）
+     ?modal=result-last         开奖结果－逐张揭晓模式示例，含Last赏（庆祝横幅，2张）
+     ?modal=result-last-multi   开奖结果－逐张揭晓模式示例，含Last赏（6张，验证Last赏固定排第1格）
      ?modal=result-agg          开奖结果－汇总列表模式示例（模拟「全包」大量张数的情况，14张）
      ?modal=result-all-small    开奖结果－「全包」张数很少（3张）时仍走汇总列表模式的示例
-     ?modal=soldout-alert       已抽完提醒弹窗（单独示例，不改变背后卡片库存）
+     ?modal=result-agg-overflow 开奖结果－汇总列表模式示例，全部9个一般奖级＋Last赏共10列，验证列表可滑动
+     ?modal=soldout-alert       已抽完提醒弹窗（单独示例，不改变背后卡片库存；点击 Got It 会 history.back()，
+                                 在独立分页开启此连结时可正常测试，嵌入 spec 的 iframe 中点击不影响画面展示）
      以上参数只影响画面初始状态，不影响一般无参数时的正常使用流程 */
   const qp = new URLSearchParams(location.search);
   if (qp.get('soldout') === '1') {
@@ -432,9 +449,28 @@ function createApp(rootId){
     // 避免提醒弹窗把这个专门展示背景页面状态的画面示例盖住／裁切不完整；
     // 提醒弹窗本身的示例由另一个独立参数 ?modal=soldout-alert 呈现（见下方 modal 分支）
   }
+  if (qp.get('lowqty') === '1') {
+    // 验证用：情境 B——把一般奖级剩余总和压到 7 张（<10 但 ≥5），
+    // 用来示范「五连」仍可选、「十连」反灰停用
+    tiers.forEach((t,i)=>{ t.left = i<7 ? 1 : 0; });
+    renderPool();
+  }
+  if (qp.get('lowstock') === '1') {
+    // 验证用：情境 D——S赏（总量1）设为售罄示范半透明遮罩，B赏（总量5）剩1张（20%）示范低库存警示红字，
+    // 其余奖级维持正常水位，一般奖级剩余总和仍远大于 10，撕券按钮与四个张数按钮维持正常可点击
+    tiers[0].left = 0;
+    tiers[2].left = 1;
+    renderPool();
+  }
   if (qp.get('insufficient') === '1') {
     points = 0;
     updateStock();
+  }
+  // 已确认（spec 2-5／B-14）：真实场景下，玩家从「积分商城」点进一个当下已经全部售罄的一番赏商品，
+  // 页面载入当下就该直接呈现停用状态＋自动跳出「已抽完提醒」弹窗，不需要玩家先操作撕券；
+  // ?soldout=1 demo 刻意跳过此自动跳出（见上方注解，专门单独展示背景停用状态），故此处排除该 demo 参数
+  if (totalLeft() <= 0 && qp.get('soldout') !== '1') {
+    showSoldOutAlert();
   }
   const modal = qp.get('modal');
   if (modal === 'rules') {
@@ -445,6 +481,13 @@ function createApp(rootId){
     showResult([{ tier: tiers[1] }, { tier: tiers[3] }], false);
   } else if (modal === 'result-last') {
     showResult([{ tier: tiers[1] }, { tier: last, isLast: true }], true);
+  } else if (modal === 'result-last-multi') {
+    // 验证用：模拟五连抽正好抽空一般奖级池，本次结果 5 张一般奖品＋Last赏＝6 张。
+    // 依规则，Last赏应该被搬到第 1 格（第一排左边），不是排在第 6 格（最后一格）
+    showResult([
+      { tier: tiers[2] }, { tier: tiers[4] }, { tier: tiers[6] }, { tier: tiers[7] }, { tier: tiers[8] },
+      { tier: last, isLast: true }
+    ], true);
   } else if (modal === 'result-agg') {
     const fake = [];
     for (let i = 0; i < 8; i++) fake.push({ tier: tiers[7] });
@@ -454,6 +497,12 @@ function createApp(rootId){
     showResult(fake, true, true);
   } else if (modal === 'result-all-small') {
     showResult([{ tier: tiers[6] }, { tier: tiers[7] }, { tier: last, isLast: true }], true, true);
+  } else if (modal === 'result-agg-overflow') {
+    // 验证用：模拟全包一次中到全部 9 个一般奖级＋Last赏，共 10 个不同奖级列，
+    // 用来确认汇总列表超过弹窗高度（440px）时，中间列表区域会自动出现上下滑动，标题与「收下」按钮维持固定不动
+    const fake = tiers.map(t => ({ tier: t }));
+    fake.push({ tier: last, isLast: true });
+    showResult(fake, true, true);
   }
 }
 

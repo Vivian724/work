@@ -733,8 +733,8 @@ function renderDynamicFields(containerId, cat2Val) {
   if (cat2Val === 'bonus') {
     html = `
       <div class="tier-field">
-        <label><span class="req">*</span>流水倍数</label>
-        <input type="number" placeholder="请输入" min="0" required>
+        <label>流水倍数</label>
+        <input type="number" placeholder="请输入（选填）" min="0">
       </div>
       <div class="tier-field">
         <label><span class="req">*</span>金额</label>
@@ -769,15 +769,6 @@ function renderDynamicFields(containerId, cat2Val) {
           <option value="">请选择</option>
           <option>优惠券 A</option>
           <option>优惠券 B</option>
-        </select>
-      </div>`;
-  } else if (cat2Val === 'ticket') {
-    html = `
-      <div class="tier-field" style="flex:2">
-        <label><span class="req">*</span>选择票券</label>
-        <select>
-          <option value="">请选择</option>
-          <option>票券 A</option>
         </select>
       </div>`;
   } else if (cat2Val === 'freebet') {
@@ -1022,7 +1013,7 @@ function clearBanner(inputId, previewId, placeholderId) {
   ph.style.display = 'flex';
 }
 
-// Init with A賞
+// Init with S赏
 addTier();
 // Init Last赏 dynamic fields
 renderDynamicFields('dynamic-fields-last', 'bonus');
