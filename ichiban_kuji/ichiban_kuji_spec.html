@@ -1355,9 +1355,9 @@ tr:hover td { background: #fafcff; }
     <div class="p3-pill">
       <select id="p3FilterType">
         <option value="">全部优惠券</option>
-        <option value="输返券">输返券</option>
         <option value="存送比例券">存送比例券</option>
-        <option value="彩金券">彩金券</option>
+        <option value="输返券">输返券</option>
+        <option value="中奖加奖券">中奖加奖券</option>
       </select>
     </div>
 
@@ -1426,19 +1426,20 @@ tr:hover td { background: #fafcff; }
     
 <div class="spec-text">
   <h3>页面位置</h3>
-  <p class="spec-lead">面包屑：位置 › 优惠券管理 › 全部优惠券。此页汇总全站所有来源发出的优惠券（不限一番赏），一番赏奖级中开出的「彩金券」等真正的优惠券性质奖品会在此页留下对应纪录；<strong>免费旋转／免费投注／道具卡不属于优惠券</strong>，这三者是在「免费旋转管理」配置与记录，不会出现在本页。</p>
+  <p class="spec-lead">面包屑：位置 › 优惠券管理 › 全部优惠券。此页汇总全站所有来源发出的优惠券（不限一番赏），一番赏奖级中开出、属于优惠券性质的奖品（对应「中奖加奖券」等类别）会在此页留下对应纪录；<strong>免费旋转／免费投注／道具卡不属于优惠券</strong>，这三者是在「免费旋转管理」配置与记录，不会出现在本页。</p>
 
   <h3>统计面板（3 项指标）</h3>
   <div class="spec-table-wrap">
     <table>
       <thead><tr><th>指标</th><th>说明</th></tr></thead>
       <tbody>
-        <tr><td class="spec-field">优惠券发放总量</td><td>依「获得时间」查询区间统计的发放张数总和</td></tr>
-        <tr><td class="spec-field">优惠券使用率</td><td>已使用张数 ÷ 发放总量</td></tr>
-        <tr><td class="spec-field">优惠券累计发放彩金</td><td>该区间内所有彩金类优惠券的金额加总</td></tr>
+        <tr><td class="spec-field">优惠券发放总量</td><td>该区间内发放的优惠券张数</td></tr>
+        <tr><td class="spec-field">优惠券使用率</td><td>该区间内优惠券的使用比率</td></tr>
+        <tr><td class="spec-field">优惠券累计发放彩金</td><td>该区间内累计发放的彩金金额</td></tr>
       </tbody>
     </table>
   </div>
+  <p class="spec-lead">以上 3 项统计指标为优惠券管理既有功能，<strong>详细计算规则依后台既有系统逻辑为准</strong>，不属本次一番赏需求定义范围，本文件不额外假设或定义计算公式。</p>
 
   <h3>栏位字段（全部 11 栏）</h3>
   <div class="spec-table-wrap">
@@ -1447,11 +1448,11 @@ tr:hover td { background: #fafcff; }
       <tbody>
         <tr><td class="spec-field">会员账号</td><td>领取该优惠券的会员</td></tr>
         <tr><td class="spec-field">获得时间</td><td>该券被发放给会员的时间</td></tr>
-        <tr><td class="spec-field">活动名称</td><td>见「名词定义」共同业务规则第 2 点：一番赏来源显示商品名称，其他一般项目显示「–」</td></tr>
+        <tr><td class="spec-field">活动名称</td><td>一番赏来源显示商品名称（见「名词定义」共同业务规则第 2 点）；其他非一番赏来源的项目依优惠券管理既有逻辑显示，不属本次一番赏需求定义范围</td></tr>
         <tr><td class="spec-field">获得方式</td><td>见共同业务规则第 1 点：一番赏产生的一律为「积分购买」</td></tr>
         <tr><td class="spec-field">优惠券名称</td><td>该张券的显示名称，例如「彩金 ₱50 (1x Turnover)」</td></tr>
         <tr><td class="spec-field">优惠券ID</td><td>系统内部唯一编号</td></tr>
-        <tr><td class="spec-field">优惠券类别</td><td>输返券／存送比例券／彩金券，共 3 类；免费旋转／免费投注／道具卡不算优惠券，不会出现在此栏位</td></tr>
+        <tr><td class="spec-field">优惠券类别</td><td>存送比例券／输返券／中奖加奖券，共 3 类（后台实际选项，无「彩金券」这个类别）；免费旋转／免费投注／道具卡不算优惠券，不会出现在此栏位</td></tr>
         <tr><td class="spec-field">状态</td><td>纯文本：未使用／待结算／已使用／已过期，与下方筛选栏「全部状态」的选项一致</td></tr>
         <tr><td class="spec-field">操作人</td><td>该券被使用或处理时的操作人，未使用时显示「–」</td></tr>
         <tr><td class="spec-field">操作时间</td><td>对应操作人的操作时间，未使用时显示「–」</td></tr>
@@ -3393,11 +3394,11 @@ renderTable();
 
 const P3_RECORDS = [
   { id:6709, member:'okbet9994fg5vz', time:'2026-06-12 16:45', activity:'苹果 Ichiban Kuji',       source:'积分购买', name:'Free Spin ×10',         type:'免费旋转',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-12 17:00', remark:'–' },
-  { id:6708, member:'vivian01',       time:'2026-06-15 17:22', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'彩金 ₱50 (1x Turnover)', type:'彩金券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-15 18:10', remark:'–' },
+  { id:6708, member:'vivian01',       time:'2026-06-15 17:22', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'彩金 ₱50 (1x Turnover)', type:'中奖加奖券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-15 18:10', remark:'–' },
   { id:6707, member:'vivian01',       time:'2026-06-15 17:21', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'Free Spin ×20',         type:'免费旋转',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
-  { id:6706, member:'vivian01',       time:'2026-06-11 18:02', activity:'高价值VIP专属赏',         source:'积分购买', name:'彩金 ₱80 (2x Turnover)', type:'彩金券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6706, member:'vivian01',       time:'2026-06-11 18:02', activity:'高价值VIP专属赏',         source:'积分购买', name:'彩金 ₱80 (2x Turnover)', type:'中奖加奖券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
   { id:6705, member:'alice_vip3',     time:'2026-06-11 10:05', activity:'入门款 Ichiban Kuji',     source:'积分购买', name:'Free Bet ×5',           type:'免费投注', status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
-  { id:6704, member:'player_tom88',   time:'2026-06-11 14:30', activity:'高价值VIP专属赏',         source:'积分购买', name:'彩金 ₱50 (2x Turnover)', type:'彩金券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-11 14:45', remark:'–' },
+  { id:6704, member:'player_tom88',   time:'2026-06-11 14:30', activity:'高价值VIP专属赏',         source:'积分购买', name:'彩金 ₱50 (2x Turnover)', type:'中奖加奖券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-11 14:45', remark:'–' },
   { id:6703, member:'jay_pm',         time:'2026-06-10 18:15', activity:'苹果 Ichiban Kuji',       source:'积分购买', name:'Free Spin ×10',         type:'免费旋转',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
 ];
 
