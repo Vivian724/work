@@ -176,6 +176,7 @@ input[type="checkbox"], input[type="radio"] { cursor: pointer; accent-color: #16
 .btn-default:hover { border-color: #1677ff; color: #1677ff; }
 .btn-danger-text { background: none; border: none; color: #ff4d4f; font-size: 13px; cursor: pointer; padding: 0 4px; }
 .btn-danger-text:hover { color: #cf1322; }
+.btn:disabled, .btn[disabled] { background: #f5f5f5 !important; color: #bfbfbf !important; border-color: #d9d9d9 !important; cursor: not-allowed !important; }
 
 /* ── TOTAL TICKETS BANNER ── */
 .total-banner {
@@ -632,7 +633,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
         <!-- 新增奖级按鈕 -->
         <div class="add-tier-wrap">
           <button class="btn-add-tier" onclick="addTier()">＋ 新增奖级</button>
-          <span class="tier-count-info" id="tierCountInfo">目前 1 个奖级（最多 9 级：S赏、A赏～H赏）</span>
+          <span class="tier-count-info" id="tierCountInfo">目前 1 个奖级（最多 9 级：S赏、A赏～H赏，至少配置到E赏）</span>
         </div>
 
         <!-- 獎級列表 -->
@@ -666,8 +667,8 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
                   <option value="bonus">彩金</option>
                   <option value="points">积分</option>
                   <option value="coupon">优惠券</option>
-                  <option value="freespin">免费旋转券</option>
-                  <option value="freebet">免费投注券</option>
+                  <option value="freespin">免费旋转</option>
+                  <option value="freebet">免费投注</option>
                   <option value="tool">道具卡</option>
                 </select>
               </div>
@@ -689,7 +690,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
     </div><!-- /modal-body -->
 
     <div class="modal-footer">
-      <button class="btn btn-primary" onclick="submitForm()">确定</button>
+      <button class="btn btn-primary" id="confirmBtn" onclick="submitForm()" disabled>确定</button>
       <button class="btn btn-warning" onclick="this.closest('.overlay').style.display='none'">取消</button>
     </div>
   </div>
@@ -774,11 +775,11 @@ function renderDynamicFields(containerId, cat2Val) {
   } else if (cat2Val === 'freebet') {
     html = `
       <div class="tier-field" style="flex:2">
-        <label><span class="req">*</span>选择免费投注券</label>
+        <label><span class="req">*</span>选择免费投注</label>
         <select required>
           <option value="" disabled selected>请选择</option>
-          <option>免费投注券 A</option>
-          <option>免费投注券 B</option>
+          <option>免费投注 A</option>
+          <option>免费投注 B</option>
         </select>
       </div>`;
   } else if (cat2Val === 'tool') {
@@ -818,8 +819,8 @@ const CAT2_MAP = {
     { value: 'bonus',        label: '彩金' },
     { value: 'points',       label: '积分' },
     { value: 'coupon',       label: '优惠券' },
-    { value: 'freespin',     label: '免费旋转券' },
-    { value: 'freebet',      label: '免费投注券' },
+    { value: 'freespin',     label: '免费旋转' },
+    { value: 'freebet',      label: '免费投注' },
     { value: 'tool',         label: '道具卡' },
   ],
   real: [
@@ -854,9 +855,9 @@ function tierFieldsHtml(tierId, isLast) {
         <button class="upload-btn-sm">📁 选择文件</button>
       </div>
       <div id="freespin-extra-${tierId}" style="margin-top:12px;display:none;">
-        <div style="font-size:12px;color:#1677ff;font-weight:600;margin-bottom:8px;">旋转券配置</div>
+        <div style="font-size:12px;color:#1677ff;font-weight:600;margin-bottom:8px;">免费旋转配置</div>
         <div id="freespin-list-extra-${tierId}" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
-        <button type="button" class="btn-add-tier" style="height:30px;font-size:12px;" onclick="addFreespinRow('extra-${tierId}')">＋ 新增旋转券</button>
+        <button type="button" class="btn-add-tier" style="height:30px;font-size:12px;" onclick="addFreespinRow('extra-${tierId}')">＋ 新增免费旋转</button>
       </div>
     </div>
   `;
@@ -922,10 +923,20 @@ function updateTotal() {
   document.getElementById('totalCount').textContent = sum;
 }
 
+const MIN_TIER_COUNT = 6; // 至少需配置到 E赏：S/A/B/C/D/E 共 6 级
+
 function updateTierInfo() {
-  const remaining = 9 - tiers.length;
   document.getElementById('tierCountInfo').textContent =
-    `目前 ${tiers.length} 个奖级（最多 9 级：S赏、A赏～H赏，还可新增 ${remaining} 个）`;
+    `目前 ${tiers.length} 个奖级（最多 9 级：S赏、A赏～H赏，至少配置到E赏）`;
+  updateConfirmBtnState();
+}
+
+function updateConfirmBtnState() {
+  const btn = document.getElementById('confirmBtn');
+  if (!btn) return;
+  const met = tiers.length >= MIN_TIER_COUNT;
+  btn.disabled = !met;
+  btn.title = met ? '' : `一番赏奖级至少需配置到 E赏（S、A、B、C、D、E 共 6 级），目前僅 ${tiers.length} 级，还差 ${MIN_TIER_COUNT - tiers.length} 级`;
 }
 
 let freespinRowId = 0;
@@ -938,7 +949,7 @@ function addFreespinRow(containerId) {
   div.className = 'freespin-row';
   div.id = rowId;
   div.innerHTML = `
-    <span style="font-size:12px;color:#999;white-space:nowrap;">旋转券 ${list.children.length + 1}</span>
+    <span style="font-size:12px;color:#999;white-space:nowrap;">免费旋转 ${list.children.length + 1}</span>
     <select required>
       <option value="" disabled selected>选择免费旋转游戏</option>
       <option>J Mania Triple Jam</option>
@@ -970,7 +981,7 @@ function updateFreespinNumbers(containerId) {
   if (!list) return;
   Array.from(list.children).forEach((row, i) => {
     const label = row.querySelector('span');
-    if (label) label.textContent = '旋转券 ' + (i + 1);
+    if (label) label.textContent = '免费旋转 ' + (i + 1);
   });
 }
 
@@ -1019,6 +1030,11 @@ addTier();
 renderDynamicFields('dynamic-fields-last', 'bonus');
 
 function submitForm() {
+  // 一番赏奖级至少需配置到 E赏（S/A/B/C/D/E 共 6 级），未达标不允许送出
+  if (tiers.length < MIN_TIER_COUNT) {
+    alert(`一番赏奖级至少需配置到 E赏（S、A、B、C、D、E 共 6 级），目前僅 ${tiers.length} 级，请先新增奖级`);
+    return;
+  }
   // 收集所有必填欄位
   const modal = document.querySelector('.modal-body');
   const inputs = modal.querySelectorAll('input[required], select[required]');

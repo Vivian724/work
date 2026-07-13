@@ -156,8 +156,8 @@ tr:hover td { background: #fafcff; }
 
 /**
  * formatPrizeLabel(tier, prizeType, prize)
- * 输出格式：{TIER大写} {类型}{金额.00} 或 {TIER大写} {类型}×{数量}
- * 例：B赏 彩金500.00 / LAST赏 彩金5000.00 / E赏 旋转券×20
+ * 输出格式：{奖级} {类型}{金额.00} 或 {奖级} {类型}×{数量}
+ * 例：B赏 彩金500.00 / Last赏 彩金5000.00 / E赏 免费旋转×20
  */
 function formatPrizeLabel(tier, prizeType, prize) {
   let val;
@@ -169,13 +169,13 @@ function formatPrizeLabel(tier, prizeType, prize) {
     const m = prize.match(/×\s*(\d+)/);
     val = prizeType + (m ? '×' + m[1] : '');
   }
-  return tier.toUpperCase() + ' ' + val;
+  return tier + ' ' + val; // 奖级名称原样输出，不做大写转换（避免「Last赏」被转成「LAST赏」）
 }
 
 /**
  * renderPrizes(prizes)
  * 同 prizeLabel 的多個獎品合併輸出，重複品項自動加 ×N
- * 例：[C赏 积分500.00, C赏 积分500.00, E赏 旋转券×20] → "C赏 积分500.00 ×2，E赏 旋转券×20"
+ * 例：[C赏 积分500.00, C赏 积分500.00, E赏 免费旋转×20] → "C赏 积分500.00 ×2，E赏 免费旋转×20"
  */
 // 奖级排序权重：Last赏最前，其次 S赏，再依 A赏～H赏字母序（与「商品配置」S→A→B→…→H→Last 的显示顺序保持一致）
 const TIER_SORT_ORDER = ['S', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -337,9 +337,8 @@ function buildPageNums(cur, total) {
       <option value="">全部奖品</option>
       <option value="彩金">彩金</option>
       <option value="积分">积分</option>
-      <option value="旋转券">旋转券</option>
-      <option value="免费旋转券">免费旋转券</option>
-      <option value="免费投注券">免费投注券</option>
+      <option value="免费旋转">免费旋转</option>
+      <option value="免费投注">免费投注</option>
       <option value="道具卡">道具卡</option>
     </select>
 
@@ -383,7 +382,7 @@ function buildPageNums(cur, total) {
   - 原因列：商品名称（如"苹果 Ichiban Kuji"）
   - 备注列：奖品列表，格式 {TIER大写} {类型}{值}，多个用逗号分隔
     彩金/积分  → B赏 彩金500.00
-    数量类     → E赏 旋转券×20
+    数量类     → E赏 免费旋转×20
 */
 const P2_RECORDS = [
   {
@@ -391,9 +390,9 @@ const P2_RECORDS = [
     operator: 'SYSTEM',
     reason: '苹果 Ichiban Kuji',
     prizes: [
-      { tier: 'A赏', prizeType: '免费旋转券', prize: '免费旋转券 × 20' },
+      { tier: 'A赏', prizeType: '免费旋转', prize: '免费旋转 × 20' },
       { tier: 'C赏', prizeType: '道具卡',     prize: '道具卡 × 3'       },
-      { tier: 'E赏', prizeType: '旋转券',     prize: '旋转券 × 10'      },
+      { tier: 'E赏', prizeType: '免费旋转',     prize: '免费旋转 × 10'      },
     ]
   },
   {
@@ -404,7 +403,7 @@ const P2_RECORDS = [
       { tier: 'B赏',    prizeType: '彩金',       prize: '彩金 50（1x Turnover）' },
       { tier: 'C赏',    prizeType: '积分',       prize: '积分 50'                },
       { tier: 'D赏',    prizeType: '积分',       prize: '积分 20'                },
-      { tier: 'E赏',    prizeType: '免费旋转券', prize: '免费旋转券 × 10'         },
+      { tier: 'E赏',    prizeType: '免费旋转', prize: '免费旋转 × 10'         },
       { tier: 'Last赏', prizeType: '道具卡',     prize: '道具卡 × 3'              },
     ]
   },
@@ -483,7 +482,7 @@ p2RenderTable();
 const RECORDS = [
   { order:'PR605996359563974932', member:'okbet9994fg5vz', time:'2026-06-12 16:45', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'all', points:80, prizes:[
     { tier:'A赏',    prizeType:'彩金',       prize:'彩金 Cash 100（1x Turnover）' },
-    { tier:'B赏',    prizeType:'免费旋转券', prize:'免费旋转券 × 10'               },
+    { tier:'B赏',    prizeType:'免费旋转', prize:'免费旋转 × 10'               },
     { tier:'C赏',    prizeType:'积分',       prize:'积分 50'                       },
     { tier:'C赏',    prizeType:'积分',       prize:'积分 50'                       },
     { tier:'D赏',    prizeType:'道具卡',     prize:'道具卡 × 2'                     },
@@ -505,26 +504,26 @@ const RECORDS = [
     { tier:'A赏', prizeType:'彩金', prize:'彩金 ₱80（2x Turnover）' },
   ]},
   { order:'PR605828183543032084', member:'vivian01',       time:'2026-06-11 18:02', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
-    { tier:'E赏', prizeType:'旋转券', prize:'旋转券 × 20' },
+    { tier:'E赏', prizeType:'免费旋转', prize:'免费旋转 × 20' },
   ]},
   { order:'PR605820423443097876', member:'vivian01',       time:'2026-06-11 16:45', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'1',   points:5,   prizes:[
-    { tier:'B赏', prizeType:'免费旋转券', prize:'免费旋转券 × 10' },
+    { tier:'B赏', prizeType:'免费旋转', prize:'免费旋转 × 10' },
   ]},
   { order:'PR605817703537617172', member:'vivian01',       time:'2026-06-11 16:18', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'1',   points:5,   prizes:[
-    { tier:'C赏', prizeType:'免费投注券', prize:'免费投注券 × 5' },
+    { tier:'C赏', prizeType:'免费投注', prize:'免费投注 × 5' },
   ]},
   { order:'PR605817154788436244', member:'vivian01',       time:'2026-06-11 16:12', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'all', points:500, prizes:[
     { tier:'B赏',    prizeType:'彩金',       prize:'彩金 50（1x Turnover）' },
     { tier:'C赏',    prizeType:'积分',       prize:'积分 50'                 },
     { tier:'D赏',    prizeType:'积分',       prize:'积分 20'                 },
-    { tier:'E赏',    prizeType:'免费旋转券', prize:'免费旋转券 × 10'          },
+    { tier:'E赏',    prizeType:'免费旋转', prize:'免费旋转 × 10'          },
     { tier:'Last赏', prizeType:'道具卡',     prize:'道具卡 × 3'               },
   ]},
   { order:'PR605800234891723001', member:'player_tom88',   time:'2026-06-11 14:30', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
     { tier:'A赏', prizeType:'彩金', prize:'彩金 50（2x Turnover）' },
   ]},
   { order:'PR605799812345678900', member:'player_tom88',   time:'2026-06-11 14:28', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
-    { tier:'F赏', prizeType:'旋转券', prize:'旋转券 × 10' },
+    { tier:'F赏', prizeType:'免费旋转', prize:'免费旋转 × 10' },
   ]},
   { order:'PR605780001122334455', member:'alice_vip3',     time:'2026-06-11 10:05', coin:'PHP', product:'入门款 Ichiban Kuji',     qty:'1',   points:10,  prizes:[
     { tier:'D赏', prizeType:'积分', prize:'积分 20' },
@@ -534,7 +533,7 @@ const RECORDS = [
     { tier:'B赏',    prizeType:'道具卡',     prize:'道具卡 × 1'          },
     { tier:'C赏',    prizeType:'积分',       prize:'积分 100'            },
     { tier:'C赏',    prizeType:'积分',       prize:'积分 100'            },
-    { tier:'Last赏', prizeType:'免费旋转券', prize:'免费旋转券 × 20'     },
+    { tier:'Last赏', prizeType:'免费旋转', prize:'免费旋转 × 20'     },
   ]},
   { order:'PR605760123456789012', member:'jay_pm',         time:'2026-06-10 18:15', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'5',   points:25, prizes:[
     { tier:'G赏', prizeType:'道具卡', prize:'道具卡 × 2' },
@@ -543,17 +542,17 @@ const RECORDS = [
     { tier:'A赏', prizeType:'彩金', prize:'彩金 ₱30（3x）' },
   ]},
   { order:'PR605740112233445566', member:'user_beta01',    time:'2026-06-10 11:22', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'1',   points:50, prizes:[
-    { tier:'B赏', prizeType:'免费投注券', prize:'免费投注券 × 8' },
+    { tier:'B赏', prizeType:'免费投注', prize:'免费投注 × 8' },
   ]},
   { order:'PR605730223344556677', member:'user_beta01',    time:'2026-06-09 20:10', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'5',   points:250, prizes:[
-    { tier:'E赏', prizeType:'免费旋转券', prize:'免费旋转券 × 30' },
+    { tier:'E赏', prizeType:'免费旋转', prize:'免费旋转 × 30' },
   ]},
   { order:'PR605720334455667788', member:'olivia_admin',   time:'2026-06-09 14:33', coin:'PHP', product:'高价值VIP专属赏',         qty:'1',   points:100, prizes:[
     { tier:'C赏', prizeType:'道具卡', prize:'道具卡 × 5' },
   ]},
   { order:'PR605710445566778899', member:'olivia_admin',   time:'2026-06-08 09:00', coin:'PHP', product:'高价值VIP专属赏',         qty:'all', points:800, prizes:[
     { tier:'A赏',    prizeType:'彩金',   prize:'彩金 ₱80（2x Turnover）'   },
-    { tier:'B赏',    prizeType:'旋转券', prize:'旋转券 × 20'                  },
+    { tier:'B赏',    prizeType:'免费旋转', prize:'免费旋转 × 20'                  },
     { tier:'C赏',    prizeType:'道具卡', prize:'道具卡 × 5'                   },
     { tier:'D赏',    prizeType:'积分',   prize:'积分 99'                     },
     { tier:'Last赏', prizeType:'彩金',   prize:'彩金 ₱99（3x Turnover）'  },
@@ -709,8 +708,8 @@ renderTable();
         <option value="输返券">输返券</option>
         <option value="存送比例券">存送比例券</option>
         <option value="彩金券">彩金券</option>
-        <option value="旋转券">旋转券</option>
-        <option value="免费投注券">免费投注券</option>
+        <option value="免费旋转">免费旋转</option>
+        <option value="免费投注">免费投注</option>
       </select>
     </div>
 
@@ -779,13 +778,13 @@ renderTable();
 <!-- PAGE 3 script：优惠券管理 -->
 <script>
 const P3_RECORDS = [
-  { id:6709, member:'okbet9994fg5vz', time:'2026-06-12 16:45', activity:'苹果 Ichiban Kuji',       source:'积分购买', name:'Free Spin ×10',         type:'旋转券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-12 17:00', remark:'–' },
+  { id:6709, member:'okbet9994fg5vz', time:'2026-06-12 16:45', activity:'苹果 Ichiban Kuji',       source:'积分购买', name:'Free Spin ×10',         type:'免费旋转',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-12 17:00', remark:'–' },
   { id:6708, member:'vivian01',       time:'2026-06-15 17:22', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'彩金 ₱50 (1x Turnover)', type:'彩金券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-15 18:10', remark:'–' },
-  { id:6707, member:'vivian01',       time:'2026-06-15 17:21', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'Free Spin ×20',         type:'旋转券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6707, member:'vivian01',       time:'2026-06-15 17:21', activity:'节日特别版 Ichiban Kuji', source:'积分购买', name:'Free Spin ×20',         type:'免费旋转',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
   { id:6706, member:'vivian01',       time:'2026-06-11 18:02', activity:'高价值VIP专属赏',         source:'积分购买', name:'彩金 ₱80 (2x Turnover)', type:'彩金券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
-  { id:6705, member:'alice_vip3',     time:'2026-06-11 10:05', activity:'入门款 Ichiban Kuji',     source:'积分购买', name:'Free Bet ×5',           type:'免费投注券', status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6705, member:'alice_vip3',     time:'2026-06-11 10:05', activity:'入门款 Ichiban Kuji',     source:'积分购买', name:'Free Bet ×5',           type:'免费投注', status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
   { id:6704, member:'player_tom88',   time:'2026-06-11 14:30', activity:'高价值VIP专属赏',         source:'积分购买', name:'彩金 ₱50 (2x Turnover)', type:'彩金券',    status:'已使用', operator:'SYSTEM', opTime:'2026-06-11 14:45', remark:'–' },
-  { id:6703, member:'jay_pm',         time:'2026-06-10 18:15', activity:'苹果 Ichiban Kuji',       source:'积分购买', name:'Free Spin ×10',         type:'旋转券',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
+  { id:6703, member:'jay_pm',         time:'2026-06-10 18:15', activity:'苹果 Ichiban Kuji',       source:'积分购买', name:'Free Spin ×10',         type:'免费旋转',    status:'未使用', operator:'–',      opTime:'–',                  remark:'–' },
 ];
 
 let p3Filtered = [...P3_RECORDS];
@@ -1092,7 +1091,7 @@ p3Search();
             <th>会员账号</th>
             <th>免费旋转名称</th>
             <th>免费类型</th>
-            <th>免费旋转券编号</th>
+            <th>免费旋转编号</th>
             <th>状态</th>
             <th>发送时间</th>
             <th>操作</th>

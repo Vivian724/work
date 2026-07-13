@@ -785,9 +785,8 @@ function renderTierHTML(sid, t, idx) {
             <select onchange="onCat2Change2(this,'${tid}')" required>
               <option value="bonus">彩金</option>
               <option value="points">积分</option>
-              <option value="spin">旋转券</option>
-              <option value="freespin">免费旋转券</option>
-              <option value="freebet">免费投注券</option>
+              <option value="spin">免费旋转</option>
+              <option value="freebet">免费投注</option>
               <option value="tool">道具卡</option>
             </select>
           </div>
@@ -802,10 +801,10 @@ function renderTierHTML(sid, t, idx) {
           <button class="upload-btn-sm">📁 选择文件</button>
         </div>
         <div id="freespin-extra-${tid}" style="display:none;margin-top:12px;">
-          <div style="font-size:12px;color:#1677ff;font-weight:600;margin-bottom:8px;">旋转券配置</div>
+          <div style="font-size:12px;color:#1677ff;font-weight:600;margin-bottom:8px;">免费旋转配置</div>
           <div id="freespin-list-extra-${tid}" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
           <button type="button" class="btn-add-tier" style="height:30px;font-size:12px;"
-            onclick="addFreespinRow2('extra-${tid}')">＋ 新增旋转券</button>
+            onclick="addFreespinRow2('extra-${tid}')">＋ 新增免费旋转</button>
         </div>
       </div>
     </div>`;
@@ -840,9 +839,8 @@ function renderLastTierHTML(sid) {
             <select onchange="onCat2Change2(this,'${lid}')" required>
               <option value="bonus">彩金</option>
               <option value="points">积分</option>
-              <option value="spin">旋转券</option>
-              <option value="freespin">免费旋转券</option>
-              <option value="freebet">免费投注券</option>
+              <option value="spin">免费旋转</option>
+              <option value="freebet">免费投注</option>
               <option value="tool">道具卡</option>
             </select>
           </div>
@@ -857,10 +855,10 @@ function renderLastTierHTML(sid) {
           <button class="upload-btn-sm">📁 选择文件</button>
         </div>
         <div id="freespin-extra-${lid}" style="display:none;margin-top:12px;">
-          <div style="font-size:12px;color:#1677ff;font-weight:600;margin-bottom:8px;">旋转券配置</div>
+          <div style="font-size:12px;color:#1677ff;font-weight:600;margin-bottom:8px;">免费旋转配置</div>
           <div id="freespin-list-extra-${lid}"></div>
           <button type="button" class="btn-add-tier" style="height:30px;font-size:12px;"
-            onclick="addFreespinRow2('extra-${lid}')">＋ 新增旋转券</button>
+            onclick="addFreespinRow2('extra-${lid}')">＋ 新增免费旋转</button>
         </div>
       </div>
     </div>`;
@@ -939,9 +937,8 @@ function updateTierInfo2() {}
 const CAT2_VIRTUAL = [
   { value:'bonus', label:'彩金' },
   { value:'points', label:'积分' },
-  { value:'spin', label:'旋转券' },
-  { value:'freespin', label:'免费旋转券' },
-  { value:'freebet', label:'免费投注券' },
+  { value:'spin', label:'免费旋转' },
+  { value:'freebet', label:'免费投注' },
   { value:'tool', label:'道具卡' },
 ];
 
@@ -959,7 +956,7 @@ function renderDynamicFields2(containerId, cat2Val) {
     html = `<div class="tier-field"><label><span style="color:#ff4d4f;">*</span>积分数量</label>
       <input type="number" placeholder="请输入" min="0" required></div>`;
   } else if (cat2Val === 'spin') {
-    html = `<div class="tier-field" style="min-width:160px;"><label><span style="color:#ff4d4f;">*</span>选择旋转券游戏</label>
+    html = `<div class="tier-field" style="min-width:160px;"><label><span style="color:#ff4d4f;">*</span>选择免费旋转游戏</label>
       <select required><option value="" disabled selected>请选择</option>
         <option>J Mania Triple Jam</option><option>FC Freespins</option>
         <option>Slot Game A</option><option>Slot Game B</option></select></div>`;
@@ -1025,7 +1022,7 @@ function _appendFsRow(list, containerId) {
   div.className = 'freespin-row';
   div.id = rowId;
   div.innerHTML = `
-    <span style="font-size:12px;color:#999;white-space:nowrap;">旋转券 ${list.children.length + 1}</span>
+    <span style="font-size:12px;color:#999;white-space:nowrap;">免费旋转 ${list.children.length + 1}</span>
     <select required>
       <option value="" disabled selected>选择免费旋转游戏</option>
       <option>J Mania Triple Jam</option><option>FC Freespins</option>
@@ -1053,7 +1050,7 @@ function removeFsRow2(rowId, btn) {
 function updateFsNumbers2(list) {
   Array.from(list.children).forEach((row, i) => {
     const label = row.querySelector('span');
-    if (label) label.textContent = '旋转券 ' + (i + 1);
+    if (label) label.textContent = '免费旋转 ' + (i + 1);
   });
 }
 
