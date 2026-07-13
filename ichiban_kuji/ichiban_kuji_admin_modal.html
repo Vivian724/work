@@ -210,6 +210,7 @@ input[type="checkbox"], input[type="radio"] { cursor: pointer; accent-color: #16
   padding: 3px 8px; font-size: 13px; height: 28px;
 }
 .tier-name-input:focus { border-color: #1677ff; outline: none; }
+.tier-name-input:disabled { background: #f5f5f5; color: #999; cursor: not-allowed; }
 .tier-qty-wrap {
   display: flex; align-items: center; gap: 6px; margin-left: auto;
 }
@@ -633,7 +634,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
         <!-- 新增奖级按鈕 -->
         <div class="add-tier-wrap">
           <button class="btn-add-tier" onclick="addTier()">＋ 新增奖级</button>
-          <span class="tier-count-info" id="tierCountInfo">目前 1 个奖级（最多 9 级：S赏、A赏～H赏，至少配置到E赏）</span>
+          <span class="tier-count-info" id="tierCountInfo">目前 1 个奖级（最多 9 级：S Tier、A Tier～H Tier，至少配置到 E Tier）</span>
         </div>
 
         <!-- 獎級列表 -->
@@ -643,7 +644,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
         <div class="prize-tier last-tier" id="lastTier">
           <div class="tier-header">
             <div style="display:flex;align-items:center;gap:8px;flex:1;">
-              <span class="req">*</span><input class="tier-name-input" type="text" value="Last赏" placeholder="奖级名称" style="max-width:120px;" required>
+              <span class="req">*</span><input class="tier-name-input" type="text" value="LAST" placeholder="奖级名称" style="max-width:120px;" disabled required>
               <div style="display:flex;align-items:center;gap:5px;background:#fff7e6;border:1px solid #ffd591;border-radius:4px;padding:0 10px;height:28px;">
                 <span style="font-size:12px;color:#fa8c16;white-space:nowrap;">数量</span>
                 <input type="number" value="1" disabled style="width:40px;border:none;background:transparent;text-align:center;font-size:13px;font-weight:600;color:#fa8c16;outline:none;">
@@ -697,13 +698,13 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
 </div>
 
 <script>
-const TIER_NAMES = ['S赏','A赏','B赏','C赏','D赏','E赏','F赏','G赏','H赏'];
+const TIER_NAMES = ['S Tier','A Tier','B Tier','C Tier','D Tier','E Tier','F Tier','G Tier','H Tier'];
 let tiers = []; // [{id, name, qty}]
 let nextId = 0;
 
 function addTier() {
   if (tiers.length >= 9) {
-    alert('最多可新增至 9 个奖级（S赏、A赏～H赏）');
+    alert('最多可新增至 9 个奖级（S Tier、A Tier～H Tier）');
     return;
   }
   const id = nextId++;
@@ -893,8 +894,7 @@ function renderTiers() {
       <div class="tier-header">
         <div style="display:flex;align-items:center;gap:8px;flex:1;">
           <span class="req">*</span><input class="tier-name-input" type="text" value="${t.name}"
-            onchange="tiers[${idx}].name = this.value"
-            placeholder="奖级名称" style="max-width:120px;" required>
+            placeholder="奖级名称" style="max-width:120px;" disabled required>
           <div style="display:flex;align-items:center;gap:5px;background:#f5f7fa;border:1px solid #e4e7ed;border-radius:4px;padding:0 10px;height:28px;">
             <span style="font-size:12px;color:#666;white-space:nowrap;">数量</span>
             <input class="tier-qty-input" type="number" min="1" value="${t.qty||1}"
@@ -919,15 +919,15 @@ function renderTiers() {
 }
 
 function updateTotal() {
-  const sum = tiers.reduce((acc, t) => acc + (parseInt(t.qty) || 0), 0) + 1; // +1 for Last赏
+  const sum = tiers.reduce((acc, t) => acc + (parseInt(t.qty) || 0), 0) + 1; // +1 for LAST
   document.getElementById('totalCount').textContent = sum;
 }
 
-const MIN_TIER_COUNT = 6; // 至少需配置到 E赏：S/A/B/C/D/E 共 6 级
+const MIN_TIER_COUNT = 6; // 至少需配置到 E Tier：S/A/B/C/D/E 共 6 级
 
 function updateTierInfo() {
   document.getElementById('tierCountInfo').textContent =
-    `目前 ${tiers.length} 个奖级（最多 9 级：S赏、A赏～H赏，至少配置到E赏）`;
+    `目前 ${tiers.length} 个奖级（最多 9 级：S Tier、A Tier～H Tier，至少配置到 E Tier）`;
   updateConfirmBtnState();
 }
 
@@ -936,7 +936,7 @@ function updateConfirmBtnState() {
   if (!btn) return;
   const met = tiers.length >= MIN_TIER_COUNT;
   btn.disabled = !met;
-  btn.title = met ? '' : `一番赏奖级至少需配置到 E赏（S、A、B、C、D、E 共 6 级），目前僅 ${tiers.length} 级，还差 ${MIN_TIER_COUNT - tiers.length} 级`;
+  btn.title = met ? '' : `一番赏奖级至少需配置到 E Tier（S Tier～E Tier 共 6 级），目前僅 ${tiers.length} 级，还差 ${MIN_TIER_COUNT - tiers.length} 级`;
 }
 
 let freespinRowId = 0;
@@ -1024,15 +1024,15 @@ function clearBanner(inputId, previewId, placeholderId) {
   ph.style.display = 'flex';
 }
 
-// Init with S赏
+// Init with S Tier
 addTier();
-// Init Last赏 dynamic fields
+// Init LAST dynamic fields
 renderDynamicFields('dynamic-fields-last', 'bonus');
 
 function submitForm() {
-  // 一番赏奖级至少需配置到 E赏（S/A/B/C/D/E 共 6 级），未达标不允许送出
+  // 一番赏奖级至少需配置到 E Tier（S/A/B/C/D/E 共 6 级），未达标不允许送出
   if (tiers.length < MIN_TIER_COUNT) {
-    alert(`一番赏奖级至少需配置到 E赏（S、A、B、C、D、E 共 6 级），目前僅 ${tiers.length} 级，请先新增奖级`);
+    alert(`一番赏奖级至少需配置到 E Tier（S Tier～E Tier 共 6 级），目前僅 ${tiers.length} 级，请先新增奖级`);
     return;
   }
   // 收集所有必填欄位
