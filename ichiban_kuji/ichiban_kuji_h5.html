@@ -42,9 +42,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .kv .kv-ph small{font-size:10px;opacity:.7}
 .kv .scrim{position:absolute;left:0;right:0;bottom:0;height:84px;background:linear-gradient(transparent,rgba(42,39,35,.62))}
 .kv .nobori{position:absolute;top:10px;left:12px;writing-mode:vertical-rl;text-orientation:upright;background:var(--shu);color:#fff;font-size:14px;letter-spacing:3px;padding:6px 4px;border-radius:3px;box-shadow:1px 1px 0 var(--shu-d);z-index:2}
-.kv .kv-text{position:absolute;left:14px;right:14px;bottom:11px;z-index:2;color:#fff}
-.kv .kv-text .kicker{font-size:10px;letter-spacing:3px;opacity:.92;text-shadow:0 1px 2px rgba(0,0,0,.5)}
-.kv .kv-text .kv-title{font-size:23px;font-weight:700;line-height:1.1;margin-top:2px;text-shadow:0 1px 4px rgba(0,0,0,.55)}
 .noren-edge{height:14px;background:radial-gradient(circle 9px at 12px -1px,var(--shu) 70%,transparent 72%) repeat-x;background-size:24px 14px}
 .b-stock{padding:9px 16px 11px;border-bottom:1px solid var(--line);background:#F6EFDD}
 .b-stock .r1{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:var(--sumi-2)}
@@ -153,7 +150,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .gcard .g-zan{display:flex;align-items:baseline;gap:2px;white-space:nowrap}
 .gcard .g-zan .lbl{font-size:10px;color:var(--sumi-2)}
 .gcard .g-zan .num{font-family:"Songti SC",serif;font-size:19px;font-weight:700;color:var(--sumi)}
-.gcard .g-zan .num.low{color:var(--shu)}
 .gcard .g-zan .tot{font-size:10px;color:var(--sumi-2)}
 .gcard .g-img{margin-bottom:7px;display:flex;justify-content:center}
 .gcard .g-img .ph,.gcard .g-img .ic{width:112px;height:112px}
@@ -241,11 +237,10 @@ function deviceHTML(){return `
   <div class="banner">
     <div class="kv"><div class="kv-ph"></div>
       <div class="scrim"></div>
-      <div class="kv-text"><div class="kv-title serif">ICHIBAN Lucky Draw</div></div>
       <button class="kv-rules" onclick="var d=this.closest('.device');d.querySelector('.rules-ov').classList.add('show');d.scrollIntoView({behavior:'smooth',block:'start'})">📋 Rules</button></div>
     <div class="noren-edge"></div>
-    <div class="b-stock"><div class="r1"><span>Remaining <b class="js-zan">49</b>/100 Draws</span></div>
-      <div class="stock-bar"><div class="stock-fill js-fill" style="width:49%"></div></div></div>
+    <div class="b-stock"><div class="r1"><span>Remaining <b class="js-zan">50</b>/100 Draws</span></div>
+      <div class="stock-bar"><div class="stock-fill js-fill" style="width:50%"></div></div></div>
   </div>
   <div class="draw-zone">
     <div class="seg js-seg">
@@ -261,7 +256,7 @@ function deviceHTML(){return `
       <div class="icon-btn" onclick="this.closest('.rules-ov').classList.remove('show')">✕</div></div>
     <div class="rules-bd">
       <div class="rules-sec-title">General Mechanics</div>
-      <div class="rules-row"><div class="rules-dot">1</div><div class="rules-txt">Users may spend <b>500 points</b> for each draw, or spend the corresponding number of points based on the selected number of draws.</div></div>
+      <div class="rules-row"><div class="rules-dot">1</div><div class="rules-txt">Users may spend <b>${COST} points</b> for each draw, or spend the corresponding number of points based on the selected number of draws.</div></div>
       <div class="rules-row"><div class="rules-dot">2</div><div class="rules-txt">This campaign uses an inventory-based random draw mechanism. Each draw will be randomly selected from the prizes that still have remaining stock in the current prize group.</div></div>
       <div class="rules-row"><div class="rules-dot">3</div><div class="rules-txt">The winning probability of each prize is based on its current remaining inventory proportion within the total remaining inventory of the prize group.</div></div>
       <div class="rules-row"><div class="rules-dot">4</div><div class="rules-txt">When a prize's inventory reaches 0, it will no longer be included in future draws.</div></div>
@@ -287,7 +282,13 @@ function deviceHTML(){return `
     <div class="result-body" style="text-align:center;padding:28px 10px 8px;color:#5c4a38;font-size:14.5px;line-height:1.9;">
       All prizes in Ichiban Lucky Draw have been drawn. Explore more rewards in the Points Mall.
     </div>
-    <div class="result-foot"><button class="btn-ok js-soldout-ok">Got It</button></div></div></div>`;}
+    <div class="result-foot"><button class="btn-ok js-soldout-ok">Got It</button></div></div></div>
+  <div class="overlay js-stock-overlay"><div class="result">
+    <div class="result-head serif">Insufficient Stock</div>
+    <div class="result-body" style="text-align:center;padding:28px 10px 8px;color:#5c4a38;font-size:14.5px;line-height:1.9;">
+      "<span class="js-stock-n">5</span> Draws" is no longer available. Please select another option.
+    </div>
+    <div class="result-foot"><button class="btn-ok js-stock-ok">Got It</button></div></div></div>`;}
 
 function createApp(rootId){
   const root=document.getElementById(rootId);
@@ -297,8 +298,8 @@ function createApp(rootId){
   let points=316149, drawN=1;
 
   const normalLeft=()=>tiers.reduce((s,t)=>s+t.left,0);
-  const totalLeft=()=>normalLeft()+last.left;
-  const grand=()=>tiers.reduce((s,t)=>s+t.total,0)+last.total;
+  const normalTotal=()=>tiers.reduce((s,t)=>s+t.total,0);
+  const totalLeft=()=>normalLeft()+last.left; // 用于「是否全部售罄」判断（含 LAST），不用于顶部进度条显示
   const curN=()=>drawN==='all'?normalLeft():drawN;
 
   function featB(t,ribbon,note){const isPhysical=t.art==='physical';
@@ -309,10 +310,10 @@ function createApp(rootId){
         :`<span class="f-type">${t.type}</span>`}
       <div class="f-note">${note}</div><div class="f-zan">Remaining <b>${t.left}</b>/${t.total} Draws</div></div></div>`;}
   function cardB(t,{hi,mid}={}){
-    const sold=t.left<=0, low=t.left>0&&t.left/t.total<=.34;
+    const sold=t.left<=0;
     const isPhysical=t.art==='physical';
     return `<div class="gcard ${hi?'hi':''} ${mid?'mid':''} ${sold?'sold':''}"><div class="g-top">${badge(t,false,hi)}
-      <div class="g-zan"><span class="lbl">Remaining</span><span class="num ${low?'low':''}">${t.left}</span><span class="tot">/${t.total}</span></div></div>
+      <div class="g-zan"><span class="lbl">Remaining</span><span class="num">${t.left}</span><span class="tot">/${t.total}</span></div></div>
       <div class="g-tagrow">${hi?'<span class="uptag">★ Top Tier</span>':mid?'<span class="midtag">Popular</span>':''}</div>
       <div class="g-img">${artImg(t.art)}</div><div class="g-name">${t.name}</div>${isPhysical
         ?`<div class="g-desc">${t.desc}</div><div class="g-type">${t.type}</div>`
@@ -341,6 +342,7 @@ function createApp(rootId){
     }
   }
   function showSoldOutAlert(){$('.js-soldout-overlay').classList.add('show');}
+  function showStockAlert(n){$('.js-stock-overlay .js-stock-n').textContent=n;$('.js-stock-overlay').classList.add('show');}
   function refreshTearButton(){
     const b=$('.js-tear');
     if(totalLeft()<=0){
@@ -356,7 +358,9 @@ function createApp(rootId){
   }
   function updateStock(){
     updateSegButtons();
-    const left=totalLeft(),tot=grand();
+    // 顶部「Remaining N/100 Draws」进度条只反映一般奖级（不含 LAST，真实一番赏玩法中 LAST（ラストワン賞）
+    // 是「抽中一般奖级最后一张时额外附赠」的奖励，本身不占用一般票数额度，故不计入这里的分子分母
+    const left=normalLeft(),tot=normalTotal();
     $('.js-zan').textContent=left;
     $('.js-fill').style.width=(left/tot*100)+'%';
     $('.js-pts2').textContent=points.toLocaleString();
@@ -373,7 +377,7 @@ function createApp(rootId){
         <div class="nm">${badge(g.tier,g.isLast)} ${g.isLast?'Last Prize · ':''}${g.tier.name}</div><div class="cnt">×${g.n}</div></div>`;});
       $('.js-rbody').innerHTML=html;
     }else{
-      // Last赏固定排在「第一排左边」＝第 1 格（不是最后一格）：把它从原本的抽奖顺序末端搬到最前面，
+      // LAST 固定排在「第一排左边」＝第 1 格（不是最后一格）：把它从原本的抽奖顺序末端搬到最前面，
       // 其余卡片（包含原本第 1 张）仍照实际抽奖顺序，全部各往后递补一格
       const ordered=[...results];
       const lastIdx=ordered.findIndex(r=>r.isLast);
@@ -386,7 +390,7 @@ function createApp(rootId){
           <div class="cover serif">OK ICHIBAN <span class="arrow">Draw ▶</span></div></div>`;});
       html+='</div>';
       $('.js-rbody').innerHTML=html;
-      ordered.forEach((r,i)=>setTimeout(()=>{const el=$(`.rk[data-i="${i}"]`);if(el)el.classList.add('torn');},300+i*280));
+      ordered.forEach((r,i)=>setTimeout(()=>{const el=$(`.rk[data-i="${i}"]`);if(el)el.classList.add('torn');},300+i*300));
     }
     $('.js-overlay').classList.add('show');
     root.scrollIntoView({behavior:'smooth',block:'start'});
@@ -415,31 +419,36 @@ function createApp(rootId){
   $('.js-ok').addEventListener('click',()=>{$('.js-overlay').classList.remove('show');
     refreshTearButton();
     if(totalLeft()<=0)showSoldOutAlert();});
-  // 已确认（spec 2-5）：「已抽完提醒」弹窗是全场唯一会造成页面跳转的弹窗——
+  // 已确认（spec 2-9）：「已抽完提醒」弹窗是全场唯一会造成页面跳转的弹窗——
   // 不论是玩家自己这次撕券刚好抽空（见上方 .js-ok 内的判断），或是从积分商城点进时该商品已经售罄（见下方页面载入检查），
   // 点击 Got It 一律强制导回「积分商城」列表页；积分商城是独立页面、不在本文件范围内，
   // 故以 history.back() 模拟「返回上一页」，正式开发应改为导向积分商城实际路由/网址
   $('.js-soldout-ok').addEventListener('click',()=>{$('.js-soldout-overlay').classList.remove('show');
     history.back();});
+  // 已确认（spec 2-3）：「库存不足提醒」弹窗关闭后停留原画面，不导回积分商城——与「已抽完提醒」是唯一的差异点
+  $('.js-stock-ok').addEventListener('click',()=>{$('.js-stock-overlay').classList.remove('show');
+    updateStock();});
 
   renderPool();
 
   /* ── spec-doc deep link：透过网址参数直接呈现特定画面状态，方便规格书用 iframe 嵌入示例 ──
      ?lowqty=1                  情境B：一般奖级剩余总和压到7张，示范「五连」可选／「十连」反灰
-     ?lowstock=1                情境D：S赏售罄（半透明遮罩）＋B赏剩1/5（低库存警示红字），其余正常
+     ?lowstock=1                情境D：S Tier 售罄（半透明遮罩），其余正常
      ?soldout=1                 情境B例外／2-5：全部售罄状态（四个张数按钮与撕券按钮全部反灰），
                                  此参数刻意跳过自动弹窗，只展示背景停用状态；真实情况（无此参数、单纯页面载入时已经售罄）
                                  会自动跳出「已抽完提醒」弹窗（同 ?modal=soldout-alert 呈现的内容），见下方一般载入检查
      ?insufficient=1            情境C／2-6：积分不足状态（撕券按钮显示 Insufficient Balance，同售罄一样反灰停用）
      ?modal=rules               活动规则弹窗
-     ?modal=result-single       开奖结果－逐张揭晓模式示例（2张，未含Last赏）
-     ?modal=result-last         开奖结果－逐张揭晓模式示例，含Last赏（庆祝横幅，2张）
-     ?modal=result-last-multi   开奖结果－逐张揭晓模式示例，含Last赏（6张，验证Last赏固定排第1格）
+     ?modal=result-single       开奖结果－逐张揭晓模式示例（2张，未含LAST）
+     ?modal=result-last         开奖结果－逐张揭晓模式示例，含LAST（庆祝横幅，2张）
+     ?modal=result-last-multi   开奖结果－逐张揭晓模式示例，含LAST（6张，验证LAST 固定排第1格）
      ?modal=result-agg          开奖结果－汇总列表模式示例（模拟「全包」大量张数的情况，14张）
      ?modal=result-all-small    开奖结果－「全包」张数很少（3张）时仍走汇总列表模式的示例
-     ?modal=result-agg-overflow 开奖结果－汇总列表模式示例，全部9个一般奖级＋Last赏共10列，验证列表可滑动
+     ?modal=result-agg-overflow 开奖结果－汇总列表模式示例，全部9个一般奖级＋LAST 共10列，验证列表可滑动
      ?modal=soldout-alert       已抽完提醒弹窗（单独示例，不改变背后卡片库存；点击 Got It 会 history.back()，
                                  在独立分页开启此连结时可正常测试，嵌入 spec 的 iframe 中点击不影响画面展示）
+     ?modal=stock-alert&n=5     库存不足提醒弹窗（spec 2-3，并发抢购情境示例）；n 为弹窗文案代入的张数
+                                （五连传 5、十连传 10，不带 n 时预设 5），点击 Got It 只关闭弹窗、停留原画面
      以上参数只影响画面初始状态，不影响一般无参数时的正常使用流程 */
   const qp = new URLSearchParams(location.search);
   if (qp.get('soldout') === '1') {
@@ -456,17 +465,16 @@ function createApp(rootId){
     renderPool();
   }
   if (qp.get('lowstock') === '1') {
-    // 验证用：情境 D——S赏（总量1）设为售罄示范半透明遮罩，B赏（总量5）剩1张（20%）示范低库存警示红字，
+    // 验证用：情境 D——S Tier（总量1）设为售罄示范半透明遮罩，
     // 其余奖级维持正常水位，一般奖级剩余总和仍远大于 10，撕券按钮与四个张数按钮维持正常可点击
     tiers[0].left = 0;
-    tiers[2].left = 1;
     renderPool();
   }
   if (qp.get('insufficient') === '1') {
     points = 0;
     updateStock();
   }
-  // 已确认（spec 2-5／B-14）：真实场景下，玩家从「积分商城」点进一个当下已经全部售罄的一番赏商品，
+  // 已确认（spec 2-9／B-14）：真实场景下，玩家从「积分商城」点进一个当下已经全部售罄的一番赏商品，
   // 页面载入当下就该直接呈现停用状态＋自动跳出「已抽完提醒」弹窗，不需要玩家先操作撕券；
   // ?soldout=1 demo 刻意跳过此自动跳出（见上方注解，专门单独展示背景停用状态），故此处排除该 demo 参数
   if (totalLeft() <= 0 && qp.get('soldout') !== '1') {
@@ -477,13 +485,15 @@ function createApp(rootId){
     $('.rules-ov').classList.add('show');
   } else if (modal === 'soldout-alert') {
     showSoldOutAlert();
+  } else if (modal === 'stock-alert') {
+    showStockAlert(qp.get('n') || 5);
   } else if (modal === 'result-single') {
     showResult([{ tier: tiers[1] }, { tier: tiers[3] }], false);
   } else if (modal === 'result-last') {
     showResult([{ tier: tiers[1] }, { tier: last, isLast: true }], true);
   } else if (modal === 'result-last-multi') {
-    // 验证用：模拟五连抽正好抽空一般奖级池，本次结果 5 张一般奖品＋Last赏＝6 张。
-    // 依规则，Last赏应该被搬到第 1 格（第一排左边），不是排在第 6 格（最后一格）
+    // 验证用：模拟五连抽正好抽空一般奖级池，本次结果 5 张一般奖品＋LAST＝6 张。
+    // 依规则，LAST 应该被搬到第 1 格（第一排左边），不是排在第 6 格（最后一格）
     showResult([
       { tier: tiers[2] }, { tier: tiers[4] }, { tier: tiers[6] }, { tier: tiers[7] }, { tier: tiers[8] },
       { tier: last, isLast: true }
@@ -498,7 +508,7 @@ function createApp(rootId){
   } else if (modal === 'result-all-small') {
     showResult([{ tier: tiers[6] }, { tier: tiers[7] }, { tier: last, isLast: true }], true, true);
   } else if (modal === 'result-agg-overflow') {
-    // 验证用：模拟全包一次中到全部 9 个一般奖级＋Last赏，共 10 个不同奖级列，
+    // 验证用：模拟全包一次中到全部 9 个一般奖级＋LAST，共 10 个不同奖级列，
     // 用来确认汇总列表超过弹窗高度（440px）时，中间列表区域会自动出现上下滑动，标题与「收下」按钮维持固定不动
     const fake = tiers.map(t => ({ tier: t }));
     fake.push({ tier: last, isLast: true });

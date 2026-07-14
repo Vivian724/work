@@ -233,7 +233,8 @@ input[type="checkbox"], input[type="radio"] { cursor: pointer; accent-color: #16
   display: block; font-size: 12px; color: #666; margin-bottom: 4px;
 }
 .tier-field select,
-.tier-field input[type="text"] {
+.tier-field input[type="text"],
+.tier-field input[type="number"] {
   height: 30px; font-size: 13px;
 }
 
@@ -714,8 +715,8 @@ function addTier() {
 }
 
 function removeTier(id) {
-  if (tiers.length <= 1) {
-    alert('至少需要保留 1 个奖级');
+  if (tiers.length <= MIN_TIER_COUNT) {
+    alert(`一番赏奖级至少须配置到 E Tier（S Tier～E Tier 共 ${MIN_TIER_COUNT} 级），这几级不可删除`);
     return;
   }
   const idx = tiers.findIndex(t => t.id === id);
@@ -736,7 +737,7 @@ function renderDynamicFields(containerId, cat2Val) {
     html = `
       <div class="tier-field">
         <label>流水倍数</label>
-        <input type="number" placeholder="请输入（选填）" min="0">
+        <input type="number" placeholder="请输入" min="0">
       </div>
       <div class="tier-field">
         <label><span class="req">*</span>金额</label>
@@ -749,14 +750,19 @@ function renderDynamicFields(containerId, cat2Val) {
         <input type="number" placeholder="请输入" min="0" required>
       </div>`;
   } else if (cat2Val === 'freespin') {
-    // 顯示下方的旋轉券區塊
-    const tierId = containerId.replace('dynamic-fields-', '');
-    const extra = document.getElementById('freespin-extra-' + tierId);
-    if (extra) {
-      extra.style.display = 'block';
-      const list = document.getElementById('freespin-list-extra-' + tierId);
-      if (list && list.children.length === 0) addFreespinRow('extra-' + tierId);
-    }
+    // 已确认（本次调整）：免费旋转比照免费投注的呈现方式，一个奖级只能配置一款游戏，
+    // 不再支援「新增免费旋转」多笔子项目；张数已由该奖级本身的「数量」栏位配置，此处不重复设置
+    html = `
+      <div class="tier-field" style="flex:2">
+        <label><span class="req">*</span>选择免费旋转游戏</label>
+        <select required>
+          <option value="" disabled selected>请选择</option>
+          <option>J Mania Triple Jam</option>
+          <option>FC Freespins</option>
+          <option>Slot Game A</option>
+          <option>Slot Game B</option>
+        </select>
+      </div>`;
   } else if (cat2Val === 'real') {
     html = `
       <div class="tier-field" style="flex:2">
@@ -767,8 +773,8 @@ function renderDynamicFields(containerId, cat2Val) {
     html = `
       <div class="tier-field" style="flex:2">
         <label><span class="req">*</span>选择优惠券</label>
-        <select>
-          <option value="">请选择</option>
+        <select required>
+          <option value="" disabled selected>请选择</option>
           <option>优惠券 A</option>
           <option>优惠券 B</option>
         </select>
@@ -855,11 +861,6 @@ function tierFieldsHtml(tierId, isLast) {
         <label><span class="req">*</span>奖品图片</label>
         <button class="upload-btn-sm">📁 选择文件</button>
       </div>
-      <div id="freespin-extra-${tierId}" style="margin-top:12px;display:none;">
-        <div style="font-size:12px;color:#1677ff;font-weight:600;margin-bottom:8px;">免费旋转配置</div>
-        <div id="freespin-list-extra-${tierId}" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
-        <button type="button" class="btn-add-tier" style="height:30px;font-size:12px;" onclick="addFreespinRow('extra-${tierId}')">＋ 新增免费旋转</button>
-      </div>
     </div>
   `;
 }
@@ -881,9 +882,6 @@ function onCat1Change(sel, tierId) {
 }
 
 function onCat2Change(sel, tierId) {
-  // 隱藏旋轉券區塊（切換到其他類型時）
-  const extra = document.getElementById('freespin-extra-' + tierId);
-  if (extra) extra.style.display = 'none';
   renderDynamicFields('dynamic-fields-' + tierId, sel.value);
 }
 
@@ -899,11 +897,11 @@ function renderTiers() {
             <span style="font-size:12px;color:#666;white-space:nowrap;">数量</span>
             <input class="tier-qty-input" type="number" min="1" value="${t.qty||1}"
               oninput="tiers[${idx}].qty = parseInt(this.value)||0; updateTotal();"
-              placeholder="0" style="width:56px;border:none;background:transparent;text-align:center;font-size:13px;font-weight:600;color:#333;outline:none;" required>
+              placeholder="请输入" style="width:56px;border:none;background:transparent;text-align:center;font-size:13px;font-weight:600;color:#333;outline:none;" required>
             <span style="font-size:12px;color:#999;">张</span>
           </div>
         </div>
-        ${tiers.length > 1 ? `<button class="btn-danger-text" onclick="removeTier(${t.id})">✕ 删除</button>` : ''}
+        ${idx >= MIN_TIER_COUNT ? `<button class="btn-danger-text" onclick="removeTier(${t.id})">✕ 删除</button>` : ''}
       </div>
       ${tierFieldsHtml(t.id, false)}
     </div>
@@ -939,66 +937,6 @@ function updateConfirmBtnState() {
   btn.title = met ? '' : `一番赏奖级至少需配置到 E Tier（S Tier～E Tier 共 6 级），目前僅 ${tiers.length} 级，还差 ${MIN_TIER_COUNT - tiers.length} 级`;
 }
 
-let freespinRowId = 0;
-
-function addFreespinRow(containerId) {
-  const list = document.getElementById('freespin-list-' + containerId);
-  if (!list) return;
-  const rowId = 'fs-' + containerId + '-' + (freespinRowId++);
-  const div = document.createElement('div');
-  div.className = 'freespin-row';
-  div.id = rowId;
-  div.innerHTML = `
-    <span style="font-size:12px;color:#999;white-space:nowrap;">免费旋转 ${list.children.length + 1}</span>
-    <select required>
-      <option value="" disabled selected>选择免费旋转游戏</option>
-      <option>J Mania Triple Jam</option>
-      <option>FC Freespins</option>
-      <option>Slot Game A</option>
-      <option>Slot Game B</option>
-    </select>
-    <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
-      <span style="font-size:12px;color:#666;white-space:nowrap;"><span style="color:#ff4d4f;">*</span> 张数</span>
-      <input type="number" min="1" placeholder="0" required
-        style="width:60px;height:30px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px;text-align:center;">
-      <span style="font-size:12px;color:#999;">张</span>
-    </div>
-
-    <button type="button" class="btn-danger-text" onclick="removeFreespinRow('${rowId}', '${containerId}')">✕ 删除</button>
-  `;
-  list.appendChild(div);
-  updateFreespinNumbers(containerId);
-}
-
-function removeFreespinRow(rowId, containerId) {
-  const el = document.getElementById(rowId);
-  if (el) el.remove();
-  updateFreespinNumbers(containerId);
-}
-
-function updateFreespinNumbers(containerId) {
-  const list = document.getElementById('freespin-list-' + containerId);
-  if (!list) return;
-  Array.from(list.children).forEach((row, i) => {
-    const label = row.querySelector('span');
-    if (label) label.textContent = '免费旋转 ' + (i + 1);
-  });
-}
-
-function triggerFsUpload(rowId) {
-  const input = document.getElementById('file-' + rowId);
-  if (input) input.click();
-}
-
-function previewFsImage(input, rowId) {
-  const file = input.files[0];
-  if (!file) return;
-  const prev = document.getElementById('prev-' + rowId);
-  const fname = document.getElementById('fname-' + rowId);
-  if (prev) { prev.src = URL.createObjectURL(file); prev.style.display = 'block'; }
-  if (fname) fname.textContent = file.name;
-}
-
 function toggleFlashSale(el) {
   document.getElementById('flashSaleRange').style.display =
     el.value === 'yes' ? 'block' : 'none';
@@ -1024,8 +962,9 @@ function clearBanner(inputId, previewId, placeholderId) {
   ph.style.display = 'flex';
 }
 
-// Init with S Tier
-addTier();
+// Init：直接展开到 E Tier（S/A/B/C/D/E 共 6 级），符合「至少配置到 E Tier」的规则，
+// 不需要运营逐一点击「+新增奖级」才能看到必填的这几级；要新增 F/G/H Tier 仍可点击「+新增奖级」
+for (let i = 0; i < MIN_TIER_COUNT; i++) addTier();
 // Init LAST dynamic fields
 renderDynamicFields('dynamic-fields-last', 'bonus');
 
