@@ -347,14 +347,6 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
 }
 
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  font-size:14px;
-  background: #f0f2f5;
-  color: #333;
-}
-
 .page { padding: 24px; }
 
 /* ── BREADCRUMB ── */
@@ -585,8 +577,27 @@ tr:hover td { background: #fafcff; }
 @media (max-width:1200px){ .spec-split{grid-template-columns:minmax(0,1fr);} }
 #mergeView1 .overlay{position:static !important;inset:auto !important;padding:0 !important;background:transparent !important;display:block !important;}
 #mergeView1 .modal{width:100% !important;max-width:100% !important;box-shadow:none !important;}
+/* 说明区太挤：原本弹窗预览（screen-card）吃掉大部分宽度，文字／表格说明区被压缩在固定 340–460px 窄栏内；
+   改成弹窗预览固定宽度、说明区改为弹性欠满剩余空间，并放大表格字级与留白，改善「2.1 基本字段」等段落的阅读体验 */
+#mergeView1 .spec-view-inner{max-width:1900px;}
+#mergeView1 .spec-split{grid-template-columns:minmax(400px,2fr) minmax(300px,1fr);}
+@media (max-width:1200px){ #mergeView1 .spec-split{grid-template-columns:minmax(0,1fr);} }
+#mergeView1 .spec-table-fields table{font-size:20.5px;table-layout:fixed;}
+#mergeView1 .spec-table-fields th{font-size:17.5px;padding:17px 20px;}
+#mergeView1 .spec-table-fields td{padding:19px 20px;line-height:1.9;}
+#mergeView1 .spec-table-fields th:first-child,
+#mergeView1 .spec-table-fields td:first-child{white-space:normal;width:130px;}
+#mergeView1 .spec-table-fields th:nth-child(2),
+#mergeView1 .spec-table-fields td:nth-child(2){width:70px;text-align:center;}
 #mergeView6 .overlay{position:static !important;inset:auto !important;padding:0 !important;background:transparent !important;display:block !important;}
 #mergeView6 .modal{width:100% !important;max-width:100% !important;box-shadow:none !important;}
+/* mergeView7：H5 预览用 iframe 撑满原本很宽的弹性栏，但里面的手机尺寸装置固定 390px 置中，
+   两侧露出大片 iframe 自身的深色背景（浪费空间），右侧文字说明栏又被压在窄栏里狂换行；
+   改成预览栏固定贴近装置实际宽度（不缩放 H5 本身），说明栏改吃剩余空间 */
+#mergeView7 .spec-view-inner{max-width:1900px;}
+#mergeView7 .spec-split{grid-template-columns:minmax(420px,460px) minmax(0,1fr);}
+@media (max-width:1200px){ #mergeView7 .spec-split{grid-template-columns:minmax(0,1fr);} }
+#mergeView7 .spec-text{font-size:20px;}
 
 </style>
 </head>
@@ -614,7 +625,7 @@ tr:hover td { background: #fafcff; }
     <div class="spec-gloss-row"><div class="spec-gloss-term">奖级</div><div class="spec-gloss-def"><span class="spec-field">S Tier</span>／A Tier～H Tier（依新增顺序命名，最多 9 级，数量与名称均可自订；<strong>S Tier</strong>为等级最高、最稀有的奖级，固定排在一般奖级最上方，显示顺序在 A Tier 之前）＋ <span class="spec-field">LAST</span>（固定 1 张，最后一抽自动触发，不可删除）。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">券数</div><div class="spec-gloss-def">该商品的总抽奖张数，＝各一般奖级（S～H）数量加总，<strong>不含</strong> LAST 的 1 张，系统自动加总显示；LAST 是额外颁发给「抽走最后一张一般奖级券」的玩家，本身不占用、也不计入票数额度。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">来源＝积分购买</div><div class="spec-gloss-def"><span class="spec-field">积分购买</span> 是前台「积分商城」<strong>所有商品类别通用</strong>的购买方式，并非一番赏专属——积分商城里任何商品类型的商品都是用积分购买。因此后台「来源」字段只会显示「积分购买」，不会出现「Ichiban Kuji」这个来源选项；真正用来判断「这是一番赏商品」的字段是商品配置里的 <strong>商品类型＝Ichiban Kuji</strong>（详见下一条）。</div></div>
-    <div class="spec-gloss-row"><div class="spec-gloss-term">一番赏的判断依据</div><div class="spec-gloss-def">一笔积分购买是否属于「一番赏」，由「商品配置」弹窗中的两个字段决定：<strong>商品类型</strong>（单选 radio，决定该商品用哪一套逻辑／是否显示奖级配置区块，一番赏须选中「Ichiban Kuji」）与 <strong>商品类别</strong>（多选 checkbox，纯粹给前台商城分类展示用，与抽奖逻辑无关，也可勾选「Ichiban Kuji」）。各记录页统一以「商品类型＝Ichiban Kuji」作为判断条件。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">一番赏的判断依据</div><div class="spec-gloss-def">一笔积分购买是否属于「一番赏」，由「商品配置」弹窗中的两个字段决定：<strong>商品类型</strong>（单选 radio，决定该商品用哪一套逻辑／是否显示奖级配置区块，一番赏须选中「Ichiban Kuji」）与 <strong>商品类别</strong>（多选 checkbox，纯粹给前台商城分类展示用，与抽奖逻辑无关，也可勾选「Ichiban Kuji」）。各记录页统一以「商品类型＝Ichiban Kuji」作为判断条件。<strong>「Ichiban Kuji」在这两个字段里目前后台都尚未存在，是本次专案新增的选项，需要 RD 新增</strong>（「商品类型」既有 12 项，新增后共 13 项，最后一个既有项为「Golden Draw Ticket」，详见「商品配置」2.1 节）。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">活动名称＝商品名称</div><div class="spec-gloss-def">各记录／报表页的「活动名称」字段，取自「商品配置」中<strong>商品类型＝Ichiban Kuji</strong> 的该笔商品的「商品名称」字段值（即玩家实际购买的一番赏商品名称）；若该笔积分购买对应的商品「商品类型」不是 Ichiban Kuji（即非一番赏的一般商品），则显示「–」。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">奖品清单格式</div><div class="spec-gloss-def">「备注」／「奖品」字段统一采用「{奖级} {奖品类型}{数值}」格式，例如「B Tier 彩金500.00」「E Tier 免费旋转×20」；一笔纪录若中出多个奖品，以顿号「，」分隔，重复品项自动合并显示为「×N」，LAST 永远排最前面。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">免费旋转／免费投注／道具卡（已确认统一名称）</div><div class="spec-gloss-def">这三种奖品类型全文统一只用「免费旋转」「免费投注」「道具卡」，<strong>没有「旋转券」这个名称</strong>，遇到旧文案／demo 数据出现「旋转券」一律视为「免费旋转」的笔误。三者皆须先在「后台 ＞ 免费旋转管理 ＞ 免费项目配置」建立主档，才能在「商品配置」奖级第二层的下拉选单中被选用；「优惠券」则是在「优惠券管理」配置，与这三者是各自独立的两套主档来源。</div></div>
@@ -675,6 +686,8 @@ tr:hover td { background: #fafcff; }
             <label><input type="checkbox"> 免费投注</label>
             <label><input type="checkbox"> 盲盒</label>
             <label><input type="checkbox"> 道具卡</label>
+            <!-- 待确认：此项是推测补上的，尚未跟运营/RD 确认「商品类别」清单里实际是否也有 Golden Draw Ticket，仅为求跟「商品类型」清单一致而加 -->
+            <label style="outline:1.5px dashed #fa8c16;outline-offset:2px;border-radius:4px;padding:2px 4px;"><input type="checkbox"> Golden Draw Ticket <span style="color:#fa8c16;font-size:11px;">（待确认）</span></label>
             <label><input type="checkbox" checked class="ichiban-cb"> <span class="ichiban-label">Ichiban Kuji</span></label>
           </div>
         </div>
@@ -704,6 +717,7 @@ tr:hover td { background: #fafcff; }
             <label><input type="radio" name="productType" value="blind"> 盲盒</label>
             <label><input type="radio" name="productType" value="freebet"> 免费投注</label>
             <label><input type="radio" name="productType" value="tool"> 道具卡</label>
+            <label><input type="radio" name="productType" value="golden"> Golden Draw Ticket</label>
             <label><input type="radio" name="productType" value="ichiban" checked> <span class="ichiban-label">Ichiban Kuji</span></label>
           </div>
         </div>
@@ -984,14 +998,14 @@ tr:hover td { background: #fafcff; }
   <p class="spec-lead">此弹窗由「一番赏商品配置」列表页点击「新增商品」或「编辑」触发，标题为「新增商品」／「编辑商品」；表单分为基本字段、顶部图配置、规则弹窗图配置、Ichiban Kuji 奖级配置 4 大区块。</p>
 
   <h3>2.1 基本字段</h3>
-  <div class="spec-table-wrap">
+  <div class="spec-table-wrap spec-table-fields">
     <table>
       <thead><tr><th>字段</th><th>必填</th><th>说明</th></tr></thead>
       <tbody>
         <tr><td class="spec-field">币种</td><td><span class="spec-req">●</span></td><td>下拉单选，目前仅「菲律宾比索」一个选项，为后续多币别预留字段</td></tr>
-        <tr><td class="spec-field">商品类别</td><td>–</td><td>多选 checkbox，用于后台商品列表的分类筛选；新增一番赏商品时须勾选「Ichiban Kuji」，不影响抽奖逻辑</td></tr>
+        <tr><td class="spec-field">商品类别</td><td>–</td><td>多选 checkbox，用于后台商品列表的分类筛选；新增一番赏商品时须勾选「Ichiban Kuji」，不影响抽奖逻辑。<strong>「Ichiban Kuji」同样是本次专案新增选项</strong>，后台目前不存在，需 RD 一并新增（与「商品类型」新增「Ichiban Kuji」是两个各自独立的字段变更，须分别处理）。清单里是否也要新增「Golden Draw Ticket」这一项以对齐「商品类型」清单，<strong>待确认（本次为求两份清单一致而暂时补上，尚未与运营/RD 核实）</strong></td></tr>
         <tr><td class="spec-field">商品名称</td><td><span class="spec-req">●</span></td><td>纯文本，会显示在玩家端商品卡片、后台各笔购买纪录的「商品名称」／「活动名称」字段</td></tr>
-        <tr><td class="spec-field">商品类型</td><td><span class="spec-req">●</span></td><td>单选 radio，决定商品的抽奖／发放机制；选中「Ichiban Kuji」才会显示下方奖级配置区块</td></tr>
+        <tr><td class="spec-field">商品类型</td><td><span class="spec-req">●</span></td><td>单选 radio，决定商品的抽奖／发放机制；选中「Ichiban Kuji」才会显示下方奖级配置区块。<strong>「Ichiban Kuji」为本次专案新增选项</strong>，后台目前既有 12 项（实物／彩金／优惠券／免费旋转／话费／流量／pisoluck／票券／盲盒／免费投注／道具卡／Golden Draw Ticket），新增后共 13 项，需 RD 新增此选项</td></tr>
         <tr><td class="spec-field">商品图片</td><td><span class="spec-req">●</span></td><td>尺寸 750×750px，最多可上传 6 张，预设第一张为封面图</td></tr>
         <tr><td class="spec-field">购买价格</td><td><span class="spec-req">●</span></td><td>目前锁定计价方式为「积分」，此数值＝单抽需扣除的积分</td></tr>
         <tr><td class="spec-field">排序</td><td><span class="spec-req">●</span></td><td>数字，越小排序越前面</td></tr>
@@ -1008,6 +1022,7 @@ tr:hover td { background: #fafcff; }
   <div class="spec-rule-box">
     <ul>
       <li><strong>总券数</strong>＝所有一般奖级（S～H）数量总和，自动加总显示；<strong>不含</strong> LAST——LAST 固定 1 张，是额外颁发给「抽走最后一张一般奖级券」的玩家，本身不占用、也不计入总券数</li>
+      <li><strong>数量栏位位数上限（本次新增规则）</strong>：每个奖级的「数量」栏位最多支持<strong>6 位数</strong>（即单一奖级上限 999,999 张）；「总券数」（各奖级数量自动加总，不含 LAST）最多支持<strong>7 位数</strong>（即总量上限 9,999,999 张）；「数量」栏位仅接受正整数输入，超过位数上限时阻挡继续输入，且送出前进行校验，超限不可送出</li>
       <li><strong>奖级数量上限</strong>：一般奖级最多 9 级（S Tier＋A Tier～H Tier），加上固定 LAST，共 10 级；达上限「＋新增奖级」会跳出提示</li>
       <li><strong>最少须配置到 E Tier（本次新增规则）</strong>：一般奖级至少要新增到 S Tier～E Tier 共 6 级，「新增奖级」上方提示文案固定显示「至少配置到 E Tier」；未达 6 级前，弹窗底部「确定」按钮维持灰色不可点击，需配置满 6 级（含）以上才会恢复可点击</li>
       <li><strong>打开弹窗即预先展开 S～E Tier（已确认，UX 调整）</strong>：既然规则规定至少要配置到 E Tier，画面<strong>不需要</strong>让运营从 1 个奖级开始逐次点击「＋新增奖级」5 次才能看满必填的这 6 级——「新增商品」弹窗打开当下，<strong>直接预先展开 S Tier～E Tier 共 6 个奖级卡片</strong>供运营依序填写；运营仍可透过「＋新增奖级」继续新增 F／G／H Tier（上限共 9 级）</li>
@@ -1045,6 +1060,7 @@ tr:hover td { background: #fafcff; }
       <li><strong>第一层＝虚拟物品，第二层＝彩金／积分</strong>：这两个分类的动态字段是<strong>直接输入的数值</strong>（彩金＝流水倍数＋金额，流水倍数选填；积分＝积分数量），因此第一行只显示<strong>金额／积分数量本身</strong>（如「5,000.00」「1,000」），<strong>不会</strong>在前台显示流水倍数文字（即使该奖级有填流水倍数，也<strong>只用于后台内部纪录</strong>，不会呈现在 H5 前台卡片上），第二行显示分类标签（如「彩金」「积分」）</li>
       <li><strong>第一层＝虚拟物品，第二层＝优惠券／免费旋转／免费投注／道具卡</strong>：这四个分类的动态字段都是<strong>从下拉选单挑选一笔既有主档</strong>（分别对应「选择优惠券」「选择免费旋转游戏」「选择免费投注」「选择道具卡」，其中免费旋转／免费投注／道具卡的选项来源即「免费旋转管理 ▸ 免费项目配置」主档列表），因此第一行显示的是<strong>该笔主档的名称</strong>（例如免费旋转选中「J Mania Triple Jam」，第一行就显示「J Mania Triple Jam」，<strong>不是</strong>张数或金额文案），第二行同样显示分类标签</li>
       <li>此排版规则同时套用于「压轴大奖（LAST）」区块与一般奖级卡片</li>
+      <li><strong>卡片「剩余量」显示格式（已确认，与顶部进度条一致）</strong>：一般奖级卡片固定显示「Remaining {剩余}/{总量}」，两个数字皆为<strong>实际数值</strong>并加千分位逗号（例如「Remaining 144,000/324,000」），<strong>不使用</strong>百分比或其他模糊化呈现；与页面顶部「Remaining N/总量 Draws」进度条采用<strong>同一套数字呈现方式</strong>，两处数字风格保持一致。「压轴大奖（LAST）」卡片<strong>不显示</strong>此剩余量栏位（LAST 本身不占用一般票数额度，见「名词定义」页「券数」说明）</li>
     </ul>
   </div>
 
@@ -2076,7 +2092,7 @@ tr:hover td { background: #fafcff; }
 </div>
 
   </div>
-</div></div>
+</div>
 
 <!-- ═══════════════════════════════════════════════════════════
      H5 前台规格书（改版：情境式排版，参照 weekly_card_spec_text.html 的编排方式）
@@ -2253,8 +2269,8 @@ tr:hover td { background: #fafcff; }
           <li><strong>触发条件</strong>：玩家本次选的是「单张／五连／十连」（非全包），最多开出 11 张（10 张＋LAST），判断依据是「选的按钮」，不是出券数量门槛（详见 2-7）</li>
           <li>标题固定格式「抽出 <span class="spec-field">{张数}</span> 张」</li>
           <li>每张卡片初始为封面「一番赏 撕▶」，依序错开撕开动画（第 1 张延迟 300ms，之后每张间隔<strong>统一改为 300ms</strong>，两者用同一个时间常数，前端实作更简单；单张撕开动画本身 1.1 秒 ease），逐一露出奖级徽章、奖品名称与分类</li>
-          <li><strong>卡片排列方式</strong>：固定 2 栏由左到右、由上到下排列（第 1 张在左上，第 2 张在右上，第 3 张换行到左下，以此类推）；排列顺序＝<strong>本次实际抽奖的先后顺序</strong>，也就是玩家这次選的每一张券依序开出哪个奖级，就照那个顺序放，<strong>不会</strong>额外按奖级、稀有度或英文字母排序，纯粹反映真实抽取过程（<strong>LAST 为唯一例外</strong>，见下一点）</li>
-          <li><strong>若本次中出 LAST（已确认）</strong>：LAST 卡片<strong>固定排在「第一排左边」，也就是第 1 格</strong>，<strong>不是</strong>排在最后一格。因为 LAST 一定是在「抽空一般奖级池」的那一张才会触发（时间上必定是本次最后开出的一张），系统会把它从原本的时间顺序「提前」搬到第 1 格；其余卡片（<strong>包含原本排第 1 格的那一张</strong>）仍照本次实际抽奖的先后顺序，全部各往后移一格，依次接续排在第 2 格、第 3 格……以此类推。<strong>这点与汇总列表模式一致</strong>——汇总列表模式是把 LAST 摆在整个列表最前面（第一列），逐张模式则是摆在「第一排左边」（第 1 格），两边都固定放在最前面，只是「列表最前面」与「格子最前面」的呈现方式不同</li>
+          <li><strong>卡片排列方式（本次调整）</strong>：固定 2 栏由左到右、由上到下排列（第 1 张在左上，第 2 张在右上，第 3 张换行到左下，以此类推）；排列顺序<strong>不再反映本次实际抽奖的先后顺序</strong>，改为依奖级代号<strong>英文字母顺序</strong>由小到大排列（A Tier→B Tier→…→H Tier→S Tier；S 因字母排序落在最后，与「奖品一览」页面 S 排最前的顺序<strong>不同，属两套各自独立的排序规则</strong>）；同一奖级本次中出多张时，彼此间顺序不拘（<strong>LAST 为唯一例外</strong>，见下一点）</li>
+          <li><strong>若本次中出 LAST（已确认）</strong>：LAST 卡片<strong>固定排在「第一排左边」，也就是第 1 格</strong>，<strong>不是</strong>排在最后一格。其余卡片一律依<strong>奖级代号英文字母顺序</strong>接续排在第 2 格、第 3 格……以此类推。<strong>这点与汇总列表模式一致</strong>——汇总列表模式是把 LAST 摆在整个列表最前面（第一列），逐张模式则是摆在「第一排左边」（第 1 格），两边都固定放在最前面，只是「列表最前面」与「格子最前面」的呈现方式不同</li>
           <li>点击「收下」→ 关闭弹窗，依全局规则判定是否切换「已全部抽完」状态，并将张数按钮重置回「单张 (1 Draw)」（见 2-2）</li>
         </ul>
     </div>
@@ -2265,7 +2281,7 @@ tr:hover td { background: #fafcff; }
       <div style="height:520px;overflow:hidden;position:relative;">
         <iframe src="ichiban_kuji_h5.html?modal=result-last" style="border:none;width:100%;height:900px;display:block;position:absolute;top:-380px;left:0;" scrolling="no"></iframe>
       </div>
-      <p class="spec-caption">上：本次开 2 张（1 张一般奖品＋LAST），LAST 固定移到左边第 1 格，原本第 1 个开出的一般奖品被挤到右边第 2 格；下：本次开 6 张（5 张一般奖品＋LAST），一般奖品仍照抽奖顺序接续排在第 2～6 格</p>
+      <p class="spec-caption">上：本次开 2 张（1 张一般奖品＋LAST），LAST 固定排在左边第 1 格；下：本次开 6 张（5 张一般奖品＋LAST），一般奖品依奖级代号英文字母顺序接续排在第 2～6 格（不是抽奖先后顺序）</p>
       <div style="height:620px;overflow:hidden;position:relative;">
         <iframe src="ichiban_kuji_h5.html?modal=result-last-multi" style="border:none;width:100%;height:900px;display:block;position:absolute;top:-380px;left:0;" scrolling="no"></iframe>
       </div>
@@ -2275,7 +2291,24 @@ tr:hover td { background: #fafcff; }
       <ul class="spec-plain">
           <li><strong>核心定义（已确认，请以此为准）</strong>：<strong>只有抽到「一般奖级最后一张券」的那一位玩家，才会被给予 LAST；抽走最后一张券的当下，该玩家会在同一次交易、同一个动作中同时得到「那张券原本对应的一般奖级奖品」＋「LAST」两笔奖品</strong>。换句话说，LAST<strong>只会</strong>颁发给「这一次撕票动作正好抽空一般奖级池」的<strong>那一位玩家本人</strong>，是他当次交易额外多得的 1 张奖品；<strong>不会</strong>因为其他玩家在此之前或之后抽奖而颁发给别人，也<strong>不存在</strong>「事后随机抽一位得奖者」的机制。同一个商品的整个生命週期里，LAST 数量固定为 1，<strong>只会被颁发这一次</strong>，归属只有一位玩家</li>
           <li><strong>触发条件</strong>：本次抽出结果中包含 LAST（无论逐张或汇总模式皆适用），精确来说是指玩家<strong>这次交易的这批抽奖动作中，恰好抽走了「一番赏这个商品的一般奖级池最后一张券」</strong>，而不是笼统的「抽空了」这个动作本身（见「抽奖演算法」）。<strong>特别强调：玩家选「全包」时必定同时中到 LAST，这是确定结果、不是机率问题</strong>——因为「全包」的定义就是一次性抽完当下剩余的所有一般奖级券，必然会抽到并抽走最后一张，所以只要点击当下一般奖级尚未售罄（否则按钮已停用、无法点击），全包<strong>百分之百会中 LAST</strong>；「单张／五连／十连」则不保证每次都中，只有在<strong>当下一般奖级剩余量恰好等于或小于本次选定张数</strong>、导致这批券抽完后池子归零时才会触发</li>
-          <li>弹窗顶部固定加上「★ 恭喜抽中 LAST ★」金色横幅，弹窗打开当下即显示，无进场动画</li>
+          <li><strong>顶部金色横幅文案＝变量（本次调整，非固定文字）</strong>：只要本次结果<strong>中出 LAST／S Tier／A Tier 其中任一个</strong>，弹窗打开当下就固定在顶部显示金色横幅，无进场动画；<strong>其余奖级（B～H Tier）中出时不会触发本横幅</strong>。文案会依本次实际中出的组合<strong>自动拼接</strong>，固定顺序为 <span class="spec-field">Last → S Tier → A Tier</span>，只列出本次实际中出的项目；命中 1 项用单数「Prize」，命中 2 项以上改用复数「Prizes」，多项之间用「,」和「and」串接（英文书写习惯，非顿号）。完整对照表如下：</li>
+        </ul>
+        <div class="spec-table-wrap">
+          <table>
+            <thead><tr><th>本次同时中出</th><th>横幅文案（变量拼接结果）</th></tr></thead>
+            <tbody>
+              <tr><td class="spec-field">仅 LAST</td><td>★ Congratulations! You Won the Last Prize! ★</td></tr>
+              <tr><td class="spec-field">仅 S Tier</td><td>★ Congratulations! You Won the S Tier Prize! ★</td></tr>
+              <tr><td class="spec-field">仅 A Tier</td><td>★ Congratulations! You Won the A Tier Prize! ★</td></tr>
+              <tr><td class="spec-field">LAST + S Tier</td><td>★ Congratulations! You Won the Last and S Tier Prizes! ★</td></tr>
+              <tr><td class="spec-field">LAST + A Tier</td><td>★ Congratulations! You Won the Last and A Tier Prizes! ★</td></tr>
+              <tr><td class="spec-field">S Tier + A Tier</td><td>★ Congratulations! You Won the S Tier and A Tier Prizes! ★</td></tr>
+              <tr><td class="spec-field">LAST + S Tier + A Tier</td><td>★ Congratulations! You Won the Last, S Tier and A Tier Prizes! ★</td></tr>
+              <tr><td class="spec-field">以上皆未中（仅 B～H Tier）</td><td>不显示横幅</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="spec-plain">
           <li>逐张模式下 LAST 卡片一样会经历撕开动画，与其他奖级卡片同一套时间规则；卡片排列位置<strong>固定是第一排左边（第 1 格）</strong>，细节与调整说明见 2-5「若本次中出 LAST」</li>
         </ul>
     </div>
@@ -2301,6 +2334,7 @@ tr:hover td { background: #fafcff; }
           <li><strong>什么时候会看到这个模式</strong>：玩家这次选的是「全包」，就一定是汇总列表模式——不管全包当下实际抽出的张数是多是少（哪怕只剩 1～2 张），都固定用这个模式显示，<strong>不会</strong>因为张数少就改成一张一张撕票（示例见左侧页面）</li>
           <li><strong>单张／五连／十连不会用到这个模式</strong>：这三种选项最多只会开出 11 张（10 张一般奖品＋LAST 1 张），张数不多，所以固定用「逐张揭晓」一张一张撕票的方式呈现（见 2-5／2-6）——只看玩家选的是哪一个按钮，不是看实际开出几张来决定用哪种模式</li>
           <li><strong>怎么统计显示</strong>：同一个奖级中出几次，就合并成一行，格式是「徽章＋奖品名称……×次数」，例如「B Tier 5,000.00 ×3」</li>
+          <li><strong>列表排序（本次调整）</strong>：LAST 固定置顶（见下方 2-6）；其余各行改依奖级代号<strong>英文字母顺序</strong>由上到下排列（A Tier→B Tier→…→H Tier→S Tier），不再依本次实际中出的先后顺序排列</li>
           <li><strong>LAST 永远放第一行</strong>：<strong>「全包」必定会同时中到 LAST</strong>（见 2-6「触发条件」——全包＝一次抽完当下剩余的所有一般奖级券，必然包含最后一张，故每一次「全包」都保证拿到 LAST，不是偶尔发生的情况）；不管它实际是第几张开出的，都固定摆在整份列表最顶端，不跟其他奖品一起比中出次数、也不参与排序</li>
           <li>这个模式<strong>没有</strong>撕票动画，弹窗一打开就直接显示完整的列表内容</li>
           <li><strong>列表内容太长时可以上下滑动（已确认，明确定义如下）</strong>：全包一次开出的奖品种类通常比较多，弹窗本身有<strong>整体高度上限</strong>（demo 实作值 <span class="spec-field">440px</span>，正式视觉稍后可能调整，但「有固定上限」这个前提不变）；当汇总列表的行数把内容撑到超过这个上限时：
@@ -2402,7 +2436,7 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">卡片「实物」分类下的商品简介／奖品名称</td><td>该奖级第一层＝实物时填写的「商品简介」「奖品名称」</td><td>—</td></tr>
         <tr><td class="spec-field">卡片「彩金／积分」分类下第一行的数值文案</td><td>彩金＝该奖级填写的「金额」；积分＝「积分数量」</td><td>直接显示<strong>金额／积分数量本身</strong>，<strong>不含流水倍数文字</strong>，非主档名称；详见「商品配置」2.2.1 节</td></tr>
         <tr><td class="spec-field">卡片「优惠券／免费旋转／免费投注／道具卡」分类下第一行的名称文案</td><td>该奖级下拉选单选中的主档名称（免费旋转／免费投注／道具卡来自「免费旋转管理 ▸ 免费项目配置」主档）</td><td>显示<strong>主档名称</strong>；<strong>建议</strong>比照「兑换记录」「积分历史」既有的「主档名称×张数」格式一併显示张数（例：「J Mania Triple Jam ×20」），详见「商品配置」2.2.1 节与待确认事项</td></tr>
-        <tr><td class="spec-field">总券数／库存进度条</td><td>各一般奖级（S～H）数量加总</td><td><strong>已确认（本次修正）</strong>：LAST<strong>不计入</strong>顶部「Remaining N/总量 Draws」进度条与总票数——真实一番赏玩法中 LAST 是「抽中最后一张一般奖级时额外附赠」的奖励，本身不占用、也不消耗一般票数额度，故不算进总量或剩余量；示例配置表（见下）总量 100＝S～H 九级加总，LAST 固定 1 张单独显示于奖品一览首位，不并入这个 100</td></tr>
+        <tr><td class="spec-field">总券数／库存进度条</td><td>各一般奖级（S～H）数量加总</td><td><strong>已确认（本次修正）</strong>：LAST<strong>不计入</strong>顶部「Remaining N/总量 Draws」进度条与总票数——真实一番赏玩法中 LAST 是「抽中最后一张一般奖级时额外附赠」的奖励，本身不占用、也不消耗一般票数额度，故不算进总量或剩余量；示例配置表（见下）总量 1,200,000＝S～H 九级加总，LAST 固定 1 张单独显示于奖品一览首位，不并入这个 1,200,000</td></tr>
       </tbody>
     </table>
   </div>
@@ -2414,20 +2448,20 @@ tr:hover td { background: #fafcff; }
     <table>
       <thead><tr><th>奖级</th><th>奖品名称</th><th>第一层／分类</th><th>总量</th><th>剩余</th><th>标签</th></tr></thead>
       <tbody>
-        <tr><td class="spec-field">S Tier</td><td>招财猫 铂金典藏摆件</td><td>实物</td><td>1</td><td>1</td><td>★ Top Tier</td></tr>
-        <tr><td class="spec-field">A Tier</td><td>招财猫 大号公仔</td><td>实物</td><td>2</td><td>1</td><td>★ Top Tier</td></tr>
-        <tr><td class="spec-field">B Tier</td><td>5,000.00</td><td>彩金</td><td>5</td><td>2</td><td>Popular</td></tr>
-        <tr><td class="spec-field">C Tier</td><td>J Mania Triple Jam（免费旋转主档名称）</td><td>免费旋转</td><td>8</td><td>4</td><td>Popular</td></tr>
-        <tr><td class="spec-field">D Tier</td><td>MiniG Free Bet（免费投注主档名称）</td><td>免费投注</td><td>10</td><td>5</td><td>—</td></tr>
-        <tr><td class="spec-field">E Tier</td><td>彩金 ₱50 (1x Turnover)（优惠券主档名称）</td><td>优惠券</td><td>12</td><td>6</td><td>—</td></tr>
-        <tr><td class="spec-field">F Tier</td><td>1,000</td><td>积分</td><td>15</td><td>8</td><td>—</td></tr>
-        <tr><td class="spec-field">G Tier</td><td>加倍卡（道具卡主档名称）</td><td>道具卡</td><td>20</td><td>11</td><td>—</td></tr>
-        <tr><td class="spec-field">H Tier</td><td>1,000.00</td><td>彩金</td><td>27</td><td>12</td><td>—</td></tr>
+        <tr><td class="spec-field">S Tier</td><td>招财猫 铂金典藏摆件</td><td>实物</td><td>12,000</td><td>12,000</td><td>★ Top Tier</td></tr>
+        <tr><td class="spec-field">A Tier</td><td>招财猫 大号公仔</td><td>实物</td><td>24,000</td><td>12,000</td><td>★ Top Tier</td></tr>
+        <tr><td class="spec-field">B Tier</td><td>5,000.00</td><td>彩金</td><td>60,000</td><td>24,000</td><td>Popular</td></tr>
+        <tr><td class="spec-field">C Tier</td><td>J Mania Triple Jam（免费旋转主档名称）</td><td>免费旋转</td><td>96,000</td><td>48,000</td><td>Popular</td></tr>
+        <tr><td class="spec-field">D Tier</td><td>MiniG Free Bet（免费投注主档名称）</td><td>免费投注</td><td>120,000</td><td>60,000</td><td>—</td></tr>
+        <tr><td class="spec-field">E Tier</td><td>免费旋转 ×10（免费旋转主档名称）</td><td>免费旋转</td><td>144,000</td><td>72,000</td><td>—</td></tr>
+        <tr><td class="spec-field">F Tier</td><td>1,000</td><td>积分</td><td>180,000</td><td>96,000</td><td>—</td></tr>
+        <tr><td class="spec-field">G Tier</td><td>加倍卡（道具卡主档名称）</td><td>道具卡</td><td>240,000</td><td>132,000</td><td>—</td></tr>
+        <tr><td class="spec-field">H Tier</td><td>1,000.00</td><td>彩金</td><td>324,000</td><td>144,000</td><td>—</td></tr>
         <tr><td class="spec-field">LAST</td><td>招财猫 黄金开运摆件</td><td>实物</td><td>1</td><td>1</td><td>压轴大奖</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="spec-lead">顶部进度条与「总券数」＝S～H 九个一般奖级总量加总＝100 张；LAST 固定 1 张，<strong>不计入</strong>这个 100（详见「5. 前后台资料对照表」的说明）。此为 demo 示例值，正式数值依商品配置实际填写为准。</p>
+  <p class="spec-lead">顶部进度条与「总券数」＝S～H 九个一般奖级总量加总＝1,200,000 张（示例值，符合「每个奖级库存最多 6 位数、总券数最多 7 位数」规则，详见「商品配置」2.2 节）；LAST 固定 1 张，<strong>不计入</strong>这个总数（详见「5. 前后台资料对照表」的说明）。此为 demo 示例值，正式数值依商品配置实际填写为准。</p>
   <hr style="border:none;border-top:1px solid #e2e6ec;margin:32px 0;">
 
   <p class="spec-lead" style="background:#eef4ff;border:1px solid #b3d1ff;border-radius:8px;padding:14px 18px;">本页对应的 QA 测试情境与边界条件清单，已独立整理到「<span class="spec-field">QA 验收事项</span>」分页（前台／后台分区），本页不重复列出，避免规格规则与验收清单混在一起。</p>
@@ -2438,7 +2472,7 @@ tr:hover td { background: #fafcff; }
     <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text"><strong>待与设计讨论画面样式</strong>：免费旋转／免费投注／道具卡这类「张数」奖励，前台目前尚未设计显示方式，产品端暂无法单方面定案，需与设计一起确认最终视觉呈现。<strong>暂定建议方向</strong>（供讨论用，非最终结论）：沿用「兑换记录」「积分历史」已有的「主档名称×张数」格式（例如「J Mania Triple Jam ×20」），套用在奖品一览卡片与开奖结果卡片的名称文字上，不另外发明新样式；若本次抽奖同一奖级中出多次，外层仍维持既有的「×次数」合并规则，两个数字分属不同层级、不会互相覆盖。（原本「同一奖级是否会设定多笔免费旋转子项」的疑虑已不存在——见「商品配置 2.2」，一个奖级已确认只能配置一款游戏＋一组张数）</span></div>
   </div>
   <p class="spec-lead" style="margin-top:20px;">一番赏中奖后，对「兑换记录」「积分历史」「资金详情」「我的优惠券」等积分商城既有页面的影响，已独立整理到「<span class="spec-field">前台＿其他页面</span>」分页，不在本页重复。</p>
-  <p class="spec-lead" style="margin-top:20px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:8px;padding:14px 18px;"><strong>本次盘点复核已修正的实作缺陷</strong>（不影响本页任何文字规则，纯粹是原型程式码与既有规则本身有落差，特此记录）：①「用户积分纪录」备注／「商品兑换记录」奖品栏共用的 <span class="spec-field">renderPrizes()</span> 排序函式，原本用字母序排列奖级，会把 S Tier 误排到 H Tier 之后，与「S Tier 固定排最上方、次序在 A Tier 之前」的规则矛盾，现已改为 LAST→S Tier→A～H Tier 的固定权重排序；②「商品兑换记录」的 <span class="spec-field">qtyBadge()</span> 只认得单张／五连／全包三种值，缺「十连」对应的中文显示，现已补上；③「免费项目统计」「免费项目发送记录」两个页签原本的分页栏是写死的假分页（永远只显示 1 个按钮），未依全站「每页 10 笔可翻页」规则实作，现已改用与其他记录页一致的翻页元件；④顶部「Remaining N/总量 Draws」进度条原本把 LAST 也算进分子分母，与真实一番赏「LAST 不占用一般票数额度」的玩法不符，现已改为只计算一般奖级（S～H），demo 默认状态显示由「51/100」修正为「50/100」。</p>
+  <p class="spec-lead" style="margin-top:20px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:8px;padding:14px 18px;"><strong>本次盘点复核已修正的实作缺陷</strong>（不影响本页任何文字规则，纯粹是原型程式码与既有规则本身有落差，特此记录）：①「用户积分纪录」备注／「商品兑换记录」奖品栏共用的 <span class="spec-field">renderPrizes()</span> 排序函式，原本用字母序排列奖级，会把 S Tier 误排到 H Tier 之后，与「S Tier 固定排最上方、次序在 A Tier 之前」的规则矛盾，现已改为 LAST→S Tier→A～H Tier 的固定权重排序；②「商品兑换记录」的 <span class="spec-field">qtyBadge()</span> 只认得单张／五连／全包三种值，缺「十连」对应的中文显示，现已补上；③「免费项目统计」「免费项目发送记录」两个页签原本的分页栏是写死的假分页（永远只显示 1 个按钮），未依全站「每页 10 笔可翻页」规则实作，现已改用与其他记录页一致的翻页元件；④顶部「Remaining N/总量 Draws」进度条原本把 LAST 也算进分子分母，与真实一番赏「LAST 不占用一般票数额度」的玩法不符，现已改为只计算一般奖级（S～H），demo 默认状态显示由「51/100」修正为「50/100」（此为当时 demo 数值示意；后续「商品配置」示例数据已改版为大数值库存，现行 demo 默认状态为「600,000/1,200,000」，逻辑与此条修正一致，见「示例配置表」）。</p>
 </div></div>
 
 <div class="spec-view" id="mergeView8"><div class="spec-view-inner">
@@ -2473,10 +2507,10 @@ tr:hover td { background: #fafcff; }
       </li>
       <li><strong>新增「商品类型」筛选</strong>：跟「状态」筛选图标按钮合并成同一排，左边多一段可以左右滑动的选项列，让玩家只看某一种商品类型的兑换记录（例如只看「Ichiban Kuji」的，不被其他不相干的记录淹没）。
         <ul style="margin:8px 0 0;padding-left:20px;">
-          <li><strong>选项从哪来（已确认）</strong>：每个选项都是「商品配置」弹窗里<span class="spec-field">商品类别</span>这个多选 checkbox 的其中一项（后台 ＞ 积分商城 ＞ 商品管理 ＞ 新增商品，见 2.1 节；目前共 15 项：FREESPIN／MONEY／COUPON／tickets（票券）／实物／彩金／优惠券／免费旋转／话费／流量／pisoluck／免费投注／盲盒／道具卡／Ichiban Kuji）。不是另外做一套分类，就是直接拿这份既有清单</li>
-          <li><strong>怎么判断筛选结果</strong>：玩家点某个类别（例如「Ichiban Kuji」）时，系统看的是「这笔兑换记录对应的商品，在商品配置里有没有勾选这个类别」——不是看商品名称，也不是看商品类型。一个商品可以同时勾好几个类别，只要勾了被选中的这个，就算符合</li>
-          <li><strong>已确认不用整理</strong>：清单里混着英文缩写旧分类（FREESPIN／MONEY／COUPON）跟中文新分类（免费旋转／彩金／优惠券），直接照后台勾选的样子显示就好，不用合并或整理</li>
-          <li><strong>滑动提示</strong>：右边多了「状态」图标按钮后，选项列可用的宽度变窄了，容易让人以为选项到「优惠券」或「积分」就没了。所以最后一个完整显示的选项后面，要故意露出下一个选项的一小截文字（直接被边界切掉，<strong>不要</strong>加白色渐层），提示玩家还能往左滑——渐层反而会把文字糊到看不清，让人误判已经滑到底了</li>
+          <li><strong>选项从哪来（本次修正）</strong>：每个选项都是「商品配置」弹窗里<span class="spec-field">商品类型</span>这个单选 radio 的其中一项（后台 ＞ 积分商城 ＞ 商品管理 ＞ 新增商品，见 2.1 节；<strong>不是</strong>「商品类别」那个多选 checkbox——两者是不同栏位，取值来源不能弄混，见下一点差异说明。目前后台既有 12 项：实物／彩金／优惠券／免费旋转／话费／流量／pisoluck／票券／盲盒／免费投注／道具卡／Golden Draw Ticket；<strong>Ichiban Kuji 是本次专案新增的第 13 个选项，目前后台尚不存在，须由 RD 新增</strong>）。筛选清单不是另外做一套分类，就是直接拿「商品类型」这份既有清单（含新增的 Ichiban Kuji 选项）</li>
+          <li><strong>怎么判断筛选结果</strong>：玩家点某个选项（例如「Ichiban Kuji」）时，系统看的是「这笔兑换记录对应的商品，在商品配置里的<span class="spec-field">商品类型</span>是不是等于这个值」——不是看商品名称，也不是看商品类别。「商品类型」是<strong>单选</strong>栏位，一个商品只会对应其中一种，不会同时符合多个筛选选项</li>
+          <li><strong>与「商品类别」的差异（本次厘清，避免混用）</strong>：「商品类别」是<strong>多选</strong> checkbox，同一个商品可以同时勾好几项，纯粹用于后台商品列表的分类筛选，与抽奖／发放机制无关；「商品类型」是<strong>单选</strong> radio，决定商品实际的抽奖／发放机制（选中「Ichiban Kuji」才会显示奖级配置区块，见 2.1 节）。本页筛选用的是<strong>后者（商品类型）</strong>，两者选项数量与内容也不完全相同——「商品类型」没有「商品类别」里那 3 个英文缩写旧分类（FREESPIN／MONEY／COUPON）</li>
+          <li><strong>滑动提示</strong>：右边多了「状态」图标按钮后，选项列可用的宽度变窄了，容易让人以为选项到「优惠券」或「话费」就没了。所以最后一个完整显示的选项后面，要故意露出下一个选项的一小截文字（直接被边界切掉，<strong>不要</strong>加白色渐层），提示玩家还能往左滑——渐层反而会把文字糊到看不清，让人误判已经滑到底了</li>
         </ul>
       </li>
       <li><strong>筛选怎么运作</strong>（「状态」＋「商品类型」通用规则，给开发参考）：
@@ -2487,7 +2521,7 @@ tr:hover td { background: #fafcff; }
           <li><strong>但不会记住太久</strong>：筛选条件只存在于这次的页面浏览中，不会存进 localStorage／cookie／网址参数。玩家刷新页面，或离开这页再回来，「状态」跟「商品类型」都会回到预设值「全部」</li>
         </ol>
       </li>
-      <li><strong>后端要注意（已确认要做，不是选配）</strong>：「商品类别」栏位本来就有（见 2.1 节），不用新增栏位。但「兑换记录」这套查询系统<strong>必须</strong>能依这个栏位筛选——玩家点「Ichiban Kuji」时，列表<strong>只能</strong>出现「商品类别里有勾 Ichiban Kuji」的商品产生的记录，不能混进别的类别。如果目前这套查询系统还没有把商品类别栏位带出来，就<strong>需要新增查询逻辑</strong>（可能要跟「商品配置」做关联查询）。怎么实作由 RD 决定，但这个筛选功能<strong>一定要做出来</strong>，不是还在讨论要不要做</li>
+      <li><strong>后端要注意（已确认要做，不是选配；本次修正取值栏位）</strong>：<span class="spec-field">商品类型</span>栏位本来就有（见 2.1 节），不用新增栏位。但「兑换记录」这套查询系统<strong>必须</strong>能依这个栏位筛选——玩家点「Ichiban Kuji」时，列表<strong>只能</strong>出现「商品类型＝Ichiban Kuji」的商品产生的记录，不能混进别的类型。如果目前这套查询系统还没有把商品类型栏位带出来，就<strong>需要新增查询逻辑</strong>（可能要跟「商品配置」做关联查询）。怎么实作由 RD 决定，但这个筛选功能<strong>一定要做出来</strong>，不是还在讨论要不要做</li>
       <li><strong>状态怎么判断</strong>（已确认）：看这个<strong>商品</strong>在「商品配置」里设的「审核模式」（自动审核／手动审核，见 2.1 节），跟积分商城其他商品用同一套机制，不是写死只能自动。
         <ul style="margin:8px 0 0;padding-left:20px;">
           <li>审核模式是设在<strong>商品</strong>上的：同一个一番赏商品，不管玩家单抽／五连／十连／全包，这次拆出来的所有记录都套用同一个结果——自动审核就直接「已完成」；手动审核则一开始全部「待审核」，审核后各自变成「已完成」或「已拒绝」。不会有同一次抽奖，一部分记录已完成、一部分还待审核的情况</li>
@@ -2537,7 +2571,7 @@ tr:hover td { background: #fafcff; }
         <div class="exch-chip on new">全部</div>
         <div class="exch-chip new">Ichiban Kuji</div>
         <div class="exch-chip new">彩金</div>
-        <div class="exch-chip new">积分</div>
+        <div class="exch-chip new">话费</div>
         <div class="exch-chip new">优惠券</div>
         <div class="exch-chip new">免费旋转</div>
         <div class="exch-chip new">道具卡</div>
@@ -2734,8 +2768,8 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">B-12</td><td>单一奖级（非 LAST）已售罄，但一般奖级剩余总和仍 &gt; 0</td><td>浏览奖品一览／尝试抽奖</td><td>该奖级卡片显示「售罄」，但<strong>不影响</strong>抽奖池运作（该奖级剩余量本就是 0，不会被抽到）；撕券按钮维持可用</td></tr>
         <tr><td class="spec-field">B-13</td><td>本次撕券使一般奖级剩余总和归零（与 B-4 同一时刻）</td><td>点击「收下」关闭开奖结果弹窗</td><td>撕券按钮同步切换为「已全部抽完」并停用；<strong>同时</strong>自动跳出「已抽完提醒」弹窗（见 2-9），需玩家点击「Got It」才关闭；<strong>关闭后强制导回积分商城列表页</strong>，该商品卡片加上「已抢光」遮罩（demo 中以 <span class="spec-field">history.back()</span> 模拟跳转，因积分商城页面不在本文件范围内）</td></tr>
         <tr><td class="spec-field">B-14</td><td>玩家透过积分商城点进一个「已抽完」的一番赏商品（页面载入当下商品即已售罄），<strong>不论是从商品列表卡片或首页 Banner 点进来，效果都相同</strong></td><td>页面载入</td><td>抽奖主画面照常渲染（奖品一览各奖级皆显示「售罄」），撕券按钮直接呈现「已全部抽完」停用状态，并<strong>立即</strong>自动跳出「已抽完提醒」弹窗，无需等玩家操作；关闭后同样强制导回积分商城列表页；<strong>Banner 本身不需要额外的售罄遮罩／失效判断</strong>，此逻辑已统一由本页处理</td></tr>
-        <tr><td class="spec-field">B-15</td><td>逐张揭晓模式，本次抽出 3 张以上（2 栏排列会换行）</td><td>开启结果弹窗</td><td>卡片按「本次实际抽奖顺序」由左到右、由上到下排列（第 1 张左上、第 2 张右上、第 3 张换行到左下…），<strong>不</strong>依奖级代号或稀有度重新排序（LAST 为唯一例外，见 B-16）</td></tr>
-        <tr><td class="spec-field">B-16</td><td>逐张揭晓模式中出 LAST</td><td>开启结果弹窗</td><td>LAST 固定出现在<strong>第一排左边（第 1 格）</strong>，<strong>不是</strong>最后一格；虽然它必定是本次最后一张开出的，但会从时间顺序「提前」搬到第 1 格，其余卡片（含原本排第 1 格的那一张）全部各往后移一格——与汇总列表模式（LAST 置顶整个列表）是一致的「固定放最前面」规则，只是逐张模式放的是「格子最前面」</td></tr>
+        <tr><td class="spec-field">B-15</td><td>逐张揭晓模式，本次抽出 3 张以上（2 栏排列会换行）</td><td>开启结果弹窗</td><td>卡片按<strong>奖级代号英文字母顺序</strong>由左到右、由上到下排列（第 1 张左上、第 2 张右上、第 3 张换行到左下…），<strong>不</strong>依本次实际抽奖先后顺序或稀有度排序（LAST 为唯一例外，永远排第 1 格，见 B-16）</td></tr>
+        <tr><td class="spec-field">B-16</td><td>逐张揭晓模式中出 LAST</td><td>开启结果弹窗</td><td>LAST 固定出现在<strong>第一排左边（第 1 格）</strong>，<strong>不是</strong>最后一格；其余卡片改依<strong>奖级代号英文字母顺序</strong>接续排在第 2 格开始——与汇总列表模式（LAST 置顶整个列表）是一致的「固定放最前面」规则，只是逐张模式放的是「格子最前面」</td></tr>
         <tr><td class="spec-field">B-17</td><td>「全包」汇总列表模式中，中出的奖级种类很多，列表内容超过弹窗高度上限（demo 值 440px）</td><td>开启结果弹窗</td><td>弹窗只有<strong>中间的奖品列表区域</strong>出现上下滑动，标题「抽出 N 张」与底部「收下」按钮维持固定不动、不随之滑动或消失；行数不多、内容未超过高度上限时则不会出现滑动痕迹</td></tr>
         <tr><td class="spec-field">B-18</td><td>玩家点击「五连」／「十连」送出撕券请求当下，因其他玩家同时间也在抢购同一商品，后端实际剩余量已 <strong>&lt;</strong> 本次请求所需张数（见 2-3），剩余量本身仍 <strong>＞0</strong>（尚未全部售罄）</td><td>点击撕券送出请求</td><td>本次交易失败，<strong>不</strong>扣款、<strong>不</strong>出券，<strong>不</strong>开启开奖结果弹窗；改跳出「库存不足提醒」弹窗（标题「Insufficient Stock」／内文「"{N} Draws" is no longer available. Please select another option.」／按钮「Got It」）；弹窗跳出同时页面上各奖级剩余量与四个张数按钮状态即时刷新为最新值（比照 1. 情境 B 反灰规则）；点击「Got It」关闭后停留原画面，<strong>不</strong>导回积分商城（此点与 B-13／B-14 的「已抽完提醒」不同）</td></tr>
         <tr><td class="spec-field">B-18b</td><td>与 B-18 相同的并发抢购情境，但校验当下后端实际剩余量已<strong>归零</strong>（一般奖级与 LAST 皆＝0，构成全部售罄）</td><td>点击撕券送出请求</td><td>不应跳出「库存不足提醒」弹窗，应统一走 2-9／B-13 的「已抽完提醒」弹窗＋强制导回积分商城流程；两个弹窗<strong>不会</strong>同时或重复出现</td></tr>

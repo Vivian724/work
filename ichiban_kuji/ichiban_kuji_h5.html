@@ -147,9 +147,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .gcard .midtag{font-size:9px;color:var(--kin-d);border:1px solid #D9B45A;background:#fff;border-radius:3px;padding:1px 5px;position:relative;z-index:2;white-space:nowrap}
 .gcard .g-top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px}
 .gcard .g-tagrow{min-height:16px;display:flex;align-items:center;margin-bottom:8px}
-.gcard .g-zan{display:flex;align-items:baseline;gap:2px;white-space:nowrap}
+.gcard .g-zan{display:flex;flex-direction:column;gap:1px}
 .gcard .g-zan .lbl{font-size:10px;color:var(--sumi-2)}
-.gcard .g-zan .num{font-family:"Songti SC",serif;font-size:19px;font-weight:700;color:var(--sumi)}
+.gcard .g-zan .nums{display:flex;align-items:baseline;gap:2px;flex-wrap:wrap}
+.gcard .g-zan .num{font-family:"Songti SC",serif;font-size:15px;font-weight:700;color:var(--sumi)}
 .gcard .g-zan .tot{font-size:10px;color:var(--sumi-2)}
 .gcard .g-img{margin-bottom:7px;display:flex;justify-content:center}
 .gcard .g-img .ph,.gcard .g-img .ic{width:112px;height:112px}
@@ -209,15 +210,15 @@ const ART={
   physical:{kind:'photo'},
 };
 const TIERS=[
-  {sho:'S',name:'招财猫 铂金典藏摆件',type:'Physical Item',desc:'限量镀铂工艺，附收藏编号证书，全球限量999台',art:'physical',total:1,left:1,hi:true},
-  {sho:'A',name:'招财猫 大号公仔',type:'Physical Item',desc:'陶瓷材质，高约30cm，附赠专属收藏证书',art:'physical',total:2,left:1,hi:true},
-  {sho:'B',name:'5,000.00',type:'E-Credit',art:'bonus',total:5,left:2,mid:true},
-  {sho:'C',name:'J Mania Triple Jam',type:'Free Spins',art:'freespin',total:8,left:4,mid:true},
-  {sho:'D',name:'MiniG Free Bet',type:'Free Bet',art:'freebet',total:10,left:5},
-  {sho:'E',name:'免费旋转 ×10',type:'Free Spins',art:'spintok',total:12,left:6},
-  {sho:'F',name:'1,000',type:'Points',art:'point',total:15,left:8},
-  {sho:'G',name:'加倍卡',type:'Voucher',art:'tool',total:20,left:11},
-  {sho:'H',name:'1,000.00',type:'E-Credit',art:'bonus',total:27,left:12},
+  {sho:'S',name:'招财猫 铂金典藏摆件',type:'Physical Item',desc:'限量镀铂工艺，附收藏编号证书，全球限量999台',art:'physical',total:12000,left:12000,hi:true},
+  {sho:'A',name:'招财猫 大号公仔',type:'Physical Item',desc:'陶瓷材质，高约30cm，附赠专属收藏证书',art:'physical',total:24000,left:12000,hi:true},
+  {sho:'B',name:'5,000.00',type:'E-Credit',art:'bonus',total:60000,left:24000,mid:true},
+  {sho:'C',name:'J Mania Triple Jam',type:'Free Spins',art:'freespin',total:96000,left:48000,mid:true},
+  {sho:'D',name:'MiniG Free Bet',type:'Free Bet',art:'freebet',total:120000,left:60000},
+  {sho:'E',name:'免费旋转 ×10',type:'Free Spins',art:'spintok',total:144000,left:72000},
+  {sho:'F',name:'1,000',type:'Points',art:'point',total:180000,left:96000},
+  {sho:'G',name:'加倍卡',type:'Voucher',art:'tool',total:240000,left:132000},
+  {sho:'H',name:'1,000.00',type:'E-Credit',art:'bonus',total:324000,left:144000},
 ];
 const LAST={sho:'楽',name:'招财猫 黄金开运摆件',type:'Physical Item',desc:'限量典藏版，镀金工艺，附精美礼盒包装',art:'physical',total:1,left:1};
 const COST=95;
@@ -239,7 +240,7 @@ function deviceHTML(){return `
       <div class="scrim"></div>
       <button class="kv-rules" onclick="var d=this.closest('.device');d.querySelector('.rules-ov').classList.add('show');d.scrollIntoView({behavior:'smooth',block:'start'})">📋 Rules</button></div>
     <div class="noren-edge"></div>
-    <div class="b-stock"><div class="r1"><span>Remaining <b class="js-zan">50</b>/100 Draws</span></div>
+    <div class="b-stock"><div class="r1"><span>Remaining <b class="js-zan">50</b>/<span class="js-tot">100</span> Draws</span></div>
       <div class="stock-bar"><div class="stock-fill js-fill" style="width:50%"></div></div></div>
   </div>
   <div class="draw-zone">
@@ -308,12 +309,13 @@ function createApp(rootId){
       <div class="f-name serif">Last Prize · ${t.name}</div>${isPhysical
         ?`<div class="f-desc">${t.desc}</div><span class="f-type">${t.type}</span>`
         :`<span class="f-type">${t.type}</span>`}
-      <div class="f-note">${note}</div><div class="f-zan">Remaining <b>${t.left}</b>/${t.total} Draws</div></div></div>`;}
+      <div class="f-note">${note}</div></div></div>`;}
   function cardB(t,{hi,mid}={}){
     const sold=t.left<=0;
     const isPhysical=t.art==='physical';
+    // 定案：所有一般奖级卡片统一显示实际「剩余/总量」数字（含千分位），不使用百分比，与顶部进度条呈现方式一致
     return `<div class="gcard ${hi?'hi':''} ${mid?'mid':''} ${sold?'sold':''}"><div class="g-top">${badge(t,false,hi)}
-      <div class="g-zan"><span class="lbl">Remaining</span><span class="num">${t.left}</span><span class="tot">/${t.total}</span></div></div>
+      <div class="g-zan"><span class="lbl">Remaining</span><span class="nums"><span class="num">${t.left.toLocaleString()}</span><span class="tot">/${t.total.toLocaleString()}</span></span></div></div>
       <div class="g-tagrow">${hi?'<span class="uptag">★ Top Tier</span>':mid?'<span class="midtag">Popular</span>':''}</div>
       <div class="g-img">${artImg(t.art)}</div><div class="g-name">${t.name}</div>${isPhysical
         ?`<div class="g-desc">${t.desc}</div><div class="g-type">${t.type}</div>`
@@ -361,27 +363,47 @@ function createApp(rootId){
     // 顶部「Remaining N/100 Draws」进度条只反映一般奖级（不含 LAST，真实一番赏玩法中 LAST（ラストワン賞）
     // 是「抽中一般奖级最后一张时额外附赠」的奖励，本身不占用一般票数额度，故不计入这里的分子分母
     const left=normalLeft(),tot=normalTotal();
-    $('.js-zan').textContent=left;
+    $('.js-zan').textContent=left.toLocaleString();
+    $('.js-tot').textContent=tot.toLocaleString();
     $('.js-fill').style.width=(left/tot*100)+'%';
     $('.js-pts2').textContent=points.toLocaleString();
     refreshTearButton();
   }
+  function congratsBanner(hasLast,hasS,hasA){
+    // 顺序固定：Last 赏、S 赏、A 赏——同一次抽奖若同时中多个重要赏项，文案会自动合并列出
+    const labels=[];
+    if(hasLast)labels.push('Last');
+    if(hasS)labels.push('S Tier');
+    if(hasA)labels.push('A Tier');
+    if(!labels.length)return '';
+    const joined=labels.length===1?labels[0]
+      :labels.length===2?labels.join(' and ')
+      :labels.slice(0,-1).join(', ')+' and '+labels[labels.length-1];
+    const word=labels.length>1?'Prizes':'Prize';
+    return `<div class="last-hit serif">★ Congratulations! You Won the ${joined} ${word}! ★</div>`;
+  }
   function showResult(results,lastTriggered,forceAgg,skipAnim){
     $('.js-rhead').textContent='Draws '+results.length+' Tickets';
-    let html=lastTriggered?'<div class="last-hit serif">★ Congratulations! You Won the Last Prize! ★</div>':'';
+    const hasS=results.some(r=>!r.isLast&&r.tier.sho==='S');
+    const hasA=results.some(r=>!r.isLast&&r.tier.sho==='A');
+    let html=congratsBanner(lastTriggered,hasS,hasA);
     if(forceAgg){
       const agg={};
       results.forEach(r=>{const k=r.isLast?'L':r.tier.sho;(agg[k]=agg[k]||{tier:r.tier,isLast:r.isLast,n:0}).n++;});
-      const aggList=Object.values(agg).sort((a,b)=>a.isLast?-1:b.isLast?1:0);
+      const aggList=Object.values(agg).sort((a,b)=>{
+        if(a.isLast)return -1; if(b.isLast)return 1;
+        return a.tier.sho.localeCompare(b.tier.sho);
+      });
       aggList.forEach(g=>{html+=`<div class="sum-row">
         <div class="nm">${badge(g.tier,g.isLast)} ${g.isLast?'Last Prize · ':''}${g.tier.name}</div><div class="cnt">×${g.n}</div></div>`;});
       $('.js-rbody').innerHTML=html;
     }else{
-      // LAST 固定排在「第一排左边」＝第 1 格（不是最后一格）：把它从原本的抽奖顺序末端搬到最前面，
-      // 其余卡片（包含原本第 1 张）仍照实际抽奖顺序，全部各往后递补一格
-      const ordered=[...results];
-      const lastIdx=ordered.findIndex(r=>r.isLast);
-      if(lastIdx>0){const [lastItem]=ordered.splice(lastIdx,1);ordered.unshift(lastItem);}
+      // 排序规则：LAST 永远固定在第 1 格；其余卡片一律按奖级字母（S/A/B…H）的英文字母顺序排列（A→H→S），
+      // 不再依照实际抽奖出的先后顺序
+      const ordered=[...results].sort((a,b)=>{
+        if(a.isLast)return -1; if(b.isLast)return 1;
+        return a.tier.sho.localeCompare(b.tier.sho);
+      });
       html+='<div class="rk-grid">';
       ordered.forEach((r,i)=>{const t=r.tier;
         html+=`<div class="rk" data-i="${i}"><div class="reveal">${revealBadge(t,r.isLast)}
@@ -477,7 +499,7 @@ function createApp(rootId){
     renderPool();
   }
   if (qp.get('lowstock') === '1') {
-    // 验证用：情境 D——S Tier（总量1）设为售罄示范半透明遮罩，
+    // 验证用：情境 D——S Tier 设为售罄示范半透明遮罩，
     // 其余奖级维持正常水位，一般奖级剩余总和仍远大于 10，撕券按钮与四个张数按钮维持正常可点击
     tiers[0].left = 0;
     renderPool();
