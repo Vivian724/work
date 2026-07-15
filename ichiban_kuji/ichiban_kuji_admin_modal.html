@@ -515,7 +515,6 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
               <div class="banner-panel">
                 <div class="banner-panel-header">
                   <span>PC 端</span>
-                  <span class="size-hint">建议尺寸 1400×800px</span>
                 </div>
                 <div class="banner-panel-body">
                   <div class="banner-drop-zone" onclick="document.getElementById('bannerPcInput').click()">
@@ -538,7 +537,6 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
               <div class="banner-panel">
                 <div class="banner-panel-header">
                   <span>H5 端</span>
-                  <span class="size-hint">建议尺寸 390×320px</span>
                 </div>
                 <div class="banner-panel-body">
                   <div class="banner-drop-zone" onclick="document.getElementById('bannerH5Input').click()">
@@ -573,7 +571,6 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
               <div class="banner-panel">
                 <div class="banner-panel-header">
                   <span>PC 端</span>
-                  <span class="size-hint">建议尺寸 356×422px</span>
                 </div>
                 <div class="banner-panel-body">
                   <div class="banner-drop-zone" onclick="document.getElementById('rulePcInput').click()">
@@ -596,7 +593,6 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
               <div class="banner-panel">
                 <div class="banner-panel-header">
                   <span>H5 端</span>
-                  <span class="size-hint">建议尺寸 356×422px</span>
                 </div>
                 <div class="banner-panel-body">
                   <div class="banner-drop-zone" onclick="document.getElementById('ruleH5Input').click()">
@@ -646,12 +642,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
           <div class="tier-header">
             <div style="display:flex;align-items:center;gap:8px;flex:1;">
               <span class="req">*</span><input class="tier-name-input" type="text" value="LAST" placeholder="奖级名称" style="max-width:120px;" disabled required>
-              <div style="display:flex;align-items:center;gap:5px;background:#fff7e6;border:1px solid #ffd591;border-radius:4px;padding:0 10px;height:28px;">
-                <span style="font-size:12px;color:#fa8c16;white-space:nowrap;">数量</span>
-                <input type="number" value="1" disabled style="width:40px;border:none;background:transparent;text-align:center;font-size:13px;font-weight:600;color:#fa8c16;outline:none;">
-                <span style="font-size:12px;color:#fa8c16;">张</span>
-              </div>
-              <span class="last-note">🏆 压轴奖：最后一抽自动触发，固定 1 张</span>
+              <span class="last-note">🏆 压轴奖：最后一抽自动触发</span>
             </div>
           </div>
           <div class="tier-body" id="tbody-last">
@@ -917,7 +908,7 @@ function renderTiers() {
 }
 
 function updateTotal() {
-  const sum = tiers.reduce((acc, t) => acc + (parseInt(t.qty) || 0), 0) + 1; // +1 for LAST
+  const sum = tiers.reduce((acc, t) => acc + (parseInt(t.qty) || 0), 0); // 不含 LAST，LAST 额外颁发不计入总券数
   document.getElementById('totalCount').textContent = sum;
 }
 

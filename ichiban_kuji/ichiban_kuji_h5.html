@@ -366,7 +366,7 @@ function createApp(rootId){
     $('.js-pts2').textContent=points.toLocaleString();
     refreshTearButton();
   }
-  function showResult(results,lastTriggered,forceAgg){
+  function showResult(results,lastTriggered,forceAgg,skipAnim){
     $('.js-rhead').textContent='Draws '+results.length+' Tickets';
     let html=lastTriggered?'<div class="last-hit serif">★ Congratulations! You Won the Last Prize! ★</div>':'';
     if(forceAgg){
@@ -390,7 +390,13 @@ function createApp(rootId){
           <div class="cover serif">OK ICHIBAN <span class="arrow">Draw ▶</span></div></div>`;});
       html+='</div>';
       $('.js-rbody').innerHTML=html;
-      ordered.forEach((r,i)=>setTimeout(()=>{const el=$(`.rk[data-i="${i}"]`);if(el)el.classList.add('torn');},300+i*300));
+      if(skipAnim){
+        // 已确认：刷新页面时若本次抽奖结果尚未点击「收下」，直接以已揭晓状态重新打开结果弹窗，
+        // 不重播撕票动画（抽奖本身在点击撕票的当下已于后端完成，动画只是纯前端效果，无需断点续播）
+        ordered.forEach((r,i)=>{const el=$(`.rk[data-i="${i}"]`);if(el)el.classList.add('torn');});
+      }else{
+        ordered.forEach((r,i)=>setTimeout(()=>{const el=$(`.rk[data-i="${i}"]`);if(el)el.classList.add('torn');},300+i*300));
+      }
     }
     $('.js-overlay').classList.add('show');
     root.scrollIntoView({behavior:'smooth',block:'start'});
@@ -417,7 +423,12 @@ function createApp(rootId){
     b.classList.add('on'); drawN=b.dataset.n==='all'?'all':parseInt(b.dataset.n); updateStock();});
   $('.js-tear').addEventListener('click',draw);
   $('.js-ok').addEventListener('click',()=>{$('.js-overlay').classList.remove('show');
-    refreshTearButton();
+    // 已确认：不论刚才选的是单张／五连／十连／全包，点击 Claim 关闭开奖结果弹窗后，
+    // 画面固定重置回「单张 (1 Draw)」预设选中状态，玩家需重新点击才能再次选五连／十连／全包
+    drawN=1;
+    $('.js-seg').querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+    $('.js-seg').querySelector('button[data-n="1"]').classList.add('on');
+    updateStock();
     if(totalLeft()<=0)showSoldOutAlert();});
   // 已确认（spec 2-9）：「已抽完提醒」弹窗是全场唯一会造成页面跳转的弹窗——
   // 不论是玩家自己这次撕券刚好抽空（见上方 .js-ok 内的判断），或是从积分商城点进时该商品已经售罄（见下方页面载入检查），
@@ -445,6 +456,7 @@ function createApp(rootId){
      ?modal=result-agg          开奖结果－汇总列表模式示例（模拟「全包」大量张数的情况，14张）
      ?modal=result-all-small    开奖结果－「全包」张数很少（3张）时仍走汇总列表模式的示例
      ?modal=result-agg-overflow 开奖结果－汇总列表模式示例，全部9个一般奖级＋LAST 共10列，验证列表可滑动
+     ?modal=result-refresh      模拟结果弹窗尚未点击「收下」前刷新页面：直接以已揭晓状态重新打开弹窗，不重播撕票动画
      ?modal=soldout-alert       已抽完提醒弹窗（单独示例，不改变背后卡片库存；点击 Got It 会 history.back()，
                                  在独立分页开启此连结时可正常测试，嵌入 spec 的 iframe 中点击不影响画面展示）
      ?modal=stock-alert&n=5     库存不足提醒弹窗（spec 2-3，并发抢购情境示例）；n 为弹窗文案代入的张数
@@ -513,6 +525,12 @@ function createApp(rootId){
     const fake = tiers.map(t => ({ tier: t }));
     fake.push({ tier: last, isLast: true });
     showResult(fake, true, true);
+  } else if (modal === 'result-refresh') {
+    // 验证用：模拟玩家在结果弹窗尚未点击「收下」前刷新页面——直接以已揭晓状态重新打开逐张模式弹窗，
+    // 不重播撕票动画（见 showResult 的 skipAnim 参数）
+    showResult([
+      { tier: tiers[2] }, { tier: tiers[4] }, { tier: last, isLast: true }
+    ], true, false, true);
   }
 }
 

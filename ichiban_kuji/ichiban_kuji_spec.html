@@ -612,7 +612,7 @@ tr:hover td { background: #fafcff; }
   <div class="spec-gloss">
     <div class="spec-gloss-row"><div class="spec-gloss-term">一番赏 / Ichiban Kuji</div><div class="spec-gloss-def">玩家以积分购买「一番赏」商品，依券数（单抽／五连／十连／全包）抽取对应奖级的奖品。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">奖级</div><div class="spec-gloss-def"><span class="spec-field">S Tier</span>／A Tier～H Tier（依新增顺序命名，最多 9 级，数量与名称均可自订；<strong>S Tier</strong>为等级最高、最稀有的奖级，固定排在一般奖级最上方，显示顺序在 A Tier 之前）＋ <span class="spec-field">LAST</span>（固定 1 张，最后一抽自动触发，不可删除）。</div></div>
-    <div class="spec-gloss-row"><div class="spec-gloss-term">券数</div><div class="spec-gloss-def">该商品的总抽奖张数，＝各奖级数量加总（含 LAST 的 1 张），系统自动加总显示。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">券数</div><div class="spec-gloss-def">该商品的总抽奖张数，＝各一般奖级（S～H）数量加总，<strong>不含</strong> LAST 的 1 张，系统自动加总显示；LAST 是额外颁发给「抽走最后一张一般奖级券」的玩家，本身不占用、也不计入票数额度。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">来源＝积分购买</div><div class="spec-gloss-def"><span class="spec-field">积分购买</span> 是前台「积分商城」<strong>所有商品类别通用</strong>的购买方式，并非一番赏专属——积分商城里任何商品类型的商品都是用积分购买。因此后台「来源」字段只会显示「积分购买」，不会出现「Ichiban Kuji」这个来源选项；真正用来判断「这是一番赏商品」的字段是商品配置里的 <strong>商品类型＝Ichiban Kuji</strong>（详见下一条）。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">一番赏的判断依据</div><div class="spec-gloss-def">一笔积分购买是否属于「一番赏」，由「商品配置」弹窗中的两个字段决定：<strong>商品类型</strong>（单选 radio，决定该商品用哪一套逻辑／是否显示奖级配置区块，一番赏须选中「Ichiban Kuji」）与 <strong>商品类别</strong>（多选 checkbox，纯粹给前台商城分类展示用，与抽奖逻辑无关，也可勾选「Ichiban Kuji」）。各记录页统一以「商品类型＝Ichiban Kuji」作为判断条件。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">活动名称＝商品名称</div><div class="spec-gloss-def">各记录／报表页的「活动名称」字段，取自「商品配置」中<strong>商品类型＝Ichiban Kuji</strong> 的该笔商品的「商品名称」字段值（即玩家实际购买的一番赏商品名称）；若该笔积分购买对应的商品「商品类型」不是 Ichiban Kuji（即非一番赏的一般商品），则显示「–」。</div></div>
@@ -804,7 +804,6 @@ tr:hover td { background: #fafcff; }
               <div class="banner-panel">
                 <div class="banner-panel-header">
                   <span>PC 端</span>
-                  <span class="size-hint">建议尺寸 1400×800px</span>
                 </div>
                 <div class="banner-panel-body">
                   <div class="banner-drop-zone" onclick="document.getElementById('bannerPcInput').click()">
@@ -827,7 +826,6 @@ tr:hover td { background: #fafcff; }
               <div class="banner-panel">
                 <div class="banner-panel-header">
                   <span>H5 端</span>
-                  <span class="size-hint">建议尺寸 390×320px</span>
                 </div>
                 <div class="banner-panel-body">
                   <div class="banner-drop-zone" onclick="document.getElementById('bannerH5Input').click()">
@@ -862,7 +860,6 @@ tr:hover td { background: #fafcff; }
               <div class="banner-panel">
                 <div class="banner-panel-header">
                   <span>PC 端</span>
-                  <span class="size-hint">建议尺寸 356×422px</span>
                 </div>
                 <div class="banner-panel-body">
                   <div class="banner-drop-zone" onclick="document.getElementById('rulePcInput').click()">
@@ -885,7 +882,6 @@ tr:hover td { background: #fafcff; }
               <div class="banner-panel">
                 <div class="banner-panel-header">
                   <span>H5 端</span>
-                  <span class="size-hint">建议尺寸 356×422px</span>
                 </div>
                 <div class="banner-panel-body">
                   <div class="banner-drop-zone" onclick="document.getElementById('ruleH5Input').click()">
@@ -935,12 +931,7 @@ tr:hover td { background: #fafcff; }
           <div class="tier-header">
             <div style="display:flex;align-items:center;gap:8px;flex:1;">
               <span class="req">*</span><input class="tier-name-input" type="text" value="LAST" placeholder="奖级名称" style="max-width:120px;" disabled required>
-              <div style="display:flex;align-items:center;gap:5px;background:#fff7e6;border:1px solid #ffd591;border-radius:4px;padding:0 10px;height:28px;">
-                <span style="font-size:14px;color:#fa8c16;white-space:nowrap;">数量</span>
-                <input type="number" value="1" disabled style="width:40px;border:none;background:transparent;text-align:center;font-size:14px;font-weight:600;color:#fa8c16;outline:none;">
-                <span style="font-size:14px;color:#fa8c16;">张</span>
-              </div>
-              <span class="last-note">🏆 压轴奖：最后一抽自动触发，固定 1 张</span>
+              <span class="last-note">🏆 压轴奖：最后一抽自动触发</span>
             </div>
           </div>
           <div class="tier-body" id="tbody-last">
@@ -1007,8 +998,8 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">单个会员限购数</td><td>–</td><td>依 VIP0～VIP10 分别设置，需勾选「限购」才生效</td></tr>
         <tr><td class="spec-field">是否限时抢购</td><td><span class="spec-req">●</span></td><td>选「是」需设置起讫时间，超出时间应下架／不可购买</td></tr>
         <tr><td class="spec-field">审核模式</td><td>–</td><td>目前锁定仅自动审核，手动审核尚未开放</td></tr>
-        <tr><td class="spec-field">顶部图（PC／H5）</td><td><span class="spec-req">●</span></td><td>PC 建议 1400×800px，H5 建议 390×320px</td></tr>
-        <tr><td class="spec-field">规则弹窗图（PC／H5）</td><td><span class="spec-req">●</span></td><td>均建议 356×422px</td></tr>
+        <tr><td class="spec-field">顶部图（PC／H5）</td><td><span class="spec-req">●</span></td><td>尺寸待定</td></tr>
+        <tr><td class="spec-field">规则弹窗图（PC／H5）</td><td><span class="spec-req">●</span></td><td>尺寸待定</td></tr>
       </tbody>
     </table>
   </div>
@@ -1016,14 +1007,14 @@ tr:hover td { background: #fafcff; }
   <h3>2.2 奖级配置规则</h3>
   <div class="spec-rule-box">
     <ul>
-      <li><strong>总券数</strong>＝所有一般奖级数量总和 ＋ LAST 奖级固定 1 张，自动加总显示</li>
+      <li><strong>总券数</strong>＝所有一般奖级（S～H）数量总和，自动加总显示；<strong>不含</strong> LAST——LAST 固定 1 张，是额外颁发给「抽走最后一张一般奖级券」的玩家，本身不占用、也不计入总券数</li>
       <li><strong>奖级数量上限</strong>：一般奖级最多 9 级（S Tier＋A Tier～H Tier），加上固定 LAST，共 10 级；达上限「＋新增奖级」会跳出提示</li>
       <li><strong>最少须配置到 E Tier（本次新增规则）</strong>：一般奖级至少要新增到 S Tier～E Tier 共 6 级，「新增奖级」上方提示文案固定显示「至少配置到 E Tier」；未达 6 级前，弹窗底部「确定」按钮维持灰色不可点击，需配置满 6 级（含）以上才会恢复可点击</li>
       <li><strong>打开弹窗即预先展开 S～E Tier（已确认，UX 调整）</strong>：既然规则规定至少要配置到 E Tier，画面<strong>不需要</strong>让运营从 1 个奖级开始逐次点击「＋新增奖级」5 次才能看满必填的这 6 级——「新增商品」弹窗打开当下，<strong>直接预先展开 S Tier～E Tier 共 6 个奖级卡片</strong>供运营依序填写；运营仍可透过「＋新增奖级」继续新增 F／G／H Tier（上限共 9 级）</li>
       <li><strong>奖级下限＝删除按钮只出现在 F Tier 之后（本次调整）</strong>：S Tier～E Tier 这 6 级是<strong>强制必填、不可删除</strong>，卡片上<strong>直接不显示</strong>「✕ 删除」按钮，运营无法误删；只有第 7 级（F Tier）以后新增出来的奖级，卡片上才会出现「✕ 删除」按钮，可自由移除，删到只剩 S～E Tier（6 级）为止</li>
       <li><strong>命名规则（本次调整）</strong>：新增奖级依序自动命名 <span class="spec-field">S Tier→A Tier→B Tier→…→H Tier</span>（共 9 级），采用与 H5 前台奖级徽章一致的英文命名；<strong>名称栏位固定反灰、不可编辑</strong>，运营无法自行修改奖级名称，避免与前台显示的英文命名不一致。第一个新增的奖级固定为「S Tier」，代表本商品等级最高、最稀有的奖品，在「商品配置」奖级列表与 H5 前台「奖品一览」中固定排在一般奖级最上方（A Tier 之前）</li>
       <li><strong>删除奖级＝自动递补重新命名</strong>：删除任一（可删除的）奖级后，<u>该奖级之后</u>的所有奖级依新顺位自动往前递补、改用对应顺位的默认名称；<u>该奖级之前</u>的奖级不受影响。例如目前有 S Tier～G Tier 七个奖级，删除 F Tier 后，原本的 G Tier 会自动变成新的 F Tier，S Tier～E Tier 维持不变（且 S～E 本就不可删除，见奖级下限规则）</li>
-      <li><strong>LAST</strong>（固定奖级）：固定显示在列表最下方，数量锁定为 1 且不可编辑、不可删除，代表最后一抽必定触发，不受一般奖级删除递补规则影响</li>
+      <li><strong>LAST</strong>（固定奖级）：固定显示在列表最下方，卡片上<strong>不显示「数量」栏位</strong>（本次调整，因 LAST 固定为 1 张且不计入总券数，无需另外呈现数量输入框），名称栏位不可编辑、无删除按钮，代表最后一抽必定触发，不受一般奖级删除递补规则影响</li>
       <li>每个奖级需填：名称、数量、第一层分类、第二层分类、对应动态字段、奖品图片，缺一不可</li>
       <li><strong>「Top Tier」「Popular」标签为前端固定逻辑，本表单无对应勾选栏位</strong>：H5 前台固定 S Tier、A Tier 显示「★ Top Tier」，B Tier、C Tier 显示「Popular」，其余奖级不显示；这是前端依奖级顺位写死的判断，不受本表单填写内容影响</li>
     </ul>
@@ -2106,7 +2097,7 @@ tr:hover td { background: #fafcff; }
       <li><strong>弹窗关闭方式</strong>：本活动所有弹窗（开奖结果、活动规则、已抽完提醒、库存不足提醒）皆<strong>只能</strong>透过明确点击弹窗上的按钮关闭（「收下」／「✕」／「我知道了」／「Got It」），<strong>不支援</strong>点击弹窗外的遮罩背景关闭；除「已抽完提醒」弹窗外，其余弹窗关闭后画面都停留在原本的抽奖主画面，不做页面跳转——「已抽完提醒」弹窗关闭后会导回「积分商城」列表页，是<strong>唯一</strong>的例外，详见 2-9（「库存不足提醒」弹窗关闭后同样停留原画面，不属于此例外，详见 2-3）。<strong>手机浏览器返回键</strong>比照同一套规则处理：视同点击弹窗关闭按钮，只关闭当前弹窗、停留在原本的抽奖主画面（或「已抽完提醒」弹窗比照其既有规则导回积分商城），<strong>不会</strong>额外离开整个页面或不响应</li>
       <li><strong>「Top Tier」／「Popular」标签范围</strong>：固定只有 S Tier、A Tier 显示「★ Top Tier」，B Tier、C Tier 显示「Popular」，其余奖级（D Tier 起）一律不显示标签，此范围为固定规则，不随奖级新增／删除而变动</li>
       <li><strong>数字格式</strong>：积分类数字（积分余额、撕券所需积分、F Tier「积分」类奖品数值）一律显示<strong>整数</strong>、不带小数；彩金类数值（B Tier、H Tier 等「彩金」类型奖品金额）一律显示到<strong>小数点后两位</strong>（例：5,000.00）；千分位一律以英文逗号分隔</li>
-      <li><strong>刷新页面不需保留抽奖结果（已确认）</strong>：玩家在撕票动画或结果弹窗显示期间刷新页面，<strong>不需要</strong>额外保留「本次抽奖结果」的画面状态，直接回到抽奖主画面即可——因为每个奖品早已各自对应写入「兑换记录」「积分历史」「资金详情」「我的优惠券」等积分商城既有页面（见「前台＿其他页面」分页），玩家仍可从这些既有页面查到本次抽奖的实际结果，不需要在一番赏页面本身另外做状态保存或复原机制</li>
+      <li><strong>刷新页面须停留在当前抽奖结果（本次修正）</strong>：玩家在撕票动画期间或结果弹窗显示期间（尚未点击「收下」）刷新页面，<strong>不能</strong>直接跳回抽奖主画面——虽然此时扣款与出券已在后端完成、每个奖品也早已各自对应写入「兑换记录」「积分历史」「资金详情」「我的优惠券」等积分商城既有页面（见「前台＿其他页面」分页），但若刷新后画面毫无反馈直接回到主画面，玩家容易误以为「抽奖没成功」或「奖品不见了」，造成不必要的疑虑与客服咨询；因此规则调整为：只要玩家目前有<strong>尚未点击「收下」</strong>的本次抽奖结果，刷新页面后应<strong>直接重新打开结果弹窗</strong>，让玩家点击「收下」确认后才关闭。<strong>不需要</strong>重播撕票／逐张揭晓动画——弹窗打开时卡片直接呈现<strong>已揭晓的最终状态</strong>即可（因为抽奖本身在点击撕票的当下就已完成，动画只是纯前端效果，不需要断点续播这层复杂度）；汇总列表模式同理，直接呈现完整列表</li>
     </ul>
   <hr style="border:none;border-top:1px solid #e2e6ec;margin:32px 0;">
 
@@ -2130,8 +2121,9 @@ tr:hover td { background: #fafcff; }
     <div class="spec-text">
       <h3>情境 A｜正常状态（尚有库存、积分充足）</h3>
       <ul class="spec-plain">
-          <li>点击单张／五连／十连／全包 → 立即切换选中样式，撕券按钮金额同步重算（＝购买价格 × 张数）；<strong>选「全包」时，「张数」是即时读取当下一般奖级剩余总和</strong>，每次开奖后剩余量变动，按钮金额会跟着重新计算，不是进页面时锁定的固定数字</li>
+          <li>点击单张／五连／十连／全包 → 立即切换选中样式，撕券按钮金额同步重算（＝购买价格 × 张数）；<strong>选「全包」时，「张数」是即时读取当下一般奖级剩余总和</strong>——因为在玩家点选「全包」之前，其他玩家可能已经抽走部分一般奖级券，所以每次点击「全包」按钮当下都要重新读取最新剩余总和来算张数与金额，<strong>不是</strong>进页面时锁定的固定数字，也<strong>不是</strong>玩家自己反复开奖过程中即时递减重算（见下一条，选到「全包」必定一次抽空并结束本轮）</li>
           <li>点击撕券按钮 → 扣款＋出券＋开启「开奖结果弹窗」（见第 2 节）；<strong>已确认防连点规则</strong>：撕券按钮点击当下立即锁定（停用），要等玩家点击结果弹窗的「收下」关闭弹窗后才恢复可点击，这段期间内的重复点击一律无效，用来防止短时间连点送出多笔重复请求（正式开发时后端仍需搭配幂等校验，避免真正网路重送造成重复扣款／扣库存）</li>
+          <li><strong>点击「收下」关闭结果弹窗后的选中状态（已确认）</strong>：<strong>不论</strong>刚才选的是单张／五连／十连／全包，画面固定<strong>重置回「单张 (1 Draw)」</strong>预设选中状态，撕券按钮金额同步改回单价×1；玩家若要再抽五连／十连／全包，需重新点击该按钮，<strong>不会</strong>停留在上一次选中的张数</li>
           <li>点击 banner 区块右下角「Rules」→ 开启「活动规则弹窗」（见 2-4）</li>
         </ul>
     </div>
@@ -2180,7 +2172,7 @@ tr:hover td { background: #fafcff; }
 
   <!-- 2. 页面状态与弹窗流程 -->
   <h3>2. 页面状态与弹窗流程（依玩家实际操作顺序排列）</h3>
-  <p class="spec-lead">本节改以玩家<strong>实际会遇到的操作顺序</strong>编排：从进入页面的全新状态开始，依序是张数选择与撕票、库存不足的并发提醒、活动规则、三种开奖结果模式、积分不足，最后是全部抽完的终态——共 9 个小节，方便对照实际操作流程、也方便 QA 依序测试。下方每张画面皆可透过网址参数直接重现该状态，方便核对文案与数值，完整参数对照表见「QA 验收事项」分页。<strong>下方画面框的裁切高度仅为本文件排版方便，不是弹窗尺寸规格</strong>——弹窗实际尺寸中，只有「活动规则弹窗」使用「规则弹窗图」（建议尺寸 356×422px，PC／H5 皆同，产品可定义，详见「商品配置」章节）；其余弹窗／状态（开奖结果、售罄状态、库存不足提醒）皆为纯前端排版，高度依当次奖品数量与文字长短动态撑高／缩短，不是产品规格能定义固定数值的项目，最终视觉呈现以 UI 设计出图为准。</p>
+  <p class="spec-lead">本节改以玩家<strong>实际会遇到的操作顺序</strong>编排：从进入页面的全新状态开始，依序是张数选择与撕票、库存不足的并发提醒、活动规则、三种开奖结果模式、积分不足，最后是全部抽完的终态——共 9 个小节，方便对照实际操作流程、也方便 QA 依序测试。下方每张画面皆可透过网址参数直接重现该状态，方便核对文案与数值，完整参数对照表见「QA 验收事项」分页。<strong>下方画面框的裁切高度仅为本文件排版方便，不是弹窗尺寸规格</strong>——弹窗实际尺寸中，只有「活动规则弹窗」使用「规则弹窗图」（尺寸待定，PC／H5 皆同，产品可定义，详见「商品配置」章节）；其余弹窗／状态（开奖结果、售罄状态、库存不足提醒）皆为纯前端排版，高度依当次奖品数量与文字长短动态撑高／缩短，不是产品规格能定义固定数值的项目，最终视觉呈现以 UI 设计出图为准。</p>
 
   <div class="spec-split">
     <div class="spec-screen-card">
@@ -2191,7 +2183,7 @@ tr:hover td { background: #fafcff; }
       <ul class="spec-plain">
           <li><strong>页面载入即时动作（已确认）</strong>：玩家进入本页当下，立即向后端刷新「当前数据」——含一般奖级＋LAST 剩余库存、玩家目前积分余额，<strong>不</strong>使用任何本地快取或前一次页面停留时的旧数值</li>
           <li><strong>积分校验</strong>：刷新完成后，以当下默认选定张数（见 2-2，预设「单张」）核对玩家积分是否足够；若<strong>不足</strong>，撕票按钮立即反灰停用、文字改显示「Insufficient Balance」（同 2-8 积分不足规则，示例见左侧页面）</li>
-          <li><strong>四个张数按钮的状态（已定案）</strong>：此情境下「单张／五连／十连／全包」四个按钮本身<strong>仍维持可点击</strong>，不因积分不足而反灰（只有撕票按钮才反灰，与 2-8 规则一致）；<strong>点击后行为与 2-2 完全一致</strong>——同样会刷新数据、重算应扣金额、切换选中样式与撕票按钮状态，<strong>不</strong>因为「入场当下积分不足」这个情境而另外区分出一套「可点击但无反应」的特例逻辑，全按同一套规则处理，减少额外状态与分支</li>
+          <li><strong>四个张数按钮的状态（已定案）</strong>：此情境下「单张／五连／十连／全包」四个按钮本身<strong>仍维持可点击</strong>，不因积分不足而反灰（只有撕票按钮才反灰）；玩家点击切换张数时，后台照样会重新计算这个张数应扣多少积分，但<strong>撕票按钮不会显示这个算出来的具体数字</strong>——只要算出来的金额仍大于玩家当下积分，撕票按钮就<strong>维持显示「Insufficient Balance」这行字，不会跟着显示应扣积分数值</strong>（见 2-8）；<strong>只有</strong>当玩家切到某个张数、算出来的应扣积分<strong>小于等于</strong>目前余额时（例如从十连切回单张），撕票按钮才会变回「Draw Now {金额} Points」可点击状态，这时候才会真的显示出金额</li>
           <li><strong>常驻资讯显示</strong>：不论积分是否足够，页面<strong>顶部进度条随时</strong>显示当前一般奖级剩余库存（剩余／总量），<strong>右下角随时</strong>显示玩家当前积分余额，两者与「当前数据」同步刷新，不需要玩家手动整理页面</li>
         </ul>
     </div>
@@ -2263,7 +2255,7 @@ tr:hover td { background: #fafcff; }
           <li>每张卡片初始为封面「一番赏 撕▶」，依序错开撕开动画（第 1 张延迟 300ms，之后每张间隔<strong>统一改为 300ms</strong>，两者用同一个时间常数，前端实作更简单；单张撕开动画本身 1.1 秒 ease），逐一露出奖级徽章、奖品名称与分类</li>
           <li><strong>卡片排列方式</strong>：固定 2 栏由左到右、由上到下排列（第 1 张在左上，第 2 张在右上，第 3 张换行到左下，以此类推）；排列顺序＝<strong>本次实际抽奖的先后顺序</strong>，也就是玩家这次選的每一张券依序开出哪个奖级，就照那个顺序放，<strong>不会</strong>额外按奖级、稀有度或英文字母排序，纯粹反映真实抽取过程（<strong>LAST 为唯一例外</strong>，见下一点）</li>
           <li><strong>若本次中出 LAST（已确认）</strong>：LAST 卡片<strong>固定排在「第一排左边」，也就是第 1 格</strong>，<strong>不是</strong>排在最后一格。因为 LAST 一定是在「抽空一般奖级池」的那一张才会触发（时间上必定是本次最后开出的一张），系统会把它从原本的时间顺序「提前」搬到第 1 格；其余卡片（<strong>包含原本排第 1 格的那一张</strong>）仍照本次实际抽奖的先后顺序，全部各往后移一格，依次接续排在第 2 格、第 3 格……以此类推。<strong>这点与汇总列表模式一致</strong>——汇总列表模式是把 LAST 摆在整个列表最前面（第一列），逐张模式则是摆在「第一排左边」（第 1 格），两边都固定放在最前面，只是「列表最前面」与「格子最前面」的呈现方式不同</li>
-          <li>点击「收下」→ 关闭弹窗，依全局规则判定是否切换「已全部抽完」状态</li>
+          <li>点击「收下」→ 关闭弹窗，依全局规则判定是否切换「已全部抽完」状态，并将张数按钮重置回「单张 (1 Draw)」（见 2-2）</li>
         </ul>
     </div>
   </div>
@@ -3002,7 +2994,7 @@ function renderTiers() {
 }
 
 function updateTotal() {
-  const sum = tiers.reduce((acc, t) => acc + (parseInt(t.qty) || 0), 0) + 1; // +1 for LAST
+  const sum = tiers.reduce((acc, t) => acc + (parseInt(t.qty) || 0), 0); // 不含 LAST，LAST 额外颁发不计入总券数
   document.getElementById('totalCount').textContent = sum;
 }
 

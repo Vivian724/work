@@ -751,7 +751,7 @@ function removeTierFromSet(sid, tid) {
 function setTotal(sid) {
   const s = sets.find(s => s.id === sid);
   if (!s) return 0;
-  return s.tiers.reduce((a,t) => a + (parseInt(t.qty)||0), 0) + 1;
+  return s.tiers.reduce((a,t) => a + (parseInt(t.qty)||0), 0); // 不含 LAST，LAST 额外颁发不计入总券数
 }
 
 function renderTierHTML(sid, t, idx) {
@@ -817,12 +817,7 @@ function renderLastTierHTML(sid) {
       <div class="tier-header">
         <div style="display:flex;align-items:center;gap:8px;flex:1;">
           <input class="tier-name-input" type="text" value="Last赏" required>
-          <div class="tier-qty-box" style="background:#fff7e6;border-color:#ffd591;">
-            <span style="color:#fa8c16;">数量</span>
-            <input class="tier-qty-input" type="number" value="1" disabled style="color:#fa8c16;">
-            <span style="color:#fa8c16;font-size:12px;">张</span>
-          </div>
-          <span class="last-note">🏆 压轴奖：最后一抽自动触发，固定 1 张</span>
+          <span class="last-note">🏆 压轴奖：最后一抽自动触发</span>
         </div>
       </div>
       <div class="tier-body">
