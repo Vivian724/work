@@ -525,7 +525,7 @@
           <tr><td>空格限制</td><td>两个输入框均<strong>不允许输入空格</strong>；前端实时去除任何空格字符（含全角空格），不弹提示、静默去除</td></tr>
           <tr><td>手机号码格式验证</td><td>仅限菲律宾本地号码，<strong>最多 11 码</strong>；超出第 11 位自动截断；付款前验证长度须恰好为 11 码，不符时于<strong>输入框下方</strong>显示「<strong>格式错误</strong>」</td></tr>
           <tr><td>邮箱格式验证</td><td>须为正确邮箱格式（如 <code>xxx@gmail.com</code>）；格式不符时于<strong>输入框下方</strong>显示「<strong>格式错误</strong>」</td></tr>
-          <tr><td>提示文案</td><td>输入框下方红色文字（无边框）：「购买前请确保您的手机号码及邮箱正确无误，信息错误恕不退款。」</td></tr>
+          <tr><td>警语文案<br><span style="font-size:11px;color:#e5484d;font-weight:700;">常駐顯示</span></td><td>邮箱输入框<strong>下方</strong>红色文字（无边框），<strong>开弹窗即显示，始终可见，不因填写状态变化，非条件触发</strong>：「购买前请确保您的手机号码及邮箱正确无误，信息错误恕不退款。」<br><span style="color:#e5484d;font-weight:700;">　7/16 調整</span></td></tr>
         </table>
 
         <h3>新增：兑换条款同意勾选</h3>
@@ -547,7 +547,7 @@
 
         <h3><span style="color:#e5484d;font-weight:800;font-size:16px;">6/30 調整：</span>功能逻辑</h3>
         <ul>
-          <li>「付款」置灰时点击，轻提示「请填写手机号码及邮箱，并同意兑换条款」。</li>
+          <li>「付款」置灰时点击，<strong>不另跳提示</strong>。手机号码 / 邮箱均有必填格式验证（输入框下方显示「格式错误」），上方亦有常駐警语，无需额外 Toast。<span style="color:#e5484d;font-weight:700;">　7/16 調整</span></li>
           <li>「付款」前再次校验库存与积分余额；不足时提示并阻止下单。</li>
           <li>付款时同时校验三方库存数据与后台库存数据：任一方为 0 → 显示<strong>购买失败弹窗</strong>（第 4 页 · 状态 B），积分不扣除、不生成兑换记录。</li>
           <li>库存充足 → <strong>扣减会员积分并生成兑换记录</strong>，进入<strong>购买成功弹窗</strong>（第 4 页 · 状态 A）；后续是否立即派发，依<strong>该商品在后台的审核配置</strong>判断：
