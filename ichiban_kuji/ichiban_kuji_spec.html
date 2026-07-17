@@ -755,25 +755,25 @@ tr:hover td { background: #fafcff; }
       </div>
 
       <!-- 单个会员限购数 -->
-      <div class="form-row">
-        <div class="form-label">单个会员限购数：</div>
+      <div class="form-row" style="opacity:0.45;pointer-events:none;">
+        <div class="form-label" style="color:#bbb;">单个会员限购数：</div>
         <div class="form-control">
           <div class="vip-grid">
-            <div class="vip-item"><span class="vip-tag">VIP0</span><input type="number" value="0"></div>
-            <div class="vip-item"><span class="vip-tag">VIP1</span><input type="number" value="0"></div>
-            <div class="vip-item"><span class="vip-tag">VIP2</span><input type="number" value="0"></div>
-            <div class="vip-item"><span class="vip-tag">VIP3</span><input type="number" value="0"></div>
-            <div class="vip-item"><span class="vip-tag">VIP4</span><input type="number" value="0"></div>
-            <div class="vip-item"><span class="vip-tag">VIP5</span><input type="number" value="0"></div>
-            <div class="vip-item"><span class="vip-tag">VIP6</span><input type="number" value="0"></div>
-            <div class="vip-item"><span class="vip-tag">VIP7</span><input type="number" value="0"></div>
-            <div class="vip-item"><span class="vip-tag">VIP8</span><input type="number" value="0"></div>
-            <div class="vip-item"><span class="vip-tag">VIP9</span><input type="number" value="0"></div>
-            <div class="vip-item"><span class="vip-tag">VIP10</span><input type="number" value="0"></div>
+            <div class="vip-item"><span class="vip-tag">VIP0</span><input type="number" value="0" disabled></div>
+            <div class="vip-item"><span class="vip-tag">VIP1</span><input type="number" value="0" disabled></div>
+            <div class="vip-item"><span class="vip-tag">VIP2</span><input type="number" value="0" disabled></div>
+            <div class="vip-item"><span class="vip-tag">VIP3</span><input type="number" value="0" disabled></div>
+            <div class="vip-item"><span class="vip-tag">VIP4</span><input type="number" value="0" disabled></div>
+            <div class="vip-item"><span class="vip-tag">VIP5</span><input type="number" value="0" disabled></div>
+            <div class="vip-item"><span class="vip-tag">VIP6</span><input type="number" value="0" disabled></div>
+            <div class="vip-item"><span class="vip-tag">VIP7</span><input type="number" value="0" disabled></div>
+            <div class="vip-item"><span class="vip-tag">VIP8</span><input type="number" value="0" disabled></div>
+            <div class="vip-item"><span class="vip-tag">VIP9</span><input type="number" value="0" disabled></div>
+            <div class="vip-item"><span class="vip-tag">VIP10</span><input type="number" value="0" disabled></div>
           </div>
           <div class="limit-row">
-            <input type="checkbox" id="limitCheck">
-            <label for="limitCheck" style="font-size:14px;color:#1677ff;cursor:pointer;">限购</label>
+            <input type="checkbox" id="limitCheck" disabled>
+            <label for="limitCheck" style="font-size:14px;color:#bbb;cursor:not-allowed;">限购</label>
           </div>
         </div>
       </div>
@@ -1009,7 +1009,7 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">商品图片</td><td><span class="spec-req">●</span></td><td>尺寸 750×750px，最多可上传 6 张，预设第一张为封面图</td></tr>
         <tr><td class="spec-field">购买价格</td><td><span class="spec-req">●</span></td><td>目前锁定计价方式为「积分」，此数值＝单抽需扣除的积分</td></tr>
         <tr><td class="spec-field">排序</td><td><span class="spec-req">●</span></td><td>数字，越小排序越前面</td></tr>
-        <tr><td class="spec-field">单个会员限购数</td><td>–</td><td>依 VIP0～VIP10 分别设置，需勾选「限购」才生效</td></tr>
+        <tr><td class="spec-field">单个会员限购数</td><td>–</td><td><span style="color:#ff4d4f;font-weight:600;">7/17調整：</span>Ichiban Kuji 機制不適用限購，此欄位對後台操作員反灰鎖定，不可配置。原規則「依 VIP0～VIP10 分別設置，需勾選『限購』才生效」不適用於此商品類型。</td></tr>
         <tr><td class="spec-field">是否限时抢购</td><td><span class="spec-req">●</span></td><td>选「是」需设置起讫时间，超出时间应下架／不可购买</td></tr>
         <tr><td class="spec-field">审核模式</td><td>–</td><td>目前锁定仅自动审核，手动审核尚未开放</td></tr>
         <tr><td class="spec-field">顶部图（PC／H5）</td><td><span class="spec-req">●</span></td><td>尺寸待定</td></tr>
