@@ -1197,6 +1197,150 @@ tr:hover td { background: #fafcff; }
 <div class="spec-view" id="mergeView3"><div class="spec-view-inner">
   <div class="spec-h1">后台＿商品兑换纪录</div>
   <p class="spec-sub">路径：商品兑换记录 ＞ Ichiban Kuji 抽奖记录页签。一笔纪录＝一次购买（单抽／五连／十连／全包）。</p>
+
+  <div class="spec-stack">
+    <div class="spec-screen-card">
+      <div class="page">
+
+  <!-- 面包屑 -->
+  <div class="breadcrumb">
+    位置 › <span>商品兑换记录</span>
+  </div>
+
+  <!-- 标签页 -->
+  <div class="tab-bar">
+    <div class="tab-item active">商品兑换记录</div>
+    <div class="tab-item">盲盒抽奖记录</div>
+    <div class="tab-item">Ichiban Kuji 抽奖记录</div>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="filter-bar" style="gap:8px;flex-wrap:wrap;align-items:center;">
+    <select id="p1FilterCoin">
+      <option value="">选择币别</option>
+      <option value="PHP">菲律宾比索</option>
+    </select>
+
+    <select id="p1FilterStatus">
+      <option value="">全部</option>
+      <option>待审核</option>
+      <option>待发货</option>
+      <option>已发货</option>
+      <option>已拒绝</option>
+    </select>
+
+    <input type="text" id="p1FilterMember" placeholder="会员名">
+
+    <div class="date-range-wrap">
+      <span class="date-icon">🕐</span>
+      <input type="datetime-local" id="p1DateStart" value="2026-07-14T00:00:00" step="1">
+      <span class="date-sep">～</span>
+      <input type="datetime-local" id="p1DateEnd" value="2026-07-21T23:59:59" step="1">
+    </div>
+
+    <!-- 本次新增：「商品类型」筛选，选项＝「商品配置」商品类型单选清单，末项 Ichiban Kuji 为本次专案新增（第 13 项） -->
+    <select id="p1FilterType" onchange="p1ToggleIchibanFilters(this.value)">
+      <option value="">全部商品类型</option>
+      <option value="real">实物</option>
+      <option value="bonus">彩金</option>
+      <option value="coupon">优惠券</option>
+      <option value="freespin">免费旋转</option>
+      <option value="phone">话费</option>
+      <option value="data">流量</option>
+      <option value="pisoluck">pisoluck</option>
+      <option value="ticket">票券</option>
+      <option value="blind">盲盒</option>
+      <option value="freebet">免费投注</option>
+      <option value="tool">道具卡</option>
+      <option value="golden">Golden Draw Ticket</option>
+      <option value="ichiban" selected>Ichiban Kuji</option>
+    </select>
+
+    <!-- 本次新增：只在上方「商品类型」＝Ichiban Kuji 时才出现，让运营可以进一步锁定「哪个一番赏商品」＋「哪种奖品」 -->
+    <span id="p1IchibanExtra" style="display:inline-flex;gap:8px;">
+      <select id="p1FilterProductName">
+        <option value="" disabled selected hidden>选择商品名称</option>
+        <option value="all">全部</option>
+        <option>苹果 Ichiban Kuji</option>
+        <option>节日特别版 Ichiban Kuji</option>
+        <option>高价值VIP专属赏</option>
+        <option>入门款 Ichiban Kuji</option>
+      </select>
+      <select id="p1FilterPrize">
+        <option value="" disabled selected hidden>选择商品奖励</option>
+        <option value="all">全部</option>
+        <option value="彩金">彩金</option>
+        <option value="积分">积分</option>
+        <option value="优惠券">优惠券</option>
+        <option value="免费旋转">免费旋转</option>
+        <option value="免费投注">免费投注</option>
+        <option value="道具卡">道具卡</option>
+      </select>
+    </span>
+
+    <button class="btn btn-primary">
+      <svg viewBox="0 0 1024 1024" width="13" height="13" fill="currentColor"><path d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.3 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z"/></svg>
+      搜索
+    </button>
+  </div>
+
+  <!-- 导出 -->
+  <div class="action-row">
+    <button class="btn btn-warning">导出</button>
+  </div>
+
+  <!-- 表格 -->
+  <div class="table-wrap">
+    <div style="overflow-x:auto;"><table>
+      <thead>
+        <tr>
+          <th>订单号</th>
+          <th>会员名</th>
+          <th>创建时间</th>
+          <th>币种</th>
+          <th>商品名称</th>
+          <th>购买价格</th>
+          <th>收货信息</th>
+          <th>订单状态</th>
+          <th>操作人</th>
+          <th>备注</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody><tr><td colspan="11" style="text-align:center;color:#999;padding:32px 0;">No Data</td></tr></tbody>
+    </table></div>
+    <div class="pagination">Total 0</div>
+  </div>
+
+  <script>
+    function p1ToggleIchibanFilters(val){
+      var el = document.getElementById('p1IchibanExtra');
+      if (el) el.style.display = (val === 'ichiban') ? 'inline-flex' : 'none';
+    }
+  </script>
+
+</div>
+    </div>
+
+<div class="spec-text">
+  <h3>本次新增内容 <span style="color:#ff4d4f;font-weight:600;font-size:15px;">7/21調整</span></h3>
+  <p class="spec-lead"><strong>范围</strong>：「商品兑换记录」子页签（第 1 个页签，全站所有商品类型共用的兑换记录列表，非 Ichiban Kuji 专属）。</p>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>项目</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">商品类型下拉新增选项</td><td>此下拉即「商品配置」商品类型单选清单（见「名词定义」页），本次新增「<strong>Ichiban Kuji</strong>」为第 13 个选项，让运营可以单独筛选出一番赏商品的兑换记录，不必混在全部商品类型里查找</td></tr>
+        <tr><td class="spec-field">联动新增两个下拉</td><td>当「商品类型」选择「Ichiban Kuji」时，筛选栏<strong>动态多出两个下拉</strong>：<strong>商品名称</strong>（该商品类型＝Ichiban Kuji 底下已配置的商品清单，可再锁定某一个一番赏商品）、<strong>商品奖励</strong>（该次抽奖实际中出的奖品分类：彩金／积分／优惠券／免费旋转／免费投注／道具卡，共 6 项）；切回其他商品类型时，这两个下拉自动隐藏并清空选择</td></tr>
+        <tr><td class="spec-field">下拉框显示文案</td><td>两个下拉未选择时，框内分别显示「<strong>选择商品名称</strong>」「<strong>选择商品奖励</strong>」这两行提示字（而非直接显示「全部」），下拉选单展开后第一个选项固定为「<strong>全部</strong>」，可点选代表不限定、不筛选该栏位</td></tr>
+        <tr><td class="spec-field">筛选逻辑</td><td>「商品类型」「商品名称」「商品奖励」与既有的「选择币别」「会员名」「创建时间区间」皆为 <strong>AND（同时套用）</strong> 关系，缺省即视为「全部」不筛选</td></tr>
+        <tr><td class="spec-field">目前状态</td><td>本页为草案示意，供你先确认方向；上方画面预设已选中「Ichiban Kuji」以便直接看到两个新下拉的呈现效果，实际上线预设值仍为「全部商品类型」</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+  </div>
+
   <div class="spec-stack">
     <div class="spec-screen-card">
       <div class="page">

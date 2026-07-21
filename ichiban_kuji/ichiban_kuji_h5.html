@@ -296,7 +296,7 @@ function createApp(rootId){
   root.innerHTML=deviceHTML();
   const $=s=>root.querySelector(s);
   const tiers=TIERS.map(t=>({...t})); const last={...LAST};
-  let points=316149, drawN=1;
+  let points=60000000, drawN=1;
 
   const normalLeft=()=>tiers.reduce((s,t)=>s+t.left,0);
   const normalTotal=()=>tiers.reduce((s,t)=>s+t.total,0);
