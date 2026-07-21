@@ -365,7 +365,8 @@ function createApp(rootId){
     const left=normalLeft(),tot=normalTotal();
     $('.js-zan').textContent=left.toLocaleString();
     $('.js-tot').textContent=tot.toLocaleString();
-    $('.js-fill').style.width=(left/tot*100)+'%';
+    // 进度条代表「已抽出／已消耗」比例，剩余库存越少，红色实心部分越多（越接近满格）
+    $('.js-fill').style.width=((tot-left)/tot*100)+'%';
     $('.js-pts2').textContent=points.toLocaleString();
     refreshTearButton();
   }
