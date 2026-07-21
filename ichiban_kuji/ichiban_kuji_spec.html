@@ -1096,13 +1096,10 @@ tr:hover td { background: #fafcff; }
   <!-- 筛选栏 -->
   <div class="filter-bar" style="justify-content:space-between;">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <select id="p2FilterProduct">
-        <option value="">积分兑换商品</option>
-        <option>苹果 Ichiban Kuji</option>
-        <option>节日特别版 Ichiban Kuji</option>
-        <option>高价值VIP专属赏</option>
-        <option>入门款 Ichiban Kuji</option>
-        <option>盲盒美术图测试2</option>
+      <!-- 7/21調整：不做「商品名称」筛选，改回「交易类型」筛选；一番赏购买纪录归属既有「积分兑换商品」这个交易类型，用此既有类型即可涵盖，不需另外按商品名称查找 -->
+      <select id="p2FilterTxType">
+        <option value="" selected>所有交易类型</option>
+        <option value="积分兑换商品">积分兑换商品</option>
       </select>
 
       <input type="text" id="p2FilterMember" placeholder="会员名">
@@ -1165,13 +1162,14 @@ tr:hover td { background: #fafcff; }
     </table>
   </div>
 
-  <h3>筛选栏位</h3>
+  <h3>筛选栏位 <span style="color:#ff4d4f;font-weight:600;font-size:15px;">7/21調整</span></h3>
+  <p class="spec-lead"><span style="color:#ff4d4f;font-weight:600;">7/21調整：</span>原「积分兑换商品」下拉不是拿掉，是改法——原本按<strong>商品名称</strong>筛选（选项为各一番赏商品名称）已确认作废，改成按<strong>交易类型</strong>筛选；一番赏购买纪录归属既有的「<strong>积分兑换商品</strong>」这个交易类型，选它即可查出全部一番赏（含其他积分商城商品）的扣分纪录，不需另外按商品名称查找。</p>
   <div class="spec-table-wrap">
     <table>
       <thead><tr><th>控件</th><th>说明</th></tr></thead>
       <tbody>
-        <tr><td class="spec-field">积分兑换商品</td><td>下拉单选，依商品名称筛选，选项来自所有可积分兑换的商品清单</td></tr>
-        <tr><td class="spec-field">会员名</td><td>文本输入，比对会员帐号（模糊比对）</td></tr>
+        <tr><td class="spec-field">所有交易类型</td><td>下拉单选；一番赏购买纪录归属既有的「<strong>积分兑换商品</strong>」这个交易类型</td></tr>
+        <tr><td class="spec-field">会员名</td><td>文本输入，比对会员帐号（精准比对）</td></tr>
         <tr><td class="spec-field">创建时间区间</td><td>起讫日期时间选择器，预设为最近一天，对应表格「创建时间」栏位</td></tr>
       </tbody>
     </table>
@@ -1196,7 +1194,7 @@ tr:hover td { background: #fafcff; }
 </div></div>
 <div class="spec-view" id="mergeView3"><div class="spec-view-inner">
   <div class="spec-h1">后台＿商品兑换纪录</div>
-  <p class="spec-sub">路径：商品兑换记录 ＞ Ichiban Kuji 抽奖记录页签。一笔纪录＝一次购买（单抽／五连／十连／全包）。</p>
+  <p class="spec-sub">路径：商品兑换记录，共 3 个子页签（商品兑换记录／盲盒抽奖记录／Ichiban Kuji 抽奖记录）。本页涵盖以下 2 组示意图：① <strong>商品兑换记录</strong>页签；② <strong>Ichiban Kuji 抽奖记录</strong>页签。各自的规则说明请见对应示意图下方。</p>
 
   <div class="spec-stack">
     <div class="spec-screen-card">
@@ -1269,6 +1267,7 @@ tr:hover td { background: #fafcff; }
       <select id="p1FilterPrize">
         <option value="" disabled selected hidden>选择商品奖励</option>
         <option value="all">全部</option>
+        <option value="实物">实物</option>
         <option value="彩金">彩金</option>
         <option value="积分">积分</option>
         <option value="优惠券">优惠券</option>
@@ -1323,20 +1322,51 @@ tr:hover td { background: #fafcff; }
     </div>
 
 <div class="spec-text">
-  <h3>本次新增内容 <span style="color:#ff4d4f;font-weight:600;font-size:15px;">7/21調整</span></h3>
-  <p class="spec-lead"><strong>范围</strong>：「商品兑换记录」子页签（第 1 个页签，全站所有商品类型共用的兑换记录列表，非 Ichiban Kuji 专属）。</p>
+  <h3>页面位置 <span style="color:#ff4d4f;font-weight:600;font-size:15px;">7/21調整</span></h3>
+  <p class="spec-lead">面包屑：位置 › 商品兑换记录，共 3 个子页签：<strong>商品兑换记录</strong>（当前页签，全站所有商品类型共用的兑换记录列表，非 Ichiban Kuji 专属）／盲盒抽奖记录／Ichiban Kuji 抽奖记录。</p>
+
+  <h3>栏位字段（全部 11 栏）</h3>
   <div class="spec-table-wrap">
     <table>
-      <thead><tr><th>项目</th><th>说明</th></tr></thead>
+      <thead><tr><th>字段</th><th>说明</th></tr></thead>
       <tbody>
-        <tr><td class="spec-field">商品类型下拉新增选项</td><td>此下拉即「商品配置」商品类型单选清单（见「名词定义」页），本次新增「<strong>Ichiban Kuji</strong>」为第 13 个选项，让运营可以单独筛选出一番赏商品的兑换记录，不必混在全部商品类型里查找</td></tr>
-        <tr><td class="spec-field">联动新增两个下拉</td><td>当「商品类型」选择「Ichiban Kuji」时，筛选栏<strong>动态多出两个下拉</strong>：<strong>商品名称</strong>（该商品类型＝Ichiban Kuji 底下已配置的商品清单，可再锁定某一个一番赏商品）、<strong>商品奖励</strong>（该次抽奖实际中出的奖品分类：彩金／积分／优惠券／免费旋转／免费投注／道具卡，共 6 项）；切回其他商品类型时，这两个下拉自动隐藏并清空选择</td></tr>
-        <tr><td class="spec-field">下拉框显示文案</td><td>两个下拉未选择时，框内分别显示「<strong>选择商品名称</strong>」「<strong>选择商品奖励</strong>」这两行提示字（而非直接显示「全部」），下拉选单展开后第一个选项固定为「<strong>全部</strong>」，可点选代表不限定、不筛选该栏位</td></tr>
-        <tr><td class="spec-field">筛选逻辑</td><td>「商品类型」「商品名称」「商品奖励」与既有的「选择币别」「会员名」「创建时间区间」皆为 <strong>AND（同时套用）</strong> 关系，缺省即视为「全部」不筛选</td></tr>
-        <tr><td class="spec-field">目前状态</td><td>本页为草案示意，供你先确认方向；上方画面预设已选中「Ichiban Kuji」以便直接看到两个新下拉的呈现效果，实际上线预设值仍为「全部商品类型」</td></tr>
+        <tr><td class="spec-field">订单号</td><td>本次兑换交易的系统唯一编号</td></tr>
+        <tr><td class="spec-field">会员名</td><td>购买人帐号</td></tr>
+        <tr><td class="spec-field">创建时间</td><td>下单时间</td></tr>
+        <tr><td class="spec-field">币种</td><td>本笔订单结算的币别</td></tr>
+        <tr><td class="spec-field">商品名称</td><td>本次兑换的商品名称，涵盖积分商城所有商品类型（含一番赏）</td></tr>
+        <tr><td class="spec-field">购买价格</td><td>本笔订单实际扣除的积分数</td></tr>
+        <tr><td class="spec-field">收货信息</td><td>实物商品的收货地址／联络方式；非实物商品显示「–」</td></tr>
+        <tr><td class="spec-field">订单状态</td><td>待审核／待发货／已发货／已拒绝，依商品类型不同可能只会用到其中几种</td></tr>
+        <tr><td class="spec-field">操作人</td><td>系统自动处理固定显示 <span class="spec-field">SYSTEM</span>；若为人工审核／调整则显示实际操作人帐号</td></tr>
+        <tr><td class="spec-field">备注</td><td>依商品类型显示对应说明，一番赏商品比照「Ichiban Kuji 抽奖记录」页签的奖品清单格式</td></tr>
+        <tr><td class="spec-field">操作</td><td>审核／发货等后台操作入口</td></tr>
       </tbody>
     </table>
   </div>
+
+  <h3>筛选栏位</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>控件</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="spec-field">选择币别</td><td>下拉单选</td></tr>
+        <tr><td class="spec-field">状态</td><td>下拉单选：全部／待审核／待发货／已发货／已拒绝</td></tr>
+        <tr><td class="spec-field">会员名</td><td>文本输入，比对会员帐号（精准比对）</td></tr>
+        <tr><td class="spec-field">创建时间区间</td><td>起讫日期时间选择器，对应表格「创建时间」栏位</td></tr>
+        <tr><td class="spec-field">商品类型</td><td><span style="color:#ff4d4f;font-weight:600;">7/21調整：</span>下拉单选，即「商品配置」商品类型单选清单（见「名词定义」页），本次新增「<strong>Ichiban Kuji</strong>」为第 13 个选项，让运营可以单独筛选出一番赏商品的兑换记录，不必混在全部商品类型里查找</td></tr>
+        <tr><td class="spec-field">商品名称</td><td><span style="color:#ff4d4f;font-weight:600;">7/21調整（新增）：</span>只在「商品类型」＝Ichiban Kuji 时才出现；下拉单选，<strong>选项来源＝「商品配置」中商品类型＝Ichiban Kuji 的各笔商品名称</strong>（隶属一番赏这个商品类型底下的商品才会出现在此清单，与「商品配置」页签资料同源），可再锁定某一个一番赏商品。未选择时框内显示提示字「选择商品名称」，下拉选单展开后第一项固定为「全部」，代表不限定商品</td></tr>
+        <tr><td class="spec-field">商品奖励</td><td><span style="color:#ff4d4f;font-weight:600;">7/21調整（新增）：</span>只在「商品类型」＝Ichiban Kuji 时才出现；下拉单选，共 7 项：实物／彩金／积分／优惠券／免费旋转／免费投注／道具卡，依该次抽奖实际中出的奖品分类筛选。未选择时框内显示提示字「选择商品奖励」，下拉选单展开后第一项固定为「全部」，代表不限定奖励类型</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="spec-lead">「商品类型」「商品名称」「商品奖励」与既有的「选择币别」「状态」「会员名」「创建时间区间」皆为 <strong>AND（同时套用）</strong> 关系，缺省即视为「全部」不筛选；切回「商品类型≠Ichiban Kuji」时，「商品名称」「商品奖励」自动隐藏并清空选择。</p>
+
+  <h3>操作按钮</h3>
+  <p class="spec-lead"><span class="spec-field">搜索</span>：套用筛选条件重新查询；<span class="spec-field">导出</span>：汇出当前筛选结果（原型未串接实际档案下载）。</p>
+
+  <h3>目前状态</h3>
+  <p class="spec-lead">本页为 7/21 新增的草案示意，供你先确认方向；上方画面预设已选中「Ichiban Kuji」以便直接看到两个新下拉的呈现效果，实际上线预设值仍为「全部商品类型」。</p>
 </div>
 
   </div>
@@ -1383,8 +1413,10 @@ tr:hover td { background: #fafcff; }
 
     <select id="filterPrizeType">
       <option value="">全部奖品</option>
+      <option value="实物">实物</option>
       <option value="彩金">彩金</option>
       <option value="积分">积分</option>
+      <option value="优惠券">优惠券</option>
       <option value="免费旋转">免费旋转</option>
       <option value="免费投注">免费投注</option>
       <option value="道具卡">道具卡</option>
@@ -1454,7 +1486,7 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">会员名</td><td>文本输入</td></tr>
         <tr><td class="spec-field">创建时间区间</td><td>起讫日期时间选择器，对应表格「创建时间」栏位</td></tr>
         <tr><td class="spec-field">全部商品</td><td>下拉单选，依商品名称筛选</td></tr>
-        <tr><td class="spec-field">全部奖品</td><td>下拉单选：彩金／积分／免费旋转／免费投注／道具卡</td></tr>
+        <tr><td class="spec-field">全部奖品</td><td>下拉单选，共 <strong>7</strong> 项：实物／彩金／积分／<strong>优惠券</strong>／免费旋转／免费投注／道具卡（<span style="color:#ff4d4f;font-weight:600;">7/21調整：</span>补上「实物」「优惠券」，因商品配置奖级第二层可配置这两类奖品，玩家中奖后会出现在「奖品」栏位，原本筛选不到）</td></tr>
       </tbody>
     </table>
   </div>
