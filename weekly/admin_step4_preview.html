@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color:#333;background:#fff;padding:20px 24px;overflow:hidden;}
+.sec-t{font-size:14px;font-weight:500;color:#1677ff;border-left:3px solid #1677ff;padding-left:8px;margin-bottom:14px;}
+.fr{display:flex;align-items:flex-start;margin-bottom:14px;}
+.fl{font-size:13px;color:#333;min-width:130px;padding-top:7px;flex-shrink:0;}
+.fc{flex:1;}
+.hint{font-size:12px;color:#999;margin-top:4px;}
+.fi{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;max-width:200px;}
+.fi::placeholder{color:#bbb;font-size:12px;}
+.rg{display:flex;gap:16px;align-items:center;padding-top:6px;flex-wrap:wrap;}
+.ri{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;}
+.ri input{accent-color:#1677ff;}
+.tog{width:40px;height:22px;border-radius:11px;background:#d9d9d9;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s;display:inline-block;}
+.tog.on{background:#1677ff;}
+.tog::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left .2s;}
+.tog.on::after{left:20px;}
+.game-btn{height:32px;padding:0 16px;border:1px solid #1677ff;border-radius:16px;background:#fff;color:#1677ff;font-size:13px;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="sec-t">通用设置</div>
+
+<div style="font-size:12px;font-weight:600;color:#555;margin-bottom:10px;padding-bottom:6px;border-bottom:1px dashed #e8e8e8;">前台红点提示</div>
+<div class="fr"><div class="fl">未购买用户<br>长期提醒：</div><div class="fc">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="tog" onclick="this.classList.toggle('on')"></div>
+    <span style="font-size:13px;color:#666;">开启后，前台对未购买周卡用户持续显示红点</span>
+  </div>
+</div></div>
+<div class="fr" style="margin-bottom:16px;"><div class="fl">已购买用户<br>奖励领取提醒：</div><div class="fc">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="tog" onclick="this.classList.toggle('on')"></div>
+    <span style="font-size:13px;color:#666;">开启后，可领取奖励时前台显示红点</span>
+  </div>
+</div></div>
+
+<div class="fr" style="margin-top:6px;"><div class="fl">存款强制弹窗：</div><div class="fc">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="tog" onclick="this.classList.toggle('on')"></div>
+    <span style="font-size:13px;color:#666;">玩家存款成功后弹出周卡购买提示</span>
+  </div>
+  <div class="hint">弹窗含「今日不再显示」选项；点击离开时将二次确认</div>
+</div></div>
+<div class="fr"><div class="fl">彩金所需流水倍数：</div><div class="fc">
+  <input type="number" class="fi" placeholder="请输入">
+</div></div>
+<div class="fr"><div class="fl">审核方式：</div><div class="fc"><div class="rg">
+  <label class="ri"><input type="radio" name="audit"> 人工审核</label>
+  <label class="ri"><input type="radio" name="audit" checked> 自动审核</label>
+</div></div></div>
+<div class="fr"><div class="fl">领取方式：</div><div class="fc"><div class="rg">
+  <label class="ri"><input type="radio" name="claim" checked> 自动领取</label>
+  <label class="ri"><input type="radio" name="claim"> 手动领取</label>
+</div><div class="hint">额外奖励无论此设定，均须满足条件后手动领取</div></div></div>
+<div class="fr"><div class="fl">已验证手机号：</div><div class="fc"><div class="rg">
+  <label class="ri"><input type="radio" name="phone"> 是</label>
+  <label class="ri"><input type="radio" name="phone" checked> 否</label>
+</div></div></div>
+<div class="fr"><div class="fl">限制使用设备：</div><div class="fc"><div class="rg" style="pointer-events:none;opacity:0.5;">
+  <label class="ri"><input type="radio" name="device" checked disabled> 无限制</label>
+  <label class="ri"><input type="radio" name="device" disabled> 仅 APP</label>
+</div></div></div>
+<div class="fr" style="margin-bottom:0;"><div class="fl">适用游戏范围：</div><div class="fc">
+  <button class="game-btn">已选择 全部 游戏</button>
+  <div class="hint">全选范围含体育</div>
+</div></div>
+</body>
+</html>

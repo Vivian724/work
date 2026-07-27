@@ -152,7 +152,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans",
 .gcard .g-zan .nums{display:flex;align-items:baseline;gap:2px;flex-wrap:wrap}
 .gcard .g-zan .num{font-family:"Songti SC",serif;font-size:15px;font-weight:700;color:var(--sumi)}
 .gcard .g-zan .tot{font-size:10px;color:var(--sumi-2)}
-.gcard .g-img{margin-bottom:7px;display:flex;justify-content:center}
+.gcard .g-img{margin-bottom:7px;display:flex;justify-content:center;position:relative}
+.gcard .sold-badge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.62);color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.3px;padding:6px 16px;border-radius:20px;z-index:5;white-space:nowrap;pointer-events:none}
 .gcard .g-img .ph,.gcard .g-img .ic{width:112px;height:112px}
 .gcard .g-img .ic span{font-size:44px}
 .gcard .g-name{font-size:12.5px;font-weight:600;line-height:1.3;min-height:32px}
@@ -317,7 +318,7 @@ function createApp(rootId){
     return `<div class="gcard ${hi?'hi':''} ${mid?'mid':''} ${sold?'sold':''}"><div class="g-top">${badge(t,false,hi)}
       <div class="g-zan"><span class="lbl">Remaining</span><span class="nums"><span class="num">${t.left.toLocaleString()}</span><span class="tot">/${t.total.toLocaleString()}</span></span></div></div>
       <div class="g-tagrow">${hi?'<span class="uptag">★ Top Tier</span>':mid?'<span class="midtag">Popular</span>':''}</div>
-      <div class="g-img">${artImg(t.art)}</div><div class="g-name">${t.name}</div>${isPhysical
+      <div class="g-img">${artImg(t.art)}${sold?'<div class="sold-badge">Sold Out</div>':''}</div><div class="g-name">${t.name}</div>${isPhysical
         ?`<div class="g-desc">${t.desc}</div><div class="g-type">${t.type}</div>`
         :`<div class="g-type">${t.type}</div>`}</div>`;
   }
