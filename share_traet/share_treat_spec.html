@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>积分商城 完整需求规格（Share Treat · 前台＋后台）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>积分商城 完整需求规格（Share Treats · 前台＋后台）</title>
 <style>
   *{box-sizing:border-box;}
   body{margin:0;background:#f4f5f7;color:#23272e;line-height:1.7;
@@ -157,20 +157,24 @@
 
 <div class="doc-header">
   <div class="hwrap">
-    <div class="doc-meta"><span class="doc-title">积分商城　完整需求规格（Share Treat）</span><span class="doc-ver">v1</span></div>
+    <div class="doc-meta"><span class="doc-title">积分商城　完整需求规格（Share Treats）</span><span class="doc-ver">v1</span></div>
     <p class="doc-sub">需求规格文件　·　更新日 2026-06-25　·　涉及端：前台 / 后台　·　读者：QA / RD / UI</p>
   </div>
 </div>
 
 <div class="wrap">
 
+  <div style="background:#eef2ff;border:1px solid #c5d0f0;border-radius:8px;padding:10px 18px;margin-bottom:16px;font-size:15px;color:#3358d4;font-weight:600;">
+    📝 7/28 更新：全文「Share Treat」統一更名為「Share Treats」（含前台、後台規格及新增商品類型）
+  </div>
+
   <div class="paper" style="margin-bottom:18px;">
     <div class="block">
       <h2>需求背景</h2>
-      <p>积分商城原有奖励多为免费旋转券、免费投注券等，需绑定游戏 / 投注使用，使用场景较单一。本次接入第三方「Share Treat」，引入可直接核销的生活化品牌奖励，让积分兑换更有感、使用场景更丰富，提升会员对积分的兴趣与活跃度。</p>
+      <p>积分商城原有奖励多为免费旋转券、免费投注券等，需绑定游戏 / 投注使用，使用场景较单一。本次接入第三方「Share Treats」，引入可直接核销的生活化品牌奖励，让积分兑换更有感、使用场景更丰富，提升会员对积分的兴趣与活跃度。</p>
       <h2 style="margin-top:18px;">需求说明</h2>
-      <p style="margin-bottom:6px;"><strong>前台：</strong>新增「Share Treat」分类，会员可用积分兑换商品；购买时填写手机号码与邮箱，三方凭此自行派发兑换信息；订单详情可查看三方状态（前台仅显示 成功 / 失败 / —；后台「处理中」前台以「—」呈现）。状态分待审核 / 已完成 / 已拒绝，<strong>人工拒绝或兑换失败时全额退还积分</strong>。</p>
-      <p><strong>后台：</strong>支持上架 Share Treat 商品（数据来自第三方）、审核兑换（通过派发、拒绝退积分）、查看订单信息。</p>
+      <p style="margin-bottom:6px;"><strong>前台：</strong>新增「Share Treats」分类，会员可用积分兑换商品；购买时填写手机号码与邮箱，三方凭此自行派发兑换信息；订单详情可查看三方状态（前台仅显示 成功 / 失败 / —；后台「处理中」前台以「—」呈现）。状态分待审核 / 已完成 / 已拒绝，<strong>人工拒绝或兑换失败时全额退还积分</strong>。</p>
+      <p><strong>后台：</strong>支持上架 Share Treats 商品（数据来自第三方）、审核兑换（通过派发、拒绝退积分）、查看订单信息。</p>
     </div>
   </div>
 
@@ -185,7 +189,7 @@
     <div class="paper">
       <div class="block">
         <h2>流程总览：会员购买 → 三方派发 → callback 结果</h2>
-        <p>本图为 Share Treat 兑换的<strong>跨前台 / 后台全局流程</strong>，标出我方与 ShareTreats 如何配合，以及两个可能失败的环节。详细规格见「前台规格」「后台规格」两个页签。</p>
+        <p>本图为 Share Treats 兑换的<strong>跨前台 / 后台全局流程</strong>，标出我方与 ShareTreats 如何配合，以及两个可能失败的环节。详细规格见「前台规格」「后台规格」两个页签。</p>
 
         <div style="border:1px solid #e0e4ea;border-radius:12px;padding:18px 20px;margin:16px 0;background:#fbfcfe;">
           <div style="display:flex;flex-direction:column;gap:0;font-size:13.5px;line-height:1.5;">
@@ -228,33 +232,33 @@
     <div class="paper" id="fe-top">
 <div class="block">
     <h2>文件说明</h2>
-    <p>这是 Share Treat 积分商城的<strong>会员端（前台）规格</strong>，供 QA / RD / UI 参考。</p>
+    <p>这是 Share Treats 积分商城的<strong>会员端（前台）规格</strong>，供 QA / RD / UI 参考。</p>
     <ul>
       <li><strong>核心改动：</strong>购买时会员需填写手机号码与邮箱，三方凭此自行派发兑换信息至会员；我方订单详情展示三方状态（成功 / 失败），不再回传兑换码 / 兑换链接。</li>
-      <li>后台逻辑（选品 / 上架 / 审核 / 查看订单信息）见《后台需求规格（Share Treat）》。</li>
+      <li>后台逻辑（选品 / 上架 / 审核 / 查看订单信息）见《后台需求规格（Share Treats）》。</li>
     </ul>
 
 
-    <div class="tip" style="border-left-color:#3358d4;background:#eef2ff;"><strong>QA 验收范围：</strong>本次改动<strong>仅针对积分商城「Share Treat」类型商品</strong>，验收请聚焦以下流程：购买 / 手机号码与邮箱填写验证 / 兑换条款同意 / 三方状态展示 / 状态（待审核·已完成·已拒绝退分）/ 已搶光 / 余额不足。<br>特别验证：① 会员购买成功后，订单详情三方状态显示「成功」，手机号码与邮箱正确回填；② 人工审核被拒后，订单「已拒绝」、三方状态显示「—」（未发送至 ShareTreats），积分历史出现「退还积分」记录；③ <strong>三方兑换失败（callback 失败）后，前台订单详情显示「已拒绝」、三方状态显示「失败」（后台订单状态仍为「审核通过」），系统自动退分、积分历史出现「退还积分」记录</strong>。<strong>其他商品类型不在本次范围、行为维持不变。</strong></div>
+    <div class="tip" style="border-left-color:#3358d4;background:#eef2ff;"><strong>QA 验收范围：</strong>本次改动<strong>仅针对积分商城「Share Treats」类型商品</strong>，验收请聚焦以下流程：购买 / 手机号码与邮箱填写验证 / 兑换条款同意 / 三方状态展示 / 状态（待审核·已完成·已拒绝退分）/ 已搶光 / 余额不足。<br>特别验证：① 会员购买成功后，订单详情三方状态显示「成功」，手机号码与邮箱正确回填；② 人工审核被拒后，订单「已拒绝」、三方状态显示「—」（未发送至 ShareTreats），积分历史出现「退还积分」记录；③ <strong>三方兑换失败（callback 失败）后，前台订单详情显示「已拒绝」、三方状态显示「失败」（后台订单状态仍为「审核通过」），系统自动退分、积分历史出现「退还积分」记录</strong>。<strong>其他商品类型不在本次范围、行为维持不变。</strong></div>
 
     <h2 style="margin-top:22px;">变更摘要</h2>
     <table>
       <tr><th style="width:68px">页码</th><th style="width:120px">页面</th><th style="width:250px">路径</th><th>主要改动</th></tr>
-      <tr><td>1</td><td>商品列表</td><td>积分商城 &gt; Share Treat 分类</td><td>沿用图片 / 价格 / 折扣 / 库存；点击商品进入商品详情。</td></tr>
+      <tr><td>1</td><td>商品列表</td><td>积分商城 &gt; Share Treats 分类</td><td>沿用图片 / 价格 / 折扣 / 库存；点击商品进入商品详情。</td></tr>
       <tr><td>2</td><td>商品详情</td><td>商品列表 &gt; 点击商品卡</td><td>新增「如何兑换 / 兑换条款」入口 + 二级「兑换说明」弹窗（内容来自三方 Brand API）；积分不足时底部按钮显示「余额不足」，仅「×」可关闭。</td></tr>
       <tr><td>3</td><td>确认订单</td><td>购买 &gt; 确认订单弹窗</td><td>新增「手机号码」「邮箱」必填输入框（均不允许空格）及提示文案；保留「我已阅读并同意《如何兑换 / 兑换条款》」勾选；未填写必填栏位或未勾选时付款置灰。</td></tr>
       <tr><td>4</td><td>购买成功</td><td>付款 &gt; 购买成功弹窗</td><td>移除「立即使用」按钮，仅保留「查看订单」，点击进入<strong>兑换记录</strong>页面。</td></tr>
       <tr><td>5</td><td>兑换记录</td><td>积分商城 &gt; 兑换记录</td><td>状态沿用系统既有三种（已完成 / 待审核 / 已拒绝）；审核通过后依三方 callback 显示（成功「已完成」/ 失败「已拒绝」自动退分，回传前显「待审核」）；人工拒绝「已拒绝」（全额退还）。</td></tr>
       <tr><td>6</td><td>订单详情</td><td>兑换记录 &gt; 订单详情</td><td><strong>既有页，非新增页</strong>；新增手机号码、邮箱（购买时填写值，只读）、三方状态（前台仅 成功 / 失败 / —）三个字段；<strong>前台画面由三方状态映射</strong>（处理中→前台待审核且三方状态显示—、成功→已完成、失败→已拒绝）。</td></tr>
-      <tr><td>7</td><td>商品列表 · 已搶光</td><td>积分商城 &gt; Share Treat 分类</td><td>库存为 0 时，商品卡叠加半透明遮罩，显示「已搶光」文字；<strong>商品卡不可点击，无法进入商品详情。</strong></td></tr>
-      <tr><td>8</td><td>积分历史</td><td>积分商城 &gt; 积分历史</td><td>新增 Share Treat 记录条目：下单扣分（付款时）、退分（人工审核拒绝<strong>或兑换失败</strong>时全额退还）。</td></tr>
+      <tr><td>7</td><td>商品列表 · 已搶光</td><td>积分商城 &gt; Share Treats 分类</td><td>库存为 0 时，商品卡叠加半透明遮罩，显示「已搶光」文字；<strong>商品卡不可点击，无法进入商品详情。</strong></td></tr>
+      <tr><td>8</td><td>积分历史</td><td>积分商城 &gt; 积分历史</td><td>新增 Share Treats 记录条目：下单扣分（付款时）、退分（人工审核拒绝<strong>或兑换失败</strong>时全额退还）。</td></tr>
     </table>
   </div>
 
   <!-- 1 商品列表 -->
   <div class="page" id="fe1">
     <div class="page-bar"><span class="n">第 1 页</span>商品列表
-      <span class="p">路径：<code>积分商城 &gt; Share Treat 分类</code> · 商品以两列卡片并排展示；有折扣时左上角显示 ⚡ 标签与划线原价</span></div>
+      <span class="p">路径：<code>积分商城 &gt; Share Treats 分类</code> · 商品以两列卡片并排展示；有折扣时左上角显示 ⚡ 标签与划线原价</span></div>
     <div class="cols">
         <div class="imgcol"><div class="stick">
           <div class="phone">
@@ -263,7 +267,7 @@
             <div class="ph-body" style="padding:10px 12px;">
               <div style="display:flex;gap:10px;margin-bottom:8px;font-size:11px;font-weight:700;">
                 <span style="color:#4b5563;">实物</span>
-                <span style="color:#3358d4;border-bottom:2px solid #3358d4;padding-bottom:2px;">Share Treat</span>
+                <span style="color:#3358d4;border-bottom:2px solid #3358d4;padding-bottom:2px;">Share Treats</span>
                 <span style="color:#4b5563;">彩金</span>
               </div>
               <div style="display:flex;gap:6px;margin-bottom:10px;">
@@ -292,10 +296,10 @@
         </div></div>
         <div class="speccol">
           <h3>入口说明</h3>
-          <p>会员在积分商城顶部点选「<strong>Share Treat</strong>」分类标签，即可看到后台已上架的商品列表。</p>
+          <p>会员在积分商城顶部点选「<strong>Share Treats</strong>」分类标签，即可看到后台已上架的商品列表。</p>
           <table>
             <tr><th>项目</th><th>说明</th></tr>
-            <tr><td>分类标签</td><td>由后台控制是否显示「Share Treat」分类</td></tr>
+            <tr><td>分类标签</td><td>由后台控制是否显示「Share Treats」分类</td></tr>
             <tr><td>商品来源</td><td>后台上架；上架 / 下架 / 排序均由后台控制</td></tr>
             <tr><td>有折扣时</td><td>左上角显示 ⚡ 折扣标签（如 -20%）+ 划线原价</td></tr>
             <tr><td>无折扣时</td><td>仅显示积分价格，无标签</td></tr>
@@ -311,7 +315,7 @@
             <tr><td>库存</td><td>后台库存数值</td><td>前台展示后台库存数值；值为 0 时显示「已搶光」遮罩（见第 7 页）</td></tr>
           </table>
           <div class="note"><strong>库存显示值：</strong>前台展示数据由后台库存数值决定，当值为 0 时，前台显示「已搶光」遮罩。</div>
-          <div class="tip">QA 验证：后台需已上架至少一件 Share Treat 商品，才能在前台「Share Treat」分类看到商品。</div>
+          <div class="tip">QA 验证：后台需已上架至少一件 Share Treats 商品，才能在前台「Share Treats」分类看到商品。</div>
           <h3>文案长度限制</h3>
           <table>
             <tr><th>位置</th><th>限制</th><th>超出处理</th></tr>
@@ -358,7 +362,7 @@
         <div style="text-align:center;">
           <div class="phone">
             <div class="ph-status">14:57</div>
-            <div class="ph-nav">Share Treat <span style="position:absolute;right:14px;color:#4b5563;font-weight:400;">×</span></div>
+            <div class="ph-nav">Share Treats <span style="position:absolute;right:14px;color:#4b5563;font-weight:400;">×</span></div>
             <div style="background:#fff;overflow:hidden;">
               <div style="padding:10px 14px 6px;font-weight:700;font-size:14px;">McDonald's 中薯</div>
               <div style="display:flex;justify-content:center;padding:4px 14px 10px;">
@@ -375,7 +379,7 @@
         <div style="text-align:center;">
           <div class="phone">
             <div class="ph-status">14:57</div>
-            <div class="ph-nav">Share Treat <span style="position:absolute;right:14px;color:#4b5563;font-weight:400;">×</span></div>
+            <div class="ph-nav">Share Treats <span style="position:absolute;right:14px;color:#4b5563;font-weight:400;">×</span></div>
             <div style="background:#fff;overflow:hidden;">
               <div style="padding:10px 14px 6px;font-weight:700;font-size:14px;">McDonald's 中薯</div>
               <div style="display:flex;justify-content:center;padding:4px 14px 10px;">
@@ -397,7 +401,7 @@
       <h3 style="margin-top:0;">弹窗说明</h3>
       <p>点击商品卡弹出，沿用既有弹窗样式。本次新增：</p>
       <ul>
-        <li>标题栏显示分类名「<strong>Share Treat</strong>」（而非商品名）</li>
+        <li>标题栏显示分类名「<strong>Share Treats</strong>」（而非商品名）</li>
         <li>商品名作为弹窗内容的副标题（左对齐，图片上方）</li>
         <li>商品简介下方新增「<strong>如何兑换 / 兑换条款 ›</strong>」蓝字入口</li>
       </ul>
@@ -851,7 +855,7 @@
   <!-- 7 商品列表 · 已搶光 -->
   <div class="page" id="fe7">
     <div class="page-bar"><span class="n">第 7 页</span>商品列表 · 已搶光
-      <span class="p">路径：<code>积分商城 &gt; Share Treat 分类</code> · 库存为 0 时，商品卡叠加半透明遮罩显示「已搶光」</span></div>
+      <span class="p">路径：<code>积分商城 &gt; Share Treats 分类</code> · 库存为 0 时，商品卡叠加半透明遮罩显示「已搶光」</span></div>
     <div class="cols">
       <div class="imgcol"><div class="stick">
         <div class="phone">
@@ -860,7 +864,7 @@
           <div class="ph-body" style="padding:10px 12px;">
             <div style="display:flex;gap:10px;margin-bottom:8px;font-size:11px;font-weight:700;">
               <span style="color:#4b5563;">实物</span>
-              <span style="color:#3358d4;border-bottom:2px solid #3358d4;padding-bottom:2px;">Share Treat</span>
+              <span style="color:#3358d4;border-bottom:2px solid #3358d4;padding-bottom:2px;">Share Treats</span>
               <span style="color:#4b5563;">彩金</span>
             </div>
             <div style="display:flex;gap:6px;margin-bottom:10px;">
@@ -916,8 +920,8 @@
 
   <!-- 8 积分历史 -->
   <div class="page" id="fe8">
-    <div class="page-bar"><span class="n">第 8 页</span>积分历史（现有功能，新增 Share Treat 记录条目）
-      <span class="p">路径：<code>积分商城 &gt; 积分历史</code> · Share Treat 购买会产生扣分与退分两种记录条目，按时间降序排列（最新在上）</span></div>
+    <div class="page-bar"><span class="n">第 8 页</span>积分历史（现有功能，新增 Share Treats 记录条目）
+      <span class="p">路径：<code>积分商城 &gt; 积分历史</code> · Share Treats 购买会产生扣分与退分两种记录条目，按时间降序排列（最新在上）</span></div>
 
     <div class="cols">
       <div class="imgcol"><div class="stick">
@@ -955,7 +959,7 @@
 
       <div class="speccol">
         <h3>说明</h3>
-        <p>积分历史为现有功能，本次不新增页面。Share Treat 购买流程需在积分历史产生以下两种条目。</p>
+        <p>积分历史为现有功能，本次不新增页面。Share Treats 购买流程需在积分历史产生以下两种条目。</p>
 
         <h3>页面结构</h3>
         <table>
@@ -1006,12 +1010,12 @@
     <div class="paper" id="bk-top">
 <div class="block">
     <h2>变更摘要</h2>
-    <div class="tip" style="border-left-color:#3358d4;background:#eef2ff;"><strong>QA 验收范围：</strong>本次后台改动<strong>仅针对「Share Treat」类型商品</strong>，验收请聚焦 Share Treat 的新增商品 / 三级联动 / 库存取小值 / 审核（通过·拒绝退分）/ <strong>兑换失败自动退分</strong> / 查看订单信息 / 重新发送（仅成功可用）等流程；<strong>其他商品类型不在本次范围、行为维持不变</strong>。</div>
+    <div class="tip" style="border-left-color:#3358d4;background:#eef2ff;"><strong>QA 验收范围：</strong>本次后台改动<strong>仅针对「Share Treats」类型商品</strong>，验收请聚焦 Share Treats 的新增商品 / 三级联动 / 库存取小值 / 审核（通过·拒绝退分）/ <strong>兑换失败自动退分</strong> / 查看订单信息 / 重新发送（仅成功可用）等流程；<strong>其他商品类型不在本次范围、行为维持不变</strong>。</div>
     <table>
       <tr><th style="width:34px">#</th><th>页面</th><th>路径</th><th>主要改动</th></tr>
-      <tr><td>1</td><td>新增商品</td><td>后台 &gt; 积分商城 &gt; 商品管理 &gt; 新增商品</td><td>新增商品类别及商品类型 <strong>Share Treat</strong>；选中商品类型 Share Treat 后出现「类别 / 厂商 / 商品」三级联动 + 商品详情</td></tr>
-      <tr><td>2</td><td>用户积分记录</td><td>后台 &gt; 积分商城 &gt; 用户积分记录</td><td>Share Treat 订单「原因」显示 <strong>Share Treat</strong>（商品类型）；「备注」显示商品名称</td></tr>
-      <tr><td>3</td><td>商品兑换记录</td><td>后台 &gt; 积分商城 &gt; 商品兑换记录</td><td>类型筛选新增 Share Treat；<strong>搜索栏新增「审核状态」筛选下拉（全部 / 待审核 / 审核通过 / 审核未通过；未发货 / 已发货为其他商品类型专属）</strong>；<strong>列表「充值状态」列改为「回传状态」列（成功 / 失败 / 处理中 / —）</strong>；<strong>搜索栏新增「回传状态」筛选下拉（全部 / 成功 / 失败 / 处理中）</strong>；操作栏「查看订单信息」+ 弹窗（显示三方订单号、回传状态、手机号码、邮箱，手机号码与邮箱各附「重新发送」按钮）；手动审核先显示审核按钮，审核可通过 / 拒绝，通过后才显示「查看订单信息」，拒绝则全额退还会员积分；<strong>兑换失败（审核通过＋回传状态失败）自动退分，审核状态维持「审核通过」、前台显示「已拒绝」</strong></td></tr>
+      <tr><td>1</td><td>新增商品</td><td>后台 &gt; 积分商城 &gt; 商品管理 &gt; 新增商品</td><td>新增商品类别及商品类型 <strong>Share Treats</strong>；选中商品类型 Share Treats 后出现「类别 / 厂商 / 商品」三级联动 + 商品详情</td></tr>
+      <tr><td>2</td><td>用户积分记录</td><td>后台 &gt; 积分商城 &gt; 用户积分记录</td><td>Share Treats 订单「原因」显示 <strong>Share Treats</strong>（商品类型）；「备注」显示商品名称</td></tr>
+      <tr><td>3</td><td>商品兑换记录</td><td>后台 &gt; 积分商城 &gt; 商品兑换记录</td><td>类型筛选新增 Share Treats；<strong>搜索栏新增「审核状态」筛选下拉（全部 / 待审核 / 审核通过 / 审核未通过；未发货 / 已发货为其他商品类型专属）</strong>；<strong>列表「充值状态」列改为「回传状态」列（成功 / 失败 / 处理中 / —）</strong>；<strong>搜索栏新增「回传状态」筛选下拉（全部 / 成功 / 失败 / 处理中）</strong>；操作栏「查看订单信息」+ 弹窗（显示三方订单号、回传状态、手机号码、邮箱，手机号码与邮箱各附「重新发送」按钮）；手动审核先显示审核按钮，审核可通过 / 拒绝，通过后才显示「查看订单信息」，拒绝则全额退还会员积分；<strong>兑换失败（审核通过＋回传状态失败）自动退分，审核状态维持「审核通过」、前台显示「已拒绝」</strong></td></tr>
     </table>
   </div>
 
@@ -1025,17 +1029,17 @@
       </div></div>
       <div class="speccol">
         <h3>改动说明</h3>
-        <p>新增商品类别 <strong>Share Treat</strong> 及商品类型 <strong>Share Treat</strong>。选中商品类型 Share Treat 后，在下方显示一组「三级联动 + 商品详情」字段，供管理员选定要上架兑换的商品。其余字段（商品图片、购买价格、积分折扣比例、排序、单个会员限购数、库存、是否限时抢购、审核模式等）维持既有逻辑不变。</p>
+        <p>新增商品类别 <strong>Share Treats</strong> 及商品类型 <strong>Share Treats</strong>。选中商品类型 Share Treats 后，在下方显示一组「三级联动 + 商品详情」字段，供管理员选定要上架兑换的商品。其余字段（商品图片、购买价格、积分折扣比例、排序、单个会员限购数、库存、是否限时抢购、审核模式等）维持既有逻辑不变。</p>
         <h3>改动点</h3>
         <ol>
-          <li>新增商品类别 <strong>Share Treat</strong> 及商品类型 <strong>Share Treat</strong>。</li>
-          <li>选中 Share Treat 后，新增字段：选择类别、选择厂商、选择商品、商品详情、商品简介。</li>
+          <li>新增商品类别 <strong>Share Treats</strong> 及商品类型 <strong>Share Treats</strong>。</li>
+          <li>选中 Share Treats 后，新增字段：选择类别、选择厂商、选择商品、商品详情、商品简介。</li>
           <li>选中其他商品类型时，上述新增字段不显示。</li>
         </ol>
         <h3>字段规格</h3>
         <table>
           <tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr>
-          <tr><td>选择类别 Category</td><td>下拉</td><td>是</td><td>Share Treat 商品类别，数据来自第三方 API</td></tr>
+          <tr><td>选择类别 Category</td><td>下拉</td><td>是</td><td>Share Treats 商品类别，数据来自第三方 API</td></tr>
           <tr><td>选择厂商 Brand</td><td>下拉</td><td>是</td><td>依所选类别联动带出</td></tr>
           <tr><td>选择商品 Goods</td><td>下拉</td><td>是</td><td>依所选厂商联动带出</td></tr>
           <tr><td>商品详情 Goods Detail</td><td>显示（只读）</td><td>—</td><td>选定商品后自动带出；仅供运营参考，<strong>不可编辑</strong></td></tr>
@@ -1064,10 +1068,10 @@
       </div></div>
       <div class="speccol">
         <h3>改动说明</h3>
-        <p>针对商品类型为 <strong>Share Treat</strong> 的兑换记录，调整「原因」与「备注」两列的显示内容；其余商品类型逻辑不变。</p>
+        <p>针对商品类型为 <strong>Share Treats</strong> 的兑换记录，调整「原因」与「备注」两列的显示内容；其余商品类型逻辑不变。</p>
         <h3>改动点</h3>
         <ol>
-          <li><strong>「原因」</strong>：改为显示<strong>商品类型</strong>，Share Treat 商品显示值为 <code>Share Treat</code>。</li>
+          <li><strong>「原因」</strong>：改为显示<strong>商品类型</strong>，Share Treats 商品显示值为 <code>Share Treats</code>。</li>
           <li><strong>「备注」</strong>：改为显示<strong>商品名称</strong>（该笔兑换的商品名称）。</li>
         </ol>
       </div>
@@ -1083,7 +1087,7 @@
         <!-- 商品兑换记录列表 mockup -->
         <div style="border:1px solid #e6e8eb;border-radius:8px;overflow:hidden;font-size:11.5px;background:#fff;margin-bottom:14px;">
           <div style="background:#fafbfc;padding:8px 12px;border-bottom:1px solid #eef0f2;font-weight:700;font-size:12px;color:#3a3f47;">商品兑换记录</div>
-          <!-- 筛选栏：对应真实后台 filter bar，箭头处新增 Share Treat 类型选项 -->
+          <!-- 筛选栏：对应真实后台 filter bar，箭头处新增 Share Treats 类型选项 -->
           <div style="padding:7px 10px;display:flex;gap:5px;border-bottom:1px solid #eef0f2;align-items:center;flex-wrap:wrap;">
             <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 7px;font-size:11px;color:#4b5563;">选择币别 ▾</span>
             <span style="background:#eef2ff;border:1.5px solid #3358d4;border-radius:4px;padding:2px 7px;font-size:11px;color:#3358d4;font-weight:700;position:relative;">
@@ -1093,7 +1097,7 @@
             <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 16px;font-size:11px;color:#8b919c;">会员名</span>
             <span style="background:#fff;border:1px solid #dde0e5;border-radius:4px;padding:2px 7px;font-size:11px;color:#8b919c;">日期范围</span>
             <span style="background:#eef2ff;border:1.5px solid #3358d4;border-radius:4px;padding:2px 7px;font-size:11px;color:#3358d4;font-weight:700;position:relative;">
-              Share Treat ▾
+              Share Treats ▾
               <span style="position:absolute;top:-7px;right:-4px;background:#e5484d;color:#fff;font-size:7px;border-radius:3px;padding:0 3px;line-height:13px;font-weight:700;">NEW</span>
             </span>
             <span style="background:#eef2ff;border:1.5px solid #3358d4;border-radius:4px;padding:2px 7px;font-size:11px;color:#3358d4;font-weight:700;position:relative;">
@@ -1178,22 +1182,22 @@
       </div></div>
       <div class="speccol">
         <h3>改动说明</h3>
-        <p>针对 Share Treat 类型商品：① 类型筛选下拉新增选项；② 搜索栏新增「<strong>审核状态</strong>」筛选下拉；③ <strong>将列表既有「充值状态」列改为「回传状态」列</strong>（显示 ShareTreats 回传结果）；④ 搜索栏新增「<strong>回传状态</strong>」筛选下拉；⑤「操作」栏提供查看订单信息入口。弹窗样式参考既有「充值信息」弹窗。</p>
+        <p>针对 Share Treats 类型商品：① 类型筛选下拉新增选项；② 搜索栏新增「<strong>审核状态</strong>」筛选下拉；③ <strong>将列表既有「充值状态」列改为「回传状态」列</strong>（显示 ShareTreats 回传结果）；④ 搜索栏新增「<strong>回传状态</strong>」筛选下拉；⑤「操作」栏提供查看订单信息入口。弹窗样式参考既有「充值信息」弹窗。</p>
 
         <h3>改动点</h3>
         <ol>
-          <li><strong>类型筛选下拉</strong>：新增选项 <strong>Share Treat</strong>，可按此类型筛选。</li>
-          <li><strong>搜索栏新增「审核状态」筛选下拉</strong>：Share Treat 适用选项为 <strong>全部 / 待审核 / 审核通过 / 审核未通过</strong>（未发货 / 已发货为其他商品类型专属，不适用于 Share Treat）。</li>
+          <li><strong>类型筛选下拉</strong>：新增选项 <strong>Share Treats</strong>，可按此类型筛选。</li>
+          <li><strong>搜索栏新增「审核状态」筛选下拉</strong>：Share Treats 适用选项为 <strong>全部 / 待审核 / 审核通过 / 审核未通过</strong>（未发货 / 已发货为其他商品类型专属，不适用于 Share Treats）。</li>
           <li><strong>「回传状态」列（由「充值状态」列改名沿用）</strong>：显示 ShareTreats 回传结果 —— <strong>成功</strong>（绿）/ <strong>失败</strong>（红）/ <strong>处理中</strong>（灰）/ <strong>—</strong>（未派发）。</li>
           <li><strong>搜索栏新增「回传状态」筛选下拉</strong>：选项为 <strong>全部 / 成功 / 失败 / 处理中</strong>，可按回传状态筛选订单。</li>
-          <li><strong>操作栏</strong>：Share Treat 类型订单显示「<strong>查看订单信息</strong>」（对应原话费类的「查看充值信息」）。</li>
+          <li><strong>操作栏</strong>：Share Treats 类型订单显示「<strong>查看订单信息</strong>」（对应原话费类的「查看充值信息」）。</li>
           <li><strong>审核控制</strong>：手动审核时，操作栏<strong>先显示「审核」按钮</strong>，完成审核后才显示「查看订单信息」；自动审核直接显示「查看订单信息」。</li>
           <li><strong>操作栏按状态区分</strong>：<strong>仅「待审核」＝「审核」按钮</strong>；<strong>其余状态一律＝「查看订单信息」</strong>。人工拒绝的订单三方订单号＝无、回传状态＝—，但会员手机 / 邮箱仍可查看。</li>
           <li><strong>点击「查看订单信息」</strong>：弹出「订单信息」窗口，显示三方订单号、回传状态、手机号码、邮箱；「重新发送」按钮<strong>仅回传状态＝成功时显示</strong>。</li>
         </ol>
 
-        <h3>审核状态说明（Share Treat 适用）</h3>
-        <p>Share Treat 订单的审核状态共三种值（<strong>未发货 / 已发货为其他商品类型专属，不适用于 Share Treat</strong>）：</p>
+        <h3>审核状态说明（Share Treats 适用）</h3>
+        <p>Share Treats 订单的审核状态共三种值（<strong>未发货 / 已发货为其他商品类型专属，不适用于 Share Treats</strong>）：</p>
         <table>
           <tr><th>审核状态值</th><th>含义</th><th>回传状态</th></tr>
           <tr><td><strong>待审核</strong></td><td>订单已提交，等待管理员人工审核（手动审核模式）或系统自动处理（自动审核模式）；此时尚未派发给 ShareTreats</td><td>—</td></tr>
@@ -1211,7 +1215,7 @@
           <tr><td style="color:#dd3b40;font-weight:700;">失败</td><td>callback 回传失败，兑换失败；系统自动全额退还积分；前台画面「已拒绝」</td></tr>
         </table>
 
-        <h3>审核状态 × 回传状态 组合总览（Share Treat）</h3>
+        <h3>审核状态 × 回传状态 组合总览（Share Treats）</h3>
         <p>两者<strong>组合</strong>后，决定前台画面、积分与操作栏：</p>
         <table>
           <tr><th>审核状态</th><th>回传状态</th><th>前台画面</th><th>积分</th><th>操作栏</th><th>说明</th></tr>
@@ -1243,7 +1247,7 @@
         <h3>功能逻辑</h3>
         <ul>
           <li><strong>回传状态列取值时机</strong>：审核通过后系统立即向 ShareTreats 发起请求，回传状态直接进入<strong>处理中</strong>，callback 回来后转<strong>成功</strong>或<strong>失败</strong>；未派发（待审核 / 审核未通过）时一律显示<strong>—</strong>。</li>
-          <li><strong>审核状态筛选</strong>：搜索栏「审核状态」下拉 Share Treat 适用选项为 <strong>全部 / 待审核 / 审核通过 / 审核未通过</strong>，按审核状态过滤列表。</li>
+          <li><strong>审核状态筛选</strong>：搜索栏「审核状态」下拉 Share Treats 适用选项为 <strong>全部 / 待审核 / 审核通过 / 审核未通过</strong>，按审核状态过滤列表。</li>
           <li><strong>回传状态筛选</strong>：搜索栏「回传状态」下拉可选 <strong>全部 / 成功 / 失败 / 处理中</strong>，按回传状态过滤列表。</li>
           <li><strong>重新发送（仅限回传状态＝成功）</strong>：<strong>仅当回传状态为「成功」时，手机号码 / 邮箱后方才显示「重新发送」按钮</strong>，用途是<strong>把已成功的兑换信息再发一次给会员</strong>（例如会员遗失简讯 / 邮件、误删）。管理员点击后，<strong>系统调用 ShareTreats Resend 接口</strong>，请 ShareTreats 再次向该手机号码 / 邮箱派发（发码方仍为 ShareTreats，我方不持有兑换码）。回传状态<strong>非成功</strong>（处理中、失败等）时，弹窗内<strong>不显示「重新发送」按钮</strong>；回传状态为成功、但已达每日上限时，按钮置灰不可点。（注：待审核订单操作栏显示「审核」按钮、不进入本弹窗。）
             <div class="note" style="border-left:3px solid #b7791a;background:#fbf1dd;padding:12px 15px;margin-top:8px;color:#7a5312;line-height:1.7;">
