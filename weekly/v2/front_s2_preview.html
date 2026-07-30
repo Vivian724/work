@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Step 2 — 置頂 Banner / 教學圖</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: #f5f7fa;
+  font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* ── 顶部教学图 / Banner ── */
+.tb-banner {
+  width: 390px;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 18px 16px 14px;
+  background: radial-gradient(120% 100% at 50% 0%, #BEE6FF 0%, #6FC1FF 40%, #2E7CFF 100%);
+  box-shadow: 0 8px 24px rgba(20,80,200,.3);
+  text-align: center;
+  position: relative;
+}
+.tb-banner::before, .tb-banner::after {
+  content:''; position:absolute; border-radius:50%;
+  background:rgba(255,255,255,.35); filter:blur(2px);
+}
+.tb-banner::before { width:70px; height:24px; top:14px; left:10px; }
+.tb-banner::after { width:90px; height:28px; bottom:60px; right:0px; }
+.tb-title {
+  color:#fff; font-size:24px; font-weight:900; letter-spacing:.5px;
+  text-shadow: 0 2px 0 #1a4fc4, 0 4px 10px rgba(0,40,120,.5);
+  position: relative;
+}
+.tb-title .hl { color:#FFE27A; }
+.tb-tagline {
+  display:inline-block; margin-top:8px; padding:5px 16px; border-radius:14px;
+  background:linear-gradient(90deg,#FFD25E,#FFB700); color:#2A2A6B;
+  font-size:12px; font-weight:800;
+  box-shadow:0 3px 8px rgba(0,0,0,.15);
+}
+.tb-steps { display:flex; gap:8px; margin-top:14px; }
+.tb-step {
+  flex:1; background:rgba(255,255,255,.92); border-radius:12px; padding:10px 6px 8px;
+}
+.tb-step .num {
+  width:20px; height:20px; border-radius:50%; background:#2E7CFF; color:#fff;
+  font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center;
+  margin:0 auto 6px;
+}
+.tb-step .txt { font-size:10px; color:#1a3a8a; font-weight:700; line-height:1.35; }
+</style>
+</head>
+<body>
+
+  <div class="tb-banner">
+    <div class="tb-title">WEEKLY <span class="hl">BONUS</span> PASS</div>
+    <div class="tb-tagline">100% Back, Rewards All Week!</div>
+    <div class="tb-steps">
+      <div class="tb-step"><div class="num">1</div><div class="txt">Activate the Weekly Bonus Pass</div></div>
+      <div class="tb-step"><div class="num">2</div><div class="txt">Claim 100% instant payment return</div></div>
+      <div class="tb-step"><div class="num">3</div><div class="txt">Claim rewards daily for 7 days</div></div>
+    </div>
+  </div>
+
+</body>
+</html>

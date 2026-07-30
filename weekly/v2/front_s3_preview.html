@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Step 3 — 購買頁</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: #f5f7fa;
+  font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* ── 购买页 ── */
+.pp-outer {
+  width: 390px;
+  border-radius: 28px;
+  padding: 14px;
+  background: linear-gradient(160deg, #6FA8FF 0%, #3E7BFF 100%);
+  box-shadow: 0 8px 24px rgba(0,60,200,.25);
+}
+.pp-card { background: #fff; border-radius: 20px; overflow: hidden; }
+.pp-tabs { display:flex; }
+.pp-tabs .t1 {
+  flex:1.2; background:linear-gradient(135deg,#FFD25E,#FFB700); color:#2A2A6B;
+  font-weight:800; font-size:14px; padding:12px 14px; display:flex; align-items:center; gap:6px;
+}
+.pp-tabs .t2 {
+  flex:1; background:linear-gradient(135deg,#5CC0FF,#2E7CFF); color:#fff;
+  font-weight:800; font-size:13px; padding:12px 10px; display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.pp-plan {
+  margin:12px 12px 0; border-radius:14px; padding:14px 16px 16px;
+  background:linear-gradient(160deg,#FFE9C2,#FFC15E); position:relative;
+}
+.pp-plan .ribbon {
+  position:absolute; top:0; left:16px; background:#FF7A3D; color:#fff;
+  font-size:11px; font-weight:800; padding:4px 12px; border-radius:0 0 8px 8px;
+}
+.pp-plan .name { color:#D2470E; font-size:18px; font-weight:900; margin-top:16px; }
+.pp-plan .desc { color:#8A6A3A; font-size:11px; margin-top:4px; line-height:1.4; }
+.pp-plan .price { color:#E0432B; font-size:26px; font-weight:900; margin-top:8px; }
+.pp-buy {
+  display:block; width:160px; margin:14px auto 0; text-align:center;
+  background:linear-gradient(135deg,#6FC1FF,#2E7CFF); color:#fff; font-weight:800; font-size:14px;
+  padding:9px; border-radius:999px; box-shadow:0 4px 10px rgba(46,124,255,.4);
+}
+.pp-list { margin:14px 10px 12px; display:flex; flex-direction:column; gap:8px; }
+.pp-day { border-radius:12px; background:#F7F9FF; overflow:hidden; }
+.pp-dhead { text-align:center; font-weight:800; font-size:12px; color:#5578CC; background:#EAF1FF; padding:6px; }
+.pp-drow { display:flex; justify-content:space-between; align-items:center; padding:6px 12px; font-size:11px; border-top:1px solid #EEF1FA; }
+.pp-drow .lbl { color:#93A0C4; }
+.pp-drow .val { color:#2E63D6; font-weight:700; text-align:right; }
+.pp-drow .val .cond { display:block; color:#aaa; font-weight:500; font-size:9px; }
+</style>
+</head>
+<body>
+
+  <div class="pp-outer">
+    <div class="pp-card">
+
+      <div class="pp-tabs">
+        <div class="t1">🎫 ELITE PASS</div>
+        <div class="t2">🎫 PRIME PASS</div>
+      </div>
+
+      <div class="pp-plan">
+        <div class="ribbon">7 Day</div>
+        <div class="name">Elite Pass</div>
+        <div class="desc">Claim daily rewards through check-ins and earn extra bonuses by completing tasks</div>
+        <div class="price">₱600.00</div>
+      </div>
+      <div class="pp-buy">Buy Now</div>
+
+      <div class="pp-list">
+        <div class="pp-day">
+          <div class="pp-dhead">Day 1</div>
+          <div class="pp-drow"><span class="lbl">Daily Rewards</span><span class="val">🪙 12.00</span></div>
+          <div class="pp-drow"><span class="lbl">Daily Task<span class="cond" style="display:block;">Deposit ≥ ₱100</span></span><span class="val">⭐ 13</span></div>
+        </div>
+        <div class="pp-day">
+          <div class="pp-dhead">Day 2</div>
+          <div class="pp-drow"><span class="lbl">Daily Rewards</span><span class="val">🎟️ VA2</span></div>
+          <div class="pp-drow"><span class="lbl">Daily Task<span class="cond" style="display:block;">Deposit ≥ ₱200</span></span><span class="val">🎵 中奖加奖 10%-有效投注</span></div>
+        </div>
+        <div class="pp-day">
+          <div class="pp-dhead">Day 3</div>
+          <div class="pp-drow"><span class="lbl">Daily Rewards</span><span class="val">🎟️ FKG_S Test</span></div>
+          <div class="pp-drow"><span class="lbl">Daily Task<span class="cond" style="display:block;">Deposit ≥ ₱300</span></span><span class="val">🎫 南西测试_MiniG 免费游戏</span></div>
+        </div>
+        <div class="pp-day">
+          <div class="pp-dhead">Day 4</div>
+          <div class="pp-drow"><span class="lbl">Daily Rewards</span><span class="val">🎟️ Facai 的道具</span></div>
+          <div class="pp-drow"><span class="lbl">Daily Task<span class="cond" style="display:block;">Deposit ≥ ₱400</span></span><span class="val">🪙 14.00</span></div>
+        </div>
+        <div class="pp-day">
+          <div class="pp-dhead">Day 5</div>
+          <div class="pp-drow"><span class="lbl">Daily Rewards</span><span class="val">🪙 15.00</span></div>
+          <div class="pp-drow"><span class="lbl">Daily Task<span class="cond" style="display:block;">Deposit ≥ ₱500</span></span><span class="val">🎫 南西测试_PT 免费旋转</span></div>
+        </div>
+        <div class="pp-day">
+          <div class="pp-dhead">Day 6</div>
+          <div class="pp-drow"><span class="lbl">Daily Rewards</span><span class="val">🎟️ Jumbo_S</span></div>
+          <div class="pp-drow"><span class="lbl">Daily Task<span class="cond" style="display:block;">Deposit ≥ ₱600</span></span><span class="val">⭐ 21</span></div>
+        </div>
+        <div class="pp-day">
+          <div class="pp-dhead">Day 7</div>
+          <div class="pp-drow"><span class="lbl">Daily Rewards</span><span class="val">🎟️ Sid Card</span></div>
+          <div class="pp-drow"><span class="lbl">Daily Task<span class="cond" style="display:block;">Deposit ≥ ₱700</span></span><span class="val">🪙 16.00</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

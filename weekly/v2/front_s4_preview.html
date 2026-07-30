@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Step 4 — 簽到頁／領取頁（Elite Pass）</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: #f5f7fa;
+  font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* ── 领取页（Elite Pass）── */
+.ep-outer {
+  width: 390px;
+  border-radius: 28px;
+  padding: 14px;
+  background: linear-gradient(160deg, #6FA8FF 0%, #3E7BFF 100%);
+  box-shadow: 0 8px 24px rgba(0,60,200,.25);
+}
+.ep-card { background: #fff; border-radius: 20px; overflow: hidden; }
+.ep-head { display: flex; }
+.ep-head .yl {
+  flex: 1.3; background: linear-gradient(135deg,#FFD25E,#FFB700);
+  color: #2A2A6B; font-weight: 800; font-size: 15px;
+  display: flex; align-items: center; gap: 6px; padding: 12px 14px;
+}
+.ep-head .bl {
+  flex: 1; background: linear-gradient(135deg,#5CC0FF,#2E7CFF);
+  color: #fff; font-weight: 800; font-size: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 10px;
+}
+.ep-days { display: flex; gap: 6px; padding: 12px 10px 4px; overflow-x: auto; }
+.ep-day {
+  flex-shrink: 0; width: 44px; height: 56px; border-radius: 14px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; gap: 4px;
+}
+.ep-day.done { background: linear-gradient(160deg,#FFC556,#FF9B2E); color: #fff; }
+.ep-day.todo { background: #EFEFEF; color: #999; }
+.ep-check { width:16px;height:16px;border-radius:50%;background:#fff;color:#FF9B2E;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:900; }
+
+/* hero */
+.ep-hero {
+  background: linear-gradient(160deg,#8FC4FF,#3E7BFF);
+  border-radius: 16px 16px 0 0;
+  padding: 16px 14px 8px;
+  position: relative;
+  text-align: center;
+}
+.ep-hero .rules-btn {
+  position:absolute; top:12px; right:12px;
+  background:rgba(255,255,255,.9); color:#2E63D6; font-size:10px; font-weight:700;
+  padding:4px 10px; border-radius:10px;
+}
+.ep-hero .title { color:#fff; font-size:22px; font-weight:900; text-shadow:0 2px 0 rgba(0,40,120,.4); margin-top:6px; }
+.ep-hero .period {
+  display:inline-block; margin-top:8px; background:rgba(255,255,255,.15); color:#fff;
+  font-size:10px; padding:3px 12px; border-radius:10px;
+}
+.ep-hero .period.fixed { background:rgba(255,255,255,.9); color:#2E63D6; font-weight:700; }
+
+/* 每日卡片 */
+.ep-dclist { margin: 10px 10px 4px; display:flex; flex-direction:column; gap:10px; }
+.dc-card { border-radius:14px; overflow:hidden; background:#fff; box-shadow:0 2px 10px rgba(60,90,160,.10); }
+.dc-card.active { box-shadow:0 6px 18px rgba(255,150,30,.35); }
+.dc-head { text-align:center; font-weight:800; font-size:13px; padding:9px; letter-spacing:.5px; }
+.dc-card.active .dc-head { background:linear-gradient(90deg,#FFC556,#FF9B2E); color:#fff; }
+.dc-card.todo .dc-head { background:#EAF1FF; color:#5578CC; }
+.dc-card.done .dc-head { background:#F2F5FC; color:#8CA0D6; }
+.dc-head .chk { color:#3DC98A; margin-left:6px; }
+.dc-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px 14px; border-top:1px solid #F0F3FA; font-size:12px;
+}
+.dc-row.mid { justify-content:center; }
+.dc-row .lbl { color:#7A88B8; font-weight:600; }
+.dc-tag {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:92px; height:30px; box-sizing:border-box;
+  padding:0; border-radius:999px; font-size:12px; font-weight:800; color:#fff;
+  box-shadow:0 3px 8px rgba(0,0,0,.12);
+  white-space:nowrap;
+}
+.dc-tag.claim { background:#4A9BFF; }
+.dc-tag.play { background:#FF6B6B; }
+.dc-val { display:flex; align-items:center; gap:6px; font-weight:700; color:#2E63D6; font-size:13px; }
+.dc-bar { height:5px; border-radius:3px; background:#EEF1FA; margin:2px 14px 0; overflow:hidden; }
+.dc-bar-fill { height:100%; background:linear-gradient(90deg,#FFC556,#FF9B2E); }
+.dc-card.done .dc-bar-fill { background:#B7C4E8; }
+.dc-progress { text-align:center; font-size:10px; color:#aaa; padding:3px 14px 8px; }
+</style>
+</head>
+<body>
+
+  <div class="ep-outer">
+    <div class="ep-card">
+
+      <div class="ep-hero">
+        <span class="rules-btn">📋 Rules</span>
+        <div class="title">Elite Pass</div>
+        <span class="period fixed">Event Period: 2026/06/24 – 2026/06/30</span>
+      </div>
+
+      <div class="ep-head">
+        <div class="yl">🛍️ DAILY REWARDS</div>
+        <div class="bl">🎫 ELITE PASS</div>
+      </div>
+
+      <div class="ep-days">
+        <div class="ep-day done">Day 1<span class="ep-check">✓</span></div>
+        <div class="ep-day done">Day 2<span class="ep-check">✓</span></div>
+        <div class="ep-day todo">Day 3<span>🎁</span></div>
+        <div class="ep-day todo">Day 4<span>🎁</span></div>
+        <div class="ep-day todo">Day 5<span>🎁</span></div>
+        <div class="ep-day todo">Day 6<span>🎁</span></div>
+        <div class="ep-day todo">Day 7<span>🎁</span></div>
+      </div>
+
+      <div class="ep-dclist">
+
+        <!-- Day 2（今日，唯一显示状态标签／按钮的天） -->
+        <div class="dc-card active">
+          <div class="dc-head">DAY 2</div>
+          <div class="dc-row"><span class="lbl">Daily Rewards</span><span class="dc-tag claim">Claim</span></div>
+          <div class="dc-row mid"><span class="dc-val">🪙 50.00</span></div>
+          <div class="dc-row"><span class="lbl">Daily Task: Bet ≥ ₱200.00</span><span class="dc-tag play">Play Now</span></div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:40%"></div></div>
+          <div class="dc-progress">80 / 200</div>
+          <div class="dc-row mid"><span class="dc-val">⭐ 80</span></div>
+        </div>
+
+        <!-- Day 3（未到达） -->
+        <div class="dc-card todo">
+          <div class="dc-head">DAY 3</div>
+          <div class="dc-row mid"><span class="lbl">Daily Rewards</span></div>
+          <div class="dc-row mid"><span class="dc-val">🪙 50.00</span></div>
+          <div class="dc-row mid"><span class="lbl">Daily Task: Bet ≥ ₱200.00</span></div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:0%"></div></div>
+          <div class="dc-progress">0 / 200</div>
+          <div class="dc-row mid"><span class="dc-val">🎟️ Acewin Free Bet</span></div>
+        </div>
+
+        <!-- Day 4 -->
+        <div class="dc-card todo">
+          <div class="dc-head">DAY 4</div>
+          <div class="dc-row mid"><span class="lbl">Daily Rewards</span></div>
+          <div class="dc-row mid"><span class="dc-val">🪙 50.00</span></div>
+          <div class="dc-row mid"><span class="lbl">Daily Task: Bet ≥ ₱200.00</span></div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:0%"></div></div>
+          <div class="dc-progress">0 / 200</div>
+          <div class="dc-row mid"><span class="dc-val">🎫 Acewin Free Spin</span></div>
+        </div>
+
+        <!-- Day 5（No Task 情境） -->
+        <div class="dc-card todo">
+          <div class="dc-head">DAY 5</div>
+          <div class="dc-row mid"><span class="lbl">Daily Rewards</span></div>
+          <div class="dc-row mid"><span class="dc-val">🎟️ Free Spin</span></div>
+          <div class="dc-row mid"><span class="lbl">Daily Task: No Task</span></div>
+        </div>
+
+        <!-- Day 6 -->
+        <div class="dc-card todo">
+          <div class="dc-head">DAY 6</div>
+          <div class="dc-row mid"><span class="lbl">Daily Rewards</span></div>
+          <div class="dc-row mid"><span class="dc-val">🪙 50.00</span></div>
+          <div class="dc-row mid"><span class="lbl">Daily Task: Bet ≥ ₱200.00</span></div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:0%"></div></div>
+          <div class="dc-progress">0 / 200</div>
+          <div class="dc-row mid"><span class="dc-val">📘 Prop Card</span></div>
+        </div>
+
+        <!-- Day 7 -->
+        <div class="dc-card todo">
+          <div class="dc-head">DAY 7</div>
+          <div class="dc-row mid"><span class="lbl">Daily Rewards</span></div>
+          <div class="dc-row mid"><span class="dc-val">🪙 50.00</span></div>
+          <div class="dc-row mid"><span class="lbl">Daily Task: Bet ≥ ₱200.00</span></div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:0%"></div></div>
+          <div class="dc-progress">0 / 200</div>
+          <div class="dc-row mid"><span class="dc-val">⭐ 80</span></div>
+        </div>
+
+        <!-- Day 1（已过天数，置于最后，标题列标示 ✓，已完成） -->
+        <div class="dc-card done">
+          <div class="dc-head">DAY 1 <span class="chk">✓ Claimed</span></div>
+          <div class="dc-row mid"><span class="lbl">Daily Rewards</span></div>
+          <div class="dc-row mid"><span class="dc-val">🪙 50.00</span></div>
+          <div class="dc-row mid"><span class="lbl">Daily Task: Bet ≥ ₱200.00</span></div>
+          <div class="dc-bar"><div class="dc-bar-fill" style="width:100%"></div></div>
+          <div class="dc-progress">200 / 200</div>
+          <div class="dc-row mid"><span class="dc-val">⭐ 80</span></div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

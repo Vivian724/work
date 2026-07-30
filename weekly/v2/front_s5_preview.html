@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Step 5 — General Mechanics 獨立區塊</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: #f5f7fa;
+  font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* ── General Mechanics 独立区块 ── */
+.gm-outer {
+  width: 390px;
+  border-radius: 24px;
+  padding: 14px;
+  background: linear-gradient(160deg, #6FA8FF 0%, #3E7BFF 100%);
+  box-shadow: 0 8px 24px rgba(0,60,200,.25);
+}
+.ep-gm {
+  font-family: 'Baloo 2', 'PingFang SC', sans-serif;
+  background: #FFF8EC;
+  border-radius: 16px;
+  padding: 16px;
+}
+.ep-gm-title {
+  text-align:center; background:linear-gradient(90deg,#FFD25E,#FFB700); color:#2A2A6B;
+  font-weight:800; font-size:18px; border-radius:10px; padding:9px; margin-bottom:14px;
+}
+.ep-gm ol { padding-left: 20px; }
+.ep-gm li { font-size:14px; color:#3355a0; margin-bottom:12px; line-height:1.55; }
+.ep-gm li.hide { color:#bbb; text-decoration: line-through; }
+.ep-gm li b { color:#1a3a8a; }
+.ep-gm li.new { color:#c41d7f; }
+.ep-gm li.new b { color:#c41d7f; }
+.ep-gm .new-tag {
+  display:inline-block; margin-left:6px; padding:1px 8px; border-radius:8px;
+  background:rgba(196,29,127,.12); color:#c41d7f; font-size:11px; font-weight:800; vertical-align:2px;
+}
+</style>
+</head>
+<body>
+
+  <div class="gm-outer">
+    <div class="ep-gm">
+      <div class="ep-gm-title">⭐ GENERAL MECHANICS ⭐</div>
+      <ol>
+        <li><b>Event Period:</b> 2026/06/24 – 2026/06/30（读取后台活动时间配置，非固定文字）</li>
+        <li><b>OKBet Weekly Bonus Pass Selection:</b> During the active event period, players can choose to purchase either the Elite Pass or the Prime Pass.</li>
+        <li><b>Purchase Eligibility:</b> Players can only purchase and hold one (1) type of OKBet Weekly Bonus Pass at any given time. Once the 7-day cycle of the current card completely expires, eligibility resets, and the player may repurchase any card of their choice.</li>
+        <li><b>Daily Login Rewards:</b> Upon successfully purchasing a OKBet Weekly Bonus Pass, players will automatically receive their corresponding daily sign-in reward simply by logging into their account each day.</li>
+        <li><b>Daily Task Rewards:</b> To claim additional Daily Task rewards, players must fulfill the specified task requirements and manually claim the reward within the same day.</li>
+        <li><b>Strict Daily Expiry &amp; Reset:</b> All daily sign-in statuses, tasks, and unclaimed rewards reset strictly at 11:59:59 PM every day. If a player fails to log in, fails to complete the required task, or forgets to claim the reward on that day, the rewards for that day will be permanently forfeited and cannot be reissued or reclaimed later.</li>
+        <li><b>Turnover Requirement:</b> All E-Credits received from this activity or promotion are subject to a 【1x】turnover requirement.
+          <div style="font-size:12px;color:#e0432b;margin-top:2px;">⚠ 依后台流水倍数动态显示，为空/0 时整行隐藏</div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+</body>
+</html>

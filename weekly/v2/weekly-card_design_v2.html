@@ -708,12 +708,32 @@ html, body {
 
       <!-- 2. 活動入口卡片 -->
       <div style="margin-bottom:18px;">
-        <div style="font-size:12px;color:#aaa;margin-bottom:6px;">② 活动入口卡片</div>
-        <div style="position:relative;display:inline-block;background:linear-gradient(135deg,#3E7BFF,#6FA8FF);border-radius:14px;padding:12px 18px;min-width:200px;box-shadow:0 4px 12px rgba(62,123,255,.3);">
-          <div style="color:#fff;font-weight:800;font-size:13px;">Weekly Bonus Pass</div>
-          <div style="color:rgba(255,255,255,.8);font-size:11px;margin-top:2px;">点击进入活动</div>
-          <span style="position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:#ff3b30;border-radius:50%;border:2.5px solid #f8f9fc;display:block;"></span>
+        <div style="font-size:12px;color:#aaa;margin-bottom:8px;">② 活动入口卡片（展示于首页小猴浮窗中）</div>
+        <!-- 浮窗側欄容器：白底 + 藍框，還原前台樣式 -->
+        <div style="width:180px;background:#fff;border-radius:20px;box-shadow:0 8px 28px rgba(0,0,0,.28);border:2px solid #c8d8ff;padding:8px 8px 10px;display:flex;flex-direction:column;gap:5px;">
+
+          <!-- Golden Draw 示意（上方入口） -->
+          <div style="background:radial-gradient(ellipse at 50% 40%,#c41a1a 0%,#5c0808 100%);border-radius:12px;height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;">
+            <div style="color:#FFD700;font-weight:900;font-size:12px;letter-spacing:1px;text-shadow:0 1px 3px rgba(0,0,0,.6);">GOLDEN DRAW</div>
+            <div style="color:#fff;font-size:10px;font-weight:700;">7PM DAILY!</div>
+          </div>
+
+          <!-- ★ Weekly Bonus Pass 入口 + 紅點 ★ -->
+          <div style="position:relative;">
+            <div style="background:linear-gradient(135deg,#3a5ce8 0%,#5f8fff 55%,#a5c8ff 100%);border-radius:12px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;">
+              <div style="color:#fff;font-weight:900;font-size:13px;text-shadow:0 1px 3px rgba(0,0,60,.4);">Weekly Bonus Pass</div>
+              <div style="color:rgba(255,255,255,.85);font-size:11px;">点击进入活动</div>
+            </div>
+            <!-- 紅點 -->
+            <span style="position:absolute;top:-5px;right:-5px;width:14px;height:14px;background:#ff3b30;border-radius:50%;border:2.5px solid #fff;display:block;box-shadow:0 1px 5px rgba(255,0,0,.5);"></span>
+          </div>
+
+          <!-- 1.5% Daily Rebate Boost 示意（下方入口） -->
+          <div style="background:linear-gradient(135deg,#1236a0,#1a5fd4);border-radius:12px;height:62px;display:flex;align-items:center;justify-content:center;">
+            <div style="color:#4dffd6;font-weight:900;font-size:13px;letter-spacing:.5px;text-shadow:0 0 8px rgba(0,255,200,.5);">1.5% <span style="color:#fff;font-size:10px;font-weight:700;">DAILY REBATE</span></div>
+          </div>
         </div>
+        <div style="margin-top:6px;font-size:10px;color:#aaa;width:180px;text-align:center;">▲ 红点位于入口卡片右上角</div>
       </div>
 
       <!-- 3. Prime Tab -->
