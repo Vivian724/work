@@ -1172,7 +1172,7 @@
               <span style="font-size:11.5px;font-weight:700;font-family:monospace;flex:1;color:#23272e;">user@example.com</span>
               <span style="font-size:12px;color:#3358d4;font-weight:700;cursor:pointer;">重新发送</span>
             </div>
-            <div style="margin-top:10px;font-size:13px;color:#4b5563;">每日最多重新发送 2 次</div>
+            <div style="margin-top:10px;font-size:13px;color:#4b5563;">手机号码、邮箱每日各限发送 2 次，于每日 00:00 重置 <span style="color:#dd3b40;font-weight:700;">（8/3 調整）</span></div>
           </div>
         </div>
         <div style="font-size:14.5px;color:#33404d;text-align:center;margin-top:9px;font-weight:600;">回传状态＝<b style="color:#30a46c;">成功</b>时的弹窗：手机、邮箱才显示「重新发送」</div>
@@ -1249,9 +1249,9 @@
           <li><strong>回传状态列取值时机</strong>：审核通过后系统立即向 ShareTreats 发起请求，回传状态直接进入<strong>处理中</strong>，callback 回来后转<strong>成功</strong>或<strong>失败</strong>；未派发（待审核 / 审核未通过）时一律显示<strong>—</strong>。</li>
           <li><strong>审核状态筛选</strong>：搜索栏「审核状态」下拉 Share Treats 适用选项为 <strong>全部 / 待审核 / 审核通过 / 审核未通过</strong>，按审核状态过滤列表。</li>
           <li><strong>回传状态筛选</strong>：搜索栏「回传状态」下拉可选 <strong>全部 / 成功 / 失败 / 处理中</strong>，按回传状态过滤列表。</li>
-          <li><strong>重新发送（仅限回传状态＝成功）</strong>：<strong>仅当回传状态为「成功」时，手机号码 / 邮箱后方才显示「重新发送」按钮</strong>，用途是<strong>把已成功的兑换信息再发一次给会员</strong>（例如会员遗失简讯 / 邮件、误删）。管理员点击后，<strong>系统调用 ShareTreats Resend 接口</strong>，请 ShareTreats 再次向该手机号码 / 邮箱派发（发码方仍为 ShareTreats，我方不持有兑换码）。回传状态<strong>非成功</strong>（处理中、失败等）时，弹窗内<strong>不显示「重新发送」按钮</strong>；回传状态为成功、但已达每日上限时，按钮置灰不可点。（注：待审核订单操作栏显示「审核」按钮、不进入本弹窗。）
-            <div class="note" style="border-left:3px solid #b7791a;background:#fbf1dd;padding:12px 15px;margin-top:8px;color:#7a5312;line-height:1.7;">
-              <strong>⚠ 待开发确认（对接 ShareTreats API）：</strong>ShareTreats 提供两支重发接口 —— SMS <code>POST /api/v3/sms/resend/{referenceNo}</code>、Email <code>POST /api/v3/email/resend</code>。<strong>每日重发次数上限（SMS 文件写 2 次 / 日）与计算范围（整笔订单共用 or 手机、邮箱各自计）、剩余次数是否以三方回传值为准</strong>，请开发对照三方文件确认后，再回填本规格。凭 <code>reference_no</code>（＝三方订单号）指定重发笔。</div>
+          <li><strong>重新发送（仅限回传状态＝成功）</strong>：<strong>仅当回传状态为「成功」时，手机号码 / 邮箱后方才显示「重新发送」按钮</strong>，用途是<strong>把已成功的兑换信息再发一次给会员</strong>（例如会员遗失简讯 / 邮件、误删）。管理员点击后，<strong>系统调用 ShareTreats Resend 接口</strong>，请 ShareTreats 再次向该手机号码 / 邮箱派发（发码方仍为 ShareTreats，我方不持有兑换码）。回传状态<strong>非成功</strong>（处理中、失败等）时，弹窗内<strong>不显示「重新发送」按钮</strong>；回传状态为成功、但已达每日上限时，点击按钮将弹出错误提示「已达今日重发次数上限」；手机号码与邮箱各自独立计算每日发送次数，互不影响，于每日 00:00 重置。<span style="color:#dd3b40;font-weight:700;">（8/3 調整）</span>（注：待审核订单操作栏显示「审核」按钮、不进入本弹窗。）
+            <div class="note" style="border-left:3px solid #1a6b3a;background:#edfaf3;padding:12px 15px;margin-top:8px;color:#1a4731;line-height:1.7;">
+              <strong>✅ 已确认规格 <span style="color:#dd3b40;font-weight:700;">（8/3 調整）</span>：</strong>ShareTreats 提供两支重发接口 —— SMS <code>POST /api/v3/sms/resend/{referenceNo}</code>、Email <code>POST /api/v3/email/resend</code>。每日重发次数上限为 <strong>手机号码与邮箱各 2 次 / 日，独立计算，互不影响</strong>；于每日 00:00 重置。达到上限后点击按钮，系统弹出错误提示「已达今日重发次数上限」。凭 <code>reference_no</code>（＝三方订单号）指定重发笔。</div>
           </li>
           <li><strong>兑换失败自动退分</strong>：callback 回传失败＝兑换失败，三方已回滚，<strong>系统自动全额退还会员本次扣减的积分</strong>，无需管理员操作。此时<strong>后台审核状态维持「审核通过」</strong>（我方确实已完成审核并派发）、<strong>回传状态显示「失败」</strong>、<strong>前台画面显示「已拒绝」</strong>；会员可用退回积分重新购买。故失败不提供「重新发送」，也无「填错改址补发」需求。</li>
           <li><strong>回传状态映射规则</strong>：
