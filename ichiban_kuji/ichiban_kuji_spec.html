@@ -2721,6 +2721,27 @@ tr:hover td { background: #fafcff; }
       <li><strong>订单详情页</strong>：点进列表任一笔记录，会看到状态流程图（「待审核 → 已完成」或「待审核 → 已拒绝」两种走向）、兑换单号（同上）、商品名称（这笔奖品自己的名称，规则同上面的「列表页栏位」），还有<strong>商品价格</strong>——就是这个商品的<span class="spec-field">购买价格</span>（一张券＝一次抽＝一次扣的积分）。每笔拆分记录都显示同一个单抽的价格，不是 0，也不是把总花费平分——比如单抽 500 积分，五连拆出的 5 笔记录，每一笔都显示「500」</li>
       <li><strong>已拒绝就退积分</strong>：某笔记录最后状态是「已拒绝」的话，积分会退给玩家，并在「积分历史」新增一笔<strong>收入</strong>记录，文案是「Points refunded after product review rejection」</li>
       <li><strong>积分历史页面</strong>：分「全部／收入／支出」三个分页签，只显示近 30 天的资料，每笔记录格式是「Redeem <span class="spec-field">{商品名称}</span>」＋时间＋金额（支出显示红色负数，收入显示绿色正数）</li>
+      <li><span style="color:#ff4d4f;font-weight:600;">8/4調整：</span><strong>「商品類型」篩選選項一律顯示英文，所有語系共用</strong>：前台「兌換紀錄」頁的「商品類型」滑動選項列，無論玩家切換哪個語言，商品類型名稱<strong>一律顯示英文</strong>，不跟著語系切換。後台英語語系（English locale）亦請開發參照下表。中英文對照表如下：
+        <table style="margin:10px 0;border-collapse:collapse;font-size:13px;line-height:1.6;">
+          <thead><tr style="background:#fafafa;"><th style="border:1px solid #e2e6ec;padding:6px 14px;text-align:left;">後台商品類型（中文）</th><th style="border:1px solid #e2e6ec;padding:6px 14px;text-align:left;">前台顯示 ／ 後台英語語系（英文）</th></tr></thead>
+          <tbody>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">彩金</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">E-Credit</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">实物</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Physical Item</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">优惠券</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Coupon</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">免费旋转</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Free Spins</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">话费</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Mobile Top-Up</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">流量</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Mobile Load</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">PISO夺宝</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">PISOLuck</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">票券</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Voucher</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">盲盒</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Blind Box</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">免费投注</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Free Bet</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">道具卡</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Feature Card</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">大奖池抽奖券</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Golden Draw Ticket</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">ShareTreats</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Share Treats</td></tr>
+            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">一番赏</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Ichiban Kuji</td></tr>
+          </tbody>
+        </table>
+      </li>
     </ul>
 
   <style>
@@ -2757,11 +2778,11 @@ tr:hover td { background: #fafcff; }
       <div class="exch-chiprow">
         <div class="exch-chip on new">全部</div>
         <div class="exch-chip new">Ichiban Kuji</div>
-        <div class="exch-chip new">彩金</div>
-        <div class="exch-chip new">话费</div>
-        <div class="exch-chip new">优惠券</div>
-        <div class="exch-chip new">免费旋转</div>
-        <div class="exch-chip new">道具卡</div>
+        <div class="exch-chip new">E-Credit</div>
+        <div class="exch-chip new">Mobile Top-Up</div>
+        <div class="exch-chip new">Coupon</div>
+        <div class="exch-chip new">Free Spins</div>
+        <div class="exch-chip new">Feature Card</div>
       </div>
       <div class="exch-iconbtn">☰</div>
     </div>
