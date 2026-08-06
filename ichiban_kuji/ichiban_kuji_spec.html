@@ -165,9 +165,9 @@ input[type="checkbox"], input[type="radio"] { cursor: pointer; accent-color: #16
 
 /* ── BUTTONS ── */
 .btn {
-  padding: 6px 20px; border-radius: 4px; font-size:14px;
-  cursor: pointer; border: 1px solid transparent; height: 34px;
-  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 16px; border-radius: 4px; font-size:14px;
+  cursor: pointer; border: 1px solid transparent; height: 32px;
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
 }
 .btn-primary { background: #1677ff; color: #fff; border-color: #1677ff; }
 .btn-primary:hover { background: #0958d9; }
@@ -400,15 +400,25 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
 .date-sep { color: #bbb; font-size:14px; }
 .date-icon { color: #bbb; font-size:14px; }
 
-.btn {
-  padding: 6px 16px; border-radius: 4px; font-size:14px;
-  cursor: pointer; border: 1px solid transparent; height: 32px;
-  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+/* ── ADJUSTMENT ANNOTATIONS ── */
+/* 用於標注規則修改日期的紅色 badge，統一以 class="spec-adj" 取代 inline style */
+.spec-adj {
+  color: #cf1322;
+  font-weight: 700;
+  background: rgba(255,77,79,.08);
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 0.88em;
 }
-.btn-primary { background: #1677ff; color: #fff; border-color: #1677ff; }
-.btn-primary:hover { background: #0958d9; }
-.btn-warning { background: #fa8c16; color: #fff; border-color: #fa8c16; }
-.btn-warning:hover { background: #d46b08; }
+/* 小注解段落（規格 rule-box 內的補充說明） */
+.spec-note { font-size: 13px; color: #666; margin-bottom: 6px; }
+
+/* ── CALLOUT BOXES ── */
+.spec-callout { border-radius: 8px; padding: 14px 18px; margin-top: 16px; font-size: 19px; line-height: 1.8; }
+.spec-callout-blue { background: #eef4ff; border: 1px solid #b3d1ff; color: #1c2a44; }
+.spec-callout-green { background: #f6ffed; border: 1px solid #b7eb8f; color: #1c3a1c; }
+.spec-callout ul { margin: 8px 0 0; padding-left: 20px; }
+.spec-callout li { margin-bottom: 6px; }
 
 /* ── EXPORT ROW ── */
 .action-row {
@@ -530,7 +540,20 @@ tr:hover td { background: #fafcff; }
 .spec-stack{display:flex;flex-direction:column;gap:32px;}
 .spec-text{font-size:19.5px;color:#1b2028;min-width:0;}
 .spec-split > .spec-screen-card{min-width:0;overflow-x:auto;}
-.spec-text h3{font-size:23px;font-weight:700;margin:40px 0 16px;color:#10141b;}
+
+/* ── 全域 h3 標題（所有 mergeView 頁面共用） ── */
+.spec-view-inner h3{font-size:21px;font-weight:700;margin:38px 0 15px;color:#10141b;padding-bottom:9px;border-bottom:1.5px solid #e2e6ec;}
+.spec-view-inner h3:first-child{margin-top:0;}
+
+/* ── 小節頭（mergeView8 子區塊等） ── */
+.spec-h4{font-size:17px;font-weight:700;color:#1c2a44;border-left:3px solid #1677ff;padding-left:10px;margin:24px 0 10px;}
+
+/* ── 巢狀清單繼承 ── */
+.spec-plain li>ul,.spec-plain li>ol,.spec-rule-box li>ul,.spec-rule-box li>ol{margin:8px 0 0;padding-left:20px;}
+.spec-plain li>ul>li,.spec-plain li>ol>li,.spec-rule-box li>ul>li,.spec-rule-box li>ol>li{margin-bottom:8px;line-height:1.8;color:inherit;}
+
+/* mergeView7 h3 仍維持 23px（比全域大，覆蓋） */
+.spec-text h3{font-size:23px;font-weight:700;margin:40px 0 16px;color:#10141b;border-bottom:none;padding-bottom:0;}
 .spec-text h3:first-child{margin-top:0;}
 .spec-lead{color:#5b6472;font-size:19px;margin:0 0 18px;line-height:1.8;}
 
@@ -614,6 +637,8 @@ tr:hover td { background: #fafcff; }
   <button onclick="mergeGo(7)">前台＿积分商城</button>
   <button onclick="mergeGo(8)">前台＿其他页面</button>
   <button onclick="mergeGo(9)">QA＿验收事项</button>
+  <button onclick="mergeGo(10)">調整紀錄</button>
+  <button onclick="mergeGo(11)">后台＿提現管理</button>
 </div>
 
 <div class="spec-view" id="mergeView0">
@@ -627,7 +652,7 @@ tr:hover td { background: #fafcff; }
     <div class="spec-gloss-row"><div class="spec-gloss-term">来源＝积分购买</div><div class="spec-gloss-def"><span class="spec-field">积分购买</span> 是前台「积分商城」<strong>所有商品类别通用</strong>的购买方式，并非一番赏专属——积分商城里任何商品类型的商品都是用积分购买。因此后台「来源」字段只会显示「积分购买」，不会出现「Ichiban Kuji」这个来源选项；真正用来判断「这是一番赏商品」的字段是商品配置里的 <strong>商品类型＝Ichiban Kuji</strong>（详见下一条）。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">一番赏的判断依据</div><div class="spec-gloss-def">一笔积分购买是否属于「一番赏」，由「商品配置」弹窗中的两个字段决定：<strong>商品类型</strong>（单选 radio，决定该商品用哪一套逻辑／是否显示奖级配置区块，一番赏须选中「Ichiban Kuji」）与 <strong>商品类别</strong>（多选 checkbox，纯粹给前台商城分类展示用，与抽奖逻辑无关，也可勾选「Ichiban Kuji」）。各记录页统一以「商品类型＝Ichiban Kuji」作为判断条件。<strong>「Ichiban Kuji」在这两个字段里目前后台都尚未存在，是本次专案新增的选项，需要 RD 新增</strong>（「商品类型」既有 12 项，新增后共 13 项，最后一个既有项为「Golden Draw Ticket」，详见「商品配置」2.1 节）。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">活动名称＝商品名称</div><div class="spec-gloss-def">各记录／报表页的「活动名称」字段，取自「商品配置」中<strong>商品类型＝Ichiban Kuji</strong> 的该笔商品的「商品名称」字段值（即玩家实际购买的一番赏商品名称）；若该笔积分购买对应的商品「商品类型」不是 Ichiban Kuji（即非一番赏的一般商品），则显示「–」。</div></div>
-    <div class="spec-gloss-row"><div class="spec-gloss-term">奖品清单格式</div><div class="spec-gloss-def">「备注」／「奖品」字段统一采用「{奖级} {奖品类型}{数值}」格式，例如「B Tier 彩金500.00」「E Tier 免费旋转×20」；一笔纪录若中出多个奖品，以顿号「，」分隔，重复品项自动合并显示为「×N」，LAST 永远排最前面。</div></div>
+    <div class="spec-gloss-row"><div class="spec-gloss-term">奖品清单格式</div><div class="spec-gloss-def">「备注」／「奖品」字段统一采用「{奖级} {英文奖品类型} {数值}」格式，例如「B Tier E-Credit 500.00」「E Tier Free Spins ×20」（<span class="spec-adj">8/6調整：</span>奖品类型名称改为英文，与前台标签对照表一致）；一笔纪录若中出多个奖品，以顿号「，」分隔，重复品项自动合并显示为「×N」，LAST 永远排最前面。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">免费旋转／免费投注／道具卡（已确认统一名称）</div><div class="spec-gloss-def">这三种奖品类型全文统一只用「免费旋转」「免费投注」「道具卡」，<strong>没有「旋转券」这个名称</strong>，遇到旧文案／demo 数据出现「旋转券」一律视为「免费旋转」的笔误。三者皆须先在「后台 ＞ 免费旋转管理 ＞ 免费项目配置」建立主档，才能在「商品配置」奖级第二层的下拉选单中被选用；「优惠券」则是在「优惠券管理」配置，与这三者是各自独立的两套主档来源。</div></div>
     <div class="spec-gloss-row"><div class="spec-gloss-term">状态字段</div><div class="spec-gloss-def">全文出现的「状态」栏位固定使用纯文本值，不使用任何色块或图示：<span class="spec-field">未使用</span> ／ <span class="spec-field">已使用</span> ／ <span class="spec-field">已过期</span>（免费旋转类）；优惠券多一个「待结算」，为 <span class="spec-field">未使用</span> ／ <span class="spec-field">待结算</span> ／ <span class="spec-field">已使用</span> ／ <span class="spec-field">已过期</span>；发送记录类为 <span class="spec-field">已发送</span> ／ <span class="spec-field">待发送</span>。此条只涵盖优惠券／免费旋转／发送记录三类页面，「商品兑换记录」的审核与发货状态另成一套体系，见该页说明。</div></div>
   </div>
@@ -818,6 +843,7 @@ tr:hover td { background: #fafcff; }
               <div class="banner-panel">
                 <div class="banner-panel-header">
                   <span>PC 端</span>
+                  <span class="size-hint">建議尺寸 2800×1200px</span>
                 </div>
                 <div class="banner-panel-body">
                   <div class="banner-drop-zone" onclick="document.getElementById('bannerPcInput').click()">
@@ -840,6 +866,7 @@ tr:hover td { background: #fafcff; }
               <div class="banner-panel">
                 <div class="banner-panel-header">
                   <span>H5 端</span>
+                  <span class="size-hint">建議尺寸 780×400px</span>
                 </div>
                 <div class="banner-panel-body">
                   <div class="banner-drop-zone" onclick="document.getElementById('bannerH5Input').click()">
@@ -1009,10 +1036,10 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">商品图片</td><td><span class="spec-req">●</span></td><td>尺寸 750×750px，最多可上传 6 张，预设第一张为封面图</td></tr>
         <tr><td class="spec-field">购买价格</td><td><span class="spec-req">●</span></td><td>目前锁定计价方式为「积分」，此数值＝单抽需扣除的积分</td></tr>
         <tr><td class="spec-field">排序</td><td><span class="spec-req">●</span></td><td>数字，越小排序越前面</td></tr>
-        <tr><td class="spec-field">单个会员限购数</td><td>–</td><td><span style="color:#ff4d4f;font-weight:600;">7/17調整：</span>Ichiban Kuji 機制不適用限購，此欄位對後台操作員反灰鎖定，不可配置。原規則「依 VIP0～VIP10 分別設置，需勾選『限購』才生效」不適用於此商品類型。</td></tr>
+        <tr><td class="spec-field">单个会员限购数</td><td>–</td><td><span class="spec-adj">7/17調整：</span>Ichiban Kuji 機制不適用限購，此欄位對後台操作員反灰鎖定，不可配置。原規則「依 VIP0～VIP10 分別設置，需勾選『限購』才生效」不適用於此商品類型。</td></tr>
         <tr><td class="spec-field">是否限时抢购</td><td><span class="spec-req">●</span></td><td>选「是」需设置起讫时间，超出时间应下架／不可购买</td></tr>
         <tr><td class="spec-field">审核模式</td><td>–</td><td>目前锁定仅自动审核，手动审核尚未开放</td></tr>
-        <tr><td class="spec-field">顶部图（PC／H5）</td><td><span class="spec-req">●</span></td><td>尺寸待定</td></tr>
+        <tr><td class="spec-field">顶部图（PC／H5）</td><td><span class="spec-req">●</span></td><td><span class="spec-adj">8/6調整：</span>PC 端建議尺寸 <strong>2800×1200px</strong>；H5 端建議尺寸 <strong>780×400px</strong>（原標注「尺寸待定」已更新）</td></tr>
         <tr><td class="spec-field">规则弹窗图（PC／H5）</td><td><span class="spec-req">●</span></td><td>尺寸待定</td></tr>
       </tbody>
     </table>
@@ -1057,11 +1084,26 @@ tr:hover td { background: #fafcff; }
     <ul>
       <li>卡片固定为「图片＋文字」结构：图片在上，文字在下</li>
       <li><strong>第一层＝实物</strong>：第一行显示「奖品名称」，第二行显示该奖级填写的「商品简介」，第三行仍保留「实物」分类标签（与其他分类卡片维持一致的视觉层级，同时提示玩家此奖品需另行配送）</li>
-      <li><strong>第一层＝虚拟物品，第二层＝彩金／积分</strong>：这两个分类的动态字段是<strong>直接输入的数值</strong>（彩金＝流水倍数＋金额，流水倍数选填；积分＝积分数量），因此第一行只显示<strong>金额／积分数量本身</strong>（如「5,000.00」「1,000」），<strong>不会</strong>在前台显示流水倍数文字（即使该奖级有填流水倍数，也<strong>只用于后台内部纪录</strong>，不会呈现在 H5 前台卡片上），第二行显示分类标签（如「彩金」「积分」）</li>
-      <li><strong>第一层＝虚拟物品，第二层＝优惠券／免费旋转／免费投注／道具卡</strong>：这四个分类的动态字段都是<strong>从下拉选单挑选一笔既有主档</strong>（分别对应「选择优惠券」「选择免费旋转游戏」「选择免费投注」「选择道具卡」，其中免费旋转／免费投注／道具卡的选项来源即「免费旋转管理 ▸ 免费项目配置」主档列表），因此第一行显示的是<strong>该笔主档的名称</strong>（例如免费旋转选中「J Mania Triple Jam」，第一行就显示「J Mania Triple Jam」，<strong>不是</strong>张数或金额文案），第二行同样显示分类标签</li>
+      <li><strong>第一层＝虚拟物品，第二层＝彩金／积分</strong>：这两个分类的动态字段是<strong>直接输入的数值</strong>（彩金＝流水倍数＋金额，流水倍数选填；积分＝积分数量），因此第一行显示格式为「<strong>小 icon＋数值</strong>」（<span class="spec-adj">8/6調整：</span>彩金显示 ₱ 小色块＋「5,000.00」，积分显示 ★ 小色块＋「1,000」，<strong>不</strong>显示「E-Credit」「Points」英文标签文字）；<strong>不会</strong>在前台显示流水倍数文字（即使该奖级有填流水倍数，也<strong>只用于后台内部纪录</strong>，不会呈现在 H5 前台卡片上）；第二行显示奖励类型英文标签（彩金→ E-Credit，积分→ Points），<span class="spec-adj">8/5調整：</span>标签一律改为英文，对照表见下方</li>
+      <li><strong>第一层＝虚拟物品，第二层＝优惠券／免费旋转／免费投注／道具卡</strong>：这四个分类的动态字段都是<strong>从下拉选单挑选一笔既有主档</strong>（分别对应「选择优惠券」「选择免费旋转游戏」「选择免费投注」「选择道具卡」，其中免费旋转／免费投注／道具卡的选项来源即「免费旋转管理 ▸ 免费项目配置」主档列表），因此第一行显示的是<strong>该笔主档的名称</strong>（例如免费旋转选中「J Mania Triple Jam」，第一行就显示「J Mania Triple Jam」，<strong>不是</strong>张数或金额文案），第二行同样显示奖励类型标签（英文，对照表见下方）</li>
       <li>此排版规则同时套用于「压轴大奖（LAST）」区块与一般奖级卡片</li>
       <li><strong>卡片「剩余量」显示格式（已确认，与顶部进度条一致）</strong>：一般奖级卡片固定显示「Remaining {剩余}/{总量}」，两个数字皆为<strong>实际数值</strong>并加千分位逗号（例如「Remaining 144,000/324,000」），<strong>不使用</strong>百分比或其他模糊化呈现；与页面顶部「Remaining N/总量 Draws」进度条采用<strong>同一套数字呈现方式</strong>，两处数字风格保持一致。「压轴大奖（LAST）」卡片<strong>不显示</strong>此剩余量栏位（LAST 本身不占用一般票数额度，见「名词定义」页「券数」说明）</li>
     </ul>
+    <div style="margin-top:12px;">
+      <p class="spec-note"><span class="spec-adj">8/5調整</span> 後台配置奖励类型与前台商品卡片奖励标签对照（标签一律英文）：</p>
+      <table style="border-collapse:collapse;font-size:13px;line-height:1.6;">
+        <thead><tr style="background:#fafafa;"><th style="border:1px solid #e2e6ec;padding:4px 14px;text-align:left;">後台奖励类型</th><th style="border:1px solid #e2e6ec;padding:4px 14px;text-align:left;">前台商品卡片奖励标签</th></tr></thead>
+        <tbody>
+          <tr><td style="border:1px solid #e2e6ec;padding:4px 14px;">彩金</td><td style="border:1px solid #e2e6ec;padding:4px 14px;">E-Credit</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:4px 14px;">积分</td><td style="border:1px solid #e2e6ec;padding:4px 14px;">Points</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:4px 14px;">实物</td><td style="border:1px solid #e2e6ec;padding:4px 14px;">Physical Item</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:4px 14px;">优惠券</td><td style="border:1px solid #e2e6ec;padding:4px 14px;">Coupon</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:4px 14px;">免费旋转</td><td style="border:1px solid #e2e6ec;padding:4px 14px;">Free Spins</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:4px 14px;">免费投注</td><td style="border:1px solid #e2e6ec;padding:4px 14px;">Free Bet</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:4px 14px;">道具卡</td><td style="border:1px solid #e2e6ec;padding:4px 14px;">Feature Card</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <h3>2.3 送出验证</h3>
@@ -1156,14 +1198,14 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">积分</td><td>本次变动数值；扣款（购买）以负数显示，例如「-500」；若为其他来源的加分则显示正数</td></tr>
         <tr><td class="spec-field">当前总积分</td><td>本次变动后，该会员的积分余额（非变动前）</td></tr>
         <tr><td class="spec-field">操作人</td><td>系统自动扣点固定显示为 <span class="spec-field">SYSTEM</span>；若为人工调整则显示实际操作人帐号</td></tr>
-        <tr><td class="spec-field">原因</td><td>＝本次购买的商品名称，与「活动名称＝商品名称」规则一致</td></tr>
-        <tr><td class="spec-field">备注</td><td>＝本次抽奖实际中出的所有奖品清单，格式见「名词定义」页「奖品清单格式」，例：「B Tier 彩金500.00，E Tier 免费旋转×20」</td></tr>
+        <tr><td class="spec-field">原因</td><td>格式固定为「<strong>Redeem {商品名称}</strong>」（例：「Redeem 苹果 Ichiban Kuji」），商品名称取值与「活动名称＝商品名称」规则一致</td></tr>
+        <tr><td class="spec-field">备注</td><td>＝本次抽奖实际中出的所有奖品清单，格式见「名词定义」页「奖品清单格式」，例：「B Tier E-Credit 500.00，E Tier Free Spins ×20」</td></tr>
       </tbody>
     </table>
   </div>
 
-  <h3>筛选栏位 <span style="color:#ff4d4f;font-weight:600;font-size:15px;">7/21調整</span></h3>
-  <p class="spec-lead"><span style="color:#ff4d4f;font-weight:600;">7/21調整：</span>原「积分兑换商品」下拉不是拿掉，是改法——原本按<strong>商品名称</strong>筛选（选项为各一番赏商品名称）已确认作废，改成按<strong>交易类型</strong>筛选；一番赏购买纪录归属既有的「<strong>积分兑换商品</strong>」这个交易类型，选它即可查出全部一番赏（含其他积分商城商品）的扣分纪录，不需另外按商品名称查找。</p>
+  <h3>筛选栏位 <span class="spec-adj">7/21調整</span></h3>
+  <p class="spec-lead"><span class="spec-adj">7/21調整：</span>原「积分兑换商品」下拉不是拿掉，是改法——原本按<strong>商品名称</strong>筛选（选项为各一番赏商品名称）已确认作废，改成按<strong>交易类型</strong>筛选；一番赏购买纪录归属既有的「<strong>积分兑换商品</strong>」这个交易类型，选它即可查出全部一番赏（含其他积分商城商品）的扣分纪录，不需另外按商品名称查找。</p>
   <div class="spec-table-wrap">
     <table>
       <thead><tr><th>控件</th><th>说明</th></tr></thead>
@@ -1321,7 +1363,7 @@ tr:hover td { background: #fafcff; }
     </div>
 
 <div class="spec-text">
-  <h3>页面位置 <span style="color:#ff4d4f;font-weight:600;font-size:15px;">7/21調整</span></h3>
+  <h3>页面位置 <span class="spec-adj">7/21調整</span></h3>
   <p class="spec-lead">面包屑：位置 › 商品兑换记录，共 3 个子页签：<strong>商品兑换记录</strong>（当前页签，全站所有商品类型共用的兑换记录列表，非 Ichiban Kuji 专属）／盲盒抽奖记录／Ichiban Kuji 抽奖记录。</p>
 
   <h3>栏位字段（全部 12 栏）</h3>
@@ -1334,7 +1376,7 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">创建时间</td><td>下单时间</td></tr>
         <tr><td class="spec-field">币种</td><td>本笔订单结算的币别</td></tr>
         <tr><td class="spec-field">商品名称</td><td>本次兑换的商品名称，涵盖积分商城所有商品类型（含一番赏）</td></tr>
-        <tr><td class="spec-field">商品奖励</td><td><span style="color:#ff4d4f;font-weight:600;">7/23調整（新增）：</span>只在「商品类型」＝Ichiban Kuji 的纪录中显示；非 Ichiban Kuji 商品该栏留空不显示任何内容。依奖励类型不同，显示内容如下：
+        <tr><td class="spec-field">商品奖励</td><td><span class="spec-adj">7/23調整（新增）：</span>只在「商品类型」＝Ichiban Kuji 的纪录中显示；非 Ichiban Kuji 商品该栏留空不显示任何内容。依奖励类型不同，显示内容如下：
           <ul style="margin:6px 0 0 0;padding-left:18px;line-height:1.8;">
             <li><strong>彩金、积分</strong>：直接显示奖励类型名称（如「彩金」「积分」）</li>
             <li><strong>实物</strong>：显示该奖品的实物商品名称</li>
@@ -1343,7 +1385,7 @@ tr:hover td { background: #fafcff; }
           </ul>
         </td></tr>
         <tr><td class="spec-field">购买价格</td><td>本笔订单实际扣除的积分数</td></tr>
-        <tr><td class="spec-field">收货信息</td><td>实物商品的收货地址／联络方式；非实物商品该栏留空不显示任何内容<span style="color:#ff4d4f;font-weight:600;">（7/23調整：原规范写「–」，依既有后台实际行为修正为留空）</span></td></tr>
+        <tr><td class="spec-field">收货信息</td><td>实物商品的收货地址／联络方式；非实物商品该栏留空不显示任何内容<span class="spec-adj">（7/23調整：原规范写「–」，依既有后台实际行为修正为留空）</span></td></tr>
         <tr><td class="spec-field">订单状态</td><td>待审核／待发货／已发货／已拒绝，依商品类型不同可能只会用到其中几种</td></tr>
         <tr><td class="spec-field">操作人</td><td>系统自动处理固定显示 <span class="spec-field">SYSTEM</span>；若为人工审核／调整则显示实际操作人帐号</td></tr>
         <tr><td class="spec-field">备注</td><td>依商品类型显示对应说明，一番赏商品比照「Ichiban Kuji 抽奖记录」页签的奖品清单格式</td></tr>
@@ -1361,9 +1403,9 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">状态</td><td>下拉单选：全部／待审核／待发货／已发货／已拒绝</td></tr>
         <tr><td class="spec-field">会员名</td><td>文本输入，比对会员帐号（精准比对）</td></tr>
         <tr><td class="spec-field">创建时间区间</td><td>起讫日期时间选择器，对应表格「创建时间」栏位</td></tr>
-        <tr><td class="spec-field">商品类型</td><td><span style="color:#ff4d4f;font-weight:600;">7/21調整：</span>下拉单选，即「商品配置」商品类型单选清单（见「名词定义」页），本次新增「<strong>Ichiban Kuji</strong>」为第 13 个选项，让运营可以单独筛选出一番赏商品的兑换记录，不必混在全部商品类型里查找</td></tr>
-        <tr><td class="spec-field">商品名称</td><td><span style="color:#ff4d4f;font-weight:600;">7/21調整（新增）：</span>只在「商品类型」＝Ichiban Kuji 时才出现；下拉单选，<strong>选项来源＝「商品配置」中商品类型＝Ichiban Kuji 的各笔商品名称</strong>（隶属一番赏这个商品类型底下的商品才会出现在此清单，与「商品配置」页签资料同源），可再锁定某一个一番赏商品。<strong>预设值为「全部」</strong>，代表不限定商品，列表显示全部 Ichiban Kuji 纪录</td></tr>
-        <tr><td class="spec-field">商品奖励</td><td><span style="color:#ff4d4f;font-weight:600;">7/21調整（新增）：</span>只在「商品类型」＝Ichiban Kuji 时才出现；下拉单选，选单第一项为「全部」，其后共 7 项：实物／彩金／积分／优惠券／免费旋转／免费投注／道具卡，依该次抽奖实际中出的奖品分类筛选。<strong>预设值为「全部」</strong>，代表不限定奖励类型，列表显示所有奖励分类的纪录</td></tr>
+        <tr><td class="spec-field">商品类型</td><td><span class="spec-adj">7/21調整：</span>下拉单选，即「商品配置」商品类型单选清单（见「名词定义」页），本次新增「<strong>Ichiban Kuji</strong>」为第 13 个选项，让运营可以单独筛选出一番赏商品的兑换记录，不必混在全部商品类型里查找</td></tr>
+        <tr><td class="spec-field">商品名称</td><td><span class="spec-adj">7/21調整（新增）：</span>只在「商品类型」＝Ichiban Kuji 时才出现；下拉单选，<strong>选项来源＝「商品配置」中商品类型＝Ichiban Kuji 的各笔商品名称</strong>（隶属一番赏这个商品类型底下的商品才会出现在此清单，与「商品配置」页签资料同源），可再锁定某一个一番赏商品。<strong>预设值为「全部」</strong>，代表不限定商品，列表显示全部 Ichiban Kuji 纪录</td></tr>
+        <tr><td class="spec-field">商品奖励</td><td><span class="spec-adj">7/21調整（新增）：</span>只在「商品类型」＝Ichiban Kuji 时才出现；下拉单选，选单第一项为「全部」，其后共 7 项：实物／彩金／积分／优惠券／免费旋转／免费投注／道具卡，依该次抽奖实际中出的奖品分类筛选。<strong>预设值为「全部」</strong>，代表不限定奖励类型，列表显示所有奖励分类的纪录</td></tr>
       </tbody>
     </table>
   </div>
@@ -1493,7 +1535,7 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">会员名</td><td>文本输入</td></tr>
         <tr><td class="spec-field">创建时间区间</td><td>起讫日期时间选择器，对应表格「创建时间」栏位</td></tr>
         <tr><td class="spec-field">全部商品</td><td>下拉单选，依商品名称筛选</td></tr>
-        <tr><td class="spec-field">全部奖品</td><td>下拉单选，共 <strong>7</strong> 项：实物／彩金／积分／<strong>优惠券</strong>／免费旋转／免费投注／道具卡（<span style="color:#ff4d4f;font-weight:600;">7/21調整：</span>补上「实物」「优惠券」，因商品配置奖级第二层可配置这两类奖品，玩家中奖后会出现在「奖品」栏位，原本筛选不到）</td></tr>
+        <tr><td class="spec-field">全部奖品</td><td>下拉单选，共 <strong>7</strong> 项：实物／彩金／积分／<strong>优惠券</strong>／免费旋转／免费投注／道具卡（<span class="spec-adj">7/21調整：</span>补上「实物」「优惠券」，因商品配置奖级第二层可配置这两类奖品，玩家中奖后会出现在「奖品」栏位，原本筛选不到）</td></tr>
       </tbody>
     </table>
   </div>
@@ -1986,7 +2028,7 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">获得时间</td><td>该券被发放给会员的时间</td></tr>
         <tr><td class="spec-field">活动名称</td><td>见共同业务规则第 2 点：一番赏来源显示商品名称</td></tr>
         <tr><td class="spec-field">获得方式</td><td>见共同业务规则第 1 点：一番赏产生的一律为「积分购买」</td></tr>
-        <tr><td class="spec-field">免费旋转名称</td><td>该免费旋转项目的名称，例如「Free Spin ×10」</td></tr>
+        <tr><td class="spec-field">免费旋转名称</td><td>该免费旋转项目的名称，例如「Free Spins ×10」</td></tr>
         <tr><td class="spec-field">免费类型</td><td>免费旋转／免费投注／道具卡三选一</td></tr>
         <tr><td class="spec-field">获得次数</td><td>该笔免费旋转的总可用次数</td></tr>
         <tr><td class="spec-field">状态</td><td>纯文本：未使用／已使用／已过期</td></tr>
@@ -2285,7 +2327,7 @@ tr:hover td { background: #fafcff; }
 
   <p class="spec-lead"><strong>Disclaimer：</strong>前台数据（商品名称、奖品名称、简介、图片、剩余量等）仅供示意，实际内容与数值以「商品配置」后台设置为准；视觉样式（配色、字体、装饰纹样）由 UI 设计出图，本文件只锁定结构、文案、规则与数值。</p>
 
-  <h3 style="margin-top:32px;">全局规则</h3>
+  <h3>全局规则</h3>
   <ul class="spec-plain">
       <li><strong>产品定位（已确认）</strong>：本活动是把「一番赏」实体手办抽选机玩法搬到线上，取其大部分核心机制（无放回加权抽取、LAST 压轴等），但线上化后的操作细节（如数据刷新时机、张数选择、库存／积分即时校验等）<strong>不是</strong>逐一照搬实体机台流程，以下条列的线上规则为最终依据</li>
       <li><strong>奖级顺序</strong>：S Tier → A Tier → B Tier → … → H Tier → LAST，命名与递补规则详见「商品配置」章节，前台只依后台顺序如实呈现</li>
@@ -2363,7 +2405,7 @@ tr:hover td { background: #fafcff; }
       <h3>情境 D｜单一奖级已售罄（整体尚未结束）</h3>
       <ul class="spec-plain">
           <li><strong>触发条件</strong>：单一奖级剩余量归零（该奖级 remaining = 0），同时一般奖级剩余总和仍 &gt; 0（整体活动尚未结束）；判定由后端回传的剩余量驱动，前端只需判断「该奖级 remaining = 0」即触发遮罩，不需要额外的 API 或事件</li>
-          <li><span style="color:#ff4d4f;font-weight:600;">7/27調整需求：</span><strong>视觉呈现：整张卡片去彩度遮罩＋图片区「Sold Out」徽章</strong>——两者同时出现，缺一不可：① 整张卡片覆盖半透明遮罩并搭配 CSS <span class="spec-field">filter: grayscale(100%)</span> 去彩度效果，让整体明显褪色；② 在奖品图片区域的正中央叠加一个深色圆角胶囊徽章，内文显示白色「Sold Out」文字；卡片其余栏位（名称、简介、标签、「剩余」数字）维持原本排版，<strong>不做</strong>内容替换，「剩余」照常显示实际剩余量（此时会是 0／总量）</li>
+          <li><span class="spec-adj">7/27調整需求：</span><strong>视觉呈现：整张卡片去彩度遮罩＋图片区「Sold Out」徽章</strong>——两者同时出现，缺一不可：① 整张卡片覆盖半透明遮罩并搭配 CSS <span class="spec-field">filter: grayscale(100%)</span> 去彩度效果，让整体明显褪色；② 在奖品图片区域的正中央叠加一个深色圆角胶囊徽章，内文显示白色「Sold Out」文字；卡片其余栏位（名称、简介、标签、「剩余」数字）维持原本排版，<strong>不做</strong>内容替换，「剩余」照常显示实际剩余量（此时会是 0／总量）</li>
           <li><strong>撕券按钮不受影响</strong>：单一奖级售罄<strong>不会</strong>触发撕券按钮的停用状态——撕券操作针对的是一般奖级<strong>总剩余量</strong>，只要总剩余量 &gt; 0，撕券按钮就维持正常可用；已售罄的奖级不会再出现在抽奖池里，玩家抽到的结果只会是仍有库存的奖级</li>
           <li><strong>整体页面与数量计算不受影响</strong>：顶部进度条的「剩余／总量」照常累计一般奖级总剩余（已售罄奖级的 0 张已反映在总量里），不因单一奖级售罄而额外更新版面或刷新页面；其他仍有库存的奖级卡片维持正常彩色显示，不受连带影响</li>
         </ul>
@@ -2452,10 +2494,12 @@ tr:hover td { background: #fafcff; }
       <h3>2-5 开奖结果弹窗－逐张揭晓模式</h3>
       <ul class="spec-plain">
           <li><strong>触发条件</strong>：玩家本次选的是「单张／五连／十连」（非全包），最多开出 11 张（10 张＋LAST），判断依据是「选的按钮」，不是出券数量门槛（详见 2-7）</li>
-          <li>标题固定格式「抽出 <span class="spec-field">{张数}</span> 张」</li>
+          <li>标题固定格式「<strong>Draw {张数} Ticket / Tickets</strong>」（<span class="spec-adj">8/6調整：</span>张数只计一般奖级 S～H Tier，LAST 不计入；1 张用单数「Ticket」，2 张以上用复数「Tickets」）；<span class="spec-adj">8/6調整：</span><strong>此处张数只计一般奖级（S～H Tier）的数量，LAST 不计入</strong>——LAST 本身不占用券数额度（见「名词定义」页「券数」说明），例如本次单张中了 F Tier 和 LAST，标题显示「Draw 1 Ticket」，不是「Draw 2 Tickets」</li>
           <li>每张卡片初始为封面「一番赏 撕▶」，依序错开撕开动画（第 1 张延迟 300ms，之后每张间隔<strong>统一改为 300ms</strong>，两者用同一个时间常数，前端实作更简单；单张撕开动画本身 1.1 秒 ease），逐一露出奖级徽章、奖品名称与分类</li>
+          <li><strong>彩金／积分卡片的显示规则（无 icon）</strong>：开奖结果卡片<strong>不显示任何 icon</strong>（含 ₱／★ 符号），仅显示两行文字——名称行＝该奖级的数值（彩金如「5,000.00」，积分如「1,000」），类型行＝英文类型标签（「E-Credit」或「Points」）；此规则与「奖品一览」页的奖级卡片<strong>不同</strong>——奖品一览卡片在图片区保留小 icon（₱／★），开奖结果卡片则完全无图示，两处各自独立设计</li>
           <li><strong>卡片排列方式（本次调整）</strong>：固定 2 栏由左到右、由上到下排列（第 1 张在左上，第 2 张在右上，第 3 张换行到左下，以此类推）；排列顺序<strong>不再反映本次实际抽奖的先后顺序</strong>，改为依奖级代号<strong>英文字母顺序</strong>由小到大排列（A Tier→B Tier→…→H Tier→S Tier；S 因字母排序落在最后，与「奖品一览」页面 S 排最前的顺序<strong>不同，属两套各自独立的排序规则</strong>）；同一奖级本次中出多张时，彼此间顺序不拘（<strong>LAST 为唯一例外</strong>，见下一点）</li>
           <li><strong>若本次中出 LAST（已确认）</strong>：LAST 卡片<strong>固定排在「第一排左边」，也就是第 1 格</strong>，<strong>不是</strong>排在最后一格。其余卡片一律依<strong>奖级代号英文字母顺序</strong>接续排在第 2 格、第 3 格……以此类推。<strong>这点与汇总列表模式一致</strong>——汇总列表模式是把 LAST 摆在整个列表最前面（第一列），逐张模式则是摆在「第一排左边」（第 1 格），两边都固定放在最前面，只是「列表最前面」与「格子最前面」的呈现方式不同</li>
+          <li><span class="spec-adj">8/5調整：</span><strong>动画播放中允许提前点击「收下」关闭弹窗</strong>——玩家无需等待全部卡片的撕开动画结束，随时可点「收下」直接关闭。剩余尚未揭晓的卡片在弹窗关闭前瞬间切换为已揭晓的最终状态（不需补播动画，后端奖品在出券时已一次确定，动画只是前端视觉效果）</li>
           <li>点击「收下」→ 关闭弹窗，依全局规则判定是否切换「已全部抽完」状态，并将张数按钮重置回「单张 (1 Draw)」（见 2-2）</li>
         </ul>
     </div>
@@ -2508,7 +2552,7 @@ tr:hover td { background: #fafcff; }
       <div style="height:520px;overflow:hidden;position:relative;">
         <iframe src="ichiban_kuji_h5.html?modal=result-all-small" style="border:none;width:100%;height:900px;display:block;position:absolute;top:-380px;left:0;" scrolling="no"></iframe>
       </div>
-      <p class="spec-caption">上：模拟全包一次中到<strong>全部 9 个一般奖级＋LAST（共 10 列）</strong>，列表总高度超过弹窗上限，可以看到「Draws … Tickets」标题与底部「Claim」按钮维持不动，只有中间的奖品列表出现滑动——用滑鼠滚轮或触控拖动即可在 iframe 里体验</p>
+      <p class="spec-caption">上：模拟全包一次中到<strong>全部 9 个一般奖级＋LAST（共 10 列）</strong>，列表总高度超过弹窗上限，可以看到「Draw … Tickets」标题与底部「Claim」按钮维持不动，只有中间的奖品列表出现滑动——用滑鼠滚轮或触控拖动即可在 iframe 里体验</p>
       <div style="height:520px;overflow:hidden;position:relative;">
         <iframe src="ichiban_kuji_h5.html?modal=result-agg-overflow" style="border:none;width:100%;height:900px;display:block;position:absolute;top:-380px;left:0;" scrolling="no"></iframe>
       </div>
@@ -2518,7 +2562,7 @@ tr:hover td { background: #fafcff; }
       <ul class="spec-plain">
           <li><strong>什么时候会看到这个模式</strong>：玩家这次选的是「全包」，就一定是汇总列表模式——不管全包当下实际抽出的张数是多是少（哪怕只剩 1～2 张），都固定用这个模式显示，<strong>不会</strong>因为张数少就改成一张一张撕票（示例见左侧页面）</li>
           <li><strong>单张／五连／十连不会用到这个模式</strong>：这三种选项最多只会开出 11 张（10 张一般奖品＋LAST 1 张），张数不多，所以固定用「逐张揭晓」一张一张撕票的方式呈现（见 2-5／2-6）——只看玩家选的是哪一个按钮，不是看实际开出几张来决定用哪种模式</li>
-          <li><strong>怎么统计显示</strong>：同一个奖级中出几次，就合并成一行，格式是「徽章＋奖品名称……×次数」，例如「B Tier 5,000.00 ×3」</li>
+          <li><strong>怎么统计显示</strong>：同一个奖级中出几次，就合并成一行，格式是「徽章＋奖品名称……×次数」，例如「B Tier 5,000.00 ×3」；<span class="spec-adj">8/6調整：</span><strong>LAST 那一行不显示「×1」</strong>——LAST 永远只有 1 张且不占用券数额度，后面不需要加数量标注，只显示徽章＋奖品名称即可</li>
           <li><strong>列表排序（本次调整）</strong>：LAST 固定置顶（见下方 2-6）；其余各行改依奖级代号<strong>英文字母顺序</strong>由上到下排列（A Tier→B Tier→…→H Tier→S Tier），不再依本次实际中出的先后顺序排列</li>
           <li><strong>LAST 永远放第一行</strong>：<strong>「全包」必定会同时中到 LAST</strong>（见 2-6「触发条件」——全包＝一次抽完当下剩余的所有一般奖级券，必然包含最后一张，故每一次「全包」都保证拿到 LAST，不是偶尔发生的情况）；不管它实际是第几张开出的，都固定摆在整份列表最顶端，不跟其他奖品一起比中出次数、也不参与排序</li>
           <li>这个模式<strong>没有</strong>撕票动画，弹窗一打开就直接显示完整的列表内容</li>
@@ -2619,14 +2663,15 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">撕券按钮积分金额</td><td>购买价格</td><td>单张单价，五连／十连／全包按张数倍增</td></tr>
         <tr><td class="spec-field">奖品一览卡片（数量／顺序／名称／图片／类型／剩余量）</td><td>Ichiban Kuji 奖级配置（S Tier～H Tier＋LAST）</td><td>卡片顺序＝后台奖级列表顺序，删除某奖级后依新顺位递补的规则与后台一致</td></tr>
         <tr><td class="spec-field">卡片「实物」分类下的商品简介／奖品名称</td><td>该奖级第一层＝实物时填写的「商品简介」「奖品名称」</td><td>—</td></tr>
-        <tr><td class="spec-field">卡片「彩金／积分」分类下第一行的数值文案</td><td>彩金＝该奖级填写的「金额」；积分＝「积分数量」</td><td>直接显示<strong>金额／积分数量本身</strong>，<strong>不含流水倍数文字</strong>，非主档名称；详见「商品配置」2.2.1 节</td></tr>
+        <tr><td class="spec-field">卡片「彩金／积分」图片区</td><td>无实体图片</td><td>以小 icon 作为图片区佔位：彩金显示 ₱ 符号（橙色底圆角方块）、积分显示 ★ 符号（红色底圆角方块），非照片奖品的视觉占位；其他奖励类型同理，各有对应占位符号（道具卡 ▤、免费旋转 ↻ 等）</td></tr>
+        <tr><td class="spec-field">卡片「彩金／积分」分类下名称文案</td><td>彩金＝该奖级填写的「金额」；积分＝「积分数量」</td><td>名称行格式为「<strong>小 icon＋数值</strong>」——彩金显示 ₱ 小色块＋数值（如「₱ 5,000.00」），积分显示 ★ 小色块＋数值（如「★ 1,000」）；<strong>移除</strong>英文标签文字（名称行不显示「E-Credit」「Points」文字，英文类型标签仍保留于下方类型行）；详见「商品配置」2.2.1 节</td></tr>
         <tr><td class="spec-field">卡片「优惠券／免费旋转／免费投注／道具卡」分类下第一行的名称文案</td><td>该奖级下拉选单选中的主档名称（免费旋转／免费投注／道具卡来自「免费旋转管理 ▸ 免费项目配置」主档）</td><td>显示<strong>主档名称</strong>；<strong>建议</strong>比照「兑换记录」「积分历史」既有的「主档名称×张数」格式一併显示张数（例：「J Mania Triple Jam ×20」），详见「商品配置」2.2.1 节与待确认事项</td></tr>
         <tr><td class="spec-field">总券数／库存进度条</td><td>各一般奖级（S～H）数量加总</td><td><strong>已确认（本次修正）</strong>：LAST<strong>不计入</strong>顶部「Remaining N/总量 Draws」进度条与总票数——真实一番赏玩法中 LAST 是「抽中最后一张一般奖级时额外附赠」的奖励，本身不占用、也不消耗一般票数额度，故不算进总量或剩余量；示例配置表（见下）总量 1,200,000＝S～H 九级加总，LAST 固定 1 张单独显示于奖品一览首位，不并入这个 1,200,000</td></tr>
       </tbody>
     </table>
   </div>
 
-  <p class="spec-lead" style="margin-top:16px;"><span style="color:#ff4d4f;font-weight:600;">7/21調整：</span>顶部「Remaining {剩余}/{总量} Draws」进度条，红色部分随着<strong>「已抽出的张数」</strong>增加而增加（不是随「剩余」增加而增加）。举例（总量 1,200,000）：还没人抽＝红色 0%；抽掉一半、剩余 600,000＝红色 50%；全部抽完、剩余 0＝红色 100%（全满）。</p>
+  <p class="spec-lead"><span class="spec-adj">7/21調整：</span>顶部「Remaining {剩余}/{总量} Draws」进度条，红色部分随着<strong>「已抽出的张数」</strong>增加而增加（不是随「剩余」增加而增加）。举例（总量 1,200,000）：还没人抽＝红色 0%；抽掉一半、剩余 600,000＝红色 50%；全部抽完、剩余 0＝红色 100%（全满）。</p>
   <hr style="border:none;border-top:1px solid #e2e6ec;margin:32px 0;">
 
   <!-- 6. 示例配置表 -->
@@ -2651,98 +2696,123 @@ tr:hover td { background: #fafcff; }
   <p class="spec-lead">顶部进度条与「总券数」＝S～H 九个一般奖级总量加总＝1,200,000 张（示例值，符合「每个奖级库存最多 6 位数、总券数最多 7 位数」规则，详见「商品配置」2.2 节）；LAST 固定 1 张，<strong>不计入</strong>这个总数（详见「5. 前后台资料对照表」的说明）。此为 demo 示例值，正式数值依商品配置实际填写为准。</p>
   <hr style="border:none;border-top:1px solid #e2e6ec;margin:32px 0;">
 
-  <p class="spec-lead" style="background:#eef4ff;border:1px solid #b3d1ff;border-radius:8px;padding:14px 18px;">本页对应的 QA 测试情境与边界条件清单，已独立整理到「<span class="spec-field">QA 验收事项</span>」分页（前台／后台分区），本页不重复列出，避免规格规则与验收清单混在一起。</p>
+  <p class="spec-callout spec-callout-blue">本页对应的 QA 测试情境与边界条件清单，已独立整理到「<span class="spec-field">QA 验收事项</span>」分页（前台／后台分区），本页不重复列出，避免规格规则与验收清单混在一起。</p>
   <hr style="border:none;border-top:1px solid #e2e6ec;margin:32px 0;">
 
   <h3>待确认事项</h3>
   <div class="spec-qa-list" style="margin-top:0;">
     <div class="spec-qa-item"><span class="spec-qa-mark">?</span><span class="spec-qa-text"><strong>待与设计讨论画面样式</strong>：免费旋转／免费投注／道具卡这类「张数」奖励，前台目前尚未设计显示方式，产品端暂无法单方面定案，需与设计一起确认最终视觉呈现。<strong>暂定建议方向</strong>（供讨论用，非最终结论）：沿用「兑换记录」「积分历史」已有的「主档名称×张数」格式（例如「J Mania Triple Jam ×20」），套用在奖品一览卡片与开奖结果卡片的名称文字上，不另外发明新样式；若本次抽奖同一奖级中出多次，外层仍维持既有的「×次数」合并规则，两个数字分属不同层级、不会互相覆盖。（原本「同一奖级是否会设定多笔免费旋转子项」的疑虑已不存在——见「商品配置 2.2」，一个奖级已确认只能配置一款游戏＋一组张数）</span></div>
   </div>
-  <p class="spec-lead" style="margin-top:20px;">一番赏中奖后，对「兑换记录」「积分历史」「资金详情」「我的优惠券」等积分商城既有页面的影响，已独立整理到「<span class="spec-field">前台＿其他页面</span>」分页，不在本页重复。</p>
-  <p class="spec-lead" style="margin-top:20px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:8px;padding:14px 18px;"><strong>本次盘点复核已修正的实作缺陷</strong>（不影响本页任何文字规则，纯粹是原型程式码与既有规则本身有落差，特此记录）：①「用户积分纪录」备注／「商品兑换记录」奖品栏共用的 <span class="spec-field">renderPrizes()</span> 排序函式，原本用字母序排列奖级，会把 S Tier 误排到 H Tier 之后，与「S Tier 固定排最上方、次序在 A Tier 之前」的规则矛盾，现已改为 LAST→S Tier→A～H Tier 的固定权重排序；②「商品兑换记录」的 <span class="spec-field">qtyBadge()</span> 只认得单张／五连／全包三种值，缺「十连」对应的中文显示，现已补上；③「免费项目统计」「免费项目发送记录」两个页签原本的分页栏是写死的假分页（永远只显示 1 个按钮），未依全站「每页 10 笔可翻页」规则实作，现已改用与其他记录页一致的翻页元件；④顶部「Remaining N/总量 Draws」进度条原本把 LAST 也算进分子分母，与真实一番赏「LAST 不占用一般票数额度」的玩法不符，现已改为只计算一般奖级（S～H），demo 默认状态显示由「51/100」修正为「50/100」（此为当时 demo 数值示意；后续「商品配置」示例数据已改版为大数值库存，现行 demo 默认状态为「600,000/1,200,000」，逻辑与此条修正一致，见「示例配置表」）。</p>
+  <p class="spec-lead">一番赏中奖后，对「兑换记录」「积分历史」「资金详情」「我的优惠券」等积分商城既有页面的影响，已独立整理到「<span class="spec-field">前台＿其他页面</span>」分页，不在本页重复。</p>
+  <div class="spec-callout spec-callout-green">
+    <strong>本次盘点复核已修正的实作缺陷</strong>（不影响文字规则，纯粹是原型程式码与规则落差，特此记录）：
+    <ul>
+      <li><span class="spec-field">renderPrizes()</span> 排序错误：原字母序会把 S Tier 排到 H Tier 之后，现已改为 LAST→S Tier→A～H Tier 固定权重排序。</li>
+      <li><span class="spec-field">qtyBadge()</span> 缺「十连」中文显示，现已补上。</li>
+      <li>「免费项目统计」「免费项目发送记录」分页栏原为写死假分页，现已改为与其他记录页一致的翻页元件。</li>
+      <li>顶部进度条原把 LAST 计入分子分母，现已改为只计算一般奖级（S～H）。demo 默认状态由「51/100」修正为「50/100」（当时示意值；现行库存示例已改为大数值，见「示例配置表」）。</li>
+    </ul>
+  </div>
 </div></div>
 
 <div class="spec-view" id="mergeView8"><div class="spec-view-inner">
-  <h1 class="spec-h1">前台＿其他页面</h1>
+  <div class="spec-h1">前台＿其他页面</div>
   <p class="spec-sub">玩家中奖后，除了一番赏页面本身，积分商城还有哪些既有页面会一起产生记录？这些页面都是全站通用的既有系统，不是为一番赏新做的。本页只说明一番赏怎么对应到这些页面，不重复讲这些页面本身的完整规格。</p>
 
   <!-- 1. 兑换记录与积分历史对应关系 -->
-  <h3>1. 前台「兑换记录」／「积分历史」对应关系</h3>
+  <h3>1. 兑换记录</h3>
   <p class="spec-lead">路径：积分商城 ＞ 兑换记录／积分历史。这是全站通用的订单查询系统，不是为一番赏特别做的。它的规则是「一笔购买＝一个商品＝一笔记录」。但一番赏一次抽奖可能同时开出好几个奖品，所以要拆成好几笔记录写进这套系统。</p>
+
+  <p class="spec-h4">基本规则</p>
   <ul class="spec-plain">
-      <li><strong>拆分规则</strong>：这次抽奖开出几个奖品（LAST 算额外 1 个），「兑换记录」就产生几笔独立的记录，不会合并成一笔。
-        <ul style="margin:8px 0 0;padding-left:20px;">
-          <li>后台「商品兑换记录 ▸ Ichiban Kuji 抽奖记录」是「1 笔购买＝1 笔纪录」，把这次所有奖品都列在同一笔纪录的「奖品」栏位里；前台「兑换记录」则是拆开分别显示。两边其实是<strong>同一份资料的两种呈现方式</strong>，不是两套资料</li>
-          <li>换个角度理解：一番赏的「一张券」＝「一个奖品」＝商品配置里「一次扣除的积分」＝独立系统里的「一个商品」。玩家买五连，就是同时买了 5 个商品，各自扣款、各自成立一笔记录</li>
-        </ul>
-      </li>
-      <li><strong>列表页栏位</strong>（对照截图）：商品图片＝该奖品图片；商品名称；积分金额（红色星形图示＋数字）；右侧是状态按钮；列表上方有一句资料同步延迟的提示文字</li>
-      <li><strong>「商品名称」栏位＝这笔奖品自己的名称</strong>（已确认）：
-        <ul style="margin:8px 0 0;padding-left:20px;">
-          <li><strong>彩金／积分 → 显示「类型＋数值」，不是只显示裸数字</strong>（例如「Points 100」「E-Credit 100.00」）——这点跟「商品配置」2.2.1 节的 H5 卡片<strong>不完全一样</strong>：H5 卡片有两行，第一行放数字、第二行另外放分类标签（彩金／积分），但「兑换记录」的「商品名称」只有一行，没有第二行可以放标签，所以类型字要跟数字合在一起显示，玩家才看得出这是哪一种奖励。数字格式沿用全局规则：积分显示整数（如「Points 100」），彩金显示到小数点后两位（如「E-Credit 100.00」）</li>
-          <li>优惠券／免费旋转／免费投注／道具卡 → 显示券的主档名称（如「J Mania Triple Jam」）</li>
-          <li>实物 → 显示该奖级填的「奖品名称」（如「招财猫 铂金典藏摆件」，见范例截图）</li>
-          <li>注意别跟「商品配置」里整个活动的「商品名称」搞混：那个是「这整个活动叫什么」（如「苹果 Ichiban Kuji」，也就是「活动名称」栏位的来源）；这里讲的是「这一笔奖品叫什么」——两个栏位不一样，取值来源也不一样</li>
-        </ul>
-      </li>
-      <li><strong>「状态」筛选：入口改版＋选项变多</strong>，从原本 4 项变成 6 项：全部／待审核／已完成／已拒绝／待发货／已发货。
-        <ul style="margin:8px 0 0;padding-left:20px;">
-          <li>「待发货」「已发货」只会用在一番赏的<strong>实物商品</strong>上（已确认不再细分更多状态；实物奖品中奖后直接显示「待发货」取代「已完成」，见范例截图）。虚拟奖品（彩金／积分／优惠券等）不会出现这两个状态。这是积分商城本来就有的逻辑，一番赏直接沿用，不用另外定义新流程</li>
-          <li>入口改成圆形图标按钮（不加红点），跟「商品类型」滑动列合并在同一排、固定在最右边，不再自己独占一整排</li>
-          <li>点击后跳出「兑换记录」页本来就有的 bottom sheet 弹窗（取消／确认＋选项清单，选中项显示蓝字），互动方式完全不变，只是入口从下拉框换成图标按钮，画面示意见下方</li>
-        </ul>
-      </li>
-      <li><strong>新增「商品类型」筛选</strong>：跟「状态」筛选图标按钮合并成同一排，左边多一段可以左右滑动的选项列，让玩家只看某一种商品类型的兑换记录（例如只看「Ichiban Kuji」的，不被其他不相干的记录淹没）。
-        <ul style="margin:8px 0 0;padding-left:20px;">
-          <li><strong>选项从哪来（本次修正）</strong>：每个选项都是「商品配置」弹窗里<span class="spec-field">商品类型</span>这个单选 radio 的其中一项（后台 ＞ 积分商城 ＞ 商品管理 ＞ 新增商品，见 2.1 节；<strong>不是</strong>「商品类别」那个多选 checkbox——两者是不同栏位，取值来源不能弄混，见下一点差异说明。目前后台既有 12 项：实物／彩金／优惠券／免费旋转／话费／流量／pisoluck／票券／盲盒／免费投注／道具卡／Golden Draw Ticket；<strong>Ichiban Kuji 是本次专案新增的第 13 个选项，目前后台尚不存在，须由 RD 新增</strong>）。筛选清单不是另外做一套分类，就是直接拿「商品类型」这份既有清单（含新增的 Ichiban Kuji 选项）</li>
-          <li><strong>怎么判断筛选结果</strong>：玩家点某个选项（例如「Ichiban Kuji」）时，系统看的是「这笔兑换记录对应的商品，在商品配置里的<span class="spec-field">商品类型</span>是不是等于这个值」——不是看商品名称，也不是看商品类别。「商品类型」是<strong>单选</strong>栏位，一个商品只会对应其中一种，不会同时符合多个筛选选项</li>
-          <li><strong>与「商品类别」的差异（本次厘清，避免混用）</strong>：「商品类别」是<strong>多选</strong> checkbox，同一个商品可以同时勾好几项，纯粹用于后台商品列表的分类筛选，与抽奖／发放机制无关；「商品类型」是<strong>单选</strong> radio，决定商品实际的抽奖／发放机制（选中「Ichiban Kuji」才会显示奖级配置区块，见 2.1 节）。本页筛选用的是<strong>后者（商品类型）</strong>，两者选项数量与内容也不完全相同——「商品类型」没有「商品类别」里那 3 个英文缩写旧分类（FREESPIN／MONEY／COUPON）</li>
-          <li><strong>滑动提示</strong>：右边多了「状态」图标按钮后，选项列可用的宽度变窄了，容易让人以为选项到「优惠券」或「话费」就没了。所以最后一个完整显示的选项后面，要故意露出下一个选项的一小截文字（直接被边界切掉，<strong>不要</strong>加白色渐层），提示玩家还能往左滑——渐层反而会把文字糊到看不清，让人误判已经滑到底了</li>
-        </ul>
-      </li>
-      <li><strong>筛选怎么运作</strong>（「状态」＋「商品类型」通用规则，给开发参考）：
-        <ol style="margin:8px 0 0;padding-left:20px;">
-          <li><strong>刚进页面</strong>：「状态」跟「商品类型」都预设「全部」，显示这位玩家的全部兑换记录，不做任何筛选</li>
-          <li><strong>套用筛选</strong>：玩家点「状态」图标按钮，从 bottom sheet 选「待审核」并确认后，列表立刻只显示待审核的记录；「商品类型」滑动列也是同样的道理。两个筛选条件各自独立、同时生效——例如选了「待审核」＋「Ichiban Kuji」，就只显示两个条件都符合的记录</li>
-          <li><strong>筛选会一直保持</strong>：选了「待审核」之后，只要玩家还留在这页，状态就会一直显示「待审核」，不会自己跳回「全部」</li>
-          <li><strong>但不会记住太久</strong>：筛选条件只存在于这次的页面浏览中，不会存进 localStorage／cookie／网址参数。玩家刷新页面，或离开这页再回来，「状态」跟「商品类型」都会回到预设值「全部」</li>
-        </ol>
-      </li>
-      <li><strong>后端要注意（已确认要做，不是选配；本次修正取值栏位）</strong>：<span class="spec-field">商品类型</span>栏位本来就有（见 2.1 节），不用新增栏位。但「兑换记录」这套查询系统<strong>必须</strong>能依这个栏位筛选——玩家点「Ichiban Kuji」时，列表<strong>只能</strong>出现「商品类型＝Ichiban Kuji」的商品产生的记录，不能混进别的类型。如果目前这套查询系统还没有把商品类型栏位带出来，就<strong>需要新增查询逻辑</strong>（可能要跟「商品配置」做关联查询）。怎么实作由 RD 决定，但这个筛选功能<strong>一定要做出来</strong>，不是还在讨论要不要做</li>
-      <li><strong>状态怎么判断</strong>（已确认）：看这个<strong>商品</strong>在「商品配置」里设的「审核模式」（自动审核／手动审核，见 2.1 节），跟积分商城其他商品用同一套机制，不是写死只能自动。
-        <ul style="margin:8px 0 0;padding-left:20px;">
-          <li>审核模式是设在<strong>商品</strong>上的：同一个一番赏商品，不管玩家单抽／五连／十连／全包，这次拆出来的所有记录都套用同一个结果——自动审核就直接「已完成」；手动审核则一开始全部「待审核」，审核后各自变成「已完成」或「已拒绝」。不会有同一次抽奖，一部分记录已完成、一部分还待审核的情况</li>
-          <li>目前「商品配置」里手动审核这个选项还反灰锁着（见 2.1 节），只是 UI 还没开放，不代表业务规则写死只能自动。已经跟运营确认过：一番赏目前实际上都是自动审核，手动审核只是系统留着的能力，暂时不会真的用到</li>
-          <li><strong>奖励什么时候真的发</strong>（以后如果用手动审核，已确认）：状态还是「待审核」时，对应的虚拟奖励（彩金／积分／优惠券／免费旋转／免费投注／道具卡）还不会出现在「资金详情」「积分历史」「我的优惠券」这些地方；要等状态变「已完成」才会真的发放（比如免费旋转要等已完成，才会出现在「我的优惠券」的未使用分页）。被拒绝的话就不发，直接走下面的「已拒绝退积分」流程</li>
-          <li>「待发货」／「已发货」跟审核状态是<strong>两回事</strong>：一番赏实物商品中奖后要走寄送流程，理论上会经过「待发货 → 已发货」；虚拟奖品没有寄送流程，不会出现这两个状态。这两者要怎么一起呈现，还要跟积分商城既有系统的实作方式确认</li>
-        </ul>
-      </li>
-      <li><strong>兑换单号，用的是后台同一笔购买的订单号</strong>（已确认）：同一次购买（不管单抽／五连／十连／全包）拆出来的所有前台记录，「兑换单号」都显示同一个值，就是后台那笔购买的订单号（例如订单号 <span class="spec-field">PR605996359563974932</span>，五连拆成的 5 笔记录都显示这同一个单号，见范例截图）。不会另外为每笔拆分记录生成新单号，这样前台任何一笔记录都能用这个单号反查回后台的完整交易</li>
-      <li><strong>订单详情页</strong>：点进列表任一笔记录，会看到状态流程图（「待审核 → 已完成」或「待审核 → 已拒绝」两种走向）、兑换单号（同上）、商品名称（这笔奖品自己的名称，规则同上面的「列表页栏位」），还有<strong>商品价格</strong>——就是这个商品的<span class="spec-field">购买价格</span>（一张券＝一次抽＝一次扣的积分）。每笔拆分记录都显示同一个单抽的价格，不是 0，也不是把总花费平分——比如单抽 500 积分，五连拆出的 5 笔记录，每一笔都显示「500」</li>
-      <li><strong>已拒绝就退积分</strong>：某笔记录最后状态是「已拒绝」的话，积分会退给玩家，并在「积分历史」新增一笔<strong>收入</strong>记录，文案是「Points refunded after product review rejection」</li>
-      <li><strong>积分历史页面</strong>：分「全部／收入／支出」三个分页签，只显示近 30 天的资料，每笔记录格式是「Redeem <span class="spec-field">{商品名称}</span>」＋时间＋金额（支出显示红色负数，收入显示绿色正数）</li>
-      <li><span style="color:#ff4d4f;font-weight:600;">8/4調整：</span><strong>「商品類型」篩選選項一律顯示英文，所有語系共用</strong>：前台「兌換紀錄」頁的「商品類型」滑動選項列，無論玩家切換哪個語言，商品類型名稱<strong>一律顯示英文</strong>，不跟著語系切換。後台英語語系（English locale）亦請開發參照下表。中英文對照表如下：
-        <table style="margin:10px 0;border-collapse:collapse;font-size:13px;line-height:1.6;">
-          <thead><tr style="background:#fafafa;"><th style="border:1px solid #e2e6ec;padding:6px 14px;text-align:left;">後台商品類型（中文）</th><th style="border:1px solid #e2e6ec;padding:6px 14px;text-align:left;">前台顯示 ／ 後台英語語系（英文）</th></tr></thead>
-          <tbody>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">彩金</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">E-Credit</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">实物</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Physical Item</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">优惠券</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Coupon</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">免费旋转</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Free Spins</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">话费</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Mobile Top-Up</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">流量</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Mobile Load</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">PISO夺宝</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">PISOLuck</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">票券</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Voucher</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">盲盒</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Blind Box</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">免费投注</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Free Bet</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">道具卡</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Feature Card</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">大奖池抽奖券</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Golden Draw Ticket</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">ShareTreats</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Share Treats</td></tr>
-            <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">一番赏</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Ichiban Kuji</td></tr>
-          </tbody>
-        </table>
-      </li>
-    </ul>
+    <li><strong>拆分规则</strong>：这次抽奖开出几个奖品（LAST 算额外 1 个），「兑换记录」就产生几笔独立的记录，不会合并成一笔。
+      <ul style="margin:8px 0 0;padding-left:20px;">
+        <li>后台「商品兑换记录 ▸ Ichiban Kuji 抽奖记录」是「1 笔购买＝1 笔纪录」，把这次所有奖品都列在同一笔纪录的「奖品」栏位里；前台「兑换记录」则是拆开分别显示。两边其实是<strong>同一份资料的两种呈现方式</strong>，不是两套资料</li>
+        <li>换个角度理解：一番赏的「一张券」＝「一个奖品」＝商品配置里「一次扣除的积分」＝独立系统里的「一个商品」。玩家买五连，就是同时买了 5 个商品，各自扣款、各自成立一笔记录</li>
+      </ul>
+    </li>
+    <li><strong>兑换单号</strong>：同一次购买（不管单抽／五连／十连／全包）拆出来的所有前台记录，「兑换单号」都显示同一个值，就是后台那笔购买的订单号（例如订单号 <span class="spec-field">PR605996359563974932</span>，五连拆成的 5 笔记录都显示这同一个单号，见范例截图）。不会另外为每笔拆分记录生成新单号，这样前台任何一笔记录都能用这个单号反查回后台的完整交易</li>
+  </ul>
+
+  <p class="spec-h4">列表页</p>
+  <ul class="spec-plain">
+    <li><strong>栏位</strong>（<span class="spec-adj">8/5調整</span>）：每笔记录显示 <strong>商品奖励图片</strong>（券类＝该券主档图片，实物＝奖品图片；积分／彩金无专属图片，依既有系统设计处理）、<strong>商品奖励名称</strong>（规则见下一点）、积分金额（红色星形图示＋数字）；右侧是状态按钮；列表上方有一句资料同步延迟的提示文字</li>
+    <li><strong>商品奖励名称规则</strong>（<span class="spec-adj">8/5調整</span>）：
+      <ul style="margin:8px 0 0;padding-left:20px;">
+        <li><strong>积分 → 「Points [整数]」</strong>（如「Points 100」）；<strong>彩金 → 「E-Credit [小数2位]」</strong>（如「E-Credit 500.00」）——纯文字，不加额外图示</li>
+        <li><strong>优惠券／免费旋转／免费投注／道具卡 → 显示该券的主档名称</strong>（如「J Mania Triple Jam」）</li>
+        <li><strong>实物 → 显示该奖级填的「奖品名称」</strong>（如「招财猫 铂金典藏摆件」，见范例截图）</li>
+        <li>注意：此处是「这一笔奖品的奖励名称」，<strong>不是</strong>「这整个活动的名称」（活动名称如「苹果 Ichiban Kuji」——那是订单详情页才显示的栏位）</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p class="spec-h4">订单详情页</p>
+  <ul class="spec-plain">
+    <li><strong>栏位</strong>：点进列表任一笔记录，会看到状态流程图（「待审核 → 已完成」或「待审核 → 已拒绝」两种走向）、兑换单号（同上）、<strong>商品名称</strong>（<span class="spec-adj">8/5調整：</span>显示该一番赏<strong>活动名称</strong>，即商品配置里整个活动的「商品名称」栏位，例如「苹果 Ichiban Kuji」——<strong>不是</strong>这笔奖品自己的名称，与列表页规则不同）、<strong>商品价格</strong>＝该商品的<span class="spec-field">购买价格</span>（一张券＝一次抽＝一次扣的积分）——每笔拆分记录都显示同一个单抽价格，不是 0，也不是把总花费平分（如单抽 500 积分，五连拆出的 5 笔记录每笔都显示「500」）</li>
+  </ul>
+
+  <p class="spec-h4">筛选功能</p>
+  <ul class="spec-plain">
+    <li><strong>「状态」筛选：入口改版＋选项变多</strong>，从原本 4 项变成 6 项：全部／待审核／已完成／已拒绝／待发货／已发货。
+      <ul style="margin:8px 0 0;padding-left:20px;">
+        <li>「待发货」「已发货」只会用在一番赏的<strong>实物商品</strong>上（已确认不再细分更多状态；实物奖品中奖后直接显示「待发货」取代「已完成」，见范例截图）。虚拟奖品（彩金／积分／优惠券等）不会出现这两个状态。这是积分商城本来就有的逻辑，一番赏直接沿用，不用另外定义新流程</li>
+        <li>入口改成圆形图标按钮（不加红点），跟「商品类型」滑动列合并在同一排、固定在最右边，不再自己独占一整排</li>
+        <li>点击后跳出「兑换记录」页本来就有的 bottom sheet 弹窗（取消／确认＋选项清单，选中项显示蓝字），互动方式完全不变，只是入口从下拉框换成图标按钮，画面示意见下方</li>
+      </ul>
+    </li>
+    <li><strong>新增「商品类型」筛选</strong>：跟「状态」筛选图标按钮合并成同一排，左边多一段可以左右滑动的选项列，让玩家只看某一种商品类型的兑换记录（例如只看「Ichiban Kuji」的，不被其他不相干的记录淹没）。
+      <ul style="margin:8px 0 0;padding-left:20px;">
+        <li><strong>选项来源</strong>：每个选项都是「商品配置」弹窗里<span class="spec-field">商品类型</span>这个单选 radio 的其中一项（后台 ＞ 积分商城 ＞ 商品管理 ＞ 新增商品，见 2.1 节；<strong>不是</strong>「商品类别」那个多选 checkbox——两者是不同栏位，取值来源不能弄混）。目前后台既有 12 项；<strong>Ichiban Kuji 是本次专案新增的第 13 个选项，目前后台尚不存在，须由 RD 新增</strong></li>
+        <li><strong>筛选逻辑</strong>：玩家点某个选项时，系统看的是「这笔兑换记录对应的商品，在商品配置里的<span class="spec-field">商品类型</span>是不是等于这个值」。「商品类型」是<strong>单选</strong>栏位，一个商品只会对应其中一种，不会同时符合多个筛选选项</li>
+        <li><strong>与「商品类别」的差异</strong>：「商品类别」是<strong>多选</strong> checkbox，纯粹用于后台商品列表的分类筛选，与抽奖机制无关；「商品类型」是<strong>单选</strong> radio，决定实际的抽奖／发放机制。本页筛选用的是<strong>后者（商品类型）</strong></li>
+        <li><strong>滑动提示</strong>：最后一个完整显示的选项后面，要故意露出下一个选项的一小截文字（直接被边界切掉，<strong>不要</strong>加白色渐层），提示玩家还能往左滑</li>
+      </ul>
+    </li>
+    <li><span class="spec-adj">8/4調整：</span><strong>「商品類型」篩選選項一律顯示英文，所有語系共用</strong>——無論玩家切換哪個語言，商品類型名稱<strong>一律顯示英文</strong>，不跟著語系切換。後台英語語系（English locale）亦請開發參照下表：
+      <table style="margin:10px 0;border-collapse:collapse;font-size:16px;line-height:1.7;">
+        <thead><tr style="background:#fafafa;"><th style="border:1px solid #e2e6ec;padding:6px 14px;text-align:left;">後台商品類型（中文）</th><th style="border:1px solid #e2e6ec;padding:6px 14px;text-align:left;">前台顯示 ／ 後台英語語系（英文）</th></tr></thead>
+        <tbody>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">彩金</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">E-Credit</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">实物</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Physical Item</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">优惠券</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Coupon</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">免费旋转</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Free Spins</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">话费</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Mobile Top-Up</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">流量</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Mobile Load</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">PISO夺宝</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">PISOLuck</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">票券</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Voucher</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">盲盒</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Blind Box</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">免费投注</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Free Bet</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">道具卡</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Feature Card</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">大奖池抽奖券</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Golden Draw Ticket</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">ShareTreats</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Share Treats</td></tr>
+          <tr><td style="border:1px solid #e2e6ec;padding:6px 14px;">一番赏</td><td style="border:1px solid #e2e6ec;padding:6px 14px;">Ichiban Kuji</td></tr>
+        </tbody>
+      </table>
+    </li>
+    <li><strong>筛选运作逻辑</strong>（「状态」＋「商品类型」通用规则，给开发参考）：
+      <ol style="margin:8px 0 0;padding-left:20px;">
+        <li><strong>刚进页面</strong>：「状态」跟「商品类型」都预设「全部」，显示这位玩家的全部兑换记录，不做任何筛选</li>
+        <li><strong>套用筛选</strong>：两个筛选条件各自独立、同时生效——例如选了「待审核」＋「Ichiban Kuji」，就只显示两个条件都符合的记录</li>
+        <li><strong>筛选会一直保持</strong>：只要玩家还留在这页，筛选状态不会自动跳回「全部」</li>
+        <li><strong>不会记住太久</strong>：筛选条件只存在于这次的页面浏览中，不会存进 localStorage／cookie／网址参数。玩家刷新页面或离开再回来，两个筛选都会回到预设值「全部」</li>
+      </ol>
+    </li>
+  </ul>
+
+  <p class="spec-h4">状态与审核</p>
+  <ul class="spec-plain">
+    <li><strong>状态怎么判断</strong>（已确认）：看这个<strong>商品</strong>在「商品配置」里设的「审核模式」（自动审核／手动审核，见 2.1 节），跟积分商城其他商品用同一套机制，不是写死只能自动。
+      <ul style="margin:8px 0 0;padding-left:20px;">
+        <li>审核模式是设在<strong>商品</strong>上的：同一个一番赏商品，不管玩家单抽／五连／十连／全包，这次拆出来的所有记录都套用同一个结果——自动审核就直接「已完成」；手动审核则一开始全部「待审核」，审核后各自变成「已完成」或「已拒绝」</li>
+        <li>目前「商品配置」里手动审核这个选项还反灰锁着（见 2.1 节），只是 UI 还没开放，不代表业务规则写死只能自动。已经跟运营确认过：一番赏目前实际上都是自动审核，手动审核只是系统留着的能力，暂时不会真的用到</li>
+        <li><strong>奖励什么时候真的发</strong>（以后如果用手动审核，已确认）：状态还是「待审核」时，对应的虚拟奖励（彩金／积分／优惠券／免费旋转／免费投注／道具卡）还不会出现在「资金详情」「积分历史」「我的优惠券」这些地方；要等状态变「已完成」才会真的发放。被拒绝的话就不发，走「已拒绝退积分」流程</li>
+        <li>「待发货」／「已发货」跟审核状态是<strong>两回事</strong>：一番赏实物商品中奖后要走寄送流程，理论上会经过「待发货 → 已发货」；虚拟奖品没有寄送流程，不会出现这两个状态。这两者要怎么一起呈现，还要跟积分商城既有系统的实作方式确认</li>
+      </ul>
+    </li>
+    <li><strong>已拒绝就退积分</strong>：某笔记录最后状态是「已拒绝」的话，积分会退给玩家，并在「积分历史」新增一笔<strong>收入</strong>记录，文案是「Points refunded after product review rejection」</li>
+  </ul>
+
 
   <style>
     .exch-mock{width:372px;margin:4px auto 8px;background:#f2f3f5;border:1px solid #e2e6ec;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(16,20,27,.04),0 10px 22px -16px rgba(16,20,27,.24);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}
@@ -2819,8 +2889,16 @@ tr:hover td { background: #fafcff; }
   <p class="spec-caption" style="text-align:center;">点击图标按钮后<strong>呼出「兑换记录」页本身既有的 bottom sheet 弹窗</strong>（取消／确认＋选项清单，选中项蓝字），互动逻辑完全不变，只是入口从下拉框改成图标按钮；选项清单由原本 4 项扩充为 6 项：全部／待审核／已完成／已拒绝／待发货／已发货</p>
   <hr style="border:none;border-top:1px solid #e2e6ec;margin:32px 0;">
 
-  <h3>2. 中奖后依奖励类型对应影响的前台其他页面</h3>
-  <p class="spec-lead">「兑换记录」是<strong>全站通用</strong>的入口，不管中出什么奖品，每个奖品都会在这里产生一笔记录（见第 1 节）。除此之外，依这个奖级在「商品配置」设定的<strong>第二层分类</strong>不同，还会<strong>同时</strong>写进下表这些各自专属的页面——两边是<strong>并存</strong>的，不是互相取代。比如玩家中一个彩金奖品，会同时在「兑换记录」跟「资金详情」两个地方各看到一笔记录。</p>
+  <h3>2. 积分历史</h3>
+  <p class="spec-lead">路径：积分商城 ＞ 积分历史。</p>
+  <ul class="spec-plain">
+    <li>分「全部／收入／支出」三个分页签，只显示近 30 天的资料，每笔记录格式是「Redeem <span class="spec-field">{商品名称}</span>」＋时间＋金额（支出显示红色负数，收入显示绿色正数）</li>
+    <li>积分奖品中奖后，会在<strong>收入</strong>分页新增一笔记录，对应这笔积分数量，与「兑换记录」并存，不是互相取代</li>
+    <li>「已拒绝退积分」也会在收入分页显示，文案是「Points refunded after product review rejection」——这笔是退款，跟抽中当下直接拿到的收入是两笔不同的记录，不要搞混</li>
+  </ul>
+  <hr style="border:none;border-top:1px solid #e2e6ec;margin:32px 0;">
+
+  <p class="spec-note" style="font-size:13px;color:#888;margin:0 0 16px;">各奖励类型对应影响的页面快速参考：「兑换记录」是全站通用入口，每个奖品都会在这里产生一笔记录；下表列出依奖励类型<strong>额外</strong>同步写入的专属页面，两边并存、互不取代。</p>
   <div class="spec-table-wrap">
     <table>
       <thead><tr><th>商品配置第二层分类</th><th>对应影响的前台页面</th><th>说明</th></tr></thead>
@@ -2870,6 +2948,7 @@ tr:hover td { background: #fafcff; }
     .coupon-mock .cm-pct span{font-size:14px;color:#999;}
   </style>
 
+  <h3>3. 资金详情 ▸ 交易记录</h3>
   <div class="spec-split">
     <div class="spec-screen-card" style="background:#f2f3f5;padding:22px 0;">
       <div class="fund-mock">
@@ -2890,7 +2969,6 @@ tr:hover td { background: #fafcff; }
       <p class="spec-caption" style="text-align:center;">示意画面（对照截图重建），实际视觉以 UI 设计出图为准</p>
     </div>
     <div class="spec-text">
-      <h3>资金详情 ▸ 交易记录（促销类别）</h3>
       <ul class="spec-plain">
         <li>路径：我 ＞ 资金详情 ＞ 交易记录，筛选类别选「促销」。一番赏的<strong>彩金</strong>奖品中奖后，除了「兑换记录」，也会在这里同步多一笔入帐记录</li>
         <li>文案格式（已确认）：<span class="spec-field">活动奖励领取：{商品名称}</span>，如上图「活动奖励领取：苹果 Ichiban Kuji」，金额显示绿色正数</li>
@@ -2899,7 +2977,8 @@ tr:hover td { background: #fafcff; }
     </div>
   </div>
 
-  <div class="spec-split" style="margin-top:32px;">
+  <h3>4. 我的优惠券</h3>
+  <div class="spec-split" style="margin-top:16px;">
     <div class="spec-screen-card" style="background:#f2f3f5;padding:22px 0;">
       <div class="coupon-mock">
         <div class="cm-top"><span class="cm-back">‹</span>我的优惠券<span class="cm-rule">规则</span></div>
@@ -2929,7 +3008,6 @@ tr:hover td { background: #fafcff; }
       <p class="spec-caption" style="text-align:center;">示意画面（对照截图重建）：第 1 张是一番赏 C Tier 中出的免费旋转范例，第 2 张是站内其他来源的优惠券，用来示意「我的优惠券」本来就混合多来源券种、不是一番赏专属页面</p>
     </div>
     <div class="spec-text">
-      <h3>我的优惠券（统一入口）</h3>
       <ul class="spec-plain">
         <li>路径：我 ＞ 我的优惠券。<strong>已确认</strong>：优惠券／免费投注／免费旋转／道具卡这四种一番赏奖品，全都进<strong>同一个</strong>「我的优惠券」页面（未使用／待结算／已使用／已过期四个分页签＋卡片列表），<strong>不是</strong>四个各自独立的入口</li>
         <li>每张券都标着获得日期／失效日期，可以点「立即使用」；这里的记录跟「兑换记录」（见第 1 节）是并存的，不是互相取代</li>
@@ -2942,14 +3020,6 @@ tr:hover td { background: #fafcff; }
 </div></div>
 
 <div class="spec-view" id="mergeView9"><div class="spec-view-inner">
-  <style>
-    /* QA 验收事项：表格栏位多、内容长，字级维持在 15px，避免跟全文一起放大后内容被挤出栏位 */
-    #mergeView9 .spec-table-wrap table{font-size:15px !important;}
-    #mergeView9 .spec-table-wrap th{font-size:15px !important;}
-    #mergeView9 .spec-table-wrap td{font-size:15px !important;line-height:1.6 !important;}
-    #mergeView9 .spec-field{font-size:15px !important;}
-    #mergeView9 p.spec-lead, #mergeView9 p.spec-sub{font-size:15px !important;}
-  </style>
   <div class="spec-h1">QA＿验收事项</div>
   <p class="spec-sub">本页汇整所有测试情境与边界条件清单，依<strong>前台／后台</strong>分区，只放测试案例本身，不重复规格规则原文（规则请回「前台＿积分商城」等各分页查看）；「情境编号」方便日后在 bug 单／测试报告里互相引用。</p>
 
@@ -3000,7 +3070,7 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">A-7</td><td>商品配置｜表单中存在必填字段留空（如奖品图片未上传）</td><td>点击「确定」</td><td>该字段边框变红，页面自动卷动＋聚焦到第一个未填字段，中断送出，不会跳出「验证通过」提示</td></tr>
         <tr><td class="spec-field">A-8</td><td>商品配置｜检视 LAST 奖级</td><td>尝试编辑数量／寻找删除按钮</td><td>数量固定为 1 且栏位反灰不可编辑；没有删除按钮，不可删除</td></tr>
         <tr><td class="spec-field">A-9</td><td>商品配置｜商品类型（单选）勾「Ichiban Kuji」，但商品类别（多选）<strong>未</strong>勾选「Ichiban Kuji」</td><td>送出后至各记录页查看</td><td>系统仍判定该商品为一番赏（各记录页活动名称显示商品名称、抽奖记录可查到该笔），因为判断依据是「商品类型」单选栏位，与「商品类别」多选栏位无关</td></tr>
-        <tr><td class="spec-field">A-10</td><td>用户积分纪录｜一笔一番赏购买产生的扣分纪录</td><td>查看该笔纪录</td><td>「原因」栏位＝该次购买的商品名称；「备注」栏位＝本次中出奖品清单（格式「{奖级} {奖品类型}{数值}」）；「操作人」显示 SYSTEM</td></tr>
+        <tr><td class="spec-field">A-10</td><td>用户积分纪录｜一笔一番赏购买产生的扣分纪录</td><td>查看该笔纪录</td><td>「原因」栏位格式「Redeem {商品名称}」（例：「Redeem 苹果 Ichiban Kuji」）；「备注」栏位＝本次中出奖品清单（格式「{奖级} {英文奖品类型} {数值}」，例：「B Tier E-Credit 500.00，E Tier Free Spins ×20」）；「操作人」显示 SYSTEM</td></tr>
         <tr><td class="spec-field">A-11</td><td>用户积分纪录｜一笔非一番赏（一般积分商城商品）购买产生的纪录</td><td>查看该笔纪录</td><td>不套用一番赏专属的备注格式，「活动名称」显示「–」</td></tr>
         <tr><td class="spec-field">A-12</td><td>商品兑换纪录｜玩家以「全包」购买并触发 LAST</td><td>查看该笔订单的「奖品」栏位</td><td>应列出该商品全部中出奖级（含 LAST），重复品项自动合并显示为「×N」</td></tr>
         <tr><td class="spec-field">A-13</td><td>商品兑换纪录｜「奖品」栏位内容较长（中出多种奖品）</td><td>查看列表呈现</td><td>栏位内文字自动换行，不出现横向卷动条，不挤压文字异常换行</td></tr>
@@ -3014,6 +3084,328 @@ tr:hover td { background: #fafcff; }
       </tbody>
     </table>
   </div>
+</div></div>
+
+<div class="spec-view" id="mergeView10"><div class="spec-view-inner" style="max-width:1100px;">
+  <div class="spec-h1">調整紀錄</div>
+  <p class="spec-sub">彙整全文所有 <span class="spec-adj" style="font-size:12px;padding:2px 7px;">紅字調整</span> 條目，方便 RD／QA 快速確認改動範圍。詳細規則請回各分頁查看原始說明。</p>
+
+  <style>
+    #mergeView10 .cl-section { margin: 32px 0 0; }
+    #mergeView10 .cl-section-hd {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 700; letter-spacing: 1.5px;
+      color: #fff; padding: 8px 18px; border-radius: 6px; margin-bottom: 12px;
+    }
+    #mergeView10 .cl-section-hd.front { background: #1677ff; }
+    #mergeView10 .cl-section-hd.back  { background: #389e0d; }
+    #mergeView10 .cl-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    #mergeView10 .cl-table th {
+      background: #f0f2f5; text-align: left; padding: 8px 14px;
+      font-weight: 600; border: 1px solid #dde1e8; color: #444; font-size: 12.5px; letter-spacing: .5px;
+    }
+    #mergeView10 .cl-table td { padding: 10px 14px; border: 1px solid #dde1e8; vertical-align: top; line-height: 1.65; }
+    #mergeView10 .cl-table tr:hover td { background: #fafbfc; }
+    #mergeView10 .cl-date {
+      display: inline-block; background: #fff2f0; color: #cf1322;
+      border: 1px solid #ffccc7; border-radius: 4px;
+      font-size: 12px; font-weight: 700; padding: 1px 8px; white-space: nowrap;
+    }
+    #mergeView10 .cl-loc { color: #888; font-size: 12px; margin-top: 2px; }
+    #mergeView10 .cl-what { color: #1c2a44; }
+    #mergeView10 .cl-what b { color: #000; }
+  </style>
+
+  <!-- ── 前台 ── -->
+  <div class="cl-section">
+    <div class="cl-section-hd front">前台（H5 玩家端）</div>
+    <table class="cl-table">
+      <thead><tr><th style="width:72px;">日期</th><th style="width:220px;">位置</th><th>調整內容</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="cl-date">8/6</span></td>
+          <td><div class="cl-loc">前台＿積分商城</div>開獎結果彈窗 › 標題</td>
+          <td class="cl-what">彈窗標題動詞由「<b>Draws</b>」改為「<b>Draw</b>」（去掉複數 s）；張數為 1 時顯示單數「<b>Draw 1 Ticket</b>」，2 張以上顯示複數「<b>Draw N Tickets</b>」。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/6</span></td>
+          <td><div class="cl-loc">前台＿積分商城</div>開獎結果彈窗 › 標題＋匯總列表</td>
+          <td class="cl-what">彈窗內所有<b>數值一律加千分位逗號</b>（如「1,200」、「10,000」），包含標題張數及匯總列表中的奖品數量。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/6</span></td>
+          <td><div class="cl-loc">前台＿積分商城</div>張數選項按鈕</td>
+          <td class="cl-what">庫存不足時，<b>張數選項按鈕自動反灰停用</b>：剩餘 &lt;5 張時「五連」反灰、剩餘 &lt;10 張時「十連」反灰（兩者各自獨立判斷）；全部售罄時四個按鈕全部反灰。反灰後點擊無反應。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/6</span></td>
+          <td><div class="cl-loc">前台＿積分商城</div>開獎結果彈窗 › 標題</td>
+          <td class="cl-what">標題張數<b>只計一般奖级（S～H Tier），LAST 不計入</b>。LAST 本身不占用券數額度，例如單張抽到 F Tier + LAST，標題顯示「Draw 1 Ticket」，不是「Draw 2 Tickets」。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/6</span></td>
+          <td><div class="cl-loc">前台＿積分商城</div>開獎結果彈窗 › 匯總列表模式</td>
+          <td class="cl-what">LAST 那一行<b>不顯示「×1」</b>。LAST 永遠只有 1 張且不占用券數額度，只顯示徽章＋獎品名稱，不加數量標注。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/6</span></td>
+          <td><div class="cl-loc">前台＿積分商城 › 一番賞</div>奖品一览 › 奖级卡片</td>
+          <td class="cl-what">
+            <b>奖品一览卡片</b>：彩金／積分的名稱行格式改為「<b>小 icon＋數值</b>」——彩金顯示 ₱ 小色塊＋「5,000.00」，積分顯示 ★ 小色塊＋「1,000」；移除原本的英文標籤文字（「E-Credit」「Points」不再顯示於名稱行）；圖片區的大型 ₱／★ 佔位 icon 保留不變；其餘獎勵類型配置照舊。<br>
+            <b>開獎結果彈窗（逐張／匯總）</b>：彩金／積分卡片<b>不顯示任何 icon</b>，僅顯示數值（名稱行）＋英文類型標籤（類型行），兩行分開展示。<br>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/5</span></td>
+          <td><div class="cl-loc">前台＿積分商城</div>開獎結果彈窗 › 逐張揭曉模式</td>
+          <td class="cl-what">動畫播放中<b>允許提前點「收下」關閉彈窗</b>。玩家無需等全部卡片翻完，隨時可點「收下」；剩餘未揭曉的卡片在關閉前瞬間切換為已揭曉狀態，不補播動畫。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/5</span></td>
+          <td><div class="cl-loc">前台＿其他頁面</div>兌換記錄 › 列表頁欄位</td>
+          <td class="cl-what">每筆記錄改為顯示<b>商品奖励圖片＋商品奖励名稱</b>（積分→「Points N」、彩金→「E-Credit N.00」、券類→主檔名稱、實物→獎品名稱），非活動名稱。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/5</span></td>
+          <td><div class="cl-loc">前台＿其他頁面</div>兌換記錄 › 訂單詳情頁</td>
+          <td class="cl-what">「商品名稱」欄顯示<b>整個活動的名稱</b>（即商品配置的「商品名稱」，如「苹果 Ichiban Kuji」），而非這筆獎品本身的名稱——與列表頁規則相反，兩處不同。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/4</span></td>
+          <td><div class="cl-loc">前台＿其他頁面</div>兌換記錄 › 商品類型篩選列</td>
+          <td class="cl-what">篩選列中各「商品類型」選項<b>一律顯示英文，所有語系共用</b>，不隨玩家切換語言而改變（後台英語語系亦同）。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">7/27</span></td>
+          <td><div class="cl-loc">前台＿積分商城 › 一番賞</div>奖品一览 › 奖级卡片 › 售罄狀態</td>
+          <td class="cl-what">售罄呈現改為<b>兩件事同時出現</b>：① 整張卡片 CSS 去彩度遮罩；② 奖品圖片區正中央叠加「Sold Out」深色圓角徽章。缺一不可，不能只做其中一項。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">7/21</span></td>
+          <td><div class="cl-loc">前台＿積分商城</div>頂部庫存進度條</td>
+          <td class="cl-what">紅色填滿方向修正：隨<b>「已抽出張數」增加而變多</b>（非隨剩餘減少而變多）。全部未抽→紅色 0%；抽完一半→紅色 50%；全部抽完→紅色 100%。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 後台 ── -->
+  <div class="cl-section">
+    <div class="cl-section-hd back">後台（Admin 運營端）</div>
+    <table class="cl-table">
+      <thead><tr><th style="width:72px;">日期</th><th style="width:220px;">位置</th><th>調整內容</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="cl-date">8/6</span></td>
+          <td><div class="cl-loc">後台＿用戶積分紀錄</div>積分歷史 › 原因欄位</td>
+          <td class="cl-what">確認「原因」欄位的顯示格式為<b>「Redeem {商品名稱}」</b>（例：「Redeem 苹果 Ichiban Kuji」），並非單純顯示商品名稱，前綴「Redeem」為系統固定文案。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/6</span></td>
+          <td><div class="cl-loc">後台＿提現管理</div>即時流水稽核查詢（補漏新增）</td>
+          <td class="cl-what">原規格未盤點此頁面，本次補充說明。一番賞購買在此頁的欄位對應：<b>類別名稱＝積分兌換</b>；<b>充值類型＝該活動的商品名稱</b>（如「蘋果一番賞」，取自商品配置的商品名稱欄位）；其餘欄位沿用既有系統規則，不新增功能。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/6</span></td>
+          <td><div class="cl-loc">後台＿商品配置</div>頂部圖 › 建議尺寸</td>
+          <td class="cl-what">新增頂部圖建議尺寸標注（原標注「尺寸待定」）：<b>PC 端 2800×1200px、H5 端 780×400px</b>。尺寸提示顯示於上傳框右上角灰色文字，與輸入框左側的「PC 端」「H5 端」標籤同排對齊。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/6</span></td>
+          <td><div class="cl-loc">後台＿全域各記錄頁</div>備注／奖品欄位 › 奖品清單格式</td>
+          <td class="cl-what">各記錄頁「備注」／「奖品」欄位中的奖品類型名稱改為<b>英文</b>，格式由「B Tier 彩金 500.00」改為「<b>B Tier E-Credit 500.00</b>」；免費旋轉如「E Tier Free Spins ×20」；其餘類型同理，對照表與前台標籤一致（見名詞定義頁「奖品清單格式」）。涵蓋範圍：後台＿商品兌換紀錄 › 奖品欄位、後台＿用戶積分紀錄 › 備注欄位，格式不變（{奖级} {英文類型} {數值}），僅類型名稱改英文。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">8/5</span></td>
+          <td><div class="cl-loc">後台＿商品配置</div>奖级配置 › 奖励類型標籤</td>
+          <td class="cl-what">確認後台配置類型與前台卡片標籤的對應關係：<b>標籤一律英文</b>（彩金→E-Credit、積分→Points、优惠券→Coupon、免費旋轉→Free Spins、免費投注→Free Bet、道具卡→Feature Card、實物→Physical Item）。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">7/23</span></td>
+          <td><div class="cl-loc">後台＿商品兌換紀錄</div>Ichiban Kuji 抽奖记录 › 詳情頁</td>
+          <td class="cl-what">新增「<b>商品奖励</b>」欄位，僅在商品類型＝Ichiban Kuji 的紀錄中顯示，非 Ichiban Kuji 商品留空。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">7/23</span></td>
+          <td><div class="cl-loc">後台＿商品兌換紀錄</div>Ichiban Kuji 抽奖记录 › 詳情頁</td>
+          <td class="cl-what">「收貨信息」欄：非實物商品<b>改為留空</b>，原規範寫「–」已修正。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">7/21</span></td>
+          <td><div class="cl-loc">後台＿商品兌換紀錄</div>篩選欄位</td>
+          <td class="cl-what">新增三個篩選項：<b>「商品類型」</b>下拉（含新選項 Ichiban Kuji）、<b>「商品名稱」</b>下拉（商品類型選 Ichiban Kuji 時才出現）、<b>「商品奖励」</b>下拉（同上）。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">7/21</span></td>
+          <td><div class="cl-loc">後台＿商品兌換紀錄</div>篩選欄位 › 全部奖品</td>
+          <td class="cl-what">「全部奖品」篩選補上<b>「实物」「优惠券」</b>兩個選項（原本缺漏，導致這兩類奖品的紀錄無法被單獨篩選出來）。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">7/21</span></td>
+          <td><div class="cl-loc">後台＿商品兌換紀錄</div>頁面位置</td>
+          <td class="cl-what">頁面路徑調整至<b>積分商城二層</b>；詳細位置見該分頁說明。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">7/21</span></td>
+          <td><div class="cl-loc">後台＿用戶積分紀錄</div>積分歷史 › 篩選欄位</td>
+          <td class="cl-what">原「積分兌換商品」下拉改按<b>「交易類型」</b>篩選（選「積分兌換商品」可查出全部一番賞的扣分紀錄），不再按商品名稱篩選。</td>
+        </tr>
+        <tr>
+          <td><span class="cl-date">7/17</span></td>
+          <td><div class="cl-loc">後台＿商品配置</div>商品設置 › 單個會員限購數</td>
+          <td class="cl-what">Ichiban Kuji 機制不適用限購，<b>此欄位後台鎖定（反灰不可編輯）</b>。原「依 VIP0～VIP10 分別設置」規則對此商品類型無效。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div></div>
+
+<div class="spec-view" id="mergeView11"><div class="spec-view-inner">
+  <div class="spec-h1">后台＿提現管理 › 即時流水稽核查詢</div>
+  <p class="spec-sub">路徑：後台 ＞ 提現管理 ＞ 即時流水稽核查詢。此頁為全站既有系統，用於審核玩家提現前的流水（打碼量）達標狀況；本章節僅說明一番賞購買產生的紀錄在此頁的呈現方式，不重複說明整個頁面的完整規格。</p>
+
+  <!-- ── UI 示意圖 ── -->
+  <div style="border:1px solid #e0e4ea;border-radius:8px;overflow:hidden;margin:20px 0 28px;background:#fff;font-size:13px;max-width:1000px;">
+    <!-- breadcrumb -->
+    <div style="padding:9px 16px;border-bottom:1px solid #e0e4ea;color:#888;font-size:12px;">位置 &gt; 即時流水稽核查詢</div>
+    <!-- tabs -->
+    <div style="display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid #e0e4ea;background:#f9fafb;">
+      <span style="background:#1677ff;color:#fff;padding:4px 12px;border-radius:4px;font-size:12px;">即時流水稽核查詢 ×</span>
+      <span style="background:#f0f0f0;color:#555;padding:4px 12px;border-radius:4px;font-size:12px;">活動列表 ×</span>
+    </div>
+    <!-- search -->
+    <div style="padding:12px 16px;border-bottom:1px solid #e0e4ea;display:flex;align-items:center;gap:8px;">
+      <span style="display:inline-block;padding:5px 10px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px;color:#333;background:#fff;min-width:140px;">vivian01</span>
+      <span style="background:#1677ff;color:#fff;padding:5px 14px;border-radius:4px;font-size:13px;">🔍 搜索</span>
+    </div>
+    <!-- table -->
+    <div style="padding:12px 16px 0;">
+      <div style="font-size:13px;color:#333;margin-bottom:10px;font-weight:500;">当前查询账号：vivian01</div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+          <thead>
+            <tr style="background:#fafafa;color:#555;text-align:center;">
+              <th style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;">創建時間</th>
+              <th style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;">類別名稱</th>
+              <th style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;">充值類型</th>
+              <th style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;">金額</th>
+              <th style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;">要求打碼量</th>
+              <th style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;">已完成打碼量</th>
+              <th style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;">狀態</th>
+              <th style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;">扣除金額</th>
+              <th style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;color:#555;">2026-08-06 12:30:00</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">
+                積分兌換<br><span style="color:#d4380d;font-size:11px;">← 類別名稱固定</span>
+              </td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;">
+                蘋果 Ichiban Kuji<br><span style="color:#d4380d;font-size:11px;">← 取自商品名稱</span>
+              </td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">500</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">1,000</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">250</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;color:#f5222d;">不通過</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">750</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;white-space:nowrap;">
+                <span style="background:#1677ff;color:#fff;padding:3px 10px;border-radius:3px;font-size:12px;margin-right:4px;">編輯</span>
+                <span style="background:#ff4d4f;color:#fff;padding:3px 10px;border-radius:3px;font-size:12px;">通過</span>
+              </td>
+            </tr>
+            <tr style="background:#fafafa;">
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;color:#555;">2026-08-06 10:15:22</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">積分兌換</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;">樂高 Ichiban Kuji</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">300</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">600</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">600</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;color:#52c41a;">通過</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">–</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;white-space:nowrap;">
+                <span style="background:#1677ff;color:#fff;padding:3px 10px;border-radius:3px;font-size:12px;margin-right:4px;">編輯</span>
+                <span style="background:#ff4d4f;color:#fff;padding:3px 10px;border-radius:3px;font-size:12px;">通過</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;white-space:nowrap;color:#555;">2026-07-25 09:44:11</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">積分兌換</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;">Blind Box</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">100</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">200</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">0</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;color:#f5222d;">不通過</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;">100</td>
+              <td style="padding:8px 10px;border:1px solid #e0e4ea;text-align:center;white-space:nowrap;">
+                <span style="background:#1677ff;color:#fff;padding:3px 10px;border-radius:3px;font-size:12px;margin-right:4px;">編輯</span>
+                <span style="background:#ff4d4f;color:#fff;padding:3px 10px;border-radius:3px;font-size:12px;">通過</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="padding:8px 16px 10px;text-align:right;font-size:11px;color:#bbb;">示意圖，數據僅供參考</div>
+  </div>
+
+  <h3>一番賞購買在此頁的欄位對應</h3>
+  <p class="spec-lead">玩家以積分購買一番賞後，若該筆積分來源涉及打碼量要求（如彩金轉積分），系統會在此頁產生對應的流水稽核紀錄。紀錄的欄位對應規則如下：</p>
+
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th style="width:160px;">欄位</th><th>一番賞的對應值</th><th>說明</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="spec-field">類別名稱</td>
+          <td><strong>積分兌換</strong></td>
+          <td>一番賞屬積分商城商品，來源統一歸類為「積分兌換」，與盲盒等其他積分商城商品分類相同</td>
+        </tr>
+        <tr>
+          <td class="spec-field">充值類型</td>
+          <td><strong>該一番賞活動的商品名稱</strong><br><span style="font-size:12px;color:#888;">例：蘋果一番賞、樂高一番賞</span></td>
+          <td>取自「商品配置」中該商品的「商品名稱」欄位（即整個活動的名稱），用於區分同一「積分兌換」類別下的不同一番賞活動；原有商品類型（如盲盒）在此欄顯示對應商品名稱，一番賞比照同一規則</td>
+        </tr>
+        <tr>
+          <td class="spec-field">金額</td>
+          <td>本次購買實際扣除的積分數（換算後的流水基數）</td>
+          <td>依既有系統規則計算，一番賞不另外定義</td>
+        </tr>
+        <tr>
+          <td class="spec-field">要求打碼量</td>
+          <td>依積分來源的彩金流水倍數自動計算</td>
+          <td>依既有系統規則計算</td>
+        </tr>
+        <tr>
+          <td class="spec-field">已完成打碼量</td>
+          <td>玩家截至查詢當下的累計打碼量</td>
+          <td>依既有系統規則計算</td>
+        </tr>
+        <tr>
+          <td class="spec-field">狀態</td>
+          <td>不通過 / 通過（依既有系統判定）</td>
+          <td>一番賞不新增狀態值，沿用現有狀態定義</td>
+        </tr>
+        <tr>
+          <td class="spec-field">扣除金額</td>
+          <td>流水未達標時的應扣金額</td>
+          <td>依既有系統規則計算</td>
+        </tr>
+        <tr>
+          <td class="spec-field">操作</td>
+          <td>編輯 ／ 通過（按鈕，依既有系統）</td>
+          <td>一番賞不新增操作類型，沿用現有按鈕邏輯</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="spec-rule-box" style="margin-top:20px;max-width:860px;">
+    <p>此頁面為既有後台系統，<strong>不需要新增頁面或改動現有功能</strong>——唯一需要確認的是「充值類型」欄的取值來源：當商品類型為 Ichiban Kuji 時，此欄取該筆商品配置的<strong>商品名稱</strong>（例：「蘋果一番賞」），而非固定寫死的文字，也不是商品類型本身（「Ichiban Kuji」），與盲盒等既有商品的處理邏輯一致。</p>
+  </div>
+
 </div></div>
 
 <script>
@@ -3326,20 +3718,24 @@ function submitForm() {
 
 /**
  * formatPrizeLabel(tier, prizeType, prize)
- * 输出格式：{奖级} {类型}{金额.00} 或 {奖级} {类型}×{数量}
- * 例：B Tier 彩金500.00 / LAST 彩金5000.00 / E Tier 免费旋转×20
+ * 输出格式：{奖级} {英文类型} {金额.00 或 整数 或 ×数量}
+ * 例：B Tier E-Credit 500.00 / F Tier Points 1000 / E Tier Free Spins ×20
  */
 function formatPrizeLabel(tier, prizeType, prize) {
   let val;
-  if (prizeType === '彩金' || prizeType === '积分') {
+  if (prizeType === 'E-Credit') {
     const m = prize.match(/[\d,]+(?:\.\d+)?/);
     const num = m ? parseFloat(m[0].replace(/,/g, '')) : 0;
-    val = prizeType + (prizeType === '彩金' ? num.toFixed(2) : num);
+    val = prizeType + ' ' + num.toFixed(2);
+  } else if (prizeType === 'Points') {
+    const m = prize.match(/[\d,]+/);
+    const num = m ? parseInt(m[0].replace(/,/g, '')) : 0;
+    val = prizeType + ' ' + num;
   } else {
     const m = prize.match(/×\s*(\d+)/);
-    val = prizeType + (m ? '×' + m[1] : '');
+    val = prizeType + (m ? ' ×' + m[1] : '');
   }
-  return tier + ' ' + val; // 奖级名称原样输出，不做任何大小写或字尾转换
+  return tier + ' ' + val;
 }
 
 /**
@@ -3393,16 +3789,16 @@ function buildPageNums(cur, total) {
 
 /*
   备注栏显示规则：
-  - 原因列：商品名称（如"苹果 Ichiban Kuji"）
-  - 备注列：奖品列表，格式 {TIER大写} {类型}{值}，多个用逗号分隔
-    彩金/积分  → B Tier 彩金500.00
-    数量类     → E Tier 免费旋转×20
+  - 原因列：格式「Redeem {商品名称}」（如"Redeem 苹果 Ichiban Kuji"）
+  - 备注列：奖品列表，格式 {TIER} {英文类型} {值}，多个用逗号分隔
+    彩金/积分  → B Tier E-Credit 500.00 / F Tier Points 1000
+    数量类     → E Tier Free Spins ×20
 */
 const P2_RECORDS = [
   {
     member: 'xnjobe3', time: '2026-06-16 09:53', points: -366, total: 481150,
     operator: 'SYSTEM',
-    reason: '苹果 Ichiban Kuji',
+    reason: 'Redeem 苹果 Ichiban Kuji',
     prizes: [
       { tier: 'A Tier', prizeType: '免费旋转', prize: '免费旋转 × 20' },
       { tier: 'C Tier', prizeType: '道具卡',     prize: '道具卡 × 3'       },
@@ -3412,7 +3808,7 @@ const P2_RECORDS = [
   {
     member: 'vivian01', time: '2026-06-15 17:22', points: -500, total: 316140,
     operator: 'SYSTEM',
-    reason: '节日特别版 Ichiban Kuji',
+    reason: 'Redeem 节日特别版 Ichiban Kuji',
     prizes: [
       { tier: 'B Tier',    prizeType: '彩金',       prize: '彩金 50（1x Turnover）' },
       { tier: 'C Tier',    prizeType: '积分',       prize: '积分 50'                },
@@ -3424,7 +3820,7 @@ const P2_RECORDS = [
   {
     member: 'vivian01', time: '2026-06-15 17:21', points: -1, total: 316640,
     operator: 'SYSTEM',
-    reason: '盲盒美术图测试2',
+    reason: 'Redeem 盲盒美术图测试2',
     prizes: [
       { tier: 'C Tier', prizeType: '积分', prize: '积分 50' },
     ]
@@ -3493,85 +3889,85 @@ p2RenderTable();
 */
 const RECORDS = [
   { order:'PR605996359563974932', member:'okbet9994fg5vz', time:'2026-06-12 16:45', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'all', points:80, prizes:[
-    { tier:'A Tier',    prizeType:'彩金',       prize:'彩金 Cash 100（1x Turnover）' },
-    { tier:'B Tier',    prizeType:'免费旋转', prize:'免费旋转 × 10'               },
-    { tier:'C Tier',    prizeType:'积分',       prize:'积分 50'                       },
-    { tier:'C Tier',    prizeType:'积分',       prize:'积分 50'                       },
-    { tier:'D Tier',    prizeType:'道具卡',     prize:'道具卡 × 2'                     },
-    { tier:'LAST', prizeType:'彩金',       prize:'彩金 Cash 100（1x Turnover）' },
+    { tier:'A Tier',    prizeType:'E-Credit',       prize:'彩金 Cash 100（1x Turnover）' },
+    { tier:'B Tier',    prizeType:'Free Spins', prize:'免费旋转 × 10'               },
+    { tier:'C Tier',    prizeType:'Points',       prize:'积分 50'                       },
+    { tier:'C Tier',    prizeType:'Points',       prize:'积分 50'                       },
+    { tier:'D Tier',    prizeType:'Feature Card',     prize:'道具卡 × 2'                     },
+    { tier:'LAST', prizeType:'E-Credit',       prize:'彩金 Cash 100（1x Turnover）' },
   ]},
   { order:'PR605840546270849300', member:'okbet04597i9j3', time:'2026-06-11 20:05', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'5',   points:25,   prizes:[
-    { tier:'A Tier', prizeType:'彩金', prize:'彩金 Cash 100（1x Turnover）' },
+    { tier:'A Tier', prizeType:'E-Credit', prize:'彩金 Cash 100（1x Turnover）' },
   ]},
   { order:'PR605830768509364500', member:'vivian01',       time:'2026-06-11 18:27', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'1',   points:50, prizes:[
-    { tier:'B Tier', prizeType:'彩金', prize:'彩金 50（1x Turnover）' },
+    { tier:'B Tier', prizeType:'E-Credit', prize:'彩金 50（1x Turnover）' },
   ]},
   { order:'PR605830753728637204', member:'vivian01',       time:'2026-06-11 18:27', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'1',   points:50, prizes:[
-    { tier:'C Tier', prizeType:'积分', prize:'积分 50' },
+    { tier:'C Tier', prizeType:'Points', prize:'积分 50' },
   ]},
   { order:'PR605830739937765652', member:'vivian01',       time:'2026-06-11 18:27', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'1',   points:50, prizes:[
-    { tier:'D Tier', prizeType:'积分', prize:'积分 20' },
+    { tier:'D Tier', prizeType:'Points', prize:'积分 20' },
   ]},
   { order:'PR605828198642526484', member:'vivian01',       time:'2026-06-11 18:02', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
-    { tier:'A Tier', prizeType:'彩金', prize:'彩金 ₱80（2x Turnover）' },
+    { tier:'A Tier', prizeType:'E-Credit', prize:'彩金 ₱80（2x Turnover）' },
   ]},
   { order:'PR605828170022658391', member:'vivian01',       time:'2026-06-11 18:05', coin:'PHP', product:'高价值VIP专属赏',         qty:'10',  points:950, prizes:[
-    { tier:'B Tier', prizeType:'彩金', prize:'彩金 ₱50（1x Turnover）' },
-    { tier:'D Tier', prizeType:'积分', prize:'积分 20' },
+    { tier:'B Tier', prizeType:'E-Credit', prize:'彩金 ₱50（1x Turnover）' },
+    { tier:'D Tier', prizeType:'Points', prize:'积分 20' },
   ]},
   { order:'PR605828183543032084', member:'vivian01',       time:'2026-06-11 18:02', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
-    { tier:'E Tier', prizeType:'免费旋转', prize:'免费旋转 × 20' },
+    { tier:'E Tier', prizeType:'Free Spins', prize:'免费旋转 × 20' },
   ]},
   { order:'PR605820423443097876', member:'vivian01',       time:'2026-06-11 16:45', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'1',   points:5,   prizes:[
-    { tier:'B Tier', prizeType:'免费旋转', prize:'免费旋转 × 10' },
+    { tier:'B Tier', prizeType:'Free Spins', prize:'免费旋转 × 10' },
   ]},
   { order:'PR605817703537617172', member:'vivian01',       time:'2026-06-11 16:18', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'1',   points:5,   prizes:[
-    { tier:'C Tier', prizeType:'免费投注', prize:'免费投注 × 5' },
+    { tier:'C Tier', prizeType:'Free Bet', prize:'免费投注 × 5' },
   ]},
   { order:'PR605817154788436244', member:'vivian01',       time:'2026-06-11 16:12', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'all', points:500, prizes:[
-    { tier:'B Tier',    prizeType:'彩金',       prize:'彩金 50（1x Turnover）' },
-    { tier:'C Tier',    prizeType:'积分',       prize:'积分 50'                 },
-    { tier:'D Tier',    prizeType:'积分',       prize:'积分 20'                 },
-    { tier:'E Tier',    prizeType:'免费旋转', prize:'免费旋转 × 10'          },
-    { tier:'LAST', prizeType:'道具卡',     prize:'道具卡 × 3'               },
+    { tier:'B Tier',    prizeType:'E-Credit',       prize:'彩金 50（1x Turnover）' },
+    { tier:'C Tier',    prizeType:'Points',       prize:'积分 50'                 },
+    { tier:'D Tier',    prizeType:'Points',       prize:'积分 20'                 },
+    { tier:'E Tier',    prizeType:'Free Spins', prize:'免费旋转 × 10'          },
+    { tier:'LAST', prizeType:'Feature Card',     prize:'道具卡 × 3'               },
   ]},
   { order:'PR605800234891723001', member:'player_tom88',   time:'2026-06-11 14:30', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
-    { tier:'A Tier', prizeType:'彩金', prize:'彩金 50（2x Turnover）' },
+    { tier:'A Tier', prizeType:'E-Credit', prize:'彩金 50（2x Turnover）' },
   ]},
   { order:'PR605799812345678900', member:'player_tom88',   time:'2026-06-11 14:28', coin:'PHP', product:'高价值VIP专属赏',         qty:'5',   points:500, prizes:[
-    { tier:'F Tier', prizeType:'免费旋转', prize:'免费旋转 × 10' },
+    { tier:'F Tier', prizeType:'Free Spins', prize:'免费旋转 × 10' },
   ]},
   { order:'PR605780001122334455', member:'alice_vip3',     time:'2026-06-11 10:05', coin:'PHP', product:'入门款 Ichiban Kuji',     qty:'1',   points:10,  prizes:[
-    { tier:'D Tier', prizeType:'积分', prize:'积分 20' },
+    { tier:'D Tier', prizeType:'Points', prize:'积分 20' },
   ]},
   { order:'PR605770099887766554', member:'alice_vip3',     time:'2026-06-10 22:40', coin:'PHP', product:'入门款 Ichiban Kuji',     qty:'all', points:80,  prizes:[
-    { tier:'A Tier',    prizeType:'积分',       prize:'积分 20'           },
-    { tier:'B Tier',    prizeType:'道具卡',     prize:'道具卡 × 1'          },
-    { tier:'C Tier',    prizeType:'积分',       prize:'积分 100'            },
-    { tier:'C Tier',    prizeType:'积分',       prize:'积分 100'            },
-    { tier:'LAST', prizeType:'免费旋转', prize:'免费旋转 × 20'     },
+    { tier:'A Tier',    prizeType:'Points',       prize:'积分 20'           },
+    { tier:'B Tier',    prizeType:'Feature Card',     prize:'道具卡 × 1'          },
+    { tier:'C Tier',    prizeType:'Points',       prize:'积分 100'            },
+    { tier:'C Tier',    prizeType:'Points',       prize:'积分 100'            },
+    { tier:'LAST', prizeType:'Free Spins', prize:'免费旋转 × 20'     },
   ]},
   { order:'PR605760123456789012', member:'jay_pm',         time:'2026-06-10 18:15', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'5',   points:25, prizes:[
-    { tier:'G Tier', prizeType:'道具卡', prize:'道具卡 × 2' },
+    { tier:'G Tier', prizeType:'Feature Card', prize:'道具卡 × 2' },
   ]},
   { order:'PR605750987654321098', member:'jay_pm',         time:'2026-06-10 15:00', coin:'PHP', product:'苹果 Ichiban Kuji',       qty:'1',   points:5, prizes:[
-    { tier:'A Tier', prizeType:'彩金', prize:'彩金 ₱30（3x）' },
+    { tier:'A Tier', prizeType:'E-Credit', prize:'彩金 ₱30（3x）' },
   ]},
   { order:'PR605740112233445566', member:'user_beta01',    time:'2026-06-10 11:22', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'1',   points:50, prizes:[
-    { tier:'B Tier', prizeType:'免费投注', prize:'免费投注 × 8' },
+    { tier:'B Tier', prizeType:'Free Bet', prize:'免费投注 × 8' },
   ]},
   { order:'PR605730223344556677', member:'user_beta01',    time:'2026-06-09 20:10', coin:'PHP', product:'节日特别版 Ichiban Kuji', qty:'5',   points:250, prizes:[
-    { tier:'E Tier', prizeType:'免费旋转', prize:'免费旋转 × 30' },
+    { tier:'E Tier', prizeType:'Free Spins', prize:'免费旋转 × 30' },
   ]},
   { order:'PR605720334455667788', member:'olivia_admin',   time:'2026-06-09 14:33', coin:'PHP', product:'高价值VIP专属赏',         qty:'1',   points:100, prizes:[
-    { tier:'C Tier', prizeType:'道具卡', prize:'道具卡 × 5' },
+    { tier:'C Tier', prizeType:'Feature Card', prize:'道具卡 × 5' },
   ]},
   { order:'PR605710445566778899', member:'olivia_admin',   time:'2026-06-08 09:00', coin:'PHP', product:'高价值VIP专属赏',         qty:'all', points:800, prizes:[
-    { tier:'A Tier',    prizeType:'彩金',   prize:'彩金 ₱80（2x Turnover）'   },
-    { tier:'B Tier',    prizeType:'免费旋转', prize:'免费旋转 × 20'                  },
-    { tier:'C Tier',    prizeType:'道具卡', prize:'道具卡 × 5'                   },
-    { tier:'D Tier',    prizeType:'积分',   prize:'积分 99'                     },
-    { tier:'LAST', prizeType:'彩金',   prize:'彩金 ₱99（3x Turnover）'  },
+    { tier:'A Tier',    prizeType:'E-Credit',   prize:'彩金 ₱80（2x Turnover）'   },
+    { tier:'B Tier',    prizeType:'Free Spins', prize:'免费旋转 × 20'                  },
+    { tier:'C Tier',    prizeType:'Feature Card', prize:'道具卡 × 5'                   },
+    { tier:'D Tier',    prizeType:'Points',   prize:'积分 99'                     },
+    { tier:'LAST', prizeType:'E-Credit',   prize:'彩金 ₱99（3x Turnover）'  },
   ]},
 ];
 
@@ -3981,7 +4377,7 @@ p4SendSearch();
 
 <script>
 function mergeGo(n) {
-  for (let i = 0; i <= 9; i++) {
+  for (let i = 0; i <= 11; i++) {
     const el = document.getElementById('mergeView' + i);
     if (el) el.classList.toggle('active', i === n);
   }
