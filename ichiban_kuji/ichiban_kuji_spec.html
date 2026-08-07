@@ -836,7 +836,7 @@ tr:hover td { background: #fafcff; }
       <!-- 顶部图配置 -->
       <div style="margin-top:16px;">
         <div class="banner-field-row">
-          <div class="banner-field-label"><span class="req">*</span>顶部图：</div>
+          <div class="banner-field-label">顶部图：</div>
           <div style="flex:1;">
             <div class="banner-panels">
               <!-- PC 端 -->
@@ -894,7 +894,7 @@ tr:hover td { background: #fafcff; }
       <!-- 规则弹窗图配置 -->
       <div style="margin-top:16px;">
         <div class="banner-field-row">
-          <div class="banner-field-label"><span class="req">*</span>规则弹窗图：</div>
+          <div class="banner-field-label">规则弹窗图：</div>
           <div style="flex:1;">
             <div class="banner-panels">
               <!-- PC 端 -->
@@ -1039,8 +1039,8 @@ tr:hover td { background: #fafcff; }
         <tr><td class="spec-field">单个会员限购数</td><td>–</td><td><span class="spec-adj">7/17調整：</span>Ichiban Kuji 機制不適用限購，此欄位對後台操作員反灰鎖定，不可配置。原規則「依 VIP0～VIP10 分別設置，需勾選『限購』才生效」不適用於此商品類型。</td></tr>
         <tr><td class="spec-field">是否限时抢购</td><td><span class="spec-req">●</span></td><td>选「是」需设置起讫时间，超出时间应下架／不可购买</td></tr>
         <tr><td class="spec-field">审核模式</td><td>–</td><td>目前锁定仅自动审核，手动审核尚未开放</td></tr>
-        <tr><td class="spec-field">顶部图（PC／H5）</td><td><span class="spec-req">●</span></td><td><span class="spec-adj">8/6調整：</span>PC 端建議尺寸 <strong>2800×1200px</strong>；H5 端建議尺寸 <strong>780×400px</strong>（原標注「尺寸待定」已更新）</td></tr>
-        <tr><td class="spec-field">规则弹窗图（PC／H5）</td><td><span class="spec-req">●</span></td><td>尺寸待定</td></tr>
+        <tr><td class="spec-field">顶部图（PC／H5）</td><td>–</td><td><span class="spec-adj">8/7調整：</span>改為<b>選填</b>，未上傳時系統自動套用預設圖（第一版設計稿）。<span class="spec-adj">8/6調整：</span>PC 端建議尺寸 <strong>2800×1200px</strong>；H5 端建議尺寸 <strong>780×400px</strong></td></tr>
+        <tr><td class="spec-field">规则弹窗图（PC／H5）</td><td>–</td><td><span class="spec-adj">8/7調整：</span>改為<b>選填</b>，未上傳時系統自動套用預設圖（第一版設計稿）。規則文案目前不會異動，僅「消費積分」數值為變量（取自購買價格欄位）。尺寸待定</td></tr>
       </tbody>
     </table>
   </div>
@@ -3195,6 +3195,11 @@ tr:hover td { background: #fafcff; }
     <table class="cl-table">
       <thead><tr><th style="width:72px;">日期</th><th style="width:220px;">位置</th><th>調整內容</th></tr></thead>
       <tbody>
+        <tr>
+          <td><span class="cl-date">8/7</span></td>
+          <td><div class="cl-loc">後台＿商品配置</div>頂部圖、規則彈窗圖 › 必填改選填</td>
+          <td class="cl-what">頂部圖與規則彈窗圖由<b>必填改為選填</b>，移除欄位標籤的「*」標記；未上傳時系統自動套用預設圖（第一版設計稿）。規則彈窗圖補充說明：規則文案目前不會異動，僅「消費積分」數值為變量（取自購買價格欄位動態代入）。</td>
+        </tr>
         <tr>
           <td><span class="cl-date">8/6</span></td>
           <td><div class="cl-loc">後台＿用戶積分紀錄</div>積分歷史 › 原因欄位</td>
