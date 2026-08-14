@@ -185,7 +185,7 @@ tr:hover td.v2-new { background: #fff2d9; }
 .h5v2-body{flex:1;min-width:0;}
 .h5v2-date{font-size:11.5px;color:#9aa1ab;margin-bottom:3px;}
 .h5v2-name{font-size:15.5px;font-weight:700;color:#1a1a1a;line-height:1.3;}
-.h5v2-qty{color:#fa8c16;font-weight:700;}
+.h5v2-qty{color:#1a1a1a;font-weight:700;}
 .h5v2-points-row{display:flex;align-items:center;gap:4px;margin-top:5px;font-size:14.5px;font-weight:700;color:#1a1a1a;}
 .h5v2-star{color:#ff3b30;font-size:14px;}
 .h5v2-status-btn{background:#3358e0;color:#fff;font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:8px;flex-shrink:0;white-space:nowrap;}
@@ -254,19 +254,19 @@ tr:hover td.v2-new { background: #fff2d9; }
 .spec-view{display:none;background:#f5f6f8;min-height:100vh;}
 .spec-view.active{display:block;}
 
-.spec-view-inner{max-width:1880px;margin:0 auto;padding:38px 44px 130px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;}
+.spec-view-inner{max-width:1880px;margin:0 auto;padding:38px 44px 130px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;font-size:18.5px;}
 .spec-h1{font-size:36px;font-weight:800;margin:0 0 12px;color:#10141b;}
-.spec-sub{color:#5b6472;font-size:20px;margin:0 0 32px;max-width:75ch;line-height:1.6;}
+.spec-sub{color:#5b6472;font-size:18.5px;margin:0 0 32px;max-width:75ch;line-height:1.6;}
 .spec-caption{color:#5b6472;font-size:18.5px;margin:8px 0 4px;line-height:1.6;}
 
 .spec-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,460px);gap:40px;align-items:start;}
 .spec-stack{display:flex;flex-direction:column;gap:32px;}
-.spec-text{font-size:19.5px;color:#1b2028;min-width:0;overflow-wrap:break-word;}
+.spec-text{font-size:18.5px;color:#1b2028;min-width:0;overflow-wrap:break-word;}
 .spec-split > .spec-screen-card{min-width:0;overflow-x:auto;}
 .spec-screen-card table{min-width:0;}
 .spec-text h3{font-size:24px;font-weight:700;margin:40px 0 16px;color:#10141b;}
 .spec-text h3:first-child{margin-top:0;}
-.spec-lead{color:#5b6472;font-size:19px;margin:0 0 18px;line-height:1.75;}
+.spec-lead{color:#5b6472;font-size:18.5px;margin:0 0 18px;line-height:1.75;}
 .spec-now{color:#5b6472;font-size:18.5px;margin:0 0 20px;line-height:1.75;max-width:1100px;}
 .spec-now strong:first-child{color:#20262f;}
 
@@ -276,17 +276,18 @@ tr:hover td.v2-new { background: #fff2d9; }
 
 .spec-table-wrap{overflow-x:auto;margin:0 0 24px;border:1px solid #e2e6ec;border-radius:8px;}
 .spec-table-wrap table{width:100%;border-collapse:collapse;font-size:18.5px;background:#fff;min-width:0;}
-.spec-table-wrap th{text-align:left;background:#fafbfc;color:#5b6472;font-weight:600;font-size:16px;letter-spacing:.02em;padding:14px 16px;border-bottom:1px solid #e2e6ec;white-space:nowrap;}
-.spec-table-wrap td{padding:14px 16px;border-bottom:1px solid #e2e6ec;color:#1b2028;vertical-align:top;line-height:1.65;}
+.spec-table-wrap th{text-align:left;background:#fafbfc;color:#5b6472;font-weight:600;font-size:18.5px;letter-spacing:.02em;padding:14px 16px;border-bottom:1px solid #e2e6ec;white-space:nowrap;}
+.spec-table-wrap td.spec-field{font-size:18.5px;}
+.spec-table-wrap td{padding:14px 16px;border-bottom:1px solid #e2e6ec;color:#1b2028;vertical-align:top;line-height:1.65;font-size:18.5px;}
 .spec-table-wrap tr:last-child td{border-bottom:none;}
 .spec-table-wrap tr.is-new td{background:#fff7e6;}
 .spec-req{color:#e5484d;font-weight:700;}
-.spec-field{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:15px;color:#10141b;}
-.spec-tag{display:inline-block;font-size:15.5px;padding:4px 10px;border-radius:99px;background:#eaf2ff;color:#1677ff;font-weight:600;white-space:nowrap;}
+.spec-field{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:18.5px;color:#10141b;}
+.spec-tag{display:inline-block;font-size:18.5px;padding:4px 10px;border-radius:99px;background:#eaf2ff;color:#1677ff;font-weight:600;white-space:nowrap;}
 .spec-tag.new{background:#fff3e0;color:#d4640a;}
 
 .spec-rule-box{background:#eaf2ff;border:1px solid #bcd8ff;border-radius:8px;padding:20px 22px;margin:0 0 22px;font-size:18.5px;}
-.spec-rule-box .spec-rule-title{font-weight:700;color:#1677ff;font-size:15.5px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px;}
+.spec-rule-box .spec-rule-title{font-weight:700;color:#1677ff;font-size:18.5px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px;}
 .spec-rule-box ol,.spec-rule-box ul{margin:0;padding-left:22px;}
 .spec-rule-box li{margin-bottom:11px;color:#1c2a44;line-height:1.7;}
 .spec-rule-box li:last-child{margin-bottom:0;}
@@ -300,21 +301,41 @@ tr:hover td.v2-new { background: #fff2d9; }
 .spec-gloss{display:flex;flex-direction:column;border:1px solid #e2e6ec;border-radius:8px;overflow:hidden;background:#fff;max-width:980px;}
 .spec-gloss-row{display:grid;grid-template-columns:200px 1fr;gap:22px;padding:20px 22px;border-bottom:1px solid #e2e6ec;}
 .spec-gloss-row:last-child{border-bottom:none;}
-.spec-gloss-term{font-weight:700;font-size:19.5px;color:#10141b;}
-.spec-gloss-def{font-size:19px;color:#5b6472;line-height:1.75;}
+.spec-gloss-term{font-weight:700;font-size:18.5px;color:#10141b;}
+.spec-gloss-def{font-size:18.5px;color:#5b6472;line-height:1.75;}
 .spec-gloss-def .spec-field{color:#1677ff;}
 
 
 /* 封面／版本记录（v2 新增） */
 .spec-cover{max-width:980px;}
-.spec-ver-badge{display:inline-flex;align-items:center;gap:8px;background:#10141b;color:#fff;font-weight:700;font-size:16.5px;padding:8px 18px;border-radius:99px;margin-bottom:22px;}
+.spec-ver-badge{display:inline-flex;align-items:center;gap:8px;background:#10141b;color:#fff;font-weight:700;font-size:18.5px;padding:8px 18px;border-radius:99px;margin-bottom:22px;}
 .spec-changelog{background:#fff;border:1px solid #e2e6ec;border-radius:10px;padding:26px 28px;margin-bottom:22px;}
-.spec-changelog h3{font-size:19px;color:#10141b;margin:0 0 14px;}
+.spec-changelog h3{font-size:18.5px;color:#10141b;margin:0 0 14px;}
 .spec-changelog ol{margin:0;padding-left:22px;}
 .spec-changelog li{margin-bottom:12px;font-size:18.5px;line-height:1.7;color:#1b2028;}
 .spec-changelog li:last-child{margin-bottom:0;}
-.spec-base-doc{font-size:17px;color:#5b6472;margin-bottom:26px;}
+.spec-base-doc{font-size:18.5px;color:#5b6472;margin-bottom:26px;}
 .spec-base-doc .spec-field{color:#1677ff;}
+/* 版本记录表格 */
+.spec-scope-notice{background:#fff7e6;border:1px solid #ffd591;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:18.5px;color:#7c4a00;line-height:1.65;}
+.spec-scope-notice strong{color:#5c3300;}
+.spec-cl-table-wrap{overflow-x:auto;border:1px solid #e2e6ec;border-radius:8px;}
+.spec-cl-table{width:100%;border-collapse:collapse;font-size:18.5px;background:#fff;}
+.spec-cl-table th{text-align:left;background:#fafbfc;color:#5b6472;font-weight:600;font-size:18.5px;padding:12px 16px;border-bottom:1px solid #e2e6ec;white-space:nowrap;}
+.spec-cl-table td{padding:13px 16px;border-bottom:1px solid #f0f2f5;color:#1b2028;vertical-align:top;line-height:1.7;font-size:18.5px;}
+.spec-cl-table tr:last-child td{border-bottom:none;}
+.spec-cl-table tr:hover td{background:#fafcff;}
+.spec-ptag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:18.5px;font-weight:600;white-space:normal;margin:2px 0;}
+.spec-ptag-admin{background:#f0f0f0;color:#2d3748;border:1px solid #d9d9d9;}
+.spec-ptag-redeem{background:#e6f4ff;color:#0958d9;border:1px solid #91caff;}
+.spec-ptag-points{background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;}
+.spec-ptag-funds{background:#fff7e6;color:#d46b08;border:1px solid #ffd591;}
+.spec-ptag-ichiban{background:#f9f0ff;color:#531dab;border:1px solid #d3adf7;}
+.spec-ptag-popup{background:#fff2f0;color:#cf1322;border:1px solid #ffa39e;}
+.spec-ttag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:18.5px;font-weight:700;white-space:nowrap;}
+.spec-ttag-new{background:#fff3e0;color:#d4640a;}
+.spec-ttag-adjust{background:#eaf2ff;color:#1677ff;}
+.spec-ttag-clarify{background:#f1f3f5;color:#5b6472;}
 
 @media (max-width:1500px){ .spec-split{grid-template-columns:minmax(0,1fr);} }
 
@@ -348,7 +369,7 @@ tr:hover td.v2-new { background: #fff2d9; }
       rgba(214,120,20,.45) 0deg, rgba(214,120,20,.45) 200deg,
       rgba(255,226,150,.85) 262deg,
       #fff0b8 306deg, #ffffff 338deg, #fff0b8 356deg, rgba(214,120,20,.45) 360deg);
-  animation:kaSpin var(--ka-spin,2.4s) linear infinite;
+  animation:kaSpin var(--ka-spin,1.5s) linear infinite;
 }
 
 /* ══ 方案 B：掃光 —— 斜向高光每隔几秒掃过卡面 ══ */
@@ -386,13 +407,13 @@ tr:hover td.v2-new { background: #fff2d9; }
   max-width:1100px;background:#fbfaf6;border:1px solid #e4dfd2;border-radius:10px;
   padding:20px 24px;margin:0 0 24px;
 }
-.ka-notes h4{font-size:17px;color:#20262f;margin:0 0 12px;}
+.ka-notes h4{font-size:18.5px;color:#20262f;margin:0 0 12px;}
 .ka-notes ul{margin:0;padding-left:20px;}
-.ka-notes li{margin-bottom:11px;font-size:18px;line-height:1.8;color:#3d4450;}
+.ka-notes li{margin-bottom:11px;font-size:18.5px;line-height:1.8;color:#3d4450;}
 .ka-notes li:last-child{margin-bottom:0;}
 .ka-tag{
   display:inline-block;background:#eef1f6;border:1px solid #d5dae3;color:#525c6b;
-  font-size:14px;padding:1px 9px;border-radius:5px;margin-right:8px;font-weight:600;
+  font-size:18.5px;padding:1px 9px;border-radius:5px;margin-right:8px;font-weight:600;
 }
 .ka-tag.warn{background:#fff4e8;border-color:#ffdca8;color:#b3660a;}
 
@@ -425,23 +446,94 @@ tr:hover td.v2-new { background: #fff2d9; }
       本文件只记录 <strong>v1 → v2 的异动内容</strong>，未提及的规则一律沿用 v1，不重复列出。
     </div>
 
+    <div class="spec-scope-notice">
+      ⚠️ <strong>适用范围：</strong>本次异动<strong>只套用在 Ichiban Kuji 相关纪录</strong>，涵盖页面如下：后台「商品兑换记录 ＞ Ichiban Kuji 抽奖记录」页签、前台兑换记录、前台积分历史、前台资金详情、前台一番赏页面。
+    </div>
     <div class="spec-changelog">
       <h3>本版新增／修改摘要</h3>
-      <ol>
-        <li><strong>〔新增规则〕同赏级聚合</strong>：同一次购买中，若同一赏级中出多张券，后台「商品兑换记录 ▸ Ichiban Kuji 抽奖记录」与前台「兑换记录」皆改为<strong>合并显示成一行／一张卡片</strong>，不再依张数逐笔列出</li>
-        <li><strong>〔新增栏位〕购买数量、总价</strong>：后台表格新增这两栏，购买数量＝该赏级本次中出的张数，总价＝该赏级单张券购买价格 × 购买数量</li>
-        <li><strong>〔调整规则〕订单号显示方式</strong>：合并后一行的订单号，尾码由原本的序号（-01／-02…）改为<strong>该赏级的英文字母代码</strong>（S／A～H，Last赏固定为 <span class="spec-field">L</span>），前缀维持不变</li>
-        <li><strong>〔调整规则〕审核／订单状态操作单位</strong>：改为以「合并后的每一行（每个赏级）」为单位，各赏级可独立审核，不与同笔购买的其他赏级绑定</li>
-        <li><strong>〔明确规则〕不提供逐张明细展开入口</strong>：合并后不需要「展开看这一行是哪几张券」的功能，因同赏级的券视为同一单位（赏＝券），购买数量＋总价＋奖品名称三项已足够代表</li>
-        <li><strong>〔明确规则〕数量为 1 时不特别标示</strong>：前台「兑换记录」「积分历史」的「×N」数量小标，只在数量大于 1 时才显示；数量为 1 就按照原本 v1 的显示方式呈现，不加「×1」标签。<strong>「资金详情」一律不显示数量小标</strong>（该页属于资金聚合，只呈现总金额）。后台「购买数量」栏位则是数据栏位，一律显示实际数字（不受此规则影响）</li>
-        <li><strong>〔新增页面异动〕积分历史</strong>：同一笔订单里，同商品、同金额的<strong>收入类</strong>纪录合并成一行，商品名称后加「×N」小标标示<strong>购买次数</strong>（一番赏每一张券算一次），右侧金额加总显示；「支出」纪录本身已是整笔订单的总扣点，不受影响</li>
-        <li><strong>〔新增页面异动〕资金详情</strong>：交易记录里，同一笔订单中同一种奖励类型（例如彩金）若中出多笔，合并成一笔「活动奖励领取：{商品名称}」，后方显示<strong>加总后的总领取金额</strong>；本页属于资金聚合性质，<strong>不显示「×N」数量小标</strong></li>
-        <li><strong>〔调整规则〕一番赏页面抽奖张数选择器</strong>：完成抽奖、关闭结果弹窗后，选择器维持停留在玩家刚才选择的张数（1／5／10／Draw All），不会自动跳回默认的「1 Draw」；重新进入页面才会回到默认值。若记住的张数已超过目前可抽次数（含已全部抽完），按下「Draw Now」时<strong>跳提示弹窗，关闭后选择器回到默认「1 Draw」</strong></li>
-        <li><strong>〔确认规则〕奖品卡片图片显示</strong>：图片一律<strong>依建议的长宽比例撑满显示框</strong>，不放大也不裁切；后台上传不强制检核比例，但会提供建议比例，运营依建议比例上传即可，若比例不符撑满后会变形，需自行在上传前调整</li>
-        <li><strong>〔新增效果〕撕卷弹窗奖品卡片光圈动画</strong>：撕卷结果弹窗内，<strong>Last赏、S赏、A赏</strong>三个赏级加上光圈动画（B～H赏不加，维持静态）。因两种画面版面不同，<strong>各用一种动画</strong>：<strong>逐张开卷（1／5／10 张）用方案 A 流光跑边</strong>（亮光沿卡片外框绕圈跑，约 2.4 秒一圈）、<strong>全包（Draw All）用方案 B 掃光</strong>（斜向高光掃过整列，约 3.2 秒一次）。两者皆为纯 CSS 实作，不需动画档案，且光不会溢出</li>
-        <li><strong>〔调整规则〕撕卷弹窗卡片改为随机排列</strong>：1／5／10 张时，弹窗内的奖品卡片改为<strong>Last赏固定置顶、其余随机排列</strong>，每次开卷重新随机；<strong>Draw All（全包）为例外，排序维持原本的赏级字母顺序</strong>，因为全包是一列一个赏级＋数量的聚合列表，玩家需要依序对照。随机只影响前台弹窗的显示顺序，不影响中奖内容与发放；<strong>后台抽奖记录维持原本的固定权重排序</strong>，前后台不需要一致</li>
-        <li><strong>适用范围</strong>：本次异动<strong>只套用在 Ichiban Kuji 相关纪录</strong>（后台 Ichiban Kuji 抽奖记录页签、前台兑换记录、前台积分历史、前台资金详情、前台一番赏页面），不影响「商品兑换记录」其他一般商品、「盲盒抽奖记录」页签的既有逻辑</li>
-      </ol>
+      <div class="spec-cl-table-wrap">
+        <table class="spec-cl-table">
+          <thead><tr>
+            <th style="width:260px;">影响页面</th>
+            <th style="width:110px;">异动类型</th>
+            <th>说明</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="spec-ptag spec-ptag-admin">后台：商品兑换记录</span><br>
+                <span class="spec-ptag spec-ptag-redeem">前台：兑换记录</span>
+              </td>
+              <td><span class="spec-ttag spec-ttag-new">新增规则</span></td>
+              <td>同一次购买中，同一赏级中出多张券，改为<strong>合并显示成一行／一张卡片</strong>，不再依张数逐笔列出</td>
+            </tr>
+            <tr>
+              <td><span class="spec-ptag spec-ptag-admin">后台：商品兑换记录</span></td>
+              <td><span class="spec-ttag spec-ttag-new">新增栏位</span></td>
+              <td>新增「购买数量」「总价」两栏；购买数量 ＝ 该赏级本次中出张数，总价 ＝ 单张价格 × 购买数量</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="spec-ptag spec-ptag-admin">后台：商品兑换记录</span><br>
+                <span class="spec-ptag spec-ptag-redeem">前台：兑换记录</span>
+              </td>
+              <td><span class="spec-ttag spec-ttag-adjust">调整规则</span></td>
+              <td>合并后订单号尾码改为<strong>赏级英文字母代码</strong>（S／A～H，Last赏固定为 <span class="spec-field">L</span>），前缀不变</td>
+            </tr>
+            <tr>
+              <td><span class="spec-ptag spec-ptag-admin">后台：商品兑换记录</span></td>
+              <td><span class="spec-ttag spec-ttag-adjust">调整规则</span></td>
+              <td>审核／订单状态改以「每个赏级」为单位，各赏级可独立审核，不与同笔购买的其他赏级绑定</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="spec-ptag spec-ptag-admin">后台：商品兑换记录</span><br>
+                <span class="spec-ptag spec-ptag-redeem">前台：兑换记录</span>
+              </td>
+              <td><span class="spec-ttag spec-ttag-clarify">明确规则</span></td>
+              <td>合并后不提供「逐张明细展开」入口；购买数量＋总价＋奖品名称三项已足够代表</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="spec-ptag spec-ptag-redeem">前台：兑换记录</span><br>
+                <span class="spec-ptag spec-ptag-points">前台：积分历史</span>
+              </td>
+              <td><span class="spec-ttag spec-ttag-clarify">明确规则</span></td>
+              <td>「×N」数量小标只在数量 &gt; 1 时显示；「资金详情」一律不显示数量小标；后台「购买数量」为数据栏位，一律显示实际数字</td>
+            </tr>
+            <tr>
+              <td><span class="spec-ptag spec-ptag-points">前台：积分历史</span></td>
+              <td><span class="spec-ttag spec-ttag-new">页面异动</span></td>
+              <td>同一笔订单、同商品、同金额的<strong>收入类</strong>纪录合并一行，名称后加「×N」标示购买次数，金额加总显示；「支出」纪录已是整笔总扣点，不受影响</td>
+            </tr>
+            <tr>
+              <td><span class="spec-ptag spec-ptag-funds">前台：资金详情</span></td>
+              <td><span class="spec-ttag spec-ttag-new">页面异动</span></td>
+              <td>同一笔订单的同类型奖励（如彩金）合并为一笔，显示<strong>加总总金额</strong>；不显示「×N」数量小标</td>
+            </tr>
+            <tr>
+              <td><span class="spec-ptag spec-ptag-ichiban">前台：一番赏页面</span></td>
+              <td><span class="spec-ttag spec-ttag-adjust">调整规则</span></td>
+              <td>关闭抽奖结果弹窗后，张数选择器保留玩家选择值；若已超过可抽次数，弹提示后选择器回到默认「1 Draw」</td>
+            </tr>
+            <tr>
+              <td><span class="spec-ptag spec-ptag-ichiban">前台：一番赏页面</span></td>
+              <td><span class="spec-ttag spec-ttag-clarify">确认规则</span></td>
+              <td>奖品卡片图片依建议比例撑满显示框；后台上传不强制检核比例，运营依建议比例上传，比例不符时撑满后会变形</td>
+            </tr>
+            <tr>
+              <td><span class="spec-ptag spec-ptag-popup">前台：撕卷弹窗</span></td>
+              <td><span class="spec-ttag spec-ttag-new">新增效果</span></td>
+              <td><strong>Last赏、S赏、A赏</strong>加掃光动画（B～H赏维持静态）；逐张开卷与全包均采用掃光，纯 CSS 实作</td>
+            </tr>
+            <tr>
+              <td><span class="spec-ptag spec-ptag-popup">前台：撕卷弹窗</span></td>
+              <td><span class="spec-ttag spec-ttag-adjust">调整规则</span></td>
+              <td>1／5／10 张时卡片<strong>Last赏置顶、其余随机排列</strong>；Draw All 维持赏级字母顺序；后台抽奖记录维持固定权重排序，前后台不需一致</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div></div>
@@ -512,32 +604,23 @@ tr:hover td.v2-new { background: #fff2d9; }
     </div>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">1.2 完整栏位定义（含新增／调整栏位）</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">1.2 栏位异动说明（仅列新增／调整栏位，未提及栏位沿用 v1）</h3>
   <div class="spec-table-wrap">
     <table>
       <thead><tr><th>字段</th><th>状态</th><th>说明</th></tr></thead>
       <tbody>
         <tr><td class="spec-field">订单号</td><td><span class="spec-tag new">调整</span></td><td>前缀不变；尾码由原本的购买序号（-01/-02…）改为<strong>该行赏级的字母代码</strong>（S、A～H、Last赏＝L）</td></tr>
-        <tr><td class="spec-field">会员名</td><td><span class="spec-tag">不变</span></td><td>沿用 v1</td></tr>
-        <tr><td class="spec-field">创建时间</td><td><span class="spec-tag">不变</span></td><td>显示该笔购买的下单时间——同一笔订单里，即使拆成多个赏级各占一行，因为是<strong>同一次抽奖</strong>产生的，时间本来就一致，各行显示相同的下单时间</td></tr>
-        <tr><td class="spec-field">币种</td><td><span class="spec-tag">不变</span></td><td>沿用 v1</td></tr>
-        <tr><td class="spec-field">商品名称</td><td><span class="spec-tag">不变</span></td><td>该次购买的一番赏商品名称，沿用 v1</td></tr>
         <tr><td class="spec-field">商品奖励</td><td><span class="spec-tag new">调整</span></td><td>只显示<strong>这一行赏级</strong>对应的奖品名称本身，<strong>不再</strong>用顿号串接多个赏级、也不再附加「×N」文字（数量改由新栏位呈现）。<strong>不额外加上赏级标示</strong>（不显示「（B赏）」「（D赏）」这类后缀）——要辨识是哪一个赏级，看<strong>订单号尾码的字母</strong>即可</td></tr>
-        <tr><td class="spec-field">购买价格</td><td><span class="spec-tag">不变</span></td><td>该赏级<strong>单张券</strong>的购买价格（单价）</td></tr>
-        <tr class="is-new"><td class="spec-field">购买数量</td><td><span class="spec-tag new">新增</span></td><td>该赏级本次购买中出的<strong>张数</strong>，是数据栏位、一律显示实际数字（1、2、30…）；只中 1 张也正常显示「1」——这跟前台「×N」标签只在大于 1 时才显示是分开的两件事，不冲突</td></tr>
-        <tr class="is-new"><td class="spec-field">总价</td><td><span class="spec-tag new">新增</span></td><td>＝ <span class="spec-field">购买价格 × 购买数量</span>，系统自动计算，不可手动编辑</td></tr>
-        <tr><td class="spec-field">收货信息</td><td><span class="spec-tag">不变</span></td><td>沿用 v1（仅实物赏有意义，其他类型显示「–」）</td></tr>
-        <tr><td class="spec-field">订单状态／审核</td><td><span class="spec-tag new">调整</span></td><td>以<strong>合并后的每一行（每个赏级）</strong>为独立审核单位；同一笔订单里，不同赏级的审核状态互不影响，可以分别通过／驳回</td></tr>
-        <tr><td class="spec-field">回传状态</td><td><span class="spec-tag">不变</span></td><td>沿用 v1</td></tr>
-        <tr><td class="spec-field">操作人 / 备注</td><td><span class="spec-tag">不变</span></td><td>沿用 v1</td></tr>
-        <tr><td class="spec-field">操作</td><td><span class="spec-tag">不变</span></td><td>沿用 v1。其中「查看订单信息」（查看会员收货资料）<strong>只有实物赏才会出现</strong>，非实物赏（彩金、积分、优惠券等）本来就没有这个入口；一番赏的实物赏一律<strong>走线下配送</strong>，因此这个入口维持 v1 行为，<strong>不因为合并而需要调整</strong>——每一行（每个赏级）各自对应自己的收货资料，不需要做整笔订单的总览页</td></tr>
+        <tr class="is-new"><td class="spec-field">购买数量〔新增〕</td><td><span class="spec-tag new">新增</span></td><td>该赏级本次购买中出的<strong>张数</strong>，一律显示实际数字（1、2、30…）；只中 1 张也正常显示「1」</td></tr>
+        <tr class="is-new"><td class="spec-field">总价〔新增〕</td><td><span class="spec-tag new">新增</span></td><td>＝ <span class="spec-field">购买价格 × 购买数量</span>，系统自动计算，不可手动编辑</td></tr>
+        <tr><td class="spec-field">订单状态／审核</td><td><span class="spec-tag new">调整</span></td><td>以<strong>每个赏级（每行）</strong>为独立审核单位；同一笔订单里，不同赏级的审核状态互不影响，可分别通过／驳回</td></tr>
       </tbody>
     </table>
   </div>
 
   <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">1.3 需试想各种情境</h3>
   <ul class="spec-plain">
-    <li><strong>某赏级本次只中出 1 张</strong>：<strong>后台</strong>仍套用合并格式，「购买数量」显示「1」、「总价」＝单价×1，不因为只有 1 张就退回旧的逐笔显示；<strong>前台维持 v1 原本的显示方式</strong>，不加「×1」标签（前台的「×N」只在数量大于 1 时才出现）。也就是同一笔只中 1 张的纪录，<strong>后台看得到数量栏位、前台看起来跟改版前一样</strong>，两边不需要一致</li>
+    <li><strong>某赏级本次只中出 1 张</strong>：后台「购买数量」显示「1」、「总价」＝单价×1；前台不显示「×N」标签，呈现与 v1 相同。<strong>后台有数量栏位、前台看起来没变，两边不需一致</strong></li>
     <li><strong>全包同时触发多个赏级＋Last赏</strong>：每个赏级各自成一行，Last赏固定 1 张、字母固定为 L，与其他赏级排列方式一致（沿用 v1「Last赏→S赏→A~H赏」固定权重排序，应用在合并后的行顺序上）</li>
     <li><strong>同一笔订单，部分赏级已审核通过、部分仍待审核</strong>：允许同时存在，因为审核单位已改为「每行独立」，不会因为某一行没审完就卡住其他行</li>
     <li><strong>该次购买没有中出任何需要人工审核的赏级（例如全是彩金/积分类，系统自动通过）</strong>：沿用 v1 既有的自动/手动审核模式设定，合并规则不影响审核模式本身，只影响审核的操作单位</li>
@@ -582,7 +665,16 @@ tr:hover td.v2-new { background: #fff2d9; }
       </div>
     </div>
     <div class="spec-text">
-      <p class="spec-lead">30 张卡片合并成 1 张：商品奖励名称后面加橘色小标「×30」标示购买数量，<strong>右侧积分数字改成这一组的总扣除积分</strong>（单价 10 × 30 张 ＝ 300），不是单张的单价。iPhone（Last赏）因为固定只有 1 张，<strong>数量为 1 时不显示「×N」标签</strong>（按照原本 v1 的显示方式），积分显示 20（单价＝总额，因为只有 1 张）。</p>
+      <div class="spec-rule-box" style="margin-top:20px;">
+        <div class="spec-rule-title">同赏级聚合规则 ── 兑换记录卡片</div>
+        <ul>
+          <li><strong>合并单位：</strong>同一次购买中，同一赏级中出的所有券合并为 1 张卡片，不再逐张列出</li>
+          <li><strong>数量标示：</strong>商品名称后加小标「×N」，N ＝ 该赏级本次中出的张数</li>
+          <li><strong>积分显示：</strong>右侧积分数字为该赏级的<strong>单张单价</strong>，不是总额</li>
+          <li><strong>数量为 1 时：</strong>不显示「×N」标签，按照 v1 原本的显示方式呈现（积分显示单价，因为单价即等于总额）</li>
+        </ul>
+      </div>
+      <p class="spec-lead" style="margin-top:14px;"><strong>例：</strong>D赏中出 30 张（单价 10 积分）→ 卡片显示「×30」，积分显示 10（单张单价）。Last赏 iPhone 固定只有 1 张（单价 20 积分）→ 不显示「×N」，积分显示 20。</p>
     </div>
   </div>
 
@@ -635,13 +727,28 @@ tr:hover td.v2-new { background: #fff2d9; }
       </div>
     </div>
     <div class="spec-text">
-      <p class="spec-lead">同一个商品名称的 2 笔「+10,000」合并成 1 行，商品名称后面加橘色小标「×2」——<strong>这个「2」就是系统替会员算出来的购买次数，也就是这次买了 2 张券</strong>；右侧金额<strong>加总</strong>显示为「+20,000」。「−200」的支出纪录维持原样、不受影响，因为它本来就是整笔订单的总扣点，不是逐张券各自扣款。</p>
+      <div class="spec-rule-box">
+        <div class="spec-rule-title">积分历史合并规则</div>
+        <ul>
+          <li><strong>收入类纪录合并：</strong>同一笔订单里，相同商品、相同积分金额的收入纪录合并成 1 行。例如买了 2 张券，原本会出现 2 笔「+10,000」→ 合并后只显示 1 行，名称后加「×2」标示购买张数，右侧金额加总为「+20,000」</li>
+          <li><strong>购买数量为 1 时：</strong>不显示「×N」，显示逻辑与 v1 相同，不会出现「×1」</li>
+          <li><strong>支出纪录不受影响：</strong>「−200」这类支出本来就是整笔订单的总扣点（不是逐张券各自扣），所以本身已经是合并的，维持原样不变</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">2.4 资金详情（新增页面异动）</h3>
-  <p class="spec-caption">路径：前台 ＞ 我的 ＞ 资金详情 ＞ 交易记录。这个页面本身就是<strong>会员的资金聚合</strong>，只呈现「拿到多少钱」，不呈现「拿了几次」——因此文案维持 <span class="spec-field">活动奖励领取：{商品名称}</span>，后方直接显示<strong>合并后的总领取金额</strong>，<strong>不加「×N」数量小标</strong>（这一点与「兑换记录」「积分历史」不同）。举例：玩家一次抽 10 张券，其中 3 张抽到彩金奖励。</p>
-  <p class="spec-now"><strong>现况（v1）：</strong>交易记录里，每一张中出彩金的券各自产生一笔「活动奖励领取」纪录（例如 3 张彩金券就是 3 笔「+1,500.00」），玩家要自己加总，才知道这次彩金总共拿了多少。</p>
+  <p class="spec-now" style="margin-bottom:16px;">路径：前台 ＞ 我的 ＞ 资金详情 ＞ 交易记录</p>
+  <p class="spec-now"><strong>现况（v1）：</strong>3 张彩金券 ＝ 3 笔「+1,500.00」，玩家须自行加总。</p>
+  <div class="spec-rule-box">
+    <div class="spec-rule-title">v2 调整规则</div>
+    <ul>
+      <li><strong>同一笔订单、同一奖励类型 → 合并为 1 笔，金额加总。</strong>例：3 张彩金各 1,500 → 显示 1 笔「+4,500.00」</li>
+      <li><strong>记录文案不变：</strong>仍显示「活动奖励领取：{商品名称}」</li>
+      <li><strong>不显示张数：</strong>此页只呈现金额，<strong>不加「×N」</strong>。张数信息请至「兑换记录」或「积分历史」查看</li>
+    </ul>
+  </div>
 
   <div class="spec-stack">
     <div class="spec-screen-card">
@@ -664,7 +771,7 @@ tr:hover td.v2-new { background: #fff2d9; }
       </div>
     </div>
     <div class="spec-text">
-      <p class="spec-lead">3 笔彩金纪录合并成 1 笔，文案维持「活动奖励领取：{商品名称}」<strong>不加数量小标</strong>，右侧金额<strong>直接加总</strong>显示为「+4,500.00」（1,500 × 3）——这个页面只要让会员看到「这个商品总共领到多少钱」，笔数不是这页要表达的资讯。同一次抽奖里，其他没有中彩金的赏级不受影响，各自维持原本的呈现方式（例如实物赏走「兑换记录」、不会出现在这个资金详情页面）。</p>
+      <p class="spec-lead">3 笔彩金合并为 1 笔，右侧显示加总金额「+4,500.00」（1,500 × 3）；文案维持原样，不加数量标示。同一次购买中其他赏级不受影响，各自维持原本呈现方式。</p>
     </div>
   </div>
 
@@ -702,7 +809,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     </div>
   </div>
 
-  <p class="spec-now"><strong>现况（v1）：</strong>玩家第一次进入页面时，抽奖张数选择器默认停留在「1 Draw」；玩家改选「5 Draws」或「10 Draws」并完成抽奖后，<strong>结果弹窗一关闭，选择器就会被重置回「1 Draw」</strong>，不会记住玩家刚刚选的张数。</p>
+  <p class="spec-now"><strong>现况（v1）：</strong>进入页面默认「1 Draw」。玩家改选「5 Draws」或「10 Draws」并完成抽奖、关闭结果弹窗后，<strong>选择器强制跳回「1 Draw」</strong>，不会记住玩家刚才的选择——即使剩余次数仍足够再选 5 或 10，下一抽还是要重新手动切换。<br>注：剩余次数不足 5 张时「5 Draws」反灰、不足 10 张时「10 Draws」反灰，这是<strong>现有机制、v2 不改动</strong>；本次调整的是「弹窗关闭后的重置行为」，与反灰逻辑无关。</p>
 
   <div class="spec-rule-box" style="max-width:1100px;background:#fff7e6;border-color:#ffd591;">
     <div class="spec-rule-title" style="color:#d4640a;">v2 调整后</div>
@@ -717,42 +824,50 @@ tr:hover td.v2-new { background: #fff2d9; }
 
   <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">3.2 需试想各种情境</h3>
   <ul class="spec-plain">
-    <li><strong>选到「Draw All」后剩余次数不足以再次「Draw All」</strong>：按下「Draw Now」时跳出提示弹窗，关闭后选择器回到默认「1 Draw」，与上方「剩余次数不足时的处理」同一套规则</li>
+    <li><strong>完成「Draw All」后</strong>：全包即抽完此活动内所有券，活动结束，玩家会离开（或被导出）此活动页面，不存在「剩余次数不足以再次 Draw All」的情境</li>
     <li><strong>玩家手动把选择器切回「1 Draw」再抽</strong>：正常记住这次选的「1 Draw」，逻辑一致，不特殊处理</li>
     <li><strong>抽奖过程中断线或抽奖失败（未成功扣款/未出结果）</strong>：剩余次数足够时，选择器维持玩家原本选择的张数、不重置，玩家可直接重试；剩余次数不足则依「剩余次数不足时的处理」跳提示弹窗并回到「1 Draw」</li>
   </ul>
 
   <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">3.3 奖品卡片图片显示标准化</h3>
-  <p class="spec-now">奖品卡片的图片一律<strong>依建议的长宽比例撑满显示框</strong>：后台上传时不强制检核比例，但会提供建议的长宽比例，前台显示时就照这个比例把图片撑满，不放大也不裁切、不分尺寸大小做不同处理。因此运营<strong>依建议比例上传即可</strong>；若上传的比例与建议比例不符，图片撑满后会有变形，需由运营自行在上传前调整好，系统不提供裁切工具。</p>
+  <div class="spec-rule-box">
+    <div class="spec-rule-title">图片显示规则</div>
+    <ul>
+      <li><strong>前端：</strong>奖品卡片图片一律撑满显示框（依显示框比例），不裁切、不留白边</li>
+      <li><strong>运营上传路径：</strong>后台 ＞ 积分商城 ＞ 商品配置 ＞ 上传奖励图片</li>
+      <li><strong>建议比例：</strong>后台上传时不强制检核，但系统会提供建议长宽比例；运营依建议比例上传即可</li>
+      <li><strong>比例不符时：</strong>图片撑满后会变形，需运营自行在上传前调整，系统不提供裁切工具</li>
+    </ul>
+  </div>
 </div></div>
 
 <!-- ══════════ 4. 前台＿开卷动画 ══════════ -->
 <div class="spec-view" id="mergeView4"><div class="spec-view-inner">
   <div class="spec-h1">前台＿开卷动画（v2 异动）</div>
-  <p class="spec-sub">路径：前台 ＞ 一番赏活动页 ＞ 按下「Draw Now」后弹出的撕卷结果弹窗。本次异动：奖品卡片的<strong>外框加上光圈动画</strong>。<br>因为「逐张开卷」与「全包」是<strong>两种版面完全不同的画面</strong>——前者是一格一张的卡片格线、后者是一列一个赏级的聚合列表——所以<strong>两种画面各用一种动画</strong>，不是二选一：<strong>逐张开卷用方案 A（流光跑边）、全包用方案 B（掃光）</strong>。下方两张示意图<strong>以实际弹窗截图为底、动画为真实可运行的效果</strong>，可直接观看。</p>
+  <p class="spec-sub">路径：前台 ＞ 一番赏活动页 ＞ 按下「Draw Now」后弹出的撕卷结果弹窗。本次异动：奖品卡片的<strong>外框加上掃光动画</strong>，逐张开卷与全包<strong>均采用掃光</strong>。下方两张示意图以实际弹窗截图为底、动画为真实可运行的效果，可直接观看。</p>
 
   <p class="spec-now"><strong>现况（v1）：</strong>撕卷结果弹窗里的奖品卡片外框是静态的，没有任何动画效果，卡片开出来就是直接呈现，缺少「开奖」的仪式感。</p>
 
   <div class="ka-ctl">
     <div class="ka-ctl-row">
-      <label for="kaSpin">逐张开卷 · A 绕一圈</label>
-      <input id="kaSpin" type="range" min="1" max="6" step="0.2" value="2.4">
-      <output id="kaSpinV">2.4 秒</output>
+      <label for="kaSpin">逐张开卷 · 掃光一次</label>
+      <input id="kaSpin" type="range" min="1.5" max="5" step="0.1" value="1.5">
+      <output id="kaSpinV">1.5 秒</output>
     </div>
     <div class="ka-ctl-row">
-      <label for="kaSweep">全包 · B 掃一次</label>
-      <input id="kaSweep" type="range" min="1.6" max="8" step="0.2" value="3.2">
+      <label for="kaSweep">全包 · 掃光一次</label>
+      <input id="kaSweep" type="range" min="1.5" max="5" step="0.1" value="3.2">
       <output id="kaSweepV">3.2 秒</output>
     </div>
     <label class="ka-chk"><input id="kaOff" type="checkbox"> 关闭动画（对照 v1 现况）</label>
   </div>
   <p class="spec-caption">上方拉杆可<strong>即时调整动画秒数</strong>，用来决定最后要给工程师的数值；勾选「关闭动画」可以直接跟现况对照。下方两张示意图都是<strong>实际可运行的动画</strong>，底图分别为逐张开卷与全包的真实弹窗截图。</p>
 
-  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">4.1 逐张开卷（1／5／10 张）—— 方案 A 流光跑边</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">4.1 逐张开卷（1／5／10 张）—— 掃光</h3>
   <p class="spec-caption">一道亮光沿着奖品卡片外框<strong>绕圈跑</strong>，像霓虹描边。这个画面是<strong>一格一张的卡片格线</strong>，卡片尺寸小而方正，光沿着一圈跑刚好把整张卡框起来，开奖的存在感最明显。</p>
   <div class="spec-stack">
     <div class="spec-screen-card">
-      <div class="screen-label">画面参考（逐张开卷：方案 A 流光跑边，底图为实际弹窗截图，动画为真实效果）</div>
+      <div class="screen-label">画面参考（逐张开卷：掃光，底图为实际弹窗截图，动画为真实效果）</div>
       <div class="page" style="background:#8f8f8f;padding:18px 0;">
         <div class="ka-shot ka-va" role="img" aria-label="撕卷结果弹窗，A赏卡片外框流光跑边动画">
           <span class="ka-ov ka-p1"></span>
@@ -762,12 +877,12 @@ tr:hover td.v2-new { background: #fff2d9; }
     </div>
     <div class="spec-text">
       <p class="spec-lead">上图这一次开出 2 张 A赏、3 张 D赏，因此<strong>只有上排两张 A赏的外框在跑光</strong>，下面三张 D赏完全不亮——这就是「只针对 Last／S／A 赏」的实际效果。</p>
-      <p class="spec-lead">外框会有一道较亮的金光沿着边框循环绕行，绕一圈约 <strong>2.4 秒</strong>。光只在外框那一圈（约 3px 宽）内跑，<strong>中间完全不覆盖卡片内容</strong>，赏级徽章、奖品名称、Coupon 说明文字都不会被挡到。</p>
+      <p class="spec-lead">外框会有一道较亮的金光沿着边框循环绕行，绕一圈约 <strong>1.5 秒</strong>。光只在外框那一圈（约 3px 宽）内跑，<strong>中间完全不覆盖卡片内容</strong>，赏级徽章、奖品名称、Coupon 说明文字都不会被挡到。</p>
       <p class="spec-lead">光<strong>不会扩散到卡片外面</strong>，所以上一张卡片的光不会渗到下一张卡片上，多张卡片并排时不会显得脏乱。</p>
     </div>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">4.2 全包（Draw All）—— 方案 B 掃光</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">4.2 全包（Draw All）—— 掃光</h3>
   <p class="spec-caption">一道斜向高光<strong>每隔几秒掃过整列</strong>一次，像光扫过表面的反光。全包画面是<strong>一列一个赏级的聚合列表</strong>（Last赏 1 张、S赏 ×11、A赏 ×14…），列很宽很扁——掃光横着扫过一整列刚好顺着这个形状，比让光绕这么长一圈跑更自然、也不会显得慢。</p>
   <div class="spec-stack">
     <div class="spec-screen-card">
@@ -792,13 +907,18 @@ tr:hover td.v2-new { background: #fff2d9; }
     <div class="spec-rule-title">动画行为</div>
     <ul>
       <li><strong>适用赏级（已确定）</strong>：两种画面都<strong>只套用在 Last赏、S赏、A赏</strong>这三个赏级；<strong>B赏以下（B～H赏）完全不加动画</strong>，维持 v1 静态样式。目的是让高赏级一眼就被认出来，而不是整个弹窗都在闪、反而看不出重点</li>
-      <li><strong>哪个画面用哪个动画（已确定）</strong>：<strong>逐张开卷（1／5／10 张）用方案 A 流光跑边</strong>；<strong>全包（Draw All）用方案 B 掃光</strong>。两个画面的版面不同——逐张开卷是小而方正的卡片格线，适合用光绕一圈把整张框起来；全包是很宽很扁的聚合列表，适合让光横着扫过一整列。<strong>动画形式跟着版面走，不是随意分配</strong>；若日后新增其他画面，比照版面类型套用（卡片格线用 A、列表用 B）</li>
+      <li><strong>动画形式（已确定）</strong>：逐张开卷与全包<strong>均采用掃光</strong>——斜向高光掃过卡片／列表面</li>
       <li><strong>全包同样要有动画（已确定）</strong>：全包是玩家花最多钱的情境、且<strong>必得 Last赏</strong>，最值钱的那一列不能反而不亮；同时全包把整箱奖励一次列出，发光正好<strong>帮玩家一眼找出高赏级在哪几列</strong></li>
-      <li><strong>触发时机</strong>：弹窗出现的同时开始播放，不需要玩家操作，所有卡片同时开始，没有进场先后顺序的差别</li>
+      <li><strong>触发时机</strong>：
+        <ul style="margin-top:8px;">
+          <li><strong>逐张开卷（1／5／10 张）：</strong>卡片有翻牌揭晓动画，光圈在该张卡片<strong>翻开后</strong>才开始播放，不与翻牌同时进行</li>
+          <li><strong>全包（Draw All）：</strong>弹窗内卡片直接呈现（无翻牌动画），弹窗出现时<strong>光圈同步开始播放</strong></li>
+        </ul>
+      </li>
       <li><strong>循环方式</strong>：<strong>持续循环播放</strong>，直到玩家关闭弹窗或按下「Claim」为止，不是只播一次就停</li>
       <li><strong>不影响排版</strong>：动画只加在卡片外框，<strong>不会把卡片撑大、不改变卡片间距</strong>，内部徽章与文字的位置、大小与现况完全一致</li>
       <li><strong>不影响操作</strong>：光圈为纯视觉效果，<strong>不会挡住点击</strong>；卡片／列本身若有点击行为，维持原本行为不变</li>
-      <li><strong>不往外扩散</strong>：两种动画的光都限制在卡片／列的范围内（方案 A 在外框一圈内、方案 B 裁切在卡面内），<strong>不会有光溢出或渗到相邻的卡片、列上</strong></li>
+      <li><strong>不往外扩散</strong>：掃光裁切在卡片／列的范围内，<strong>不会溢出或渗到相邻的卡片、列上</strong></li>
     </ul>
   </div>
 
@@ -831,30 +951,30 @@ tr:hover td.v2-new { background: #fff2d9; }
     </ul>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">4.5 给前端开发的建议</h3>
-  <div class="ka-notes">
-    <h4>实作方式与注意事项</h4>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">4.5 给前端开发的说明</h3>
+  <div class="spec-rule-box">
+    <div class="spec-rule-title">实作参考</div>
     <ul>
-      <li><span class="ka-tag">技术</span>两种动画皆<strong>纯 CSS 实作</strong>（渐层 ＋ 关键帧动画），<strong>不需要 GIF、影片或 Lottie 等动画档案</strong>，不增加页面载入时间，设计师也不需要另外输出动画素材。</li>
-      <li><span class="ka-tag warn">效能</span>动画<strong>只能改变位移（transform）与透明度（opacity）</strong>这两类属性，浏览器可交给显示卡处理，低阶手机也不会掉帧。<strong>不可</strong>逐帧改变渐层颜色或阴影的模糊半径——那样每一帧都要重绘整张卡片，低阶手机会明显卡顿。</li>
-      <li><span class="ka-tag warn">方案 A 陷阱</span>流光的做法是「转一个圆锥渐层，再用<strong>遮罩把中间挖空</strong>、只留外框一圈」。<strong>不可</strong>用不透明色块盖住中间来做出边框效果——那样会把卡片内容一起遮掉。</li>
-      <li><span class="ka-tag warn">方案 A 陷阱</span>卡片外层<strong>不可加裁切</strong>（overflow 隐藏）。裁切会把渐层裁到内框，正好是遮罩挖掉的区域，结果光完全看不见。</li>
-      <li><span class="ka-tag warn">方案 B 陷阱</span>掃光必须限制在卡片范围内，但要<strong>由掃光自己所在的图层负责裁切</strong>，卡片最外层不裁切；否则日后若要再加外圈光暈，会被一起裁掉。</li>
-      <li><span class="ka-tag">范围</span>动画加在<strong>卡片／列的最外层容器</strong>上，只影响外框，不动内部的徽章、文字与右侧「×N」数量的排版，也不会把卡片或列撑大。</li>
-      <li><span class="ka-tag">参数</span>动画秒数请做成<strong>可调参数</strong>（不要写死在多处），上方控制列的数值即为建议值：逐张开卷的流光<strong>绕一圈 2.4 秒</strong>、全包的掃光<strong>掃一次 3.2 秒</strong>。若实测低阶手机卡顿，优先调长秒数、降低频率，不要改变实作方式。</li>
-      <li><span class="ka-tag">无障碍</span>需支援系统层级的「减少动态效果」设定（<span class="spec-field">prefers-reduced-motion</span>）——玩家若在手机系统开启此设定，动画应<strong>自动停止</strong>、卡片以静态样式呈现，属业界常规做法。</li>
+      <li><strong>以本规格书 HTML 档案为实作基准</strong>：动画效果已在本档案内以纯 CSS 实现，前端请直接参照档案内的动画效果进行开发，无另外的设计稿或动画输出档</li>
+      <li><strong>不需要额外动画档案：</strong>两种动画皆为纯 CSS 实作，不需要 GIF、影片或 Lottie 档案</li>
+      <li><strong>动画秒数建议值：</strong>掃光一次建议 <strong>1.5 秒～5 秒</strong>可调，逐张开卷与全包可分别设定；建议做成可调参数，方便日后微调</li>
+      <li><strong>动画范围：</strong>只加在卡片外框，不影响内部文字、徽章排版，不会把卡片撑大</li>
     </ul>
   </div>
 
   <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">4.6 需试想各种情境</h3>
   <ul class="spec-plain">
-    <li><strong>逐张开卷与全包的差异整理</strong>：两者都只让 Last／S／A 赏发光，但<strong>动画形式不同</strong>（逐张开卷＝流光跑边、全包＝掃光），<strong>排序规则也不同</strong>（逐张开卷＝Last赏置顶＋其余随机、全包＝维持赏级字母顺序）。这两项差异都是刻意的，见 4.1／4.2／4.4</li>
-    <li><strong>这一次没有开出任何 Last／S／A 赏</strong>：整个弹窗都没有光圈，属正常情况，不需要退而给最高的那张一个动画——「没有光」本身就是资讯，玩家看到就知道这次没中大奖</li>
-    <li><strong>一次开出多张 Last／S／A 赏</strong>：每一张都各自套用，不会只亮其中一张；多张同时亮属正常情况</li>
-    <li><strong>是否要改成依序进场</strong>：目前所有卡片同时开始播放；是否需要错开成「一张一张亮起来」的进场效果，本版<strong>不处理</strong>，维持同时开始</li>
-    <li><strong>弹窗停留很久</strong>：动画持续循环不会自动停止；若担心长时间停留耗电，可另行讨论是否加上「播放 N 秒后淡出停止」，本版<strong>维持持续循环</strong></li>
-    <li><strong>随机排列会不会让玩家以为系统作弊</strong>：因为随机只动显示顺序、不动中奖结果，且中奖内容在弹窗上完整列出，玩家可自行核对；若客服收到疑问，说明「顺序随机、内容不变」即可</li>
-    <li><strong>低阶手机效能</strong>：全包画面因为已经把同赏级聚合成一列，<strong>最多也只有 Last／S／A 三列会亮</strong>，动画图层数量极少，不会因为这一箱有几十张券而爆量；逐张开卷最多 10 张卡、会亮的更少。若实测仍有卡顿，优先<strong>降低循环频率</strong>（调长秒数），不改变实作方式；亦可只让<strong>目前在画面内</strong>的卡片播放动画，滑出画面即暂停</li>
+    <li><strong>逐张开卷 vs 全包的差异</strong>：
+      <ul style="margin-top:6px;">
+        <li>动画形式：逐张开卷与全包均采用掃光</li>
+        <li>卡片排序：逐张开卷＝Last赏置顶＋其余随机；全包＝维持赏级字母顺序</li>
+        <li>触发时机：逐张开卷＝翻牌揭晓后才亮；全包＝弹窗出现时同步亮</li>
+        <li>以上差异均为刻意设计，详见 4.1／4.2／4.4</li>
+      </ul>
+    </li>
+    <li><strong>这次没有开出 Last／S／A 赏</strong>：整个弹窗都没有光圈，属正常情况，不需要另外处理</li>
+    <li><strong>一次开出多张 Last／S／A 赏</strong>：每张各自套用动画，多张同时亮属正常情况</li>
+    <li><strong>动画是否循环停止</strong>：持续循环，不自动停止</li>
   </ul>
 </div></div>
 
