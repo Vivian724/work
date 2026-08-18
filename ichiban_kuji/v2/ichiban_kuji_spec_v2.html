@@ -429,9 +429,10 @@ tr:hover td.v2-new { background: #fff2d9; }
 <div class="spec-nav" id="mergeNav">
   <button onclick="mergeGo(0)">封面／版本纪录</button>
   <button onclick="mergeGo(1)">后台＿商品兑换记录</button>
-  <button onclick="mergeGo(2)">前台＿兑换记录／积分历史／资金详情</button>
-  <button onclick="mergeGo(3)">前台＿一番赏页面</button>
-  <button onclick="mergeGo(4)">前台＿开卷动画</button>
+  <button onclick="mergeGo(2)">后台＿商品配置 ▸ LAST赏</button>
+  <button onclick="mergeGo(3)">前台＿兑换记录／积分历史／资金详情</button>
+  <button onclick="mergeGo(4)">前台＿一番赏页面</button>
+  <button onclick="mergeGo(5)">前台＿开卷动画</button>
 </div>
 
 <!-- ══════════ 0. 封面／版本纪录 ══════════ -->
@@ -440,6 +441,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     <div class="spec-ver-badge">📄 v2.0</div>
     <div class="spec-h1">Ichiban Kuji 一番赏 · 规格书 v2.0</div>
     <p class="spec-sub">本版主题：中奖纪录「同赏级聚合」显示。</p>
+    <p style="color:#e03c3c;font-size:14px;font-weight:600;margin-top:6px;">※ 8/18 调整：后台商品配置 ▸ LAST赏 ＞ 虚拟物品新增「商品简介」必填字段（标注红字之处为本次新增内容）</p>
 
     <div class="spec-base-doc">
       基准文件：<span class="spec-field">ichiban_kuji_spec.html</span>（v1.0，未特别标示版本号，视为基准版）。
@@ -530,6 +532,11 @@ tr:hover td.v2-new { background: #fff2d9; }
               <td><span class="spec-ptag spec-ptag-popup">前台：撕卷弹窗</span></td>
               <td><span class="spec-ttag spec-ttag-adjust">调整规则</span></td>
               <td>1／5／10 张时卡片<strong>Last赏置顶、其余随机排列</strong>；Draw All 维持赏级字母顺序；后台抽奖记录维持固定权重排序，前后台不需一致</td>
+            </tr>
+            <tr>
+              <td><span class="spec-ptag spec-ptag-admin">后台：商品配置 ▸ LAST赏</span></td>
+              <td><span class="spec-ttag spec-ttag-new">新增字段</span></td>
+              <td>LAST赏 第一层「虚拟物品」新增「商品简介」必填字段，适用所有第二层子类型</td>
             </tr>
           </tbody>
         </table>
@@ -628,12 +635,12 @@ tr:hover td.v2-new { background: #fff2d9; }
   </ul>
 </div></div>
 
-<!-- ══════════ 2. 前台＿兑换记录 ══════════ -->
-<div class="spec-view" id="mergeView2"><div class="spec-view-inner">
+<!-- ══════════ 3. 前台＿兑换记录 ══════════ -->
+<div class="spec-view" id="mergeView3"><div class="spec-view-inner">
   <div class="spec-h1">前台＿兑换记录／积分历史（v2 异动）</div>
   <p class="spec-sub">路径：积分商城 ＞ 兑换记录。适用与后台完全相同的「同赏级聚合」规则；本页说明前台的列表卡片、以及点进去的订单详情页要如何对应调整。</p>
 
-  <h3 style="font-size:22px;font-weight:700;margin-bottom:14px;">2.1 兑换记录列表</h3>
+  <h3 style="font-size:22px;font-weight:700;margin-bottom:14px;">3.1 兑换记录列表</h3>
   <p class="spec-now"><strong>现况（v1）：</strong>一张券＝一张卡片，卡片上只有商品图片、商品奖励名称、这一张的单价积分与状态按钮。买全包一次中出 30 张同种奖励，列表就会往下滑出 30 张几乎一模一样的卡片。</p>
 
   <div class="spec-stack">
@@ -678,7 +685,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     </div>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">2.2 订单详情页</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">3.2 订单详情页</h3>
   <p class="spec-caption">点击列表卡片会进入「订单详情」页。合并后，这个页面在「商品价格」下方新增「数量」「总价格」两个栏位；本页下方示意图为草稿排版，正式视觉样式请<strong>参照设计稿</strong>。</p>
   <p class="spec-now"><strong>现况（v1）：</strong>详情页只有「兑换单号」「商品名称」「商品价格」三个栏位，其中商品价格是<strong>单张</strong>的价格。玩家看不出这笔合并了几张，也无法在详情页确认总金额。</p>
 
@@ -709,36 +716,55 @@ tr:hover td.v2-new { background: #fff2d9; }
     </div>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">2.3 积分历史（新增页面异动）</h3>
-  <p class="spec-caption">路径：会员中心 ＞ 积分历史。本次异动是把同一个商品的多笔纪录合并成一行，并<strong>替会员算出这个商品总共买了几次</strong>（一番赏<strong>每一张券算一次</strong>）。只处理<strong>收入类纪录</strong>——「支出」纪录本身已经是整笔订单的总扣除金额，不需要再合并或相乘。<br>合并判断条件：<strong>同一笔订单＋同商品名称</strong>即合并（同一笔订单内，同商品的金额本来就一致，不会有差异，除非是不同的一番赏商品）。</p>
-  <p class="spec-now"><strong>现况（v1）：</strong>积分历史每一行显示的是<strong>「商品名称」</strong>与金额。一番赏是<strong>一张券算一次购买</strong>，所以同一次购买有几张券，就会产生几笔独立的「收入」纪录，同一个商品名称重复出现多行（例如 2 张券就是 2 笔「+10,000」），玩家要自己数笔数才知道这个商品总共买了几次、拿了多少。下方的「支出」纪录只有 1 笔、金额本来就是整笔订单的总扣点，不受影响。</p>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">3.3 积分历史（新增页面异动）</h3>
+  <p class="spec-caption">路径：会员中心 ＞ 积分历史。本次异动同时作用于<strong>收入</strong>与<strong>支出</strong>两类纪录，统一在数量 &gt; 1 时于商品名称后显示「×N」购买张数，数量为 1 时不显示。<br>合并判断条件：<strong>同一笔订单＋同商品名称</strong>即合并；金额处理方式：收入显示<strong>加总金额</strong>，支出本身已是整笔订单总扣点，<strong>金额不变</strong>，只新增张数标注。</p>
+  <p class="spec-now"><strong>现况（v1）：</strong>积分历史每一行显示的是<strong>「商品名称」</strong>与金额。一番赏一张券算一次购买，同一次购买有几张券就产生几笔独立的「收入」纪录，重复出现多行；「支出」纪录虽然是整笔订单总扣点，但<strong>目前也不显示购买张数</strong>，玩家无法直接看出这次买了几张。</p>
 
   <div class="spec-stack">
     <div class="spec-screen-card">
-      <div class="screen-label" style="background:#fa8c16;">合并后（v2：同笔订单、同商品、同金额的收入纪录合并显示数量）</div>
+      <div class="screen-label" style="background:#fa8c16;">合并后（v2：收入纪录合并＋加总金额；支出纪录数量 &gt; 1 时显示 ×N）</div>
       <div class="page" style="background:#f5f6f8;">
         <div class="h5-frame" style="max-width:420px;">
           <div class="h5v2-topbar"><span class="back">‹</span>积分历史</div>
           <div class="h5ph-tabs"><div class="h5ph-tab active">全部</div><div class="h5ph-tab">收入</div><div class="h5ph-tab">支出</div></div>
           <div class="h5ph-note">*仅展示近 30 日数据</div>
           <div class="h5ph-row merged"><div class="h5ph-left"><div class="h5ph-name">Redeem QA_30张_08 <span class="h5ph-qty">×2</span></div><div class="h5ph-date">2026-08-11 18:20:15</div></div><div class="h5ph-amt pos">+20,000</div></div>
-          <div class="h5ph-row"><div class="h5ph-left"><div class="h5ph-name">Redeem QA_30张_08</div><div class="h5ph-date">2026-08-11 18:20:15</div></div><div class="h5ph-amt neg">−200</div></div>
+          <div class="h5ph-row merged"><div class="h5ph-left"><div class="h5ph-name">Redeem QA_30张_08 <span class="h5ph-qty">×2</span></div><div class="h5ph-date">2026-08-11 18:20:15</div></div><div class="h5ph-amt neg">−200</div></div>
         </div>
       </div>
     </div>
     <div class="spec-text">
       <div class="spec-rule-box">
-        <div class="spec-rule-title">积分历史合并规则</div>
-        <ul>
-          <li><strong>收入类纪录合并：</strong>同一笔订单里，相同商品、相同积分金额的收入纪录合并成 1 行。例如买了 2 张券，原本会出现 2 笔「+10,000」→ 合并后只显示 1 行，名称后加「×2」标示购买张数，右侧金额加总为「+20,000」</li>
-          <li><strong>购买数量为 1 时：</strong>不显示「×N」，显示逻辑与 v1 相同，不会出现「×1」</li>
-          <li><strong>支出纪录不受影响：</strong>「−200」这类支出本来就是整笔订单的总扣点（不是逐张券各自扣），所以本身已经是合并的，维持原样不变</li>
-        </ul>
+        <div class="spec-rule-title">积分历史 ×N 显示规则</div>
+        <div class="spec-table-wrap" style="margin-top:10px;">
+          <table>
+            <thead>
+              <tr><th style="width:160px;">规则</th><th>收入纪录</th><th>支出纪录 <span style="color:#e03c3c;font-size:12px;font-weight:700;">※ 8/18 新增</span></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>行数处理</td>
+                <td>同订单＋同商品的多笔合并为 <strong>1 行</strong></td>
+                <td>本身已是 1 行，<strong>不需合并</strong></td>
+              </tr>
+              <tr>
+                <td>×N 显示条件</td>
+                <td>数量 &gt; 1 → 显示「×N」<br>数量 = 1 → 不显示</td>
+                <td>数量 &gt; 1 → 显示「×N」<br>数量 = 1 → 不显示</td>
+              </tr>
+              <tr>
+                <td>金额</td>
+                <td>多笔金额<strong>加总</strong>显示</td>
+                <td>维持原总扣点，<strong>金额不变</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">2.4 资金详情（新增页面异动）</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">3.4 资金详情（新增页面异动）</h3>
   <p class="spec-now" style="margin-bottom:16px;">路径：前台 ＞ 我的 ＞ 资金详情 ＞ 交易记录</p>
   <p class="spec-now"><strong>现况（v1）：</strong>3 张彩金券 ＝ 3 笔「+1,500.00」，玩家须自行加总。</p>
   <div class="spec-rule-box">
@@ -775,14 +801,14 @@ tr:hover td.v2-new { background: #fff2d9; }
     </div>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">2.5 资金详情 —— 需试想各种情境</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">3.5 资金详情 —— 需试想各种情境</h3>
   <ul class="spec-plain">
     <li><strong>合并判断范围</strong>：与「积分历史」一致——<strong>同一笔订单＋同奖励文案（{商品名称}相同）</strong>即合并（同一笔订单内金额本来就一致）</li>
     <li><strong>只中 1 张该类奖励</strong>：不特别处理，正常显示 1 笔、金额即该笔金额；因为本页一律不显示数量，所以中 1 张或多张的<strong>呈现格式完全相同</strong>，差别只在金额</li>
     <li><strong>筛选／日期区间</strong>：合并只发生在「同一笔订单」内，不会跨订单、跨日期合并；若玩家分成两次购买、各中 1 次彩金，仍各自显示 2 笔，不合并</li>
   </ul>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">2.6 与后台的对应关系</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">3.6 与后台的对应关系</h3>
   <ul class="spec-plain">
     <li>前台每一张卡片＝后台合并后的<strong>一行</strong>，两者是同一份聚合后的数据，呈现方式不同（表格 vs 卡片），不是两套独立逻辑</li>
     <li>卡片上的「商品名称」文字，沿用 v1 规则（彩金/积分显示数值本身、优惠券等显示主档名称、实物显示奖品名称），只是额外加上数量小标「×N」——<strong>购买数量为 1 时不显示「×N」标签</strong>，按照原本 v1 的显示方式呈现（此规则同样适用于「积分历史」；<strong>「资金详情」不适用</strong>，该页一律不显示数量小标）</li>
@@ -791,12 +817,12 @@ tr:hover td.v2-new { background: #fff2d9; }
   </ul>
 </div></div>
 
-<!-- ══════════ 3. 前台＿一番赏页面 ══════════ -->
-<div class="spec-view" id="mergeView3"><div class="spec-view-inner">
+<!-- ══════════ 4. 前台＿一番赏页面 ══════════ -->
+<div class="spec-view" id="mergeView4"><div class="spec-view-inner">
   <div class="spec-h1">前台＿一番赏页面（v2 异动）</div>
   <p class="spec-sub">路径：前台 ＞ 一番赏活动页（Ichiban Luck Draw）。本次异动：抽奖张数选择器的「记忆行为」调整、奖品卡片图片显示标准化。</p>
 
-  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">3.1 抽奖张数选择器 —— 记忆行为调整</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">4.1 抽奖张数选择器 —— 记忆行为调整</h3>
   <div class="spec-stack">
     <div class="spec-screen-card">
       <div class="screen-label">画面参考</div>
@@ -822,14 +848,14 @@ tr:hover td.v2-new { background: #fff2d9; }
     </ul>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">3.2 需试想各种情境</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">4.2 需试想各种情境</h3>
   <ul class="spec-plain">
     <li><strong>完成「Draw All」后</strong>：全包即抽完此活动内所有券，活动结束，玩家会离开（或被导出）此活动页面，不存在「剩余次数不足以再次 Draw All」的情境</li>
     <li><strong>玩家手动把选择器切回「1 Draw」再抽</strong>：正常记住这次选的「1 Draw」，逻辑一致，不特殊处理</li>
     <li><strong>抽奖过程中断线或抽奖失败（未成功扣款/未出结果）</strong>：剩余次数足够时，选择器维持玩家原本选择的张数、不重置，玩家可直接重试；剩余次数不足则依「剩余次数不足时的处理」跳提示弹窗并回到「1 Draw」</li>
   </ul>
 
-  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">3.3 奖品卡片图片显示标准化</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">4.3 奖品卡片图片显示标准化</h3>
   <div class="spec-rule-box">
     <div class="spec-rule-title">图片显示规则</div>
     <ul>
@@ -841,8 +867,8 @@ tr:hover td.v2-new { background: #fff2d9; }
   </div>
 </div></div>
 
-<!-- ══════════ 4. 前台＿开卷动画 ══════════ -->
-<div class="spec-view" id="mergeView4"><div class="spec-view-inner">
+<!-- ══════════ 5. 前台＿开卷动画 ══════════ -->
+<div class="spec-view" id="mergeView5"><div class="spec-view-inner">
   <div class="spec-h1">前台＿开卷动画（v2 异动）</div>
   <p class="spec-sub">路径：前台 ＞ 一番赏活动页 ＞ 按下「Draw Now」后弹出的撕卷结果弹窗。本次异动：奖品卡片的<strong>外框加上掃光动画</strong>，逐张开卷与全包<strong>均采用掃光</strong>。下方两张示意图以实际弹窗截图为底、动画为真实可运行的效果，可直接观看。</p>
 
@@ -863,7 +889,7 @@ tr:hover td.v2-new { background: #fff2d9; }
   </div>
   <p class="spec-caption">上方拉杆可<strong>即时调整动画秒数</strong>，用来决定最后要给工程师的数值；勾选「关闭动画」可以直接跟现况对照。下方两张示意图都是<strong>实际可运行的动画</strong>，底图分别为逐张开卷与全包的真实弹窗截图。</p>
 
-  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">4.1 逐张开卷（1／5／10 张）—— 掃光</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">5.1 逐张开卷（1／5／10 张）—— 掃光</h3>
   <p class="spec-caption">一道亮光沿着奖品卡片外框<strong>绕圈跑</strong>，像霓虹描边。这个画面是<strong>一格一张的卡片格线</strong>，卡片尺寸小而方正，光沿着一圈跑刚好把整张卡框起来，开奖的存在感最明显。</p>
   <div class="spec-stack">
     <div class="spec-screen-card">
@@ -882,7 +908,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     </div>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">4.2 全包（Draw All）—— 掃光</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">5.2 全包（Draw All）—— 掃光</h3>
   <p class="spec-caption">一道斜向高光<strong>每隔几秒掃过整列</strong>一次，像光扫过表面的反光。全包画面是<strong>一列一个赏级的聚合列表</strong>（Last赏 1 张、S赏 ×11、A赏 ×14…），列很宽很扁——掃光横着扫过一整列刚好顺着这个形状，比让光绕这么长一圈跑更自然、也不会显得慢。</p>
   <div class="spec-stack">
     <div class="spec-screen-card">
@@ -902,7 +928,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     </div>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">4.3 两种画面的共通规则</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">5.3 两种画面的共通规则</h3>
   <div class="spec-rule-box" style="max-width:1100px;">
     <div class="spec-rule-title">动画行为</div>
     <ul>
@@ -922,7 +948,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     </ul>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">4.4 撕卷弹窗的卡片排序 —— 改为随机排列</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">5.4 撕卷弹窗的卡片排序 —— 改为随机排列</h3>
   <p class="spec-now"><strong>现况（v1）：</strong>撕卷结果弹窗里的奖品卡片，是<strong>依赏级的英文字母顺序排列</strong>（S赏 → A赏 → B赏 → … → H赏）。因此卡片一出来，位置就固定了——最好的赏级永远在最前面，玩家看第一张就知道这次的最好成绩，后面几张失去悬念。</p>
   <div class="spec-rule-box" style="max-width:1100px;">
     <div class="spec-rule-title">调整后规则（1／5／10 张）</div>
@@ -951,7 +977,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     </ul>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">4.5 给前端开发的说明</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">5.5 给前端开发的说明</h3>
   <div class="spec-rule-box">
     <div class="spec-rule-title">实作参考</div>
     <ul>
@@ -962,7 +988,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     </ul>
   </div>
 
-  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">4.6 需试想各种情境</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">5.6 需试想各种情境</h3>
   <ul class="spec-plain">
     <li><strong>逐张开卷 vs 全包的差异</strong>：
       <ul style="margin-top:6px;">
@@ -978,9 +1004,119 @@ tr:hover td.v2-new { background: #fff2d9; }
   </ul>
 </div></div>
 
+<!-- ══════════ 2. 后台＿商品配置 ▸ LAST赏 ══════════ -->
+<div class="spec-view" id="mergeView2"><div class="spec-view-inner">
+  <p style="color:#e03c3c;font-size:20px;font-weight:700;margin-bottom:16px;">※ 8/18 调整</p>
+  <div class="spec-h1">后台＿商品配置 ▸ LAST赏（新增）</div>
+  <p class="spec-sub">路径：后台 ＞ 积分商城 ＞ 商品配置 ＞ LAST赏。以下说明新增「商品简介」字段的规格，仅适用于第一层选择「虚拟物品」的情况。</p>
+
+  <h3 style="font-size:22px;font-weight:700;margin-bottom:14px;">2.1 需求说明</h3>
+  <p class="spec-lead" style="margin-bottom:16px;">
+    现况：第一层选择「实物」时，配置页面已有「商品简介」（必填）；第一层选择「虚拟物品」时，无「商品简介」字段。<br><br>
+    <strong>新增：</strong>第一层选择「虚拟物品」时，不论第二层为何子类型，一律新增「商品简介」必填字段。
+  </p>
+
+  <h3 style="font-size:22px;font-weight:700;margin-bottom:14px;">2.2 画面示意</h3>
+
+  <div class="spec-stack">
+
+    <!-- 新增后：虚拟物品 + 商品简介置于最右 -->
+    <div class="spec-screen-card">
+      <div class="screen-label">新增后：虚拟物品（商品简介置于最右，任一第二层子类型均相同）</div>
+      <div class="page" style="background:#fff; padding:20px 24px;">
+        <div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+          <div style="border:1.5px solid #d9d9d9;border-radius:4px;padding:5px 12px;color:#bbb;font-size:14px;min-width:80px;">LAST</div>
+          <span style="color:#d4640a;font-size:15px;font-weight:600;">🏆 压轴奖：最后一抽自动触发</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:20px;margin-bottom:16px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊第一层</div>
+            <div style="display:flex;align-items:center;gap:6px;border:1px solid #d9d9d9;border-radius:4px;padding:5px 10px;width:130px;font-size:14px;">
+              虚拟物品 <span style="margin-left:auto;color:#999;">▾</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊第二层</div>
+            <div style="display:flex;align-items:center;gap:6px;border:1px solid #d9d9d9;border-radius:4px;padding:5px 10px;width:130px;font-size:14px;">
+              优惠券 <span style="margin-left:auto;color:#999;">▾</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊优惠券</div>
+            <div style="display:flex;align-items:center;gap:6px;border:1px solid #d9d9d9;border-radius:4px;padding:5px 10px;width:160px;font-size:14px;color:#bbb;">
+              选择优惠券 <span style="margin-left:auto;color:#999;">▾</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊商品简介 <span style="background:#fff3e0;color:#d4640a;font-size:11px;padding:1px 6px;border-radius:99px;margin-left:4px;">新增</span></div>
+            <input type="text" placeholder="请输入商品简介"
+              style="border:1px solid #1677ff;border-radius:4px;padding:5px 10px;font-size:14px;width:180px;outline:none;color:#333;">
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊奖品图片</div>
+          <button style="background:#1677ff;color:#fff;border:none;border-radius:4px;padding:6px 14px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;">📎 选择文件</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-text">
+      <p class="spec-lead">「商品简介」为新增必填字段，仅在第一层为「虚拟物品」时出现，位置固定在同行最右侧（第二层及第三层选择器之后）、奖品图片上方。实物原本已有此字段，不受本次异动影响。</p>
+    </div>
+  </div>
+
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">2.3 字段规格说明</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th>字段</th><th>状态</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr class="is-new">
+          <td class="spec-field">商品简介〔新增〕</td>
+          <td><span class="spec-tag new">新增</span></td>
+          <td>
+            适用范围：第一层「虚拟物品」 × 所有第二层子类型（彩金、积分、优惠券、免费旋转、免费投注、道具卡）。<br>
+            ・位置：同行最右侧（第二层及第三层选择器之后），奖品图片上方<br>
+            ・格式：单行文字输入框<br>
+            ・必填：是，不可留空；若留空则无法储存，显示提示文案「请输入商品简介」
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">2.4 各情境穷举</h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead><tr><th style="width:160px;">第一层</th><th style="width:160px;">第二层</th><th>「商品简介」字段是否出现</th><th>是否必填</th></tr></thead>
+      <tbody>
+        <tr class="is-new"><td>虚拟物品</td><td>彩金</td><td>✅ 出现〔新增〕</td><td>✅ 必填</td></tr>
+        <tr class="is-new"><td>虚拟物品</td><td>积分</td><td>✅ 出现〔新增〕</td><td>✅ 必填</td></tr>
+        <tr class="is-new"><td>虚拟物品</td><td>优惠券</td><td>✅ 出现〔新增〕</td><td>✅ 必填</td></tr>
+        <tr class="is-new"><td>虚拟物品</td><td>免费旋转</td><td>✅ 出现〔新增〕</td><td>✅ 必填</td></tr>
+        <tr class="is-new"><td>虚拟物品</td><td>免费投注</td><td>✅ 出现〔新增〕</td><td>✅ 必填</td></tr>
+        <tr class="is-new"><td>虚拟物品</td><td>道具卡</td><td>✅ 出现〔新增〕</td><td>✅ 必填</td></tr>
+        <tr><td>实物</td><td>（无）</td><td>✅ 出现（原有，不异动）</td><td>✅ 必填（原有）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">2.5 验证规则</h3>
+  <ul class="spec-plain">
+    <li><strong>留空时无法储存：</strong>点击储存后若「商品简介」为空，字段框变红色边框，显示提示文案「请输入商品简介」，阻止送出</li>
+    <li><strong>字数上限：</strong>不超过 50 字；超出时输入框不再接受输入（hard stop）</li>
+    <li><strong>编辑既有资料：</strong>已储存的虚拟物品 LAST赏若原本无此字段（旧资料），进入编辑页时「商品简介」显示空白，运营须手动补填后才可储存</li>
+  </ul>
+
+  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">2.6 本次未涉及之既有规则</h3>
+  <ul class="spec-plain">
+    <li>第一层「实物」：已有「商品简介」字段，不受本次异动影响</li>
+    <li>非 LAST赏的其他赏级字段，不受本次异动影响</li>
+  </ul>
+</div></div>
+
 <script>
 function mergeGo(n) {
-  for (let i = 0; i <= 4; i++) {
+  for (let i = 0; i <= 5; i++) {
     const el = document.getElementById('mergeView' + i);
     if (el) el.classList.toggle('active', i === n);
   }
