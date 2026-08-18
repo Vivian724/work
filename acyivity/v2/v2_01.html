@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>预约中心・前台三版本初稿</title>
+<style>
+:root{
+  --color-primary:#1677ff;
+  --color-primary-soft:#e6f4ff;
+  --color-danger:#ff4d4f;
+  --color-warn:#faad14;
+  --color-success:#52c41a;
+  --color-text:#1a1a1a;
+  --color-sub:#8c8c8c;
+  --color-bg:#eef1f6;
+  --color-card:#ffffff;
+  --radius-lg:14px;
+  --radius-md:10px;
+  --radius-sm:6px;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;
+  --font-base:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:var(--font-base);}
+body{font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;color:var(--color-text);background:var(--color-bg);line-height:1.6;}
+a,b,code{display:inline;}
+
+/* ── 评审用：三版本切换（非产品本身UI，仅供比较） ── */
+.review-bar{position:sticky;top:0;z-index:200;background:#001529;padding:0 20px;display:flex;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.review-bar .rb-label{color:rgba(255,255,255,.45);font-size:0.75rem;padding:0 12px 0 0;white-space:nowrap;}
+.review-tab{padding:14px 18px;font-size:0.8125rem;color:rgba(255,255,255,.65);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.review-tab.active{color:#fff;border-bottom-color:var(--color-primary);background:rgba(255,255,255,.06);}
+.review-tab:hover{color:#fff;}
+.review-note{margin-left:auto;font-size:0.75rem;color:rgba(255,255,255,.45);padding:0 4px;}
+
+.version{display:none;min-height:calc(100vh - 49px);}
+.version.show{display:block;}
+
+/* ── 设计观察 callout（贴在原型旁的评审注记，非产品内容） ── */
+.design-note{max-width:1040px;margin:0 auto 0;padding:14px 24px 0;}
+.design-note .box{background:#fffbe6;border:1px solid #ffe58f;border-radius:var(--radius-sm);padding:12px 16px;font-size:0.8125rem;color:#874d00;line-height:1.7;}
+.design-note .box b{color:#613400;}
+.design-note .box.good{background:#f6ffed;border-color:#b7eb8f;color:#274d0c;}
+.design-note .box.good b{color:#1c3606;}
+
+/* ── 前台通用外壳 ── */
+.shell{max-width:1040px;width:100%;margin:0 auto;padding:20px 24px 72px;}
+.top-row{display:flex;align-items:center;justify-content:space-between;background:var(--color-card);border-radius:var(--radius-md);padding:12px 18px;margin-bottom:var(--space-4);box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.brand{font-size:1rem;font-weight:700;color:var(--color-primary);}
+.top-right{display:flex;align-items:center;gap:16px;}
+.bell{position:relative;cursor:pointer;width:30px;height:30px;border-radius:50%;background:var(--color-primary-soft);display:flex;align-items:center;justify-content:center;}
+.bell .dot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--color-danger);border:2px solid #fff;display:none;}
+.bell .dot.show{display:block;}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--color-primary);color:#fff;font-size:0.75rem;display:flex;align-items:center;justify-content:center;}
+
+/* ── 卡片通用 ── */
+.pill{display:inline-block;font-size:0.6875rem;font-weight:600;padding:2px 9px;border-radius:10px;}
+.pill.unreg{background:#f5f5f5;color:#999;}.pill.reg{background:var(--color-primary-soft);color:var(--color-primary);}
+.pill.claimable{background:#fff1f0;color:var(--color-danger);}.pill.claimed{background:#f6ffed;color:var(--color-success);}.pill.ended{background:#f5f5f5;color:#bbb;}
+.badge-dot{position:absolute;top:-6px;right:-6px;min-width:17px;height:17px;padding:0 3px;border-radius:9px;background:var(--color-danger);color:#fff;font-size:0.6875rem;font-weight:700;display:none;align-items:center;justify-content:center;box-shadow:0 0 0 2px #fff;}
+.badge-dot.show{display:flex;}
+.new-tag{font-size:0.625rem;color:#fff;background:var(--color-warn);border-radius:3px;padding:1px 4px;margin-left:4px;vertical-align:1px;}
+.btn{height:40px;padding:0 26px;border-radius:20px;font-size:0.875rem;font-weight:600;cursor:pointer;border:none;}
+.btn-primary{background:var(--color-primary);color:#fff;}
+.btn-primary:disabled{background:#d9d9d9;color:#fff;cursor:not-allowed;}
+.btn-claim{background:var(--color-danger);color:#fff;}
+.btn-ghost{background:#fff;color:#666;border:1px solid #d9d9d9;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:0.8125rem;color:var(--color-sub);cursor:pointer;margin-bottom:12px;}
+.back-link:hover{color:var(--color-primary);}
+
+/* ── 站内信面板（三版本共用） ── */
+.msg-panel{position:absolute;top:42px;right:0;width:320px;background:#fff;border-radius:var(--radius-md);box-shadow:0 8px 28px rgba(0,0,0,.15);z-index:80;display:none;overflow:hidden;}
+.msg-panel.show{display:block;}
+.msg-head{padding:12px 16px;font-size:0.8125rem;font-weight:600;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;}
+.msg-head .close{cursor:pointer;color:#999;}
+.msg-item{padding:14px 16px;border-bottom:0.5px solid #f5f5f5;}
+.msg-title{font-size:0.8125rem;font-weight:600;margin-bottom:4px;}
+.msg-content{font-size:0.75rem;color:#666;line-height:1.5;margin-bottom:8px;}
+.msg-cta{display:inline-block;height:26px;line-height:26px;padding:0 14px;background:var(--color-primary);color:#fff;border-radius:13px;font-size:0.75rem;cursor:pointer;}
+.msg-empty{padding:36px 16px;text-align:center;color:#bbb;font-size:0.75rem;}
+
+/* ── 活动详情（三版本共用的活动页组件外观） ── */
+.stage{background:var(--color-card);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);position:relative;}
+.banner{min-height:200px;background:linear-gradient(135deg,var(--banner-from,#4096ff),var(--banner-to,#1677ff));display:flex;align-items:center;justify-content:center;color:#fff;position:relative;padding:32px 20px;}
+.banner-title{font-size:1.375rem;font-weight:700;text-align:center;}
+.banner-sub{font-size:0.75rem;color:rgba(255,255,255,.85);margin-top:6px;text-align:center;}
+.body-area{background:#f6f9ff;padding:22px 24px;}
+.status-line{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:0.8125rem;}
+.actions{display:flex;gap:10px;}
+.copy-block{background:#fff;border-radius:8px;padding:16px 18px;font-size:0.8125rem;color:#666;line-height:1.7;margin-bottom:14px;}
+
+/* ═══════════ 版本一：主路口卡片墙 → 点入活动页 ═══════════ */
+.hub-head{margin-bottom:var(--space-4);}
+.hub-head h1{font-size:1.25rem;font-weight:700;}
+.hub-head p{font-size:0.8125rem;color:var(--color-sub);margin-top:2px;}
+.hub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:var(--space-5);}
+.hub-card{position:relative;background:var(--color-card);border-radius:var(--radius-md);overflow:hidden;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:transform .15s,box-shadow .15s;border:1.5px solid transparent;}
+.hub-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(22,119,255,.14);border-color:#91caff;}
+.hub-card .thumb{height:88px;background:linear-gradient(135deg,var(--banner-from,#4096ff),var(--banner-to,#1677ff));position:relative;}
+.hub-card .thumb .badge-dot{top:8px;right:8px;}
+.hub-card .body{padding:14px 16px;}
+.hub-card .name{font-size:0.9375rem;font-weight:600;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hub-card .time{font-size:0.6875rem;color:var(--color-sub);margin-bottom:8px;}
+.hub-promo{background:var(--color-card);border-radius:var(--radius-md);padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.hub-promo-title{font-size:0.875rem;font-weight:600;margin-bottom:10px;}
+.hub-promo-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid #f0f0f0;font-size:0.8125rem;}
+.hub-promo-row:last-child{border-bottom:none;}
+.hub-promo-left{display:flex;align-items:center;gap:8px;}
+.hub-promo-dot{width:8px;height:8px;border-radius:50%;background:var(--color-danger);}
+.hub-promo-dot.hidden{visibility:hidden;}
+
+/* ═══════════ 版本二：滑动切换bar覆盖banner ═══════════ */
+.v2-strip{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;gap:8px;padding:14px 16px;overflow-x:auto;background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,0));}
+.v2-pill{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:16px;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);color:#fff;font-size:0.75rem;cursor:pointer;border:1px solid rgba(255,255,255,.3);white-space:nowrap;position:relative;}
+.v2-pill.active{background:rgba(255,255,255,.92);color:var(--color-primary);font-weight:600;}
+.v2-pill .badge-dot{position:static;display:inline-flex;width:14px;height:14px;font-size:0.5625rem;box-shadow:none;}
+
+/* ═══════════ 版本三：总路口按钮 + 弹窗选择 ═══════════ */
+.v3-lobby{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;}
+.v3-lobby .hint{font-size:0.8125rem;color:var(--color-sub);margin-bottom:20px;}
+.entry-trigger{display:inline-flex;align-items:center;gap:14px;background:var(--color-card);border-radius:999px;padding:14px 26px 14px 18px;box-shadow:0 6px 20px rgba(22,119,255,.16);cursor:pointer;border:1.5px solid #91caff;transition:transform .15s;position:relative;}
+.entry-trigger:hover{transform:translateY(-2px);}
+.entry-trigger .icn{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#4096ff,#1677ff);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;}
+.entry-trigger .txt .t1{font-size:0.9375rem;font-weight:700;color:var(--color-text);}
+.entry-trigger .txt .t2{font-size:0.75rem;color:var(--color-sub);margin-top:2px;}
+.entry-trigger .badge-dot{top:2px;right:2px;}
+.modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-mask.show{display:flex;}
+.modal-box{background:#fff;border-radius:var(--radius-lg);max-width:640px;width:100%;max-height:82vh;overflow-y:auto;padding:0;animation:modalIn .18s ease;}
+@keyframes modalIn{from{opacity:0;transform:translateY(12px) scale(.98);}to{opacity:1;transform:none;}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #f0f0f0;}
+.modal-head h2{font-size:1.0625rem;font-weight:700;}
+.modal-close{cursor:pointer;color:#999;font-size:1.25rem;line-height:1;}
+.modal-body{padding:18px 22px 22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+
+@media (max-width:640px){
+  .shell{padding:14px 14px 60px;}
+  .hub-grid{grid-template-columns:1fr;}
+  .modal-body{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="review-bar">
+  <span class="rb-label">初稿比较 ·</span>
+  <div class="review-tab active" data-v="v1" onclick="switchVersion('v1')">版本一・主路口卡片墙</div>
+  <div class="review-tab" data-v="v2" onclick="switchVersion('v2')">版本二・滑动bar覆盖banner</div>
+  <div class="review-tab" data-v="v3" onclick="switchVersion('v3')">版本三・弹窗选择</div>
+  <span class="review-note">以下三版皆为可点击的互动初稿</span>
+</div>
+
+<!-- ══════════════════ 版本一 ══════════════════ -->
+<div class="version show" id="version-v1">
+  <div class="design-note">
+    <div class="box good"><b>设计意图：</b>先看「全貌」再决定要进哪个活动——像逛活动橱窗。优点是每个活动的 Banner 完全不受干扰、可以摆满版面视觉；卡片墙也天然支援未来活动数量变多（3个、5个都不挤）。代价是多了一层「先选、才看到内容」的点击，比原地切换多一步。</div>
+  </div>
+  <div class="shell">
+    <div class="top-row">
+      <div class="brand">Game Center</div>
+      <div class="top-right">
+        <div class="bell" onclick="V1.toggleMsg(event)">
+          🔔<div class="dot" id="v1-dot"></div>
+          <div class="msg-panel" id="v1-msg" onclick="event.stopPropagation()">
+            <div class="msg-head"><span>站内信</span><span class="close" onclick="V1.toggleMsg()">×</span></div>
+            <div id="v1-msg-list"></div>
+          </div>
+        </div>
+        <div class="avatar">VC</div>
+      </div>
+    </div>
+
+    <div id="v1-hub">
+      <div class="hub-head"><h1>预约中心</h1><p id="v1-count"></p></div>
+      <div class="hub-grid" id="v1-grid"></div>
+      <div class="hub-promo">
+        <div class="hub-promo-title">🎁 Rewards promotion</div>
+        <div id="v1-promo"></div>
+      </div>
+    </div>
+
+    <div id="v1-detail" style="display:none;">
+      <div class="back-link" onclick="V1.back()">← 返回预约中心</div>
+      <div class="stage" id="v1-stage"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ 版本二 ══════════════════ -->
+<div class="version" id="version-v2">
+  <div class="design-note">
+    <div class="box"><b>设计观察（你提到的问题）：</b>滑动 bar 直接盖在 Banner 上方，会挡到 Banner 本身的视觉重心与活动标题——尤其如果 Banner 上原本就设计了文字或角色立绘在顶部，会被这条 bar 完全遮住。目前用半透明玻璃感处理，稍微缓解「完全挡住」但仍会「压在上面」，属于用空间换取「原地切换、不用跳转」的手感。</div>
+  </div>
+  <div class="shell">
+    <div class="top-row">
+      <div class="brand">Game Center</div>
+      <div class="top-right">
+        <div class="bell" onclick="V2.toggleMsg(event)">
+          🔔<div class="dot" id="v2-dot"></div>
+          <div class="msg-panel" id="v2-msg" onclick="event.stopPropagation()">
+            <div class="msg-head"><span>站内信</span><span class="close" onclick="V2.toggleMsg()">×</span></div>
+            <div id="v2-msg-list"></div>
+          </div>
+        </div>
+        <div class="avatar">VC</div>
+      </div>
+    </div>
+    <div class="stage" id="v2-stage"></div>
+    <div class="hub-promo" style="margin-top:16px;">
+      <div class="hub-promo-title">🎁 Rewards promotion</div>
+      <div id="v2-promo"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ 版本三 ══════════════════ -->
+<div class="version" id="version-v3">
+  <div class="design-note">
+    <div class="box good"><b>设计意图：</b>入口本身很轻量（一颗按钮/条），不占用大块版面，适合放在游戏大厅、首页等空间有限的地方；点击才「弹出」选择，选完直接进活动页，中间没有多一个专门的列表页。代价是活动清单被藏在弹窗里，曝光感比版本一的整版卡片墙弱一些，且弹窗在活动较多时可滚动但可视区域有限。</div>
+  </div>
+  <div class="shell">
+    <div class="top-row">
+      <div class="brand">Game Center</div>
+      <div class="top-right">
+        <div class="bell" onclick="V3.toggleMsg(event)">
+          🔔<div class="dot" id="v3-dot"></div>
+          <div class="msg-panel" id="v3-msg" onclick="event.stopPropagation()">
+            <div class="msg-head"><span>站内信</span><span class="close" onclick="V3.toggleMsg()">×</span></div>
+            <div id="v3-msg-list"></div>
+          </div>
+        </div>
+        <div class="avatar">VC</div>
+      </div>
+    </div>
+
+    <div id="v3-lobby" class="v3-lobby">
+      <div class="hint">这是游戏大厅／首页的一个入口位（示意），预约中心以按钮形式存在</div>
+      <div class="entry-trigger" onclick="V3.openModal()">
+        <div class="icn">🎮</div>
+        <div class="txt">
+          <div class="t1" id="v3-trigger-title">预约中心</div>
+          <div class="t2" id="v3-trigger-sub"></div>
+        </div>
+        <div class="badge-dot" id="v3-trigger-dot">!</div>
+      </div>
+    </div>
+
+    <div id="v3-detail" style="display:none;">
+      <div class="back-link" onclick="V3.back()">← 返回预约中心入口</div>
+      <div class="stage" id="v3-stage"></div>
+      <div class="hub-promo" style="margin-top:16px;">
+        <div class="hub-promo-title">🎁 Rewards promotion</div>
+        <div id="v3-promo"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="v3-modal" onclick="V3.closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-head"><h2>预约中心</h2><span class="modal-close" onclick="V3.closeModal()">×</span></div>
+      <div class="modal-body" id="v3-modal-grid"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════ 共用资料（3个「加入總入口」的预约活动示例） ══════════════ */
+var ACT=[
+  {id:1,name:'夏季预约活动',state:'claimable',reward:'PHP 500 彩金',viewed:true,phase:'奖励领取',phaseTime:'07/25 00:00 ~ 08/05 23:59',from:'#4096ff',to:'#1677ff'},
+  {id:2,name:'新游戏预约·龙城霸业',state:'unreg',reward:'免费旋转券 ×5',viewed:false,phase:'预约进行中',phaseTime:'07/28 10:00 ~ 08/02 23:59',from:'#7c6bff',to:'#4b2fe0'},
+  {id:3,name:'赛事预约·全明星赛',state:'reg',reward:'限定头像框',viewed:true,phase:'预约进行中',phaseTime:'07/26 00:00 ~ 08/03 23:59',from:'#ff8a45',to:'#ff5a1f'}
+];
+function stateLabel(s){return {unreg:'未预约',reg:'已预约',claimable:'待领取',claimed:'已领取',ended:'已结束'}[s];}
+function hasBadgeA(a){return a.state==='claimable';}
+function hasBadgeB(a){return !a.viewed;}
+function hasBadge(a){return hasBadgeA(a)||hasBadgeB(a);}
+function pendingMsgs(){return ACT.filter(function(a){return a.state==='claimable';});}
+
+function stageHtml(a){
+  var actionsHtml='';
+  if(a.state==='unreg') actionsHtml='<button class="btn btn-primary" onclick="alert(\'（示意）已完成预约\')">立即预约</button>';
+  else if(a.state==='reg') actionsHtml='<button class="btn btn-ghost" disabled>已预约，等待达成领奖条件</button>';
+  else if(a.state==='claimable') actionsHtml='<button class="btn btn-claim" onclick="alert(\'（示意）奖励已领取\')">领取奖励：'+a.reward+'</button>';
+  else actionsHtml='<button class="btn btn-ghost" disabled>活动已结束</button>';
+  return '<div class="banner" style="--banner-from:'+a.from+';--banner-to:'+a.to+';">'+
+      '<div><div class="banner-title">'+a.name+'</div><div class="banner-sub">'+a.phase+'　'+a.phaseTime+'</div></div>'+
+    '</div>'+
+    '<div class="body-area">'+
+      '<div class="copy-block">完成预约并达成领奖条件后，即可在此页面领取对应奖励。每个预约活动状态各自独立，互不影响。</div>'+
+      '<div class="status-line">当前状态：<span class="pill '+a.state+'">'+stateLabel(a.state)+'</span></div>'+
+      '<div class="actions">'+actionsHtml+'</div>'+
+    '</div>';
+}
+function promoHtml(markViewed){
+  return ACT.map(function(a){
+    var b=hasBadge(a);
+    return '<div class="hub-promo-row"><div class="hub-promo-left"><span class="hub-promo-dot '+(b?'':'hidden')+'"></span><span>'+a.name+'</span></div><span class="pill '+a.state+'" style="background:none;padding:0;font-weight:400;color:#999;">'+stateLabel(a.state)+'</span></div>';
+  }).join('');
+}
+function msgListHtml(){
+  var msgs=pendingMsgs();
+  if(!msgs.length) return '<div class="msg-empty">暂无待领取奖励提醒</div>';
+  return msgs.map(function(a){
+    return '<div class="msg-item"><div class="msg-title">🎁 '+a.name+' Reward Ready</div><div class="msg-content">Your '+a.reward+' reward is ready to claim!</div><div class="msg-cta">Claim Now</div></div>';
+  }).join('');
+}
+
+function switchVersion(v){
+  document.querySelectorAll('.version').forEach(function(el){el.classList.remove('show');});
+  document.getElementById('version-'+v).classList.add('show');
+  document.querySelectorAll('.review-tab').forEach(function(el){el.classList.toggle('active',el.dataset.v===v);});
+}
+
+/* ══════════════ 版本一：主路口卡片墙 ══════════════ */
+var V1=(function(){
+  function renderHub(){
+    document.getElementById('v1-count').textContent='共 '+ACT.length+' 个进行中的预约活动，点击卡片查看详情';
+    document.getElementById('v1-grid').innerHTML=ACT.map(function(a){
+      var b=hasBadge(a);
+      return '<div class="hub-card" style="--banner-from:'+a.from+';--banner-to:'+a.to+';" onclick="V1.open('+a.id+')">'+
+        '<div class="thumb"><div class="badge-dot '+(b?'show':'')+'">'+(hasBadgeA(a)?'!':'N')+'</div></div>'+
+        '<div class="body"><div class="name">'+a.name+(hasBadgeB(a)?'<span class="new-tag">新</span>':'')+'</div><div class="time">'+a.phaseTime+'</div><span class="pill '+a.state+'">'+stateLabel(a.state)+'</span></div>'+
+      '</div>';
+    }).join('');
+    document.getElementById('v1-promo').innerHTML=promoHtml();
+    document.getElementById('v1-dot').classList.toggle('show',pendingMsgs().length>0);
+    document.getElementById('v1-msg-list').innerHTML=msgListHtml();
+  }
+  function open(id){
+    var a=ACT.find(function(x){return x.id===id;});
+    if(!a.viewed) a.viewed=true;
+    document.getElementById('v1-hub').style.display='none';
+    document.getElementById('v1-detail').style.display='block';
+    document.getElementById('v1-stage').innerHTML=stageHtml(a);
+    renderHub(); // 更新红点状态
+  }
+  function back(){
+    document.getElementById('v1-hub').style.display='block';
+    document.getElementById('v1-detail').style.display='none';
+    renderHub();
+  }
+  function toggleMsg(e){ if(e) e.stopPropagation(); document.getElementById('v1-msg').classList.toggle('show'); }
+  renderHub();
+  return {open:open,back:back,toggleMsg:toggleMsg};
+})();
+
+/* ══════════════ 版本二：滑动bar覆盖banner ══════════════ */
+var V2=(function(){
+  var cur=ACT[0].id;
+  function render(){
+    var a=ACT.find(function(x){return x.id===cur;});
+    var strip='<div class="v2-strip">'+ACT.map(function(x){
+      var b=hasBadge(x);
+      return '<div class="v2-pill '+(x.id===cur?'active':'')+'" onclick="V2.switchTo('+x.id+')">'+
+        (b?'<span class="badge-dot show">'+(hasBadgeA(x)?'!':'N')+'</span>':'')+
+        '<span>'+x.name+'</span>'+
+      '</div>';
+    }).join('')+'</div>';
+    document.getElementById('v2-stage').innerHTML=strip+stageHtml(a);
+    document.getElementById('v2-promo').innerHTML=promoHtml();
+    document.getElementById('v2-dot').classList.toggle('show',pendingMsgs().length>0);
+    document.getElementById('v2-msg-list').innerHTML=msgListHtml();
+  }
+  function switchTo(id){
+    cur=id;
+    var a=ACT.find(function(x){return x.id===id;});
+    if(!a.viewed) a.viewed=true;
+    render();
+  }
+  function toggleMsg(e){ if(e) e.stopPropagation(); document.getElementById('v2-msg').classList.toggle('show'); }
+  render();
+  return {switchTo:switchTo,toggleMsg:toggleMsg};
+})();
+
+/* ══════════════ 版本三：总路口按钮 + 弹窗选择 ══════════════ */
+var V3=(function(){
+  function renderTrigger(){
+    var n=ACT.length, badge=ACT.some(hasBadge);
+    document.getElementById('v3-trigger-sub').textContent=n+' 个活动进行中';
+    document.getElementById('v3-trigger-dot').classList.toggle('show',badge);
+    document.getElementById('v3-dot').classList.toggle('show',pendingMsgs().length>0);
+    document.getElementById('v3-msg-list').innerHTML=msgListHtml();
+  }
+  function renderModalGrid(){
+    document.getElementById('v3-modal-grid').innerHTML=ACT.map(function(a){
+      var b=hasBadge(a);
+      return '<div class="hub-card" style="--banner-from:'+a.from+';--banner-to:'+a.to+';" onclick="V3.choose('+a.id+')">'+
+        '<div class="thumb"><div class="badge-dot '+(b?'show':'')+'">'+(hasBadgeA(a)?'!':'N')+'</div></div>'+
+        '<div class="body"><div class="name">'+a.name+(hasBadgeB(a)?'<span class="new-tag">新</span>':'')+'</div><div class="time">'+a.phaseTime+'</div><span class="pill '+a.state+'">'+stateLabel(a.state)+'</span></div>'+
+      '</div>';
+    }).join('');
+  }
+  function openModal(){ renderModalGrid(); document.getElementById('v3-modal').classList.add('show'); }
+  function closeModal(e){ if(e && e.target!==document.getElementById('v3-modal')) return; document.getElementById('v3-modal').classList.remove('show'); }
+  function choose(id){
+    var a=ACT.find(function(x){return x.id===id;});
+    if(!a.viewed) a.viewed=true;
+    document.getElementById('v3-modal').classList.remove('show');
+    document.getElementById('v3-lobby').style.display='none';
+    document.getElementById('v3-detail').style.display='block';
+    document.getElementById('v3-stage').innerHTML=stageHtml(a);
+    document.getElementById('v3-promo').innerHTML=promoHtml();
+    renderTrigger();
+  }
+  function back(){
+    document.getElementById('v3-lobby').style.display='flex';
+    document.getElementById('v3-detail').style.display='none';
+    renderTrigger();
+  }
+  function toggleMsg(e){ if(e) e.stopPropagation(); document.getElementById('v3-msg').classList.toggle('show'); }
+  renderTrigger();
+  return {openModal:openModal,closeModal:closeModal,choose:choose,back:back,toggleMsg:toggleMsg};
+})();
+</script>
+</body>
+</html>
