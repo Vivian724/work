@@ -1142,6 +1142,63 @@ tr:hover td.v2-new { background: #fff2d9; }
       <li>期数以实际交易时的期数为准，历史记录不随续期变动</li>
     </ul>
   </div>
+
+  <!-- ▌页面 5：积分不足 撕卷提示 -->
+  <h3 style="font-size:20px;font-weight:700;padding:14px 22px;background:#10141b;color:#fff;border-radius:8px;margin:56px 0 0;">2.6 积分不足 —— 撕卷处显示欠缺积分 <span class="spec-tag new" style="margin-left:10px;font-size:15px;">样式调整</span></h3>
+  <div style="margin:12px 0 24px;padding:12px 20px;background:#f0f4ff;border-left:4px solid #3358e0;border-radius:0 6px 6px 0;display:flex;align-items:center;gap:14px;">
+    <div>
+      <div style="font-size:12px;color:#5b6472;margin-bottom:3px;letter-spacing:.05em;">前台路径</div>
+      <div style="font-size:16px;font-weight:700;color:#10141b;">积分商城 ＞ 一番赏活动页</div>
+    </div>
+  </div>
+  <p class="spec-caption">过往积分不足时，仅显示静态文案提示；<strong>调整后改为动态计算会员欠缺的积分数量</strong>，并将差额显示于撕卷处，让玩家一眼知道还差多少积分才能参与抽奖。</p>
+
+  <div class="spec-stack">
+    <div class="spec-screen-card">
+      <div class="screen-label">画面参考 —— 积分不足状态（撕卷处）</div>
+      <div class="page" style="background:#3d3d3d;padding:36px 24px;display:flex;justify-content:center;align-items:center;min-height:152px;">
+        <div style="position:relative;display:inline-block;">
+          <!-- top notch (semicircle cutout) -->
+          <div style="position:absolute;top:-12px;left:162px;transform:translateX(-50%);width:24px;height:24px;background:#3d3d3d;border-radius:50%;z-index:5;"></div>
+          <!-- bottom notch (semicircle cutout) -->
+          <div style="position:absolute;bottom:-12px;left:162px;transform:translateX(-50%);width:24px;height:24px;background:#3d3d3d;border-radius:50%;z-index:5;"></div>
+          <!-- ticket outer gradient border -->
+          <div style="padding:3px;border-radius:16px;background:linear-gradient(to bottom,#e06830,#c02828,#e06830);box-shadow:inset 0 0 0 1.5px rgba(255,175,60,.3),0 8px 28px rgba(0,0,0,.6);">
+            <!-- ticket interior -->
+            <div style="background:linear-gradient(135deg,#fef2e8,#f5dfbc);border-radius:14px;display:flex;width:510px;height:88px;overflow:hidden;">
+              <!-- left: ICHIBAN label -->
+              <div style="flex:0 0 145px;display:flex;justify-content:center;align-items:center;">
+                <span style="font-size:26px;font-weight:900;color:#c03030;letter-spacing:.02em;">ICHIBAN</span>
+              </div>
+              <!-- center: tear dashed line -->
+              <div style="width:28px;flex-shrink:0;display:flex;justify-content:center;">
+                <div style="width:0;height:100%;border-left:2.5px dashed rgba(175,50,50,.4);"></div>
+              </div>
+              <!-- right: required points text -->
+              <div style="flex:1;display:flex;align-items:center;padding:0 18px 0 10px;">
+                <span style="font-size:15px;color:#c04040;white-space:nowrap;">Required <strong style="font-size:15px;font-weight:800;color:#b82020;">{4,000,000,000}</strong> More Points</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spec-text">
+      <h3>积分差额计算方式</h3>
+      <p class="spec-lead">欠缺积分 ＝ <strong>本次选择消费总积分（抽数 × 单张票价）</strong> − <strong>会员当前积分余额</strong>；结果以整数、千分位逗号格式显示（如 4,000,000,000），不显示小数点，不显示币别符号。</p>
+      <p class="spec-lead">撕卷处文案格式：<strong>Required {欠缺积分} More Points</strong>，欠缺积分数字以粗体显示，前后文案维持常规字重。</p>
+    </div>
+  </div>
+
+  <div class="spec-rule-box" style="max-width:1100px;">
+    <div class="spec-rule-title">显示规则</div>
+    <ul>
+      <li><strong>触发条件</strong>：会员当前积分余额 ＜ 本次选择消费总积分时，撕卷右侧改显示「Required {欠缺积分} More Points」；余额足够时维持正常状态，不显示此提示</li>
+      <li><strong>计算公式</strong>：欠缺积分 ＝（抽数 × 单张票价）− 会员当前余额；无论选择一抽、五抽、十抽或全包，皆以<strong>该次实际消费总额</strong>计算差额</li>
+      <li><strong>格式</strong>：欠缺积分以千分位逗号格式呈现（例：4,000,000,000），不显示小数点，不显示币别符号</li>
+      <li><strong>动态连动</strong>：玩家切换抽数时，差额数字随选择即时重新计算</li>
+    </ul>
+  </div>
 </div></div>
 
 <script>

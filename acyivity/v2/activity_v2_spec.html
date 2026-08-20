@@ -159,10 +159,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:15px;line-
 
 <div class="page">
 
-  <div class="note" style="margin-bottom:20px;">
-    <b>v2.0 重大调整</b>：Requirement 1「同期活动入口切换（總入口）」已依讨论移除，暂不开发。本稿保留 Requirement 2 红点提醒（两颗独立开关）／Requirement 3 站内信提醒（系统默认行为）。每个预约活动恢复第一版做法：各自拥有独立首页浮窗入口，互不聚合。页面内示意图仅供参考，实际视觉以设计稿为准。
-  </div>
-
   <!-- ══════════════════════════ 前台规格 ══════════════════════════ -->
   <div id="panel-front" class="tab-panel active">
 
@@ -195,7 +191,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:15px;line-
               <div class="promo-loc-row">
                 <span class="plr-tag">全平台</span>
                 <div class="plr-content">
-                  <b>展开后活动卡片右上角</b>
+                  <b>浮窗活動卡片右上角</b>
                   <div class="demo-wrap">
                     <div class="dot-loc-mock" style="gap:12px;padding:14px 22px;">
                       <div style="position:relative;background:linear-gradient(135deg,#4096ff,#1677ff);border-radius:10px;width:88px;height:58px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;">活动卡片<div style="position:absolute;top:-4px;right:-4px;width:12px;height:12px;border-radius:50%;background:#ff4d4f;border:2px solid #f5f7fa;"></div></div>
@@ -268,7 +264,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:15px;line-
                 <thead><tr><th>位置</th><th>平台</th><th>说明</th></tr></thead>
                 <tbody>
                   <tr><td>首页浮窗图标右上角</td><td>全平台</td><td>红点（圆形实心），收起状态可见</td></tr>
-                  <tr><td>展开后活动卡片右上角</td><td>全平台</td><td>红点（圆形实心）</td></tr>
+                  <tr><td>浮窗活動卡片右上角</td><td>全平台</td><td>红点（圆形实心）</td></tr>
                   <tr><td>进入活动内页后</td><td>—</td><td>红点不显示</td></tr>
                   <tr><td>底部导航「奖励中心」图标</td><td>全平台</td><td>数字角标</td></tr>
                   <tr><td>Promotion Banner 右上角</td><td>全平台</td><td>红色数字角标，数字 = 可领取奖励数量</td></tr>
@@ -523,7 +519,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:15px;line-
               <ul class="rule-list">
                 <li>两颗开关的触发逻辑详见前台规格「红点提醒」</li>
                 <li>活动开启提醒需记录各用户的已读状态，确保每人每活动仅显示一次</li>
-                <li>如需关闭任一开关，仅在步骤 4 操作，活动列表不重复展示</li>
+                <li>两颗开关统一在步骤 4 配置，活动列表页不另设重复控制入口</li>
               </ul>
             </div>
           </div>
