@@ -442,6 +442,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     <div class="spec-h1">Ichiban Kuji 一番赏 · 规格书 v2.0</div>
     <p class="spec-sub">本版主题：中奖纪录「同赏级聚合」显示。</p>
     <p style="color:#e03c3c;font-size:14px;font-weight:600;margin-top:6px;">※ 8/18 调整：后台商品配置 ▸ LAST赏 ＞ 虚拟物品新增「商品简介」必填字段（标注红字之处为本次新增内容）</p>
+    <p style="color:#e03c3c;font-size:14px;font-weight:600;margin-top:4px;">※ 8/20 调整：后台商品配置 ＞ 各奖级第二层选「彩金」时移除行内「流水倍数」字段；LAST赏区块下方新增全局「彩金所需流水倍数」独立配置（标注红字之处为本次新增内容）</p>
 
     <div class="spec-base-doc">
       基准文件：<span class="spec-field">ichiban_kuji_spec.html</span>（v1.0，未特别标示版本号，视为基准版）。
@@ -537,6 +538,11 @@ tr:hover td.v2-new { background: #fff2d9; }
               <td><span class="spec-ptag spec-ptag-admin">后台：商品配置 ▸ LAST赏</span></td>
               <td><span class="spec-ttag spec-ttag-new">新增字段</span></td>
               <td>LAST赏 第一层「虚拟物品」新增「商品简介」必填字段，适用所有第二层子类型</td>
+            </tr>
+            <tr>
+              <td><span class="spec-ptag spec-ptag-admin">后台：商品配置</span></td>
+              <td><span class="spec-ttag spec-ttag-adjust">调整字段</span></td>
+              <td>各奖级第二层选「彩金」时，移除行内「流水倍数」字段，仅保留「金额」；并在 LAST赏区块下方新增全局独立字段「彩金所需流水倍数」（数字输入，选填，预设值 0）</td>
             </tr>
           </tbody>
         </table>
@@ -1107,11 +1113,120 @@ tr:hover td.v2-new { background: #fff2d9; }
     <li><strong>编辑既有资料：</strong>已储存的虚拟物品 LAST赏若原本无此字段（旧资料），进入编辑页时「商品简介」显示空白，运营须手动补填后才可储存</li>
   </ul>
 
-  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">2.6 本次未涉及之既有规则</h3>
+  <h3 style="font-size:22px;font-weight:700;margin:36px 0 14px;">2.6 本次未涉及之既有规则 <span style="font-size:14px;font-weight:400;color:#888;">（以下仅适用于 8/18 商品简介调整）</span></h3>
   <ul class="spec-plain">
     <li>第一层「实物」：已有「商品简介」字段，不受本次异动影响</li>
     <li>非 LAST赏的其他赏级字段，不受本次异动影响</li>
   </ul>
+
+  <!-- ── 8/20 调整 ── -->
+  <div style="margin-top:48px;border-top:2px solid #e8ecf0;padding-top:36px;">
+    <p style="color:#e03c3c;font-size:20px;font-weight:700;margin-bottom:16px;">※ 8/20 调整</p>
+    <div class="spec-h1">后台＿商品配置 ▸ 彩金流水倍数（调整）</div>
+    <p class="spec-sub">路径：后台 ＞ 积分商城 ＞ 商品配置。调整涉及两处：（1）各奖级行内移除「流水倍数」字段；（2）LAST赏区块下方新增全局「彩金所需流水倍数」独立字段。</p>
+
+    <h3 style="font-size:22px;font-weight:700;margin-bottom:14px;">2.7 需求说明</h3>
+    <p class="spec-lead" style="margin-bottom:16px;">
+      <strong>调整 1 — 移除各奖级行内「流水倍数」字段</strong><br>
+      彩金流水倍数改为全商品统一配置（见调整 2），各奖级行内不再个别设定。第二层选「彩金」时，动态字段由「流水倍数＋金额」改为仅「金额（必填）」。<br><br>
+      <strong>调整 2 — 新增全局「彩金所需流水倍数」独立配置</strong><br>
+      LAST赏区块下方新增独立字段「彩金所需流水倍数」（数字，选填，预设 0），统一套用至该商品所有彩金奖级。留空视同 0，即无流水要求。商品无彩金奖级时此字段不生效；既有商品均未配置流水倍数，无需迁移。
+    </p>
+
+    <h3 style="font-size:22px;font-weight:700;margin-bottom:14px;">2.8 画面示意</h3>
+    <div class="spec-stack">
+
+      <div class="spec-screen-card">
+        <div class="screen-label">调整前：第二层选「彩金」行内显示「流水倍数」＋「金额」</div>
+        <div class="page" style="background:#fff; padding:20px 24px;">
+          <div style="font-size:12px;color:#999;margin-bottom:10px;">以 A Tier 为例</div>
+          <div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊第一层</div>
+              <div style="display:flex;align-items:center;gap:6px;border:1px solid #d9d9d9;border-radius:4px;padding:5px 10px;width:120px;font-size:14px;">
+                虚拟物品 <span style="margin-left:auto;color:#999;">▾</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊第二层</div>
+              <div style="display:flex;align-items:center;gap:6px;border:1px solid #d9d9d9;border-radius:4px;padding:5px 10px;width:100px;font-size:14px;">
+                彩金 <span style="margin-left:auto;color:#999;">▾</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:13px;color:#999;margin-bottom:6px;">流水倍数</div>
+              <input type="number" placeholder="请输入" style="border:1px solid #d9d9d9;border-radius:4px;padding:5px 10px;font-size:14px;width:100px;color:#333;">
+            </div>
+            <div>
+              <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊金额</div>
+              <input type="number" placeholder="请输入" style="border:1px solid #d9d9d9;border-radius:4px;padding:5px 10px;font-size:14px;width:100px;color:#333;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-screen-card">
+        <div class="screen-label">调整后：移除「流水倍数」，仅保留「金额」；LAST赏下方新增全局「彩金所需流水倍数」</div>
+        <div class="page" style="background:#fff; padding:20px 24px;">
+          <div style="font-size:12px;color:#999;margin-bottom:8px;">各奖级行（以 A Tier 为例）— 移除「流水倍数」</div>
+          <div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:24px;">
+            <div>
+              <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊第一层</div>
+              <div style="display:flex;align-items:center;gap:6px;border:1px solid #d9d9d9;border-radius:4px;padding:5px 10px;width:120px;font-size:14px;">
+                虚拟物品 <span style="margin-left:auto;color:#999;">▾</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊第二层</div>
+              <div style="display:flex;align-items:center;gap:6px;border:1px solid #d9d9d9;border-radius:4px;padding:5px 10px;width:100px;font-size:14px;">
+                彩金 <span style="margin-left:auto;color:#999;">▾</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:13px;color:#e03c3c;margin-bottom:6px;">＊金额</div>
+              <input type="number" placeholder="请输入" style="border:1px solid #1677ff;border-radius:4px;padding:5px 10px;font-size:14px;width:100px;color:#333;outline:none;">
+            </div>
+          </div>
+          <div style="font-size:12px;color:#999;margin-bottom:8px;">LAST赏区块下方 — 全局独立配置</div>
+          <div style="background:#f8f9fa;border:1px solid #e8ecf0;border-radius:6px;padding:14px 18px;display:flex;align-items:center;gap:14px;">
+            <div style="font-size:14px;color:#333;white-space:nowrap;">彩金所需流水倍数：</div>
+            <input type="number" value="0" style="border:1px solid #1677ff;border-radius:4px;padding:5px 10px;font-size:14px;width:80px;color:#333;outline:none;">
+            <span style="background:#fff3e0;color:#d4640a;font-size:11px;padding:2px 8px;border-radius:99px;">新增</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-text">
+        <p class="spec-lead">调整 1：第二层选「彩金」的动态字段，由「流水倍数（选填）＋金额（必填）」改为仅「金额（必填）」，适用全部奖级（S Tier～H Tier 及 LAST赏）。<br><br>调整 2：LAST赏配置区块下方新增独立字段「彩金所需流水倍数」，为整个商品的全局设定，预设值为 0（留空同等 0，即无流水要求）；仅对该商品中第二层配置为「彩金」的奖级生效。</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">2.9 字段规格说明</h3>
+    <div class="spec-table-wrap">
+      <table>
+        <thead><tr><th>字段</th><th>状态</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr class="is-new">
+            <td class="spec-field">各奖级「流水倍数」〔移除〕</td>
+            <td><span class="spec-tag" style="background:#fff0f0;color:#cf1322;">移除</span></td>
+            <td>原在第二层选「彩金」时显示的「流水倍数（选填）」动态字段，本次移除；不影响「金额（必填）」字段。适用范围：S Tier～H Tier 及 LAST赏全部奖级</td>
+          </tr>
+          <tr class="is-new">
+            <td class="spec-field">彩金所需流水倍数〔新增〕</td>
+            <td><span class="spec-tag new">新增</span></td>
+            <td>
+              ・位置：LAST赏配置区块下方，独立全局字段区<br>
+              ・格式：数字输入框<br>
+              ・必填：否（选填）；预设值为 0；留空等同 0，即无流水要求<br>
+              ・生效条件：仅对该商品中第二层配置为「彩金」的奖级生效；若商品无彩金奖级，此字段不影响任何逻辑<br>
+              ・作用范围：全局设定，套用至该商品所有彩金类奖级（非各奖级独立配置）<br>
+              ・旧资料：既有商品均未配置流水倍数，上线后系统以预设值 0 处理，无需人工迁移
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div></div>
 
 <script>

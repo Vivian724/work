@@ -246,17 +246,17 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:15px;line-
           <div class="col-spec">
             <div class="sec">
               <div class="sec-label">两种红点情境（互斥）</div>
-              <div class="note-b note" style="margin-bottom:14px;">两种情境互斥（未预约 / 已预约状态不可并存），各活动红点各自独立，互不影响。</div>
+              <div class="note-b note" style="margin-bottom:14px;">两种情境不会同时显示：情境一为一次性（进入活动页后消失，不再重复）；情境二仅在有奖励可领时触发。各活动红点各自独立，互不影响。</div>
               <table class="cmp-table">
                 <thead><tr>
                   <th class="th-label">项目</th>
-                  <th class="th-unreg">情境一：未预约提醒</th>
+                  <th class="th-unreg">情境一：活动开启提醒</th>
                   <th class="th-claim">情境二：奖励领取提醒</th>
                 </tr></thead>
                 <tbody>
-                  <tr><td class="col-label">适用用户</td><td class="col-unreg">尚未完成预约</td><td class="col-claim">已完成预约</td></tr>
-                  <tr><td class="col-label">触发时机</td><td class="col-unreg">活动进行中，用户进入前台时</td><td class="col-claim">已达成领奖条件，且奖励尚未领取</td></tr>
-                  <tr><td class="col-label">红点消失</td><td class="col-unreg">完成预约后立即消失</td><td class="col-claim">领取奖励后立即消失</td></tr>
+                  <tr><td class="col-label">适用用户</td><td class="col-unreg">所有用户（不限是否已预约）</td><td class="col-claim">已完成预约</td></tr>
+                  <tr><td class="col-label">触发时机</td><td class="col-unreg">活动开启时，每位用户仅显示一次</td><td class="col-claim">已达成领奖条件，且奖励尚未领取</td></tr>
+                  <tr><td class="col-label">红点消失</td><td class="col-unreg">进入活动页后消失，此后不再重复</td><td class="col-claim">领取奖励后立即消失</td></tr>
                   <tr><td class="col-label">开关关闭时</td><td class="row-span" colspan="2">无论用户状态，全部隐藏</td></tr>
                 </tbody>
               </table>
@@ -486,10 +486,10 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:15px;line-
                 <div class="sdp-placeholder">预约达成条件、参与门槛等设定与第一版一致，未变更。</div>
                 <div class="sdp-sec-title">通用设置<span style="font-size:11px;color:#999;font-weight:400;">（v3 新增，参考周卡活动既有开关样式）</span></div>
                 <div class="sdp-field-row">
-                  <div class="sdp-label" style="min-width:160px;padding-top:3px;">未预约用户预约提醒：</div>
+                  <div class="sdp-label" style="min-width:160px;padding-top:3px;">活动开启提醒：</div>
                   <div class="sdp-ctrl" style="display:flex;align-items:flex-start;gap:10px;">
                     <div class="sdp-toggle"></div>
-                    <span style="font-size:13px;color:#666;line-height:1.7;">开启后，前台对<b>未预约</b>用户<b>持续显示红点</b>，直到完成预约为止。</span>
+                    <span style="font-size:13px;color:#666;line-height:1.7;">开启后，对所有用户显示<b>一次</b>红点，进入活动页即消失。</span>
                   </div>
                 </div>
                 <div class="sdp-field-row">
@@ -499,7 +499,19 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:15px;line-
                     <span style="font-size:13px;color:#666;line-height:1.7;">开启后，<b>可领取奖励时</b>前台显示红点。</span>
                   </div>
                 </div>
-                <div class="sdp-info-box">两个开关<b>各自独立</b>：一个人不会同时符合两种状态（未预约／可领奖互斥），所以不会同时显示。开关只影响「红点是否显示」，站内信提醒维持<b>系统默认行为</b>，不提供活动层级开关。两者<b>预设皆为开启</b>；开关状态只在此步骤设置，活动列表不重复展示。</div>
+                <div class="sdp-info-box">
+                  <table style="width:100%;border-collapse:collapse;margin-bottom:10px;font-size:13px;">
+                    <tr>
+                      <td style="padding:4px 14px 4px 0;width:50%;vertical-align:top;border-right:1px solid #d6e4ff;">
+                        <b>活动开启提醒</b><br>一次性；进入活动页即消失
+                      </td>
+                      <td style="padding:4px 0 4px 14px;vertical-align:top;">
+                        <b>奖励领取提醒</b><br>有奖励可领时显示；领取后消失
+                      </td>
+                    </tr>
+                  </table>
+                  <div style="border-top:1px solid #d6e4ff;padding-top:8px;font-size:12.5px;color:#666;">两者<b>各自独立、预设皆为开启</b>，不会同时出现。开关只影响「红点是否显示」，站内信维持<b>系统默认行为</b>，不提供活动层级开关。</div>
+                </div>
               </div>
             </div>
           </div>
@@ -507,27 +519,11 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:15px;line-
           <!-- RIGHT: spec -->
           <div class="col-spec">
             <div class="sec">
-              <div class="sec-label">触发条件对照</div>
-              <table class="cmp-table">
-                <thead><tr>
-                  <th class="th-label">项目</th>
-                  <th class="th-unreg">未预约提醒</th>
-                  <th class="th-claim">奖励领取提醒</th>
-                </tr></thead>
-                <tbody>
-                  <tr><td class="col-label">适用用户</td><td class="col-unreg">尚未完成预约</td><td class="col-claim">已完成预约</td></tr>
-                  <tr><td class="col-label">触发时机</td><td class="col-unreg">活动进行中，用户进入前台时</td><td class="col-claim">已达成领奖条件，且奖励尚未领取</td></tr>
-                  <tr><td class="col-label">红点消失</td><td class="col-unreg">完成预约后立即消失</td><td class="col-claim">领取奖励后立即消失</td></tr>
-                  <tr><td class="col-label">开关关闭时</td><td class="row-span" colspan="2">无论用户状态，全部隐藏</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="sec">
               <div class="sec-label">注意事项</div>
               <ul class="rule-list">
-                <li>红点触发条件由系统自动判断，后台两颗开关仅控制是否显示</li>
-                <li>两者预设皆为开启；如需关闭，仅在步骤 4 操作，活动列表不重复展示</li>
-                <li>站内信提醒维持系统默认行为，不提供活动层级开关</li>
+                <li>两颗开关的触发逻辑详见前台规格「红点提醒」</li>
+                <li>活动开启提醒需记录各用户的已读状态，确保每人每活动仅显示一次</li>
+                <li>如需关闭任一开关，仅在步骤 4 操作，活动列表不重复展示</li>
               </ul>
             </div>
           </div>
