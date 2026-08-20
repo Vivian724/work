@@ -427,12 +427,13 @@ tr:hover td.v2-new { background: #fff2d9; }
 <body>
 
 <div class="spec-nav" id="mergeNav">
-  <button onclick="mergeGo(0)">封面／版本纪录</button>
-  <button onclick="mergeGo(1)">后台＿商品兑换记录</button>
-  <button onclick="mergeGo(2)">后台＿商品配置 ▸ LAST赏</button>
-  <button onclick="mergeGo(3)">前台＿兑换记录／积分历史／资金详情</button>
-  <button onclick="mergeGo(4)">前台＿一番赏页面</button>
-  <button onclick="mergeGo(5)">前台＿开卷动画</button>
+  <button data-n="0" onclick="mergeGo(0)">封面／版本纪录</button>
+  <button data-n="1" onclick="mergeGo(1)">后台＿商品兑换记录</button>
+  <button data-n="2" onclick="mergeGo(2)">后台＿商品配置 ▸ LAST赏</button>
+  <button data-n="6" onclick="mergeGo(6)">后台＿用户积分纪录</button>
+  <button data-n="3" onclick="mergeGo(3)">前台＿兑换记录／积分历史／资金详情</button>
+  <button data-n="4" onclick="mergeGo(4)">前台＿一番赏页面</button>
+  <button data-n="5" onclick="mergeGo(5)">前台＿开卷动画</button>
 </div>
 
 <!-- ══════════ 0. 封面／版本纪录 ══════════ -->
@@ -443,6 +444,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     <p class="spec-sub">本版主题：中奖纪录「同赏级聚合」显示。</p>
     <p style="color:#e03c3c;font-size:14px;font-weight:600;margin-top:6px;">※ 8/18 调整：后台商品配置 ▸ LAST赏 ＞ 虚拟物品新增「商品简介」必填字段（标注红字之处为本次新增内容）</p>
     <p style="color:#e03c3c;font-size:14px;font-weight:600;margin-top:4px;">※ 8/20 调整：后台商品配置 ＞ 各奖级第二层选「彩金」时移除行内「流水倍数」字段；LAST赏区块下方新增全局「彩金所需流水倍数」独立配置（标注红字之处为本次新增内容）</p>
+    <p style="color:#e03c3c;font-size:14px;font-weight:600;margin-top:4px;">※ 8/20 新增：后台积分商城 ＞ 用户积分纪录 ＞「积分类型」下拉新增「一番赏积分获得」选项，用于独立区分一番赏抽奖产生的积分变动纪录（标注红字之处为本次新增内容）</p>
 
     <div class="spec-base-doc">
       基准文件：<span class="spec-field">ichiban_kuji_spec.html</span>（v1.0，未特别标示版本号，视为基准版）。
@@ -543,6 +545,11 @@ tr:hover td.v2-new { background: #fff2d9; }
               <td><span class="spec-ptag spec-ptag-admin">后台：商品配置</span></td>
               <td><span class="spec-ttag spec-ttag-adjust">调整字段</span></td>
               <td>各奖级第二层选「彩金」时，移除行内「流水倍数」字段，仅保留「金额」；并在 LAST赏区块下方新增全局独立字段「彩金所需流水倍数」（数字输入，选填，预设值 0）</td>
+            </tr>
+            <tr style="background:#fff0f0;">
+              <td><span class="spec-ptag spec-ptag-admin" style="background:#fff0f0;color:#cf1322;border-color:#ffa39e;">后台：积分商城 ▸ 用户积分纪录</span></td>
+              <td><span class="spec-ttag spec-ttag-new">新增选项</span></td>
+              <td><span style="color:#e03c3c;font-weight:600;">【8/20 新增】</span>「积分类型」下拉筛选中，于「盲盒积分获得」之后新增「<strong>一番赏积分获得</strong>」类型；会员购买一番赏获得积分时，纪录写入此新类型，其余积分扣除类纪录仍归入各原有类型不变</td>
             </tr>
           </tbody>
         </table>
@@ -1229,14 +1236,135 @@ tr:hover td.v2-new { background: #fff2d9; }
   </div>
 </div></div>
 
+<!-- ══════════ 6. 后台＿用户积分纪录 ══════════ -->
+<div class="spec-view" id="mergeView6"><div class="spec-view-inner">
+  <div class="spec-h1">后台＿用户积分纪录 <span style="color:#e03c3c;font-size:18px;font-weight:700;margin-left:8px;">※ 8/20 新增</span></div>
+  <p class="spec-sub">路径：后台 ＞ 积分商城 ＞ 用户积分纪录</p>
+  <p class="spec-sub" style="margin-top:6px;">本次新增「<strong style="color:#e03c3c;">一番赏积分获得</strong>」积分类型，用于记录<span style="white-space:nowrap;">一番赏（Ichiban Kuji）</span>抽奖所产生的积分收入；搭配原有「积分兑换商品」可区分该活动两种积分来源。其余类型、栏位、筛选与导出逻辑均不异动。</p>
+
+  <h3 style="font-size:22px;font-weight:700;margin-bottom:14px;">6.1 画面示意</h3>
+  <p class="spec-caption">「积分类型」下拉选单本次与一番赏相关的两个类型，以及各自的原因／备注示范值。</p>
+
+  <div class="spec-stack">
+    <div class="spec-screen-card">
+      <div class="screen-label" style="background:#fa8c16;">更新后：积分类型下拉（仅展示与一番赏相关的两项）</div>
+      <div class="page" style="background:#f0f2f5;padding:20px 24px 28px;">
+        <div style="font-size:13px;color:#666;margin-bottom:14px;">位置 ＞ 用户积分纪录</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;margin-bottom:130px;">
+          <div style="position:relative;min-width:168px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;border:1px solid #1677ff;border-radius:6px;padding:6px 12px;background:#fff;font-size:13px;gap:8px;">
+              积分类型 <span style="font-size:10px;color:#1677ff;">▴</span>
+            </div>
+            <div style="position:absolute;top:calc(100% + 2px);left:0;background:#fff;border:1px solid #e2e6ec;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.12);z-index:10;min-width:168px;padding:4px 0;font-size:13px;">
+              <div style="padding:7px 16px;color:#555;cursor:pointer;">积分兑换商品</div>
+              <div style="padding:7px 16px;background:#fff7e6;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                <span style="color:#d46b08;font-weight:600;">一番赏积分获得</span>
+                <span style="background:#e03c3c;color:#fff;font-size:10px;padding:1px 7px;border-radius:99px;font-weight:700;white-space:nowrap;">新增</span>
+              </div>
+            </div>
+          </div>
+          <input placeholder="名" style="border:1px solid #d9d9d9;border-radius:6px;padding:6px 12px;font-size:13px;width:110px;" readonly>
+          <div style="border:1px solid #d9d9d9;border-radius:6px;padding:6px 12px;background:#fff;font-size:12.5px;color:#555;">2026-08-01 00:00:00 ～ 2026-08-20 00:00:00</div>
+          <div style="background:#1677ff;color:#fff;border-radius:6px;padding:6px 18px;font-size:13px;cursor:pointer;">搜索</div>
+          <div style="background:#fa8c16;color:#fff;border-radius:6px;padding:6px 18px;font-size:13px;cursor:pointer;margin-left:auto;">导出</div>
+        </div>
+        <div style="overflow-x:auto;margin-top:-4px;">
+          <table style="width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border-radius:6px;overflow:hidden;border:1px solid #e2e6ec;">
+            <thead>
+              <tr style="background:#fafbfc;">
+                <th style="padding:10px 14px;text-align:left;color:#5b6472;font-weight:600;border-bottom:1px solid #e2e6ec;white-space:nowrap;">会员名</th>
+                <th style="padding:10px 14px;text-align:left;color:#5b6472;font-weight:600;border-bottom:1px solid #e2e6ec;white-space:nowrap;">创建时间</th>
+                <th style="padding:10px 14px;text-align:left;color:#5b6472;font-weight:600;border-bottom:1px solid #e2e6ec;white-space:nowrap;">积分</th>
+                <th style="padding:10px 14px;text-align:left;color:#5b6472;font-weight:600;border-bottom:1px solid #e2e6ec;white-space:nowrap;">当前总积分</th>
+                <th style="padding:10px 14px;text-align:left;color:#5b6472;font-weight:600;border-bottom:1px solid #e2e6ec;white-space:nowrap;">操作人</th>
+                <th style="padding:10px 14px;text-align:left;color:#5b6472;font-weight:600;border-bottom:1px solid #e2e6ec;white-space:nowrap;">原因</th>
+                <th style="padding:10px 14px;text-align:left;color:#5b6472;font-weight:600;border-bottom:1px solid #e2e6ec;white-space:nowrap;">备注</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">okbet1052j2e5y</td>
+                <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">2026-08-19 17:20:05</td>
+                <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">+100</td>
+                <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">80,830</td>
+                <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">SYSTEM</td>
+                <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">Redeem 苹果 Ichiban Kuji</td>
+                <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">B Tier E-Credit 500.00，E Tier Free Spins ×20</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 14px;color:#1b2028;">okbet8145z0kmm</td>
+                <td style="padding:10px 14px;color:#1b2028;">2026-08-18 14:05:33</td>
+                <td style="padding:10px 14px;color:#1b2028;">+50</td>
+                <td style="padding:10px 14px;color:#1b2028;">454,084</td>
+                <td style="padding:10px 14px;color:#1b2028;">SYSTEM</td>
+                <td style="padding:10px 14px;color:#1b2028;">Redeem 苹果 Ichiban Kuji</td>
+                <td style="padding:10px 14px;color:#1b2028;">A Tier Voucher ×1，C Tier Free Spins ×10</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-text">
+      <div class="spec-rule-box">
+        <div class="spec-rule-title">与一番赏相关的两种积分类型说明</div>
+        <ul>
+          <li><strong>积分兑换商品（原有）：</strong>会员使用积分兑换一番赏商品时，系统扣除对应积分，纪录归入此类型</li>
+          <li style="color:#e03c3c;font-weight:600;">一番赏积分获得〔8/20 新增〕：会员购买一番赏并获得积分奖励时，由系统自动写入此类型；与积分兑换商品独立分类，不合并</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size:22px;font-weight:700;margin:44px 0 14px;">6.2 规则说明 <span style="color:#e03c3c;font-size:14px;font-weight:700;">（橙底行为新增内容）</span></h3>
+  <div class="spec-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:200px;">积分类型</th>
+          <th style="width:90px;">状态</th>
+          <th>触发条件</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="spec-field">积分兑换商品</td>
+          <td><span class="spec-tag" style="background:#f0f5ff;color:#2f54eb;border:1px solid #adc6ff;">原有</span></td>
+          <td>会员使用积分兑换一番赏商品，系统自动扣除积分</td>
+        </tr>
+        <tr class="is-new">
+          <td class="spec-field">一番赏积分获得</td>
+          <td><span class="spec-tag new">新增</span></td>
+          <td>会员完成一番赏购买，系统按配置金额自动发放积分</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="spec-rule-box" style="margin-top:24px;">
+    <div class="spec-rule-title">原因／备注字段格式说明（两种类型共用相同规则）</div>
+    <ul>
+      <li>
+        <strong>原因（系统自动填入）：</strong>格式固定为「<strong>Redeem {商品名称}</strong>」，商品名称取值与「活动名称＝商品名称」规则一致<br>
+        <span style="color:#888;font-size:15px;">例：Redeem 苹果 Ichiban Kuji</span>
+      </li>
+      <li style="margin-top:10px;">
+        <strong>备注（系统自动填入）：</strong>本次抽奖实际中出的所有奖品清单；格式见「名词定义」页「奖品清单格式」<br>
+        <span style="color:#888;font-size:15px;">例：B Tier E-Credit 500.00，E Tier Free Spins ×20</span>
+      </li>
+    </ul>
+  </div>
+</div></div>
+
 <script>
 function mergeGo(n) {
-  for (let i = 0; i <= 5; i++) {
+  for (let i = 0; i <= 6; i++) {
     const el = document.getElementById('mergeView' + i);
     if (el) el.classList.toggle('active', i === n);
   }
-  document.getElementById('mergeNav').querySelectorAll('button').forEach((b, i) => {
-    b.classList.toggle('active', i === n);
+  document.getElementById('mergeNav').querySelectorAll('button').forEach((b) => {
+    b.classList.toggle('active', parseInt(b.getAttribute('data-n')) === n);
   });
 }
 mergeGo(0);
