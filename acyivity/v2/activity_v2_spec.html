@@ -245,7 +245,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
               <div class="promo-loc-row">
                 <span class="plr-tag">全平台</span>
                 <div class="plr-content">
-                  <b>底部导航「奖励中心」图标</b>：有未领取奖励时，显示数字角标
+                  <b>底部导航「奖励中心」图标</b>：情境一或情境二任一成立即显示数字角标；情境二成立时数字＝可领取奖励总数，仅情境一成立时数字为 1
                   <div class="demo-wrap">
                     <div class="nav-mock">
                       <div class="nav-mock-ico">🎁</div>
@@ -258,7 +258,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
               <div class="promo-loc-row">
                 <span class="plr-tag">全平台</span>
                 <div class="plr-content">
-                  <b>Promotion Banner 右上角</b>：对应活动显示红色数字角标，数字 = 该活动可领取奖励数量
+                  <b>Promotion Banner 右上角</b>：对应活动情境一或情境二任一成立即显示红色数字角标；情境二成立时数字＝该活动可领取奖励数量，仅情境一成立时数字为 1
                   <div class="demo-wrap">
                     <div class="promo-banner-mock">活动 Banner<div class="num-badge">1</div></div>
                   </div>
@@ -267,7 +267,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
               <div class="promo-loc-row">
                 <span class="plr-tag app">H5 / App</span>
                 <div class="plr-content">
-                  <b>折叠状态 Expand 按钮</b>：数字角标，数字 = 未展开活动可领取奖励总数；展开后隐藏；PC 不显示
+                  <b>折叠状态 Expand 按钮</b>：数字角标，数字 = 未展开活动中情境一或情境二成立的提醒总数（情境二以可领奖励数量计入，仅情境一成立的活动各计 1）；展开后隐藏；PC 不显示
                   <div class="demo-wrap">
                     <div class="expand-btn-mock">Expand ≫<div class="num-badge">3</div></div>
                   </div>
@@ -280,7 +280,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
           <div class="col-spec">
             <div class="sec">
               <div class="sec-label">两种红点情境（各自独立触发，呈现方式不同）</div>
-              <div class="note-b note" style="margin-bottom:14px;">情境一为一次性提醒（进入活动页后消失，不再重复）；情境二仅在有奖励可领时触发，领取后消失。两者触发条件互不影响，<b>可能同时成立</b>——但因两者在「首页浮窗／卡片」的呈现方式相同（同为红点），不会产生视觉冲突；「数字角标」类位置仅反映情境二的可领数量，与情境一无关。判断逻辑详见下方组合表。</div>
+              <div class="note-b note" style="margin-bottom:14px;">两情境触发条件互不影响，<b>可能同时成立</b>，显示逻辑已统一：情境一或情境二任一成立，所有位置（首页浮窗／卡片、底部导览／Banner／Expand）皆会显示提醒。数字角标计算规则与组合判断详见下表。</div>
               <table class="cmp-table">
                 <thead><tr>
                   <th class="th-label">项目</th>
@@ -289,7 +289,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
                 </tr></thead>
                 <tbody>
                   <tr><td class="col-label">适用用户</td><td class="col-unreg">所有用户（不限是否已预约）</td><td class="col-claim">已完成预约</td></tr>
-                  <tr><td class="col-label">触发时机</td><td class="col-unreg">活动开启时，每位用户仅显示一次</td><td class="col-claim">已达成领奖条件，且奖励尚未领取</td></tr>
+                  <tr><td class="col-label">触发时机</td><td class="col-unreg">活动开启时，每位用户仅显示一次。<br>判断依据为<b>会员账号</b>，非装置。<br>换装置或多装置登入，皆视为已读、不重复显示。</td><td class="col-claim">已达成领奖条件，且奖励尚未领取</td></tr>
                   <tr><td class="col-label">红点消失</td><td class="col-unreg">进入活动页后消失，此后不再重复</td><td class="col-claim">领取奖励后立即消失</td></tr>
                   <tr><td class="col-label">开关关闭时</td><td class="row-span" colspan="2">无论用户状态，全部隐藏</td></tr>
                 </tbody>
@@ -298,31 +298,18 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
 
             <div class="sec">
               <div class="sec-label">判断逻辑表：两情境组合下的呈现结果</div>
+              <div class="note" style="margin-bottom:14px;">数字角标固定规则：<b>数字＝可领取奖励数量；数量为 0 时（代表只有开启提醒、尚无奖励可领），改以「1」表示</b>。下表为两情境四种组合的完整呈现结果：</div>
               <table class="spec-table">
-                <thead><tr><th>情境一（未读）</th><th>情境二（可领）</th><th>首页浮窗／卡片红点</th><th>底部导览／Banner／Expand 数字角标</th></tr></thead>
+                <thead><tr><th>情境一<br>活动开启（未读）</th><th>情境二<br>奖励可领（未领）</th><th>首页浮窗／卡片<br>红点</th><th>底部导览／Banner／Expand<br>数字角标</th></tr></thead>
                 <tbody>
                   <tr><td class="td-center">是</td><td class="td-center">是</td><td>显示</td><td>显示，数字＝可领取奖励数量</td></tr>
-                  <tr><td class="td-center">是</td><td class="td-center">否</td><td>显示</td><td>不显示</td></tr>
+                  <tr><td class="td-center">是</td><td class="td-center">否</td><td>显示</td><td>显示，数字＝<b>1</b>（无奖励可领，以 1 代表开启提醒）</td></tr>
                   <tr><td class="td-center">否</td><td class="td-center">是</td><td>显示</td><td>显示，数字＝可领取奖励数量</td></tr>
                   <tr><td class="td-center">否</td><td class="td-center">否</td><td>不显示</td><td>不显示</td></tr>
                 </tbody>
               </table>
             </div>
 
-            <div class="sec">
-              <div class="sec-label">显示位置汇总</div>
-              <table class="spec-table">
-                <thead><tr><th>位置</th><th>平台</th><th>适用情境</th><th>说明</th></tr></thead>
-                <tbody>
-                  <tr><td>首页浮窗图标右上角</td><td>全平台</td><td>情境一或情境二</td><td>红点（圆形实心），收起状态可见</td></tr>
-                  <tr><td>浮窗活動卡片右上角</td><td>全平台</td><td>情境一或情境二</td><td>红点（圆形实心）</td></tr>
-                  <tr><td>进入活动内页后</td><td>—</td><td>—</td><td>红点不显示</td></tr>
-                  <tr><td>底部导航「奖励中心」图标</td><td>全平台</td><td>情境二</td><td>数字角标，数字 = 该用户所有活动可领取奖励总数</td></tr>
-                  <tr><td>Promotion Banner 右上角</td><td>全平台</td><td>情境二</td><td>红色数字角标，数字 = 该活动可领取奖励数量</td></tr>
-                  <tr><td>折叠状态 Expand 按钮</td><td>H5 / App</td><td>情境二</td><td>数字角标，展开后隐藏；PC 不显示</td></tr>
-                </tbody>
-              </table>
-            </div>
           </div>
 
         </div>
@@ -335,6 +322,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
         <div class="step-num">2</div>
         <div class="step-title">站内信提醒</div>
         <div class="step-subtitle">消息中心「收件箱」</div>
+        <div style="font-size:14px;font-weight:600;color:#cf1322;">（站内信通知将另外开单处理）</div>
       </div>
       <div class="step-body">
         <div class="two-col">
