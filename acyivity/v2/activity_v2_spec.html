@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>预约活动 v2.0 规格书</title>
+<title>预约活动 v2.1 规格书</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-height:1.7;color:#333;background:#f5f7fa;padding:0 32px 64px;}
@@ -144,12 +144,32 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
 .sdp-info-box b{color:#1677ff;}
 .sdp-placeholder{background:#fafafa;border:1px dashed #d9d9d9;border-radius:4px;padding:12px 16px;font-size:14px;color:#bbb;margin-bottom:16px;}
 .sdp-gray-block{border-left:3px solid #e0e0e0;padding-left:12px;margin-bottom:18px;}
+
+/* ── preview: 推荐游戏 / 预约成功弹窗 ── */
+.sdp-game-btn{display:inline-flex;align-items:center;height:32px;padding:0 16px;border:1px solid #d9d9d9;border-radius:6px;background:#fff;font-size:14px;color:#333;font-family:inherit;}
+.sdp-game-btn strong{color:#1677ff;margin:0 2px;}
+.game-recommend-mock{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;margin-top:12px;justify-items:center;}
+.game-recommend-mock.gr3 .grm-card:last-child{grid-column:1 / span 2;}
+.game-recommend-mock.gr1 .grm-card{grid-column:1 / span 2;}
+.grm-card{width:64px;text-align:center;}
+.grm-icon{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,#4096ff,#1677ff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;margin:0 auto;}
+.grm-demo-row{display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;}
+.grm-demo-box{border:1px solid #e0e4ee;border-radius:10px;background:#fafbff;padding:14px 16px;}
+.grm-demo-ttl{font-size:12px;color:#999;margin-bottom:10px;text-align:center;}
+.pm-success-wrap{padding:26px 18px 20px;text-align:center;}
+.pm-success-ico{width:52px;height:52px;border-radius:50%;background:#e6f7e6;color:#52c41a;font-size:28px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;}
+.pm-success-ttl{font-size:16px;font-weight:700;color:#1a1a1a;margin-bottom:5px;}
+.pm-success-sub{font-size:13px;color:#888;margin-bottom:16px;}
+.pm-success-rec-ttl{font-size:13px;font-weight:600;color:#555;text-align:left;margin-bottom:2px;}
+
+/* ── date-stamped new-content tag ── */
+.new-tag{display:inline-block;font-size:12px;font-weight:700;color:#cf1322;background:#fff1f0;border:1px solid #ffccc7;border-radius:3px;padding:1px 7px;margin-left:6px;vertical-align:middle;white-space:nowrap;}
 </style>
 </head>
 <body>
 <div class="tab-fixed-wrap">
   <div class="tab-fixed-inner">
-    <div class="tab-doc-title">预约活动 v2.0 规格书</div>
+    <div class="tab-doc-title">预约活动 v2.1 规格书</div>
     <div class="tab-bar">
       <button class="tab-btn active" onclick="switchTab('front',this)">前台规格</button>
       <button class="tab-btn" onclick="switchTab('back',this)">后台规格</button>
@@ -163,13 +183,13 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
   <div class="step">
     <div class="step-body">
       <div style="display:flex;flex-wrap:wrap;gap:8px 32px;align-items:baseline;margin-bottom:18px;">
-        <div style="font-size:17px;font-weight:700;color:#1a1a1a;">文件版本：v2.0</div>
-        <div style="font-size:15px;color:#999;">更新日期：2026-08-18</div>
+        <div style="font-size:17px;font-weight:700;color:#1a1a1a;">文件版本：v2.1</div>
+        <div style="font-size:15px;color:#999;">更新日期：2026-08-25</div>
       </div>
 
       <div class="sec">
         <div class="sec-label">需求目的</div>
-        <div style="font-size:16.5px;color:#444;line-height:1.9;">为提升已预约用户的活动参与度与奖励认领率，新增红点提醒与站内信提醒机制，让用户能即时得知「活动开启」与「奖励可领取」两种状态；同时开放后台设置「预约活动」是否显示于前台 Rewards → Promotion 列表，使预约活动比照既有活动模板呈现于该列表页。</div>
+        <div style="font-size:16.5px;color:#444;line-height:1.9;">为提升已预约用户的活动参与度与奖励认领率，新增红点提醒与站内信提醒机制，让用户能即时得知「活动开启」与「奖励可领取」两种状态；同时开放后台设置「预约活动」是否显示于前台 Rewards → Promotion 列表，使预约活动比照既有活动模板呈现于该列表页。<span class="new-tag">8/25 新增</span>「推荐游戏」设置与「预约成功」弹窗，让玩家预约成功后能立即被引导至指定游戏，提升导流效果。</div>
       </div>
 
       <div class="sec">
@@ -179,10 +199,12 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
           <tbody>
             <tr><td>前台</td><td class="td-center">新增</td><td>首页浮窗图标／浮窗活动卡片／底部导览「奖励中心」／Promotion Banner／折叠状态 Expand 按钮，共 5 处红点或数字角标提醒（开关配置见后台步骤 4）</td></tr>
             <tr><td>前台</td><td class="td-center">新增</td><td>消息中心「收件箱」站内信提醒（触发条件同步骤 4「奖励领取提醒」，系统默认行为，无独立开关）</td></tr>
+            <tr><td>前台</td><td class="td-center">新增<span class="new-tag">8/25</span></td><td>「预约成功」弹窗：玩家预约成功时立即弹出，展示后台设置的「推荐游戏」（最多 4 款）</td></tr>
             <tr><td>后台步骤 2</td><td class="td-center">新增</td><td>「活动列表设置」区块（列表开关／PC・H5 列表图片／排序），用于控制前台 Promotion 列表显示</td></tr>
             <tr><td>后台步骤 2</td><td class="td-center">异动</td><td>首页浮窗与活动列表图片上传格式统一新增支援 <b>webp</b>（原仅 png／bmp／jpg／gif）；Promotion 列表排序改依新增的数值字段，取代旧版依角标排序</td></tr>
             <tr><td>后台步骤 4</td><td class="td-center">新增</td><td>「活动开启提醒」「已预约用户奖励领取提醒」两颗独立开关，预设皆为开启</td></tr>
-            <tr><td>后台步骤 4</td><td class="td-center">不异动</td><td>预约达成条件、参与门槛、领取条件、提款条件等既有设定，维持第一版逻辑</td></tr>
+            <tr><td>后台步骤 4</td><td class="td-center">新增<span class="new-tag">8/25</span></td><td>「推荐游戏」设置：置于步骤 4 页面最下方，选择方式与既有「适用游戏范围」一致但不含体育类别，上限 4 款，用于前台「预约成功」弹窗推荐显示</td></tr>
+            <tr><td>后台步骤 4</td><td class="td-center">不异动</td><td>预约达成条件、参与门槛、领取条件、提款条件、适用游戏范围等既有设定，维持第一版逻辑</td></tr>
           </tbody>
         </table>
       </div>
@@ -408,6 +430,106 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
       </div>
     </div>
 
+    <!-- Step 3: 预约成功弹窗（v2.1 新增） -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">预约成功弹窗</div>
+        <div class="step-subtitle">预约操作成功时立即弹出，展示推荐游戏</div>
+        <span class="new-tag">8/25 新增</span>
+      </div>
+      <div class="step-body">
+        <div class="two-col">
+
+          <!-- LEFT: phone mockup -->
+          <div class="col-preview">
+            <div class="phone-mock" style="width:260px;">
+              <div class="pm-success-wrap" style="position:relative;">
+                <div style="position:absolute;top:-6px;right:-2px;width:22px;height:22px;border-radius:50%;background:#f0f0f0;color:#999;font-size:13px;display:flex;align-items:center;justify-content:center;">✕</div>
+                <div class="pm-success-ico">✓</div>
+                <div class="pm-success-ttl">预约成功！</div>
+                <div class="pm-success-sub">开奖后将通知您中奖结果</div>
+                <div class="pm-success-rec-ttl">为你推荐<span style="font-weight:400;color:#bbb;">（既有弹窗样式，本次仅新增此区块）</span></div>
+                <div class="game-recommend-mock">
+                  <div class="grm-card"><div class="grm-icon">🎮</div></div>
+                  <div class="grm-card"><div class="grm-icon">🎮</div></div>
+                  <div class="grm-card"><div class="grm-icon">🎮</div></div>
+                  <div class="grm-card"><div class="grm-icon">🎮</div></div>
+                </div>
+                <div class="pd-cta" style="margin-top:20px;width:100%;justify-content:center;">Play Now</div>
+              </div>
+              <div class="phone-caption">4 款时：2×2 两排显示；CTA 按钮文案／关闭✕为既有设计，不异动</div>
+            </div>
+
+            <div class="grm-demo-row">
+              <div class="grm-demo-box">
+                <div class="grm-demo-ttl">1 款时：弹窗正中间</div>
+                <div class="game-recommend-mock gr1" style="margin-top:0;">
+                  <div class="grm-card"><div class="grm-icon">🎮</div></div>
+                </div>
+              </div>
+              <div class="grm-demo-box">
+                <div class="grm-demo-ttl">2 款时：左右一排</div>
+                <div class="game-recommend-mock" style="margin-top:0;">
+                  <div class="grm-card"><div class="grm-icon">🎮</div></div>
+                  <div class="grm-card"><div class="grm-icon">🎮</div></div>
+                </div>
+              </div>
+              <div class="grm-demo-box">
+                <div class="grm-demo-ttl">3 款时：上左右、下居中</div>
+                <div class="game-recommend-mock gr3" style="margin-top:0;">
+                  <div class="grm-card"><div class="grm-icon">🎮</div></div>
+                  <div class="grm-card"><div class="grm-icon">🎮</div></div>
+                  <div class="grm-card"><div class="grm-icon">🎮</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: spec -->
+          <div class="col-spec">
+            <div class="sec">
+              <div class="sec-label">触发规则</div>
+              <div class="note-b note" style="margin-bottom:14px;">「预约成功」弹窗为<b>既有样式</b>（标题／副标／CTA 按钮／右上角关闭✕均不异动），本次仅新增「为你推荐」游戏区块，并新增 CTA 按钮点击后的跳转逻辑（详见下方「点击行为」表）。</div>
+              <ul class="rule-list">
+                <li>触发时机：玩家完成预约操作、系统判定<b>预约成功</b>的瞬间立即弹出</li>
+                <li>推荐游戏取值来自后台步骤 4「推荐游戏」设置，<b>最多 4 款</b>；显示顺序依选择弹窗中的固定列表顺序（同「适用游戏范围」的类别／游戏排列方式），<b>非</b>依后台点选的先后顺序</li>
+                <li>后台「推荐游戏」<b>未选择任何游戏</b>时，弹窗呈现<b>既有弹窗样式</b>（不含「为你推荐」区块，与本次新增前完全一致）</li>
+                <li>每次预约成功皆弹出，不因玩家先前已关闭过而抑制</li>
+              </ul>
+            </div>
+            <div class="sec">
+              <div class="sec-label">排版规则：推荐游戏数量与呈现方式</div>
+              <div class="note" style="margin-bottom:14px;">卡片仅显示<b>游戏缩略图</b>，不附加游戏名称文字；固定采 <b>2 栏</b> 排列，依实际数量决定行数与对齐方式，须完整覆盖下表 0～4 款全部情境：</div>
+              <table class="spec-table">
+                <thead><tr><th style="width:110px;">推荐游戏数量</th><th style="width:160px;">排版方式</th><th>说明</th></tr></thead>
+                <tbody>
+                  <tr><td class="td-center">0 款</td><td class="td-center">既有弹窗样式</td><td>不显示「为你推荐」标题与游戏卡片，呈现方式与本次新增前完全一致</td></tr>
+                  <tr><td class="td-center">1 款</td><td class="td-center">单张居中</td><td>仅 1 张卡片，置于弹窗正中间</td></tr>
+                  <tr><td class="td-center">2 款</td><td class="td-center">左右一排</td><td>2 张卡片同排左右并列</td></tr>
+                  <tr><td class="td-center">3 款</td><td class="td-center">2＋1 三角形</td><td>第一排 2 张左右并列，第二排 1 张水平居中</td></tr>
+                  <tr><td class="td-center">4 款（上限）</td><td class="td-center">2×2 两排</td><td>每排 2 张，共两排，无居中特例</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="sec">
+              <div class="sec-label">点击行为<span style="font-size:13px;color:#999;font-weight:400;">（依后台是否配置推荐游戏，穷举全部情境）</span></div>
+              <table class="spec-table">
+                <thead><tr><th style="width:150px;">情境</th><th style="width:150px;">操作</th><th>跳转结果</th></tr></thead>
+                <tbody>
+                  <tr><td class="td-gray" rowspan="1">情境一：<br>后台<b>未配置</b>推荐游戏（0 款）</td><td>点击 CTA 按钮（既有按钮，本次不改文案）</td><td>跳转至<b>首页</b>（既有行为，不异动）</td></tr>
+                  <tr><td class="td-gray" rowspan="2">情境二：<br>后台<b>已配置</b>推荐游戏（1～4 款）</td><td>点击任一推荐游戏卡片</td><td>关闭弹窗，跳转至<b>该卡片对应的游戏</b></td></tr>
+                  <tr><td>点击 CTA 按钮</td><td>关闭弹窗，<b>随机</b>跳转至已配置的推荐游戏中的其中一款</td></tr>
+                  <tr><td class="td-gray">不限情境</td><td>点击右上角关闭「✕」</td><td>关闭弹窗，停留在原页面（既有行为，不异动）</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div><!-- /panel-front -->
 
   <!-- ══════════════════════════ 后台规格 ══════════════════════════ -->
@@ -539,7 +661,8 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
             <div class="spec-demo-panel">
               <div class="step-topbar-inner">步骤 4 — 活动条件</div>
               <div class="sdp-body">
-                <div class="sdp-placeholder">预约达成条件、参与门槛等设定与第一版一致，未变更。</div>
+                <div class="sdp-placeholder">预约达成条件、参与门槛、奖项配置等设定与第一版一致，未变更。</div>
+
                 <div class="sdp-sec-title">通用设置<span style="font-size:13px;color:#999;font-weight:400;">（v2 新增，参考周卡活动既有开关样式）</span></div>
                 <div class="sdp-field-row">
                   <div class="sdp-label" style="min-width:160px;padding-top:3px;">活动开启提醒：</div>
@@ -568,6 +691,22 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
                   </table>
                   <div style="border-top:1px solid #d6e4ff;padding-top:8px;font-size:14.5px;color:#666;">两者<b>各自独立、预设皆为开启</b>，触发条件互不影响、可能同时成立（同时成立时首页浮窗／卡片仍只显示单一红点，不会重叠）。开关只影响「红点是否显示」，站内信维持<b>系统默认行为</b>，不提供活动层级开关。</div>
                 </div>
+
+                <div style="border-top:1px solid #f0f0f0;margin:18px 0;"></div>
+
+                <div class="sdp-sec-title-gray">通用设置（既有部分，节录）</div>
+                <div class="sdp-field-row">
+                  <div class="sdp-label" style="min-width:160px;padding-top:6px;">适用游戏范围：</div>
+                  <div class="sdp-ctrl"><button class="sdp-game-btn">已选择 全部 游戏</button></div>
+                </div>
+                <div class="sdp-field-row">
+                  <div class="sdp-label" style="min-width:160px;padding-top:6px;">推荐游戏：</div>
+                  <div class="sdp-ctrl">
+                    <button class="sdp-game-btn">已选择 <strong>3</strong> 个游戏</button>
+                    <div style="margin-top:6px;"><span class="new-tag">8/25 新增</span></div>
+                    <div class="sdp-hint" style="margin-top:8px;"><b>最多可选择 4 款</b>，玩家预约成功时，于前台「预约成功」弹窗推荐显示。</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -575,7 +714,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
           <!-- RIGHT: spec -->
           <div class="col-spec">
             <div class="sec">
-              <div class="sec-label">注意事项</div>
+              <div class="sec-label">注意事项（活动开启提醒／奖励领取提醒）</div>
               <ul class="rule-list">
                 <li>两颗开关的触发逻辑详见前台规格「红点提醒」，两者判断条件互相独立、可能同时成立，呈现方式见判断逻辑表</li>
                 <li>活动开启提醒需记录各用户的已读状态，确保每人每活动仅显示一次</li>
@@ -583,9 +722,38 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
               </ul>
             </div>
             <div class="sec">
-              <div class="sec-label">提示文案（操作成功）</div>
+              <div class="sec-label">新增字段说明（推荐游戏）<span class="new-tag">8/25 新增</span></div>
+              <table class="spec-table">
+                <thead><tr><th style="width:120px;">字段</th><th style="width:80px;">必填</th><th>说明</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><b>推荐游戏</b></td>
+                    <td class="td-center">否</td>
+                    <td>
+                      <ul style="margin:0;padding-left:18px;line-height:1.9;">
+                        <li><b>位置</b>：置于步骤 4「活动条件」页最下方，紧接在既有「适用游戏范围」栏位下方（「适用游戏范围」本身不异动，两者一并置底）</li>
+                        <li><b>选择方式</b>：与「适用游戏范围」相同（依类别全选／单选、按钮显示已选数量），<b>惟弹窗内不含「体育」类别</b>（体育为投注类型而非单一游戏，无法产生对应游戏卡片，故排除）</li>
+                        <li><b>数量上限</b>：最多 4 款；达上限后其余游戏灰显不可选，须先取消勾选才能再选其他游戏</li>
+                        <li><b>用途</b>：玩家预约成功时，于前台「预约成功」弹窗推荐显示</li>
+                        <li><b>未选择时</b>：弹窗不显示推荐游戏区块</li>
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="sec">
+              <div class="sec-label">注意事项（推荐游戏）<span class="new-tag">8/25 新增</span></div>
+              <ul class="rule-list">
+                <li>「推荐游戏」为独立选择项，与「适用游戏范围」互不影响，可分别勾选不同游戏，彼此无从属关系</li>
+                <li>「推荐游戏」选择弹窗<b>不含「体育」类别</b>，此点与「适用游戏范围」选择弹窗（含体育）不同，其余类别与选择方式一致</li>
+              </ul>
+            </div>
+            <div class="sec">
+              <div class="sec-label">提示文案（操作失败／成功）</div>
               <ul class="rule-list">
                 <li>切换任一开关后即时生效，无需另外保存；切换后顶部提示「设置已更新」</li>
+                <li>推荐游戏已选满 4 款时，其余游戏选项呈灰显 disabled 状态（无法点击勾选）；鼠标悬停（hover）该灰显选项时显示提示「已达上限，请先取消勾选其他游戏」，须先取消勾选才能替换</li>
               </ul>
             </div>
           </div>
@@ -596,7 +764,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
 
   </div><!-- /panel-back -->
 
-  <div class="note" style="margin-top:8px;text-align:center;font-size:15px;color:#bbb;border:none;background:none;">预约活动 v2.0 规格书 · 2026-08-18</div>
+  <div class="note" style="margin-top:8px;text-align:center;font-size:15px;color:#bbb;border:none;background:none;">预约活动 v2.1 规格书 · 2026-08-25</div>
 
 </div><!-- /page -->
 
