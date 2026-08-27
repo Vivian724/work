@@ -201,7 +201,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
             <tr><td>前台</td><td class="td-center">新增</td><td>消息中心「收件箱」站内信提醒（触发条件同步骤 4「奖励领取提醒」，系统默认行为，无独立开关）</td></tr>
             <tr><td>前台</td><td class="td-center">新增<span class="new-tag">8/25</span></td><td>「预约成功」弹窗：玩家预约成功时立即弹出，展示后台设置的「推荐游戏」（最多 4 款）</td></tr>
             <tr><td>后台步骤 2</td><td class="td-center">新增</td><td>「活动列表设置」区块（列表开关／PC・H5 列表图片／排序），用于控制前台 Promotion 列表显示</td></tr>
-            <tr><td>后台步骤 2</td><td class="td-center">异动</td><td>首页浮窗与活动列表图片上传格式统一新增支援 <b>webp</b>（原仅 png／bmp／jpg／gif）；Promotion 列表排序改依新增的数值字段，取代旧版依角标排序</td></tr>
+            <tr><td>后台步骤 2</td><td class="td-center">异动</td><td>首页浮窗与活动列表图片上传格式统一新增支援 <b>webp</b>（原仅 png／bmp／jpg／gif）；Promotion 列表新增「排序」数值字段，<b>数字越大越靠前</b>，预设 9999（最优先）；首页浮窗排序<b>维持既有逻辑，不因本次异动变更</b></td></tr>
             <tr><td>后台步骤 4</td><td class="td-center">新增</td><td>「活动开启提醒」「已预约用户奖励领取提醒」两颗独立开关，预设皆为开启</td></tr>
             <tr><td>后台步骤 4</td><td class="td-center">新增<span class="new-tag">8/25</span></td><td>「推荐游戏」设置：置于步骤 4 页面最下方，选择方式与既有「适用游戏范围」一致但不含体育类别，上限 4 款，用于前台「预约成功」弹窗推荐显示</td></tr>
             <tr><td>后台步骤 4</td><td class="td-center">不异动</td><td>预约达成条件、参与门槛、领取条件、提款条件、适用游戏范围等既有设定，维持第一版逻辑</td></tr>
@@ -213,7 +213,8 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
         <div class="sec-label">本次未涉及之既有规则</div>
         <ul class="rule-list">
           <li>后台步骤 1「活动模板设置」、步骤 3「参与对象与名单」、步骤 5「风控条件」、步骤 6「提交预览」：均沿用现有规则，本次未调整</li>
-          <li>首页浮窗排序数值规则（预设 0、不可负数、上限 9999）沿用既有规则，未变更；新增之「活动列表」排序与其共用同一数值限制</li>
+          <li>首页浮窗排序数值规则（预设 0、不可负数、上限 9999、数字越小越靠前）沿用既有规则，未变更</li>
+          <li>新增之「活动列表」排序为<b>独立逻辑</b>，与首页浮窗排序<b>方向相反</b>：预设 9999、不可负数、上限 9999、<b>数字越大越靠前</b>，两者排序池各自独立、互不影响</li>
         </ul>
       </div>
     </div>
@@ -550,7 +551,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
             <div class="spec-demo-panel">
               <div class="step-topbar-inner">步骤 2 — 活动图片</div>
               <div class="sdp-body">
-                <div class="sdp-hint" style="margin-bottom:16px;">设置首页浮窗图片、活动列表图片及活动备注。活动列表图片用于前台 Rewards → Promotion 分类显示（Event time／标题依步骤 1 配置，排序依下方「排序」数值，取代旧版依角标排序的规则）。</div>
+                <div class="sdp-hint" style="margin-bottom:16px;">设置首页浮窗图片、活动列表图片及活动备注。活动列表图片用于前台 Rewards → Promotion 分类显示（Event time／标题依步骤 1 配置，排序依下方「排序」数值、<b>数字越大越靠前</b>，预设 9999）。</div>
 
                 <!-- 首页浮窗设置 -->
                 <div class="sdp-sec-title">首页浮窗设置</div>
@@ -615,7 +616,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
                   <tr>
                     <td><b>排序</b></td>
                     <td class="td-center">必填</td>
-                    <td>预设 0（最优先）；不可负数，上限 9999；与其他活动在 Promotion 列表共用同一排序池，独立于首页浮窗排序。</td>
+                    <td>预设 <b>9999</b>（最优先）；<b>数字越大越靠前</b>；不可负数，上限 9999；与其他活动在 Promotion 列表共用同一排序池，独立于首页浮窗排序（首页浮窗排序依据既有逻辑，不因本次异动变更）。</td>
                   </tr>
                 </tbody>
               </table>
@@ -753,7 +754,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
             <div class="sec">
               <div class="sec-label">提示文案（操作失败／成功）</div>
               <ul class="rule-list">
-                <li>切换任一开关后即时生效，无需另外保存；切换后顶部提示「设置已更新」</li>
+                <li>切换任一开关仅为调整当前表单设置，<b>不会立即生效或保存</b>；须完成本步骤其余设置，并于步骤 6「确认送出」时一并提交，通过验证后才正式保存生效</li>
                 <li>推荐游戏已选满 4 款时，其余游戏选项呈灰显 disabled 状态（无法点击勾选）；鼠标悬停（hover）该灰显选项时显示提示「已达上限，请先取消勾选其他游戏」，须先取消勾选才能替换</li>
               </ul>
             </div>

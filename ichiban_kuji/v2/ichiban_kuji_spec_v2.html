@@ -445,6 +445,7 @@ tr:hover td.v2-new { background: #fff2d9; }
     <p style="color:#e03c3c;font-size:14px;font-weight:600;margin-top:6px;">※ 8/18 调整：后台商品配置 ▸ LAST赏 ＞ 虚拟物品新增「商品简介」必填字段（标注红字之处为本次新增内容）</p>
     <p style="color:#e03c3c;font-size:14px;font-weight:600;margin-top:4px;">※ 8/20 调整：后台商品配置 ＞ 各奖级第二层选「彩金」时移除行内「流水倍数」字段；LAST赏区块下方新增全局「彩金所需流水倍数」独立配置（标注红字之处为本次新增内容）</p>
     <p style="color:#e03c3c;font-size:14px;font-weight:600;margin-top:4px;">※ 8/20 新增：后台积分商城 ＞ 用户积分纪录 ＞「积分类型」下拉新增「一番赏积分获得」选项，用于独立区分一番赏抽奖产生的积分变动纪录（标注红字之处为本次新增内容）</p>
+    <p style="color:#e03c3c;font-size:14px;font-weight:600;margin-top:4px;">※ 8/27 新增：后台积分商城 ＞ 用户积分纪录 ＞「原因」栏位格式补充——该笔订单购买总张数（总卷数）大于 1 时，需在商品名称后加註「×N」，与前台「兑换记录／积分历史」的 ×N 规则一致（标注红字之处为本次新增内容）</p>
 
     <div class="spec-base-doc">
       基准文件：<span class="spec-field">ichiban_kuji_spec.html</span>（v1.0，未特别标示版本号，视为基准版）。
@@ -550,6 +551,11 @@ tr:hover td.v2-new { background: #fff2d9; }
               <td><span class="spec-ptag spec-ptag-admin" style="background:#fff0f0;color:#cf1322;border-color:#ffa39e;">后台：积分商城 ▸ 用户积分纪录</span></td>
               <td><span class="spec-ttag spec-ttag-new">新增选项</span></td>
               <td><span style="color:#e03c3c;font-weight:600;">【8/20 新增】</span>「积分类型」下拉筛选中，于「盲盒积分获得」之后新增「<strong>一番赏积分获得</strong>」类型；会员购买一番赏获得积分时，纪录写入此新类型，其余积分扣除类纪录仍归入各原有类型不变</td>
+            </tr>
+            <tr style="background:#fff0f0;">
+              <td><span class="spec-ptag spec-ptag-admin" style="background:#fff0f0;color:#cf1322;border-color:#ffa39e;">后台：积分商城 ▸ 用户积分纪录</span></td>
+              <td><span class="spec-ttag spec-ttag-new">新增规则</span></td>
+              <td><span style="color:#e03c3c;font-weight:600;">【8/27 新增】</span>「原因」栏位格式补充：该笔订单购买总张数（总卷数）大于 1 时，格式改为「Redeem {商品名称} ×N」，N＝该笔订单购买的总张数／总卷数；购买总张数为 1 时不显示「×N」，沿用原格式</td>
             </tr>
           </tbody>
         </table>
@@ -1243,7 +1249,7 @@ tr:hover td.v2-new { background: #fff2d9; }
   <p class="spec-sub" style="margin-top:6px;">本次新增「<strong style="color:#e03c3c;">一番赏积分获得</strong>」积分类型，用于记录<span style="white-space:nowrap;">一番赏（Ichiban Kuji）</span>抽奖所产生的积分收入；搭配原有「积分兑换商品」可区分该活动两种积分来源。其余类型、栏位、筛选与导出逻辑均不异动。</p>
 
   <h3 style="font-size:22px;font-weight:700;margin-bottom:14px;">6.1 画面示意</h3>
-  <p class="spec-caption">「积分类型」下拉选单本次与一番赏相关的两个类型，以及各自的原因／备注示范值。</p>
+  <p class="spec-caption">「积分类型」下拉选单本次与一番赏相关的两个类型，以及各自的原因／备注示范值。下表两笔范例分别对应<strong>购买总张数 &gt; 1</strong>（第一笔，「原因」显示「×2」）与<strong>购买总张数 ＝ 1</strong>（第二笔，「原因」不显示「×N」）两种情境。</p>
 
   <div class="spec-stack">
     <div class="spec-screen-card">
@@ -1288,7 +1294,7 @@ tr:hover td.v2-new { background: #fff2d9; }
                 <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">+100</td>
                 <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">80,830</td>
                 <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">SYSTEM</td>
-                <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">Redeem 苹果 Ichiban Kuji</td>
+                <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">Redeem 苹果 Ichiban Kuji <span style="color:#e03c3c;font-weight:600;">×2</span></td>
                 <td style="padding:10px 14px;border-bottom:1px solid #f0f2f5;color:#1b2028;">B Tier E-Credit 500.00，E Tier Free Spins ×20</td>
               </tr>
               <tr>
@@ -1343,11 +1349,15 @@ tr:hover td.v2-new { background: #fff2d9; }
   </div>
 
   <div class="spec-rule-box" style="margin-top:24px;">
-    <div class="spec-rule-title">原因／备注字段格式说明（两种类型共用相同规则）</div>
+    <div class="spec-rule-title">原因／备注字段格式说明（两种类型共用相同规则）<span style="color:#e03c3c;font-size:14px;font-weight:700;margin-left:8px;">※ 8/27 新增 ×N 规则</span></div>
     <ul>
       <li>
         <strong>原因（系统自动填入）：</strong>格式固定为「<strong>Redeem {商品名称}</strong>」，商品名称取值与「活动名称＝商品名称」规则一致<br>
         <span style="color:#888;font-size:15px;">例：Redeem 苹果 Ichiban Kuji</span>
+      </li>
+      <li style="margin-top:10px; color:#e03c3c;">
+        <strong>〔8/27 新增〕×N 显示规则：</strong>该笔订单购买<strong>总张数（总卷数）大于 1</strong> 时，「原因」格式改为「<strong>Redeem {商品名称} ×N</strong>」，N＝该笔订单购买的总张数／总卷数（不分赏级，加总计算）；购买总张数为 <strong>1</strong> 时不显示「×N」，沿用原格式。规则与前台「兑换记录」「积分历史」的 ×N 显示规则一致（详见 3.1／3.3 页签）<br>
+        <span style="color:#888;font-size:15px;">例：购买总张数 2 张 → Redeem 苹果 Ichiban Kuji ×2；购买总张数 1 张 → Redeem 苹果 Ichiban Kuji（不显示 ×N）</span>
       </li>
       <li style="margin-top:10px;">
         <strong>备注（系统自动填入）：</strong>本次抽奖实际中出的所有奖品清单；格式见「名词定义」页「奖品清单格式」<br>
