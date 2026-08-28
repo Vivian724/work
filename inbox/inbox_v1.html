@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<title>站内信提醒－活动消息（后台配置）规格文件</title>
+<style>
+  :root{
+    --blue:#2f80fd;
+    --blue-dark:#1c6ce0;
+    --border:#e3e5e8;
+    --border-strong:#c9cdd3;
+    --text-primary:#1f2329;
+    --text-secondary:#6b7280;
+    --text-muted:#9ca3af;
+    --bg-page:#f5f6f8;
+    --bg-card:#ffffff;
+    --green:#33b76a;
+    --green-bg:#e7f7ee;
+    --green-text:#1a8a4a;
+    --red:#f0554f;
+    --gray-bg:#f0f1f3;
+    --gray-text:#6b7280;
+    --amber-bg:#fff4e0;
+    --amber-text:#b06a00;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:#eef0f3;color:var(--text-primary);
+    font-family:-apple-system,"PingFang TC","Microsoft JhengHei",Helvetica,Arial,sans-serif;
+    line-height:1.85;font-size:20px;
+  }
+  .page-wrap{max-width:1920px;width:96%;margin:0 auto;padding:40px 32px 80px;}
+
+  /* ===== 文件排版（.doc scope） ===== */
+  .doc-header{background:#fff;border-radius:10px;padding:32px 40px;margin-bottom:36px;}
+  .doc h1{font-size:36px;font-weight:700;margin:0 0 12px;}
+  .doc-meta{font-size:17px;color:var(--text-muted);margin:0;}
+
+  .visual-full{background:#fff;border-radius:10px;padding:28px;margin-bottom:0;display:flex;flex-direction:column;}
+  .full{background:#fff;border-radius:10px;padding:34px 38px;margin-bottom:36px;}
+
+  .topic-group{background:#e2e5ea;border-radius:16px;padding:14px;margin-bottom:36px;}
+  .topic-group .visual-full{margin-bottom:14px;}
+  .topic-group .full{margin-bottom:0;}
+
+  .mega-header{display:flex;align-items:center;gap:14px;font-size:24px;font-weight:700;color:var(--text-primary);margin:12px 0 20px;}
+  .mega-header .mega-num{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;font-size:18px;font-weight:700;flex-shrink:0;}
+  .mega-header::after{content:"";flex:1;height:1px;background:var(--border-strong);}
+
+  .full h2{font-size:29px;font-weight:700;border-bottom:2px solid var(--blue);padding-bottom:12px;margin:0 0 24px;}
+  .full h2 .tag{display:inline-block;font-size:15px;font-weight:500;background:#eaf2ff;color:var(--blue);padding:4px 11px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+  .full h3{font-size:21px;font-weight:700;color:var(--blue);margin:28px 0 14px;}
+  .doc p{font-size:20px;margin:0 0 18px;}
+  .doc ul{margin:0 0 8px;padding-left:26px;}
+  .doc li{font-size:20px;margin-bottom:16px;padding-left:4px;}
+  .doc li::marker{color:var(--text-primary);}
+  .doc li ul{margin-top:10px;margin-bottom:4px;}
+  .doc li li{font-size:18px;margin-bottom:10px;}
+  .visual-caption{font-size:16px;color:var(--text-muted);margin-top:14px;text-align:center;}
+
+  .note{font-size:17px;line-height:1.7;color:var(--text-secondary);font-style:italic;background:var(--gray-bg);border-radius:6px;padding:16px 20px;margin:20px 0 0;}
+  .open-item{font-size:17px;line-height:1.7;background:var(--amber-bg);color:var(--amber-text);border-radius:6px;padding:16px 20px;margin:20px 0 0;}
+  .open-item b{font-weight:700;}
+
+  table.spec{width:100%;border-collapse:collapse;font-size:18px;margin:20px 0 8px;table-layout:fixed;}
+  table.spec th{text-align:left;background:var(--gray-bg);font-weight:700;padding:14px 16px;border:1px solid #d8dadd;}
+  table.spec td{padding:14px 16px;border:1px solid #e3e5e8;vertical-align:top;line-height:1.7;}
+
+  /* ===== 画面草稿（.uiframe scope，命名皆加前缀避免与文件样式互相污染） ===== */
+  .uiframe{
+    position:relative;
+    font-family:-apple-system,"PingFang TC","Microsoft JhengHei",Helvetica,Arial,sans-serif;
+    font-size:16px;color:var(--text-primary);background:var(--bg-page);
+    border:1px solid var(--border);border-radius:8px;padding:22px;flex:1;
+  }
+  .uiframe .breadcrumb{font-size:15px;color:var(--text-muted);margin-bottom:14px;}
+  .uiframe .tabbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+  .uiframe .tab{padding:8px 17px;border:1px solid var(--border);border-radius:6px;font-size:15px;color:var(--text-secondary);background:#fff;}
+  .uiframe .tab.active{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500;}
+  .uiframe .tab.new{position:relative;}
+  .uiframe .tab.new::after{content:"新增";position:absolute;top:-9px;right:-7px;background:#ff6b57;color:#fff;font-size:11px;padding:2px 6px;border-radius:8px;font-weight:500;}
+
+  .uiframe .card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:20px;}
+
+  .uiframe .toolbar{display:flex;justify-content:space-between;align-items:center;margin:0 0 14px;flex-wrap:wrap;gap:10px;}
+  .uiframe .toolbar-right{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+  .uiframe .filter-item{display:flex;align-items:center;gap:8px;}
+  .uiframe .filter-item label{font-size:15px;color:var(--text-primary);white-space:nowrap;}
+
+  .uiframe button{font-family:inherit;font-size:15px;padding:9px 17px;border-radius:6px;border:1px solid var(--border-strong);background:#fff;color:var(--text-primary);cursor:pointer;-webkit-appearance:none;appearance:none;}
+  .uiframe button:hover{background:#f5f6f8;}
+  .uiframe button:focus,.uiframe button:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+  .uiframe button.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+  .uiframe button.primary:hover{background:var(--blue-dark);}
+  .uiframe button.ghost-link{border:none;background:none;color:var(--blue);padding:5px 0;font-size:15px;}
+
+  .uiframe .btn-sm{padding:6px 15px;font-size:14px;border-radius:5px;border:none;color:#fff;font-weight:500;white-space:nowrap;-webkit-appearance:none;appearance:none;}
+  .uiframe .btn-confirm{background:var(--green);}
+  .uiframe .btn-confirm:focus,.uiframe .btn-confirm:focus-visible{outline:2px solid var(--green-text);outline-offset:2px;}
+  .uiframe .btn-edit{background:var(--blue);}
+  .uiframe .btn-edit:focus,.uiframe .btn-edit:focus-visible{outline:2px solid var(--blue-dark);outline-offset:2px;}
+  .uiframe .btn-delete{background:var(--red);}
+  .uiframe .btn-delete:focus,.uiframe .btn-delete:focus-visible{outline:2px solid #c73832;outline-offset:2px;}
+  .uiframe .btn-sm:disabled{background:var(--gray-bg);color:var(--text-muted);cursor:not-allowed;}
+  .uiframe .action-group{display:flex;gap:5px;flex-wrap:nowrap;}
+
+  .uiframe select,.uiframe input[type=text],.uiframe textarea{font-family:inherit;font-size:15px;padding:8px 11px;border:1px solid var(--border-strong);border-radius:6px;background:#fff;color:var(--text-primary);}
+  .uiframe select:focus,.uiframe input:focus,.uiframe textarea:focus{outline:none;border-color:var(--blue);}
+
+  .uiframe table{width:100%;border-collapse:collapse;font-size:15px;table-layout:fixed;}
+  .uiframe thead th{text-align:left;color:var(--text-secondary);font-weight:500;padding:10px 8px;border-bottom:1px solid var(--border-strong);}
+  .uiframe tbody td{padding:13px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .uiframe tbody tr:last-child td{border-bottom:none;}
+  .uiframe .muted{color:var(--text-secondary);}
+  .uiframe .sub{color:var(--text-muted);font-size:14px;}
+
+  .uiframe .badge{display:inline-block;padding:3px 11px;border-radius:12px;font-size:14px;font-weight:500;white-space:nowrap;}
+  .uiframe .badge.on{background:var(--green-bg);color:var(--green-text);}
+  .uiframe .badge.pending{background:var(--gray-bg);color:var(--gray-text);}
+
+  .uiframe .modal{background:#fff;border-radius:8px;width:100%;padding:28px 32px;position:relative;box-shadow:0 6px 24px rgba(0,0,0,0.08);border:1px solid var(--border);}
+  .uiframe .modal-close{position:absolute;top:20px;right:22px;font-size:19px;color:var(--text-muted);background:none;border:none;padding:0;}
+  .uiframe .modal-title{font-size:20px;font-weight:600;margin:0 0 6px;}
+  .uiframe .modal-subtitle{font-size:15px;color:var(--text-muted);margin:0 0 20px;}
+
+  .uiframe .field{margin-bottom:19px;}
+  .uiframe .field-label{font-size:15px;color:var(--text-primary);margin-bottom:7px;display:block;}
+  .uiframe .field-label .req{color:var(--red);margin-right:2px;}
+  .uiframe .field-label .reset{float:right;font-size:14px;color:var(--blue);cursor:pointer;font-weight:400;}
+  .uiframe .field-label .reset:hover{text-decoration:underline;}
+  .uiframe .field select,.uiframe .field input,.uiframe .field textarea{width:100%;}
+  .uiframe .count{text-align:right;font-size:14px;color:var(--text-muted);margin-top:4px;}
+  .uiframe .field .hint{font-size:14px;color:var(--text-muted);margin-top:6px;}
+  .uiframe textarea{resize:vertical;font-family:inherit;}
+
+  .uiframe .modal-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:8px;}
+  .uiframe .modal-actions button{padding:9px 27px;}
+
+  .uiframe .hint-box{background:var(--gray-bg);border-radius:6px;padding:13px 17px;margin:-4px 0 19px;font-size:14px;color:var(--text-secondary);}
+
+  .uiframe .state-row{display:flex;align-items:center;gap:17px;padding:13px 0;border-bottom:1px solid var(--border);}
+  .uiframe .state-row:last-child{border-bottom:none;}
+  .uiframe .state-row .state-name{width:80px;font-size:15px;font-weight:600;flex-shrink:0;}
+
+  .uiframe .field-error{color:var(--red);font-size:14px;margin-top:6px;}
+
+  .uiframe .cell-flex{display:flex;align-items:center;gap:6px;min-width:0;}
+  .uiframe .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1;}
+  .uiframe .table-scroll{overflow-x:auto;}
+
+  .uiframe .modal-overlay{display:none;position:absolute;inset:0;background:rgba(31,35,41,0.35);border-radius:8px;align-items:center;justify-content:center;z-index:10;}
+  .uiframe .modal-overlay.show{display:flex;}
+  .uiframe .confirm-dialog{background:#fff;border-radius:8px;padding:24px 28px;width:88%;max-width:360px;box-shadow:0 6px 24px rgba(0,0,0,0.12);border:1px solid var(--border);}
+  .uiframe .confirm-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+  .uiframe .confirm-title{font-size:18px;font-weight:700;}
+  .uiframe .confirm-body{display:flex;align-items:center;gap:12px;margin-bottom:22px;font-size:15px;color:var(--text-primary);}
+  .uiframe .confirm-icon{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--amber-text);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;}
+  .uiframe .confirm-actions{display:flex;justify-content:flex-end;gap:12px;}
+</style>
+</head>
+<body>
+<div class="page-wrap doc">
+
+  <div class="doc-header">
+    <h1>站内信提醒 — 活动消息（后台配置）规格文件</h1>
+    <p class="doc-meta">位置：消息推送 ＞ 活动消息（新增分页）　｜　版本：v2　｜　状态：草案</p>
+  </div>
+
+  <div class="mega-header"><span class="mega-num">1</span>页面与画面</div>
+  <!-- 页面位置与结构 -->
+  <div class="full">
+    <h2>1.1 页面位置与结构</h2>
+    <p style="margin:0;">位置：后台选单「公告管理」＞「消息推送」，新增分页「活动消息」，与现有「app系统推送」「自定义消息」「定时消息」「短信群发」并列。</p>
+    <div class="note">此分页与「自定义消息」分页逻辑不同：自定义消息是操作员手动一次性广播；本功能是系统依规则自动判断触发、仅发送给符合条件且未重复发送过的使用者。</div>
+  </div>
+
+  <!-- 1.2：活动设定列表，画面＋规格说明 -->
+  <div class="topic-group">
+  <div class="visual-full">
+      <div class="uiframe">
+        <div class="breadcrumb">位置 &gt; 消息推送</div>
+        <div class="tabbar">
+          <div class="tab">app系统推送</div>
+          <div class="tab">自定义消息</div>
+          <div class="tab">定时消息</div>
+          <div class="tab">短信群发</div>
+          <div class="tab active new">活动消息</div>
+        </div>
+        <div class="card">
+          <div class="toolbar">
+            <div>
+              <p style="margin:0;font-size:13px;font-weight:600;">活动设定列表</p>
+            </div>
+            <div class="toolbar-right">
+              <div class="filter-item">
+                <label>模板类型：</label>
+                <select>
+                  <option>全部</option>
+                  <option>Reward Ready</option>
+                </select>
+              </div>
+              <button class="primary">＋ 新增</button>
+            </div>
+          </div>
+          <div class="table-scroll">
+          <table style="min-width:1080px;">
+            <colgroup>
+              <col style="width:8%"><col style="width:10%"><col style="width:12%"><col style="width:13%"><col style="width:11%"><col style="width:8%"><col style="width:7%"><col style="width:10%"><col style="width:9%"><col style="width:12%">
+            </colgroup>
+            <thead>
+              <tr><th>模板类型</th><th>活动</th><th>消息标题</th><th>消息内容</th><th>CTA 跳转连结</th><th>审核状态</th><th>已发送</th><th>新增时间</th><th>操作人名称</th><th>操作</th></tr>
+            </thead>
+            <tbody>
+              <tr id="setting-row-1">
+                <td>Reward Ready</td>
+                <td><div class="cell-flex"><span class="truncate" title="每日特别返水(Daily Special Rebate)">每日特别返水(Daily Special Rebate)</span></div></td>
+                <td>🎉 {ActivityName} is Ready to Claim!</td>
+                <td class="muted">Hurry! Your {RewardName} bonus won't wait forever — claim it before it expires.</td>
+                <td class="muted"><div class="cell-flex"><span class="truncate" title="/promo/daily-special-rebate">/promo/daily-special-rebate</span></div></td>
+                <td><span class="badge on">已确认</span></td>
+                <td>1,284</td>
+                <td class="sub">2026-08-20 09:30:00</td>
+                <td class="sub">admin_lisa</td>
+                <td>
+                  <div class="action-group">
+                    <button class="btn-sm btn-delete" onclick="showDeleteConfirm('setting-row-1')">删除</button>
+                  </div>
+                </td>
+              </tr>
+              <tr id="setting-row-2">
+                <td>Reward Ready</td>
+                <td><div class="cell-flex"><span class="truncate" title="游戏挑战赛v3(Game Challenge)">游戏挑战赛v3(Game Challenge)</span></div></td>
+                <td>{ActivityName} Reward Ready</td>
+                <td class="muted">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</td>
+                <td class="muted">－</td>
+                <td><span class="badge pending">待确认</span></td>
+                <td>0</td>
+                <td class="sub">确认后产生</td>
+                <td class="sub">admin_chen</td>
+                <td>
+                  <div class="action-group">
+                    <button class="btn-sm btn-confirm">确认</button>
+                    <button class="btn-sm btn-edit">编辑</button>
+                    <button class="btn-sm btn-delete" onclick="showDeleteConfirm('setting-row-2')">删除</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+        <div class="modal-overlay" id="delete-overlay">
+          <div class="confirm-dialog">
+            <div class="confirm-header">
+              <span class="confirm-title">提示</span>
+              <button class="modal-close" onclick="closeDeleteConfirm()">✕</button>
+            </div>
+            <div class="confirm-body">
+              <span class="confirm-icon">!</span>
+              <span>确认删除吗？</span>
+            </div>
+            <div class="confirm-actions">
+              <button onclick="closeDeleteConfirm()">取消</button>
+              <button class="primary" onclick="confirmDelete()">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="visual-caption">分页位置示意，及活动设定列表完整栏位；可实际点击「删除」测试二次确认流程，栏位宽度不足时可左右滑动查看</p>
+  </div>
+  <div class="full">
+      <h2>1.2 活动设定列表<span class="tag">页面主画面</span></h2>
+      <p>显示所有已配置的「模板 × 活动」设定（跨模板整并显示）。每笔设定绑定一个模板类型与一个活动。列表提供依「模板类型」筛选，以及依活动名称模糊搜寻。</p>
+      <p>操作栏位（比照后台既有样式，三色实心按钮，横向排列）：</p>
+      <ul>
+        <li><b>确认（绿色）</b>：将「待确认」状态的设定转为「已确认」（各状态下按钮显示规则详见 2.2 状态机）。</li>
+        <li><b>编辑（蓝色）</b>：仅「待确认」状态可点击；点击后开启设定弹窗，栏位同 1.3 新增设定弹窗，可调整消息标题、消息内容、CTA跳转连结（设定确认后是否仍可编辑，详见 2.2 状态机）。</li>
+        <li><b>删除（红色）</b>：点击后先跳出二次确认弹窗（内容「确认删除吗？」，样式详见下方说明）；确认后执行删除，处理原则详见 2.3 资料处理原则。</li>
+      </ul>
+      <div class="note">本文件所有「提示」跳窗（含此处删除二次确认、1.3 验证失败阻挡提示）皆统一比照同一套样式：左上角标题「提示」、右上角「✕」可关闭、左侧橘色圆形惊叹号图示、右侧提示文字、按钮靠右对齐。需要操作员二次确认的情境用两个按钮（取消／确定）；纯粹告知、无需选择的情境用单一按钮（我知道了）。</div>
+      <table class="spec">
+        <tr><th style="width:22%">栏位</th><th style="width:15%">型态</th><th>说明 / 资料来源</th></tr>
+        <tr><td>模板类型</td><td>显示，唯读</td><td>此笔设定所属的模板类型名称，来源为新增当下选择的模板</td></tr>
+        <tr><td>活动</td><td>显示，唯读</td><td>此笔设定绑定的活动名称，来源为新增当下选择的活动</td></tr>
+        <tr><td>消息标题</td><td>显示，唯读</td><td>此设定目前存储的消息标题</td></tr>
+        <tr><td>消息内容</td><td>显示，唯读</td><td>此设定目前存储的消息内容前段预览</td></tr>
+        <tr><td>CTA 跳转连结</td><td>显示，唯读</td><td>此笔设定的活动专属页面连结；未配置时显示为「－」</td></tr>
+        <tr><td>审核状态</td><td>系统栏位</td><td>待确认 / 已确认，见 2.2 状态机</td></tr>
+        <tr><td>已发送数</td><td>数字，唯读</td><td>统计此设定已成功发送的通知数</td></tr>
+        <tr><td>新增时间</td><td>显示，唯读</td><td>取值为操作员点击「确认」当下的时间，非建立设定的时间；「待确认」状态尚未产生此时间，明确显示文字「确认后产生」，不使用「－」（避免与 CTA 跳转连结栏位的「－」混淆为同一种意思）</td></tr>
+        <tr><td>操作人名称</td><td>显示，唯读</td><td>建立此笔设定的操作人员帐号</td></tr>
+      </table>
+  </div>
+  </div>
+
+  <!-- 1.3：新增设定弹窗，文字配画面 -->
+  <div class="topic-group">
+  <div class="visual-full">
+      <div class="uiframe">
+        <div class="modal">
+          <button class="modal-close">✕</button>
+          <p class="modal-title">新增设定</p>
+          <p class="modal-subtitle">先选模板类型，决定套用哪一组触发条件与文案模板；再选活动</p>
+
+          <div class="field">
+            <label class="field-label"><span class="req">*</span>① 模板类型</label>
+            <select><option selected>Reward Ready</option></select>
+          </div>
+
+          <div class="hint-box">触发条件：已达成领奖条件 + 奖励尚未领取</div>
+
+          <div class="field">
+            <label class="field-label"><span class="req">*</span>② 选择活动</label>
+            <select>
+              <option>请选择活动（单选）</option>
+              <option>每日返水加码(Daily Rebate Boost)</option>
+              <option>负盈利活动(亏损救援金类,AgentActivity)</option>
+              <option>消费活动(投注消费类)</option>
+              <option>预约活动</option>
+            </select>
+            <div class="hint">一次仅能绑定一个活动，因 CTA 连结需指向该活动专属页面；「每日特别返水」「游戏挑战赛v3」已被其他设定占用，故不显示于选单中</div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">消息标题 <span class="reset" onclick="resetField('v2-title-input','v2-title-count')">还原为模板预设值</span></label>
+            <input type="text" id="v2-title-input" value="{ActivityName} Reward Ready" data-default="{ActivityName} Reward Ready" oninput="updateCount('v2-title-input','v2-title-count',50)">
+            <div class="count" id="v2-title-count">12/50</div>
+            <div class="field-error" id="v2-title-error" style="display:none;">消息标题缺少 {ActivityName} 变量，请补回后再送出</div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">消息内容 <span class="reset" onclick="resetField('v2-content-input','v2-content-count')">还原为模板预设值</span></label>
+            <textarea rows="3" id="v2-content-input" data-default="Your {RewardName} reward is ready to claim! Don't miss out—claim it now." oninput="updateCount('v2-content-input','v2-content-count',1000)">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</textarea>
+            <div class="count" id="v2-content-count">64/1000</div>
+            <div class="field-error" id="v2-content-error" style="display:none;">消息内容缺少 {RewardName} 变量，请补回后再送出</div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">CTA 跳转连结</label>
+            <input type="text" placeholder="/promo/xxx-xxx（可留空）">
+            <div class="hint">留空时，前台不会显示可点击按钮，呈现样式与一般站内信相同</div>
+          </div>
+
+          <div class="field" style="margin-bottom:0;">
+            <label class="field-label">CTA 按钮文字</label>
+            <div class="hint-box" style="margin:0;">固定值，不可编辑：<b>Claim Now</b></div>
+          </div>
+
+          <div class="modal-actions">
+            <button>取消</button>
+            <button class="primary" onclick="validateAndSubmit()">确定</button>
+          </div>
+        </div>
+        <div class="modal-overlay" id="validate-overlay">
+          <div class="confirm-dialog">
+            <div class="confirm-header">
+              <span class="confirm-title">提示</span>
+              <button class="modal-close" onclick="closeValidateError()">✕</button>
+            </div>
+            <div class="confirm-body">
+              <span class="confirm-icon">!</span>
+              <span id="validate-error-text">送出失败</span>
+            </div>
+            <div class="confirm-actions">
+              <button class="primary" onclick="closeValidateError()">我知道了</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="visual-caption">可实际输入文字并点击「还原为模板预设值」测试；亦可删除文字中的 {ActivityName} 或 {RewardName} 后点击「确定」，测试送出阻挡提示</p>
+  </div>
+  <div class="full">
+      <h2>1.3 新增设定弹窗<span class="tag">点击「＋新增」开启</span></h2>
+      <p>栏位依序标号「① 模板类型」「② 选择活动」，引导操作员依序填写：</p>
+      <ul>
+        <li>① 选择模板类型后，画面显示一段灰底提示文字，列出该模板固定的触发条件，供操作员确认，此区块不可编辑。</li>
+        <li>② 选择活动（单选）。消息标题 / 消息内容栏位会自动预填模板预设文案，操作员可微调；栏位旁提供「还原为模板预设值」，可一键还原并即时更新字数统计（右侧可实际试打）。</li>
+        <li>CTA 按钮文字固定显示模板值、不可编辑；CTA 跳转连结为活动层级栏位，非必填，若填写需对应该活动专属页面（前台呈现规则详见 2.1 验证规则）。</li>
+      </ul>
+      <div class="note">模板类型本身（名称、触发条件、预设文案、CTA按钮文字）目前仅有一组（如 Reward Ready），暂不建置独立的模板管理介面；模板以资料库/后端建置方式提供，本页「① 模板类型」下拉选单目前仅会显示此唯一选项。未来若模板数量增加，再评估是否需要独立的维护介面。</div>
+      <div class="note">编辑既有设定时，①模板类型、②选择活动两栏位改为唯读，不可变更，仅能编辑消息标题、消息内容、CTA跳转连结。</div>
+      <table class="spec">
+        <tr><th style="width:22%">栏位</th><th style="width:15%">必填</th><th>说明 / 资料来源</th></tr>
+        <tr><td>① 模板类型（选择）</td><td>是</td><td>下拉选单，来源：现有模板类型清单（触发条件提示区行为详见上方说明）</td></tr>
+        <tr><td>② 选择活动</td><td>是</td><td>下拉选单，单选；来源：活动列表中「有参与角标提醒」的活动，且需排除「已被任一模板占用」的活动</td></tr>
+        <tr><td>消息标题</td><td>是</td><td>预填模板预设值，可依活动微调，最长 50 字；{ActivityName}取值沿用该活动标题，为必留变量，不可删除（见 2.1 验证规则）</td></tr>
+        <tr><td>消息内容</td><td>是</td><td>预填模板预设值，可依活动微调，最长 1000 字；{RewardName}取值沿用对应奖励名称，为必留变量，不可删除（见 2.1 验证规则）</td></tr>
+        <tr><td>CTA 跳转连结</td><td>否</td><td>文字（URL），对应此活动专属页面；可留空（前台呈现规则详见 2.1 验证规则）</td></tr>
+        <tr><td>触发条件 / CTA按钮文字</td><td>—</td><td>皆为模板固定值，此弹窗皆不可编辑；触发条件说明详见上方；CTA按钮文字固定为「Claim Now」，套用于实际发送内容</td></tr>
+      </table>
+  </div>
+  </div>
+
+  <div class="mega-header"><span class="mega-num">2</span>规则与逻辑</div>
+  <!-- 验证规则 -->
+  <div class="full">
+    <h2>2.1 验证规则</h2>
+    <ul>
+      <li>「选择活动」下拉选单仅列出活动列表中「有参与角标提醒」的活动；同时需排除已被「任一」模板占用的活动，非仅排除同模板内已存在的活动。两个条件须同时满足才会出现在选单中。</li>
+      <li>消息标题最长 50 字、消息内容最长 1000 字，输入达上限即无法再继续输入（见 1.3 新增设定弹窗栏位说明）；活动设定列表与消息列表皆完整显示消息标题与消息内容全文，不做省略号截断。</li>
+      <li>{ActivityName} 取值沿用该活动于活动设定中的标题；{RewardName} 取值沿用对应奖励名称；两者为必留变量，微调文案时不可删除。操作员点击「确定」送出时，系统检查两个栏位是否仍包含对应变量：
+        <ul>
+          <li>缺少变量时，无法送出，跳出阻挡提示弹窗（沿用统一提示弹窗样式，见 1.2 活动设定列表说明）：标题「提示」，内容「消息标题缺少 {ActivityName} 变量」／「消息内容缺少 {RewardName} 变量」／两者皆缺时「消息标题缺少 {ActivityName} 变量；消息内容缺少 {RewardName} 变量」，皆统一加上「，请补回后再送出。」，单一按钮「我知道了」，点击后关闭弹窗、回到弹窗内容修改，不会送出。</li>
+          <li>两个变量皆存在时，才允许实际送出。</li>
+        </ul>
+      </li>
+      <li>CTA 跳转连结为非必填：有配置连结时，前台消息才会显示可点击的 CTA 按钮；未配置连结时，前台呈现样式与一般站内信相同，不显示可点击按钮。</li>
+      <li>消息标题、消息内容、所属活动、模板类型皆为必填，未填写不可送出；CTA 跳转连结为非必填栏位，可留空送出。</li>
+      <li>编辑既有设定时，模板类型与选择活动不可变更（见 1.3 新增设定弹窗说明）。</li>
+    </ul>
+  </div>
+
+  <!-- 状态机，文字配画面 -->
+  <div class="topic-group">
+  <div class="visual-full">
+      <div class="uiframe">
+        <div class="card">
+          <div class="state-row">
+            <div class="state-name">待确认</div>
+            <span class="badge pending">待确认</span>
+            <div class="action-group">
+              <button class="btn-sm btn-confirm">确认</button>
+              <button class="btn-sm btn-edit">编辑</button>
+              <button class="btn-sm btn-delete">删除</button>
+            </div>
+          </div>
+          <div class="state-row">
+            <div class="state-name">已确认</div>
+            <span class="badge on">已确认</span>
+            <div class="action-group">
+              <button class="btn-sm btn-delete">删除</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="visual-caption">两种状态下，操作栏按钮的实际样子</p>
+  </div>
+  <div class="full">
+      <h2>2.2 状态机（审核流程）</h2>
+      <p>每笔活动设定新增后，都要经过人工确认，才会真正开始运作：</p>
+      <table class="spec">
+        <tr><th style="width:16%">状态</th><th style="width:42%">说明</th><th>可执行操作</th></tr>
+        <tr><td>待确认</td><td>刚新增、还没被确认的状态；系统不会判断触发条件，也不会发通知</td><td>确认 / 编辑 / 删除</td></tr>
+        <tr><td>已确认</td><td>操作员按下确认后，系统开始正常判断触发条件、发送通知</td><td>仅删除（「确认」「编辑」按钮不再显示）</td></tr>
+      </table>
+      <div class="note">设定一经确认即无法再编辑；如需调整已确认设定的内容，须先删除，再重新新增一笔并重新走一次确认流程。</div>
+      <div class="note">设定转为「已确认」后，系统仅针对「确认时间点之后」才达成触发条件的会员发送通知；确认前即已达成条件、但当时尚未收到通知的会员，<b>不会</b>因设定被确认而补发。</div>
+  </div>
+  </div>
+
+  <!-- 资料处理原则 -->
+  <div class="full">
+    <h2>2.3 资料处理原则</h2>
+    <ul style="margin-bottom:0;">
+      <li>删除：点击删除须先经二次确认弹窗（内容「确认删除吗？」）；确认后为真删除，整笔设定资料由资料库直接移除，不保留历史纪录。<b>删除设定不会影响「消息列表」中已经发送过的纪录，只有这笔设定本身会消失</b>（见 3.1 与「消息列表」整合）。</li>
+      <li>新增设定时，消息标题／消息内容会带入模板当下的预设文案；送出后此文字即存为这笔设定「自己的一份副本」，与模板不再有关联。之后若模板预设文案被修改，所有已存在的设定都维持原本存下来的文字，不会自动跟着变成新文案——即使某笔设定当初完全没被操作员微调过、文字跟模板预设值一模一样，也一样不会自动更新。</li>
+      <li>「每个奖励仅发送一次，领取后不再重复」之逻辑由系统自动记录发送状态，不开放后台配置。</li>
+    </ul>
+  </div>
+
+  <div class="mega-header"><span class="mega-num">3</span>系统整合</div>
+  <!-- 五：与既有「消息列表」整合，文字配画面 -->
+  <div class="topic-group">
+  <div class="visual-full">
+    <div class="uiframe">
+      <div class="breadcrumb">位置 &gt; 消息列表</div>
+      <div class="tabbar">
+        <div class="tab">消息推送</div>
+        <div class="tab active">消息列表</div>
+      </div>
+      <div class="card">
+        <div class="toolbar-right" style="margin-bottom:18px;">
+          <select>
+            <option>所有消息</option>
+            <option>活动消息</option>
+          </select>
+          <input type="text" placeholder="会员名" style="width:130px;">
+          <input type="text" placeholder="开始时间" style="width:120px;">
+          <span class="muted">～</span>
+          <input type="text" placeholder="结束时间" style="width:120px;">
+          <button class="primary">搜索</button>
+        </div>
+        <table>
+          <colgroup>
+            <col style="width:16%"><col style="width:34%"><col style="width:10%"><col style="width:12%"><col style="width:16%"><col style="width:12%">
+          </colgroup>
+          <thead>
+            <tr><th>标题</th><th>内容</th><th>消息类型</th><th>会员名</th><th>新增时间</th><th>操作人名称</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>每日特别返水(Daily Special Rebate) Reward Ready</td>
+              <td class="muted">Your Summer Badge reward is ready to claim! Don't miss out—claim it now.</td>
+              <td>活动消息</td>
+              <td>player0088</td>
+              <td class="sub">2026-08-27 17:41:14</td>
+              <td class="sub">system</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="visual-caption">既有消息列表页面，筛选下拉新增「活动消息」选项后的示意</p>
+  </div>
+  <div class="full">
+    <h2>3.1 与「消息列表」整合<span class="tag">既有页面，非新增</span></h2>
+    <p>「公告管理 ＞ 消息列表」为记录所有已发送消息的既有页面。活动消息一经系统发送，须比照其他消息类型，一并写入此页的发送纪录，供操作员查询与稽核。</p>
+    <ul>
+      <li>「所有消息」筛选下拉选单需新增「活动消息」选项。活动消息的发送纪录一样归在「所有消息」底下（选「所有消息」时会一起显示）；操作员另外选择「活动消息」时，则只显示活动消息这个类型的发送纪录。</li>
+    </ul>
+    <table class="spec">
+      <tr><th style="width:22%">栏位</th><th>取值来源</th></tr>
+      <tr><td>标题</td><td>此笔发送当下的消息标题</td></tr>
+      <tr><td>内容</td><td>此笔发送当下的消息内容</td></tr>
+      <tr><td>消息类型</td><td>固定显示「活动消息」</td></tr>
+      <tr><td>新增时间</td><td>实际发送时间</td></tr>
+    </table>
+  </div>
+  </div>
+
+</div>
+<script>
+function updateCount(inputId, countId, max){
+  var el = document.getElementById(inputId);
+  var countEl = document.getElementById(countId);
+  countEl.textContent = el.value.length + '/' + max;
+}
+function resetField(inputId, countId){
+  var el = document.getElementById(inputId);
+  el.value = el.getAttribute('data-default');
+  var max = countId.indexOf('title') > -1 ? 50 : 1000;
+  updateCount(inputId, countId, max);
+}
+
+var pendingDeleteRow = null;
+function showDeleteConfirm(rowId){
+  pendingDeleteRow = rowId;
+  document.getElementById('delete-overlay').classList.add('show');
+}
+function closeDeleteConfirm(){
+  document.getElementById('delete-overlay').classList.remove('show');
+  pendingDeleteRow = null;
+}
+function confirmDelete(){
+  if(pendingDeleteRow){
+    var row = document.getElementById(pendingDeleteRow);
+    if(row) row.remove();
+  }
+  closeDeleteConfirm();
+}
+
+function closeValidateError(){
+  document.getElementById('validate-overlay').classList.remove('show');
+}
+function validateAndSubmit(){
+  var titleOk = document.getElementById('v2-title-input').value.indexOf('{ActivityName}') > -1;
+  var contentOk = document.getElementById('v2-content-input').value.indexOf('{RewardName}') > -1;
+  document.getElementById('v2-title-error').style.display = titleOk ? 'none' : 'block';
+  document.getElementById('v2-content-error').style.display = contentOk ? 'none' : 'block';
+  if(!titleOk || !contentOk){
+    var missing = [];
+    if(!titleOk) missing.push('消息标题缺少 {ActivityName} 变量');
+    if(!contentOk) missing.push('消息内容缺少 {RewardName} 变量');
+    document.getElementById('validate-error-text').textContent = missing.join('；') + '，请补回后再送出。';
+    document.getElementById('validate-overlay').classList.add('show');
+    return;
+  }
+  alert('（原型示意）验证通过，允许送出');
+}
+</script>
+</body>
+</html>
