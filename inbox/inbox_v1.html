@@ -92,7 +92,6 @@
   .uiframe button:focus,.uiframe button:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
   .uiframe button.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
   .uiframe button.primary:hover{background:var(--blue-dark);}
-  .uiframe button.ghost-link{border:none;background:none;color:var(--blue);padding:5px 0;font-size:15px;}
 
   .uiframe .btn-sm{padding:6px 15px;font-size:14px;border-radius:5px;border:none;color:#fff;font-weight:500;white-space:nowrap;-webkit-appearance:none;appearance:none;}
   .uiframe .btn-confirm{background:var(--green);}
@@ -156,6 +155,36 @@
   .uiframe .confirm-body{display:flex;align-items:center;gap:12px;margin-bottom:22px;font-size:15px;color:var(--text-primary);}
   .uiframe .confirm-icon{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--amber-text);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;}
   .uiframe .confirm-actions{display:flex;justify-content:flex-end;gap:12px;}
+
+  .uiframe .phone-frame{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,0.18);}
+  .uiframe .phone-status{display:flex;justify-content:space-between;align-items:center;padding:12px 20px 2px;font-size:15px;font-weight:600;background:#fff;}
+  .uiframe .phone-status .status-icons{display:flex;gap:5px;align-items:center;font-size:12px;color:var(--text-primary);}
+  .uiframe .msg-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 14px;background:#fff;}
+  .uiframe .msg-header .msg-back{font-size:20px;color:var(--text-primary);width:24px;}
+  .uiframe .msg-header .msg-header-title{font-weight:700;font-size:17px;flex:1;text-align:center;}
+  .uiframe .msg-header .msg-read-all{font-size:13px;color:var(--text-secondary);font-weight:500;width:52px;text-align:right;white-space:nowrap;}
+  .uiframe .msg-tabs{display:flex;gap:8px;padding:0 16px 14px;background:#fff;}
+  .uiframe .msg-tab-pill{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:20px;font-size:14px;font-weight:600;background:var(--gray-bg);color:var(--text-secondary);}
+  .uiframe .msg-tab-pill.active{background:var(--blue);color:#fff;}
+  .uiframe .msg-tab-badge{background:var(--red);color:#fff;border-radius:10px;font-size:11px;font-weight:700;padding:1px 6px;}
+  .uiframe .msg-item{display:flex;gap:12px;padding:14px 16px;border-top:1px solid var(--border);background:#fff;}
+  .uiframe .msg-avatar{position:relative;width:36px;height:36px;border-radius:50%;background:var(--gray-bg);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--blue);}
+  .uiframe .msg-avatar .unread-dot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--red);border:2px solid #fff;}
+  .uiframe .msg-item .msg-body{flex:1;min-width:0;}
+  .uiframe .msg-item-title{font-weight:700;font-size:15px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .uiframe .msg-item-preview{font-size:13px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .uiframe .msg-detail-bg{background:var(--bg-page);padding:16px;min-height:180px;}
+  .uiframe .msg-detail-card{padding:18px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08);border:1px solid var(--border);}
+  .uiframe .msg-detail-card .msg-detail-title{font-size:16px;font-weight:700;margin:0 0 8px;}
+  .uiframe .msg-detail-card .msg-detail-content{font-size:14px;color:var(--text-primary);margin:0 0 14px;line-height:1.6;}
+  .uiframe .msg-cta-btn{display:inline-block;padding:10px 22px;background:var(--blue);color:#fff;border-radius:8px;font-weight:700;font-size:14px;}
+
+  .uiframe .popup-backdrop{background:#3a3d45;border-radius:14px;padding:30px 16px;display:flex;align-items:center;justify-content:center;min-height:220px;}
+  .uiframe .popup-card{position:relative;background:#fff;border-radius:14px;padding:26px 22px;width:100%;max-width:230px;box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+  .uiframe .popup-close{position:absolute;top:14px;right:16px;font-size:18px;color:var(--text-muted);}
+  .uiframe .popup-title{font-size:19px;font-weight:800;color:var(--text-primary);text-align:center;margin:0 0 10px;}
+  .uiframe .popup-content{font-size:13px;color:var(--text-secondary);text-align:center;line-height:1.5;margin:0 0 18px;}
+  .uiframe .popup-btn{display:block;width:100%;padding:12px;text-align:center;background:var(--blue);color:#fff;border-radius:8px;font-weight:700;font-size:14px;}
 </style>
 </head>
 <body>
@@ -375,7 +404,7 @@
       <ul>
         <li>① 选择模板类型后，画面显示一段灰底提示文字，列出该模板固定的触发条件，供操作员确认，此区块不可编辑。</li>
         <li>② 选择活动（单选）。消息标题 / 消息内容栏位会自动预填模板预设文案，操作员可微调；栏位旁提供「还原为模板预设值」，可一键还原并即时更新字数统计（右侧可实际试打）。</li>
-        <li>CTA 按钮文字固定显示模板值、不可编辑；CTA 跳转连结为活动层级栏位，非必填，若填写需对应该活动专属页面（前台呈现规则详见 2.1 验证规则）。</li>
+        <li>CTA 按钮文字固定显示模板值、不可编辑；CTA 跳转连结为活动层级栏位，非必填，若填写需对应该活动专属页面（前台呈现规则详见 4.1 前台呈现）。</li>
       </ul>
       <div class="note">模板类型本身（名称、触发条件、预设文案、CTA按钮文字）目前仅有一组（如 Reward Ready），暂不建置独立的模板管理介面；模板以资料库/后端建置方式提供，本页「① 模板类型」下拉选单目前仅会显示此唯一选项。未来若模板数量增加，再评估是否需要独立的维护介面。</div>
       <div class="note">编辑既有设定时，①模板类型、②选择活动两栏位改为唯读，不可变更，仅能编辑消息标题、消息内容、CTA跳转连结。</div>
@@ -385,7 +414,7 @@
         <tr><td>② 选择活动</td><td>是</td><td>下拉选单，单选；来源：活动列表中「有参与角标提醒」的活动，且需排除「已被任一模板占用」的活动</td></tr>
         <tr><td>消息标题</td><td>是</td><td>预填模板预设值，可依活动微调，最长 50 字；{ActivityName}取值沿用该活动标题，为必留变量，不可删除（见 2.1 验证规则）</td></tr>
         <tr><td>消息内容</td><td>是</td><td>预填模板预设值，可依活动微调，最长 1000 字；{RewardName}取值沿用对应奖励名称，为必留变量，不可删除（见 2.1 验证规则）</td></tr>
-        <tr><td>CTA 跳转连结</td><td>否</td><td>文字（URL），对应此活动专属页面；可留空（前台呈现规则详见 2.1 验证规则）</td></tr>
+        <tr><td>CTA 跳转连结</td><td>否</td><td>文字（URL），对应此活动专属页面；可留空（前台呈现规则详见 4.1 前台呈现）</td></tr>
         <tr><td>触发条件 / CTA按钮文字</td><td>—</td><td>皆为模板固定值，此弹窗皆不可编辑；触发条件说明详见上方；CTA按钮文字固定为「Claim Now」，套用于实际发送内容</td></tr>
       </table>
   </div>
@@ -404,7 +433,7 @@
           <li>两个变量皆存在时，才允许实际送出。</li>
         </ul>
       </li>
-      <li>CTA 跳转连结为非必填：有配置连结时，前台消息才会显示可点击的 CTA 按钮；未配置连结时，前台呈现样式与一般站内信相同，不显示可点击按钮。</li>
+      <li>CTA 跳转连结为非必填栏位，是否配置会直接影响前台呈现样式，详见 4.1 前台呈现。</li>
       <li>消息标题、消息内容、所属活动、模板类型皆为必填，未填写不可送出；CTA 跳转连结为非必填栏位，可留空送出。</li>
       <li>编辑既有设定时，模板类型与选择活动不可变更（见 1.3 新增设定弹窗说明）。</li>
     </ul>
@@ -514,6 +543,154 @@
       <tr><td>内容</td><td>此笔发送当下的消息内容</td></tr>
       <tr><td>消息类型</td><td>固定显示「活动消息」</td></tr>
       <tr><td>新增时间</td><td>实际发送时间</td></tr>
+    </table>
+  </div>
+  </div>
+
+  <div class="mega-header"><span class="mega-num">4</span>前台呈现</div>
+  <!-- 前台：消息中心 -->
+  <div class="topic-group">
+  <div class="visual-full">
+    <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;">
+      <div>
+        <p class="visual-caption" style="margin:0 0 8px;">首页－消息中心</p>
+        <div class="uiframe phone-frame" style="max-width:260px;padding:0;">
+          <div class="phone-status">
+            <span>09:41</span>
+            <span class="status-icons">▂▄▆ 📶 🔋</span>
+          </div>
+          <div class="msg-header">
+            <span class="msg-back">‹</span>
+            <span class="msg-header-title">消息中心</span>
+            <span class="msg-read-all">一键已读</span>
+          </div>
+          <div class="msg-tabs">
+            <div class="msg-tab-pill active">Inbox <span class="msg-tab-badge">6</span></div>
+            <div class="msg-tab-pill">Notices</div>
+          </div>
+          <div class="msg-item">
+            <div class="msg-avatar">✉<span class="unread-dot"></span></div>
+            <div class="msg-body">
+              <div class="msg-item-title">{ActivityName} Reward Ready</div>
+              <div class="msg-item-preview">Your {RewardName} reward is ready to claim!</div>
+            </div>
+          </div>
+          <div class="msg-item">
+            <div class="msg-avatar">✉<span class="unread-dot"></span></div>
+            <div class="msg-body">
+              <div class="msg-item-title">Chief Quality Executive</div>
+              <div class="msg-item-preview">Recommend Friends And Enjoy Great Gifts!</div>
+            </div>
+          </div>
+          <div class="msg-item">
+            <div class="msg-avatar">✉</div>
+            <div class="msg-body">
+              <div class="msg-item-title">Win Back Your Reward</div>
+              <div class="msg-item-preview">Don't miss out on your rewards this week...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="visual-caption" style="margin:0 0 8px;">首页－消息中心－详情（已配置 CTA 连结）</p>
+        <div class="uiframe phone-frame" style="max-width:260px;padding:0;">
+          <div class="phone-status">
+            <span>09:41</span>
+            <span class="status-icons">▂▄▆ 📶 🔋</span>
+          </div>
+          <div class="msg-header">
+            <span class="msg-back">‹</span>
+            <span class="msg-header-title">消息中心</span>
+            <span class="msg-read-all"></span>
+          </div>
+          <div class="msg-detail-bg">
+            <div class="msg-detail-card">
+              <div class="msg-detail-title">{ActivityName} Reward Ready</div>
+              <div class="msg-detail-content">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</div>
+              <div class="msg-cta-btn">Claim Now</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="visual-caption" style="margin:0 0 8px;">首页－消息中心－详情（未配置 CTA 连结）</p>
+        <div class="uiframe phone-frame" style="max-width:260px;padding:0;">
+          <div class="phone-status">
+            <span>09:41</span>
+            <span class="status-icons">▂▄▆ 📶 🔋</span>
+          </div>
+          <div class="msg-header">
+            <span class="msg-back">‹</span>
+            <span class="msg-header-title">消息中心</span>
+            <span class="msg-read-all"></span>
+          </div>
+          <div class="msg-detail-bg">
+            <div class="msg-detail-card">
+              <div class="msg-detail-title">{ActivityName} Reward Ready</div>
+              <div class="msg-detail-content">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="visual-caption">左：收件箱列表；中：详情页（已配置 CTA 连结）；右：详情页（未配置 CTA 连结）——规则详见下方说明</p>
+
+    <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;margin-top:28px;">
+      <div>
+        <p class="visual-caption" style="margin:0 0 8px;">跳出式弹窗（已配置 CTA 连结）</p>
+        <div class="uiframe" style="max-width:280px;">
+          <div class="popup-backdrop">
+            <div class="popup-card">
+              <span class="popup-close">✕</span>
+              <p class="popup-title">{ActivityName} Reward Ready</p>
+              <p class="popup-content">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</p>
+              <span class="popup-btn">Claim Now</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="visual-caption" style="margin:0 0 8px;">跳出式弹窗（未配置 CTA 连结，比照一般站内信弹窗）</p>
+        <div class="uiframe" style="max-width:280px;">
+          <div class="popup-backdrop">
+            <div class="popup-card">
+              <p class="popup-title">{ActivityName} Reward Ready</p>
+              <p class="popup-content">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</p>
+              <span class="popup-btn">Confirm</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="visual-caption">左：跳出式弹窗（已配置 CTA 连结）；右：跳出式弹窗（未配置连结，比照一般站内信弹窗）——<b>仅 PC 版会出现，App／H5 版无此弹窗</b>，规则详见下方说明</p>
+  </div>
+  <div class="full">
+    <h2>4.1 前台呈现（消息中心）</h2>
+    <p>活动消息发送后，比照既有站内信规则显示于会员端「消息中心 ＞ 收件箱」，最新一笔以「本次新增」标示。</p>
+    <h3>触发规则</h3>
+    <ul>
+      <li>触发条件依所选模板固定规则判断（如 Reward Ready：已达成领奖条件＋奖励尚未领取），详见 1.3 新增设定弹窗。</li>
+      <li>每个奖励仅发送一次，领取后不再重复（见 2.3 资料处理原则）。</li>
+      <li>站内信本身没有独立的开关可单独关闭；若要停止发送，须至 1.2 活动设定列表将对应设定删除，设定一旦删除即不再触发发送。</li>
+    </ul>
+    <h3>呈现形式</h3>
+    <p>活动消息以两种形式呈现给会员，两者皆归类于消息中心「收件箱」、与既有站内信并列，但 CTA 是否配置对两者呈现的影响不完全相同（详见下方 CTA 按钮呈现规则）：</p>
+    <ul>
+      <li><b>收件箱列表／详情页</b>：常态呈现，App／H5／PC 皆有，会员可在消息中心随时查看；<b>App／H5 无跳出式弹窗，以返回键返回列表，非「✕」关闭</b>。</li>
+      <li><b>跳出式弹窗</b>：比照既有站内信弹窗机制，于会员进入前台时主动跳出提醒；<b>仅 PC 版才有此弹窗</b>，App／H5 版不会跳出弹窗（画面示意见下方第二排）。</li>
+    </ul>
+    <h3>CTA 按钮呈现规则</h3>
+    <ul>
+      <li><b>PC 弹窗、有配置 CTA 跳转连结</b>：共两个可互动元素——「Claim Now」按钮（点击跳转至对应活动页）＋右上角「✕」关闭。</li>
+      <li><b>PC 弹窗、未配置 CTA 跳转连结</b>：比照一般站内信弹窗样式，仅一个「Confirm」按钮，点击仅关闭弹窗、不跳转；不显示「✕」。</li>
+      <li>收件箱详情页比照上述同一套「有／无 CTA」逻辑：有配置连结时显示「Claim Now」按钮並可跳转；未配置时按钮不显示。</li>
+    </ul>
+    <h3>文案模板</h3>
+    <table class="spec">
+      <tr><th style="width:15%">栏位</th><th>内容</th></tr>
+      <tr><td>Title</td><td>{ActivityName} Reward Ready</td></tr>
+      <tr><td>Content</td><td>Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</td></tr>
+      <tr><td>CTA</td><td>Claim Now → 跳转至对应活动页（未配置连结时不显示）</td></tr>
     </table>
   </div>
   </div>
