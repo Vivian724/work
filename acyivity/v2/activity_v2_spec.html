@@ -163,6 +163,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
 .pm-success-rec-ttl{font-size:13px;font-weight:600;color:#555;text-align:left;margin-bottom:2px;}
 
 /* ── date-stamped new-content tag ── */
+.new-txt{color:#cf1322;}
 .new-tag{display:inline-block;font-size:12px;font-weight:700;color:#cf1322;background:#fff1f0;border:1px solid #ffccc7;border-radius:3px;padding:1px 7px;margin-left:6px;vertical-align:middle;white-space:nowrap;}
 </style>
 </head>
@@ -189,7 +190,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
 
       <div class="sec">
         <div class="sec-label">需求目的</div>
-        <div style="font-size:16.5px;color:#444;line-height:1.9;">为提升已预约用户的活动参与度与奖励认领率，新增红点提醒与站内信提醒机制，让用户能即时得知「活动开启」与「奖励可领取」两种状态；同时开放后台设置「预约活动」是否显示于前台 Rewards → Promotion 列表，使预约活动比照既有活动模板呈现于该列表页。<span class="new-tag">8/25 新增</span>「推荐游戏」设置与「预约成功」弹窗，让玩家预约成功后能立即被引导至指定游戏，提升导流效果。</div>
+        <div style="font-size:16.5px;color:#444;line-height:1.9;">为提升已预约用户的活动参与度与奖励认领率，新增红点提醒与站内信提醒机制，让用户能即时得知「活动开启」与「奖励可领取」两种状态；同时开放后台设置「预约活动」是否显示于前台 Rewards → Promotion 列表，使预约活动比照既有活动模板呈现于该列表页。<span class="new-tag">8/25 新增</span>「推荐游戏」设置与「预约成功」弹窗，让玩家预约成功后能立即被引导至指定游戏，提升导流效果。<span class="new-txt"><span class="new-tag">9/4 新增</span>后台步骤 2 新增「弹窗游戏底图」必填栏位（356×470px），供已配置推荐游戏时的「预约成功」弹窗取用。</span></div>
       </div>
 
       <div class="sec">
@@ -201,6 +202,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
             <tr><td>前台</td><td class="td-center">新增</td><td>消息中心「收件箱」站内信提醒（触发条件同步骤 4「奖励领取提醒」，系统默认行为，无独立开关）</td></tr>
             <tr><td>前台</td><td class="td-center">新增<span class="new-tag">8/25</span></td><td>「预约成功」弹窗：玩家预约成功时立即弹出，展示后台设置的「推荐游戏」（最多 4 款）</td></tr>
             <tr><td>后台步骤 2</td><td class="td-center">新增</td><td>「活动列表设置」区块（列表开关／PC・H5 列表图片／排序），用于控制前台 Promotion 列表显示</td></tr>
+            <tr><td>后台步骤 2</td><td class="td-center">新增<span class="new-tag">9/4</span></td><td class="new-txt">「弹窗游戏底图」栏位：置于既有「弹窗底图」下方，样式与「弹窗底图」一致，PC 端与 H5 端建议尺寸皆为 <b>356×470px</b>，必填；仅用于前台「预约成功」弹窗——有配置「推荐游戏」时取此图，未配置时取既有「弹窗底图」</td></tr>
             <tr><td>后台步骤 2</td><td class="td-center">异动</td><td>首页浮窗与活动列表图片上传格式统一新增支援 <b>webp</b>（原仅 png／bmp／jpg／gif）；Promotion 列表新增「排序」数值字段，<b>数字越大越靠前</b>，预设 9999（最优先）；首页浮窗排序<b>维持既有逻辑，不因本次异动变更</b></td></tr>
             <tr><td>后台步骤 4</td><td class="td-center">新增</td><td>「活动开启提醒」「已预约用户奖励领取提醒」两颗独立开关，预设皆为开启</td></tr>
             <tr><td>后台步骤 4</td><td class="td-center">新增<span class="new-tag">8/25</span></td><td>「推荐游戏」设置：置于步骤 4 页面最下方，选择方式与既有「适用游戏范围」一致但不含体育类别，上限 4 款，用于前台「预约成功」弹窗推荐显示</td></tr>
@@ -496,6 +498,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
                 <li>触发时机：玩家完成预约操作、系统判定<b>预约成功</b>的瞬间立即弹出</li>
                 <li>推荐游戏取值来自后台步骤 4「推荐游戏」设置，<b>最多 4 款</b>；显示顺序依选择弹窗中的固定列表顺序（同「适用游戏范围」的类别／游戏排列方式），<b>非</b>依后台点选的先后顺序</li>
                 <li>后台「推荐游戏」<b>未选择任何游戏</b>时，弹窗呈现<b>既有弹窗样式</b>（不含「为你推荐」区块，与本次新增前完全一致）</li>
+                <li class="new-txt"><span class="new-tag" style="margin-left:0;margin-right:6px;">9/4 新增</span>弹窗底图依后台步骤 2 配置取图：「推荐游戏」<b>已配置</b>（1～4 款）取「弹窗游戏底图」（356×470px）；<b>未配置</b>（0 款）取既有「弹窗底图」（356×289px）。<b>仅此弹窗有此差异</b>，活动内其他弹窗不受影响</li>
                 <li>每次预约成功皆弹出，不因玩家先前已关闭过而抑制</li>
               </ul>
             </div>
@@ -541,7 +544,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
       <div class="step-header">
         <div class="step-num">2</div>
         <div class="step-title">步骤 2 — 活动图片</div>
-        <div class="step-subtitle">新增「活动列表设置」区块</div>
+        <div class="step-subtitle">新增「活动列表设置」区块、<span class="new-txt">「弹窗游戏底图」栏位</span><span class="new-tag">9/4 新增</span></div>
       </div>
       <div class="step-body">
         <div class="two-col">
@@ -552,6 +555,22 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
               <div class="step-topbar-inner">步骤 2 — 活动图片</div>
               <div class="sdp-body">
                 <div class="sdp-hint" style="margin-bottom:16px;">设置首页浮窗图片、活动列表图片及活动备注。活动列表图片用于前台 Rewards → Promotion 分类显示（Event time／标题依步骤 1 配置，排序依下方「排序」数值、<b>数字越大越靠前</b>，预设 9999）。</div>
+
+                <!-- 弹窗底图（既有）／弹窗游戏底图（9/4 新增） -->
+                <div class="sdp-sec-title-gray">弹窗底图（既有，不异动）</div>
+                <div class="sdp-img-grid" style="margin-bottom:18px;">
+                  <div class="sdp-img-card"><div class="sdp-img-head" style="display:flex;align-items:center;justify-content:space-between;"><span>PC 端</span><span style="font-size:12px;font-weight:400;color:#bbb;">建议尺寸 356×289px</span></div><div class="sdp-img-dashed">↑<br>点击上传图片</div></div>
+                  <div class="sdp-img-card"><div class="sdp-img-head" style="display:flex;align-items:center;justify-content:space-between;"><span>H5 端</span><span style="font-size:12px;font-weight:400;color:#bbb;">建议尺寸 356×289px</span></div><div class="sdp-img-dashed">↑<br>点击上传图片</div></div>
+                </div>
+
+                <div class="sdp-sec-title new-txt" style="border-left-color:#cf1322;"><span style="margin-right:2px;">*</span>弹窗游戏底图<span class="new-tag">9/4 新增</span></div>
+                <div class="sdp-img-grid" style="margin-bottom:6px;">
+                  <div class="sdp-img-card"><div class="sdp-img-head" style="display:flex;align-items:center;justify-content:space-between;"><span>PC 端</span><span style="font-size:12px;font-weight:400;color:#bbb;">建议尺寸 356×470px</span></div><div class="sdp-img-dashed">↑<br>点击上传图片</div></div>
+                  <div class="sdp-img-card"><div class="sdp-img-head" style="display:flex;align-items:center;justify-content:space-between;"><span>H5 端</span><span style="font-size:12px;font-weight:400;color:#bbb;">建议尺寸 356×470px</span></div><div class="sdp-img-dashed">↑<br>点击上传图片</div></div>
+                </div>
+                <div class="sdp-hint new-txt" style="margin-bottom:20px;">PC 端与 H5 端<b>建议尺寸皆为 356×470px</b>；详细说明见右侧字段表。</div>
+
+                <div style="border-top:1px solid #f0f0f0;margin-bottom:18px;"></div>
 
                 <!-- 首页浮窗设置 -->
                 <div class="sdp-sec-title">首页浮窗设置</div>
@@ -603,6 +622,11 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:17px;line-
               <table class="spec-table">
                 <thead><tr><th style="width:120px;">字段</th><th style="width:80px;">必填</th><th>说明</th></tr></thead>
                 <tbody>
+                  <tr>
+                    <td class="new-txt"><b>弹窗游戏底图</b><span class="new-tag">9/4 新增</span></td>
+                    <td class="td-center new-txt">必填</td>
+                    <td class="new-txt"><b>位置</b>：既有「弹窗底图」下方（「弹窗底图」本身不异动）；样式与「弹窗底图」一致。<b>尺寸</b>：PC／H5 皆 356×470px；格式 png、bmp、jpg、gif、webp，5MB 以内。<br><b>用途</b>：<b>仅</b>用于前台「预约成功」弹窗——步骤 4「推荐游戏」<b>已配置</b>（1～4 款）时取此图；<b>未配置</b>（0 款）时取既有「弹窗底图」（356×289px）。其他弹窗不受影响。</td>
+                  </tr>
                   <tr>
                     <td><b>列表开关</b></td>
                     <td class="td-center">必填</td>
