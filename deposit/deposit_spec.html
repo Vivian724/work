@@ -1,4 +1,901 @@
 <!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>存款活动公版 规格文件（原型 × 规格 对照版）</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   第一段：原规格文件既有样式（规格内文的排版，完全沿用不动）
+   ═══════════════════════════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f7f7f9;color:#2c2c33;line-height:1.75;font-size:16px;}
+.doc-header{background:#fff;border-bottom:1px solid #e6e6ec;padding:28px 48px 20px;}
+.doc-header .tag{font-size:13px;color:#5a5a8a;background:#eef0fb;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:10px;}
+.doc-header h1{font-size:26px;font-weight:500;margin-bottom:10px;color:#1e1e28;}
+.meta-table{font-size:14.5px;color:#5c5c68;}
+.meta-table div{margin-bottom:3px;}
+.meta-table b{color:#1e1e28;font-weight:500;display:inline-block;width:110px;}
+.topnav{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #e6e6ec;padding:0 48px;display:flex;gap:4px;overflow-x:auto;}
+.topnav a{font-size:15px;color:#5c5c68;text-decoration:none;padding:14px 16px;white-space:nowrap;border-bottom:2px solid transparent;}
+.topnav a:hover{color:#3d3dbf;}
+.doc-body{max-width:1500px;margin:0 auto;padding:32px 48px 100px;}
+.pilot-flag{background:#fef7ec;border:1px solid #f2dfa8;border-radius:8px;padding:16px 22px;margin-bottom:24px;font-size:15px;color:#8a6d1f;}
+.h1-title{font-size:24px;font-weight:500;color:#1e1e28;margin:36px 0 4px;padding-top:8px;border-top:1px solid #e6e6ec;}
+.h1-title:first-of-type{border-top:none;margin-top:0;}
+.h2-title{font-size:19px;font-weight:500;color:#1e1e28;margin:22px 0 10px;}
+.intent-box{background:#fff;border:1px solid #e6e6ec;border-radius:10px;padding:20px 24px;font-size:16px;color:#42424a;margin-bottom:20px;}
+.term-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px;}
+.term-card{background:#fff;border:1px solid #e6e6ec;border-radius:8px;padding:14px 16px;}
+.term-card .t-name{font-size:16px;font-weight:500;color:#1e1e28;margin-bottom:5px;}
+.term-card .t-desc{font-size:14.5px;color:#5c5c68;}
+.section{background:#fff;border-radius:10px;border:1px solid #e6e6ec;margin-bottom:24px;overflow:hidden;}
+.section-head{padding:14px 22px;border-bottom:1px solid #e6e6ec;background:#fbfbfd;}
+.section-head .num{font-size:13.5px;color:#8a8a96;font-weight:500;}
+.section-head h3{font-size:18px;font-weight:500;color:#1e1e28;margin-top:2px;}
+
+.spec-body{padding:6px 26px 20px;}
+.sub-block{padding:16px 0;border-bottom:1px dashed #eeeef3;}
+.sub-block:last-child{border-bottom:none;}
+.sub-num{font-size:17px;font-weight:500;color:#3d3dbf;margin-bottom:8px;}
+.sub-content{font-size:16px;color:#42424a;}
+.sub-content ul{padding-left:18px;margin-top:4px;}
+.sub-content li{margin-bottom:4px;}
+.sub-content table{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px;}
+.sub-content th,.sub-content td{border:1px solid #eeeef3;padding:7px 10px;text-align:left;}
+.sub-content th{background:#fbfbfd;color:#5c5c68;font-weight:500;font-size:14px;}
+.pending{background:#fef7ec;border:1px solid #f2dfa8;border-radius:6px;padding:11px 15px;font-size:14.5px;color:#8a6d1f;}
+.pending .lbl{font-weight:500;margin-right:4px;}
+.change-note{background:#eef0fb;border:1px solid #cdd2f0;border-radius:6px;padding:11px 15px;font-size:14.5px;color:#40408a;margin-top:8px;}
+.change-note .lbl{font-weight:500;margin-right:4px;}
+.na{color:#a0a0aa;font-size:15px;font-style:normal;}
+.checklist{font-size:15px;color:#42424a;}
+.checklist li{list-style:none;margin-bottom:6px;padding-left:22px;position:relative;}
+.checklist li::before{content:"☐";position:absolute;left:0;color:#b8b8c4;}
+.checklist li.done::before{content:"☑";color:#4a9d6f;}
+
+@media (max-width: 760px){
+  .doc-header{padding:22px 18px 16px;}
+  .topnav{padding:0 12px;}
+  .doc-body{padding:20px 14px 80px;}
+  .term-grid{grid-template-columns:1fr;}
+  .spec-body{padding:6px 16px 18px;}
+  .sub-content table{font-size:13.5px;}
+  .doc-header h1{font-size:21px;}
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   第二段：新增样式 —— 左（原型）右（规格）对照版面
+   设计原则：左右各自独立卷动，互不干扰；中间可拖曳调整宽度；
+   窄萤幕（<1024px）自动改为上下堆叠。
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --c-line:#e6e6ec; --c-primary:#3d3dbf; --c-muted:#8a8a96; --c-ink:#1e1e28;
+  --split-left:62%;
+}
+html,body{height:100%;}
+body{overflow:hidden;background:#eef0f4;}
+.app{height:100vh;display:flex;flex-direction:column;min-height:0;}
+
+/* ─── 页首 ─────────────────────────────────────────────────── */
+.doc-header{flex:0 0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 20px;}
+.doc-header .tag{margin-bottom:0;}
+.doc-header h1{font-size:18px;margin:0;}
+.hd-sub{font-size:13px;color:var(--c-muted);font-weight:400;margin-left:8px;}
+.hd-spacer{flex:1 1 auto;}
+.hd-btn{font-size:13px;color:#5c5c68;background:#fff;border:1px solid var(--c-line);border-radius:6px;padding:5px 12px;cursor:pointer;font-family:inherit;}
+.hd-btn:hover{color:var(--c-primary);border-color:#c3c3e8;}
+.hd-btn:focus-visible{outline:2px solid var(--c-primary);outline-offset:2px;}
+.doc-meta{display:none;width:100%;border-top:1px solid var(--c-line);padding-top:10px;}
+.doc-meta.open{display:block;}
+
+/* ─── 左右分栏 ─────────────────────────────────────────────── */
+.split{flex:1 1 auto;display:flex;min-height:0;}
+.pane{display:flex;flex-direction:column;min-width:0;min-height:0;}
+.pane--proto{flex:0 0 var(--split-left);background:#fff;}
+.pane--spec{flex:1 1 auto;background:#f7f7f9;border-left:1px solid var(--c-line);}
+.resizer{flex:0 0 6px;background:var(--c-line);cursor:col-resize;transition:background .15s;}
+.resizer:hover,.resizer:focus-visible{background:var(--c-primary);outline:none;}
+
+/* ─── 分栏顶部工具列 ───────────────────────────────────────── */
+.pane-bar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:7px 14px;background:#fff;border-bottom:1px solid var(--c-line);font-size:13px;min-height:38px;}
+.pane-bar__title{font-weight:500;color:var(--c-ink);white-space:nowrap;}
+.pane-bar__hint{color:var(--c-muted);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pane-bar__hint.is-archive{color:#8a6d1f;background:#fef7ec;border:1px solid #f2dfa8;border-radius:4px;padding:1px 7px;}
+.pane-bar__spacer{flex:1 1 auto;}
+.pane-bar__btn{font-size:12.5px;color:#5c5c68;background:#fff;border:1px solid var(--c-line);border-radius:6px;padding:4px 10px;cursor:pointer;text-decoration:none;white-space:nowrap;font-family:inherit;}
+.pane-bar__btn:hover{color:var(--c-primary);border-color:#c3c3e8;}
+.pane-bar__btn:focus-visible{outline:2px solid var(--c-primary);outline-offset:2px;}
+
+/* 双向连动开关 */
+.link-toggle{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#5c5c68;cursor:pointer;white-space:nowrap;user-select:none;}
+.link-toggle input{width:14px;height:14px;accent-color:var(--c-primary);cursor:pointer;}
+
+/* ─── 原型 iframe ──────────────────────────────────────────── */
+.proto-wrap{flex:1 1 auto;position:relative;min-height:0;overflow:hidden;}
+/* 原型是照 1280px 宽的后台画面做的，分栏后放不下，
+   所以用 CSS transform 等比缩小塞进来（勾掉「符合宽度」就恢复原尺寸、改用卷动） */
+#protoFrame{width:100%;height:100%;border:0;display:block;background:#fff;transform-origin:0 0;}
+.proto-wrap.is-scroll{overflow:auto;}
+.proto-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#fff;padding:30px;text-align:center;font-size:14.5px;color:#5c5c68;}
+.proto-fallback.hidden{display:none;}
+
+/* ─── 规格分栏：章节导览 ───────────────────────────────────── */
+.spec-nav{flex:0 0 auto;display:flex;align-items:center;gap:2px;padding:6px 10px;background:#fff;border-bottom:1px solid var(--c-line);overflow-x:auto;}
+.spec-nav__item{flex:0 0 auto;font-size:13px;color:#5c5c68;background:transparent;border:1px solid transparent;border-radius:6px;padding:5px 10px;cursor:pointer;white-space:nowrap;font-family:inherit;}
+.spec-nav__item:hover{color:var(--c-primary);background:#f2f2fa;}
+.spec-nav__item:focus-visible{outline:2px solid var(--c-primary);outline-offset:1px;}
+.spec-nav__item.active{color:#fff;background:var(--c-primary);border-color:var(--c-primary);}
+.spec-nav__item.todo::after{content:"待补";font-size:11px;margin-left:5px;color:#b8912f;background:#fef7ec;border:1px solid #f2dfa8;border-radius:4px;padding:0 4px;}
+.spec-nav__item.active.todo::after{color:#fff;background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.4);}
+.spec-nav__label{flex:0 0 auto;font-size:12px;color:#a0a0aa;padding:0 8px 0 10px;border-left:1px solid var(--c-line);margin-left:6px;white-space:nowrap;}
+.spec-nav__label:first-child{border-left:none;margin-left:0;padding-left:2px;}
+
+/* ─── 规格分栏：目前位置列 ─────────────────────────────────── */
+.spec-ctx{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:7px 16px;background:#fbfbfd;border-bottom:1px solid var(--c-line);font-size:13px;min-height:36px;}
+.spec-ctx__step{font-size:12px;color:#fff;background:var(--c-primary);border-radius:10px;padding:2px 9px;white-space:nowrap;}
+.spec-ctx__title{font-weight:500;color:var(--c-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* ─── 规格分栏：内容卷动区 ─────────────────────────────────── */
+.spec-scroll{flex:1 1 auto;overflow-y:auto;padding:18px 20px 80px;}
+.panel{display:none;}
+.panel.active{display:block;}
+.panel .h1-title:first-of-type{margin-top:0;border-top:none;}
+
+/* 「原型画面栏位对照」区块（待补章节用） */
+.field-ref{background:#f4f6fb;border:1px solid #dfe3f2;border-radius:8px;padding:14px 18px;font-size:15px;color:#42424a;}
+.field-ref .fr-title{font-size:14px;font-weight:500;color:#40408a;margin-bottom:6px;}
+.field-ref ul{padding-left:18px;margin-top:4px;}
+.field-ref li{margin-bottom:4px;}
+
+/* ─── 响应式：窄萤幕改为上下堆叠 ───────────────────────────── */
+@media (max-width:1023px){
+  body{overflow:auto;}
+  .app{height:auto;min-height:100vh;}
+  .split{flex-direction:column;}
+  .pane--proto{flex:0 0 auto;height:70vh;}
+  .pane--spec{border-left:none;border-top:1px solid var(--c-line);}
+  .resizer{display:none;}
+  .spec-scroll{overflow-y:visible;}
+  .pane-bar__hint{display:none;}
+}
+@media (max-width:640px){
+  .doc-header{padding:10px 14px;}
+  .spec-scroll{padding:14px 12px 60px;}
+  .pane--proto{height:60vh;}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══════════ 页首：标题 + 文件资讯（可收合） ══════════ -->
+  <header class="doc-header">
+    <span class="tag">存款活动公版</span>
+    <h1>规格文件<span class="hd-sub">原型 × 规格 对照版</span></h1>
+    <div class="hd-spacer"></div>
+    <button class="hd-btn" id="metaToggle" aria-expanded="false" aria-controls="docMeta">文件资讯 ▾</button>
+
+    <div class="doc-meta" id="docMeta">
+      <div class="meta-table">
+        <div><b>文件版本号</b>v0.3</div>
+        <div><b>修改摘要</b>v0.3：将后台原型（add_activity_deposit.html）与规格文件合并为同一份 —— 左侧为可实际操作的原型，右侧为对应章节规格，点选原型步骤时右侧自动切换，不需再开两份档案对照。同时补上第2／3／5／6步与列表页的章节骨架（内容待补），让 6 个步骤与规格章节一一对应。原先内嵌的 7 张后台截图已移除 —— 左栏就是实际画面，截图不但重复，还会随原型改版而过期；内文里「见下方截图」「上图」等说法已改写为「在左侧原型怎么操作可看到该状态」。v0.2：新增「3.5 流水规则」「3.6 奖励发放」。</div>
+        <div><b>内含原型</b>后台 add_activity_deposit.html（已内嵌于左侧，原档仍可单独开启）</div>
+        <div><b>参考来源</b>BR-20260725_存款活动公版（企划书）</div>
+        <div><b>使用方式</b>左侧原型点到哪一步，右侧规格自动跟到对应章节；也可点右侧章节让左侧跳到对应画面。可拖曳中间灰线调整左右宽度。</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="split" id="split">
+
+    <!-- ══════════ 左：后台原型（可实际操作） ══════════ -->
+    <section class="pane pane--proto" aria-label="后台原型">
+      <div class="pane-bar">
+        <span class="pane-bar__title">后台原型</span>
+        <span class="pane-bar__hint" id="protoMode">载入中…</span>
+        <div class="pane-bar__spacer"></div>
+        <label class="link-toggle" title="把 1280px 宽的后台画面等比缩小，完整塞进这一栏"><input type="checkbox" id="fitToggle" checked>符合宽度</label>
+        <a class="pane-bar__btn" href="add_activity_deposit.html" target="_blank" rel="noopener">原型另开分页 ↗</a>
+      </div>
+      <div class="proto-wrap">
+        <iframe id="protoFrame" title="后台新增存款活动原型"></iframe>
+        <div class="proto-fallback hidden" id="protoFallback">
+          <div>此浏览器无法直接内嵌原型画面。</div>
+          <a class="pane-bar__btn" href="add_activity_deposit.html" target="_blank" rel="noopener">改用独立分页开启原型 ↗</a>
+          <div style="font-size:13px;color:#a0a0aa;">（右侧规格仍可正常阅读，只是无法自动连动）</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="resizer" id="resizer" role="separator" aria-orientation="vertical" tabindex="0" aria-label="拖曳调整左右宽度，或用左右方向键调整"></div>
+
+    <!-- ══════════ 右：规格文件（依左侧步骤自动切换） ══════════ -->
+    <section class="pane pane--spec" aria-label="规格文件">
+      <nav class="spec-nav" id="specNav" aria-label="规格章节"></nav>
+
+      <div class="spec-ctx">
+        <span class="spec-ctx__step" id="ctxStep" hidden></span>
+        <span class="spec-ctx__title" id="ctxTitle">名词定义</span>
+        <div class="pane-bar__spacer"></div>
+        <button class="pane-bar__btn" id="ctxGoto" hidden>◀ 左侧原型跳到这一步</button>
+        <label class="link-toggle"><input type="checkbox" id="linkToggle" checked>双向连动</label>
+      </div>
+
+      <div class="spec-scroll" id="specScroll">
+
+        <!-- ─── 名词定义 ─── -->
+        <article class="panel" id="p-terms">
+  <div class="h1-title" id="terms">名词定义</div>
+  <div class="intent-box">
+    在看各章节规格前，先统一定义这份文件里会反复用到的词——这几个词在讨论过程中都各自厘清过一次，这里整理成正式定义，避免后面每一节重复解释。
+  </div>
+  <div class="term-grid">
+    <div class="term-card"><div class="t-name">规则区块</div><div class="t-desc">一个存款活动底下可以新增多个"规则区块"，每个区块各自独立设定存款条件、奖励规则、统计周期等。一般活动通常只挂1个区块；组合型活动（如新人礼包）才会叠加多个。</div></div>
+    <div class="term-card"><div class="t-name">存款条件</div><div class="t-desc">决定"怎样才算数"的判断依据，三选一：复存／单笔存款／累计存款，与奖励规则各自独立、可自由组合。</div></div>
+    <div class="term-card"><div class="t-name">奖励规则</div><div class="t-desc">决定"算数之后给多少"，三选一：固定金额／百分比奖励／阶梯奖励，与存款条件各自独立、可自由组合。</div></div>
+    <div class="term-card"><div class="t-name">复存</div><div class="t-desc">这一笔存款达标，且会员在统计周期范围内，此前已有至少一笔达标存款纪录——第一笔达标存款本身不算复存、不会发放奖励，从第二笔开始才算。</div></div>
+    <div class="term-card"><div class="t-name">参与次数限制</div><div class="t-desc">每达标一次立刻发放一次奖励，此栏位是"次数上限"，不是"集满次数才发放"的门槛。例：设定3次，代表最多可领3次，不是要存满3笔才给。</div></div>
+    <div class="term-card"><div class="t-name">统计周期</div><div class="t-desc">存款条件为"复存"或"累计存款"时，用来决定计算范围与重置时机：活动期间累计／每日00:00重置／每周固定时间重置，各规则区块可各自设定。</div></div>
+    <div class="term-card"><div class="t-name">VIP联动</div><div class="t-desc">规则区块开启"依会员层级设定不同数值"后，可将某个VIP等级的门槛/奖励"套用"至其他VIP等级——套用后该等级变成只读、跟随来源等级即时同步，取消套用则保留当下数值变回独立设定。</div></div>
+    <div class="term-card"><div class="t-name">奖励状态（4种）</div><div class="t-desc">未达标／可领取／已领取／已过期。由规则区块的达标情况与"奖励发放"的领取天数设定共同决定，不需另外配置。</div></div>
+  </div>
+        </article>
+
+        <!-- ─── 1. 需求目的 ─── -->
+        <article class="panel" id="p-purpose">
+  <div class="h1-title" id="purpose">1. 需求目的</div>
+  <div class="intent-box">
+    目前存款活动大多依赖定制开发或单独配置，导致上线效率低、规则难以复用、维护成本高。本次建设统一的存款活动公版，让运营可通过后台灵活配置活动规则（存款条件、奖励规则、周期、用户分层等），不需要每次都由工程师另外开发，同时活动可用"多个规则区块"自由组合呈现，提升活动设计的弹性。
+  </div>
+        </article>
+
+        <!-- ─── 2. 前台规则 ─── -->
+        <article class="panel" id="p-frontend">
+  <div class="h1-title" id="frontend">2. 规则文件内容－前台</div>
+  <div class="section">
+    <div class="section-head"><div class="num">2.1</div><h3>前台页面依功能区块以图文方式撰写规则</h3></div>
+    <div class="spec-body">
+      <div class="sub-block"><div class="pending"><span class="lbl">⚠️ 待补充：</span>前台的完整视觉与规则说明尚未整理进本文件，先前讨论过的活动小卡片、活动详情页视觉稿仅为方向参考，尚未逐栏位写成正式规格。将于下一版补上 2.1.1～2.1.5。</div></div>
+    </div>
+  </div>
+        </article>
+
+        <!-- ─── 3.0 活动列表页（对应原型列表画面） ─── -->
+        <article class="panel" id="p-s0">
+          <div class="h1-title">3. 规则文件内容－后台</div>
+          <div class="section">
+            <div class="section-head"><div class="num">3.0（对应后台活动列表页）</div><h3>活动列表与筛选</h3></div>
+            <div class="spec-body">
+              <div class="sub-block">
+                <div class="pending"><span class="lbl">⚠️ 待补充：</span>原型有完整的活动列表画面（筛选、表格、新增活动入口），但目前规格文件尚未涵盖这一页。本节先建立骨架，待确认后补齐 3.0.1～3.0.8。</div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-content">
+                  <div class="field-ref">
+                    <div class="fr-title">撰写对照：左侧原型这一页画面上看得到的栏位</div>
+                    <p style="font-size:14px;color:#5c5c68;margin-bottom:6px;">以下只是「画面上有什么」的清单，供撰写规格时逐项对照，<b>不代表规则已定义</b>。</p>
+                    <ul>
+                      <li><b>筛选区：</b>活动模板（下拉：全部／周卡活动／预约活动／存款活动）、活动ID、活动名称、活动时间、状态。</li>
+                      <li><b>操作按钮：</b>搜索、新增活动。</li>
+                      <li><b>列表栏位：</b>ID、排序、状态、起止时间、币种、语系、活动模板、活动名称、预览图片、黑名单、指定代理、参与／中奖人数、彩金所需流水倍数、操作。</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-num">待撰写项目（依规范 4.1.1～4.1.8）</div>
+                <div class="sub-content">
+                  <ul class="checklist">
+                    <li>3.0.1 详细说明交互行为（点新增活动、点操作栏各按钮、搜索的行为）</li>
+                    <li>3.0.2 文案长度限制（活动名称过长时列表如何截断）</li>
+                    <li>3.0.3 操作失败后的提示文案及交互行为</li>
+                    <li>3.0.4 操作成功后的提示文案及交互行为</li>
+                    <li>3.0.5 下拉选单的来源及内容（活动模板、状态）</li>
+                    <li>3.0.6 输入框的限制（活动ID、活动名称）</li>
+                    <li>3.0.7 说明开关状态（列表内的状态切换是否可直接操作）</li>
+                    <li>3.0.8 需试想各种情境（列表无资料、筛选无结果、权限不足）</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ─── 3.1 活动模板设置（第1步） ─── -->
+        <article class="panel" id="p-s1">
+          <div class="h1-title">3. 规则文件内容－后台</div>
+  <div class="section">
+    <div class="section-head"><div class="num">3.1（对应后台第1步）</div><h3>活动模板设置</h3></div>
+    <div class="spec-body">
+
+      <div class="sub-block">
+        <div class="sub-num">3.1.1 详细说明交互行为</div>
+        <div class="sub-content">
+          <ul>
+            <li>"活动类型"下拉固定选择"存款活动"，选择后其余栏位固定显示，无连动变化。</li>
+            <li>填写完各栏位后，点击右上角"下一步"按钮，进入第2步"活动图片"。</li>
+            <li>点击"退出编辑"离开新增流程，返回活动列表页，本步骤填写内容不会保存。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.1.2 文案长度限制</div>
+        <div class="sub-content">
+          <ul>
+            <li>活动名称：文字输入框，上限字数尚未定案。</li>
+          </ul>
+          <div class="pending"><span class="lbl">⚠️ 待确认：</span>活动名称字数上限，需与运营确认前台显示空间后补上限制。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.1.3 操作失败后的提示文案及交互行为</div>
+        <div class="sub-content">
+          <div class="pending"><span class="lbl">⚠️ 待补充：</span>必填栏位未填写时点击"下一步"的验证提示文案与呈现方式（红字提示／Toast／是否阻挡跳转）尚未定义。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.1.4 操作成功后的提示文案及交互行为</div>
+        <div class="sub-content">
+          <div class="pending"><span class="lbl">⚠️ 待补充：</span>本步骤填写完成后，除跳转至下一步外，是否有额外的成功提示尚未定义。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.1.5 下拉选单的来源及内容</div>
+        <div class="sub-content">
+          <table>
+            <tr><th>下拉选单</th><th>选项</th><th>来源</th></tr>
+            <tr><td>活动类型</td><td>周卡活动／预约活动／存款活动</td><td>固定选项（写死），本活动固定选择"存款活动"</td></tr>
+            <tr><td>活动币种</td><td>PHP</td><td>固定选项（写死），目前仅一个选项</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.1.6 输入框的限制</div>
+        <div class="sub-content">
+          <ul>
+            <li>活动名称：必填，不可留空；上限字数待确认（同3.1.2）。</li>
+            <li>活动时间（开始／结束）：必填，需为合法日期时间；结束时间需晚于开始时间。</li>
+          </ul>
+          <div class="pending"><span class="lbl">⚠️ 待确认：</span>活动时间是否可选过去时间、最短活动时长限制等细节尚未定案。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.1.7 说明开关状态，开启前、开启后产生的作用</div>
+        <div class="sub-content">
+          <table>
+            <tr><th>开关</th><th>开启前（关闭）</th><th>开启后</th></tr>
+            <tr><td>活动状态</td><td>活动不会出现在任何前台入口</td><td>依"活动时间"自动上下架，若目前在活动时间区间内则前台显示</td></tr>
+          </table>
+          <div class="change-note"><span class="lbl">与原始企划书的差异：</span>企划书4.1原规划4种状态（草稿／上线／暂停／已结束），运营确认实际只需开启／关闭2种，已简化。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.1.8 需试想各种情境后撰写规格文件</div>
+        <div class="sub-content">
+          <ul>
+            <li>活动名称留白时点击"下一步" → <span class="na">⚠️ 待确认阻挡方式与提示文案</span></li>
+            <li>活动时间的结束时间早于开始时间 → <span class="na">⚠️ 待确认阻挡方式</span></li>
+            <li>营运中途将"活动类型"切换成其他模板，是否会清空已填写的存款专属设定（如第4步的规则区块）？→ <span class="na">⚠️ 待确认</span></li>
+          </ul>
+          <div class="change-note"><span class="lbl">已移除的栏位：</span>"活动入口""活动说明"原本规划在此步骤（企划书4.1有列），经与运营确认后判断不需要／与其他栏位重复，已从画面移除。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+        </article>
+
+        <!-- ─── 3.2 活动图片（第2步） ─── -->
+        <article class="panel" id="p-s2">
+          <div class="h1-title">3. 规则文件内容－后台</div>
+          <div class="section">
+            <div class="section-head"><div class="num">3.2（对应后台第2步）</div><h3>活动图片</h3></div>
+            <div class="spec-body">
+              <div class="sub-block">
+                <div class="pending"><span class="lbl">⚠️ 待补充：</span>本步骤规格尚未撰写。左侧原型已有完整画面，可边操作边把 3.2.1～3.2.8 逐项补齐。</div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-content">
+                  <div class="field-ref">
+                    <div class="fr-title">撰写对照：左侧原型第2步画面上看得到的栏位</div>
+                    <p style="font-size:14px;color:#5c5c68;margin-bottom:6px;">以下只是「画面上有什么」的清单，供撰写规格时逐项对照，<b>不代表规则已定义</b>。</p>
+                    <ul>
+                      <li><b>活动设置：</b>活动语系（多选，预设「预设」，另有英文／菲律宾语／越南语／宿雾语）、活动标题（依语系分页签各自填写）、链接（跳转链接／外部链接网址）。</li>
+                      <li><b>图片上传：</b>多个上传框，部分标注建议尺寸（356×294px、356×422px、946×543px），部分未标注尺寸；另有「各规则区块对应的规则弹窗图」，张数随第4步新增的规则区块数量变动。</li>
+                      <li><b>排序：</b>数字输入。</li>
+                      <li><b>备注：</b>多行文字输入（placeholder「请输入备注内容...」）。</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-num">待撰写项目（依规范 4.1.1～4.1.8）</div>
+                <div class="sub-content">
+                  <ul class="checklist">
+                    <li>3.2.1 详细说明交互行为（语系切换与标题的对应关系、上传流程、预览）</li>
+                    <li>3.2.2 文案长度限制（活动标题、备注的字数上限与超出处理）</li>
+                    <li>3.2.3 操作失败后的提示文案（图片格式／尺寸／大小不符、上传失败）</li>
+                    <li>3.2.4 操作成功后的提示文案及交互行为</li>
+                    <li>3.2.5 下拉选单的来源及内容（活动语系的来源）</li>
+                    <li>3.2.6 输入框的限制（排序是否可为0／负数、链接格式验证）</li>
+                    <li>3.2.7 说明开关状态（本步骤如有开关需补充）</li>
+                    <li>3.2.8 需试想各种情境（未上传任何图片可否进下一步、第4步区块数量变动后规则弹窗图如何连动）</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ─── 3.3 参与对象与名单（第3步） ─── -->
+        <article class="panel" id="p-s3">
+          <div class="h1-title">3. 规则文件内容－后台</div>
+          <div class="section">
+            <div class="section-head"><div class="num">3.3（对应后台第3步）</div><h3>参与对象与名单</h3></div>
+            <div class="spec-body">
+              <div class="sub-block">
+                <div class="pending"><span class="lbl">⚠️ 待补充：</span>本步骤规格尚未撰写。<b>特别注意：</b>本步骤勾选的「会员等级」是第4步 VIP 联动的资料来源（见 3.4.5、3.4.8 情境三），两节需一并确认。</div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-content">
+                  <div class="field-ref">
+                    <div class="fr-title">撰写对照：左侧原型第3步画面上看得到的栏位</div>
+                    <p style="font-size:14px;color:#5c5c68;margin-bottom:6px;">以下只是「画面上有什么」的清单，供撰写规格时逐项对照，<b>不代表规则已定义</b>。</p>
+                    <ul>
+                      <li><b>参与对象设置：</b>1. 充值层级（多选，预设层／第一～五层／内部帐号等）、2. 指定代理（弹窗多选代理线）、3. 新会员限制、4. 会员等级（VIP0～VIP10 多选）、5. 用户标签。</li>
+                      <li><b>黑名单设置：</b>黑名单、用户标签。</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-num">待撰写项目（依规范 4.1.1～4.1.8）</div>
+                <div class="sub-content">
+                  <ul class="checklist">
+                    <li>3.3.1 详细说明交互行为（多选下拉的全选／取消、代理线弹窗的确定与取消）</li>
+                    <li>3.3.2 文案长度限制（已选项目过多时如何显示，例如「已选 5 项」或省略号）</li>
+                    <li>3.3.3 操作失败后的提示文案及交互行为</li>
+                    <li>3.3.4 操作成功后的提示文案及交互行为</li>
+                    <li>3.3.5 下拉选单的来源及内容（充值层级、代理线、会员等级、用户标签各自来自哪个资料源）</li>
+                    <li>3.3.6 输入框的限制（是否允许一个都不选）</li>
+                    <li>3.3.7 说明开关状态（新会员限制开启前／后的作用）</li>
+                    <li>3.3.8 需试想各种情境（<b>取消勾选某VIP后，第4步已建立的VIP联动如何处理</b> —— 与 3.4.8 情境三同一个待确认项；黑名单与参与对象重叠时以何者优先）</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ─── 3.4 / 3.5 / 3.6 活动条件（第4步，三个区块同页） ─── -->
+        <article class="panel" id="p-s4">
+          <div class="h1-title">3. 规则文件内容－后台</div>
+          <div class="intent-box" style="margin-bottom:20px;font-size:15px;">
+            <b>本步骤在原型上是同一个画面</b>，由上而下依序为三个区块：<b>3.4 活动条件／规则区块</b>、<b>3.5 流水规则</b>、<b>3.6 奖励发放</b>。以下三节即依此顺序排列，可对照左侧画面往下卷动阅读。
+          </div>
+  <div class="section">
+    <div class="section-head"><div class="num">3.4（对应后台第4步）</div><h3>活动条件 / 规则区块</h3></div>
+    <div class="spec-body" style="padding-top:18px;">
+      <div class="intent-box" style="margin-bottom:4px;">
+        这一步是整个存款活动公版真正的"大脑"，前面几步（活动名称、参与对象、图片）都只是单纯填资料，只有这一步在做"运算判断"，也是过去讨论中最常被误解、需要反复厘清的部分，以下尽量用具体例子说明，不只是罗列选项。
+        <br><br>
+        核心概念：营运在这一步要回答两个各自独立的问题——<b>"怎样才算数"</b>（存款条件：复存／单笔存款／累计存款）跟<b>"算数后给多少"</b>（奖励规则：固定金额／百分比／阶梯奖励）。这两个问题的答案可以任意组合，例如"单笔存款＋阶梯奖励"或"累计存款＋固定金额"，共有 3×3＝9 种组合，全部都要能正常运作（详见3.4.8情境）。
+        <br><br>
+        一个活动可以新增多个这样的"规则区块"——一般活动通常只挂1个区块；只有像"新人欢迎礼包"这种刻意串联多种玩法的组合型活动，才会疊加2～3个区块。
+      </div>
+    </div>
+
+    <div class="spec-body">
+
+      <div class="sub-block">
+        <div class="sub-num">3.4.1 详细说明交互行为</div>
+        <div class="sub-content">
+          <p style="margin-bottom:10px;">举一个营运实际操作的例子来说明这个画面在做什么——假设营运想做「单笔存款满100，立刻送10元」这个活动：</p>
+          <ul>
+            <li>点击"新增规则区块"，系统生成一个区块，预设"存款条件＝复存"、"奖励规则＝固定金额"。</li>
+            <li>把存款条件切换成"单笔存款"（点击后画面上的栏位<b>不会</b>整个重排，只有"最低存款金额"栏位的用途跟着切换意思，不需要额外操作）。</li>
+            <li>在"最低存款金额"填 100，"奖励金额"填 10。</li>
+            <li>此时画面区块上方的小标签会自动显示"单笔存款 × 固定金额"，方便营运一眼确认目前是哪种组合，不用重新展开检查每个栏位。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-body">
+      <div class="sub-content">
+          <ul>
+            <li>若把"奖励规则"切换成"阶梯奖励"，画面下方原本的单一"最低存款金额／奖励金额"两个输入框，会替换成一张可以新增多档的阶梯表格（可在左侧原型把「奖励规则」切换成「阶梯奖励」实际看到）；反之从阶梯切回固定金额／百分比，表格会收起、换回单一栏位——两种状态互相切换时，<b>系统不会记住原本已经填的数字</b>，切换前建议先确认组合方向，避免来回切换导致要重新输入。</li>
+            <li>点击区块右上角"删除区块"可移除该区块（无二次确认，谨慎处理见3.4.8边界情境）。</li>
+          </ul>
+        </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.4.2 文案长度限制</div>
+        <div class="sub-content">
+          <div class="pending"><span class="lbl">⚠️ 待确认：</span>「最低存款金额」「奖励金额」「奖励上限」等数字栏位，目前仅限制为数字输入（型态为number），尚未定案最大可输入几位数、是否要有金额上限的技术性防呆（例如避免营运手滑打成天文数字）。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.4.3 操作失败后的提示文案及交互行为</div>
+        <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>必填栏位留空、或阶梯档位重叠（例如两档门槛设成一样）时的验证提示尚未定义。</div></div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.4.4 操作成功后的提示文案及交互行为</div>
+        <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>新增／删除区块、套用VIP设定等操作目前是画面立即反应，没有额外的成功提示文字，是否需要补上尚待确认。</div></div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.4.5 下拉选单的来源及内容</div>
+        <div class="sub-content">
+          <table>
+            <tr><th>下拉／单选</th><th>选项</th><th>来源</th></tr>
+            <tr><td>区块型态</td><td>标准型（条件×奖励自由组合）／按天任务型</td><td>固定选项（写死）</td></tr>
+            <tr><td>存款条件</td><td>复存／单笔存款／累计存款</td><td>固定选项（写死），三者各自独立、可与奖励规则任意组合</td></tr>
+            <tr><td>奖励规则</td><td>固定金额／百分比奖励／阶梯奖励</td><td>固定选项（写死）</td></tr>
+            <tr><td>统计周期</td><td>活动期间累计／每日（00:00重置）／每周（可设定重置日）</td><td>固定选项（写死），仅存款条件为"复存"或"累计存款"时显示</td></tr>
+            <tr><td>参与次数限制类型</td><td>每日／活动期间</td><td>固定选项（写死），仅存款条件为"单笔存款"时显示（复存已改用统计周期，见3.4.8）</td></tr>
+            <tr><td>依会员层级设定（VIP联动）</td><td>VIP0～VIP10（共11档）</td><td>来源为第3步"参与对象与名单"勾选的会员等级——第4步只会列出第3步已勾选、有资格参加本活动的VIP等级，未勾选的不会出现（详见3.4.7）</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.4.6 输入框的限制</div>
+        <div class="sub-content">
+          <table>
+            <tr><th>栏位</th><th>必填</th><th>能否留空</th><th>能否为0</th><th>说明</th></tr>
+            <tr><td>最低存款金额／累计门槛金额</td><td>是</td><td>否</td><td>⚠️待确认</td><td>数字型态，具体上下限待确认</td></tr>
+            <tr><td>奖励金额／奖励比例</td><td>是</td><td>否</td><td>⚠️待确认</td><td>依"奖励规则"是固定金额还是百分比，单位不同（元／%）</td></tr>
+            <tr><td>奖励上限</td><td>否（选填）</td><td>是，留空代表不设上限</td><td>⚠️待确认</td><td>本区块累计发放的总金额上限，与「奖励金额」是两个不同层级的数字（一个管单次、一个管整体）</td></tr>
+            <tr><td>参与次数</td><td>是（存款条件≠累计存款时）</td><td>否</td><td>⚠️待确认，理论上0代表完全不能参加，需与营运确认是否要挡下这种设定</td><td>次数为"上限"，不是"门槛"，见名词定义</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.4.7 说明开关状态，开启前、开启后产生的作用</div>
+        <div class="sub-content">
+          <p style="margin-bottom:8px;">"依会员层级设定不同数值"这个开关，是这一步最容易搞混的地方，以下用情境说明（可在左侧原型打开这个开关对照）：</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-body">
+      <div class="sub-content" style="padding:16px 0;">
+        <table>
+          <tr><th>状态</th><th>开启前（关闭）</th><th>开启后</th></tr>
+          <tr><td>依会员层级设定不同数值</td><td>本区块所有会员套用同一组门槛与奖励，画面上不会出现VIP列表</td><td>展开VIP0～VIP10的手风琴列表（只列出第3步已勾选的VIP等级），可各自设定专属数值，并可"套用"给其他VIP形成联动——以把VIP2的设定套用给VIP4为例：VIP4的栏位会反灰唯读，数字跟着VIP2走，VIP2改数字VIP4会跟着变；点"取消套用"会把当下继承到的数字保留下来，变回VIP4自己独立可编辑的设定</td></tr>
+        </table>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.4.8 需试想各种情境后撰写规格文件</div>
+        <div class="sub-content">
+
+          <p style="margin-bottom:10px;"><b>情境一：存款条件×奖励规则的9种组合，逐一确认逻辑是否成立</b></p>
+          <table style="margin-bottom:14px;">
+            <tr><th>存款条件 ＼ 奖励规则</th><th>固定金额</th><th>百分比奖励</th><th>阶梯奖励</th></tr>
+            <tr><td>复存</td><td>存款满X（且非本人首笔达标）→ 给固定Y元</td><td>存款满X（且非首笔达标）→ 依比例给奖励</td><td>本笔金额落在哪个区间（且非首笔达标）→ 给对应档奖励</td></tr>
+            <tr><td>单笔存款</td><td>单笔满X → 给固定Y元</td><td>单笔满X → 依比例给奖励</td><td>单笔金额落在哪个区间 → 给对应档奖励</td></tr>
+            <tr><td>累计存款</td><td>期间累计满X → 一次性给固定Y元</td><td>期间累计满X → 依比例给奖励</td><td>累计金额达到哪个档位 → 逐档给对应奖励（需搭配进度条概念）</td></tr>
+          </table>
+
+          <p style="margin-bottom:10px;"><b>情境二：复存的判定，实际举例走一次</b></p>
+          <p style="margin-bottom:10px;">设定：存款条件＝复存，最低存款金额＝100，统计周期＝每日。</p>
+          <ul style="margin-bottom:14px;">
+            <li>会员当天第一次存款120（≥100，达标）→ <b>不发奖励</b>，因为这是他今天第一笔达标纪录，系统记录"今天已有1笔"。</li>
+            <li>同一天会员再存款150 → <b>发放奖励</b>，因为今天已有前一笔达标纪录，这笔算复存。</li>
+            <li>隔天00:00统计周期重置，会员今天第一笔存款100 → 又变回"今天的第一笔"，<b>不发奖励</b>，需要今天再存第二笔才会触发。</li>
+          </ul>
+
+          <p style="margin-bottom:10px;"><b>情境三：VIP联动的例外情况</b></p>
+          <ul style="margin-bottom:14px;">
+            <li>第3步一个VIP都没勾选时，第4步开启"依会员层级设定不同数值"，画面会用红字提示"请先至第3步勾选可参加本活动的VIP等级"，不会显示空的VIP列表。</li>
+            <li>已经营运在第3步取消某个VIP的参加资格（例如原本勾了VIP4，后来取消勾选），若VIP4当下正被其他VIP等级"套用"著（例如VIP2套用给VIP4），⚠️ <b>待确认</b>：这条联动关系该自动解除，还是保留但前台不会有VIP4的人看到？目前程式尚未处理这个情况，需要与工程确认。</li>
+          </ul>
+
+          <p style="margin-bottom:10px;"><b>情境四：区块型态选择"按天任务型"时的差异</b></p>
+          <p style="margin-bottom:10px;">按天任务型是跟上述"标准型"完全不同的另一种区块——不是存款条件×奖励规则的组合，而是让营运设定最多7天、每天各自的门槛与奖励（例如第1天存50送5、第2天存80送10……）。关键规则：</p>
+          <ul style="margin-bottom:14px;">
+            <li>断签不影响后续——某天没达标只是那天没有奖励，隔天照常繼續计算，不会整个重来。</li>
+            <li>没有全勤奖——奖励都是各天分别发放，集满7天没有额外的整套奖励。</li>
+            <li>"第1天"是每位会员各自起算，从他在本区块第一次真正存款达到当日门槛的那天开始算，不是活动开始那天，也不是他第一次点进活动页面那天。</li>
+            <li>⚠️ <b>待确认</b>：若会员的个人7天进度尚未跑完、但活动整体已经结束（活动时间到期），剩余天数是直接作废，还是延长给他跑完？目前未定案。</li>
+          </ul>
+
+          <p style="margin-bottom:10px;"><b>边界与异常</b></p>
+          <ul>
+            <li>营运在同一活动内叠加两个"性质完全相同"的区块（例如都是复存＋固定金额、数字也一样）→ ⚠️待确认是否要挡下重复设定或仅提示。</li>
+            <li>营运删除一个正在被其他VIP联动"套用"的区块 → ⚠️待确认连动的VIP设定如何处理。</li>
+            <li>营运没有权限修改已经"开启"中的活动的规则区块 → ⚠️待确认是否允许、需不需要走审核。</li>
+          </ul>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-head"><div class="num">3.5（对应后台第4步）</div><h3>流水规则</h3></div>
+    <div class="spec-body" style="padding-top:14px;">
+      <div class="change-note">与原始企划书的差异：企划书4.6「流水规则」，在原型注解里被标注为「原6领取」的一部分，目前已经并入第4步「活动条件」画面内，跟规则区块设定、奖励发放同页显示，不需要另外跳转步骤。</div>
+    </div>
+    <div class="spec-body">
+
+      <div class="sub-block">
+        <div class="sub-num">3.5.1 详细说明交互行为</div>
+        <div class="sub-content">
+          <ul>
+            <li>「本金」「奖金」两个勾选框各自独立勾选，决定流水计算基数：只勾「本金」＝奖金部分免流水、只需本金流水；只勾「奖金」＝只需奖金流水；两者都勾（预设状态）＝本金＋奖金合计都需要流水。</li>
+            <li>流水倍数：输入数字，决定「本金／奖金基数」需要打码几倍，会员才符合达标/领取资格，预设值为1倍。</li>
+            <li>点击「已选择 X 个游戏」按钮，开启游戏选择弹窗（跟其他活动共用同一个游戏选择组件），可勾选哪些游戏的投注计入流水计算，不影响存款条件本身是否达标。</li>
+          </ul>
+          <div class="pending"><span class="lbl">⚠️ 待补充：</span>目前「本金」「奖金」勾选框与流水倍数输入框，在原型上只有画面互动（可以点击/输入），但没有接对应的资料保存逻辑——也就是营运勾选或输入后，数值不会被记住。需要与工程确认这两个栏位串接储存的方式与时机。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.5.2 文案长度限制</div>
+        <div class="sub-content"><span class="na">不适用——本节没有长文字输入栏位。</span></div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.5.3 操作失败后的提示文案及交互行为</div>
+        <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>流水倍数栏位画面上标示必填（红色*），但留空时是否阻挡进入下一步、提示文案为何，目前未定义。</div></div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.5.4 操作成功后的提示文案及交互行为</div>
+        <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>调整流水设定后，是否有即时保存或成功提示，目前未定义。</div></div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.5.5 下拉选单的来源及内容</div>
+        <div class="sub-content">
+          <span class="na">本节没有下拉选单。</span>
+          <div class="pending" style="margin-top:8px;"><span class="lbl">⚠️ 待确认：</span>游戏选择弹窗内的游戏分类与游戏清单（如"EVO:EvoLive"、"TPG:TPG"等），目前画面上是写死的示例资料，实际应该串接哪个游戏商列表来源（API或后台维护的游戏字典表），尚待确认。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.5.6 输入框的限制</div>
+        <div class="sub-content">
+          <table>
+            <tr><th>栏位</th><th>必填</th><th>能否留空</th><th>能否为0</th><th>说明</th></tr>
+            <tr><td>流水倍数</td><td>是</td><td>否</td><td>⚠️待确认</td><td>数字型态，上限位数与是否可为0/负数尚未定案</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.5.7 说明开关状态，开启前、开启后产生的作用</div>
+        <div class="sub-content">
+          <p style="margin-bottom:8px;">「本金」「奖金」严格来说不是单一开关，而是两个各自独立的勾选框，组合出3种有效状态：</p>
+          <table>
+            <tr><th>勾选组合</th><th>作用</th></tr>
+            <tr><td>只勾「本金」</td><td>流水只计算本金部分的投注，奖金部分不需要流水即可提领</td></tr>
+            <tr><td>只勾「奖金」</td><td>流水只计算奖金部分的投注，本金部分不受流水限制</td></tr>
+            <tr><td>本金＋奖金都勾（预设）</td><td>本金与奖金合计都要达到流水倍数要求</td></tr>
+          </table>
+          <div class="pending"><span class="lbl">⚠️ 待确认：</span>若「本金」「奖金」两个都不勾选，目前程序没有挡下这个操作——这代表「完全免流水」吗？这是否为合法的设定状态，需要与营运确认，若不合法则需要补上「至少勾选一个」的验证。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.5.8 需试想各种情境后撰写规格文件</div>
+        <div class="sub-content">
+          <ul>
+            <li>会员的存款没有达到规则区块设定的门槛（未达标）时，流水规则是否仍然在计算这名会员的投注？⚠️ <b>待确认</b>——合理推测应该是「未达标就不会发奖励，流水要求自然也不成立」，但目前文件与画面都没有明确写出这个先后关系，建议在正式规格里补一句明确说明。</li>
+            <li>同一活动如果新增了多个规则区块（例如一个复存＋固定金额、一个单笔存款＋阶梯奖励），流水规则只有画面上这一组（不是每个规则区块各自一组），代表不同区块发出的奖励，最终都套用同一个流水倍数与游戏范围。⚠️ <b>待确认</b>：这是否为刻意的设计（流水本来就该是整个活动层级共用，不需要按区块拆分）？需要跟营运确认这个理解是否正确，避免营运误以为可以帮每个区块单独设定流水倍数。</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-head"><div class="num">3.6（对应后台第4步）</div><h3>奖励发放</h3></div>
+    <div class="spec-body" style="padding-top:14px;">
+      <div class="change-note">与原始企划书的差异：企划书4.7「奖励发放」，在原型注解里被标注为「原7提款」的一部分，目前已经并入第4步「活动条件」画面内，跟规则区块设定、流水规则同页显示。</div>
+    </div>
+    <div class="spec-body">
+
+      <div class="sub-block">
+        <div class="sub-num">3.6.1 详细说明交互行为</div>
+        <div class="sub-content">
+          <ul>
+            <li>发放方式：「自动发放」／「手动领取」单选，预设「自动发放」。切到「手动领取」时，画面即时展开一个「请输入天数」的数字栏位，用来设定会员必须在几天内主动领取，超过天数系统会自动把奖励状态改为「已过期」；切回「自动发放」时，该栏位会收起来。</li>
+            <li>审核方式：「人工审核」／「自动审核」单选，预设「自动审核」。</li>
+            <li>已验证手机号：「是」／「否」单选，预设「否」（代表不限制）。</li>
+            <li>限制使用设备：「无限制」／「仅APP」单选，预设「无限制」。</li>
+          </ul>
+          <div class="pending"><span class="lbl">⚠️ 待补充：</span>目前只有「发放方式」这个栏位真正串接了程序逻辑（切换会正确展开/收起领取天数栏位）；「审核方式」「已验证手机号」「限制使用设备」，以及展开后的「领取天数」输入框，画面上都只能点击/输入，但没有接对应的资料保存逻辑，数值不会被记住。需要与工程确认这几个栏位串接储存的方式与时机。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.6.2 文案长度限制</div>
+        <div class="sub-content"><span class="na">不适用——本节没有长文字输入栏位。</span></div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.6.3 操作失败后的提示文案及交互行为</div>
+        <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>选择「手动领取」后展开的天数栏位，是否为必填、留空时点击下一步会怎么提示，目前未定义。</div></div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.6.4 操作成功后的提示文案及交互行为</div>
+        <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>调整奖励发放设定后，是否有即时保存或成功提示，目前未定义。</div></div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.6.5 下拉选单的来源及内容</div>
+        <div class="sub-content"><span class="na">本节都是单选题，没有下拉选单。</span></div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.6.6 输入框的限制</div>
+        <div class="sub-content">
+          <table>
+            <tr><th>栏位</th><th>必填</th><th>能否留空</th><th>能否为0</th><th>说明</th></tr>
+            <tr><td>领取天数（仅「手动领取」时出现）</td><td>⚠️待确认</td><td>⚠️待确认</td><td>⚠️待确认</td><td>超过此天数，奖励状态自动变为「已过期」</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.6.7 说明开关状态，开启前、开启后产生的作用</div>
+        <div class="sub-content">
+          <table>
+            <tr><th>栏位</th><th>状态A</th><th>状态B</th></tr>
+            <tr><td>发放方式</td><td>自动发放：会员达标后，系统自动发放奖励，不需要会员或客服额外操作</td><td>手动领取：会员达标后，奖励进入「可领取」状态，会员需在设定天数内主动领取，逾期自动变为「已过期」</td></tr>
+            <tr><td>审核方式</td><td>人工审核：⚠️待确认——是否指手动领取时，需要多一层人工确认才能放行</td><td>自动审核：系统自动判断是否放行，不需人工介入</td></tr>
+            <tr><td>已验证手机号</td><td>否：不限制会员的手机验证状态</td><td>是：⚠️待确认——限制的是"已验证手机号的会员才能参加本活动"，还是"才能领取奖励"</td></tr>
+            <tr><td>限制使用设备</td><td>无限制：任何设备都能参加活动／领取奖励</td><td>仅APP：⚠️待确认——限制的是"必须用APP参加存款活动"，还是"必须用APP领取奖励"</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-num">3.6.8 需试想各种情境后撰写规格文件</div>
+        <div class="sub-content">
+          <ul>
+            <li>「手动领取」但会员超过天数没有领取 → 状态变为「已过期」，此时这笔奖励是否真的从系统作废，还是仍然保留纪录、只是标记状态给数据统计用？⚠️ <b>待确认</b>，需要与工程确认过期奖励的实际处理方式。</li>
+            <li>审核方式选「人工审核」，但发放方式是「自动发放」——这两个栏位同时存在时，逻辑上是否会冲突（自动发放通常代表不需要人工介入，那审核方式选人工审核是否还有意义）？⚠️ <b>待确认</b>：这两组栏位彼此是否应该有连动限制（例如选了自动发放，审核方式就固定显示自动审核、反灰不可选人工），还是四种组合本来就都合理存在，需要跟营运确认实际使用情境。</li>
+            <li>「限制使用设备＝仅APP」，但会员是从网页版（H5或PC）完成存款达标的——这笔存款算不算数、奖励能不能领？⚠️ <b>待确认</b>，需要先厘清这个限制是作用在"存款行为本身"还是"事后的领奖动作"，两种理解会导致完全不同的实作方式。</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+        </article>
+
+        <!-- ─── 3.7 风控条件（第5步） ─── -->
+        <article class="panel" id="p-s5">
+          <div class="h1-title">3. 规则文件内容－后台</div>
+          <div class="section">
+            <div class="section-head"><div class="num">3.7（对应后台第5步）</div><h3>风控条件</h3></div>
+            <div class="spec-body">
+              <div class="sub-block">
+                <div class="pending"><span class="lbl">⚠️ 待补充：</span>本步骤规格尚未撰写。左侧原型已有完整画面，可边操作边把 3.7.1～3.7.8 逐项补齐。</div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-content">
+                  <div class="field-ref">
+                    <div class="fr-title">撰写对照：左侧原型第5步画面上看得到的栏位</div>
+                    <p style="font-size:14px;color:#5c5c68;margin-bottom:6px;">以下只是「画面上有什么」的清单，供撰写规格时逐项对照，<b>不代表规则已定义</b>。</p>
+                    <ul>
+                      <li><b>风险检测设置（皆为开关）：</b>同IP检测、同手机号检测、同姓名检测、同email检测。</li>
+                      <li><b>触发条件：</b>数字输入（画面文案为「◯ 笔以上，将自动拒绝」）。</li>
+                      <li><b>自动拒绝：</b>开关。</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-num">待撰写项目（依规范 4.1.1～4.1.8）</div>
+                <div class="sub-content">
+                  <ul class="checklist">
+                    <li>3.7.1 详细说明交互行为（各检测开关与「触发条件」「自动拒绝」之间的连动）</li>
+                    <li>3.7.2 文案长度限制</li>
+                    <li>3.7.3 操作失败后的提示文案及交互行为</li>
+                    <li>3.7.4 操作成功后的提示文案及交互行为</li>
+                    <li>3.7.5 下拉选单的来源及内容</li>
+                    <li>3.7.6 输入框的限制（触发条件笔数可否为0、上限）</li>
+                    <li>3.7.7 <b>说明开关状态</b>（4个检测开关各自开启前／后的作用；「自动拒绝」关闭时命中风控会如何处理——进人工审核还是照常发放）</li>
+                    <li>3.7.8 需试想各种情境（同时命中多项检测、风控与第4步奖励发放的先后关系）</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ─── 3.8 提交预览（第6步） ─── -->
+        <article class="panel" id="p-s6">
+          <div class="h1-title">3. 规则文件内容－后台</div>
+          <div class="section">
+            <div class="section-head"><div class="num">3.8（对应后台第6步）</div><h3>提交预览</h3></div>
+            <div class="spec-body">
+              <div class="sub-block">
+                <div class="pending"><span class="lbl">⚠️ 待补充：</span>本步骤规格尚未撰写。这一步是<b>整份设定的汇总确认页</b>，规格重点会落在「必填检查」与「送出后的行为」，与前面各步骤的验证规则（3.1.3、3.4.3 等）需一致。</div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-content">
+                  <div class="field-ref">
+                    <div class="fr-title">撰写对照：左侧原型第6步画面上看得到的内容</div>
+                    <p style="font-size:14px;color:#5c5c68;margin-bottom:6px;">以下只是「画面上有什么」的清单，供撰写规格时逐项对照，<b>不代表规则已定义</b>。</p>
+                    <ul>
+                      <li><b>必填提示：</b>画面顶端红字列出尚未填写的必填栏位（原型示例文案：「● 请填写以下必填字段：有效时间、活动名称」）。</li>
+                      <li><b>汇总表：</b>依第1～5步分段列出已填内容（活动ID／模板类型／状态／币种／活动名称／活动时间；语系／活动标题／规则弹窗图张数／排序；充值层级／指定代理／新会员限制／会员等级／黑名单类型／用户标签；规则区块数量／统计周期／奖金所需流水倍数／流水计算基数／审核方式／领取方式／已验证手机号／限制使用设备／适用游戏范围 等）。</li>
+                      <li><b>操作按钮：</b>上一步、退出编辑、确认送出。</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-num">待撰写项目（依规范 4.1.1～4.1.8）</div>
+                <div class="sub-content">
+                  <ul class="checklist">
+                    <li>3.8.1 详细说明交互行为（点必填提示能否跳回该步骤、确认送出后跳转到哪里）</li>
+                    <li>3.8.2 文案长度限制（汇总表内长字串如何截断）</li>
+                    <li>3.8.3 <b>操作失败后的提示文案</b>（必填未完成时是否挡下送出、提示呈现方式）</li>
+                    <li>3.8.4 <b>操作成功后的提示文案</b>（送出成功的提示与后续状态，例如活动预设为「关闭」）</li>
+                    <li>3.8.5 下拉选单的来源及内容</li>
+                    <li>3.8.6 输入框的限制（本步骤是否可直接修改，或仅供检视）</li>
+                    <li>3.8.7 说明开关状态</li>
+                    <li>3.8.8 需试想各种情境（送出中断线、重复点击送出、送出后可否再编辑）</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ─── 撰写检查清单 ─── -->
+        <article class="panel" id="p-checklist">
+          <div class="h1-title">撰写检查清单</div>
+  <div class="section">
+    <div class="spec-body">
+      <ul class="checklist">
+        <li class="done">版本号跟修改摘要有更新</li>
+        <li class="done">本节画面区块有对应的原型画面（左栏可实际操作，切换步骤时自动对位）</li>
+        <li class="done">交互行为写了"触发条件 → 结果"</li>
+        <li>文案长度限制有明确行数与超出处理方式 —— 部分待确认</li>
+        <li>成功／失败情境有对应文案 —— 待补充</li>
+        <li class="done">（后台）下拉选单写了来源</li>
+        <li class="done">（后台）输入框写了限制</li>
+        <li class="done">（后台）开关写了开启前／开启后的作用</li>
+        <li>「资料是空的」「网路很差」「权限不足」等边界情境 —— 大部分仍待补</li>
+      </ul>
+    </div>
+  </div>
+        </article>
+
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     原型原始码（完整的 add_activity_deposit.html，另外注入了一段
+     「桥接程式」让它能跟右侧规格互相通知目前在第几步）。
+     存成 text/plain 只是当作资料保存，不会被浏览器直接执行；
+     真正执行是下方程式把它塞进 iframe 里。
+     ══════════════════════════════════════════════════════════════ -->
+<script type="text/plain" id="proto-src"><!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -1523,7 +2420,7 @@ goStep(1);
 filtered = rawData.slice();
 renderRows();
 
-</script>
+@@ENDSCRIPT@@>
 <!-- 預覽圖片彈窗 -->
 <div class="modal-overlay hidden" id="previewModal">
   <div class="modal">
@@ -1571,6 +2468,245 @@ renderRows();
   });
 
   post({src:'proto', type:'ready'});   // 告诉外层「我载入好了」
+})();
+@@ENDSCRIPT@@>
+
+</body>
+</html>
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   对照版的控制程式
+   做三件事：
+   1. 把上面存起来的原型原始码塞进左边的 iframe 里执行。
+   2. 听左边原型传来的「我现在在第N步」，自动切换右边规格章节。
+   3. 右边点章节时，反过来叫左边原型跳到对应画面。
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  /* ── 章节清单：id 对应上面的 <article id="p-xxx">，step 对应原型第几步 ── */
+  var PANELS = [
+    {id:'terms',     label:'名词定义',        group:'doc'},
+    {id:'purpose',   label:'1. 需求目的',     group:'doc'},
+    {id:'frontend',  label:'2. 前台规则',     group:'doc', todo:true},
+    {id:'s0',        label:'列表页',          group:'be',  step:0, todo:true},
+    {id:'s1',        label:'① 3.1 模板设置',  group:'be',  step:1},
+    {id:'s2',        label:'② 3.2 活动图片',  group:'be',  step:2, todo:true},
+    {id:'s3',        label:'③ 3.3 参与对象',  group:'be',  step:3, todo:true},
+    {id:'s4',        label:'④ 3.4~3.6 活动条件', group:'be', step:4},
+    {id:'s5',        label:'⑤ 3.7 风控条件',  group:'be',  step:5, todo:true},
+    {id:'s6',        label:'⑥ 3.8 提交预览',  group:'be',  step:6, todo:true},
+    {id:'checklist', label:'撰写检查清单',    group:'doc'}
+  ];
+
+  var byId = {};
+  PANELS.forEach(function(p){ byId[p.id] = p; });
+
+  var frame      = document.getElementById('protoFrame');
+  var specScroll = document.getElementById('specScroll');
+  var specNav    = document.getElementById('specNav');
+  var ctxStep    = document.getElementById('ctxStep');
+  var ctxTitle   = document.getElementById('ctxTitle');
+  var ctxGoto    = document.getElementById('ctxGoto');
+  var linkToggle = document.getElementById('linkToggle');
+  var fallback   = document.getElementById('protoFallback');
+  var modeLabel  = document.getElementById('protoMode');
+  var fitToggle  = document.getElementById('fitToggle');
+  var protoWrap  = document.querySelector('.proto-wrap');
+
+  var PROTO_WIDTH = 1280;   // 原型后台画面的设计宽度
+
+  var current = 'terms';
+  var protoReady = false;
+
+  /* ── 让原型「整个画面塞进这一栏」──────────────────────────
+     原型是 1280px 宽的后台画面，分栏后通常放不下。勾选「符合宽度」时
+     用 CSS transform 等比缩小；取消勾选则恢复原尺寸，改用左右卷动看。 */
+  function applyFit(){
+    var w = protoWrap.clientWidth, h = protoWrap.clientHeight;
+    if (!w || !h) return;
+    if (fitToggle.checked && w < PROTO_WIDTH){
+      var k = w / PROTO_WIDTH;
+      frame.style.width     = PROTO_WIDTH + 'px';
+      frame.style.height    = (h / k) + 'px';
+      frame.style.transform = 'scale(' + k + ')';
+      protoWrap.classList.remove('is-scroll');
+    } else {
+      frame.style.width     = fitToggle.checked ? '100%' : PROTO_WIDTH + 'px';
+      frame.style.height    = '100%';
+      frame.style.transform = 'none';
+      protoWrap.classList.toggle('is-scroll', !fitToggle.checked);
+    }
+  }
+  fitToggle.addEventListener('change', applyFit);
+  window.addEventListener('resize', applyFit);
+
+  /* ── 产生右侧章节导览列 ────────────────────────────────── */
+  function renderNav(){
+    var html = '';
+    var lastGroup = null;
+    PANELS.forEach(function(p){
+      if(p.group !== lastGroup){
+        html += '<span class="spec-nav__label">' + (p.group === 'be' ? '后台（跟随原型）' : '文件') + '</span>';
+        lastGroup = p.group;
+      }
+      html += '<button type="button" class="spec-nav__item' + (p.todo ? ' todo' : '') +
+              '" data-panel="' + p.id + '">' + p.label + '</button>';
+    });
+    specNav.innerHTML = html;
+  }
+
+  /* ── 切换右侧显示的章节 ────────────────────────────────── */
+  /* fromProto = true 代表是左边原型触发的，就不要再回头去指挥原型，避免来回打架 */
+  function showPanel(id, fromProto){
+    var p = byId[id];
+    if(!p) return;
+    current = id;
+
+    // 切换 article 的显示
+    var panels = specScroll.querySelectorAll('.panel');
+    for(var i = 0; i < panels.length; i++){
+      panels[i].classList.toggle('active', panels[i].id === 'p-' + id);
+    }
+    // 切换导览列的高亮
+    var items = specNav.querySelectorAll('.spec-nav__item');
+    for(var j = 0; j < items.length; j++){
+      items[j].classList.toggle('active', items[j].getAttribute('data-panel') === id);
+    }
+    // 更新「目前位置」列
+    ctxTitle.textContent = p.label.replace(/^[①②③④⑤⑥]\s*/, '');
+    if(typeof p.step === 'number'){
+      ctxStep.hidden = false;
+      ctxStep.textContent = p.step === 0 ? '对应列表页' : '对应后台第' + p.step + '步';
+      ctxGoto.hidden = false;
+    }else{
+      ctxStep.hidden = true;
+      ctxGoto.hidden = true;
+    }
+    // 换章节时卷回顶端，避免停在上一节的中段
+    specScroll.scrollTop = 0;
+
+    // 若是使用者从右侧点的，且连动开著，就叫左侧原型跳过去
+    if(!fromProto && linkToggle.checked && typeof p.step === 'number'){
+      gotoProto(p.step);
+    }
+  }
+
+  /* ── 叫左侧原型跳到第 N 步（0 = 回到活动列表页）────────── */
+  function gotoProto(step){
+    if(!frame.contentWindow) return;
+    frame.contentWindow.postMessage({
+      src: 'spec',
+      type: step === 0 ? 'list' : 'go',
+      step: step
+    }, '*');
+  }
+
+  /* ── 听左侧原型的回报 ──────────────────────────────────── */
+  window.addEventListener('message', function(e){
+    var d = e.data || {};
+    if(d.src !== 'proto') return;
+    if(!protoReady){          // 第一次收到回报：确定原型活著，取消所有备援计时器
+      protoReady = true;
+      clearTimeout(liveTimer); clearTimeout(blobTimer); clearTimeout(giveUpTimer);
+      if(mode === 'live'){
+        modeLabel.textContent = '即时载入 add_activity_deposit.html · 原型改版会自动同步';
+      }
+    }
+    fallback.classList.add('hidden');
+    if(d.type === 'step' && linkToggle.checked) showPanel('s' + d.step, true);
+    if(d.type === 'list' && linkToggle.checked) showPanel('s0', true);
+  });
+
+  /* ── 事件绑定 ──────────────────────────────────────────── */
+  specNav.addEventListener('click', function(e){
+    var btn = e.target.closest('.spec-nav__item');
+    if(btn) showPanel(btn.getAttribute('data-panel'), false);
+  });
+
+  ctxGoto.addEventListener('click', function(){
+    var p = byId[current];
+    if(p && typeof p.step === 'number') gotoProto(p.step);
+  });
+
+  document.getElementById('metaToggle').addEventListener('click', function(){
+    var meta = document.getElementById('docMeta');
+    var open = meta.classList.toggle('open');
+    this.setAttribute('aria-expanded', open ? 'true' : 'false');
+    this.textContent = open ? '文件资讯 ▴' : '文件资讯 ▾';
+  });
+
+  /* ── 中间那条可拖曳的分隔线 ────────────────────────────── */
+  (function setupResizer(){
+    var resizer = document.getElementById('resizer');
+    var split   = document.getElementById('split');
+    var dragging = false;
+
+    function setLeft(pct){
+      pct = Math.min(80, Math.max(25, pct));
+      document.documentElement.style.setProperty('--split-left', pct + '%');
+      applyFit();   // 宽度变了，缩放比例要跟着重算
+    }
+    resizer.addEventListener('mousedown', function(){ dragging = true; document.body.style.userSelect = 'none'; });
+    window.addEventListener('mousemove', function(e){
+      if(!dragging) return;
+      var rect = split.getBoundingClientRect();
+      setLeft((e.clientX - rect.left) / rect.width * 100);
+    });
+    window.addEventListener('mouseup', function(){ dragging = false; document.body.style.userSelect = ''; });
+    // 键盘也能调整，方便不用滑鼠的人
+    resizer.addEventListener('keydown', function(e){
+      var cur = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--split-left')) || 58;
+      if(e.key === 'ArrowLeft'){ setLeft(cur - 3); e.preventDefault(); }
+      if(e.key === 'ArrowRight'){ setLeft(cur + 3); e.preventDefault(); }
+    });
+  })();
+
+  /* ══ 启动：把原型放进左边的 iframe ══════════════════════
+     两种来源，依序尝试：
+       1.「即时载入」同资料夹的 add_activity_deposit.html
+          —— 首选。之后原型改版，这份对照版会自动跟著更新，不用重做合并。
+       2.「内嵌副本」下方 <script type="text/plain"> 里存的那一份
+          —— 备援。当这份 HTML 被单独寄出、身边没有原型档时才会用到，
+             此时工具列会明确标示是存档副本，避免误以为是最新版。
+     ═══════════════════════════════════════════════════════ */
+  // 存档时把原型里的 script 结束标记换成了 @@ENDSCRIPT@@（否则会提早截断这个区块），这里换回来
+  var protoHtml = document.getElementById('proto-src').textContent
+                    .split('@@ENDSCRIPT@@').join('<' + '/script');
+
+  var mode = 'live';
+  var liveTimer, blobTimer, giveUpTimer;
+
+  renderNav();
+  showPanel('terms', true);
+  frame.src = 'add_activity_deposit.html';
+  applyFit();
+
+  // 1.8 秒内没听到原型回报 → 判定「原型档不在旁边」，改用内嵌副本
+  liveTimer = setTimeout(function(){
+    if(protoReady) return;
+    mode = 'archive';
+    modeLabel.textContent = '内嵌副本（存档于 2026-09-07）· 非即时';
+    modeLabel.classList.add('is-archive');
+    modeLabel.title = '找不到同资料夹的 add_activity_deposit.html，因此改用存档当下的内嵌副本；若原型后来改过版，这里看到的会是旧版。';
+    frame.removeAttribute('src');
+    frame.srcdoc = protoHtml;
+    applyFit();
+  }, 1800);
+
+  // 再不行就试 blob 网址（少数浏览器不支援 srcdoc）
+  blobTimer = setTimeout(function(){
+    if(protoReady) return;
+    try{ frame.src = URL.createObjectURL(new Blob([protoHtml], {type:'text/html'})); }catch(err){}
+  }, 4500);
+
+  // 都失败才显示提示，请使用者另开分页看原型
+  giveUpTimer = setTimeout(function(){
+    if(!protoReady) fallback.classList.remove('hidden');
+  }, 8000);
+
 })();
 </script>
 
