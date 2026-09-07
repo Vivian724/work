@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>新增活动</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color:#333;background:#f0f2f5;min-width:1280px;}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:180px;flex-shrink:0;background:#fff;border-right:0.5px solid #e8e8e8;}
+.menu-parent{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:44px;font-size:13px;font-weight:500;background:#e8f0fe;color:#333;}
+.menu-parent .label{display:flex;align-items:center;gap:6px;}
+.menu-icon-box{width:20px;height:20px;border-radius:4px;background:#1677ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.new-badge{font-size:11px;color:#1677ff;font-weight:400;}
+.submenu-item{display:flex;align-items:center;padding:0 14px 0 40px;height:38px;font-size:13px;color:#1677ff;background:#e6f4ff;text-decoration:none;}
+.right{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{background:#fff;border-bottom:0.5px solid #e8e8e8;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;}
+.top-left{font-size:12px;color:#666;white-space:nowrap;}
+.top-center{display:flex;align-items:center;flex:1;justify-content:center;overflow:hidden;}
+.top-stat{font-size:11px;color:#666;white-space:nowrap;padding:0 6px;}
+.top-stat .num{color:#1677ff;font-weight:500;}
+.top-stat .warn{color:#ff4d4f;font-weight:500;}
+.top-div{width:0.5px;height:12px;background:#e0e0e0;flex-shrink:0;}
+.top-right{display:flex;align-items:center;gap:8px;font-size:13px;color:#555;}
+.avatar{width:26px;height:26px;border-radius:50%;background:#ff4d4f;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:500;}
+.content-area{flex:1;padding:12px 16px;}
+.bc-bar{font-size:13px;color:#999;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.bc-bar a{color:#999;text-decoration:none;}.bc-bar a:hover{color:#1677ff;}
+.bc-bar .cur{color:#333;}
+.step-page{display:flex;gap:12px;}
+.step-nav{width:168px;flex-shrink:0;background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;padding:8px 0;}
+.step-nav-item{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;font-size:13px;color:#666;border-left:3px solid transparent;}
+.step-nav-item:hover{background:#f5f5f5;}
+.step-nav-item.done .snum{background:#1677ff;border-color:#1677ff;color:#fff;}
+.step-nav-item.active{color:#1677ff;background:#e6f4ff;border-left-color:#1677ff;}
+.step-nav-item.active .snum{background:#1677ff;border-color:#1677ff;color:#fff;}
+.snum{width:20px;height:20px;border-radius:50%;border:1.5px solid #d9d9d9;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;color:#999;}
+.step-main{flex:1;display:flex;flex-direction:column;gap:10px;}
+.step-topbar{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
+.step-title-text{font-size:14px;font-weight:500;color:#1677ff;}
+.step-topbar-btns{display:flex;gap:8px;align-items:center;}
+.btn-prev{height:32px;padding:0 18px;border:1px solid #d9d9d9;border-radius:16px;background:#fff;font-size:13px;cursor:pointer;color:#666;}
+.btn-prev:hover{border-color:#1677ff;color:#1677ff;}
+.btn-next{height:32px;padding:0 20px;border:none;border-radius:16px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
+.btn-next:hover{background:#4096ff;}
+.btn-exit{height:32px;padding:0 16px;border:1px solid #ff4d4f;border-radius:16px;background:#fff;font-size:13px;cursor:pointer;color:#ff4d4f;text-decoration:none;display:inline-flex;align-items:center;}
+.btn-exit:hover{background:#fff2f0;}
+.btn-submit{height:32px;padding:0 20px;border:none;border-radius:16px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
+.step-content{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;padding:20px 24px;}
+.step-desc{font-size:12px;color:#999;margin-bottom:16px;}
+.sec-title{font-size:14px;font-weight:500;color:#1677ff;border-left:3px solid #1677ff;padding-left:8px;margin-bottom:14px;}
+.sec-block{margin-bottom:24px;}
+.field-row{display:flex;align-items:flex-start;margin-bottom:14px;}
+.field-label{font-size:13px;color:#333;min-width:120px;padding-top:7px;flex-shrink:0;}
+.req{color:#ff4d4f;margin-right:2px;}
+.field-ctrl{flex:1;}
+.f-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;}
+.f-input::placeholder{color:#bbb;font-size:12px;}
+.f-input:focus{border-color:#1677ff;}
+.f-input.disabled{background:#f5f5f5;color:#bbb;cursor:not-allowed;pointer-events:none;}
+.f-input[type=number]{-moz-appearance:textfield;}
+.f-input[type=number]::-webkit-outer-spin-button,.f-input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
+.f-textarea{border:1px solid #d9d9d9;border-radius:4px;padding:8px 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;resize:vertical;min-height:80px;}
+.f-select{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;}
+.radio-group{display:flex;gap:16px;align-items:center;padding-top:6px;}
+.radio-item{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;}
+.radio-item input{accent-color:#1677ff;}
+.time-range-input{display:flex;align-items:center;height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;gap:6px;background:#fff;max-width:420px;}
+.time-range-input input{border:none;outline:none;font-size:12px;color:#bbb;background:transparent;width:130px;}
+.time-sep{color:#bbb;}
+.toggle{width:40px;height:22px;border-radius:11px;background:#d9d9d9;position:relative;cursor:pointer;flex-shrink:0;transition:background 0.2s;display:inline-block;}
+.toggle.on{background:#1677ff;}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left 0.2s;}
+.toggle.on::after{left:20px;}
+.toggle.disabled-toggle{opacity:0.4;cursor:not-allowed;pointer-events:none;}
+.hint{font-size:12px;color:#999;margin-top:4px;}
+/* multiselect */
+.ms-wrap{border:1px solid #d9d9d9;border-radius:4px;padding:4px 8px;min-height:34px;display:flex;align-items:center;flex-wrap:wrap;gap:4px;cursor:pointer;background:#fff;position:relative;}
+.ms-tag{display:inline-flex;align-items:center;gap:4px;background:#f0f0f0;border-radius:3px;padding:2px 6px;font-size:12px;color:#333;}
+.ms-tag .ms-rm{cursor:pointer;color:#999;font-size:11px;}
+.ms-tag .ms-rm:hover{color:#ff4d4f;}
+.ms-arrow{margin-left:auto;color:#999;font-size:11px;flex-shrink:0;}
+.ms-dropdown{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #d9d9d9;border-radius:4px;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,0.08);max-height:200px;overflow-y:auto;}
+.ms-option{padding:8px 12px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+.ms-option:hover{background:#f5f5f5;}
+.ms-option.selected{color:#1677ff;}
+.ms-check{color:#1677ff;font-size:12px;}
+.ms-placeholder{color:#bbb;font-size:12px;}
+/* lang tabs */
+.lang-tabs{display:flex;border-bottom:1px solid #e8e8e8;margin-bottom:16px;}
+.lang-tab{padding:8px 16px;font-size:13px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.lang-tab.active{color:#1677ff;border-bottom-color:#1677ff;}
+/* image upload */
+.img-section-title{display:flex;align-items:center;font-size:13px;font-weight:500;margin-bottom:4px;}
+.img-num{width:20px;height:20px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;margin-right:6px;flex-shrink:0;}
+.upload-btn{height:34px;padding:0 20px;background:#1677ff;color:#fff;border:none;border-radius:17px;font-size:13px;cursor:pointer;}
+.img-upload-box{border:1px solid #d9d9d9;border-radius:4px;min-height:120px;display:flex;align-items:center;justify-content:center;background:#fafafa;}
+.rich-editor{border:1px solid #d9d9d9;border-radius:4px;overflow:hidden;}
+.rich-toolbar{background:#f5f5f5;border-bottom:1px solid #e8e8e8;padding:6px 10px;display:flex;gap:6px;flex-wrap:wrap;}
+.rich-tool{font-size:12px;color:#555;cursor:pointer;padding:2px 5px;border-radius:2px;}
+.rich-body{min-height:100px;padding:10px;font-size:13px;color:#bbb;}
+/* award table */
+.award-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+.award-table th{background:#f5f7fa;padding:8px 10px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;}
+.award-table td{padding:8px 10px;border:1px solid #ebeef5;text-align:center;vertical-align:middle;}
+.btn-add{height:30px;padding:0 16px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;margin-bottom:10px;}
+.btn-del{height:28px;padding:0 12px;background:#ff4d4f;color:#fff;border:none;border-radius:4px;font-size:12px;cursor:pointer;}
+.td-input{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:12px;width:90px;outline:none;}
+.td-input[type=number]{-moz-appearance:textfield;}
+.td-input[type=number]::-webkit-inner-spin-button,.td-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
+.td-select{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 4px;font-size:12px;outline:none;}
+/* claim */
+.ratio-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100px;-moz-appearance:textfield;}
+.ratio-input::-webkit-outer-spin-button,.ratio-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.ratio-input:focus{border-color:#1677ff;}
+.game-btn{height:32px;padding:0 16px;border:1px solid #1677ff;border-radius:16px;background:#fff;color:#1677ff;font-size:13px;cursor:pointer;}
+/* 风控 disabled */
+.risk-disabled{opacity:0.45;pointer-events:none;}
+.f-input-disabled{background:#f5f5f5;color:#bbb;cursor:not-allowed;}
+/* game modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:500;}
+.modal{background:#fff;border-radius:8px;width:620px;max-height:580px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.15);}
+.modal-header{padding:16px 24px;border-bottom:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-size:15px;font-weight:500;color:#333;}
+.modal-close{cursor:pointer;color:#999;font-size:20px;background:none;border:none;line-height:1;}
+.modal-body{flex:1;padding:16px 24px;overflow-y:auto;}
+.game-category{margin-bottom:12px;border:0.5px solid #e8e8e8;border-radius:6px;overflow:hidden;}
+.cat-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f9f9f9;border-bottom:0.5px solid #e8e8e8;cursor:pointer;}
+.cat-check{width:16px;height:16px;accent-color:#1677ff;flex-shrink:0;}
+.cat-name{font-size:14px;font-weight:500;color:#1677ff;}
+.cat-games{padding:12px 14px;display:flex;flex-wrap:wrap;}
+.game-row-item{display:flex;align-items:center;gap:6px;width:33%;cursor:pointer;font-size:13px;color:#333;padding:4px 0;}
+.game-row-item input{width:15px;height:15px;accent-color:#1677ff;flex-shrink:0;cursor:pointer;}
+.modal-footer{padding:12px 24px;border-top:0.5px solid #e8e8e8;display:flex;justify-content:flex-end;gap:8px;}
+.modal-cancel{height:32px;padding:0 20px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;font-size:13px;cursor:pointer;color:#666;}
+.modal-confirm{height:32px;padding:0 20px;border:none;border-radius:4px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;}
+/* preview */
+.preview-warn{background:#fff2f0;border:1px solid #ffccc7;border-radius:4px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#ff4d4f;}
+.preview-step-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:#333;}
+.preview-snum{width:22px;height:22px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;}
+.preview-row{display:flex;gap:6px;font-size:13px;padding:7px 0;border-bottom:0.5px solid #f5f5f5;}
+.preview-row:last-child{border-bottom:none;}
+.pk{color:#999;min-width:90px;flex-shrink:0;}
+.pk.req::before{content:'*';color:#ff4d4f;margin-right:2px;}
+.pv{color:#333;}.pv.empty{color:#bbb;}.pv.red{color:#ff4d4f;}
+.prev-img-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+.prev-img-table th{background:#f5f7fa;padding:8px 12px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;}
+.prev-img-table td{padding:8px 12px;border:1px solid #ebeef5;text-align:center;color:#bbb;}
+/* 领取条件区块 */
+.claim-cond-box{background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-top:8px;}
+.claim-cond-text{font-size:13px;color:#333;line-height:2;display:flex;align-items:center;flex-wrap:wrap;gap:8px;}
+.claim-inline-input{height:32px;width:100px;border:1px solid #1677ff;border-radius:4px;padding:0 8px;font-size:13px;color:#333;outline:none;background:#fff;-moz-appearance:textfield;}
+.claim-inline-input::-webkit-outer-spin-button,.claim-inline-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.hidden{display:none!important;}
+
+/* 存款规则区块专用样式 */
+.rule-block{border:1px solid #e8e8e8;border-radius:6px;padding:16px 18px;margin-bottom:14px;background:#fafbfc;}
+.rule-block-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px dashed #e0e0e0;flex-wrap:wrap;}
+.rule-block-num{width:22px;height:22px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:500;}
+.block-type-tag{font-size:11px;color:#1677ff;background:#e6f4ff;padding:2px 9px;border-radius:10px;font-weight:500;}
+.vip-box{background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:12px 16px;margin-top:10px;}
+.vip-box-head{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.vip-box-title{font-size:13px;font-weight:500;color:#874d00;}
+.vip-accordion{background:#fff;border:1px solid #e8e8e8;border-radius:6px;margin-top:6px;overflow:hidden;}
+.vip-acc-item+.vip-acc-item{border-top:1px solid #e8e8e8;}
+.vip-acc-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;font-size:13px;font-weight:500;color:#333;}
+.vip-acc-head:hover{background:#f9f9f9;}
+.vip-acc-arrow{color:#999;font-size:11px;}
+.vip-acc-body{padding:4px 14px 16px;border-top:1px dashed #e8e8e8;}
+.vip-linked-tag{font-size:11px;color:#999;font-weight:400;background:#f0f0f0;padding:1px 8px;border-radius:8px;margin-left:6px;}
+.vip-acc-item.vip-linked .vip-acc-head{color:#999;}
+.vip-inline-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;padding:6px 0 10px;}
+.vip-inline-label{font-size:13px;color:#1677ff;font-weight:500;white-space:nowrap;}
+.vip-inline-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:130px;-moz-appearance:textfield;}
+.vip-inline-input::-webkit-outer-spin-button,.vip-inline-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.vip-inline-pct{font-size:13px;color:#333;}
+.vip-help-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#bbb;color:#fff;font-size:10px;margin-left:2px;cursor:help;flex-shrink:0;}
+.f-input:disabled,.f-select:disabled,.td-input:disabled,.td-select:disabled{background:#f5f5f5;color:#bbb;cursor:not-allowed;}
+.btn-add:disabled,.btn-del:disabled{background:#f5f5f5;color:#ccc;border-color:#e8e8e8;cursor:not-allowed;}
+.empty-hint{font-size:12px;color:#bbb;padding:10px 0;}
+.btn-add.small{height:26px;padding:0 12px;font-size:12px;background:#fff;color:#1677ff;border:1px solid #1677ff;}
+.btn-del.ghost{background:#fff;color:#ff4d4f;border:1px solid #ffccc7;}
+.bell{width:26px;height:26px;border-radius:50%;border:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:center;}
+.page-card{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;}
+.tab-bar{display:flex;border-bottom:0.5px solid #e8e8e8;padding:0 16px;}
+.tab{padding:11px 4px;font-size:13px;color:#1677ff;border-bottom:2px solid #1677ff;margin-right:20px;}
+.filter-area{padding:12px 16px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.fl{font-size:13px;color:#333;white-space:nowrap;}
+.fi-input{height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;}
+.fi-input::placeholder{color:#bbb;font-size:12px;}
+.fi-input:focus{border-color:#1677ff;}
+.fi-select{height:32px;border:1px solid #1677ff;border-radius:4px;padding:0 8px;font-size:13px;color:#333;background:#fff;outline:none;}
+.time-range{display:flex;align-items:center;height:32px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;padding:0 10px;gap:6px;}
+.time-range input{border:none;outline:none;font-size:12px;color:#bbb;background:transparent;width:95px;}
+.btn-search{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;}
+.btn-new{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;}
+.list-area{padding:12px 16px 0;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:1200px;}
+th{background:#fafafa;padding:9px 8px;text-align:left;font-weight:500;color:#888;border-bottom:1px solid #f0f0f0;white-space:nowrap;}
+th.sortable{cursor:pointer;}
+th.sortable:hover{color:#1677ff;}
+.sort-arrows{display:inline-flex;flex-direction:column;margin-left:3px;vertical-align:middle;gap:1px;}
+.arr-up{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:4px solid #ccc;}
+.arr-up.active{border-bottom-color:#1677ff;}
+.arr-dn{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid #ccc;}
+.arr-dn.active{border-top-color:#1677ff;}
+td{padding:11px 8px;border-bottom:0.5px solid #f0f0f0;color:#333;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#fafafa;}
+.status-on{color:#52c41a;font-size:12px;}
+.status-off{color:#999;font-size:12px;}
+.alink{font-size:12px;color:#1677ff;cursor:pointer;background:none;border:none;padding:0;white-space:nowrap;text-decoration:none;}
+.alink:hover{color:#4096ff;}
+.acts-row{display:flex;gap:12px;margin-bottom:4px;}
+.acts-row:last-child{margin-bottom:0;}
+.upload-pill{height:26px;padding:0 14px;background:#1677ff;color:#fff;border:none;border-radius:13px;font-size:12px;cursor:pointer;}
+.upload-pill:hover{background:#4096ff;}
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:10px 16px 14px;font-size:13px;color:#666;}
+.pg-btn{width:28px;height:28px;border-radius:4px;border:1px solid #d9d9d9;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;}
+.pg-btn.active{background:#1677ff;color:#fff;border-color:#1677ff;}
+.pg-sel{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:13px;}
+.pg-input{width:40px;height:28px;border:1px solid #d9d9d9;border-radius:4px;text-align:center;font-size:13px;}
+/* 彈窗 */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;z-index:500;padding-top:40px;}
+.modal{background:#fff;border-radius:8px;width:920px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.15);}
+.modal-header{padding:14px 24px;border-bottom:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.modal-title{font-size:15px;font-weight:500;color:#1677ff;}
+.modal-header-btns{display:flex;gap:8px;}
+.btn-cancel{height:30px;padding:0 16px;border:1px solid #ff4d4f;border-radius:15px;background:#fff;font-size:13px;cursor:pointer;color:#ff4d4f;}
+.btn-confirm{height:30px;padding:0 20px;border:none;border-radius:15px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
+.modal-body{flex:1;overflow-y:auto;padding:20px 24px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:20px;}
+.info-item{padding:6px 0;}
+.info-label{font-size:12px;color:#999;margin-bottom:3px;}
+.info-value{font-size:14px;font-weight:500;color:#333;}
+.img-table{width:100%;border-collapse:collapse;font-size:13px;}
+.img-table th{background:#f5f7fa;padding:10px 14px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;white-space:nowrap;}
+.img-table td{padding:12px 14px;border:1px solid #ebeef5;text-align:center;vertical-align:top;}
+.img-table td.lang-cell{text-align:left;font-size:13px;color:#333;font-weight:500;vertical-align:middle;white-space:nowrap;}
+.upload-box{border:1.5px dashed #d9d9d9;border-radius:6px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fafafa;min-height:90px;gap:4px;}
+.upload-box:hover{border-color:#1677ff;background:#f0f7ff;}
+.upload-text{font-size:12px;color:#bbb;}
+.upload-hint{font-size:11px;color:#ccc;}
+.url-input{width:100%;margin-top:8px;height:28px;border:1px solid #e8e8e8;border-radius:4px;padding:0 8px;font-size:12px;color:#333;outline:none;background:#fff;}
+.url-input::placeholder{color:#ccc;font-size:11px;}
+.url-input:focus{border-color:#1677ff;}
+.lang-tabs{display:flex;border-bottom:1px solid #e8e8e8;margin-bottom:16px;}
+.lang-tab{padding:8px 16px;font-size:13px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.lang-tab.active{color:#1677ff;border-bottom-color:#1677ff;}
+.hint-text{font-size:12px;color:#999;margin-top:4px;}
+.img-card{border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;}
+.img-card-head{background:#f5f7fa;padding:8px 14px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;}
+.img-dashed{cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;padding:16px 12px;}
+.img-dashed:hover{border-color:#1677ff;background:#f0f7ff;}
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="sidebar">
+    <div class="menu-parent">
+      <div class="label">
+        <div class="menu-icon-box"><svg viewBox="0 0 12 12" fill="none" width="12" height="12"><circle cx="6" cy="6" r="4" stroke="#fff" stroke-width="1.3"/><path d="M4 6h4M6 4v4" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+        <span>活动配置<span class="new-badge">（新）</span></span>
+      </div>
+      <span style="font-size:10px;color:#999;transform:rotate(90deg);display:inline-block;">›</span>
+    </div>
+    <a href="#" class="submenu-item" onclick="showList();return false;">活动列表</a>
+    <a href="award_review.html" class="submenu-item">派奖审核</a>
+    <a href="activity_report.html" class="submenu-item">活动报表</a>
+  </div>
+  <div class="right">
+    <div class="topbar">
+      <div class="top-left">当前时间：2026/04/14 10:33:02 +08:00</div>
+      <div class="top-center">
+        <div class="top-stat">在线人数：<span class="num">28</span></div><div class="top-div"></div>
+        <div class="top-stat">当日注册：<span class="num">7</span></div><div class="top-div"></div>
+        <div class="top-stat">实名认证待处理：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">当日充值成功：<span class="num">2</span></div><div class="top-div"></div>
+        <div class="top-stat">充值：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">提款：<span class="num">0</span></div><div class="top-div"></div>
+        <div class="top-stat">VIP派奖审核：<span class="warn">1140</span></div>
+      </div>
+      <div class="top-right"><div class="avatar">CN</div>vivianadmin ▾</div>
+    </div>
+    <div class="content-area">
+      <div id="listView">
+<div class="bc-bar">位置 <span>›</span> 活动配置 <span>›</span> <span class="cur">活动列表</span></div>
+      <div class="page-card">
+        <div class="tab-bar"><div class="tab">活动列表</div></div>
+        <div style="position:relative;display:inline-block;width:100%;">
+          <span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">1</span>
+        <div class="filter-area" style="border:2px solid #ff4d4f;">
+          <span class="fl">活动模板：</span>
+          <select class="fi-select" id="fTmpl"><option value="">全部</option><option>周卡活动</option><option>预约活动</option><option>存款活动</option></select>
+          <span class="fl">活动ID：</span>
+          <input type="text" class="fi-input" placeholder="活动ID" style="width:110px;" id="fId">
+          <span class="fl">活动名称：</span>
+          <input type="text" class="fi-input" placeholder="活动名称" style="width:140px;" id="fName">
+          <span class="fl">活动时间：</span>
+          <div class="time-range">
+            <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="开始时间" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'">
+            <span class="time-sep">~</span>
+            <input type="text" placeholder="结束时间" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'">
+          </div>
+          <span class="fl">状态：</span>
+          <select class="fi-select" id="fStatus">
+            <option value="">全部</option><option value="1">开启</option><option value="0">关闭</option>
+          </select>
+          <button class="btn-search" onclick="doFilter()">搜索</button>
+          <button class="btn-new" onclick="showWizard()">新增活动</button>
+        </div>
+        </div>
+        <div style="position:relative;display:inline-block;width:100%;">
+          <span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">2</span>
+        <div class="list-area" style="border:2px solid #ff4d4f;">
+          <table>
+            <thead><tr>
+              <th class="sortable" onclick="sortBy('id')">ID <span class="sort-arrows"><span class="arr-up" id="s-id-up"></span><span class="arr-dn" id="s-id-dn"></span></span></th>
+              <th class="sortable" onclick="sortBy('sort')">排序 <span class="sort-arrows"><span class="arr-up" id="s-sort-up"></span><span class="arr-dn" id="s-sort-dn"></span></span></th>
+              <th>状态</th>
+              <th class="sortable" onclick="sortBy('time')">起止时间 <span class="sort-arrows"><span class="arr-up" id="s-time-up"></span><span class="arr-dn" id="s-time-dn"></span></span></th>
+              <th>币种</th><th>语系</th><th>活动模板</th><th>活动名称</th>
+              <th>预览图片</th>
+              <th>黑名单</th><th>指定代理</th><th>参与／中奖人数</th>
+              <th>彩金所需流水倍數</th><th>操作</th>
+            </tr></thead>
+            <tbody id="tBody"></tbody>
+          </table>
+        </div>
+        </div>
+        <div class="pagination">
+          <span id="totalTxt">Total 4</span>
+          <select class="pg-sel"><option>10/page</option><option>20/page</option></select>
+          <div class="pg-btn">‹</div><div class="pg-btn active">1</div><div class="pg-btn">›</div>
+          <span>Go to</span><input type="number" class="pg-input" value="1">
+        </div>
+      </div>
+      </div>
+<div id="wizardView" class="hidden">
+<div class="bc-bar">位置 <span>›</span> 活动配置 <span>›</span> <a href="#" onclick="showList();return false;">活动列表</a> <span>›</span> <span class="cur">新增活动（存款活动）</span></div>
+      <div class="step-page">
+        <div class="step-nav" id="stepNav"></div>
+        <div class="step-main">
+          <div class="step-topbar">
+            <div class="step-title-text">活动配置步骤</div>
+            <div class="step-topbar-btns" id="topBtns"></div>
+          </div>
+          <div class="step-content" id="stepContent"></div>
+        </div>
+      
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 代理线选择弹窗 -->
+<div class="modal-overlay hidden" id="agentLineModal">
+  <div class="modal" style="width:480px;">
+    <div class="modal-header">
+      <span class="modal-title">请选择代理</span>
+      <button class="modal-close" onclick="closeAgentLineModal()">×</button>
+    </div>
+    <div class="modal-body" id="agentLineModalBody"></div>
+    <div class="modal-footer">
+      <button class="modal-cancel" onclick="closeAgentLineModal()">取消</button>
+      <button class="modal-confirm" onclick="confirmAgentLines()">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 游戏选择弹窗 -->
+<div class="modal-overlay hidden" id="gameModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">请选择游戏</span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="modal-cancel" onclick="closeModal()">取消</button>
+      <button class="modal-confirm" onclick="confirmGames()">确定</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── 步骤名称（6步）──────────────────────────────────────────────
+const stepNames=['活动模板设置','活动图片','参与对象与名单','活动条件','风控条件','提交预览'];
+let cur=1, claimAuto=true, awardRows=[{}];
+
+// ── 语系 ────────────────────────────────────────────────────────
+const langOptions=[
+  {val:'default',label:'预设'},
+  {val:'en',label:'英文'},
+  {val:'ph',label:'菲律宾语'},
+  {val:'vn',label:'越南语'},
+  {val:'ceb',label:'宿雾语'}
+];
+let selectedLangs=['default'], activeLangTab='default', langOpen=false;
+
+// ── 其他多选 ────────────────────────────────────────────────────
+const levelOptions=[{val:'default',label:'默认层'},{val:'1',label:'第一层'},{val:'2',label:'第二层'},{val:'3',label:'第三层'},{val:'4',label:'第四层'},{val:'5',label:'第五层'},{val:'internal',label:'内部充值'}];
+let selectedLevels=levelOptions.map(function(o){return o.val;}),levelOpen=false;
+const vipOptions=Array.from({length:11},(_,i)=>({val:'vip'+i,label:'VIP'+i}));
+let selectedVips=vipOptions.map(function(o){return o.val;}),vipOpen=false;
+
+// ── 游戏 ────────────────────────────────────────────────────────
+const gameCategories=[
+  {cat:'EVO:EvoLive',games:['Football Studio','Crazy Coin Flip','Dead or Alive: Saloon','EvoLive Baccarat A','Football Studio Dice','Mega Ball','French Roulette Gold','Auto Lightning Roulette','Crazy Time A DNT','Speed Baccarat A']},
+  {cat:'TPG:TPG',games:['Space Galaxy','Lucky Leprechaun','8 Dragons','Mahjong House','Sic-Bo']},
+  {cat:'CQ9 Gaming:SLOT',games:['Money Tree','Hot Spin','Sky Lanterns','Lucky Bats','Meow','Fortune Dragon']},
+  {cat:'PG:PG',games:['Pinata Wins','Dead Man\'s Riches','Jack the Giant Hunter','Diner Frenzy Spins']},
+  {cat:'电子游戏',games:['老虎机A','老虎机B','老虎机C','经典水果机','幸运转盘']},
+  {cat:'电子宾果游戏',games:['宾果A','宾果B','宾果C','超级宾果','快速宾果']},
+];
+var agentLineOptions=['代理线A','代理线B','代理线C','VIP专属线','dannyagentsub线'];
+var selectedAgentLines=[],tempAgentLines=[];
+
+let tempSelected={},confirmedSelected={},confirmedCount=0;
+
+// 初始化全选
+gameCategories.forEach(function(c,i){
+  confirmedSelected[i]=new Set(c.games);
+  confirmedCount+=c.games.length;
+});
+
+// ── 导航 ────────────────────────────────────────────────────────
+function renderNav(){
+  document.getElementById('stepNav').innerHTML=stepNames.map(function(n,i){
+    var num=i+1,isA=num===cur,isD=num<cur;
+    // 所有步骤都可以直接点击跳转
+    return '<div class="step-nav-item '+(isA?'active':isD?'done':'')+'" onclick="goStep('+num+')" style="cursor:pointer;">'+
+      '<div class="snum">'+(isD?'✓':num)+'</div><span>'+n+'</span>'+
+    '</div>';
+  }).join('');
+}
+function renderTopBtns(){
+  var isFirst=cur===1,isLast=cur===6;
+  var h='';
+  if(!isFirst)h+='<button class="btn-prev" onclick="goStep('+(cur-1)+')">‹ 上一步</button>';
+  if(isLast){
+    h+='<a href="#" class="btn-exit" onclick="showList();return false;">退出编辑 ↩</a>';
+    h+='<button class="btn-submit" onclick="submitActivity()">确认送出</button>';
+  }else{
+    h+='<button class="btn-next" onclick="goStep('+(cur+1)+')">下一步 ›</button>';
+    h+='<a href="#" class="btn-exit" onclick="showList();return false;">退出编辑 ↩</a>';
+  }
+  document.getElementById('topBtns').innerHTML=h;
+}
+function goStep(n){cur=n;renderNav();renderTopBtns();renderStep();}
+function toggle(el){el.classList.toggle('on');}
+
+function renderStep(){
+  var el=document.getElementById('stepContent');
+  if(cur===1)el.innerHTML=step1();
+  else if(cur===2){el.innerHTML=step2();setupLangDrop();}
+  else if(cur===3){el.innerHTML=step3();setupDrops();}
+  else if(cur===4){el.innerHTML=step4();if(blocks.length===0)addBlock();else renderBlocks();}
+  else if(cur===5)el.innerHTML=step5();
+  else el.innerHTML=step6();
+}
+
+// ════════════════════════════════════════════════════════════════
+// 步骤一：活动模板设置
+// ════════════════════════════════════════════════════════════════
+function step1(){
+  return '<div class="step-desc">将活动模板配置保存至系统，系统将自动配置相关功能</div>'+
+  '<div class="sec-block"><div class="sec-title">活动模板</div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动类型：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>周卡活动</option><option>预约活动</option><option selected>存款活动</option></select></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动名称：</div><div class="field-ctrl"><input type="text" id="actNameInput" class="f-input" placeholder="请输入（前后台展示名称）" style="max-width:400px;"></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动币种：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>PHP</option></select></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"><span class="time-sep">～</span><input type="text" placeholder="结束时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"></div></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动状态：</div><div class="field-ctrl"><div class="radio-group">'+
+    '<label class="radio-item"><input type="radio" name="actStatus" checked> 关闭</label>'+
+    '<label class="radio-item"><input type="radio" name="actStatus"> 开启</label>'+
+  '</div></div></div>'+
+  '</div>';
+}
+
+// ════════════════════════════════════════════════════════════════
+// 步骤二：活动图片
+// ════════════════════════════════════════════════════════════════
+function step2(){
+  var tagHtml=selectedLangs.length===0
+    ?'<span class="ms-placeholder">请选择语系</span>'
+    :selectedLangs.map(function(v){
+        var lb=langOptions.find(function(o){return o.val===v;});
+        lb=lb?lb.label:v;
+        return '<span class="ms-tag">'+lb+(v==='default'?'':' <span class="ms-rm" onclick="removeLang(event,\''+v+'\')">×</span>')+'</span>';
+      }).join('');
+
+  var titleHtml= selectedLangs.length===1 && selectedLangs[0]==='default'
+    ? '<div class="field-row"><div class="field-label" style="min-width:140px;">活动标题：</div><div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入活动标题"></div></div>'
+    : selectedLangs.map(function(v){
+        var lb=langOptions.find(function(o){return o.val===v;});
+        lb=lb?lb.label:v;
+        var label=v==='default'?'活动标题':'活动标题('+lb+')';
+        return '<div class="field-row"><div class="field-label" style="min-width:140px;">'+label+'：</div><div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入活动标题"></div></div>';
+      }).join('');
+
+  var tabHtml=selectedLangs.map(function(v){
+    var lb=langOptions.find(function(o){return o.val===v;});
+    lb=lb?lb.label:v;
+    return '<div class="lang-tab '+(v===activeLangTab?'active':'')+'" onclick="switchLangTab(\''+v+'\')">'+lb+'</div>';
+  }).join('');
+
+  var ddHtml=langOptions.map(function(o){
+    var isSel=selectedLangs.includes(o.val);
+    var disableDefault=o.val==='default';
+    return '<div class="ms-option '+(isSel?'selected':'')+'" onclick="'+(disableDefault?'':'toggleLang(\''+o.val+'\')')+'">'+
+      '<span>'+o.label+(disableDefault?' <span style="font-size:11px;color:#bbb;">（固定）</span>':'')+'</span>'+
+      (isSel?'<span class="ms-check">✓</span>':'')+
+    '</div>';
+  }).join('');
+
+  return '<div class="step-desc">上传活动相关图片，用于展示在不同平台和位置。</div>'+
+  '<div class="sec-block" style="border:0.5px solid #e8e8e8;border-radius:4px;padding:16px;">'+
+    '<div class="sec-title">活动设置</div>'+
+    '<div class="field-row"><div class="field-label">活动语系</div><div class="field-ctrl" style="position:relative;max-width:400px;">'+
+      '<div class="ms-wrap" id="langWrap" onclick="toggleLangDrop(event)">'+tagHtml+'<span class="ms-arrow">▾</span></div>'+
+      '<div class="ms-dropdown '+(langOpen?'':'hidden')+'" id="langDropdown">'+ddHtml+'</div>'+
+    '</div></div>'+
+    titleHtml+
+  '</div>'+
+  (selectedLangs.length>0
+    ?'<div class="sec-block" style="border:0.5px solid #e8e8e8;border-radius:4px;padding:16px;margin-top:10px;">'+
+      '<div class="lang-tabs">'+tabHtml+'</div>'+
+      '<div id="langTabContent">'+renderLangTabContent()+'</div>'+
+    '</div>'
+    :'');
+}
+
+function renderLangTabContent(){
+  var gameTotal=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);
+  return (
+    // ══════════════════════════════════════════════════════════
+    // 规则弹窗图（每个规则区块各自一张，与第4步「活动条件」即时对应）
+    // ══════════════════════════════════════════════════════════
+    (blocks.length===0
+      ? '<div class="sec-block"><div class="sec-title"><span class="req">*</span>规则弹窗图</div>'+
+        '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:12px 16px;font-size:13px;color:#ad6800;">'+
+        '尚未于第4步「活动条件」新增规则区块，请先完成该步骤设定后，再回来上传各区块对应的规则弹窗图。'+
+        '</div></div>'
+      : '<div class="sec-block"><div class="sec-title"><span class="req">*</span>规则弹窗图</div>'+
+        blocks.map(function(b,i){
+          var tag=b.type==='daily'?'按天任务型':(b.conditionType+' × '+b.rewardMode);
+          return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-bottom:12px;">'+
+            '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:10px;">区块'+(i+1)+'（'+tag+'）规则弹窗图</div>'+
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+              imgCard('PC 端','建议尺寸 356×422px')+
+              imgCard('H5 端','建议尺寸 356×422px')+
+            '</div>'+
+          '</div>';
+        }).join('')+
+        '<div class="hint">此区与第4步「活动条件」的规则区块即时对应——若之后在第4步新增或删除区块，请回到本步骤确认弹窗图数量是否需要调整。</div>'+
+      '</div>')+
+
+    // ── 排序 ────────────────────────────────────────────────────
+    '<div class="sec-block">'+
+      '<div class="field-row" style="margin-bottom:0;">'+
+        '<div class="field-label">排序：</div>'+
+        '<div class="field-ctrl"><input type="number" class="f-input" style="max-width:160px;-moz-appearance:textfield;" placeholder="请输入" value="0"></div>'+
+      '</div>'+
+    '</div>'+
+
+    // ── 备注 ────────────────────────────────────────────────────
+    '<div class="sec-block"><div class="sec-title">备注</div>'+
+    '<textarea class="f-textarea" placeholder="请输入备注内容..."></textarea>'+
+    '<div class="hint">此备注仅供内部参考，不会显示给用户</div></div>'
+  );
+}
+
+// ── 附加配置資料 ────────────────────────────────────────────────
+var addonBlocks=[]; // 預設不顯示，點新增配置才展開
+
+function renderAddonList(){
+  if(addonBlocks.length===0) return '';
+  return addonBlocks.map(function(block, i){
+    return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
+      // header：序号 + 删除
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">'+
+        '<span style="font-size:14px;font-weight:500;color:#1677ff;">附加配置 '+(i+1)+'</span>'+
+        '<button onclick="delAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:12px;cursor:pointer;">删除</button>'+
+      '</div>'+
+      // 链接
+      '<div class="field-row">'+
+        '<div class="field-label">链接：</div>'+
+        '<div class="field-ctrl"><input type="text" class="f-input" placeholder="请输入跳转链接" style="max-width:500px;" value="'+block.link+'" oninput="addonBlocks['+i+'].link=this.value"></div>'+
+      '</div>'+
+      // PC / H5 图片
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+        imgCard('PC 端','建议尺寸 946×543px')+
+        imgCard('H5 端','建议尺寸 356×294px')+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function addAddon(){
+  if(addonBlocks.length>=3)return;
+  addonBlocks.push({name:'',link:''});
+  refreshAddonList();
+}
+
+function delAddon(i){
+  addonBlocks.splice(i,1);
+  refreshAddonList();
+}
+
+function refreshAddonList(){
+  var el=document.getElementById('addonList');
+  if(el)el.innerHTML=renderAddonList();
+  // 更新新增按钮状态
+  var addBtn=document.getElementById('addonAddBtn');
+  if(addBtn){
+    if(addonBlocks.length>=3){
+      addBtn.textContent='最多新增 3 个配置';
+      addBtn.disabled=true;
+      addBtn.style.background='#f5f5f5';
+      addBtn.style.color='#bbb';
+      addBtn.style.cursor='not-allowed';
+      addBtn.style.border='1px solid #e8e8e8';
+    } else {
+      addBtn.textContent='+ 新增配置';
+      addBtn.disabled=false;
+      addBtn.style.background='#1677ff';
+      addBtn.style.color='#fff';
+      addBtn.style.cursor='pointer';
+      addBtn.style.border='none';
+    }
+  }
+}
+
+// 浮窗图片上传卡片（无尺寸标注）
+function imgCardAlt(label){
+  return '<div style="border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;">'+
+    '<div style="background:#f5f7fa;padding:8px 14px;border-bottom:1px solid #e8e8e8;">'+
+      '<span style="font-size:13px;font-weight:500;color:#333;">'+label+'</span>'+
+    '</div>'+
+    '<div style="padding:14px;">'+
+      '<div style="min-height:100px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;">'+
+        '<svg viewBox="0 0 24 24" fill="none" width="28" height="28"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>'+
+        '<span style="font-size:12px;color:#bbb;">点击上传图片</span>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+// 单张图片上传卡片（仅上传框，无 URL 输入）
+function imgCard(platform, sizeHint){
+  return '<div style="border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;">'+
+    '<div style="background:#f5f7fa;padding:8px 14px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;">'+
+      '<span style="font-size:13px;font-weight:500;color:#333;">'+platform+'</span>'+
+      '<span style="font-size:11px;color:#bbb;">'+sizeHint+'</span>'+
+    '</div>'+
+    '<div style="padding:14px;">'+
+      '<div style="min-height:110px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;">'+
+        '<svg viewBox="0 0 24 24" fill="none" width="28" height="28"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>'+
+        '<span style="font-size:12px;color:#bbb;">点击上传图片</span>'+
+        '<span style="font-size:11px;color:#ccc;">PNG / JPG，≤ 2MB</span>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+function imgBlock(num,title,size,link){
+  return '<div style="margin-bottom:16px;"><div class="img-section-title"><span class="img-num">'+num+'</span>'+title+'</div><div style="font-size:12px;color:#999;margin-bottom:8px;">尺寸：'+size+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;"><div class="img-upload-box"><button class="upload-btn">点击上传自定义图片</button></div><div><div style="font-size:13px;margin-bottom:6px;">'+link+'</div><input type="text" class="f-input" placeholder="请输入外部链接网址"></div></div></div>';
+}
+
+// 语系下拉逻辑
+function setupLangDrop(){
+  setTimeout(function(){
+    document.addEventListener('click',function h(e){
+      if(!e.target.closest('#langWrap')&&!e.target.closest('#langDropdown')&&langOpen){
+        langOpen=false;document.removeEventListener('click',h);renderStep();
+      }
+    });
+  },0);
+}
+function toggleLangDrop(e){e.stopPropagation();langOpen=!langOpen;renderStep();if(langOpen)setupLangDrop();}
+function toggleLang(v){
+  if(v==='default')return;
+  if(selectedLangs.includes(v))selectedLangs=selectedLangs.filter(function(x){return x!==v;});
+  else selectedLangs.push(v);
+  if(!selectedLangs.includes(activeLangTab))activeLangTab=selectedLangs[0]||'default';
+  langOpen=true;renderStep();setupLangDrop();
+}
+function removeLang(e,v){
+  e.stopPropagation();
+  if(v==='default')return;
+  selectedLangs=selectedLangs.filter(function(x){return x!==v;});
+  if(activeLangTab===v)activeLangTab=selectedLangs[0]||'default';
+  langOpen=false;renderStep();
+}
+function switchLangTab(v){activeLangTab=v;var el=document.getElementById('langTabContent');if(el)el.innerHTML=renderLangTabContent();}
+
+// ════════════════════════════════════════════════════════════════
+// 步骤三：参与对象与名单
+// ════════════════════════════════════════════════════════════════
+function step3(){
+  var lvlHtml=selectedLevels.length===0?'<span class="ms-placeholder">请选择充值层级</span>':selectedLevels.map(function(v){var lb=levelOptions.find(function(o){return o.val===v;});lb=lb?lb.label:v;return '<span class="ms-tag">'+lb+'<span class="ms-rm" onclick="removeLevel(event,\''+v+'\')">×</span></span>';}).join('');
+  var vipHtml=selectedVips.length===0?'<span class="ms-placeholder">请选择会员等级</span>':selectedVips.map(function(v){var lb=vipOptions.find(function(o){return o.val===v;});lb=lb?lb.label:v;return '<span class="ms-tag">'+lb+'<span class="ms-rm" onclick="removeVip(event,\''+v+'\')">×</span></span>';}).join('');
+  var lvlDd='<div class="ms-option '+(selectedLevels.length===levelOptions.length?'selected':'')+'" onclick="toggleAllLevel()"><span>全选</span>'+(selectedLevels.length===levelOptions.length?'<span class="ms-check">✓</span>':'')+'</div>'+levelOptions.map(function(o){return '<div class="ms-option '+(selectedLevels.includes(o.val)?'selected':'')+'" onclick="toggleLevel(\''+o.val+'\')"><span>'+o.label+'</span>'+(selectedLevels.includes(o.val)?'<span class="ms-check">✓</span>':'')+'</div>';}).join('');
+  var vipDd='<div class="ms-option" onclick="toggleAllVip()"><span>全选</span>'+(selectedVips.length===vipOptions.length?'<span class="ms-check">✓</span>':'')+'</div>'+vipOptions.map(function(o){return '<div class="ms-option '+(selectedVips.includes(o.val)?'selected':'')+'" onclick="toggleVip(\''+o.val+'\')"><span>'+o.label+'</span>'+(selectedVips.includes(o.val)?'<span class="ms-check">✓</span>':'')+'</div>';}).join('');
+  return '<div class="step-desc">设置活动的参与对象与黑名单规则</div>'+
+  '<div class="sec-block"><div class="sec-title">参与对象设置</div>'+
+  '<div class="field-row"><div class="field-label">1. 充值层级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="levelWrap" onclick="toggleLevelDrop(event)">'+lvlHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(levelOpen?'':'hidden')+'" id="levelDropdown">'+lvlDd+'</div></div></div>'+
+  '<div class="field-row"><div class="field-label">2. 指定代理：</div><div class="field-ctrl">'+
+  '<div class="radio-group" style="flex-direction:column;align-items:flex-start;gap:10px;">'+
+    '<label class="radio-item"><input type="radio" name="agent" value="none" checked onchange="setAgentMode(\'none\')"> 不指定</label>'+
+    '<div>'+
+      '<label class="radio-item"><input type="radio" name="agent" value="line" onchange="setAgentMode(\'line\')"> 指定代理線</label>'+
+      '<div id="agentLineDrop" class="hidden" style="margin-top:8px;margin-left:4px;">'+
+        '<button class="game-btn" onclick="openAgentLineModal()">'+
+          (selectedAgentLines.length?'已选择 <strong>'+selectedAgentLines.length+'</strong> 个代理':'选择代理')+
+        '</button>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+
+'</div></div>'+
+  '<div class="field-row"><div class="field-label">3. 新会员限制：</div><div class="field-ctrl"><div style="display:flex;align-items:center;gap:10px;"><div class="toggle" onclick="toggle(this)"></div><span style="font-size:13px;">活动开始后注册的新会员</span></div></div></div>'+
+  '<div class="field-row"><div class="field-label">4. 会员等级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="vipWrap" onclick="toggleVipDrop(event)">'+vipHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(vipOpen?'':'hidden')+'" id="vipDropdown">'+vipDd+'</div><div class="hint">此处勾选的VIP等级，会同步决定第4步「依会员层级设定不同数值」可以展开设定哪些VIP。</div></div></div>'+
+  '<div class="field-row"><div class="field-label">5. 用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>'+
+  '<div class="sec-block"><div class="sec-title">黑名单设置</div>'+
+  '<div class="field-row"><div class="field-label">黑名单：</div><div class="field-ctrl"><input type="text" class="f-input" style="max-width:360px;" placeholder="请输入"></div></div>'+
+  '<div class="field-row"><div class="field-label">用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>';
+}
+function setAgentMode(v){
+  var lineDrop=document.getElementById('agentLineDrop');
+  if(lineDrop)lineDrop.classList.toggle('hidden',v!=='line');
+}
+function openAgentLineModal(){
+  tempAgentLines=selectedAgentLines.slice();
+  renderAgentLineModalBody();
+  document.getElementById('agentLineModal').classList.remove('hidden');
+}
+function closeAgentLineModal(){document.getElementById('agentLineModal').classList.add('hidden');}
+function renderAgentLineModalBody(){
+  var allSel=tempAgentLines.length===agentLineOptions.length;
+  document.getElementById('agentLineModalBody').innerHTML=
+    '<div style="padding:10px 14px;border-bottom:1px solid #e8e8e8;background:#f9f9f9;display:flex;align-items:center;gap:10px;">'+
+      '<input type="checkbox" class="cat-check" '+(allSel?'checked':'')+' onclick="toggleAllAgentLines(this.checked)">'+
+      '<span style="font-size:14px;font-weight:500;color:#333;">全选</span>'+
+    '</div>'+
+    agentLineOptions.map(function(line){
+      var chk=tempAgentLines.includes(line);
+      return '<div style="padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid #f5f5f5;">'+
+        '<input type="checkbox" class="cat-check" '+(chk?'checked':'')+' onchange="toggleAgentLine(\''+line+'\',this.checked)">'+
+        '<span style="font-size:13px;color:#333;">'+line+'</span>'+
+      '</div>';
+    }).join('');
+}
+function toggleAllAgentLines(checked){tempAgentLines=checked?agentLineOptions.slice():[];renderAgentLineModalBody();}
+function toggleAgentLine(line,checked){if(checked){if(!tempAgentLines.includes(line))tempAgentLines.push(line);}else{tempAgentLines=tempAgentLines.filter(function(l){return l!==line;});}renderAgentLineModalBody();}
+function confirmAgentLines(){selectedAgentLines=tempAgentLines.slice();closeAgentLineModal();renderStep();}
+function setupDrops(){setTimeout(function(){document.addEventListener('click',function h(e){var ch=false;if(!e.target.closest('#levelWrap')&&!e.target.closest('#levelDropdown')&&levelOpen){levelOpen=false;ch=true;}if(!e.target.closest('#vipWrap')&&!e.target.closest('#vipDropdown')&&vipOpen){vipOpen=false;ch=true;}if(ch){document.removeEventListener('click',h);renderStep();setupDrops();}});},0);}
+function toggleLevelDrop(e){e.stopPropagation();levelOpen=!levelOpen;vipOpen=false;renderStep();setupDrops();}
+function toggleLevel(v){if(selectedLevels.includes(v))selectedLevels=selectedLevels.filter(function(x){return x!==v;});else selectedLevels.push(v);levelOpen=true;renderStep();setupDrops();}
+function toggleAllLevel(){selectedLevels=selectedLevels.length===levelOptions.length?[]:levelOptions.map(function(o){return o.val;});levelOpen=true;renderStep();setupDrops();}
+function removeLevel(e,v){e.stopPropagation();selectedLevels=selectedLevels.filter(function(x){return x!==v;});levelOpen=false;renderStep();}
+function toggleVipDrop(e){e.stopPropagation();vipOpen=!vipOpen;levelOpen=false;renderStep();setupDrops();}
+function toggleVip(v){if(selectedVips.includes(v))selectedVips=selectedVips.filter(function(x){return x!==v;});else selectedVips.push(v);vipOpen=true;renderStep();setupDrops();}
+function toggleAllVip(){selectedVips=selectedVips.length===vipOptions.length?[]:vipOptions.map(function(o){return o.val;});vipOpen=true;renderStep();setupDrops();}
+function removeVip(e,v){e.stopPropagation();selectedVips=selectedVips.filter(function(x){return x!==v;});vipOpen=false;renderStep();}
+
+// ════════════════════════════════════════════════════════════════
+// 步骤四：活动条件（原4 + 原6领取 + 原7提款）
+// ════════════════════════════════════════════════════════════════
+function step4(){
+  return '<div class="step-desc">请设定本次存款活动的规则区块。一个活动可新增多个规则区块，每个区块可各自选择存款条件类型、门槛与奖励；存款条件为「复存」或「累计存款」时，还可各自设定统计周期（活动期间／每日／每周）。</div>'+
+
+  '<div class="sec-block"><div class="sec-title">规则区块设定</div>'+
+  '<button class="btn-add" onclick="addBlock()">+ 新增规则区块</button>'+
+  '<div id="blocksContainer"></div></div>'+
+
+  '<div class="sec-block"><div class="sec-title">流水规则</div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>奖金所需流水：</div><div class="field-ctrl" style="display:flex;align-items:center;gap:10px;">'+
+  '<label class="radio-item"><input type="checkbox" id="turnoverPrincipal" checked> 本金</label>'+
+  '<label class="radio-item"><input type="checkbox" id="turnoverBonus" checked> 奖金</label>'+
+  '<input type="number" class="f-input" style="width:100px;max-width:100px;-moz-appearance:textfield;" placeholder="请输入" value="1">'+
+  '<span style="font-size:13px;color:#333;">倍</span>'+
+  '</div></div>'+
+  '<div class="hint" style="margin:-6px 0 14px;">本金／奖金可各自勾选，两者皆可单独或同时纳入流水计算（例如只勾「本金」＝奖金免流水、存款本金需流水）。</div>'+
+  '<div class="field-row"><div class="field-label">适用游戏范围：</div><div class="field-ctrl"><button class="game-btn" onclick="openModal()">已选择 <strong>'+confirmedCount+'</strong> 个游戏</button><div class="hint">仅影响流水计算是否纳入该游戏的投注，不影响存款条件本身。</div></div></div>'+
+  '</div>'+
+
+  '<div class="sec-block"><div class="sec-title">奖励发放</div>'+
+  '<div class="field-row"><div class="field-label">发放方式：</div><div class="field-ctrl">'+
+  '<div class="radio-group">'+
+  '<label class="radio-item"><input type="radio" name="depositClaim" checked onchange="setDepositClaim(true)"> 自动发放</label>'+
+  '<label class="radio-item"><input type="radio" name="depositClaim" onchange="setDepositClaim(false)"> 手动领取</label>'+
+  '</div>'+
+  '<div id="depositClaimDaysWrap" class="hidden" style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:8px;">'+
+  '<input type="number" class="f-input" style="width:120px;max-width:120px;" placeholder="请输入天数">天内需领取，逾期状态自动变为「已过期」'+
+  '</div></div></div>'+
+  '<div class="field-row"><div class="field-label">审核方式：</div><div class="field-ctrl"><div class="radio-group">'+
+  '<label class="radio-item"><input type="radio" name="audit"> 人工审核</label>'+
+  '<label class="radio-item"><input type="radio" name="audit" checked> 自动审核</label>'+
+  '</div></div></div>'+
+  '<div class="hint" style="margin:4px 0 14px;">奖励状态共4种：未达标／可领取／已领取／已过期——由上方规则区块的达标情况与本区的领取天数设定共同决定，无需另外配置。</div>'+
+  '<div class="field-row"><div class="field-label">已验证手机号：</div><div class="field-ctrl"><div class="radio-group">'+
+  '<label class="radio-item"><input type="radio" name="phoneVerified"> 是</label>'+
+  '<label class="radio-item"><input type="radio" name="phoneVerified" checked> 否</label>'+
+  '</div></div></div>'+
+  '<div class="field-row"><div class="field-label">限制使用设备：</div><div class="field-ctrl"><div class="radio-group">'+
+  '<label class="radio-item"><input type="radio" name="deviceLimit" checked> 无限制</label>'+
+  '<label class="radio-item"><input type="radio" name="deviceLimit"> 仅 APP</label>'+
+  '</div></div></div>'+
+  '</div>';
+}
+
+function setDepositClaim(v){
+  var el=document.getElementById('depositClaimDaysWrap');
+  if(el) el.classList.toggle('hidden', v);
+}
+
+// ════ 存款规则区块（新架构）════
+let blocks=[]; let blockSeq=0;
+const vipList=Array.from({length:11},function(_,i){return 'VIP'+i;});
+
+function addBlock(){
+  blocks.push({
+    id:++blockSeq, type:'standard',
+    conditionType:'复存', rewardMode:'固定金额', cycleType:'活动期间累计',
+    minAmount:'', rewardValue:'',
+    limitType:'每日', limitCount:'',
+    tiers:[{threshold:'',rewardType:'固定金额',rewardValue:''}], cap:'',
+    dayCount:7, dayRows:(function(){var r=[];for(var k=0;k<7;k++)r.push({threshold:'',reward:''});return r;})(),
+    vipOverride:false, vipOverrides:{}, vipExpanded:{'VIP0':true}, vipApplyMode:{}, vipLinkedTo:{}
+  });
+  renderBlocks();
+}
+function removeBlock(i){blocks.splice(i,1);renderBlocks();}
+function setBlockType(i,val){blocks[i].type=val;renderBlocks();}
+function setConditionType(i,val){blocks[i].conditionType=val;renderBlocks();}
+function setRewardMode(i,val){blocks[i].rewardMode=val;renderBlocks();}
+function setCycleType(i,val){blocks[i].cycleType=val;renderBlocks();}
+function updateField(i,key,val){blocks[i][key]=val;}
+function updateFieldAndRerender(i,key,val){blocks[i][key]=val;renderBlocks();}
+function addTier(i){blocks[i].tiers.push({threshold:'',rewardType:'固定金额',rewardValue:''});renderBlocks();}
+function delTier(i,j){blocks[i].tiers.splice(j,1);renderBlocks();}
+function updateTier(i,j,key,val){blocks[i].tiers[j][key]=val;}
+function setDayCount(i,val){
+  var n=Math.max(1,Math.min(7,parseInt(val)||1));
+  var b=blocks[i]; b.dayCount=n;
+  var rows=b.dayRows.slice(0,n);
+  while(rows.length<n)rows.push({threshold:'',reward:''});
+  b.dayRows=rows; renderBlocks();
+}
+function updateDay(i,j,key,val){blocks[i].dayRows[j][key]=val;}
+function toggleVipOverride(i){blocks[i].vipOverride=!blocks[i].vipOverride;renderBlocks();}
+
+function renderBlocks(){
+  var el=document.getElementById('blocksContainer');
+  if(!el)return;
+  if(blocks.length===0){el.innerHTML='<div class="empty-hint">尚未新增任何规则区块，请点击上方按钮新增。一般存款活动通常只需1个区块；组合型活动（如新人礼包）才需要多个。</div>';return;}
+  el.innerHTML=blocks.map(function(b,i){return renderBlock(b,i);}).join('');
+}
+function renderBlock(b,i){
+  var tag=b.type==='daily'?'按天任务型':(b.conditionType+' × '+b.rewardMode);
+  return '<div class="rule-block">'
+    +'<div class="rule-block-head">'
+      +'<div class="rule-block-num">'+(i+1)+'</div>'
+      +'<div style="font-size:13px;color:#333;">区块型态：</div>'
+      +'<select class="f-select" style="max-width:220px;height:32px;" onchange="setBlockType('+i+',this.value)">'
+        +'<option value="standard"'+(b.type==='standard'?' selected':'')+'>标准型（条件×奖励自由组合）</option>'
+        +'<option value="daily"'+(b.type==='daily'?' selected':'')+'>按天任务型</option>'
+      +'</select>'
+      +'<span class="block-type-tag">'+tag+'</span>'
+      +'<div style="flex:1;"></div>'
+      +'<button class="btn-del" onclick="removeBlock('+i+')">删除区块</button>'
+    +'</div>'
+    +renderBlockBody(b,i)
+    +renderVipSection(b,i)
+    +'</div>';
+}
+function renderBlockBody(b,i){
+  if(b.type==='daily')return renderDaily(b,i);
+  return renderStandard(b,i);
+}
+function renderStandard(b,i){
+  var isAccum = b.conditionType==='累计存款';
+  var isTier = b.rewardMode==='阶梯奖励';
+  var thresholdLabel = isAccum ? '累计门槛金额' : '最低存款金额';
+
+  var html='';
+
+  // 存款条件（独立选项）
+  html += '<div class="field-row"><div class="field-label"><span class="req">*</span>存款条件：</div><div class="field-ctrl"><div class="radio-group">'
+    +'<label class="radio-item"><input type="radio" name="ct'+i+'" '+(b.conditionType==='复存'?'checked':'')+' onchange="setConditionType('+i+',\'复存\')"> 复存</label>'
+    +'<label class="radio-item"><input type="radio" name="ct'+i+'" '+(b.conditionType==='单笔存款'?'checked':'')+' onchange="setConditionType('+i+',\'单笔存款\')"> 单笔存款</label>'
+    +'<label class="radio-item"><input type="radio" name="ct'+i+'" '+(b.conditionType==='累计存款'?'checked':'')+' onchange="setConditionType('+i+',\'累计存款\')"> 累计存款</label>'
+    +'</div></div></div>';
+
+  // 奖励规则（独立选项，跟条件自由组合）
+  html += '<div class="field-row"><div class="field-label"><span class="req">*</span>奖励规则：</div><div class="field-ctrl"><div class="radio-group">'
+    +'<label class="radio-item"><input type="radio" name="rm'+i+'" '+(b.rewardMode==='固定金额'?'checked':'')+' onchange="setRewardMode('+i+',\'固定金额\')"> 固定金额</label>'
+    +'<label class="radio-item"><input type="radio" name="rm'+i+'" '+(b.rewardMode==='百分比'?'checked':'')+' onchange="setRewardMode('+i+',\'百分比\')"> 百分比奖励</label>'
+    +'<label class="radio-item"><input type="radio" name="rm'+i+'" '+(b.rewardMode==='阶梯奖励'?'checked':'')+' onchange="setRewardMode('+i+',\'阶梯奖励\')"> 阶梯奖励</label>'
+    +'</div></div></div>';
+
+  if(isTier){
+    // 奖励规则=阶梯奖励 → 不论条件是复存/单笔/累计，都用门槛表格，门槛栏位文字依条件切换
+    var rows=b.tiers.map(function(t,j){
+      return '<tr>'
+        +'<td>'+(j+1)+'</td>'
+        +'<td><input class="td-input" type="number" placeholder="'+thresholdLabel+'" value="'+t.threshold+'" oninput="updateTier('+i+','+j+',\'threshold\',this.value)"></td>'
+        +'<td><select class="td-select" onchange="updateTier('+i+','+j+',\'rewardType\',this.value)"><option '+(t.rewardType==='固定金额'?'selected':'')+'>固定金额</option><option '+(t.rewardType==='百分比'?'selected':'')+'>百分比</option></select></td>'
+        +'<td><input class="td-input" type="number" placeholder="奖励数值" value="'+t.rewardValue+'" oninput="updateTier('+i+','+j+',\'rewardValue\',this.value)"></td>'
+        +'<td><button class="btn-del" onclick="delTier('+i+','+j+')">删除</button></td>'
+        +'</tr>';
+    }).join('');
+    html += '<div class="field-row"><div class="field-label" style="padding-top:0;">阶梯配置：</div><div class="field-ctrl">'
+      +'<button class="btn-add small" onclick="addTier('+i+')">+ 新增档位</button>'
+      +'<table class="award-table"><thead><tr><th style="width:50px;">档位</th><th>'+thresholdLabel+'</th><th style="width:110px;">奖励类型</th><th>奖励数值</th><th style="width:70px;">操作</th></tr></thead><tbody>'+rows+'</tbody></table>'
+      +(isAccum?'<div class="hint">累计型阶梯：需持续累计存款金额，依达到的档位往上解锁，通常搭配进度条呈现。</div>':'<div class="hint">单笔/复存型阶梯：只看「这一笔」存款落在哪个金额区间，对应给对应档位的奖励，无需累计记录。</div>')
+      +'</div></div>';
+  } else {
+    html += '<div class="field-row"><div class="field-label"><span class="req">*</span>'+thresholdLabel+'：</div><div class="field-ctrl"><input type="number" class="f-input" style="max-width:220px;" placeholder="请输入" value="'+b.minAmount+'" oninput="updateField('+i+',\'minAmount\',this.value)"></div></div>'
+      +'<div class="field-row"><div class="field-label"><span class="req">*</span>奖励'+(b.rewardMode==='百分比'?'比例(%)':'金额')+'：</div><div class="field-ctrl"><input type="number" class="f-input" style="max-width:220px;" placeholder="请输入" value="'+b.rewardValue+'" oninput="updateField('+i+',\'rewardValue\',this.value)"></div></div>';
+  }
+
+  // 奖励上限——BR文件4.4写明「同时支持：奖励上限、不同阶梯配置」，两者是各自独立的能力，不是只有阶梯才有上限
+  html += '<div class="field-row"><div class="field-label">奖励上限：</div><div class="field-ctrl"><input type="number" class="f-input" style="max-width:220px;" placeholder="请输入（本区块累计发放上限，留空代表不设上限）" value="'+b.cap+'" oninput="updateField('+i+',\'cap\',this.value)"></div></div>';
+
+
+  var needsCycle = isAccum || b.conditionType==='复存';
+
+  if(!needsCycle){
+    // 单笔存款：维持原本的每日／活动期间 + 次数
+    html += '<div class="field-row"><div class="field-label"><span class="req">*</span>参与次数限制：</div><div class="field-ctrl">'
+      +'<div class="radio-group">'
+      +'<label class="radio-item"><input type="radio" name="lt'+i+'" '+(b.limitType==='每日'?'checked':'')+' onchange="updateField('+i+',\'limitType\',\'每日\')"> 每日</label>'
+      +'<label class="radio-item"><input type="radio" name="lt'+i+'" '+(b.limitType==='活动期间'?'checked':'')+' onchange="updateField('+i+',\'limitType\',\'活动期间\')"> 活动期间</label>'
+      +'<input type="number" class="f-input" style="width:100px;max-width:100px;" placeholder="次数" value="'+b.limitCount+'" oninput="updateField('+i+',\'limitCount\',this.value)">次'
+      +'</div>'
+      +'<div class="hint">每达标一次立刻发放一次奖励，此处为「次数上限」，不是「达到次数才发放」的门槛——例如设定3次，代表最多可以领3次，不是要存满3笔才给。</div>'
+      +'</div></div>';
+  } else {
+    html += '<div class="field-row"><div class="field-label"><span class="req">*</span>统计周期：</div><div class="field-ctrl">'
+      +'<div class="radio-group">'
+      +'<label class="radio-item"><input type="radio" name="cy'+i+'" '+(b.cycleType==='活动期间累计'?'checked':'')+' onchange="setCycleType('+i+',\'活动期间累计\')"> 活动期间累计</label>'
+      +'<label class="radio-item"><input type="radio" name="cy'+i+'" '+(b.cycleType==='每日'?'checked':'')+' onchange="setCycleType('+i+',\'每日\')"> 每日（每日00:00重置）</label>'
+      +'<label class="radio-item"><input type="radio" name="cy'+i+'" '+(b.cycleType==='每周'?'checked':'')+' onchange="setCycleType('+i+',\'每周\')"> 每周（可设定重置日）</label>'
+      +'</div>';
+    if(isAccum){
+      html += '<div class="hint">此区块的累计金额依此周期计算与重置，不受其他区块影响；「参与次数限制」不适用于累计存款条件。</div>'
+        +'</div></div>';
+    } else {
+      // 复存：借用同一个统计周期，同时决定「有没有前一笔」的判断范围，以及次数上限的计算范围
+      html += '<div class="hint">此周期同时决定：①「复存」判定的范围——在此范围内，会员之前是否已有过至少一笔达标存款；②下方参与次数上限的计算范围。</div>'
+        +'</div></div>'
+        +'<div class="field-row"><div class="field-label"><span class="req">*</span>参与次数上限：</div><div class="field-ctrl"><input type="number" class="f-input" style="width:100px;max-width:100px;" placeholder="次数" value="'+b.limitCount+'" oninput="updateField('+i+',\'limitCount\',this.value)">次'
+        +'<div class="hint">「复存」定义：这一笔达标，且会员在上方统计周期范围内，此前已有至少一笔达标存款纪录——第一笔达标存款本身不算复存、不会发放奖励，从第二笔开始才算。此处次数为「上限」，不是门槛。</div>'
+        +'</div></div>';
+    }
+  }
+
+  return html;
+}
+function renderDaily(b,i){
+  var rows=b.dayRows.map(function(d,j){
+    return '<tr>'
+      +'<td>Day '+(j+1)+'</td>'
+      +'<td><input class="td-input" type="number" placeholder="当日门槛金额" value="'+d.threshold+'" oninput="updateDay('+i+','+j+',\'threshold\',this.value)"></td>'
+      +'<td><input class="td-input" type="number" placeholder="当日奖励金额" value="'+d.reward+'" oninput="updateDay('+i+','+j+',\'reward\',this.value)"></td>'
+      +'</tr>';
+  }).join('');
+  return '<div class="field-row"><div class="field-label"><span class="req">*</span>任务天数：</div><div class="field-ctrl"><input type="number" class="f-input" style="width:100px;max-width:100px;" min="1" max="7" value="'+b.dayCount+'" oninput="setDayCount('+i+',this.value)"><span class="hint" style="display:inline;margin-left:8px;">固定上限7天</span></div></div>'
+    +'<div class="field-row"><div class="field-label" style="padding-top:0;">每日门槛/奖励：</div><div class="field-ctrl">'
+    +'<table class="award-table"><thead><tr><th style="width:80px;">天数</th><th>当日门槛金额</th><th>当日奖励金额</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    +'<div class="hint">断签不影响后续：某天未达标只是当天没有奖励，隔天正常继续，不重置进度、无额外全勤奖。「第1天」将以该会员在本区块第一次达标日各自起算，非固定日历日。</div>'
+    +'</div></div>';
+}
+function ensureVipData(b,vk){
+  var real=b.vipLinkedTo[vk]||vk; // 若已连动，直接读取来源等级的资料
+  if(!b.vipOverrides[real]){
+    b.vipOverrides[real]={
+      minAmount:b.minAmount, rewardValue:b.rewardValue, cap:b.cap,
+      tiers:JSON.parse(JSON.stringify(b.tiers))
+    };
+  }
+  return b.vipOverrides[real];
+}
+function toggleVipExpand(i,vk){
+  var b=blocks[i];
+  ensureVipData(b,vk);
+  b.vipExpanded[vk]=!b.vipExpanded[vk];
+  renderBlocks();
+}
+function updateVipField(i,vk,key,val){
+  if(blocks[i].vipLinkedTo[vk])return; // 连动中的等级不可直接编辑
+  ensureVipData(blocks[i],vk)[key]=val;
+}
+function addVipTier(i,vk){if(blocks[i].vipLinkedTo[vk])return;ensureVipData(blocks[i],vk).tiers.push({threshold:'',rewardType:'固定金额',rewardValue:''});renderBlocks();}
+function delVipTier(i,vk,j){if(blocks[i].vipLinkedTo[vk])return;ensureVipData(blocks[i],vk).tiers.splice(j,1);renderBlocks();}
+function updateVipTier(i,vk,j,key,val){if(blocks[i].vipLinkedTo[vk])return;ensureVipData(blocks[i],vk).tiers[j][key]=val;}
+function toggleApplyMode(i,vk){
+  var b=blocks[i];
+  if(!b.vipApplyMode[vk])b.vipApplyMode[vk]={on:false};
+  b.vipApplyMode[vk].on=!b.vipApplyMode[vk].on;
+  renderBlocks();
+}
+function toggleApplyTarget(i,vk,tk){
+  var b=blocks[i];
+  if(b.vipLinkedTo[tk]===vk){
+    // 已连动 → 取消连动，并把目前继承到的数值，快照成这个等级自己独立的数据
+    var snap=ensureVipData(b,tk);
+    delete b.vipLinkedTo[tk];
+    b.vipOverrides[tk]=JSON.parse(JSON.stringify(snap));
+  } else {
+    // 建立连动：以来源等级(vk)为准，tk之后都读vk的数据
+    delete b.vipOverrides[tk]; // 清掉自己原本的独立数据，改成读取来源
+    b.vipLinkedTo[tk]=vk;
+    b.vipExpanded[tk]=false;
+  }
+  renderBlocks();
+}
+function renderVipSection(b,i){
+  var box='<div class="vip-box">'
+    +'<div class="vip-box-head">'
+    +'<div class="toggle'+(b.vipOverride?' on':'')+'" onclick="toggleVipOverride('+i+')"></div>'
+    +'<div class="vip-box-title">依会员层级设定不同数值（VIP专属门槛/奖励）</div>'
+    +'</div>';
+  if(!b.vipOverride){
+    box+='<div class="hint">关闭时，本区块所有会员套用同一组门槛与奖励。</div>';
+  } else {
+    var eligibleVips=vipList.filter(function(vk){return selectedVips.includes(vk.toLowerCase());});
+    if(eligibleVips.length===0){
+      box+='<div class="hint" style="color:#ff4d4f;">第3步「参与对象与名单」尚未勾选任何会员等级，请先至第3步勾选可参加本活动的VIP等级，才能在此设定各等级的专属数值。</div>';
+      box+='</div>';
+      return box;
+    }
+    box+='<div class="hint" style="margin-bottom:10px;">展开各VIP等级可各自设定专属数值；前台仅显示会员自己对应的数字，不会互相看到彼此的设定。此处只列出第3步已勾选可参加本活动的VIP等级。</div>';
+    box+='<div class="vip-accordion">';
+    eligibleVips.forEach(function(vk){
+      var isOpen=!!b.vipExpanded[vk];
+      var linkedFrom=b.vipLinkedTo[vk]; // 若有值，代表本等级目前连动自哪个等级
+      var vd=ensureVipData(b,vk);
+      var isTier=b.rewardMode==='阶梯奖励';
+      var thresholdLabel=b.conditionType==='累计存款'?'累计门槛金额':'最低存款金额';
+      var dis=linkedFrom?' disabled':'';
+      box+='<div class="vip-acc-item'+(linkedFrom?' vip-linked':'')+'">'
+        +'<div class="vip-acc-head" onclick="toggleVipExpand('+i+',\''+vk+'\')"><span>'+vk+(linkedFrom?' <span class="vip-linked-tag">已套用自 '+linkedFrom+'</span>':'')+'</span><span class="vip-acc-arrow">'+(isOpen?'▾':'▸')+'</span></div>';
+      if(isOpen){
+        if(linkedFrom){
+          box+='<div class="vip-acc-body">'
+            +'<div class="hint" style="margin-bottom:10px;">此等级目前套用「'+linkedFrom+'」的设定，欄位反灰唯讀；'+linkedFrom+'的数值异动时会同步更新。</div>'
+            +'<button class="btn-del ghost" style="margin-bottom:10px;" onclick="toggleApplyTarget('+i+',\''+linkedFrom+'\',\''+vk+'\')">取消套用（转为独立设定）</button>';
+        } else {
+          var am=b.vipApplyMode[vk]||{on:false};
+          box+='<div class="vip-acc-body">'
+            +'<label class="radio-item" style="margin-bottom:10px;"><input type="checkbox" '+(am.on?'checked':'')+' onchange="toggleApplyMode('+i+',\''+vk+'\')"> 套用至其他等级<span class="vip-help-icon" title="勾选后，把本等级（'+vk+'）目前的数值，套用给下方勾选的其他VIP等级，之后本等级异动，套用中的等级会跟着同步变动">?</span></label>';
+          if(am.on){
+            box+='<div style="background:#fff;border:1px solid #e8e8e8;border-radius:4px;padding:10px 12px;margin-bottom:10px;">'
+              +'<div style="font-size:12px;color:#999;margin-bottom:6px;">勾选后，该VIP等级将持续跟随本等级（'+vk+'）的数值，反灰不可自行编辑：</div>'
+              +'<div style="display:flex;flex-wrap:wrap;gap:10px;">'
+              +eligibleVips.filter(function(x){return x!==vk;}).map(function(tk){
+                return '<label class="radio-item"><input type="checkbox" '+(b.vipLinkedTo[tk]===vk?'checked':'')+' onchange="toggleApplyTarget('+i+',\''+vk+'\',\''+tk+'\')"> '+tk+(b.vipLinkedTo[tk]&&b.vipLinkedTo[tk]!==vk?'<span class="hint" style="display:inline;">（目前套用自'+b.vipLinkedTo[tk]+'）</span>':'')+'</label>';
+              }).join('')
+              +'</div>'
+              +'</div>';
+          }
+        }
+        if(isTier){
+          var rows=vd.tiers.map(function(t,j){
+            return '<tr>'
+              +'<td>'+(j+1)+'</td>'
+              +'<td><input class="td-input" type="number" '+dis+' placeholder="'+thresholdLabel+'" value="'+t.threshold+'" oninput="updateVipTier('+i+',\''+vk+'\','+j+',\'threshold\',this.value)"></td>'
+              +'<td><select class="td-select" '+dis+' onchange="updateVipTier('+i+',\''+vk+'\','+j+',\'rewardType\',this.value)"><option '+(t.rewardType==='固定金额'?'selected':'')+'>固定金额</option><option '+(t.rewardType==='百分比'?'selected':'')+'>百分比</option></select></td>'
+              +'<td><input class="td-input" type="number" '+dis+' placeholder="奖励数值" value="'+t.rewardValue+'" oninput="updateVipTier('+i+',\''+vk+'\','+j+',\'rewardValue\',this.value)"></td>'
+              +'<td><button class="btn-del" '+dis+' onclick="delVipTier('+i+',\''+vk+'\','+j+')">删除</button></td>'
+              +'</tr>';
+          }).join('');
+          box+='<button class="btn-add small" '+dis+' onclick="addVipTier('+i+',\''+vk+'\')">+ 新增档位</button>'
+            +'<table class="award-table"><thead><tr><th style="width:50px;">档位</th><th>'+thresholdLabel+'</th><th style="width:110px;">奖励类型</th><th>奖励数值</th><th style="width:70px;">操作</th></tr></thead><tbody>'+rows+'</tbody></table>';
+        } else {
+          var isPct=b.rewardMode==='百分比';
+          box+='<div class="vip-inline-row">'
+            +'<span class="vip-inline-label">'+thresholdLabel+'&gt;=</span>'
+            +'<input type="number" class="vip-inline-input" '+dis+' value="'+vd.minAmount+'" oninput="updateVipField('+i+',\''+vk+'\',\'minAmount\',this.value)">'
+            +'<span class="vip-inline-label">奖励'+(isPct?'比例':'金额')+'：</span>'
+            +'<input type="number" class="vip-inline-input" '+dis+' value="'+vd.rewardValue+'" oninput="updateVipField('+i+',\''+vk+'\',\'rewardValue\',this.value)">'
+            +(isPct?'<span class="vip-inline-pct">%</span>':'')
+            +'<span class="vip-inline-label">上限金额：</span>'
+            +'<input type="number" class="vip-inline-input" '+dis+' placeholder="留空不设上限" value="'+vd.cap+'" oninput="updateVipField('+i+',\''+vk+'\',\'cap\',this.value)">'
+          +'</div>';
+        }
+        if(isTier){
+          box+='<div class="vip-inline-row" style="padding-top:0;">'
+            +'<span class="vip-inline-label">奖励上限：</span>'
+            +'<input type="number" class="vip-inline-input" '+dis+' placeholder="留空不设上限（本区块累计发放上限）" style="width:220px;" value="'+vd.cap+'" oninput="updateVipField('+i+',\''+vk+'\',\'cap\',this.value)">'
+          +'</div>';
+        }
+        box+='</div>';
+      }
+      box+='</div>';
+    });
+    box+='</div>';
+  }
+  box+='</div>';
+  return box;
+}
+
+
+// ════════════════════════════════════════════════════════════════
+// 步骤五：风控条件
+// ════════════════════════════════════════════════════════════════
+function step5(){
+  return '<div class="step-desc">设置活动的风险控制规则，确保活动安全进行</div>'+
+  '<div class="sec-block"><div class="sec-title">风险检测设置</div>'+
+  '<div class="field-row"><div class="field-label">同IP检测：</div><div class="field-ctrl"><div class="toggle" id="tog-ip" onclick="toggleRisk(this,\'ip\')"></div></div></div>'+
+  '<div class="field-row"><div class="field-label">同手机号检测：</div><div class="field-ctrl"><div class="toggle" id="tog-phone" onclick="toggleRisk(this,\'phone\')"></div></div></div>'+
+  '<div class="field-row"><div class="field-label">同姓名检测：</div><div class="field-ctrl"><div class="toggle" id="tog-name" onclick="toggleRisk(this,\'name\')"></div></div></div>'+
+  '<div class="field-row"><div class="field-label">同email检测：</div><div class="field-ctrl"><div class="toggle" id="tog-email" onclick="toggleRisk(this,\'email\')"></div></div></div>'+
+  '</div>'+
+  '<div id="autoRejectBlock" style="border:1px solid #ffccc7;border-radius:4px;padding:14px;opacity:0.4;pointer-events:none;">'+
+    '<div class="sec-title" style="color:#ff4d4f;border-left-color:#ff4d4f;">自动拒绝</div>'+
+    '<div class="field-row"><div class="field-label">自动拒绝：</div><div class="field-ctrl"><div class="toggle" id="tog-autorej"></div></div></div>'+
+    '<div class="field-row"><div class="field-label">触发条件：</div><div class="field-ctrl" style="display:flex;align-items:center;gap:8px;font-size:13px;">当违反 <input type="number" id="rejectInput" class="f-input f-input-disabled" style="width:80px;-moz-appearance:textfield;" placeholder="0" disabled> 笔以上，将自动拒绝</div></div>'+
+  '</div>';
+}
+
+function setupRiskToggle(){} // called after step4 renders—no-op here, handled in step5
+
+function toggleRisk(el, key){
+  el.classList.toggle('on');
+  updateAutoRejectState();
+}
+
+function updateAutoRejectState(){
+  var anyOn=['tog-ip','tog-phone','tog-name','tog-email'].some(function(id){
+    var t=document.getElementById(id);return t&&t.classList.contains('on');
+  });
+  var block=document.getElementById('autoRejectBlock');
+  if(!block)return;
+  if(anyOn){
+    block.style.opacity='1';
+    block.style.pointerEvents='auto';
+    // 自动打开自动拒绝开关
+    var tog=document.getElementById('tog-autorej');
+    if(tog&&!tog.classList.contains('on'))tog.classList.add('on');
+    var inp=document.getElementById('rejectInput');
+    if(inp){inp.disabled=false;inp.classList.remove('f-input-disabled');}
+  } else {
+    block.style.opacity='0.4';
+    block.style.pointerEvents='none';
+    var tog=document.getElementById('tog-autorej');
+    if(tog)tog.classList.remove('on');
+    var inp=document.getElementById('rejectInput');
+    if(inp){inp.disabled=true;inp.classList.add('f-input-disabled');}
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// 步骤六：提交预览
+// ════════════════════════════════════════════════════════════════
+function step6(){
+  var langStr=selectedLangs.map(function(v){var o=langOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、')||'–';
+  var levelStr=selectedLevels.length?selectedLevels.map(function(v){var o=levelOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、'):'–';
+  var vipStr=selectedVips.length?selectedVips.map(function(v){var o=vipOptions.find(function(o){return o.val===v;});return o?o.label:v;}).join('、'):'–';
+  var total=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);
+  var addonCount=addonBlocks.length;
+  function row(req,k,v,red){return '<div class="preview-row"><span class="pk '+(req?'req':'')+'">'+(k)+'：</span><span class="pv '+(red?'red':v==='–'?'empty':'')+'">'+v+'</span></div>';}
+  function pRow(num,title,body,last){return '<div style="display:grid;grid-template-columns:130px 1fr;border-bottom:'+(last?'none':'0.5px solid #e8e8e8')+'"><div style="padding:14px 16px;border-right:0.5px solid #e8e8e8;"><div class="preview-step-title"><div class="preview-snum">'+num+'</div>'+title+'</div></div><div style="padding:14px 16px;">'+body+'</div></div>';}
+  return '<div class="step-desc">请确认以下活动配置信息，确认无误后点击提交按钮</div>'+
+  '<div class="preview-warn">● 请填写以下必填字段：有效时间、活动名称</div>'+
+  '<div style="border:0.5px solid #e8e8e8;border-radius:4px;overflow:hidden;">'+
+  '<div style="display:grid;grid-template-columns:130px 1fr;background:#f5f7fa;border-bottom:0.5px solid #e8e8e8;"><div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;border-right:0.5px solid #e8e8e8;">步骤</div><div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;">相关字段</div></div>'+
+  pRow('1','活动模板设置',
+    '<div class="preview-grid">'+
+    row(false,'活动ID','–')+row(true,'模板类型','存款活动')+
+    row(true,'状态','关闭')+row(true,'活动币种','PHP')+
+    row(true,'活动名称','–',true)+row(true,'活动时间','–',true)+
+    '</div>')+
+  pRow('2','活动图片',
+    '<div>'+
+    row(false,'语系',langStr)+row(false,'活动标题','–')+
+    row(true,'规则弹窗图（依区块）',blocks.length?blocks.length+'张（每区块1张）':'–')+
+    row(false,'排序','0')+
+    '</div>')+
+  pRow('3','参与对象与名单',
+    '<div class="preview-grid">'+
+    row(false,'充值层级',levelStr)+row(false,'指定代理','不指定')+
+    row(false,'新会员限制','否')+row(false,'会员等级',vipStr)+
+    row(false,'黑名单类型','–')+row(false,'用户标签','–')+
+    '</div>')+
+  pRow('4','活动条件（存款专用）',
+    '<div class="preview-grid">'+
+    row(true,'规则区块数量',blocks.length?blocks.length+'个':'–')+
+    row(false,'统计周期','各区块各自设定（复存／累计存款条件适用）')+
+    row(false,'奖金所需流水倍数','–')+
+    row(false,'流水计算基数','本金+奖金')+
+    row(false,'审核方式','自动审核')+
+    row(false,'领取方式','自动发放')+
+    row(false,'已验证手机号','否')+
+    row(false,'限制使用设备','无限制')+
+    row(false,'适用游戏范围',total?total+'个':'–')+
+    '</div>')+
+  pRow('5','风控条件',
+    '<div class="preview-grid">'+
+    row(false,'同IP检测','否')+row(false,'同姓名检测','否')+
+    row(false,'同手机号检测','否')+row(false,'同email检测','否')+
+    row(false,'自动拒绝','–')+
+    '</div>',true)+
+  '</div>';
+}
+
+// ════════════════════════════════════════════════════════════════
+// 游戏弹窗
+// ════════════════════════════════════════════════════════════════
+function openModal(){
+  tempSelected={};
+  gameCategories.forEach(function(c,i){tempSelected[i]=new Set(confirmedSelected[i]||[]);});
+  renderModalBody();
+  document.getElementById('gameModal').classList.remove('hidden');
+}
+
+function renderModalBody(){
+  var allGames=gameCategories.reduce(function(a,c){return a.concat(c.games);},[]);
+  var totalSel=Object.values(tempSelected).reduce(function(s,set){return s+set.size;},0);
+  var allSelected=totalSel===allGames.length;
+
+  document.getElementById('modalBody').innerHTML=
+    // 全选行
+    '<div style="padding:10px 14px;border-bottom:1px solid #e8e8e8;background:#f9f9f9;display:flex;align-items:center;gap:10px;">'+
+      '<input type="checkbox" class="cat-check" '+(allSelected?'checked':'')+' onclick="toggleAllGames(this.checked)">'+
+      '<span style="font-size:14px;font-weight:500;color:#333;">全选</span>'+
+    '</div>'+
+    gameCategories.map(function(c,ci){
+      var sel=tempSelected[ci]||new Set();
+      var allChk=sel.size===c.games.length;
+      return '<div class="game-category">'+
+        '<div class="cat-header">'+
+          '<input type="checkbox" class="cat-check" '+(allChk?'checked':'')+' onclick="toggleCat('+ci+',this.checked)">'+
+          '<span class="cat-name">'+c.cat+'</span>'+
+        '</div>'+
+        '<div class="cat-games">'+
+          c.games.map(function(g){
+            return '<label class="game-row-item"><input type="checkbox" '+(sel.has(g)?'checked':'')+' onchange="toggleGame('+ci+',\''+g+'\',this.checked)">'+g+'</label>';
+          }).join('')+
+        '</div>'+
+      '</div>';
+    }).join('');
+}
+
+function toggleAllGames(checked){
+  gameCategories.forEach(function(c,i){
+    if(!tempSelected[i])tempSelected[i]=new Set();
+    if(checked)c.games.forEach(function(g){tempSelected[i].add(g);});
+    else tempSelected[i].clear();
+  });
+  renderModalBody();
+}
+function toggleCat(ci,checked){if(!tempSelected[ci])tempSelected[ci]=new Set();if(checked)gameCategories[ci].games.forEach(function(g){tempSelected[ci].add(g);});else tempSelected[ci].clear();renderModalBody();}
+function toggleGame(ci,g,checked){if(!tempSelected[ci])tempSelected[ci]=new Set();if(checked)tempSelected[ci].add(g);else tempSelected[ci].delete(g);renderModalBody();}
+function confirmGames(){
+  confirmedSelected={};
+  gameCategories.forEach(function(_,i){confirmedSelected[i]=new Set(tempSelected[i]||[]);});
+  confirmedCount=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);
+  closeModal();renderStep();
+}
+function closeModal(){document.getElementById('gameModal').classList.add('hidden');}
+
+function calcClaimMax(){
+  var a=parseFloat(document.getElementById('claimBetPerReward').value)||0;
+  var b=parseFloat(document.getElementById('claimRewardLimit').value)||0;
+  var out=document.getElementById('claimBetMax');
+  if(out)out.value=(a&&b)?(a*b):'';
+}
+
+
+const langMap={zh:'简体中文',en:'英文',ph:'菲律宾语',vn:'越南语',ceb:'宿雾语'};
+const rawData=[
+  {id:50009,sort:0,status:1,timeStart:'26/09/01',timeEnd:'26/09/15',currency:'PHP',lang:'菲律宾语',langs:['ph'],template:'存款活动',name:'存款嘉年华',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'—',feeRatio:'—',rechargeType:'—'},
+  {id:50005,sort:0,status:0,timeStart:'26/04/07',timeEnd:'26/05/30',currency:'PHP',lang:'菲律宾语',langs:['ph'],template:'预约活动',name:'丹尼测试预约活动 PHP',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'2',feeRatio:'—',rechargeType:'笔笔充'},
+  {id:50006,sort:0,status:0,timeStart:'26/04/08',timeEnd:'51/01/01',currency:'PHP',lang:'菲律宾语、简体中文',langs:['ph','zh'],template:'预约活动',name:'预约活动四月',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'—',feeRatio:'—',rechargeType:'—'},
+  {id:50007,sort:0,status:1,timeStart:'26/04/08',timeEnd:'51/01/01',currency:'PHP',lang:'菲律宾语、英文、越南语',langs:['ph','en','vn'],template:'预约活动',name:'春季预约活动',blacklist:'第一层',memberIds:'vivian007',agent:'dannyagentsub',winCount:'0/0',auditRatio:'3',feeRatio:'—',rechargeType:'首充'},
+  {id:50008,sort:0,status:0,timeStart:'26/04/10',timeEnd:'26/06/30',currency:'PHP',lang:'菲律宾语',langs:['ph'],template:'预约活动',name:'四月预约活动PHP',blacklist:'—',agent:'—',winCount:'5/2',auditRatio:'4',feeRatio:'5%',rechargeType:'全部'},
+];
+let filtered=[...rawData],sortKey='',sortDir=1;
+
+var modalAddonBlocks=[],modalActiveLang='',modalLangs=[];
+
+
+
+function renderModalAddonList(){
+  if(modalAddonBlocks.length===0)return '';
+  return modalAddonBlocks.map(function(block,i){
+    return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-bottom:12px;">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'+
+        '<span style="font-size:14px;font-weight:500;color:#1677ff;">附加配置 '+(i+1)+'</span>'+
+        '<button onclick="delModalAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:12px;cursor:pointer;">删除</button>'+
+      '</div>'+
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+        '<span style="font-size:13px;color:#333;flex-shrink:0;">链接：</span>'+
+        '<input type="text" style="flex:1;height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;outline:none;" placeholder="请输入跳转链接" value="'+block.link+'" oninput="modalAddonBlocks['+i+'].link=this.value">'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 946×543px')+imgCard('H5 端','建议尺寸 356×294px')+'</div>'+
+    '</div>';
+  }).join('');
+}
+function addModalAddon(){
+  if(modalAddonBlocks.length>=3)return;
+  modalAddonBlocks.push({link:''});
+  refreshModalAddonList();
+}
+function delModalAddon(i){
+  modalAddonBlocks.splice(i,1);
+  refreshModalAddonList();
+}
+function refreshModalAddonList(){
+  var el=document.getElementById('modalAddonList');
+  if(el)el.innerHTML=renderModalAddonList();
+  var btn=document.getElementById('modalAddonAddBtn');
+  if(btn){
+    if(modalAddonBlocks.length>=3){
+      btn.textContent='最多新增 3 个配置';btn.disabled=true;
+      btn.style.background='#f5f5f5';btn.style.color='#bbb';btn.style.border='1px solid #e8e8e8';btn.style.cursor='not-allowed';
+    }else{
+      btn.textContent='+ 新增配置';btn.disabled=false;
+      btn.style.background='#1677ff';btn.style.color='#fff';btn.style.border='none';btn.style.cursor='pointer';
+    }
+  }
+}
+function renderModalLangContent(){
+  return '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>Banner 图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 1400×800px')+imgCard('H5 端','建议尺寸 390×320px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>活动页底图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 1400×2300px')+imgCard('H5 端','建议尺寸 390×838px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>文案底图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 946×543px')+imgCard('H5 端','建议尺寸 356×294px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>规则弹窗图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 356×422px')+imgCard('H5 端','建议尺寸 356×422px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>弹窗底图</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 356×289px')+imgCard('H5 端','建议尺寸 356×289px')+'</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>按钮底图</div>'+
+    '<div style="margin-bottom:10px;">'+
+      '<div style="font-size:13px;font-weight:500;color:#555;margin-bottom:8px;">可点击状态</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 348×104px')+imgCard('H5 端','建议尺寸 140×42px')+'</div>'+
+    '</div>'+
+    '<div>'+
+      '<div style="font-size:13px;font-weight:500;color:#555;margin-bottom:8px;">不可点击状态</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 348×104px')+imgCard('H5 端','建议尺寸 140×42px')+'</div>'+
+    '</div>'+
+  '</div>'+
+  '<div style="margin-bottom:12px;">'+
+    '<div style="font-size:14px;font-weight:500;color:#333;margin-bottom:6px;">附加显示配置</div>'+
+    '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 14px;font-size:13px;color:#ad6800;margin-bottom:12px;">以下配置为非必填，按需配置</div>'+
+  '</div>'+
+  '<div id="modalAddonList">'+renderModalAddonList()+'</div>'+
+  (modalAddonBlocks.length<3
+    ?'<button id="modalAddonAddBtn" class="btn-add" onclick="addModalAddon()">+ 新增配置</button>'
+    :'<button id="modalAddonAddBtn" class="btn-add" style="background:#f5f5f5;color:#bbb;border:1px solid #e8e8e8;cursor:not-allowed;" disabled>最多新增 3 个配置</button>'
+  )+
+  '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-top:16px;margin-bottom:20px;">'+
+    '<div style="margin-bottom:14px;">'+
+      '<div style="font-size:14px;font-weight:500;color:#333;margin-bottom:10px;">首页浮窗设置：'+
+        '<label style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="mFloatWin" checked> 关闭</label>'+
+        '<label style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="mFloatWin"> 开启</label>'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px;">'+imgCardAlt('PC 图片')+imgCardAlt('H5 图片')+'</div>'+
+      '<div style="font-size:12px;color:#999;">图片格式：png、bmp、jpg、gif；大小限制 5MB 内</div>'+
+    '</div>'+
+    '<div style="display:flex;align-items:center;gap:10px;">'+
+      '<span style="font-size:13px;color:#333;flex-shrink:0;">排序：</span>'+
+      '<input type="number" style="height:34px;width:120px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;outline:none;-moz-appearance:textfield;" placeholder="请输入" value="0">'+
+    '</div>'+
+  '</div>'+
+  '<div class="sec-block">'+
+    '<div class="sec-title">备注</div>'+
+    '<textarea class="f-textarea" placeholder="请输入备注内容..."></textarea>'+
+    '<div class="hint-text">此备注仅供内部参考，不会显示给用户</div>'+
+  '</div>';
+}
+function switchModalLangTab(v){
+  modalActiveLang=v;
+  var tabHtml=modalLangs.map(function(lang){
+    var label=langMap[lang]||lang;
+    return '<div class="lang-tab '+(lang===v?'active':'')+'" onclick="switchModalLangTab(\''+lang+'\')">'+label+'</div>';
+  }).join('');
+  document.getElementById('modalTabBar').innerHTML=tabHtml;
+  document.getElementById('modalLangContent').innerHTML=renderModalLangContent();
+}
+
+function openPreview(id){
+  var r=rawData.find(function(x){return x.id===id;});
+  if(!r)return;
+  modalAddonBlocks=[];
+  modalLangs=r.langs||[];
+  modalActiveLang=modalLangs[0]||'';
+  var tabHtml=modalLangs.map(function(lang){
+    var label=langMap[lang]||lang;
+    return '<div class="lang-tab '+(lang===modalActiveLang?'active':'')+'" onclick="switchModalLangTab(\''+lang+'\')">'+label+'</div>';
+  }).join('');
+  document.getElementById('modalBody').innerHTML=
+    '<div class="info-grid">'+
+    '<div class="info-item"><div class="info-label">前端显示名称</div><div class="info-value">'+r.name+'</div></div>'+
+    '<div class="info-item"><div class="info-label">ID</div><div class="info-value">'+r.id+'</div></div>'+
+    '<div class="info-item"><div class="info-label">类型</div><div class="info-value">系统</div></div>'+
+    '<div class="info-item"><div class="info-label">时间</div><div class="info-value">'+r.timeStart+' 至 '+r.timeEnd+'</div></div>'+
+    '<div class="info-item"><div class="info-label">模板类型</div><div class="info-value">'+r.template+'</div></div>'+
+    '<div class="info-item"><div class="info-label">币种</div><div class="info-value">'+r.currency+'</div></div>'+
+    '</div>'+
+    '<div class="lang-tabs" id="modalTabBar">'+tabHtml+'</div>'+
+    '<div id="modalLangContent">'+renderModalLangContent()+'</div>';
+  document.getElementById('previewModal').classList.remove('hidden');
+}
+
+function closePreviewModal(){document.getElementById('previewModal').classList.add('hidden');}
+
+function doFilter(){
+  var name=(document.getElementById('fName').value||'').toLowerCase();
+  var id=document.getElementById('fId').value||'';
+  var status=document.getElementById('fStatus').value;
+  filtered=rawData.filter(function(r){
+    if(name&&!r.name.toLowerCase().includes(name))return false;
+    if(id&&!String(r.id).includes(id))return false;
+    if(status!==''&&String(r.status)!==status)return false;
+    return true;
+  });
+  renderRows();
+}
+
+function sortBy(key){
+  if(sortKey===key)sortDir*=-1;else{sortKey=key;sortDir=1;}
+  ['id','sort','time'].forEach(function(k){
+    var u=document.getElementById('s-'+k+'-up'),d=document.getElementById('s-'+k+'-dn');
+    if(u)u.classList.remove('active');if(d)d.classList.remove('active');
+  });
+  var el=document.getElementById('s-'+key+(sortDir===1?'-up':'-dn'));
+  if(el)el.classList.add('active');
+  filtered.sort(function(a,b){
+    var av=key==='id'?a.id:key==='sort'?a.sort:a.timeStart;
+    var bv=key==='id'?b.id:key==='sort'?b.sort:b.timeStart;
+    return av>bv?sortDir:av<bv?-sortDir:0;
+  });
+  renderRows();
+}
+
+function toggleSt(id){var r=rawData.find(function(x){return x.id===id;});if(r)r.status=r.status?0:1;doFilter();}
+function delRow(id){
+  if(confirm('确认删除活动 '+id+' ？')){
+    var i=rawData.findIndex(function(x){return x.id===id;});
+    if(i>-1)rawData.splice(i,1);
+    filtered=filtered.filter(function(x){return x.id!==id;});renderRows();
+  }
+}
+
+function renderRows(){
+  var tbody=document.getElementById('tBody');
+  document.getElementById('totalTxt').textContent='Total '+filtered.length;
+  if(!filtered.length){tbody.innerHTML='<tr><td colspan="14" style="text-align:center;padding:32px;color:#bbb;">暂无数据</td></tr>';return;}
+  tbody.innerHTML=filtered.map(function(r,ri){return '<tr>'+
+    '<td>'+r.id+'</td>'+
+    '<td>'+r.sort+'</td>'+
+    '<td class="'+(r.status?'status-on':'status-off')+'">'+(r.status?'开启':'关闭')+'</td>'+
+    '<td style="font-size:11px;white-space:nowrap;">'+r.timeStart+'~'+r.timeEnd+'</td>'+
+    '<td>'+r.currency+'</td>'+
+    '<td style="font-size:11px;">'+r.lang+'</td>'+
+    '<td>'+r.template+'</td>'+
+    '<td>'+r.name+'</td>'+
+    '<td>'+(ri===0?'<div style="position:relative;display:inline-block;"><span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">3</span><div style="border:2px solid #ff4d4f;border-radius:4px;display:inline-block;"><button class="upload-pill" onclick="openPreview('+r.id+')">上传</button></div></div>':'<button class="upload-pill" onclick="openPreview('+r.id+')">上传</button>')+'</td>'+
+    '<td>'+(r.blacklist==='—'?'<span style="color:#bbb">—</span>':(r.memberIds?'<div style="font-size:11px;color:#666;">'+r.memberIds+'</div>':''))+'</td>'+
+    '<td style="font-size:11px;">'+(r.agent==='—'?'<span style="color:#bbb">—</span>':'<span style="color:#1677ff">'+r.agent+'</span>')+'</td>'+
+    '<td style="text-align:center;">'+r.winCount+'</td>'+
+    '<td style="text-align:center;">'+r.auditRatio+'</td>'+
+    '<td>'+
+      '<div class="acts-row">'+
+        '<a href="add_activity.html" class="alink">编辑</a>'+
+        '<button class="alink" style="color:#ff4d4f;" onclick="delRow('+r.id+')">删除</button>'+
+      '</div>'+
+      '<div class="acts-row">'+
+        '<button class="alink" onclick="toggleSt('+r.id+')">'+(r.status?'关闭':'开启')+'</button>'+
+      '</div>'+
+    '</td>'+
+  '</tr>';}).join('');
+}
+
+
+// ════════════════════════════════════════════════════════════════
+// 列表 / 精灵 视图切换
+// ════════════════════════════════════════════════════════════════
+function showList(){
+  document.getElementById('listView').classList.remove('hidden');
+  document.getElementById('wizardView').classList.add('hidden');
+  filtered = rawData.slice();
+  renderRows();
+}
+function showWizard(){
+  document.getElementById('listView').classList.add('hidden');
+  document.getElementById('wizardView').classList.remove('hidden');
+  cur = 1; blocks = []; blockSeq = 0;
+  goStep(1);
+}
+function submitActivity(){
+  var nameInput = document.getElementById('actNameInput');
+  var name = (nameInput && nameInput.value.trim()) || '（未命名存款活动）';
+  var maxId = rawData.reduce(function(m,r){return Math.max(m,r.id);}, 50000);
+  rawData.unshift({
+    id: maxId+1, sort:0, status:0,
+    timeStart:'26/09/03', timeEnd:'26/09/17', currency:'PHP',
+    lang:'菲律宾语', langs:['ph'], template:'存款活动', name:name,
+    blacklist:'—', agent:'—', winCount:'0/0', auditRatio:'—', feeRatio:'—', rechargeType:'—'
+  });
+  showList();
+}
+
+goStep(1);
+filtered = rawData.slice();
+renderRows();
+
+</script>
+<!-- 預覽圖片彈窗 -->
+<div class="modal-overlay hidden" id="previewModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">预览图片</div>
+      <div class="modal-header-btns">
+        <button class="btn-cancel" onclick="closePreviewModal()">取消 ↩</button>
+        <button class="btn-confirm" onclick="closePreviewModal()">确认</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+</body>
+</html>
