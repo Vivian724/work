@@ -49,6 +49,11 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .change-note{background:#eef0fb;border:1px solid #cdd2f0;border-radius:6px;padding:11px 15px;font-size:14.5px;color:#40408a;margin-top:8px;}
 .change-note .lbl{font-weight:500;margin-right:4px;}
 .na{color:#a0a0aa;font-size:15px;font-style:normal;}
+/* 规则来源标记：区分本次新增、本次异动、与既有不异动的逻辑 */
+.tag-rule{display:inline-block;font-size:12.5px;line-height:1.6;padding:1px 7px;border-radius:4px;margin-right:6px;vertical-align:1px;white-space:nowrap;}
+.tag-new{background:#eaf6ee;border:1px solid #b7dfc6;color:#2f7d4f;}
+.tag-chg{background:#fef2e8;border:1px solid #f5d0a9;color:#a65f14;}
+.tag-old{background:#eef0f4;border:1px solid #d8dbe3;color:#5c5c68;}
 .checklist{font-size:15px;color:#42424a;}
 .checklist li{list-style:none;margin-bottom:6px;padding-left:22px;position:relative;}
 .checklist li::before{content:"☐";position:absolute;left:0;color:#b8b8c4;}
@@ -148,6 +153,14 @@ body{overflow:hidden;background:#eef0f4;}
 .field-ref ul{padding-left:18px;margin-top:4px;}
 .field-ref li{margin-bottom:4px;}
 
+/* 规格栏较窄，表格塞不下时让它在自己的框内横向卷动，
+   而不是把每个字挤成一行（右栏本身绝不横向卷动） */
+.sub-content{overflow-x:auto;}
+.sub-content table{min-width:440px;}
+.sub-content .t-wide{min-width:500px;}
+/* 表格首栏放「章节＋要求」，用小字区隔两层资讯 */
+.cell-sub{display:block;font-size:13.5px;color:#5c5c68;margin-top:3px;}
+
 /* ─── 响应式：窄萤幕改为上下堆叠 ───────────────────────────── */
 @media (max-width:1023px){
   body{overflow:auto;}
@@ -179,8 +192,8 @@ body{overflow:hidden;background:#eef0f4;}
 
     <div class="doc-meta" id="docMeta">
       <div class="meta-table">
-        <div><b>文件版本号</b>v0.3</div>
-        <div><b>修改摘要</b>v0.3：将后台原型（add_activity_deposit.html）与规格文件合并为同一份 —— 左侧为可实际操作的原型，右侧为对应章节规格，点选原型步骤时右侧自动切换，不需再开两份档案对照。同时补上第2／3／5／6步与列表页的章节骨架（内容待补），让 6 个步骤与规格章节一一对应。原先内嵌的 7 张后台截图已移除 —— 左栏就是实际画面，截图不但重复，还会随原型改版而过期；内文里「见下方截图」「上图」等说法已改写为「在左侧原型怎么操作可看到该状态」。v0.2：新增「3.5 流水规则」「3.6 奖励发放」。</div>
+        <div><b>文件版本号</b>v0.8</div>
+        <div><b>修改摘要</b>v0.8：完成步骤1～6的跨步骤一致性检查 —— ①「通用原则」新增〈跨步骤一致性检查〉，列出 3 项必须先决定的矛盾（必填阻挡时机三处说法不一致、第6步必填检查漏掉第4步金额与流水倍数、多语系时预览会漏）与 5 项尚未接上的缺口。②「3.8 提交预览」全节改写，写明本页为前面各步骤的镜像、五段汇总结构、7 项必填与维护规则，并指出原型三处不一致。③「3.7 风控条件」确立既有规则不重写、仅写与奖励发放的交互。④ 顺手修正三处：补上「三种存款条件各自显示哪些栏位」对照表、3.1.7 用词残留、3.4.8 与 3.3 的重复待确认项已互相指向。v0.7：确立「既有规则不重写」的处理方式 —— ①「3.7 风控条件」全部为既有逻辑，本次不异动，故不重写完整规格，改为标明分类与不重写的理由；但另行定义「风控 × 存款活动奖励发放」的交互（命中风控是否照发奖、与 3.6 审核方式的优先序、被拦下的奖励是否流入派奖审核、前台状态如何呈现、统计口径如何计），因为这个组合是本次才产生的。②「通用原则」新增附录「本次未涉及之既有规则」清单（依规范第5章第1点），列出九类既有项目与其相关章节，让读者知道未写是刻意而非遗漏。v0.6：依运营确认补写 —— ①新增「通用原则」章节，收录跨步骤适用的规则，首条为「活动配置完成后不建议修改，需调整应结束原活动另建新活动」，并附改动影响面对照表；原本散落在 3.2.8／3.3／3.4.8 的「上线后修改」待确认项，统一改为指向本节。②「3.2 活动图片」新增步骤依赖说明（弹窗图数量取决于第4步，第2步不应阻挡下一步）与画面必须显示的提示文案规格。③「3.3 参与对象」新增与 3.4 的职责分工：第3步决定资格（活动层级）、第4步决定数值（区块层级），权重以第3步为单一真实来源，并附穷举的判断逻辑表。④「2.1 前台」新增展示前提三道关卡（语系／状态与时间／参与对象），并写明语系决定前台是否展示、目前活动公版皆为英文。v0.5：依运营确认的规则补写 —— ①「3.1 活动模板设置」新增「本节规则来源分类」（本步骤唯一新增为活动类型的「存款活动」选项，其余皆既有逻辑），并写入必填未填即阻挡下一步的验证规则；②「3.2 活动图片」全节重写，写明唯一新增的「规则弹窗图」如何跟着第4步的规则区块动态产生，并列出区块增删改时的图文错位风险。文中新增「新增／异动／不异动」三色标记，标为「不异动」者代表规则已存在于现行系统，其待确认项属「查证既有实作」而非重新决策。v0.4：依企划书 BR-20260725 写出第一版完整规格 —— 新增「企划书对照表」（4.1～4.9 逐项对到规格章节与原型画面，标出已实现／有差异／未涵盖／原型新增）、补写「2. 前台规则」（依 4.8，含每个展示项目的后台资料来源）、「3.3 参与对象与名单」（依 4.5）、「3.9 数据统计」（依 4.9），并在 3.1 补上与 4.1 的差异对照。已知三个待决缺口：缺「存款渠道」条件导致渠道专属活动配不出来、缺「活动说明」栏位导致前台活动规则无来源、前台尚无原型画面。v0.3：将后台原型（add_activity_deposit.html）与规格文件合并为同一份 —— 左侧为可实际操作的原型，右侧为对应章节规格，点选原型步骤时右侧自动切换，不需再开两份档案对照。同时补上第2／3／5／6步与列表页的章节骨架（内容待补），让 6 个步骤与规格章节一一对应。原先内嵌的 7 张后台截图已移除 —— 左栏就是实际画面，截图不但重复，还会随原型改版而过期；内文里「见下方截图」「上图」等说法已改写为「在左侧原型怎么操作可看到该状态」。v0.2：新增「3.5 流水规则」「3.6 奖励发放」。</div>
         <div><b>内含原型</b>后台 add_activity_deposit.html（已内嵌于左侧，原档仍可单独开启）</div>
         <div><b>参考来源</b>BR-20260725_存款活动公版（企划书）</div>
         <div><b>使用方式</b>左侧原型点到哪一步，右侧规格自动跟到对应章节；也可点右侧章节让左侧跳到对应画面。可拖曳中间灰线调整左右宽度。</div>
@@ -251,15 +264,286 @@ body{overflow:hidden;background:#eef0f4;}
   </div>
         </article>
 
+        <!-- ─── 企划书对照表 ─── -->
+        <article class="panel" id="p-brief">
+          <div class="h1-title">企划书对照表</div>
+          <div class="intent-box">
+            这份表把企划书 <b>BR-20260725 存款活动公版</b> 的每一项需求，对到本文件的规格章节与后台原型画面，
+            用来一眼看出「企划书要的东西，后台是不是真的做得出来」。<br><br>
+            状态分四种：<b>✅ 已实现</b>（原型有画面、规格已写）／<b>⚠️ 有差异</b>（做了但跟企划书不一样，需确认）／
+            <b>❌ 未涵盖</b>（企划书有要求，原型还没有画面）／<b>➕ 原型新增</b>（原型有做，但企划书没提）。
+          </div>
+
+          <div class="section">
+            <div class="section-head"><div class="num">对照</div><h3>企划书 4.1～4.9 逐项对照</h3></div>
+            <div class="spec-body">
+              <div class="sub-block"><div class="sub-content">
+                <table class="t-wide">
+                  <tr><th style="width:150px;">企划书章节与要求</th><th style="width:88px;">对应章节／状态</th><th>差异与备注</th></tr>
+                  <tr><td><b>3. 支持活动类型</b><span class="cell-sub">复存活动、累计存款活动、VIP专属存款活动、渠道专属存款活动</span></td><td>3.3＋3.4<span class="cell-sub">⚠️ 有差异</span></td><td><b>「渠道专属存款活动」目前配不出来</b>——它需要 4.5 的「存款渠道」条件，而后台没有这个栏位（详见 3.3）</td></tr>
+                  <tr><td><b>4.1 活动基础配置</b><span class="cell-sub">活动名称、活动时间、活动状态、活动入口、活动说明</span></td><td>3.1<span class="cell-sub">⚠️ 有差异</span></td><td>活动状态由 4 种简化为 2 种；活动入口、活动说明已从画面移除（详见 3.1 补充对照）</td></tr>
+                  <tr><td><b>4.2 活动周期配置</b><span class="cell-sub">活动周期／每日／每周三种统计周期与重置规则</span></td><td>3.4<span class="cell-sub">✅ 已实现</span></td><td>原型把周期放在「各规则区块内各自设定」，不是整个活动一个周期——比企划书更细，需确认这是刻意的</td></tr>
+                  <tr><td><b>4.3 存款条件</b><span class="cell-sub">复存、单笔存款、累计存款、最低存款金额、每日／活动期间参与次数</span></td><td>3.4<span class="cell-sub">✅ 已实现</span></td><td>—</td></tr>
+                  <tr><td><b>4.4 奖励规则</b><span class="cell-sub">固定金额、百分比奖励、阶梯奖励，另支持奖励上限与多档阶梯</span></td><td>3.4<span class="cell-sub">✅ 已实现</span></td><td>—</td></tr>
+                  <tr><td><b>4.5 用户分层</b><span class="cell-sub">VIP等级、注册渠道／代理、用户标签、存款渠道</span></td><td>3.3<span class="cell-sub">⚠️ 有差异</span></td><td><b>缺「存款渠道」</b>；「注册渠道」原型只有「指定代理」。反之原型多了「充值层级」「新会员限制」两项企划书没提的条件</td></tr>
+                  <tr><td><b>4.6 流水规则</b><span class="cell-sub">流水倍数、本金＋奖金或仅奖金、指定游戏类型参与流水</span></td><td>3.5<span class="cell-sub">✅ 已实现</span></td><td>原型的流水是<b>整个活动共用一组</b>，不是每个规则区块各自设定（详见 3.5.8）</td></tr>
+                  <tr><td><b>4.7 奖励发放</b><span class="cell-sub">自动发放／手动领取；奖励状态未达标／可领取／已领取／已过期</span></td><td>3.6<span class="cell-sub">✅ 已实现</span></td><td>原型另有「审核方式」「已验证手机号」「限制使用设备」三项企划书没提的设定</td></tr>
+                  <tr><td><b>4.8 前台展示</b><span class="cell-sub">活动规则、当前存款金额、距离下一档金额、当前可领取奖励、流水完成进度、当前奖励状态</span></td><td>2.1<span class="cell-sub">❌ 未涵盖</span></td><td>前台目前完全没有原型画面；其中「活动规则」还缺后台的填写来源（见 4.1）</td></tr>
+                  <tr><td><b>4.9 数据统计</b><span class="cell-sub">6 项指标＋活动／日期／VIP／渠道·代理／用户标签 5 个筛选维度</span></td><td>3.9<span class="cell-sub">❌ 未涵盖</span></td><td>后台侧边栏有「活动报表」连结，但本次原型未做内容</td></tr>
+                  <tr><td><span class="na">（企划书未提）</span><span class="cell-sub">活动列表页：筛选与列表栏位</span></td><td>3.0<span class="cell-sub">➕ 原型新增</span></td><td>属后台公版共用页，非存款活动专属</td></tr>
+                  <tr><td><span class="na">（企划书未提）</span><span class="cell-sub">活动图片：多语系标题、图片上传、排序、备注</span></td><td>3.2<span class="cell-sub">➕ 原型新增</span></td><td>前台展示需要的素材，企划书 4.8 隐含需要但未列为配置项</td></tr>
+                  <tr><td><span class="na">（企划书未提）</span><span class="cell-sub">风控条件：同IP／同手机号／同姓名／同email 检测、自动拒绝</span></td><td>3.7<span class="cell-sub">➕ 原型新增</span></td><td>企划书 2. 建设目标提到「活动限制规则」，可能即指此项，需确认</td></tr>
+                  <tr><td><span class="na">（企划书未提）</span><span class="cell-sub">提交预览：送出前的汇总确认页</span></td><td>3.8<span class="cell-sub">➕ 原型新增</span></td><td>—</td></tr>
+                </table>
+              </div></div>
+
+              <div class="sub-block">
+                <div class="sub-num">需要优先决策的三个缺口</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:10px;">以下三项会直接影响「企划书说得出来的活动，后台做不做得出来」，建议先跟运营确认，再往下补细节规格：</p>
+                  <table>
+                    <tr><th style="width:150px;">缺口</th><th>影响</th><th>需要决定的事</th></tr>
+                    <tr><td><b>缺「存款渠道」条件</b></td><td>企划书列的四种活动类型里，「渠道专属存款活动」无法配置</td><td>这次要不要补上这个栏位？若要，渠道清单从哪来（金流商代码？后台维护的字典表？）</td></tr>
+                    <tr><td><b>缺「活动说明／规则」填写栏位</b></td><td>前台 4.8 要展示「活动规则」，但后台没有地方可以填这段文案</td><td>规则文案要用哪个栏位承载？沿用第2步的「备注」、还是补一个多语系的富文本栏位？</td></tr>
+                    <tr><td><b>前台无原型、无规格</b></td><td>4.8 的六项展示内容全部无法验收，且「距离下一档金额」在非阶梯奖励时没有定义</td><td>前台画面何时产出？是否沿用既有活动的前台版型？</td></tr>
+                  </table>
+                  <div class="change-note"><span class="lbl">写在前面：</span>上述状态是拿企划书对照<b>目前的原型</b>得出的，不是说原型做错了——移除活动入口、活动说明、简化活动状态，都是先前与运营确认后的决定（见 3.1）。这张表的用途是让这些决定被看见、不被遗忘，而不是要求原型回头照企划书全做。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ─── 通用原则 ─── -->
+        <article class="panel" id="p-principles">
+          <div class="h1-title">通用原则</div>
+          <div class="intent-box">
+            这一节收录<b>跨步骤、跨章节都适用</b>的原则。写在这里的目的，是避免同一件事在各节各写一套、日后彼此矛盾——
+            各节遇到相同问题时一律指向本节，不重复定义。
+          </div>
+
+          <div class="section">
+            <div class="section-head"><div class="num">原则一</div><h3>活动配置完成后，不建议修改</h3></div>
+            <div class="spec-body">
+
+              <div class="sub-block">
+                <div class="sub-content">
+                  <p style="margin-bottom:10px;"><b>活动一旦配置完成，不建议再回头修改设定。</b>需要调整时，建议的做法是<b>结束或关闭原活动，另行建立一个新活动</b>，而不是修改进行中的活动。</p>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">为什么</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:8px;">两个层面的原因：</p>
+                  <ul style="margin-bottom:10px;">
+                    <li><b>设定彼此连动，改一处会牵动多处。</b>存款活动公版的各步骤不是各自独立的表单——语系决定前台是否展示、参与对象决定第4步能设定哪些VIP、规则区块数量决定第2步要上传几组弹窗图。改动任一项都可能让其他步骤的设定变成孤儿或错位。</li>
+                    <li><b>会员已经依当下规则参加了。</b>活动进行中，会员已依原规则存款、累积进度、甚至已达标等待领奖。中途改动会直接造成会员权益争议，也会让数据统计（3.9）的口径在同一个活动内前后不一致，无法正确复盘。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">改动的影响面（若确实必须改，先对照这张表）</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th style="width:150px;">改动的设定</th><th>会牵动什么</th></tr>
+                    <tr><td>第2步 <b>取消某个语系</b></td><td>该语系前台立即不再显示此活动；该语系已参加、已达标未领奖的会员如何处理（3.2.8）</td></tr>
+                    <tr><td>第3步 <b>取消勾选某VIP等级</b></td><td>第4步该等级的专属数值失去对象；若该等级正被其他等级「套用」，连动关系断裂；已参加的该等级会员权益（3.3 职责分工）</td></tr>
+                    <tr><td>第4步 <b>删除规则区块</b></td><td>第2步该区块的弹窗图失去对应；若删的是中间的区块，后续区块序号递补，可能造成图文错位（3.2.8）</td></tr>
+                    <tr><td>第4步 <b>修改区块的条件×奖励组合</b></td><td>第2步已上传的弹窗图内容变成旧玩法的说明图；已依旧规则累积进度的会员如何结算（3.2.8）</td></tr>
+                    <tr><td>第1步 <b>缩短活动时间</b></td><td>提前结束，进行中的进度与未领奖励如何处理；「按天任务型」区块的个人天数进度尚未跑完（3.4.8 情境四）</td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">需要确认的三件事</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:8px;">「不建议修改」是方向，要能实作还需把以下三点定死：</p>
+                  <table>
+                    <tr><th style="width:110px;">待确认</th><th>选项与说明</th></tr>
+                    <tr><td><b>① 时间点</b><br>「配置完成后」指哪一刻？</td><td><span class="na">⚠️ 待确认：</span>（a）第6步按下「确认送出」后　（b）活动状态切为「开启」后　（c）活动开始时间到达、真正对会员曝光后。三者严格程度不同——若选（a），运营送出后连错字都不能改；若选（c），限制最宽松但活动一开跑就锁死</td></tr>
+                    <tr><td><b>② 强度</b><br>是硬锁还是软性提醒？</td><td><span class="na">⚠️ 待确认：</span>（a）系统<b>硬性锁定</b>，栏位反灰不可编辑　（b）允许编辑，但跳出<b>二次确认警示</b>说明影响，由运营自行负责　（c）分栏位处理：影响会员权益的锁死，纯展示类（如备注、排序）可改。建议采（c），兼顾安全与实务弹性</td></tr>
+                    <tr><td><b>③ 例外</b><br>哪些一定要能改？</td><td><span class="na">⚠️ 待确认：</span>至少「<b>紧急关闭活动</b>」必须保留——第1步的活动状态开关（3.1.7）本来就是为了能随时下架而设计，不应被本原则锁住。其余如延长结束时间、修正错字、补上漏传的弹窗图，是否开放需逐项确认</td></tr>
+                  </table>
+                  <div class="change-note"><span class="lbl">给规格撰写者：</span>上述三点确认后，本节即成为正式规则，各节（3.1.7、3.2.8、3.3、3.4.8）不再重复定义，一律指向本节。</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-head"><div class="num">检查</div><h3>跨步骤一致性检查（步骤1～6）</h3></div>
+            <div class="spec-body">
+              <div class="sub-block">
+                <div class="sub-content">
+                  <p style="margin-bottom:10px;">把第1～6步串起来读一遍后，发现以下几处<b>彼此对不上或没接起来</b>的地方。分成「必须先决定的矛盾」与「尚未接上的缺口」两类，逐项列出，避免散落在各节而被忽略。</p>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">A. 必须先决定的矛盾（三项）</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th style="width:130px;">矛盾</th><th>冲突内容与建议</th></tr>
+                    <tr><td><b>A1 必填阻挡的时机，三处说法不一致</b></td><td>
+                      <b>3.1.3</b> 说「必填未填即挡下一步，<b>所有活动模板一致</b>的既有逻辑」；<br>
+                      <b>3.2.3</b> 说规则弹窗图<b>第2步不能挡</b>（否则走不到第4步）；<br>
+                      <b>3.8.3</b> 说提交预览是「<b>全流程唯一</b>的必填总关卡」。<br>
+                      三句话互相打架：若必填一律即时挡，第2步就不该例外；若第1步会挡，第6步就不是「唯一」。<br>
+                      <span class="na">建议改为一套两层规则：<b>①既有的公版必填（第1步各栏位）维持即时阻挡；②本次新增的「规则弹窗图」因数量取决于第4步，属例外，不即时阻挡，改由第6步检查；③第6步为最后一道总关卡（非唯一）。</b>请确认。</span></td></tr>
+                    <tr><td><b>A2 第6步的必填检查漏掉第4步的金额栏位</b></td><td>
+                      <b>3.4.6</b> 规定「最低存款金额」「奖励金额」必填不可留空、<b>3.5.6</b> 规定「流水倍数」必填；<br>
+                      但 <b>3.8</b> 第6步预览的必填项只有 7 个，第4步那段<b>仅「规则区块数量」标必填</b>，金额与流水倍数皆未列入检查。<br>
+                      <b>后果：运营可以建好一个空的规则区块（金额没填、流水倍数没填）直接送出</b>，产生一个不可能达标的活动。<br>
+                      <span class="na">建议：第6步的必填检查须涵盖每个规则区块的金额栏位与流水倍数，且缺漏时要指出<b>是哪一个区块</b>。请确认。</span></td></tr>
+                    <tr><td><b>A3 多语系时，第6步预览会漏</b></td><td>
+                      <b>3.2</b> 规定活动标题「每勾一个语系多一个输入框」、规则弹窗图位于语系页签内（每语系一组）；<br>
+                      但 <b>3.8</b> 预览只显示<b>单一个</b>「活动标题」与<b>一个总数</b>的「规则弹窗图」。<br>
+                      <b>后果：勾了三个语系时，运营在预览页看不出哪个语系缺素材</b>，而语系一旦勾选前台就会展示（见 3.2「活动语系的作用」），等于缺素材直接上线。<br>
+                      <span class="na">建议：预览的这两项改为依语系分列。请确认。</span></td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">B. 尚未接上的缺口（五项）</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th style="width:130px;">缺口</th><th>说明</th></tr>
+                    <tr><td><b>B1 完整依赖链是 3 → 4 → 2</b></td><td>第4步的 VIP 清单依赖第3步、第2步的弹窗图数量依赖第4步。目前只有 3.2 写了「第4步→第2步」，<b>3.3 未说明它是第4步的前置</b>。建议在 3.3 补一句，并把完整链条写成：先第3步定名单 → 再第4步建区块与数值 → 最后回第2步补图。</td></tr>
+                    <tr><td><b>B2 奖励上限只有区块层级</b></td><td>3.4.6 的「奖励上限」是<b>单一区块</b>的累计发放上限。活动挂多个区块时，<b>整个活动的总成本上限没有地方可以设</b>。需确认是否需要活动层级的总上限（与 3.9「活动成本率」直接相关）。</td></tr>
+                    <tr><td><b>B3 未达标时流水算不算，会影响前台</b></td><td>3.5.8 待确认「未达标时流水是否仍在计算」；而 2.1 要求前台显示「流水完成进度」。<b>两题必须一起答</b>——若未达标不计算流水，前台的进度条在未达标阶段要显示什么（隐藏／显示 0／显示灰阶）尚无定义。</td></tr>
+                    <tr><td><b>B4 「领取天数」在第6步看不到</b></td><td>3.6.1 规定发放方式切「手动领取」时展开「领取天数」；但 3.8 预览只有「领取方式」，<b>没有「领取天数」这一项</b>。运营在预览页无法确认自己设了几天。</td></tr>
+                    <tr><td><b>B5 切换活动类型是否清空后续设定</b></td><td>3.1.8 待确认「运营中途把活动类型改成其他模板，会不会清空第4步的存款专属设定」。此题与<b>通用原则一</b>相关（配置后不建议修改），但目前两处未连结。建议一并纳入通用原则的讨论。</td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">C. 已修正（本次检查顺手处理）</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th style="width:130px;">项目</th><th>处理方式</th></tr>
+                    <tr><td>「参与次数限制」与「参与次数上限」看似矛盾</td><td>并非矛盾，而是<b>三种存款条件显示的栏位本来就不同</b>，且两个栏位名称相近。已在 3.4 补上「三种存款条件各自显示哪些栏位」对照表，并建议统一命名</td></tr>
+                    <tr><td>3.1.7 写「不会出现在任何前台入口」</td><td>「活动入口」栏位已移除，用词残留。已改为「不会在前台展示」，并指向 2.1 展示前提</td></tr>
+                    <tr><td>3.4.8 情境三与 3.3 职责分工重复</td><td>两处为同一个待确认项。已在 3.4.8 加注「与 3.3 为同一项，请一并决定」</td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">D. 通顺的部分（确认无冲突）</div>
+                <div class="sub-content">
+                  <ul>
+                    <li>统计周期由各规则区块各自设定（3.4）→ 第6步预览显示「各区块各自设定」，一致。</li>
+                    <li>流水规则为整个活动共用一组（3.5.8）→ 第6步预览显示单一流水倍数，一致。</li>
+                    <li>送出后活动状态预设「关闭」（3.8.4）→ 与 3.1.7「关闭时不展示」一致，送出不等于上线。</li>
+                    <li>第3步决定资格、第4步决定数值（3.3 职责分工）→ 与原型实作一致（第4步只列第3步勾选的等级）。</li>
+                    <li>风控为既有逻辑、不重写，但与奖励发放的交互另行定义（3.7）→ 与附录「本次未涉及之既有规则」的判断原则一致。</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-head"><div class="num">附录</div><h3>本次未涉及之既有规则</h3></div>
+            <div class="spec-body">
+              <div class="sub-block">
+                <div class="sub-content">
+                  <p style="margin-bottom:10px;">依规范第5章第1点另附此清单。以下项目<b>皆为后台活动配置公版的既有逻辑，本次存款活动公版不新增、不异动</b>，因此本文件<b>不重写其完整规格</b>——开发不需重做、测试不需重验。列出来的目的是让读者知道「这些没写是刻意的，不是漏了」。</p>
+                  <table>
+                    <tr><th style="width:150px;">既有项目</th><th style="width:90px;">相关章节</th><th>备注</th></tr>
+                    <tr><td>风控条件（同IP／同手机号／同姓名／同email 检测、触发条件、自动拒绝）</td><td>3.7</td><td>本次完全不异动；但「风控 × 存款活动奖励」的交互是新的，已在 3.7 另行定义</td></tr>
+                    <tr><td>活动名称、活动币种、活动时间、活动状态</td><td>3.1</td><td>公版共用栏位。本步骤唯一新增为活动类型的「存款活动」选项</td></tr>
+                    <tr><td>必填未填即阻挡下一步的验证逻辑</td><td>3.1.3</td><td>公版共用验证</td></tr>
+                    <tr><td>步骤导览、上一步／下一步／退出编辑</td><td>3.1、3.2</td><td>公版共用，允许直接点选任一步骤跳转</td></tr>
+                    <tr><td>活动语系、活动标题、排序、备注、图片上传元件</td><td>3.2</td><td>公版共用。本步骤唯一新增为「规则弹窗图」</td></tr>
+                    <tr><td>参与对象各栏位（充值层级、指定代理、新会员限制、会员等级、用户标签、黑名单）</td><td>3.3</td><td>栏位本身为公版共用；但这些条件<b>与第4步 VIP 数值的职责分工</b>是新的，已在 3.3 定义</td></tr>
+                    <tr><td>游戏选择弹窗</td><td>3.5.1</td><td>与其他活动共用同一个组件</td></tr>
+                    <tr><td>活动列表页（筛选、列表栏位、新增活动入口）</td><td>3.0</td><td><span class="na">⚠️ 待确认是否全部为既有</span>——若确认为公版共用且不异动，3.0 可比照 3.7 改为不重写</td></tr>
+                    <tr><td>提交预览页的汇总与送出</td><td>3.8</td><td><span class="na">⚠️ 待确认是否全部为既有</span>——但已知本页需<b>新增承接</b>一项检查：第2步规则弹窗图是否齐备（见 3.2 步骤依赖），该部分必须写</td></tr>
+                  </table>
+                  <div class="change-note"><span class="lbl">判断原则：</span>既有功能<b>本身</b>不重写；但既有功能与本次新增功能的<b>相遇处</b>必须写——那才是本次真正新产生的规则，也是最容易到开发阶段才爆出来的地方。3.7 的「风控 × 奖励发放」、3.3 的「参与对象 × VIP 数值」、3.8 的「提交检查 × 规则弹窗图」都属此类。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
         <!-- ─── 2. 前台规则 ─── -->
         <article class="panel" id="p-frontend">
-  <div class="h1-title" id="frontend">2. 规则文件内容－前台</div>
-  <div class="section">
-    <div class="section-head"><div class="num">2.1</div><h3>前台页面依功能区块以图文方式撰写规则</h3></div>
-    <div class="spec-body">
-      <div class="sub-block"><div class="pending"><span class="lbl">⚠️ 待补充：</span>前台的完整视觉与规则说明尚未整理进本文件，先前讨论过的活动小卡片、活动详情页视觉稿仅为方向参考，尚未逐栏位写成正式规格。将于下一版补上 2.1.1～2.1.5。</div></div>
-    </div>
-  </div>
+          <div class="h1-title">2. 规则文件内容－前台</div>
+
+          <div class="intent-box">
+            本章依企划书 <b>4.8 前台展示</b> 撰写。<b>目前前台还没有原型画面</b>，因此这一版先把「前台要显示什么、每个显示项目的数字从后台哪个设定来」定义清楚——
+            这部分不需要等画面就能先确认；至于版位、字级、动线等视觉规则，待前台原型产出后再补 2.1.1～2.1.5 的细节。
+          </div>
+
+          <div class="section">
+            <div class="section-head"><div class="num">2.1</div><h3>前台展示项目与资料来源</h3></div>
+            <div class="spec-body">
+
+              <div class="sub-block">
+                <div class="sub-num">前提：这个活动会不会出现在前台</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:8px;">在讨论「显示什么」之前，先厘清「会不会显示」。目前已知有三道关卡，三者<b>都通过</b>才会在前台看到这个活动：</p>
+                  <table>
+                    <tr><th style="width:130px;">关卡</th><th style="width:110px;">设定位置</th><th>规则</th></tr>
+                    <tr><td><b>① 语系</b></td><td>第2步 活动语系<br>（3.2）</td><td>会员所在语系版本必须是<b>已勾选的语系</b>，否则该活动不会出现。<b>目前活动公版皆为英文</b></td></tr>
+                    <tr><td><b>② 活动状态与时间</b></td><td>第1步<br>（3.1.7）</td><td>活动状态需为「开启」，且目前时间落在活动时间区间内</td></tr>
+                    <tr><td><b>③ 参与对象</b></td><td>第3步<br>（3.3）</td><td>会员需符合参与对象条件，且不在黑名单内。<span class="na">⚠️ 待确认：不符合的会员是完全看不到活动，还是看得到但不能参加</span></td></tr>
+                  </table>
+                  <div class="change-note"><span class="lbl">与企划书的关系：</span>企划书 4.1 原有「活动入口（Banner、活动中心、充值页）」可决定曝光位置，该栏位已从后台移除（见 3.1 补充对照），因此目前<b>没有「在哪里曝光」的配置</b>，只有上述「会不会曝光」的判断。曝光位置由何决定，待确认。</div>
+                </div>
+              </div>
+
+              <div class="sub-block"><div class="sub-content">
+                <table class="t-wide">
+                  <tr><th style="width:140px;">展示项目（企划书4.8）</th><th style="width:120px;">资料来源（后台设定）</th><th>状态与待确认事项</th></tr>
+                  <tr><td><b>活动规则</b><span class="cell-sub">活动的文字说明，让会员知道怎么参加、怎么算达标</span></td><td><span class="na">⚠️ 目前无来源</span></td><td>企划书 4.1 原有「活动说明（前台规则说明）」，但已从后台画面移除，导致这段文案<b>无处可填</b>。需先决定承载栏位（见企划书对照表）</td></tr>
+                  <tr><td><b>当前存款金额</b><span class="cell-sub">会员在本活动的累计存款金额</span></td><td>3.4 规则区块的<b>统计周期</b></td><td>⚠️ 待确认：一个活动可有多个规则区块、各自的统计周期不同，前台要显示哪一个区块的金额？还是每个区块各显示一组？</td></tr>
+                  <tr><td><b>距离下一档金额</b><span class="cell-sub">还差多少钱可以拿到下一档奖励</span></td><td>3.4 <b>阶梯奖励</b>的各档门槛</td><td>⚠️ 待确认：只有「阶梯奖励」才有「下一档」的概念。奖励规则若是固定金额或百分比，这一栏要隐藏、还是改显示「距离达标金额」？</td></tr>
+                  <tr><td><b>当前可领取奖励</b><span class="cell-sub">目前已达标、可以领的奖励金额</span></td><td>3.4 奖励规则＋3.6 发放方式</td><td>⚠️ 待确认：发放方式为「自动发放」时奖励直接入账，此栏是否仍要显示、显示什么</td></tr>
+                  <tr><td><b>流水完成进度</b><span class="cell-sub">奖金还差多少流水才能提领</span></td><td>3.5 流水倍数＋计算基数＋适用游戏</td><td>⚠️ 待确认：进度的分母是「本金×倍数」「奖金×倍数」还是两者合计，需与 3.5.7 的勾选组合对齐</td></tr>
+                  <tr><td><b>当前奖励状态</b><span class="cell-sub">未达标／可领取／已领取／已过期</span></td><td>3.4 达标情况＋3.6 领取天数</td><td>✅ 四种状态已定义（见名词定义），但各状态的前台文案与样式待设计</td></tr>
+                </table>
+              </div></div>
+
+              <div class="sub-block">
+                <div class="sub-num">2.1.1 详细说明交互行为</div>
+                <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>活动入口（Banner／活动中心／充值页，企划书 4.1）、活动详情页的进入与返回、领取按钮的点击行为，均待前台原型产出后撰写。</div></div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-num">2.1.2 文案长度限制</div>
+                <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>活动名称、活动规则说明在小卡片与详情页的行数上限与超出处理（两行后加「…」或单行截断），待版面确定后定义。</div></div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-num">2.1.3 操作失败后的提示文案及交互行为</div>
+                <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>手动领取失败（已过期、流水未完成、活动已结束、设备限制不符）的提示文案尚未定义。其中「限制使用设备＝仅APP」「已验证手机号＝是」两项限制（3.6.7）究竟挡的是参加还是领奖，会直接影响这里的文案。</div></div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-num">2.1.4 操作成功后的提示文案及交互行为</div>
+                <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>领取成功的提示与后续状态变化（可领取 → 已领取）待定义。</div></div>
+              </div>
+              <div class="sub-block">
+                <div class="sub-num">2.1.5 需试想各种情境后撰写规格文件</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:8px;">以下情境待前台设计确认后逐一补齐规格：</p>
+                  <ul>
+                    <li>会员不符合参与对象（3.3 未勾选的 VIP／被列入黑名单）时，前台是完全看不到这个活动，还是看得到但不能参加？</li>
+                    <li>活动尚未开始／已结束时的显示方式。</li>
+                    <li>一个活动挂了多个规则区块时，前台是分成多张卡片、还是一张卡片里分区显示？</li>
+                    <li>存款条件为「复存」时，会员的第一笔达标存款不发奖（见名词定义）——前台要如何表达这件事，避免会员误以为系统漏发？</li>
+                    <li>统计周期重置的当下（每日 00:00、每周固定时间），前台进度归零要不要提示？</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
         </article>
 
         <!-- ─── 3.0 活动列表页（对应原型列表画面） ─── -->
@@ -311,8 +595,25 @@ body{overflow:hidden;background:#eef0f4;}
     <div class="spec-body">
 
       <div class="sub-block">
+        <div class="sub-num">本节规则来源分类</div>
+        <div class="sub-content">
+          <p style="margin-bottom:8px;">本步骤<b>唯一的新增，是活动类型下拉多了「存款活动」这个模板选项</b>；画面上其余栏位与行为，都沿用后台活动配置公版的既有逻辑，本次不异动。</p>
+          <table>
+            <tr><th style="width:110px;">分类</th><th style="width:150px;">项目</th><th>说明</th></tr>
+            <tr><td><span class="tag-rule tag-new">新增</span></td><td>活动类型：新增「存款活动」选项</td><td>本次建设的存款活动公版模板。选择后进入存款活动专属的配置流程（差异集中在第4步，见 3.4～3.6）</td></tr>
+            <tr><td><span class="tag-rule tag-old">不异动</span></td><td>活动名称、活动币种、活动时间、活动状态</td><td>公版共用栏位，与周卡活动／预约活动完全相同</td></tr>
+            <tr><td><span class="tag-rule tag-old">不异动</span></td><td>必填未填即阻挡下一步的验证逻辑</td><td>公版共用验证，所有活动模板一致（见 3.1.3）</td></tr>
+            <tr><td><span class="tag-rule tag-old">不异动</span></td><td>「下一步」「退出编辑」的按钮行为</td><td>公版共用的步骤导览</td></tr>
+            <tr><td class="na">（无）</td><td>本次没有「异动」项目</td><td>本步骤没有既有栏位被修改行为或改变定义</td></tr>
+          </table>
+          <div class="change-note"><span class="lbl">这个分类的用处：</span>标示为「不异动」的项目，代表规则<b>已经存在于现行系统</b>——开发不需要重做，测试也不必重验；文中若仍标「⚠️ 待确认」，指的是<b>要去查证既有系统实际是怎么做的并写下来</b>，而不是要运营重新决策。</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
         <div class="sub-num">3.1.1 详细说明交互行为</div>
         <div class="sub-content">
+          <p style="margin-bottom:8px;"><span class="tag-rule tag-old">不异动</span>以下交互皆为公版既有行为，仅「存款活动」这个选项为本次新增。</p>
           <ul>
             <li>"活动类型"下拉固定选择"存款活动"，选择后其余栏位固定显示，无连动变化。</li>
             <li>填写完各栏位后，点击右上角"下一步"按钮，进入第2步"活动图片"。</li>
@@ -327,14 +628,24 @@ body{overflow:hidden;background:#eef0f4;}
           <ul>
             <li>活动名称：文字输入框，上限字数尚未定案。</li>
           </ul>
-          <div class="pending"><span class="lbl">⚠️ 待确认：</span>活动名称字数上限，需与运营确认前台显示空间后补上限制。</div>
+          <div class="pending"><span class="lbl">⚠️ 待查证（既有规则）：</span><span class="tag-rule tag-old">不异动</span>活动名称为公版共用栏位，字数上限应已存在于现行系统。请向既有活动模板（周卡／预约活动）查证实际限制几个字、超出时是挡住输入还是截断，并写回本节；若查证后发现现行系统确实没有限制，再回头与运营确认要不要补上。</div>
         </div>
       </div>
 
       <div class="sub-block">
         <div class="sub-num">3.1.3 操作失败后的提示文案及交互行为</div>
         <div class="sub-content">
-          <div class="pending"><span class="lbl">⚠️ 待补充：</span>必填栏位未填写时点击"下一步"的验证提示文案与呈现方式（红字提示／Toast／是否阻挡跳转）尚未定义。</div>
+          <p style="margin-bottom:8px;"><span class="tag-rule tag-old">不异动·既有逻辑</span>必填栏位未填写时，点击「下一步」<b>会被阻挡，无法进入下一步</b>。此为后台活动配置公版的既有验证逻辑，所有活动模板一致，非本次新增。</p>
+          <table>
+            <tr><th style="width:120px;">栏位</th><th style="width:100px;">是否可能留空</th><th>说明</th></tr>
+            <tr><td>活动类型</td><td>否</td><td>下拉预设已选「存款活动」，无空值状态</td></tr>
+            <tr><td><b>活动名称</b></td><td><b>会</b></td><td>唯一需要运营手动输入的文字栏位，留空即触发阻挡</td></tr>
+            <tr><td>活动币种</td><td>否</td><td>下拉预设 PHP，目前仅一个选项</td></tr>
+            <tr><td><b>活动时间</b></td><td><b>会</b></td><td>开始／结束时间预设为空，未选即触发阻挡</td></tr>
+            <tr><td>活动状态</td><td>否</td><td>单选预设「关闭」，无空值状态</td></tr>
+          </table>
+          <div class="pending"><span class="lbl">⚠️ 待确认（提示样式）：</span>阻挡时的提示<b>呈现方式与文案</b>尚未确认。后台第6步「提交预览」已有既有样式可参照——顶端红字列出缺漏栏位，文案为「● 请填写以下必填字段：有效时间、活动名称」。需确认第1步是否沿用同一套（顶端红字汇总），还是改为各栏位下方个别红字提示。</div>
+          <div class="change-note"><span class="lbl">原型现况说明：</span>目前原型的步骤切换（<code>goStep</code>）<b>没有实作这段验证</b>，点「下一步」一定会跳转。这是原型的简化，<b>不是规则差异</b>——开发请依本节规则实作阻挡，不要照原型的行为做。</div>
         </div>
       </div>
 
@@ -363,7 +674,7 @@ body{overflow:hidden;background:#eef0f4;}
             <li>活动名称：必填，不可留空；上限字数待确认（同3.1.2）。</li>
             <li>活动时间（开始／结束）：必填，需为合法日期时间；结束时间需晚于开始时间。</li>
           </ul>
-          <div class="pending"><span class="lbl">⚠️ 待确认：</span>活动时间是否可选过去时间、最短活动时长限制等细节尚未定案。</div>
+          <div class="pending"><span class="lbl">⚠️ 待查证（既有规则）：</span><span class="tag-rule tag-old">不异动</span>活动时间为公版共用栏位。「是否可选过去时间」「最短活动时长」「日期元件是否直接限制可选范围」等细节，请向既有活动模板查证现行实作后写回本节。</div>
         </div>
       </div>
 
@@ -372,7 +683,7 @@ body{overflow:hidden;background:#eef0f4;}
         <div class="sub-content">
           <table>
             <tr><th>开关</th><th>开启前（关闭）</th><th>开启后</th></tr>
-            <tr><td>活动状态</td><td>活动不会出现在任何前台入口</td><td>依"活动时间"自动上下架，若目前在活动时间区间内则前台显示</td></tr>
+            <tr><td>活动状态</td><td>活动不会在前台展示（「活动入口」栏位已移除，曝光位置由何决定见 2.1 展示前提）</td><td>依"活动时间"自动上下架，若目前在活动时间区间内则前台显示</td></tr>
           </table>
           <div class="change-note"><span class="lbl">与原始企划书的差异：</span>企划书4.1原规划4种状态（草稿／上线／暂停／已结束），运营确认实际只需开启／关闭2种，已简化。</div>
         </div>
@@ -382,8 +693,8 @@ body{overflow:hidden;background:#eef0f4;}
         <div class="sub-num">3.1.8 需试想各种情境后撰写规格文件</div>
         <div class="sub-content">
           <ul>
-            <li>活动名称留白时点击"下一步" → <span class="na">⚠️ 待确认阻挡方式与提示文案</span></li>
-            <li>活动时间的结束时间早于开始时间 → <span class="na">⚠️ 待确认阻挡方式</span></li>
+            <li>活动名称留白时点击"下一步" → <span class="tag-rule tag-old">既有</span><b>阻挡，无法进入下一步</b>（见 3.1.3）；提示样式待确认。</li>
+            <li>活动时间的结束时间早于开始时间 → <span class="na">⚠️ 待确认：这属于「填了但填错」，与「没填」是两种情况。需确认是同样阻挡下一步，还是在选择当下就不让选（日期元件限制可选范围）。</span></li>
             <li>营运中途将"活动类型"切换成其他模板，是否会清空已填写的存款专属设定（如第4步的规则区块）？→ <span class="na">⚠️ 待确认</span></li>
           </ul>
           <div class="change-note"><span class="lbl">已移除的栏位：</span>"活动入口""活动说明"原本规划在此步骤（企划书4.1有列），经与运营确认后判断不需要／与其他栏位重复，已从画面移除。</div>
@@ -392,6 +703,23 @@ body{overflow:hidden;background:#eef0f4;}
 
     </div>
   </div>
+
+          <div class="section">
+            <div class="section-head"><div class="num">3.1 补充</div><h3>与企划书 4.1 活动基础配置的对照</h3></div>
+            <div class="spec-body">
+              <div class="sub-block"><div class="sub-content">
+                <table class="t-wide">
+                  <tr><th style="width:145px;">企划书 4.1 配置项</th><th style="width:92px;">后台现况</th><th>差异与影响</th></tr>
+                  <tr><td>活动名称<span class="cell-sub">前后台展示名称</span></td><td>✅ 有</td><td>字数上限待确认（见 3.1.2）</td></tr>
+                  <tr><td>活动时间<span class="cell-sub">开始时间、结束时间</span></td><td>✅ 有</td><td>—</td></tr>
+                  <tr><td>活动状态<span class="cell-sub">草稿／上线／暂停／已结束</span></td><td>⚠️ 简化为开启／关闭</td><td>经与运营确认只需两种，由「活动时间」自动上下架（见 3.1.7）。<span class="na">⚠️ 待确认：少了「暂停」后，活动上线中要临时停掉，是关闭开关还是改结束时间？两者对已达标未领奖的会员影响不同</span></td></tr>
+                  <tr><td>活动入口<span class="cell-sub">Banner、活动中心、充值页等</span></td><td>❌ 已移除</td><td>经与运营确认后移除（见 3.1.8）。<span class="na">⚠️ 待确认：移除后前台入口改由何处决定——是所有活动固定都出现在活动中心，还是另有配置的地方？</span></td></tr>
+                  <tr><td><b>活动说明</b><span class="cell-sub">前台规则说明</span></td><td><b>❌ 已移除</b></td><td><b>这一项移除后产生了缺口</b>：企划书 4.8 要求前台可查看「活动规则」，但后台已无栏位可填这段文案（见 2.1）。需决定用哪个栏位承载</td></tr>
+                </table>
+                <div class="change-note"><span class="lbl">说明：</span>移除与简化都是先前与运营确认过的决定，本表不是要求改回企划书原样，而是把这些决定连带产生的<b>后续影响</b>写下来，避免开发到前台时才发现规则文案没有来源。</div>
+              </div></div>
+            </div>
+          </div>
         </article>
 
         <!-- ─── 3.2 活动图片（第2步） ─── -->
@@ -400,38 +728,168 @@ body{overflow:hidden;background:#eef0f4;}
           <div class="section">
             <div class="section-head"><div class="num">3.2（对应后台第2步）</div><h3>活动图片</h3></div>
             <div class="spec-body">
+
               <div class="sub-block">
-                <div class="pending"><span class="lbl">⚠️ 待补充：</span>本步骤规格尚未撰写。左侧原型已有完整画面，可边操作边把 3.2.1～3.2.8 逐项补齐。</div>
-              </div>
-              <div class="sub-block">
+                <div class="sub-num">⚠️ 步骤依赖：本步骤必须等第4步完成才能做完</div>
                 <div class="sub-content">
-                  <div class="field-ref">
-                    <div class="fr-title">撰写对照：左侧原型第2步画面上看得到的栏位</div>
-                    <p style="font-size:14px;color:#5c5c68;margin-bottom:6px;">以下只是「画面上有什么」的清单，供撰写规格时逐项对照，<b>不代表规则已定义</b>。</p>
-                    <ul>
-                      <li><b>活动设置：</b>活动语系（多选，预设「预设」，另有英文／菲律宾语／越南语／宿雾语）、活动标题（依语系分页签各自填写）、链接（跳转链接／外部链接网址）。</li>
-                      <li><b>图片上传：</b>多个上传框，部分标注建议尺寸（356×294px、356×422px、946×543px），部分未标注尺寸；另有「各规则区块对应的规则弹窗图」，张数随第4步新增的规则区块数量变动。</li>
-                      <li><b>排序：</b>数字输入。</li>
-                      <li><b>备注：</b>多行文字输入（placeholder「请输入备注内容...」）。</li>
-                    </ul>
-                  </div>
+                  <p style="margin-bottom:10px;"><b>规则弹窗图到底要上传几组，必须等第4步「活动条件」建好规则区块之后才会知道</b>——因为每个规则区块各需一组弹窗图（见 3.2.1）。这代表本步骤<b>无法在第4步之前完成</b>，即使它在画面上的编号排在第4步前面。</p>
+                  <table>
+                    <tr><th style="width:120px;">项目</th><th>说明</th></tr>
+                    <tr><td>画面步骤顺序</td><td>1 模板设置 → <b>2 活动图片</b> → 3 参与对象 → <b>4 活动条件</b> → 5 风控 → 6 提交预览</td></tr>
+                    <tr><td><b>资料依赖方向</b></td><td><b>第4步 → 第2步</b>（与画面顺序相反）：先在第4步决定有几个规则区块，第2步才知道要上传几组图</td></tr>
+                    <tr><td>实际可行的操作顺序</td><td>第1步 → <span class="na">（第2步的弹窗图先跳过，其余可先填）</span> → 第3步 → <b>第4步建立规则区块</b> → <b>回到第2步补上各区块的弹窗图</b> → 第5步 → 第6步提交</td></tr>
+                  </table>
+                  <p style="margin-top:10px;"><span class="tag-rule tag-old">不异动</span>后台的步骤导览<b>允许直接点选任一步骤跳转</b>，不强制照顺序走，因此上述「先跳过、之后回头补」的操作是做得到的。</p>
+                  <div class="pending" style="margin-top:8px;"><span class="lbl">⚠️ 待确认（必填的阻挡时机）：</span>既然弹窗图数量要等第4步才知道，<b>第2步的「下一步」就不应该因为弹窗图未上传而阻挡</b>，否则运营根本走不到第4步。建议规则为：<b>第2步不挡，改由第6步「提交预览」统一检查</b>——未上传完整弹窗图时，在提交预览页以红字列出缺漏并阻挡送出（沿用该页既有的必填提示样式）。请确认此规则。</div>
+                  <div class="change-note" style="margin-top:8px;"><span class="lbl">给设计的建议（非规格）：</span>步骤编号与资料依赖方向相反，运营第一次配置时很容易在第2步卡住。将来若要根本解决，可考虑调整步骤顺序，把「活动条件」移到「活动图片」之前，让画面顺序与资料依赖一致。</div>
                 </div>
               </div>
+
               <div class="sub-block">
-                <div class="sub-num">待撰写项目（依规范 4.1.1～4.1.8）</div>
+                <div class="sub-num">本步骤画面上必须显示的提示文案</div>
                 <div class="sub-content">
-                  <ul class="checklist">
-                    <li>3.2.1 详细说明交互行为（语系切换与标题的对应关系、上传流程、预览）</li>
-                    <li>3.2.2 文案长度限制（活动标题、备注的字数上限与超出处理）</li>
-                    <li>3.2.3 操作失败后的提示文案（图片格式／尺寸／大小不符、上传失败）</li>
-                    <li>3.2.4 操作成功后的提示文案及交互行为</li>
-                    <li>3.2.5 下拉选单的来源及内容（活动语系的来源）</li>
-                    <li>3.2.6 输入框的限制（排序是否可为0／负数、链接格式验证）</li>
-                    <li>3.2.7 说明开关状态（本步骤如有开关需补充）</li>
-                    <li>3.2.8 需试想各种情境（未上传任何图片可否进下一步、第4步区块数量变动后规则弹窗图如何连动）</li>
+                  <p style="margin-bottom:10px;">因为「要上传几组弹窗图」这件事运营在第2步当下无从得知，<b>画面必须主动把这个依赖关系讲出来</b>，不能只写在规格文件里。以下文案为本步骤的规格要求：</p>
+                  <table>
+                    <tr><th style="width:130px;">出现时机</th><th style="width:90px;">状态</th><th>文案与呈现</th></tr>
+                    <tr><td>第4步<b>尚未</b>建立任何规则区块时，显示于「规则弹窗图」区</td><td><span class="tag-rule tag-old">原型已有</span></td><td>黄底提示框：「<b>尚未于第4步『活动条件』新增规则区块，请先完成该步骤设定后，再回来上传各区块对应的规则弹窗图。</b>」<br>此时不显示任何上传框</td></tr>
+                    <tr><td>已有规则区块时，显示于上传区下方</td><td><span class="tag-rule tag-old">原型已有</span></td><td>灰字提示：「<b>此区与第4步『活动条件』的规则区块即时对应——若之后在第4步新增或删除区块，请回到本步骤确认弹窗图数量是否需要调整。</b>」</td></tr>
+                    <tr><td>每一组上传区的标题</td><td><span class="tag-rule tag-old">原型已有</span></td><td>「<b>区块N（存款条件 × 奖励规则）规则弹窗图</b>」——括号内标签取自第4步该区块的实际设定，会即时跟着变，让运营知道这组图对应的是哪个玩法</td></tr>
+                    <tr><td>第4步<b>新增或删除</b>区块后，运营回到第2步时</td><td><span class="tag-rule tag-new">建议新增</span></td><td><span class="na">⚠️ 待确认：</span>建议在弹窗图区顶端加一句提醒，例如「规则区块已变更，请确认各区块的弹窗图是否需要重新上传」，避免运营以为图片会自动跟着搬移（对应 3.2.8 的图文错位风险）</td></tr>
+                  </table>
+                  <div class="change-note"><span class="lbl">为什么要写进规格：</span>这几句提示不是美术文案，而是<b>规则的一部分</b>——少了它们，运营在第2步只会看到一个必填的空区块，不知道该去哪里、也不知道要传几张。文案若要调整可以，但「必须在画面上告知这个依赖关系」这件事不能拿掉。</div>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">本节规则来源分类</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:8px;">本步骤<b>唯一的新增是「规则弹窗图」</b>——它的数量不是固定的，而是<b>跟着第4步的规则区块走：第4步每新增一个存款规则区块，这里就要为它上传一组对应的规则弹窗图</b>。其余栏位皆沿用公版既有逻辑。</p>
+                  <table>
+                    <tr><th style="width:110px;">分类</th><th style="width:150px;">项目</th><th>说明</th></tr>
+                    <tr><td><span class="tag-rule tag-new">新增</span></td><td><b>规则弹窗图</b></td><td>依第4步规则区块动态产生，每个区块一组（PC 端＋H5 端各一张）。这是存款活动公版特有的设定，因为每个规则区块的玩法不同，前台要弹出的规则说明图也不同</td></tr>
+                    <tr><td><span class="tag-rule tag-old">不异动</span></td><td>活动语系、活动标题</td><td>公版共用栏位</td></tr>
+                    <tr><td><span class="tag-rule tag-old">不异动</span></td><td>排序、备注</td><td>公版共用栏位</td></tr>
+                    <tr><td><span class="tag-rule tag-old">不异动</span></td><td>图片上传元件本身</td><td>公版共用元件（点击上传、格式与大小限制）</td></tr>
+                    <tr><td class="na">（无）</td><td>本次没有「异动」项目</td><td>—</td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">活动语系的作用（本节最重要的规则）</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:10px;"><span class="tag-rule tag-old">不异动</span><b>「活动语系」不只是决定文案用哪国文字，而是决定这个活动<span style="color:#3d3dbf;">在前台哪些语系版本会展示</span>。</b></p>
+                  <table>
+                    <tr><th style="width:150px;">语系是否勾选</th><th>前台行为</th></tr>
+                    <tr><td><b>已勾选</b></td><td>该语系版本的前台<b>会</b>出现这个活动</td></tr>
+                    <tr><td><b>未勾选</b></td><td>该语系版本的前台<b>不会</b>出现这个活动——等同于对该语系的会员而言，此活动不存在</td></tr>
+                  </table>
+                  <div class="change-note" style="margin-top:10px;"><span class="lbl">目前现况：</span>活动公版目前上线的活动<b>皆为英文</b>。多语系的栏位与页签虽然已经存在，但实务上尚未真正使用；撰写与验收时请以「英文单一语系」为主要情境，多语系视为未来扩充。</div>
+                  <div class="pending" style="margin-top:8px;"><span class="lbl">⚠️ 待确认：</span>下拉里的「<b>预设</b>」与「<b>英文</b>」是两个并列选项，且「预设」为系统预设勾选。既然目前实际都是英文，需厘清两者关系——「预设」指的就是英文吗？还是指「会员语系未匹配到任何已勾选语系时的退回选项」？这会直接影响前台判断要不要展示活动，务必先定义。</div>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.2.1 详细说明交互行为</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:8px;"><b>画面由上而下分三段：</b></p>
+                  <ul style="margin-bottom:12px;">
+                    <li><b>活动设置</b>：活动语系（多选下拉，预设只勾「预设」）、活动标题。<b>每多勾一个语系，就多出一个该语系的活动标题输入框</b>，同时下方多一个语系页签。</li>
+                    <li><b>语系页签区</b>：页签为已勾选的语系（预设／英文／菲律宾语／越南语／宿雾语）。页签内含<b>规则弹窗图、排序、备注</b>。</li>
+                  </ul>
+
+                  <p style="margin-bottom:8px;"><span class="tag-rule tag-new">新增</span><b>规则弹窗图的运作方式（本节重点）：</b></p>
+                  <table>
+                    <tr><th style="width:150px;">第4步的状态</th><th>第2步「规则弹窗图」区呈现</th></tr>
+                    <tr><td><b>还没有任何规则区块</b></td><td>不显示上传框，改显示黄色提示：「尚未于第4步『活动条件』新增规则区块，请先完成该步骤设定后，再回来上传各区块对应的规则弹窗图。」</td></tr>
+                    <tr><td><b>已有 N 个规则区块</b></td><td>产生 N 组上传区，每组标题为「<b>区块N（存款条件 × 奖励规则）规则弹窗图</b>」——括号内的组合标签取自第4步该区块的实际设定，会即时跟着变。每组含 <b>PC 端</b>与 <b>H5 端</b>各一个上传框，建议尺寸皆为 <b>356×422px</b>，格式 PNG／JPG，单档 ≤ 2MB</td></tr>
+                  </table>
+                  <p style="margin-top:10px;">区块下方并有固定提示文案：「此区与第4步『活动条件』的规则区块即时对应——若之后在第4步新增或删除区块，请回到本步骤确认弹窗图数量是否需要调整。」</p>
+                  <ul style="margin-top:10px;">
+                    <li>排序：数字输入框，预设值 0。</li>
+                    <li>备注：多行文字输入，下方标注「此备注仅供内部参考，不会显示给用户」。</li>
                   </ul>
                 </div>
               </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.2.2 文案长度限制</div>
+                <div class="sub-content">
+                  <ul>
+                    <li>活动标题：文字输入框，<span class="tag-rule tag-old">不异动</span><span class="na">⚠️ 待查证（既有规则）：字数上限请向既有活动模板查证后写回。</span></li>
+                    <li>备注：多行输入，<span class="na">⚠️ 待查证：字数上限与是否支持换行。</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.2.3 操作失败后的提示文案及交互行为</div>
+                <div class="sub-content">
+                  <ul>
+                    <li><b>规则弹窗图未上传</b>：画面标示为必填（红色 *），但<b>第2步不应阻挡「下一步」</b>——弹窗图的数量要等第4步才知道，在第2步硬挡会让运营走不到第4步（详见本节开头「步骤依赖」）。建议改由第6步「提交预览」统一检查并阻挡送出。<span class="na">⚠️ 待确认此规则。</span></li>
+                    <li>图片格式或大小不符（非 PNG／JPG、超过 2MB）：<span class="na">⚠️ 待确认提示文案与呈现方式。</span></li>
+                    <li>图片尺寸与建议尺寸不符：<span class="na">⚠️ 待确认是仅提示、自动裁切，还是不允许上传。</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.2.4 操作成功后的提示文案及交互行为</div>
+                <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待确认：</span>上传成功后，上传框是直接换成缩图预览，还是另有成功提示？是否支持点击缩图放大预览、以及重新上传／删除已上传的图？</div></div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.2.5 下拉选单的来源及内容</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th style="width:120px;">下拉选单</th><th style="width:170px;">选项</th><th>来源</th></tr>
+                    <tr><td>活动语系</td><td>预设／英文／菲律宾语／越南语／宿雾语</td><td><span class="tag-rule tag-old">不异动</span><span class="na">⚠️ 待查证：是写死的固定选项，还是跟平台已开通的语系设定连动？</span></td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.2.6 输入框的限制</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th style="width:110px;">栏位</th><th style="width:80px;">必填</th><th>限制</th></tr>
+                    <tr><td>活动标题</td><td class="na">⚠️ 待确认</td><td>画面未标红星；若非必填，前台没有标题时显示什么需一并确认</td></tr>
+                    <tr><td><b>规则弹窗图</b></td><td><b>是</b>（画面有红星）</td><td>每个规则区块的 PC 端与 H5 端<span class="na">⚠️ 待确认是否两张都必填，或允许只上传其中一端</span></td></tr>
+                    <tr><td>排序</td><td>否</td><td>数字，预设 0。<span class="na">⚠️ 待查证：可否为负数、上限、数字大小与排序先后的关系（越小越前还是越大越前）</span></td></tr>
+                    <tr><td>备注</td><td>否</td><td>仅内部参考，不显示给用户</td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.2.7 说明开关状态，开启前、开启后产生的作用</div>
+                <div class="sub-content"><span class="na">不适用——本步骤没有开关。</span></div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.2.8 需试想各种情境后撰写规格文件</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:10px;"><b>因为规则弹窗图是「跟着第4步区块动态产生」，以下连动情境必须逐一定义，否则会出现图片与规则对不上的问题：</b></p>
+                  <table>
+                    <tr><th style="width:170px;">情境</th><th>需要定义的规则</th></tr>
+                    <tr><td>第4步<b>新增</b>一个区块</td><td>第2步自动多出一组上传区（原型已如此）。已上传的其他区块图片应保持不变。</td></tr>
+                    <tr><td>第4步<b>删除</b>一个区块</td><td><span class="na">⚠️ 待确认：</span>该区块已上传的图片是直接删除，还是保留在系统里？若运营是误删后又重新新增，图片要不要能救回？</td></tr>
+                    <tr><td>第4步删除<b>中间</b>的区块<br>（例如共3块，删掉区块2）</td><td><span class="na">⚠️ 待确认（风险最高）：</span>原本的「区块3」会递补成「区块2」。此时已上传的图片是<b>跟着原本的区块走</b>，还是<b>留在原来的位置</b>？后者会造成<b>图文错位</b>——区块2显示的是旧区块3的规则图，且画面上不会有任何警示。建议明确规定图片绑定「区块本身」而非「序号」。</td></tr>
+                    <tr><td>第4步<b>修改</b>区块的条件组合<br>（例如复存 → 单笔存款）</td><td><span class="na">⚠️ 待确认：</span>第2步的区块标题会即时变成新的组合标签，但<b>已上传的图内容仍是旧玩法的说明图</b>。是否要在标签变动时提示运营「此区块规则已变更，请确认弹窗图是否需要重新上传」？</td></tr>
+                    <tr><td>完全没建区块就到第2步</td><td>显示黄色提示引导先去第4步（原型已如此）。<span class="na">⚠️ 待确认此时能否继续按「下一步」。</span></td></tr>
+                    <tr><td>勾选<b>多语系</b>时</td><td>勾选即代表<b>该语系前台会展示此活动</b>（见本节「活动语系的作用」），因此每个已勾选的语系都必须备齐该语系的素材。<span class="na">⚠️ 待确认：某语系已勾选但未上传弹窗图／未填标题时，是在后台就挡住不让送出，还是允许送出、前台开天窗？建议采前者——因为语系一旦勾选，前台就会对该语系会员展示，缺素材等于线上事故。</span></td></tr>
+                    <tr><td><b>活动上线后取消勾选</b>某个语系</td><td>该语系的前台会立即不再展示此活动。<b>依「通用原则一」，配置完成后不建议修改</b>；若确实必须调整，应结束原活动另建新活动。该语系已参加、已达标未领奖会员的处理方式，随通用原则一并确认</td></tr>
+                  </table>
+
+                  <div class="pending" style="margin-top:12px;"><span class="lbl">⚠️ 待确认（结构问题）：</span><b>排序与备注目前放在语系页签内</b>，结构上等于「每个语系可以有不同的排序值与不同的备注」。但备注画面已标明「仅供内部参考，不会显示给用户」，内部备注理应与语系无关；排序通常也是整个活动一个值。需确认这两项应该<b>移到语系页签外</b>（整个活动共用一份），还是确实要分语系。</div>
+
+                  <div class="change-note" style="margin-top:10px;"><span class="lbl">原型现况（两处不一致，供开发注意）：</span>
+                    ① 第6步「提交预览」把规则弹窗图汇总为「N 张（每区块 1 张）」，但第2步实际每个区块是 <b>PC＋H5 两张</b>，预览的说法需修正为「每区块 2 张」或「N 组」。
+                    ② 原型切换语系页签时，页签的高亮样式未跟着更新（仅内容重绘），属原型的呈现瑕疵，非规则差异。
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </article>
@@ -442,36 +900,143 @@ body{overflow:hidden;background:#eef0f4;}
           <div class="section">
             <div class="section-head"><div class="num">3.3（对应后台第3步）</div><h3>参与对象与名单</h3></div>
             <div class="spec-body">
-              <div class="sub-block">
-                <div class="pending"><span class="lbl">⚠️ 待补充：</span>本步骤规格尚未撰写。<b>特别注意：</b>本步骤勾选的「会员等级」是第4步 VIP 联动的资料来源（见 3.4.5、3.4.8 情境三），两节需一并确认。</div>
+
+              <div class="intent-box" style="margin:16px 0 4px;">
+                本步骤对应企划书 <b>4.5 用户分层</b>，决定「谁可以参加这个活动」。这一步的设定会往后影响第4步——
+                第4步的 VIP 联动只会列出这里勾选过的 VIP 等级（见 3.4.5、3.4.8 情境三），两节需一起确认。
               </div>
+
               <div class="sub-block">
+                <div class="sub-num">3.3.1 详细说明交互行为</div>
                 <div class="sub-content">
-                  <div class="field-ref">
-                    <div class="fr-title">撰写对照：左侧原型第3步画面上看得到的栏位</div>
-                    <p style="font-size:14px;color:#5c5c68;margin-bottom:6px;">以下只是「画面上有什么」的清单，供撰写规格时逐项对照，<b>不代表规则已定义</b>。</p>
-                    <ul>
-                      <li><b>参与对象设置：</b>1. 充值层级（多选，预设层／第一～五层／内部帐号等）、2. 指定代理（弹窗多选代理线）、3. 新会员限制、4. 会员等级（VIP0～VIP10 多选）、5. 用户标签。</li>
-                      <li><b>黑名单设置：</b>黑名单、用户标签。</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="sub-block">
-                <div class="sub-num">待撰写项目（依规范 4.1.1～4.1.8）</div>
-                <div class="sub-content">
-                  <ul class="checklist">
-                    <li>3.3.1 详细说明交互行为（多选下拉的全选／取消、代理线弹窗的确定与取消）</li>
-                    <li>3.3.2 文案长度限制（已选项目过多时如何显示，例如「已选 5 项」或省略号）</li>
-                    <li>3.3.3 操作失败后的提示文案及交互行为</li>
-                    <li>3.3.4 操作成功后的提示文案及交互行为</li>
-                    <li>3.3.5 下拉选单的来源及内容（充值层级、代理线、会员等级、用户标签各自来自哪个资料源）</li>
-                    <li>3.3.6 输入框的限制（是否允许一个都不选）</li>
-                    <li>3.3.7 说明开关状态（新会员限制开启前／后的作用）</li>
-                    <li>3.3.8 需试想各种情境（<b>取消勾选某VIP后，第4步已建立的VIP联动如何处理</b> —— 与 3.4.8 情境三同一个待确认项；黑名单与参与对象重叠时以何者优先）</li>
+                  <ul>
+                    <li>画面分「参与对象设置」与「黑名单设置」两个区块，前者是<b>可以参加的人</b>，后者是<b>排除掉的人</b>。</li>
+                    <li>「充值层级」「会员等级」「用户标签」为多选下拉，点击展开选项清单，可复选；预设为<b>全选</b>（代表不限制）。</li>
+                    <li>「指定代理」点击后开启代理线选择弹窗，勾选后按「确定」带回，按「取消」不套用。</li>
+                    <li>「新会员限制」为开关。</li>
+                    <li>各条件之间为<b>「同时满足」</b>关系（AND）——例如同时勾了 VIP1 与「充值层级＝第一层」，代表要两个条件都符合才能参加。<span class="na">⚠️ 待确认此理解是否正确</span></li>
                   </ul>
                 </div>
               </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.3.2 文案长度限制</div>
+                <div class="sub-content">
+                  <div class="pending"><span class="lbl">⚠️ 待确认：</span>多选下拉在已选项目很多时（例如 VIP0～VIP10 全选、或勾了十几个代理线），收合状态要如何显示——完整列出并换行、或显示「已选 N 项」、或列前几项后加「…」，目前未定义。</div>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.3.3 操作失败后的提示文案及交互行为</div>
+                <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>若某个条件一个都没勾（例如会员等级全部取消勾选），点「下一步」是否阻挡、提示文案为何，尚未定义。此情境同时会让第4步的 VIP 联动无对象可列（见 3.4.8 情境三）。</div></div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.3.4 操作成功后的提示文案及交互行为</div>
+                <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待补充：</span>代理线弹窗按「确定」后除了带回已选内容，是否需要额外的成功提示，尚未定义。</div></div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.3.5 下拉选单的来源及内容</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th>栏位</th><th>选项</th><th>来源</th></tr>
+                    <tr><td>充值层级</td><td>默认层／第一层～第五层／内部帐号 等</td><td class="na">⚠️ 待确认：是固定选项，还是来自会员系统的层级设定</td></tr>
+                    <tr><td>指定代理</td><td>代理线A／代理线B／代理线C／VIP专属线／dannyagentsub线</td><td class="na">⚠️ 待确认：原型为写死的示例资料，实际应串接代理系统的代理线清单</td></tr>
+                    <tr><td>会员等级</td><td>VIP0～VIP10（共11档）</td><td>VIP 系统的等级设定</td></tr>
+                    <tr><td>用户标签</td><td class="na">⚠️ 待确认</td><td class="na">⚠️ 待确认：应串接后台的会员标签管理</td></tr>
+                    <tr><td>黑名单</td><td class="na">⚠️ 待确认</td><td class="na">⚠️ 待确认：是既有的黑名单名单表，还是本活动独立维护</td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.3.6 输入框的限制</div>
+                <div class="sub-content">
+                  <ul>
+                    <li>本步骤皆为选择类栏位，没有自由输入的数字或文字框。</li>
+                    <li><span class="na">⚠️ 待确认：</span>是否允许所有条件都不勾选（等同「所有人都不能参加」），若不合法需补上验证。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.3.7 说明开关状态，开启前、开启后产生的作用</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th>开关</th><th>关闭</th><th>开启</th></tr>
+                    <tr><td>新会员限制</td><td>不限制注册时间，所有符合其他条件的会员都可参加</td><td class="na">⚠️ 待确认：「新会员」的定义是什么（注册 N 天内？首存未完成？），以及开启后是「只限新会员」还是「排除新会员」——两种理解相反，必须先厘清</td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.3.8 需试想各种情境后撰写规格文件</div>
+                <div class="sub-content">
+                  <ul>
+                    <li><b>同一个会员同时符合参与对象与黑名单</b>（例如是 VIP3 但也在黑名单里）→ <span class="na">⚠️ 待确认</span>，一般惯例是黑名单优先排除，但需明文写出。</li>
+                    <li><b>活动上线后才修改参与对象</b>（例如原本 VIP1～5，改成 VIP3～5）→ 已经参加中、甚至已达标未领奖的 VIP1、VIP2 会员怎么处理？奖励作废还是保留？<span class="na">⚠️ 待确认</span></li>
+                    <li><b>取消勾选某个 VIP，但第4步该 VIP 正被其他等级「套用」中</b> → 与 3.4.8 情境三为同一个待确认项，需一并决定。</li>
+                    <li><b>会员在活动期间升降 VIP 等级</b>（参加时是 VIP2，达标时已升 VIP3）→ 以哪个时间点的等级判定资格与奖励金额？<span class="na">⚠️ 待确认</span>，这题会直接影响第4步 VIP 专属数值的取值逻辑。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.3 与 3.4 的职责分工（VIP 设定在两步都出现，此节为准）</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:10px;">「VIP 等级」在第3步与第4步都会出现，容易混淆。两者<b>问的是不同问题</b>，不重叠：</p>
+                  <table>
+                    <tr><th style="width:90px;">步骤</th><th style="width:120px;">回答的问题</th><th>性质</th></tr>
+                    <tr><td><b>第3步<br>（本节）</b></td><td><b>谁能参加？</b></td><td>资格题，答案是「有／无」。整个<b>活动层级</b>一份名单，所有规则区块共用</td></tr>
+                    <tr><td><b>第4步<br>（3.4）</b></td><td><b>能参加的人，各自拿多少？</b></td><td>数值题，答案是金额与门槛。<b>规则区块层级</b>，每个区块各有一份</td></tr>
+                  </table>
+
+                  <p style="margin:14px 0 8px;"><b>权重原则：以第3步为单一真实来源。</b></p>
+                  <ul style="margin-bottom:12px;">
+                    <li>第4步的 VIP 清单<b>永远是第3步勾选结果的子集</b>，第4步不能自己新增第3步没勾的等级。</li>
+                    <li>资格只有第3步一个地方能改，避免两处设定打架、无从判断该听谁的。</li>
+                    <li><span class="tag-rule tag-old">与原型一致</span>原型已如此实作：第4步开启「依会员层级设定不同数值」时，只列出第3步已勾选的等级；一个都没勾时显示红字提示，引导回第3步。</li>
+                  </ul>
+
+                  <p style="margin-bottom:8px;"><b>判断逻辑表</b>（依规范第5章第4点，穷举组合后再看结果）：</p>
+                  <table>
+                    <tr><th style="width:90px;">第3步<br>是否勾选</th><th style="width:95px;">第4步<br>层级开关</th><th style="width:110px;">第4步<br>该VIP数值</th><th>该等级会员的实际结果</th></tr>
+                    <tr><td><b>否</b></td><td class="na">不适用</td><td class="na">不适用</td><td>不能参加。前台是否完全看不到活动，见 2.1 展示前提</td></tr>
+                    <tr><td>是</td><td>关闭</td><td class="na">不适用</td><td>可参加，套用该规则区块的<b>共用</b>门槛与奖励</td></tr>
+                    <tr><td>是</td><td>开启</td><td>已设定专属值</td><td>可参加，套用<b>该等级的专属</b>门槛与奖励</td></tr>
+                    <tr><td>是</td><td>开启</td><td>已套用自其他等级</td><td>可参加，数值<b>跟随来源等级即时同步</b>（见 3.4.7 VIP联动）</td></tr>
+                    <tr><td>是</td><td>开启</td><td><b>未设定／留空</b></td><td><span class="na">⚠️ 待确认：</span>是退回套用共用数值，还是该区块对此等级不生效（等于有资格参加活动、但这个区块拿不到奖励）？两种处理对会员体验差很多，必须明确定义</td></tr>
+                  </table>
+
+                  <div class="pending" style="margin-top:12px;"><span class="lbl">⚠️ 待确认（回头修改第3步时的连动，共三项）：</span>
+                    「以第3步为主」只解决了「谁说了算」，没解决「改了之后旧资料怎么办」。以下三项需一并决定：
+                    <table style="margin-top:8px;">
+                      <tr><th style="width:150px;">情境</th><th>需要决定</th></tr>
+                      <tr><td><b>取消勾选</b>某个已在第4步设过专属数值的等级</td><td>该笔数值是<b>直接删除</b>、还是<b>保留但不生效</b>？建议保留但不生效——运营常是误删后又勾回来，直接删除会让他重设一遍。若该等级正被其他等级「套用」中，连动关系也需一并处理（同 3.4.8 情境三）</td></tr>
+                      <tr><td><b>新增勾选</b>一个等级</td><td>第4步是否自动多出该等级的一列？其数值预设为空、还是沿用共用数值？建议自动补上并提示运营确认，避免漏设</td></tr>
+                      <tr><td>活动<b>已上线</b>后修改第3步</td><td><b>依「通用原则一：活动配置完成后不建议修改」处理</b>——需要调整时应结束原活动、另建新活动，而非修改进行中的活动。该原则的时间点、强度与例外见通用原则一节</td></tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">与企划书 4.5 的差异</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th style="width:150px;">企划书 4.5 要求</th><th style="width:120px;">后台现况</th><th>说明</th></tr>
+                    <tr><td>VIP 等级</td><td>✅ 会员等级</td><td>—</td></tr>
+                    <tr><td>注册渠道／代理</td><td>⚠️ 只有「指定代理」</td><td>「注册渠道」没有对应栏位；画面上的「充值层级」是充值相关，不等于注册渠道</td></tr>
+                    <tr><td>用户标签</td><td>✅ 用户标签</td><td>—</td></tr>
+                    <tr><td><b>存款渠道</b></td><td><b>❌ 没有这个栏位</b></td><td><b>影响企划书第 3 章列的「渠道专属存款活动」目前无法配置。</b>需决定这次要不要补上，以及渠道清单的来源</td></tr>
+                    <tr><td class="na">（企划书未提）</td><td>➕ 充值层级</td><td>原型新增，需确认业务定义与来源</td></tr>
+                    <tr><td class="na">（企划书未提）</td><td>➕ 新会员限制</td><td>原型新增，定义待确认（见 3.3.7）</td></tr>
+                    <tr><td class="na">（企划书未提）</td><td>➕ 黑名单设置</td><td>原型新增，企划书 2. 建设目标的「活动限制规则」可能涵盖此项</td></tr>
+                  </table>
+                </div>
+              </div>
+
             </div>
           </div>
         </article>
@@ -481,6 +1046,24 @@ body{overflow:hidden;background:#eef0f4;}
           <div class="h1-title">3. 规则文件内容－后台</div>
           <div class="intent-box" style="margin-bottom:20px;font-size:15px;">
             <b>本步骤在原型上是同一个画面</b>，由上而下依序为三个区块：<b>3.4 活动条件／规则区块</b>、<b>3.5 流水规则</b>、<b>3.6 奖励发放</b>。以下三节即依此顺序排列，可对照左侧画面往下卷动阅读。
+            <br><br>
+            <b>关于本步骤的 VIP 设定：</b>本步骤设定的是「能参加的人各自拿多少」（数值），<b>不决定资格</b>——谁能参加由第3步决定，本步骤的 VIP 清单只是第3步勾选结果的子集。两步的职责分工、权重原则与完整判断逻辑表，统一写在 <b>3.3</b>，请先看该节再读 3.4.7。
+          </div>
+
+          <div class="section">
+            <div class="section-head"><div class="num">3.4 前置</div><h3>三种存款条件各自显示哪些栏位</h3></div>
+            <div class="spec-body">
+              <div class="sub-block"><div class="sub-content">
+                <p style="margin-bottom:10px;">选择不同的「存款条件」，下方出现的栏位并不相同。3.4.5 与 3.4.6 分别从「下拉来源」与「输入限制」的角度描述，容易让人误以为两处矛盾——其实是<b>栏位名称相近但并非同一个栏位</b>。此表为准：</p>
+                <table>
+                  <tr><th style="width:95px;">存款条件</th><th style="width:85px;">统计周期</th><th style="width:140px;">次数相关栏位</th><th>说明</th></tr>
+                  <tr><td><b>单笔存款</b></td><td>不显示</td><td><b>参与次数限制</b><span class="cell-sub">每日／活动期间 单选 ＋ 次数输入</span></td><td>次数的计算范围由「每日／活动期间」这个单选决定</td></tr>
+                  <tr><td><b>复存</b></td><td>显示</td><td><b>参与次数上限</b><span class="cell-sub">只有次数输入，没有范围单选</span></td><td>次数的计算范围<b>改由统计周期决定</b>，因此不需要再选一次范围</td></tr>
+                  <tr><td><b>累计存款</b></td><td>显示</td><td><b>不显示</b></td><td>画面明示「参与次数限制不适用于累计存款条件」——累计达标是一次性结算，没有次数概念</td></tr>
+                </table>
+                <div class="change-note"><span class="lbl">用词提醒：</span>「参与次数<b>限制</b>」（单笔存款）与「参与次数<b>上限</b>」（复存）在画面上是两个不同名称的栏位，含义相同（都是可领取次数的上限，不是达标门槛），但一个附带范围单选、一个不附带。<span class="na">⚠️ 建议统一命名为「参与次数上限」，避免运营与开发误解。</span></div>
+              </div></div>
+            </div>
           </div>
   <div class="section">
     <div class="section-head"><div class="num">3.4（对应后台第4步）</div><h3>活动条件 / 规则区块</h3></div>
@@ -602,7 +1185,7 @@ body{overflow:hidden;background:#eef0f4;}
           <p style="margin-bottom:10px;"><b>情境三：VIP联动的例外情况</b></p>
           <ul style="margin-bottom:14px;">
             <li>第3步一个VIP都没勾选时，第4步开启"依会员层级设定不同数值"，画面会用红字提示"请先至第3步勾选可参加本活动的VIP等级"，不会显示空的VIP列表。</li>
-            <li>已经营运在第3步取消某个VIP的参加资格（例如原本勾了VIP4，后来取消勾选），若VIP4当下正被其他VIP等级"套用"著（例如VIP2套用给VIP4），⚠️ <b>待确认</b>：这条联动关系该自动解除，还是保留但前台不会有VIP4的人看到？目前程式尚未处理这个情况，需要与工程确认。</li>
+            <li>已经营运在第3步取消某个VIP的参加资格（例如原本勾了VIP4，后来取消勾选），若VIP4当下正被其他VIP等级"套用"著（例如VIP2套用给VIP4），⚠️ <b>待确认</b>：这条联动关系该自动解除，还是保留但前台不会有VIP4的人看到？目前程式尚未处理这个情况，需要与工程确认。<b>（本项与 3.3「职责分工」内的同一项为同一个待确认，请一并决定，勿分开处理）</b></li>
           </ul>
 
           <p style="margin-bottom:10px;"><b>情境四：区块型态选择"按天任务型"时的差异</b></p>
@@ -616,6 +1199,7 @@ body{overflow:hidden;background:#eef0f4;}
 
           <p style="margin-bottom:10px;"><b>边界与异常</b></p>
           <ul>
+            <li><b>活动配置完成后要修改设定</b> → 依<b>通用原则一：不建议修改</b>，应结束原活动另建新活动；影响面对照表与待确认事项见该节。</li>
             <li>营运在同一活动内叠加两个"性质完全相同"的区块（例如都是复存＋固定金额、数字也一样）→ ⚠️待确认是否要挡下重复设定或仅提示。</li>
             <li>营运删除一个正在被其他VIP联动"套用"的区块 → ⚠️待确认连动的VIP设定如何处理。</li>
             <li>营运没有权限修改已经"开启"中的活动的规则区块 → ⚠️待确认是否允许、需不需要走审核。</li>
@@ -788,37 +1372,50 @@ body{overflow:hidden;background:#eef0f4;}
           <div class="section">
             <div class="section-head"><div class="num">3.7（对应后台第5步）</div><h3>风控条件</h3></div>
             <div class="spec-body">
+
               <div class="sub-block">
-                <div class="pending"><span class="lbl">⚠️ 待补充：</span>本步骤规格尚未撰写。左侧原型已有完整画面，可边操作边把 3.7.1～3.7.8 逐项补齐。</div>
-              </div>
-              <div class="sub-block">
+                <div class="sub-num">本节规则来源分类</div>
                 <div class="sub-content">
-                  <div class="field-ref">
-                    <div class="fr-title">撰写对照：左侧原型第5步画面上看得到的栏位</div>
-                    <p style="font-size:14px;color:#5c5c68;margin-bottom:6px;">以下只是「画面上有什么」的清单，供撰写规格时逐项对照，<b>不代表规则已定义</b>。</p>
-                    <ul>
-                      <li><b>风险检测设置（皆为开关）：</b>同IP检测、同手机号检测、同姓名检测、同email检测。</li>
-                      <li><b>触发条件：</b>数字输入（画面文案为「◯ 笔以上，将自动拒绝」）。</li>
-                      <li><b>自动拒绝：</b>开关。</li>
-                    </ul>
-                  </div>
+                  <p style="margin-bottom:10px;"><span class="tag-rule tag-old">全部不异动</span><b>本步骤的风控检测规则全部为后台既有逻辑，本次存款活动公版没有新增、也没有异动任何一项。</b></p>
+                  <table>
+                    <tr><th style="width:150px;">项目</th><th style="width:90px;">分类</th><th>说明</th></tr>
+                    <tr><td>同IP检测、同手机号检测、同姓名检测、同email检测</td><td><span class="tag-rule tag-old">不异动</span></td><td>公版共用的风险检测开关，所有活动模板一致</td></tr>
+                    <tr><td>触发条件（违反 N 笔以上）</td><td><span class="tag-rule tag-old">不异动</span></td><td>公版共用</td></tr>
+                    <tr><td>自动拒绝</td><td><span class="tag-rule tag-old">不异动</span></td><td>公版共用</td></tr>
+                    <tr><td class="na">（无）</td><td>—</td><td>本次没有新增或异动项目</td></tr>
+                  </table>
                 </div>
               </div>
+
               <div class="sub-block">
-                <div class="sub-num">待撰写项目（依规范 4.1.1～4.1.8）</div>
+                <div class="sub-num">因此本节不重写既有规格</div>
                 <div class="sub-content">
-                  <ul class="checklist">
-                    <li>3.7.1 详细说明交互行为（各检测开关与「触发条件」「自动拒绝」之间的连动）</li>
-                    <li>3.7.2 文案长度限制</li>
-                    <li>3.7.3 操作失败后的提示文案及交互行为</li>
-                    <li>3.7.4 操作成功后的提示文案及交互行为</li>
-                    <li>3.7.5 下拉选单的来源及内容</li>
-                    <li>3.7.6 输入框的限制（触发条件笔数可否为0、上限）</li>
-                    <li>3.7.7 <b>说明开关状态</b>（4个检测开关各自开启前／后的作用；「自动拒绝」关闭时命中风控会如何处理——进人工审核还是照常发放）</li>
-                    <li>3.7.8 需试想各种情境（同时命中多项检测、风控与第4步奖励发放的先后关系）</li>
+                  <p style="margin-bottom:8px;">依规范第5章第1点，既有且本次不异动的规则，列入「本次未涉及之既有规则」清单即可，<b>不在本文件重写完整规格</b>。理由：</p>
+                  <ul style="margin-bottom:10px;">
+                    <li><b>开发不需重做、测试不需重验。</b>写出来只会让人误以为这是本次要实作的范围。</li>
+                    <li><b>抄写既有规则容易抄错。</b>一旦抄错，就多了一份「看起来像规格、其实是二手且有误」的来源，比没写更危险。</li>
+                    <li><b>会过期。</b>既有风控日后若调整，这份文件不会同步更新，反而变成误导。</li>
                   </ul>
+                  <div class="pending"><span class="lbl">⚠️ 待补：</span>既有风控规则的<b>权威来源</b>（是哪一份既有规格文件、或后台哪个模块的说明）请补在此，让需要细节的人知道去哪里查。</div>
                 </div>
               </div>
+
+              <div class="sub-block">
+                <div class="sub-num">⚠️ 但有一段必须写：风控与存款活动奖励发放的交互</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:10px;">风控本身是既有的，<b>但「风控 × 存款活动奖励」这个组合是本次才产生的</b>——存款活动会自动派发奖励，而风控会拦截可疑会员，两者相遇时该怎么处理，既有文件不会有答案，必须在本次定义。</p>
+                  <table>
+                    <tr><th style="width:170px;">需要定义的交互</th><th>说明</th></tr>
+                    <tr><td><b>命中风控的会员，存款活动奖励照不照发？</b></td><td><span class="na">⚠️ 待确认：</span>直接不发、改进人工审核、还是照发但标记？这是本节最关键的一题</td></tr>
+                    <tr><td><b>与 3.6「审核方式」的关系</b></td><td><span class="na">⚠️ 待确认：</span>第4步的「审核方式（人工／自动审核）」与第5步的「自动拒绝」都在管放行与否，两者是<b>各自独立</b>还是<b>有优先序</b>？例如奖励发放设「自动审核」、风控设「自动拒绝」，两者冲突时听谁的</td></tr>
+                    <tr><td><b>「自动拒绝」关闭时怎么办</b></td><td><span class="na">⚠️ 待确认：</span>命中风控但未开启自动拒绝，该笔奖励是照常发放、还是进入待人工处理？后台侧边栏有「<b>派奖审核</b>」页面，需确认被拦下的奖励是否即流入该页处理</td></tr>
+                    <tr><td><b>前台如何呈现</b></td><td><span class="na">⚠️ 待确认：</span>奖励因风控被拦时，会员在前台看到的奖励状态是什么？四种状态（未达标／可领取／已领取／已过期）都套不上这个情况，是否需要第五种状态或另一套文案（见 2.1）</td></tr>
+                    <tr><td><b>数据统计口径</b></td><td><span class="na">⚠️ 待确认：</span>被风控拦下的奖励，在 3.9 的「发奖人数／发奖金额／活动成本率」算不算？（见 3.9.1）</td></tr>
+                  </table>
+                  <div class="change-note"><span class="lbl">写作原则：</span>既有功能<b>本身</b>不重写，但既有功能与本次新增功能<b>相遇处</b>一定要写——那是本次真正新产生的规则，也是最容易在开发阶段才爆出来的地方。</div>
+                </div>
+              </div>
+
             </div>
           </div>
         </article>
@@ -829,37 +1426,169 @@ body{overflow:hidden;background:#eef0f4;}
           <div class="section">
             <div class="section-head"><div class="num">3.8（对应后台第6步）</div><h3>提交预览</h3></div>
             <div class="spec-body">
+
               <div class="sub-block">
-                <div class="pending"><span class="lbl">⚠️ 待补充：</span>本步骤规格尚未撰写。这一步是<b>整份设定的汇总确认页</b>，规格重点会落在「必填检查」与「送出后的行为」，与前面各步骤的验证规则（3.1.3、3.4.3 等）需一致。</div>
-              </div>
-              <div class="sub-block">
+                <div class="sub-num">本节的性质：前面各步骤的镜像</div>
                 <div class="sub-content">
-                  <div class="field-ref">
-                    <div class="fr-title">撰写对照：左侧原型第6步画面上看得到的内容</div>
-                    <p style="font-size:14px;color:#5c5c68;margin-bottom:6px;">以下只是「画面上有什么」的清单，供撰写规格时逐项对照，<b>不代表规则已定义</b>。</p>
-                    <ul>
-                      <li><b>必填提示：</b>画面顶端红字列出尚未填写的必填栏位（原型示例文案：「● 请填写以下必填字段：有效时间、活动名称」）。</li>
-                      <li><b>汇总表：</b>依第1～5步分段列出已填内容（活动ID／模板类型／状态／币种／活动名称／活动时间；语系／活动标题／规则弹窗图张数／排序；充值层级／指定代理／新会员限制／会员等级／黑名单类型／用户标签；规则区块数量／统计周期／奖金所需流水倍数／流水计算基数／审核方式／领取方式／已验证手机号／限制使用设备／适用游戏范围 等）。</li>
-                      <li><b>操作按钮：</b>上一步、退出编辑、确认送出。</li>
-                    </ul>
-                  </div>
+                  <p style="margin-bottom:10px;"><b>本步骤不是独立的设定页，而是把第1～5步已填的内容，依步骤分段汇总呈现，供运营送出前最后确认。</b>它没有自己的设定，所有内容都来自前面的步骤。</p>
+                  <table>
+                    <tr><th style="width:130px;">分段</th><th>汇总呈现的栏位</th></tr>
+                    <tr><td>1 活动模板设置</td><td>活动ID、模板类型★、状态★、活动币种★、活动名称★、活动时间★</td></tr>
+                    <tr><td>2 活动图片</td><td>语系、活动标题、<b>规则弹窗图（依区块）★</b>、排序</td></tr>
+                    <tr><td>3 参与对象与名单</td><td>充值层级、指定代理、新会员限制、会员等级、黑名单类型、用户标签</td></tr>
+                    <tr><td>4 活动条件（存款专用）</td><td><b>规则区块数量★</b>、统计周期、奖金所需流水倍数、流水计算基数、审核方式、领取方式、已验证手机号、限制使用设备、适用游戏范围</td></tr>
+                    <tr><td>5 风控条件</td><td>同IP检测、同姓名检测、同手机号检测、同email检测、自动拒绝</td></tr>
+                  </table>
+                  <p style="margin-top:8px;">★ 为必填栏位，共 7 项。第5步风控条件全部非必填。尚未填写的栏位一律显示「–」。</p>
+                  <div class="change-note"><span class="lbl">⚠️ 维护规则（重要）：</span>因为本页是前面各步骤的镜像，<b>任何步骤新增、删除或改名栏位时，本页必须同步调整</b>，否则运营会在预览页看不到自己刚填的设定、或看到已不存在的栏位。这是本页最容易在后续迭代中被遗漏的地方，请列入变更检查项。</div>
                 </div>
               </div>
+
               <div class="sub-block">
-                <div class="sub-num">待撰写项目（依规范 4.1.1～4.1.8）</div>
+                <div class="sub-num">本节规则来源分类</div>
                 <div class="sub-content">
-                  <ul class="checklist">
-                    <li>3.8.1 详细说明交互行为（点必填提示能否跳回该步骤、确认送出后跳转到哪里）</li>
-                    <li>3.8.2 文案长度限制（汇总表内长字串如何截断）</li>
-                    <li>3.8.3 <b>操作失败后的提示文案</b>（必填未完成时是否挡下送出、提示呈现方式）</li>
-                    <li>3.8.4 <b>操作成功后的提示文案</b>（送出成功的提示与后续状态，例如活动预设为「关闭」）</li>
-                    <li>3.8.5 下拉选单的来源及内容</li>
-                    <li>3.8.6 输入框的限制（本步骤是否可直接修改，或仅供检视）</li>
-                    <li>3.8.7 说明开关状态</li>
-                    <li>3.8.8 需试想各种情境（送出中断线、重复点击送出、送出后可否再编辑）</li>
+                  <table>
+                    <tr><th style="width:110px;">分类</th><th style="width:160px;">项目</th><th>说明</th></tr>
+                    <tr><td><span class="tag-rule tag-old">不异动</span></td><td>预览页的框架、分段汇总方式、送出按钮</td><td>公版共用<span class="na">⚠️ 待确认是否确实为既有</span></td></tr>
+                    <tr><td><span class="tag-rule tag-new">新增</span></td><td>「4 活动条件（存款专用）」分段的内容</td><td>存款活动专属栏位，其他活动模板没有</td></tr>
+                    <tr><td><span class="tag-rule tag-new">新增</span></td><td><b>承接「规则弹窗图」的必填检查</b></td><td>第2步因为数量取决于第4步而不阻挡，改由本页统一检查（见 3.2 步骤依赖）</td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.8.1 详细说明交互行为</div>
+                <div class="sub-content">
+                  <ul>
+                    <li>进入本步骤时，即时读取第1～5步当下的设定值汇总呈现；不需另外按「更新」。</li>
+                    <li>页面顶端以红字列出尚未填写的必填栏位。</li>
+                    <li>按钮位于步骤列右上角：「上一步」「退出编辑」「确认送出」。</li>
+                    <li><span class="na">⚠️ 待确认：</span>预览表内的栏位<b>能否点击跳回对应步骤</b>修改？原型目前不可点击。若运营发现某项填错，现在只能自己回想是第几步、手动点回去，建议做成可点击。</li>
                   </ul>
                 </div>
               </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.8.2 文案长度限制</div>
+                <div class="sub-content"><div class="pending"><span class="lbl">⚠️ 待确认：</span>汇总表内的长字串（活动名称、已选的多个代理线／VIP等级／用户标签）如何处理——完整换行显示、或超出以「…」截断。其中「会员等级」全选时会是 VIP0～VIP10 共 11 项，实测会占据数行。</div></div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.8.3 操作失败后的提示文案及交互行为</div>
+                <div class="sub-content">
+                  <p style="margin-bottom:8px;"><b>本页是全流程唯一的必填总关卡</b>，须检查 7 项必填栏位，其中包含由第2步转移过来的「规则弹窗图」。</p>
+                  <table>
+                    <tr><th style="width:150px;">检查项</th><th>规则</th></tr>
+                    <tr><td>第1步 5 项必填</td><td>活动名称、活动时间为运营实际可能留空者；其余三项有预设值（见 3.1.3）</td></tr>
+                    <tr><td><b>规则弹窗图</b></td><td><b>每个规则区块都必须有对应的弹窗图</b>方可送出。<span class="na">⚠️ 待确认：每区块的 PC 端与 H5 端是否两张都必填（见 3.2.6）</span></td></tr>
+                    <tr><td>规则区块数量</td><td>至少需有 1 个规则区块</td></tr>
+                  </table>
+                  <p style="margin-top:8px;">提示样式：页面顶端红底框，文案格式为「● 请填写以下必填字段：<i>缺漏栏位名称，以顿号分隔</i>」。</p>
+                  <div class="pending"><span class="lbl">⚠️ 待确认：</span>未通过检查时是<b>阻挡送出</b>，还是允许送出但存为未完成状态？依 3.1.3 的既有逻辑推断应为阻挡，需确认。</div>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.8.4 操作成功后的提示文案及交互行为</div>
+                <div class="sub-content">
+                  <ul>
+                    <li>送出成功后返回活动列表页，新活动出现在列表最上方。</li>
+                    <li>新建活动的状态依第1步设定，预设为「关闭」——<b>送出不等于上线</b>，仍需另行开启。</li>
+                    <li><span class="na">⚠️ 待确认：</span>是否需要成功提示（Toast 或弹窗），文案为何。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.8.5 下拉选单的来源及内容</div>
+                <div class="sub-content"><span class="na">不适用——本页为唯读汇总，没有下拉选单。</span></div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.8.6 输入框的限制</div>
+                <div class="sub-content"><span class="na">不适用——本页为唯读汇总，不可直接编辑；需修改请回到对应步骤。</span></div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.8.7 说明开关状态，开启前、开启后产生的作用</div>
+                <div class="sub-content"><span class="na">不适用——本页没有开关，仅呈现前面步骤的开关结果（如新会员限制、风控各检测、自动拒绝）。</span></div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.8.8 需试想各种情境后撰写规格文件</div>
+                <div class="sub-content">
+                  <ul>
+                    <li><b>完全没建规则区块就进到本页</b> → 「规则区块数量」显示「–」并触发必填阻挡；「规则弹窗图」也无从检查。需确认提示文案是否要明确引导「请先至第4步新增规则区块」。</li>
+                    <li><b>有区块但弹窗图只传了一部分</b> → 需明确指出<b>是哪个区块</b>缺图，只说「规则弹窗图未填」运营无从下手。</li>
+                    <li><b>重复点击「确认送出」</b> → <span class="na">⚠️ 待确认</span>是否防重复提交，避免建出两个相同活动。</li>
+                    <li><b>送出过程中断线</b> → <span class="na">⚠️ 待确认</span>活动是否已建立、运营重试会不会变成两笔。</li>
+                    <li><b>送出后可否再编辑</b> → 依<b>通用原则一：配置完成后不建议修改</b>处理，该原则的时间点与强度待确认。</li>
+                  </ul>
+
+                  <div class="change-note" style="margin-top:10px;"><span class="lbl">原型现况（三处不一致，供开发注意）：</span>
+                    ① 必填提示文案中写「<b>有效时间</b>」，但第1步该栏位名称为「<b>活动时间</b>」，两处名称需统一。
+                    ② 「规则弹窗图（依区块）」的值显示为「N 张（每区块 1 张）」，但第2步实际每区块为 PC＋H5 <b>两张</b>（见 3.2），需修正为「每区块 2 张」或改以「N 组」表示。
+                    ③ 原型的必填提示为写死的示例文案，未依实际填写状况动态计算，属原型简化，非规则差异。
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </article>
+
+        <!-- ─── 3.9 数据统计（企划书 4.9，原型未涵盖） ─── -->
+        <article class="panel" id="p-s9">
+          <div class="h1-title">3. 规则文件内容－后台</div>
+          <div class="section">
+            <div class="section-head"><div class="num">3.9（企划书 4.9．本次原型未涵盖）</div><h3>数据统计</h3></div>
+            <div class="spec-body">
+
+              <div class="pending" style="margin:16px 0 4px;"><span class="lbl">⚠️ 本节没有对应的原型画面：</span>后台侧边栏虽有「活动报表」连结，但本次原型未做内容，左侧点不到对应画面。以下先依企划书 4.9 把「要统计什么」定义出来，画面产出后再补交互规格。</div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.9.1 统计指标</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th style="width:130px;">指标</th><th>建议定义</th><th>状态</th></tr>
+                    <tr><td>活动参与人数</td><td>活动期间内符合参与对象、且至少有一笔存款纪录的会员数</td><td class="na">⚠️ 待确认：只是「看得到活动」算不算参与？还是要有存款行为才算？</td></tr>
+                    <tr><td>存款人数</td><td>活动期间内有存款的会员数（去重）</td><td class="na">⚠️ 待确认：是否只计入「达标」的存款，未达标的小额存款算不算</td></tr>
+                    <tr><td>存款金额</td><td>上述会员的存款总额</td><td class="na">⚠️ 待确认：口径同上</td></tr>
+                    <tr><td>发奖人数</td><td>实际拿到奖励的会员数（去重）</td><td class="na">⚠️ 待确认：「自动发放」即入账算发奖；「手动领取」是以达标计、还是以实际领取计？</td></tr>
+                    <tr><td>发奖金额</td><td>实际发出的奖励总额</td><td class="na">⚠️ 待确认：口径同上；已过期未领的奖励不应计入</td></tr>
+                    <tr><td>活动成本率</td><td>发奖金额 ÷ 存款金额</td><td class="na">⚠️ 待确认：分母是「活动期间总存款」还是「达标存款」？此数字直接影响运营复盘判断，务必先定义清楚</td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.9.2 筛选维度</div>
+                <div class="sub-content">
+                  <table>
+                    <tr><th style="width:130px;">维度</th><th>说明</th><th>状态</th></tr>
+                    <tr><td>活动</td><td>指定单一活动，或跨活动汇总</td><td class="na">⚠️ 待确认：是否支持多选比较</td></tr>
+                    <tr><td>日期</td><td>指定统计区间</td><td class="na">⚠️ 待确认：最小粒度是日还是小时；跨时区如何处理（后台时间为 +08:00）</td></tr>
+                    <tr><td>VIP</td><td>依会员等级拆分</td><td class="na">⚠️ 待确认：以哪个时间点的等级归户（同 3.3.8 的升降级问题）</td></tr>
+                    <tr><td>渠道／代理</td><td>依注册渠道或代理线拆分</td><td class="na">⚠️ 待确认：「渠道」的定义与 3.3 的缺口相同——后台目前没有渠道栏位，若统计要拆渠道，资料来源需先补齐</td></tr>
+                    <tr><td>用户标签</td><td>依会员标签拆分</td><td class="na">⚠️ 待确认</td></tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="sub-block">
+                <div class="sub-num">3.9.3～3.9.8 待撰写项目</div>
+                <div class="sub-content">
+                  <ul class="checklist">
+                    <li>3.9.3 详细说明交互行为（查询、导出、下钻到明细）</li>
+                    <li>3.9.4 操作失败／成功的提示文案</li>
+                    <li>3.9.5 下拉选单的来源及内容</li>
+                    <li>3.9.6 输入框的限制（日期区间上限、是否可查未来日期）</li>
+                    <li>3.9.7 说明开关状态</li>
+                    <li>3.9.8 需试想各种情境（区间内无资料、活动尚未开始、统计更新频率为即时或每日跑批）</li>
+                  </ul>
+                </div>
+              </div>
+
             </div>
           </div>
         </article>
@@ -2490,14 +3219,17 @@ renderRows();
   var PANELS = [
     {id:'terms',     label:'名词定义',        group:'doc'},
     {id:'purpose',   label:'1. 需求目的',     group:'doc'},
+    {id:'principles',label:'通用原则',        group:'doc'},
+    {id:'brief',     label:'企划书对照',      group:'doc'},
     {id:'frontend',  label:'2. 前台规则',     group:'doc', todo:true},
     {id:'s0',        label:'列表页',          group:'be',  step:0, todo:true},
     {id:'s1',        label:'① 3.1 模板设置',  group:'be',  step:1},
-    {id:'s2',        label:'② 3.2 活动图片',  group:'be',  step:2, todo:true},
-    {id:'s3',        label:'③ 3.3 参与对象',  group:'be',  step:3, todo:true},
+    {id:'s2',        label:'② 3.2 活动图片',  group:'be',  step:2},
+    {id:'s3',        label:'③ 3.3 参与对象',  group:'be',  step:3},
     {id:'s4',        label:'④ 3.4~3.6 活动条件', group:'be', step:4},
-    {id:'s5',        label:'⑤ 3.7 风控条件',  group:'be',  step:5, todo:true},
-    {id:'s6',        label:'⑥ 3.8 提交预览',  group:'be',  step:6, todo:true},
+    {id:'s5',        label:'⑤ 3.7 风控条件',  group:'be',  step:5},
+    {id:'s6',        label:'⑥ 3.8 提交预览',  group:'be',  step:6},
+    {id:'s9',        label:'3.9 数据统计',    group:'be',  todo:true},
     {id:'checklist', label:'撰写检查清单',    group:'doc'}
   ];
 
