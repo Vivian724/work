@@ -65,6 +65,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .radio-group{display:flex;gap:16px;align-items:center;padding-top:6px;}
 .radio-item{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;}
 .radio-item input{accent-color:#1677ff;}
+.radio-item.disabled{color:#bbb;cursor:not-allowed;}
 .time-range-input{display:flex;align-items:center;height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;gap:6px;background:#fff;max-width:420px;}
 .time-range-input input{border:none;outline:none;font-size:12px;color:#bbb;background:transparent;width:130px;}
 .time-sep{color:#bbb;}
@@ -156,6 +157,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 
 /* 存款规则区块专用样式 */
 .rule-block{border:1px solid #e8e8e8;border-radius:6px;padding:16px 18px;margin-bottom:14px;background:#fafbfc;}
+.block-summary{margin:10px 0 14px;padding:10px 14px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;font-size:13px;color:#237804;line-height:1.6;}
 .rule-block-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px dashed #e0e0e0;flex-wrap:wrap;}
 .rule-block-num{width:22px;height:22px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:500;}
 .block-type-tag{font-size:11px;color:#1677ff;background:#e6f4ff;padding:2px 9px;border-radius:10px;font-weight:500;}
@@ -170,6 +172,8 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .vip-acc-body{padding:4px 14px 16px;border-top:1px dashed #e8e8e8;}
 .vip-linked-tag{font-size:11px;color:#999;font-weight:400;background:#f0f0f0;padding:1px 8px;border-radius:8px;margin-left:6px;}
 .vip-acc-item.vip-linked .vip-acc-head{color:#999;}
+.vip-acc-head.is-linked{cursor:default;}
+.vip-acc-head.is-linked:hover{background:transparent;}
 .vip-inline-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;padding:6px 0 10px;}
 .vip-inline-label{font-size:13px;color:#1677ff;font-weight:500;white-space:nowrap;}
 .vip-inline-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:130px;-moz-appearance:textfield;}
@@ -371,6 +375,21 @@ tr:hover td{background:#fafafa;}
   </div>
 </div>
 
+<!-- 规则弹窗图提醒（决议 A25：第4步配置完成后引导回第2步补图） -->
+<div class="modal-overlay hidden" id="imgReminderModal">
+  <div class="modal" style="width:520px;">
+    <div class="modal-header">
+      <span class="modal-title">规则区块已建立，请补上规则弹窗图</span>
+      <button class="modal-close" onclick="imgReminderLater()">×</button>
+    </div>
+    <div class="modal-body" id="imgReminderBody"></div>
+    <div class="modal-footer">
+      <button class="modal-cancel" onclick="imgReminderLater()">稍后再补，先到第5步</button>
+      <button class="modal-confirm" onclick="imgReminderGo()">现在去第2步补图</button>
+    </div>
+  </div>
+</div>
+
 <!-- 游戏选择弹窗 -->
 <div class="modal-overlay hidden" id="gameModal">
   <div class="modal">
@@ -445,12 +464,46 @@ function renderTopBtns(){
     h+='<a href="#" class="btn-exit" onclick="showList();return false;">退出编辑 ↩</a>';
     h+='<button class="btn-submit" onclick="submitActivity()">确认送出</button>';
   }else{
-    h+='<button class="btn-next" onclick="goStep('+(cur+1)+')">下一步 ›</button>';
+    h+='<button class="btn-next" onclick="'+(cur===4?'leaveStep4()':'goStep('+(cur+1)+')')+'">下一步 ›</button>';
     h+='<a href="#" class="btn-exit" onclick="showList();return false;">退出编辑 ↩</a>';
   }
   document.getElementById('topBtns').innerHTML=h;
 }
 function goStep(n){cur=n;renderNav();renderTopBtns();renderStep();}
+
+// 决议 A24：结束时间的可选范围限制在开始时间之后；若已选的结束时间早于新的开始时间，直接清掉让运营重选
+function syncEndMin(){
+  var st=document.getElementById('actStart'), en=document.getElementById('actEnd');
+  if(!st||!en) return;
+  if(st.value){ en.min=st.value; if(en.value && en.value<st.value){ en.value=''; } }
+  else { en.removeAttribute('min'); }
+}
+
+// 决议 A25：第4步的规则区块配置完成后，引导运营回第2步补上各区块的规则弹窗图。
+// 先跳提示弹窗，按「现在去补图」直接跳到第2步；同一批区块只提醒一次，区块有增删改才会再提醒。
+var lastImgReminderSig='';
+function blocksSig(){ return blocks.map(function(b){return b.id+':'+b.conditionType;}).join('|'); }
+function leaveStep4(){
+  var sig=blocksSig();
+  if(blocks.length>0 && sig!==lastImgReminderSig){ openImgReminder(); return; }
+  goStep(5);
+}
+function openImgReminder(){
+  var list=blocks.map(function(b,i){
+    var tag=b.conditionType;
+    return '<li style="margin-bottom:4px;">区块'+(i+1)+'（'+tag+'）——需上传 PC 端与 H5 端各一张</li>';
+  }).join('');
+  document.getElementById('imgReminderBody').innerHTML=
+    '<p style="font-size:13px;color:#333;margin-bottom:10px;">第4步已建立 <b>'+blocks.length+'</b> 个规则区块。每个区块都需要在<b>第2步「活动图片」</b>上传对应的规则弹窗图，否则第6步提交时会被挡下：</p>'+
+    '<ul style="padding-left:20px;font-size:13px;color:#555;margin-bottom:10px;">'+list+'</ul>'+
+    '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 12px;font-size:12px;color:#ad6800;">之后若在第4步新增、删除或修改区块，系统会再次提醒，请回第2步确认弹窗图是否需要重新上传。</div>';
+  document.getElementById('imgReminderModal').classList.remove('hidden');
+}
+function imgReminderLater(){ lastImgReminderSig=blocksSig(); document.getElementById('imgReminderModal').classList.add('hidden'); goStep(5); }
+function imgReminderGo(){
+  lastImgReminderSig=blocksSig(); document.getElementById('imgReminderModal').classList.add('hidden'); goStep(2);
+  var sec=document.getElementById('popupImgSection'); if(sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
+}
 function toggle(el){el.classList.toggle('on');}
 
 function renderStep(){
@@ -472,7 +525,8 @@ function step1(){
   '<div class="field-row"><div class="field-label"><span class="req">*</span>活动类型：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>周卡活动</option><option>预约活动</option><option selected>存款活动</option></select></div></div>'+
   '<div class="field-row"><div class="field-label"><span class="req">*</span>活动名称：</div><div class="field-ctrl"><input type="text" id="actNameInput" class="f-input" placeholder="请输入（前后台展示名称）" style="max-width:400px;"></div></div>'+
   '<div class="field-row"><div class="field-label"><span class="req">*</span>活动币种：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>PHP</option></select></div></div>'+
-  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"><span class="time-sep">～</span><input type="text" placeholder="结束时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'"></div></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" id="actStart" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'" onchange="syncEndMin()"><span class="time-sep">～</span><input type="text" id="actEnd" placeholder="结束时间" onfocus="this.type=\'datetime-local\';syncEndMin()" onblur="if(!this.value)this.type=\'text\'"></div>'+
+  '<div class="hint">结束时间不可早于开始时间——选定开始时间后，结束时间的可选范围会自动限制在其之后。</div></div></div>'+
   '<div class="field-row"><div class="field-label"><span class="req">*</span>活动状态：</div><div class="field-ctrl"><div class="radio-group">'+
     '<label class="radio-item"><input type="radio" name="actStatus" checked> 关闭</label>'+
     '<label class="radio-item"><input type="radio" name="actStatus"> 开启</label>'+
@@ -544,9 +598,9 @@ function renderLangTabContent(){
         '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:12px 16px;font-size:13px;color:#ad6800;">'+
         '尚未于第4步「活动条件」新增规则区块，请先完成该步骤设定后，再回来上传各区块对应的规则弹窗图。'+
         '</div></div>'
-      : '<div class="sec-block"><div class="sec-title"><span class="req">*</span>规则弹窗图</div>'+
+      : '<div class="sec-block" id="popupImgSection"><div class="sec-title"><span class="req">*</span>规则弹窗图</div>'+
         blocks.map(function(b,i){
-          var tag=b.type==='daily'?'按天任务型':(b.conditionType+' × '+b.rewardMode);
+          var tag=b.conditionType;
           return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-bottom:12px;">'+
             '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:10px;">区块'+(i+1)+'（'+tag+'）规则弹窗图</div>'+
             '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
@@ -720,9 +774,8 @@ function step3(){
     '</div>'+
   '</div>'+
 '</div></div>'+
-  '<div class="field-row"><div class="field-label">3. 新会员限制：</div><div class="field-ctrl"><div style="display:flex;align-items:center;gap:10px;"><div class="toggle" onclick="toggle(this)"></div><span style="font-size:13px;">活动开始后注册的新会员</span></div></div></div>'+
-  '<div class="field-row"><div class="field-label">4. 会员等级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="vipWrap" onclick="toggleVipDrop(event)">'+vipHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(vipOpen?'':'hidden')+'" id="vipDropdown">'+vipDd+'</div><div class="hint">此处勾选的VIP等级，会同步决定第4步「依会员层级设定不同数值」可以展开设定哪些VIP。</div></div></div>'+
-  '<div class="field-row"><div class="field-label">5. 用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>'+
+  '<div class="field-row"><div class="field-label">3. 会员等级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="vipWrap" onclick="toggleVipDrop(event)">'+vipHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(vipOpen?'':'hidden')+'" id="vipDropdown">'+vipDd+'</div><div class="hint">此处勾选的VIP等级，会同步决定第4步「依会员层级设定不同数值」可以展开设定哪些VIP。</div></div></div>'+
+  '<div class="field-row"><div class="field-label">4. 用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>'+
   '<div class="sec-block"><div class="sec-title">黑名单设置</div>'+
   '<div class="field-row"><div class="field-label">黑名单：</div><div class="field-ctrl"><input type="text" class="f-input" style="max-width:360px;" placeholder="请输入"></div></div>'+
   '<div class="field-row"><div class="field-label">用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>';
@@ -769,7 +822,7 @@ function removeVip(e,v){e.stopPropagation();selectedVips=selectedVips.filter(fun
 // 步骤四：活动条件（原4 + 原6领取 + 原7提款）
 // ════════════════════════════════════════════════════════════════
 function step4(){
-  return '<div class="step-desc">请设定本次存款活动的规则区块。一个活动可新增多个规则区块，每个区块可各自选择存款条件类型、门槛与奖励；存款条件为「复存」或「累计存款」时，还可各自设定统计周期（活动期间／每日／每周）。</div>'+
+  return '<div class="step-desc">新增规则区块——每个区块是一种存款玩法（一次存款／复存／连续性），可挂多个；流水与发放方式为整个活动共用。</div>'+
 
   '<div class="sec-block"><div class="sec-title">规则区块设定</div>'+
   '<button class="btn-add" onclick="addBlock()">+ 新增规则区块</button>'+
@@ -789,321 +842,179 @@ function step4(){
   '<div class="sec-block"><div class="sec-title">奖励发放</div>'+
   '<div class="field-row"><div class="field-label">发放方式：</div><div class="field-ctrl">'+
   '<div class="radio-group">'+
-  '<label class="radio-item"><input type="radio" name="depositClaim" checked onchange="setDepositClaim(true)"> 自动发放</label>'+
-  '<label class="radio-item"><input type="radio" name="depositClaim" onchange="setDepositClaim(false)"> 手动领取</label>'+
+  '<label class="radio-item"><input type="radio" name="depositClaim" '+(claimAuto?'checked':'')+' onchange="setDepositClaim(true)"> 自动发放</label>'+
+  '<label class="radio-item"><input type="radio" name="depositClaim" '+(claimAuto?'':'checked')+' onchange="setDepositClaim(false)"> 手动领取</label>'+
   '</div>'+
-  '<div id="depositClaimDaysWrap" class="hidden" style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:8px;">'+
-  '<input type="number" class="f-input" style="width:120px;max-width:120px;" placeholder="请输入天数">天内需领取，逾期状态自动变为「已过期」'+
+  // 领取天数：仅「手动领取」时出现，展开即预设带入 1 天（决议 A42）
+  '<div id="depositClaimDaysWrap" class="'+(claimAuto?'hidden':'')+'" style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:8px;">'+
+  '<input type="number" class="f-input" min="1" value="1" style="width:120px;max-width:120px;" oninput="if(this.value!==\'\'&&+this.value<1)this.value=1">天内需领取，逾期状态自动变为「已过期」（预设 1 天）'+
   '</div></div></div>'+
+  // 审核方式：与发放方式连动（决议 A41）——自动发放时固定「自动审核」并反灰，只有手动领取才开放选择
   '<div class="field-row"><div class="field-label">审核方式：</div><div class="field-ctrl"><div class="radio-group">'+
-  '<label class="radio-item"><input type="radio" name="audit"> 人工审核</label>'+
-  '<label class="radio-item"><input type="radio" name="audit" checked> 自动审核</label>'+
-  '</div></div></div>'+
+  '<label class="radio-item'+(claimAuto?' disabled':'')+'" id="auditManualLabel"><input type="radio" name="audit" id="auditManual" '+(claimAuto?'disabled':'')+'> 人工审核</label>'+
+  '<label class="radio-item"><input type="radio" name="audit" id="auditAuto" checked> 自动审核</label>'+
+  '</div>'+
+  '<div class="hint" id="auditHint"'+(claimAuto?'':' class="hidden" style="display:none;"')+'>发放方式为「自动发放」时，审核方式固定为「自动审核」；切换为「手动领取」后才可选择人工审核。</div>'+
+  '</div></div>'+
   '<div class="hint" style="margin:4px 0 14px;">奖励状态共4种：未达标／可领取／已领取／已过期——由上方规则区块的达标情况与本区的领取天数设定共同决定，无需另外配置。</div>'+
-  '<div class="field-row"><div class="field-label">已验证手机号：</div><div class="field-ctrl"><div class="radio-group">'+
-  '<label class="radio-item"><input type="radio" name="phoneVerified"> 是</label>'+
-  '<label class="radio-item"><input type="radio" name="phoneVerified" checked> 否</label>'+
-  '</div></div></div>'+
-  '<div class="field-row"><div class="field-label">限制使用设备：</div><div class="field-ctrl"><div class="radio-group">'+
-  '<label class="radio-item"><input type="radio" name="deviceLimit" checked> 无限制</label>'+
-  '<label class="radio-item"><input type="radio" name="deviceLimit"> 仅 APP</label>'+
-  '</div></div></div>'+
   '</div>';
 }
 
 function setDepositClaim(v){
+  claimAuto=v;                                   // 记住状态，重新渲染时不会跑掉
   var el=document.getElementById('depositClaimDaysWrap');
   if(el) el.classList.toggle('hidden', v);
+  // 决议 A41：自动发放 → 审核方式固定自动审核且反灰；手动领取 → 开放人工审核
+  var manual=document.getElementById('auditManual'), auto=document.getElementById('auditAuto');
+  var lbl=document.getElementById('auditManualLabel'), hint=document.getElementById('auditHint');
+  if(manual){ manual.disabled=v; if(v){ manual.checked=false; auto.checked=true; } }
+  if(lbl) lbl.classList.toggle('disabled', v);
+  if(hint) hint.style.display=v?'':'none';
 }
 
-// ════ 存款规则区块（新架构）════
+// ════ 存款规则区块（定案版，2026-09-08 晚）════
+// 存款条件回答「哪些存款算数」：一次存款／复存／连续性。
+// 奖励：一次存款／复存＝一列（达门槛 → 固定金额 或 该笔金额的百分比）；连续性＝多列阶梯（累计达 X → 送 Y 元，只有固定金额）。没有任何金额上限。
+// 上限：没有任何金额上限栏位（运营决议）；只有复存的「参与次数上限」。
 let blocks=[]; let blockSeq=0;
 const vipList=Array.from({length:11},function(_,i){return 'VIP'+i;});
+const CONDS=[
+  ['一次存款','只送一次：统计周期内第一笔达门槛的存款'],
+  ['复存',   '存一次送一次：第 2 笔起每一笔达门槛都送，有次数上限（固定以活动期间计算）'],
+  ['连续性', '存越多送越多：累计存款达各档门槛逐档送，每档一次']
+];
+function needsCycle(b){ return b.conditionType!=='复存'; }
+function needsLimit(b){ return b.conditionType==='复存'; }
+function isMulti(b){ return b.conditionType==='连续性'; }
+function noNeg(el,min){ if(el.value!==''&&+el.value<min) el.value=min; }   // 数字栏位不接受负数／低于下限
 
+function newRow(){ return {threshold:'',rewardType:'固定金额',rewardValue:''}; }
 function addBlock(){
-  blocks.push({
-    id:++blockSeq, type:'standard',
-    conditionType:'复存', rewardMode:'固定金额', cycleType:'活动期间累计',
-    minAmount:'', rewardValue:'',
-    limitType:'每日', limitCount:'',
-    tiers:[{threshold:'',rewardType:'固定金额',rewardValue:''}], cap:'',
-    dayCount:7, dayRows:(function(){var r=[];for(var k=0;k<7;k++)r.push({threshold:'',reward:''});return r;})(),
-    vipOverride:false, vipOverrides:{}, vipExpanded:{'VIP0':true}, vipApplyMode:{}, vipLinkedTo:{}
-  });
+  blocks.push({ id:++blockSeq, conditionType:'一次存款', cycleType:'活动期间累计', limitCount:'',
+    vipRows:{}, vipExpanded:{'VIP0':true}, vipLinkedTo:{} });
   renderBlocks();
 }
 function removeBlock(i){blocks.splice(i,1);renderBlocks();}
-function setBlockType(i,val){blocks[i].type=val;renderBlocks();}
-function setConditionType(i,val){blocks[i].conditionType=val;renderBlocks();}
-function setRewardMode(i,val){blocks[i].rewardMode=val;renderBlocks();}
-function setCycleType(i,val){blocks[i].cycleType=val;renderBlocks();}
-function updateField(i,key,val){blocks[i][key]=val;}
-function updateFieldAndRerender(i,key,val){blocks[i][key]=val;renderBlocks();}
-function addTier(i){blocks[i].tiers.push({threshold:'',rewardType:'固定金额',rewardValue:''});renderBlocks();}
-function delTier(i,j){blocks[i].tiers.splice(j,1);renderBlocks();}
-function updateTier(i,j,key,val){blocks[i].tiers[j][key]=val;}
-function setDayCount(i,val){
-  var n=Math.max(1,Math.min(7,parseInt(val)||1));
-  var b=blocks[i]; b.dayCount=n;
-  var rows=b.dayRows.slice(0,n);
-  while(rows.length<n)rows.push({threshold:'',reward:''});
-  b.dayRows=rows; renderBlocks();
+function setConditionType(i,val){
+  blocks[i].conditionType=val; renderBlocks();
 }
-function updateDay(i,j,key,val){blocks[i].dayRows[j][key]=val;}
-function toggleVipOverride(i){blocks[i].vipOverride=!blocks[i].vipOverride;renderBlocks();}
+function setCycleType(i,val){blocks[i].cycleType=val;renderBlocks();}
+function updateField(i,key,val){blocks[i][key]=val;refreshSummary(i);}
 
+// ── 各 VIP 的奖励设定 ──
+function eligibleVipKeys(){ return vipList.filter(function(vk){return selectedVips.includes(vk.toLowerCase());}); }
+function rowsOf(b,vk){ var real=b.vipLinkedTo[vk]||vk; if(!b.vipRows[real]) b.vipRows[real]=[newRow()]; return b.vipRows[real]; }
+function addRow(i,vk){ var b=blocks[i]; if(b.vipLinkedTo[vk]||!isMulti(b))return; rowsOf(b,vk).push(newRow()); renderBlocks(); }
+function delRow(i,vk,j){ var b=blocks[i]; if(b.vipLinkedTo[vk])return; var r=rowsOf(b,vk); if(r.length>1){ r.splice(j,1); renderBlocks(); } }
+function updateRow(i,vk,j,key,val){ if(blocks[i].vipLinkedTo[vk])return; rowsOf(blocks[i],vk)[j][key]=val; if(key==='rewardType')renderBlocks(); else refreshSummary(i); }
+function toggleVipExpand(i,vk){ var b=blocks[i]; b.vipExpanded[vk]=!b.vipExpanded[vk]; renderBlocks(); }
+function isApplySource(b,vk){ return eligibleVipKeys().some(function(tk){return tk!==vk && b.vipLinkedTo[tk]===vk;}); }
+function toggleApplyAll(i,vk){
+  var b=blocks[i]; var others=eligibleVipKeys().filter(function(tk){return tk!==vk;});
+  if(isApplySource(b,vk)){ others.forEach(function(tk){ if(b.vipLinkedTo[tk]===vk){ var snap=rowsOf(b,tk); delete b.vipLinkedTo[tk]; b.vipRows[tk]=JSON.parse(JSON.stringify(snap)); } }); }
+  else { others.forEach(function(tk){ delete b.vipRows[tk]; b.vipLinkedTo[tk]=vk; b.vipExpanded[tk]=false; }); }
+  renderBlocks();
+}
+
+// ── 白话说明：把区块设定翻成一句人话 ──
+function describeBlock(b){
+  var cyc={'活动期间累计':'整个活动期间','每日':'每天','每周':'每周'}[b.cycleType]||'';
+  var eligible=eligibleVipKeys();
+  if(eligible.length===0) return '请先至第3步勾选可参加的 VIP 等级。';
+  var vk=eligible[0]; var rows=rowsOf(b,vk);
+  var fmt=function(r){ var v=r.rewardValue===''?'？':r.rewardValue; return r.rewardType==='百分比'?'送该笔金额的 '+v+'%':'送 '+v+' 元'; };
+  var one=rows[0]; var th=one.threshold||'？';
+  var s;
+  if(b.conditionType==='一次存款')  s='会员在'+cyc+'内第一笔达 '+th+' 元的存款'+fmt(one)+'，只送一次。';
+  else if(b.conditionType==='复存') s='会员活动期间第 2 笔起，每一笔存款达 '+th+' 元'+fmt(one)+(b.limitCount?'，整个活动最多领 '+b.limitCount+' 次':'')+'。';
+  else { var used=rows.filter(function(r){return r.threshold!==''||r.rewardValue!=='';});
+         s='会员在'+cyc+'内累计存款，'+(used.length?used.map(function(r){return '达 '+(r.threshold||'？')+' 元送 '+(r.rewardValue||'？')+' 元';}).join('、'):'（尚未填写档位）')+'，每档只送一次。'; }
+  if(eligible.length>1) s+='（以 '+vk+' 为例'+(isApplySource(b,vk)?'，其余等级相同':'，其余等级各自设定')+'）';
+  return s;
+}
+function refreshSummary(i){ var el=document.querySelectorAll('#blocksContainer .block-summary')[i]; if(el) el.textContent=describeBlock(blocks[i]); }
+
+// ── 画面 ──
 function renderBlocks(){
   var el=document.getElementById('blocksContainer');
   if(!el)return;
-  if(blocks.length===0){el.innerHTML='<div class="empty-hint">尚未新增任何规则区块，请点击上方按钮新增。一般存款活动通常只需1个区块；组合型活动（如新人礼包）才需要多个。</div>';return;}
+  if(blocks.length===0){el.innerHTML='<div class="empty-hint">尚未新增任何规则区块，请点击上方按钮新增。一个活动页可挂多个区块，每个区块是一种存款玩法；同一笔存款符合几个区块就在几个区块各自算数、各自发奖。</div>';return;}
   el.innerHTML=blocks.map(function(b,i){return renderBlock(b,i);}).join('');
 }
 function renderBlock(b,i){
-  var tag=b.type==='daily'?'按天任务型':(b.conditionType+' × '+b.rewardMode);
   return '<div class="rule-block">'
     +'<div class="rule-block-head">'
       +'<div class="rule-block-num">'+(i+1)+'</div>'
-      +'<div style="font-size:13px;color:#333;">区块型态：</div>'
-      +'<select class="f-select" style="max-width:220px;height:32px;" onchange="setBlockType('+i+',this.value)">'
-        +'<option value="standard"'+(b.type==='standard'?' selected':'')+'>标准型（条件×奖励自由组合）</option>'
-        +'<option value="daily"'+(b.type==='daily'?' selected':'')+'>按天任务型</option>'
-      +'</select>'
-      +'<span class="block-type-tag">'+tag+'</span>'
+      +'<div style="font-size:13px;color:#333;">玩法：</div>'
+      +'<span class="block-type-tag">'+b.conditionType+'</span>'
       +'<div style="flex:1;"></div>'
       +'<button class="btn-del" onclick="removeBlock('+i+')">删除区块</button>'
     +'</div>'
+    +'<div class="block-summary">'+describeBlock(b)+'</div>'
     +renderBlockBody(b,i)
-    +renderVipSection(b,i)
     +'</div>';
 }
 function renderBlockBody(b,i){
-  if(b.type==='daily')return renderDaily(b,i);
-  return renderStandard(b,i);
-}
-function renderStandard(b,i){
-  var isAccum = b.conditionType==='累计存款';
-  var isTier = b.rewardMode==='阶梯奖励';
-  var thresholdLabel = isAccum ? '累计门槛金额' : '最低存款金额';
-
   var html='';
-
-  // 存款条件（独立选项）
+  // 存款条件（四选一，选项旁直接写白话定义）
+  var cur=CONDS.filter(function(c){return c[0]===b.conditionType;})[0];
   html += '<div class="field-row"><div class="field-label"><span class="req">*</span>存款条件：</div><div class="field-ctrl"><div class="radio-group">'
-    +'<label class="radio-item"><input type="radio" name="ct'+i+'" '+(b.conditionType==='复存'?'checked':'')+' onchange="setConditionType('+i+',\'复存\')"> 复存</label>'
-    +'<label class="radio-item"><input type="radio" name="ct'+i+'" '+(b.conditionType==='单笔存款'?'checked':'')+' onchange="setConditionType('+i+',\'单笔存款\')"> 单笔存款</label>'
-    +'<label class="radio-item"><input type="radio" name="ct'+i+'" '+(b.conditionType==='累计存款'?'checked':'')+' onchange="setConditionType('+i+',\'累计存款\')"> 累计存款</label>'
-    +'</div></div></div>';
-
-  // 奖励规则（独立选项，跟条件自由组合）
-  html += '<div class="field-row"><div class="field-label"><span class="req">*</span>奖励规则：</div><div class="field-ctrl"><div class="radio-group">'
-    +'<label class="radio-item"><input type="radio" name="rm'+i+'" '+(b.rewardMode==='固定金额'?'checked':'')+' onchange="setRewardMode('+i+',\'固定金额\')"> 固定金额</label>'
-    +'<label class="radio-item"><input type="radio" name="rm'+i+'" '+(b.rewardMode==='百分比'?'checked':'')+' onchange="setRewardMode('+i+',\'百分比\')"> 百分比奖励</label>'
-    +'<label class="radio-item"><input type="radio" name="rm'+i+'" '+(b.rewardMode==='阶梯奖励'?'checked':'')+' onchange="setRewardMode('+i+',\'阶梯奖励\')"> 阶梯奖励</label>'
-    +'</div></div></div>';
-
-  if(isTier){
-    // 奖励规则=阶梯奖励 → 不论条件是复存/单笔/累计，都用门槛表格，门槛栏位文字依条件切换
-    var rows=b.tiers.map(function(t,j){
-      return '<tr>'
-        +'<td>'+(j+1)+'</td>'
-        +'<td><input class="td-input" type="number" placeholder="'+thresholdLabel+'" value="'+t.threshold+'" oninput="updateTier('+i+','+j+',\'threshold\',this.value)"></td>'
-        +'<td><select class="td-select" onchange="updateTier('+i+','+j+',\'rewardType\',this.value)"><option '+(t.rewardType==='固定金额'?'selected':'')+'>固定金额</option><option '+(t.rewardType==='百分比'?'selected':'')+'>百分比</option></select></td>'
-        +'<td><input class="td-input" type="number" placeholder="奖励数值" value="'+t.rewardValue+'" oninput="updateTier('+i+','+j+',\'rewardValue\',this.value)"></td>'
-        +'<td><button class="btn-del" onclick="delTier('+i+','+j+')">删除</button></td>'
-        +'</tr>';
-    }).join('');
-    html += '<div class="field-row"><div class="field-label" style="padding-top:0;">阶梯配置：</div><div class="field-ctrl">'
-      +'<button class="btn-add small" onclick="addTier('+i+')">+ 新增档位</button>'
-      +'<table class="award-table"><thead><tr><th style="width:50px;">档位</th><th>'+thresholdLabel+'</th><th style="width:110px;">奖励类型</th><th>奖励数值</th><th style="width:70px;">操作</th></tr></thead><tbody>'+rows+'</tbody></table>'
-      +(isAccum?'<div class="hint">累计型阶梯：需持续累计存款金额，依达到的档位往上解锁，通常搭配进度条呈现。</div>':'<div class="hint">单笔/复存型阶梯：只看「这一笔」存款落在哪个金额区间，对应给对应档位的奖励，无需累计记录。</div>')
-      +'</div></div>';
-  } else {
-    html += '<div class="field-row"><div class="field-label"><span class="req">*</span>'+thresholdLabel+'：</div><div class="field-ctrl"><input type="number" class="f-input" style="max-width:220px;" placeholder="请输入" value="'+b.minAmount+'" oninput="updateField('+i+',\'minAmount\',this.value)"></div></div>'
-      +'<div class="field-row"><div class="field-label"><span class="req">*</span>奖励'+(b.rewardMode==='百分比'?'比例(%)':'金额')+'：</div><div class="field-ctrl"><input type="number" class="f-input" style="max-width:220px;" placeholder="请输入" value="'+b.rewardValue+'" oninput="updateField('+i+',\'rewardValue\',this.value)"></div></div>';
+    +CONDS.map(function(c){ return '<label class="radio-item"><input type="radio" name="ct'+i+'" '+(b.conditionType===c[0]?'checked':'')+' onchange="setConditionType('+i+',\''+c[0]+'\')"> '+c[0]+'</label>'; }).join('')
+    +'</div><div class="hint">'+cur[1]+'</div></div></div>';
+  // 统计周期（复存没有）
+  if(needsCycle(b)){
+    html += '<div class="field-row"><div class="field-label"><span class="req">*</span>统计周期：</div><div class="field-ctrl"><div class="radio-group">'
+      +[['活动期间累计','活动期间'],['每日','每日（00:00重置）'],['每周','每周（可设定重置日）']].map(function(c){
+        return '<label class="radio-item"><input type="radio" name="cy'+i+'" '+(b.cycleType===c[0]?'checked':'')+' onchange="setCycleType('+i+',\''+c[0]+'\')"> '+c[1]+'</label>'; }).join('')
+      +'</div></div></div>';
   }
-
-  // 奖励上限——BR文件4.4写明「同时支持：奖励上限、不同阶梯配置」，两者是各自独立的能力，不是只有阶梯才有上限
-  html += '<div class="field-row"><div class="field-label">奖励上限：</div><div class="field-ctrl"><input type="number" class="f-input" style="max-width:220px;" placeholder="请输入（本区块累计发放上限，留空代表不设上限）" value="'+b.cap+'" oninput="updateField('+i+',\'cap\',this.value)"></div></div>';
-
-
-  var needsCycle = isAccum || b.conditionType==='复存';
-
-  if(!needsCycle){
-    // 单笔存款：维持原本的每日／活动期间 + 次数
-    html += '<div class="field-row"><div class="field-label"><span class="req">*</span>参与次数限制：</div><div class="field-ctrl">'
-      +'<div class="radio-group">'
-      +'<label class="radio-item"><input type="radio" name="lt'+i+'" '+(b.limitType==='每日'?'checked':'')+' onchange="updateField('+i+',\'limitType\',\'每日\')"> 每日</label>'
-      +'<label class="radio-item"><input type="radio" name="lt'+i+'" '+(b.limitType==='活动期间'?'checked':'')+' onchange="updateField('+i+',\'limitType\',\'活动期间\')"> 活动期间</label>'
-      +'<input type="number" class="f-input" style="width:100px;max-width:100px;" placeholder="次数" value="'+b.limitCount+'" oninput="updateField('+i+',\'limitCount\',this.value)">次'
-      +'</div>'
-      +'<div class="hint">每达标一次立刻发放一次奖励，此处为「次数上限」，不是「达到次数才发放」的门槛——例如设定3次，代表最多可以领3次，不是要存满3笔才给。</div>'
+  // 参与次数上限（只有复存）
+  if(needsLimit(b)){
+    var unit='次／整个活动';
+    html += '<div class="field-row"><div class="field-label"><span class="req">*</span>参与次数上限：</div><div class="field-ctrl">'
+      +'<input type="number" class="f-input" min="1" style="width:100px;max-width:100px;" placeholder="最少1" value="'+b.limitCount+'" oninput="noNeg(this,1);updateField('+i+',\'limitCount\',this.value)"> '+unit
       +'</div></div>';
-  } else {
-    html += '<div class="field-row"><div class="field-label"><span class="req">*</span>统计周期：</div><div class="field-ctrl">'
-      +'<div class="radio-group">'
-      +'<label class="radio-item"><input type="radio" name="cy'+i+'" '+(b.cycleType==='活动期间累计'?'checked':'')+' onchange="setCycleType('+i+',\'活动期间累计\')"> 活动期间累计</label>'
-      +'<label class="radio-item"><input type="radio" name="cy'+i+'" '+(b.cycleType==='每日'?'checked':'')+' onchange="setCycleType('+i+',\'每日\')"> 每日（每日00:00重置）</label>'
-      +'<label class="radio-item"><input type="radio" name="cy'+i+'" '+(b.cycleType==='每周'?'checked':'')+' onchange="setCycleType('+i+',\'每周\')"> 每周（可设定重置日）</label>'
-      +'</div>';
-    if(isAccum){
-      html += '<div class="hint">此区块的累计金额依此周期计算与重置，不受其他区块影响；「参与次数限制」不适用于累计存款条件。</div>'
-        +'</div></div>';
-    } else {
-      // 复存：借用同一个统计周期，同时决定「有没有前一笔」的判断范围，以及次数上限的计算范围
-      html += '<div class="hint">此周期同时决定：①「复存」判定的范围——在此范围内，会员之前是否已有过至少一笔达标存款；②下方参与次数上限的计算范围。</div>'
-        +'</div></div>'
-        +'<div class="field-row"><div class="field-label"><span class="req">*</span>参与次数上限：</div><div class="field-ctrl"><input type="number" class="f-input" style="width:100px;max-width:100px;" placeholder="次数" value="'+b.limitCount+'" oninput="updateField('+i+',\'limitCount\',this.value)">次'
-        +'<div class="hint">「复存」定义：这一笔达标，且会员在上方统计周期范围内，此前已有至少一笔达标存款纪录——第一笔达标存款本身不算复存、不会发放奖励，从第二笔开始才算。此处次数为「上限」，不是门槛。</div>'
-        +'</div></div>';
-    }
   }
-
+  html += renderVipTables(b,i);
   return html;
 }
-function renderDaily(b,i){
-  var rows=b.dayRows.map(function(d,j){
-    return '<tr>'
-      +'<td>Day '+(j+1)+'</td>'
-      +'<td><input class="td-input" type="number" placeholder="当日门槛金额" value="'+d.threshold+'" oninput="updateDay('+i+','+j+',\'threshold\',this.value)"></td>'
-      +'<td><input class="td-input" type="number" placeholder="当日奖励金额" value="'+d.reward+'" oninput="updateDay('+i+','+j+',\'reward\',this.value)"></td>'
-      +'</tr>';
-  }).join('');
-  return '<div class="field-row"><div class="field-label"><span class="req">*</span>任务天数：</div><div class="field-ctrl"><input type="number" class="f-input" style="width:100px;max-width:100px;" min="1" max="7" value="'+b.dayCount+'" oninput="setDayCount('+i+',this.value)"><span class="hint" style="display:inline;margin-left:8px;">固定上限7天</span></div></div>'
-    +'<div class="field-row"><div class="field-label" style="padding-top:0;">每日门槛/奖励：</div><div class="field-ctrl">'
-    +'<table class="award-table"><thead><tr><th style="width:80px;">天数</th><th>当日门槛金额</th><th>当日奖励金额</th></tr></thead><tbody>'+rows+'</tbody></table>'
-    +'<div class="hint">断签不影响后续：某天未达标只是当天没有奖励，隔天正常继续，不重置进度、无额外全勤奖。「第1天」将以该会员在本区块第一次达标日各自起算，非固定日历日。</div>'
-    +'</div></div>';
-}
-function ensureVipData(b,vk){
-  var real=b.vipLinkedTo[vk]||vk; // 若已连动，直接读取来源等级的资料
-  if(!b.vipOverrides[real]){
-    b.vipOverrides[real]={
-      minAmount:b.minAmount, rewardValue:b.rewardValue, cap:b.cap,
-      tiers:JSON.parse(JSON.stringify(b.tiers))
-    };
-  }
-  return b.vipOverrides[real];
-}
-function toggleVipExpand(i,vk){
-  var b=blocks[i];
-  ensureVipData(b,vk);
-  b.vipExpanded[vk]=!b.vipExpanded[vk];
-  renderBlocks();
-}
-function updateVipField(i,vk,key,val){
-  if(blocks[i].vipLinkedTo[vk])return; // 连动中的等级不可直接编辑
-  ensureVipData(blocks[i],vk)[key]=val;
-}
-function addVipTier(i,vk){if(blocks[i].vipLinkedTo[vk])return;ensureVipData(blocks[i],vk).tiers.push({threshold:'',rewardType:'固定金额',rewardValue:''});renderBlocks();}
-function delVipTier(i,vk,j){if(blocks[i].vipLinkedTo[vk])return;ensureVipData(blocks[i],vk).tiers.splice(j,1);renderBlocks();}
-function updateVipTier(i,vk,j,key,val){if(blocks[i].vipLinkedTo[vk])return;ensureVipData(blocks[i],vk).tiers[j][key]=val;}
-function toggleApplyMode(i,vk){
-  var b=blocks[i];
-  if(!b.vipApplyMode[vk])b.vipApplyMode[vk]={on:false};
-  b.vipApplyMode[vk].on=!b.vipApplyMode[vk].on;
-  renderBlocks();
-}
-function toggleApplyTarget(i,vk,tk){
-  var b=blocks[i];
-  if(b.vipLinkedTo[tk]===vk){
-    // 已连动 → 取消连动，并把目前继承到的数值，快照成这个等级自己独立的数据
-    var snap=ensureVipData(b,tk);
-    delete b.vipLinkedTo[tk];
-    b.vipOverrides[tk]=JSON.parse(JSON.stringify(snap));
-  } else {
-    // 建立连动：以来源等级(vk)为准，tk之后都读vk的数据
-    delete b.vipOverrides[tk]; // 清掉自己原本的独立数据，改成读取来源
-    b.vipLinkedTo[tk]=vk;
-    b.vipExpanded[tk]=false;
-  }
-  renderBlocks();
-}
-function renderVipSection(b,i){
-  var box='<div class="vip-box">'
-    +'<div class="vip-box-head">'
-    +'<div class="toggle'+(b.vipOverride?' on':'')+'" onclick="toggleVipOverride('+i+')"></div>'
-    +'<div class="vip-box-title">依会员层级设定不同数值（VIP专属门槛/奖励）</div>'
-    +'</div>';
-  if(!b.vipOverride){
-    box+='<div class="hint">关闭时，本区块所有会员套用同一组门槛与奖励。</div>';
-  } else {
-    var eligibleVips=vipList.filter(function(vk){return selectedVips.includes(vk.toLowerCase());});
-    if(eligibleVips.length===0){
-      box+='<div class="hint" style="color:#ff4d4f;">第3步「参与对象与名单」尚未勾选任何会员等级，请先至第3步勾选可参加本活动的VIP等级，才能在此设定各等级的专属数值。</div>';
-      box+='</div>';
-      return box;
+function renderVipTables(b,i){
+  var multi=isMulti(b);
+  var eligible=eligibleVipKeys();
+  var box='<div class="vip-box"><div class="vip-box-head"><div class="vip-box-title">各 VIP 等级的奖励</div></div>';
+  if(eligible.length===0) return box+'<div class="hint" style="color:#ff4d4f;">第3步「参与对象与名单」尚未勾选任何会员等级，请先至第3步勾选可参加本活动的VIP等级。</div></div>';
+  box+='<div class="vip-accordion">';
+  eligible.forEach(function(vk){
+    var linkedFrom=b.vipLinkedTo[vk]; var isOpen=!linkedFrom && !!b.vipExpanded[vk];
+    box+='<div class="vip-acc-item'+(linkedFrom?' vip-linked':'')+'">'
+      +(linkedFrom
+        ? '<div class="vip-acc-head is-linked"><span>'+vk+' <span class="vip-linked-tag">已套用</span></span></div>'
+        : '<div class="vip-acc-head" onclick="toggleVipExpand('+i+',\''+vk+'\')"><span>'+vk+'</span><span class="vip-acc-arrow">'+(isOpen?'▾':'▸')+'</span></div>');
+    if(isOpen){
+      var rows=rowsOf(b,vk); if(!multi) rows=rows.slice(0,1);
+      box+='<div class="vip-acc-body">'
+        +(vk===eligible[0]?'<label class="radio-item" style="margin-bottom:10px;"><input type="checkbox" '+(isApplySource(b,vk)?'checked':'')+' onchange="toggleApplyAll('+i+',\''+vk+'\')"> 套用至所有其他 VIP 等级</label>':'')
+        +'<table class="award-table"><thead><tr>'
+          +(multi?'<th style="width:60px;">档位</th><th>累计存款达（金额）</th><th>奖励金额（元）</th><th style="width:70px;">操作</th>'
+                 :'<th>存款达（金额）</th><th style="width:130px;">奖励类型</th><th>奖励数值</th>')
+        +'</tr></thead><tbody>'
+        +rows.map(function(r,j){
+          var th='<td><input class="td-input" type="number" min="0" placeholder="金额" value="'+r.threshold+'" oninput="noNeg(this,0);updateRow('+i+',\''+vk+'\','+j+',\'threshold\',this.value)"></td>';
+          if(multi) return '<tr><td>'+(j+1)+'</td>'+th
+            +'<td><input class="td-input" type="number" min="0" placeholder="元" value="'+r.rewardValue+'" oninput="noNeg(this,0);updateRow('+i+',\''+vk+'\','+j+',\'rewardValue\',this.value)"></td>'
+            +'<td><button class="btn-del" '+(rows.length<=1?'disabled':'')+' onclick="delRow('+i+',\''+vk+'\','+j+')">删除</button></td></tr>';
+          return '<tr>'+th
+            +'<td><select class="td-select" onchange="updateRow('+i+',\''+vk+'\','+j+',\'rewardType\',this.value)"><option '+(r.rewardType==='固定金额'?'selected':'')+'>固定金额</option><option '+(r.rewardType==='百分比'?'selected':'')+'>百分比</option></select></td>'
+            +'<td><input class="td-input" type="number" min="0" placeholder="'+(r.rewardType==='百分比'?'该笔金额的 %':'元')+'" value="'+r.rewardValue+'" oninput="noNeg(this,0);updateRow('+i+',\''+vk+'\','+j+',\'rewardValue\',this.value)"></td></tr>';
+        }).join('')
+        +'</tbody></table>'
+        +(multi?'<button class="btn-add small" style="margin-top:8px;" onclick="addRow('+i+',\''+vk+'\')">+ 新增档位</button>':'')
+        +'</div>';
     }
-    box+='<div class="hint" style="margin-bottom:10px;">展开各VIP等级可各自设定专属数值；前台仅显示会员自己对应的数字，不会互相看到彼此的设定。此处只列出第3步已勾选可参加本活动的VIP等级。</div>';
-    box+='<div class="vip-accordion">';
-    eligibleVips.forEach(function(vk){
-      var isOpen=!!b.vipExpanded[vk];
-      var linkedFrom=b.vipLinkedTo[vk]; // 若有值，代表本等级目前连动自哪个等级
-      var vd=ensureVipData(b,vk);
-      var isTier=b.rewardMode==='阶梯奖励';
-      var thresholdLabel=b.conditionType==='累计存款'?'累计门槛金额':'最低存款金额';
-      var dis=linkedFrom?' disabled':'';
-      box+='<div class="vip-acc-item'+(linkedFrom?' vip-linked':'')+'">'
-        +'<div class="vip-acc-head" onclick="toggleVipExpand('+i+',\''+vk+'\')"><span>'+vk+(linkedFrom?' <span class="vip-linked-tag">已套用自 '+linkedFrom+'</span>':'')+'</span><span class="vip-acc-arrow">'+(isOpen?'▾':'▸')+'</span></div>';
-      if(isOpen){
-        if(linkedFrom){
-          box+='<div class="vip-acc-body">'
-            +'<div class="hint" style="margin-bottom:10px;">此等级目前套用「'+linkedFrom+'」的设定，欄位反灰唯讀；'+linkedFrom+'的数值异动时会同步更新。</div>'
-            +'<button class="btn-del ghost" style="margin-bottom:10px;" onclick="toggleApplyTarget('+i+',\''+linkedFrom+'\',\''+vk+'\')">取消套用（转为独立设定）</button>';
-        } else {
-          var am=b.vipApplyMode[vk]||{on:false};
-          box+='<div class="vip-acc-body">'
-            +'<label class="radio-item" style="margin-bottom:10px;"><input type="checkbox" '+(am.on?'checked':'')+' onchange="toggleApplyMode('+i+',\''+vk+'\')"> 套用至其他等级<span class="vip-help-icon" title="勾选后，把本等级（'+vk+'）目前的数值，套用给下方勾选的其他VIP等级，之后本等级异动，套用中的等级会跟着同步变动">?</span></label>';
-          if(am.on){
-            box+='<div style="background:#fff;border:1px solid #e8e8e8;border-radius:4px;padding:10px 12px;margin-bottom:10px;">'
-              +'<div style="font-size:12px;color:#999;margin-bottom:6px;">勾选后，该VIP等级将持续跟随本等级（'+vk+'）的数值，反灰不可自行编辑：</div>'
-              +'<div style="display:flex;flex-wrap:wrap;gap:10px;">'
-              +eligibleVips.filter(function(x){return x!==vk;}).map(function(tk){
-                return '<label class="radio-item"><input type="checkbox" '+(b.vipLinkedTo[tk]===vk?'checked':'')+' onchange="toggleApplyTarget('+i+',\''+vk+'\',\''+tk+'\')"> '+tk+(b.vipLinkedTo[tk]&&b.vipLinkedTo[tk]!==vk?'<span class="hint" style="display:inline;">（目前套用自'+b.vipLinkedTo[tk]+'）</span>':'')+'</label>';
-              }).join('')
-              +'</div>'
-              +'</div>';
-          }
-        }
-        if(isTier){
-          var rows=vd.tiers.map(function(t,j){
-            return '<tr>'
-              +'<td>'+(j+1)+'</td>'
-              +'<td><input class="td-input" type="number" '+dis+' placeholder="'+thresholdLabel+'" value="'+t.threshold+'" oninput="updateVipTier('+i+',\''+vk+'\','+j+',\'threshold\',this.value)"></td>'
-              +'<td><select class="td-select" '+dis+' onchange="updateVipTier('+i+',\''+vk+'\','+j+',\'rewardType\',this.value)"><option '+(t.rewardType==='固定金额'?'selected':'')+'>固定金额</option><option '+(t.rewardType==='百分比'?'selected':'')+'>百分比</option></select></td>'
-              +'<td><input class="td-input" type="number" '+dis+' placeholder="奖励数值" value="'+t.rewardValue+'" oninput="updateVipTier('+i+',\''+vk+'\','+j+',\'rewardValue\',this.value)"></td>'
-              +'<td><button class="btn-del" '+dis+' onclick="delVipTier('+i+',\''+vk+'\','+j+')">删除</button></td>'
-              +'</tr>';
-          }).join('');
-          box+='<button class="btn-add small" '+dis+' onclick="addVipTier('+i+',\''+vk+'\')">+ 新增档位</button>'
-            +'<table class="award-table"><thead><tr><th style="width:50px;">档位</th><th>'+thresholdLabel+'</th><th style="width:110px;">奖励类型</th><th>奖励数值</th><th style="width:70px;">操作</th></tr></thead><tbody>'+rows+'</tbody></table>';
-        } else {
-          var isPct=b.rewardMode==='百分比';
-          box+='<div class="vip-inline-row">'
-            +'<span class="vip-inline-label">'+thresholdLabel+'&gt;=</span>'
-            +'<input type="number" class="vip-inline-input" '+dis+' value="'+vd.minAmount+'" oninput="updateVipField('+i+',\''+vk+'\',\'minAmount\',this.value)">'
-            +'<span class="vip-inline-label">奖励'+(isPct?'比例':'金额')+'：</span>'
-            +'<input type="number" class="vip-inline-input" '+dis+' value="'+vd.rewardValue+'" oninput="updateVipField('+i+',\''+vk+'\',\'rewardValue\',this.value)">'
-            +(isPct?'<span class="vip-inline-pct">%</span>':'')
-            +'<span class="vip-inline-label">上限金额：</span>'
-            +'<input type="number" class="vip-inline-input" '+dis+' placeholder="留空不设上限" value="'+vd.cap+'" oninput="updateVipField('+i+',\''+vk+'\',\'cap\',this.value)">'
-          +'</div>';
-        }
-        if(isTier){
-          box+='<div class="vip-inline-row" style="padding-top:0;">'
-            +'<span class="vip-inline-label">奖励上限：</span>'
-            +'<input type="number" class="vip-inline-input" '+dis+' placeholder="留空不设上限（本区块累计发放上限）" style="width:220px;" value="'+vd.cap+'" oninput="updateVipField('+i+',\''+vk+'\',\'cap\',this.value)">'
-          +'</div>';
-        }
-        box+='</div>';
-      }
-      box+='</div>';
-    });
     box+='</div>';
-  }
-  box+='</div>';
-  return box;
+  });
+  return box+'</div></div>';
 }
-
 
 // ════════════════════════════════════════════════════════════════
 // 步骤五：风控条件
@@ -1184,19 +1095,17 @@ function step6(){
   pRow('3','参与对象与名单',
     '<div class="preview-grid">'+
     row(false,'充值层级',levelStr)+row(false,'指定代理','不指定')+
-    row(false,'新会员限制','否')+row(false,'会员等级',vipStr)+
+    row(false,'会员等级',vipStr)+
     row(false,'黑名单类型','–')+row(false,'用户标签','–')+
     '</div>')+
   pRow('4','活动条件（存款专用）',
     '<div class="preview-grid">'+
     row(true,'规则区块数量',blocks.length?blocks.length+'个':'–')+
-    row(false,'统计周期','各区块各自设定（复存／累计存款条件适用）')+
+    blocks.map(function(b,i){ return row(false,'区块'+(i+1)+'（'+b.conditionType+'）',describeBlock(b)); }).join('')+
     row(false,'奖金所需流水倍数','–')+
     row(false,'流水计算基数','本金+奖金')+
     row(false,'审核方式','自动审核')+
     row(false,'领取方式','自动发放')+
-    row(false,'已验证手机号','否')+
-    row(false,'限制使用设备','无限制')+
     row(false,'适用游戏范围',total?total+'个':'–')+
     '</div>')+
   pRow('5','风控条件',
