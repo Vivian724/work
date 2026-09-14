@@ -5,116 +5,120 @@
 <title>新增活动</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color:#333;background:#f0f2f5;min-width:1280px;}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:16px;color:#333;background:#f0f2f5;min-width:1280px;}
 .layout{display:flex;min-height:100vh;}
 .sidebar{width:180px;flex-shrink:0;background:#fff;border-right:0.5px solid #e8e8e8;}
-.menu-parent{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:44px;font-size:13px;font-weight:500;background:#e8f0fe;color:#333;}
+.menu-parent{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:44px;font-size:15px;font-weight:500;background:#e8f0fe;color:#333;}
 .menu-parent .label{display:flex;align-items:center;gap:6px;}
 .menu-icon-box{width:20px;height:20px;border-radius:4px;background:#1677ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.new-badge{font-size:11px;color:#1677ff;font-weight:400;}
-.submenu-item{display:flex;align-items:center;padding:0 14px 0 40px;height:38px;font-size:13px;color:#1677ff;background:#e6f4ff;text-decoration:none;}
+.new-badge{font-size:13px;color:#1677ff;font-weight:400;}
+.submenu-item{display:flex;align-items:center;padding:0 14px 0 40px;height:38px;font-size:15px;color:#1677ff;background:#e6f4ff;text-decoration:none;}
 .right{flex:1;display:flex;flex-direction:column;min-width:0;}
 .topbar{background:#fff;border-bottom:0.5px solid #e8e8e8;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;}
-.top-left{font-size:12px;color:#666;white-space:nowrap;}
+.top-left{font-size:14px;color:#666;white-space:nowrap;}
 .top-center{display:flex;align-items:center;flex:1;justify-content:center;overflow:hidden;}
-.top-stat{font-size:11px;color:#666;white-space:nowrap;padding:0 6px;}
+.top-stat{font-size:13px;color:#666;white-space:nowrap;padding:0 6px;}
 .top-stat .num{color:#1677ff;font-weight:500;}
 .top-stat .warn{color:#ff4d4f;font-weight:500;}
 .top-div{width:0.5px;height:12px;background:#e0e0e0;flex-shrink:0;}
-.top-right{display:flex;align-items:center;gap:8px;font-size:13px;color:#555;}
-.avatar{width:26px;height:26px;border-radius:50%;background:#ff4d4f;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:500;}
+.top-right{display:flex;align-items:center;gap:8px;font-size:15px;color:#555;}
+.avatar{width:26px;height:26px;border-radius:50%;background:#ff4d4f;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:500;}
 .content-area{flex:1;padding:12px 16px;}
-.bc-bar{font-size:13px;color:#999;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.bc-bar{font-size:15px;color:#999;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
 .bc-bar a{color:#999;text-decoration:none;}.bc-bar a:hover{color:#1677ff;}
 .bc-bar .cur{color:#333;}
 .step-page{display:flex;gap:12px;}
 .step-nav{width:168px;flex-shrink:0;background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;padding:8px 0;}
-.step-nav-item{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;font-size:13px;color:#666;border-left:3px solid transparent;}
+.step-nav-item{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;font-size:15px;color:#666;border-left:3px solid transparent;}
 .step-nav-item:hover{background:#f5f5f5;}
 .step-nav-item.done .snum{background:#1677ff;border-color:#1677ff;color:#fff;}
 .step-nav-item.active{color:#1677ff;background:#e6f4ff;border-left-color:#1677ff;}
 .step-nav-item.active .snum{background:#1677ff;border-color:#1677ff;color:#fff;}
-.snum{width:20px;height:20px;border-radius:50%;border:1.5px solid #d9d9d9;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;color:#999;}
-.step-main{flex:1;display:flex;flex-direction:column;gap:10px;}
+.snum{width:20px;height:20px;border-radius:50%;border:1.5px solid #d9d9d9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;color:#999;}
+.step-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px;}
 .step-topbar{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
-.step-title-text{font-size:14px;font-weight:500;color:#1677ff;}
+.step-title-text{font-size:16px;font-weight:500;color:#1677ff;}
 .step-topbar-btns{display:flex;gap:8px;align-items:center;}
-.btn-prev{height:32px;padding:0 18px;border:1px solid #d9d9d9;border-radius:16px;background:#fff;font-size:13px;cursor:pointer;color:#666;}
+.btn-prev{height:32px;padding:0 18px;border:1px solid #d9d9d9;border-radius:16px;background:#fff;font-size:15px;cursor:pointer;color:#666;}
 .btn-prev:hover{border-color:#1677ff;color:#1677ff;}
-.btn-next{height:32px;padding:0 20px;border:none;border-radius:16px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
+.btn-next{height:32px;padding:0 20px;border:none;border-radius:16px;background:#1677ff;color:#fff;font-size:15px;cursor:pointer;font-weight:500;}
 .btn-next:hover{background:#4096ff;}
-.btn-exit{height:32px;padding:0 16px;border:1px solid #ff4d4f;border-radius:16px;background:#fff;font-size:13px;cursor:pointer;color:#ff4d4f;text-decoration:none;display:inline-flex;align-items:center;}
+.btn-exit{height:32px;padding:0 16px;border:1px solid #ff4d4f;border-radius:16px;background:#fff;font-size:15px;cursor:pointer;color:#ff4d4f;text-decoration:none;display:inline-flex;align-items:center;}
 .btn-exit:hover{background:#fff2f0;}
-.btn-submit{height:32px;padding:0 20px;border:none;border-radius:16px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
-.step-content{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;padding:20px 24px;}
-.step-desc{font-size:12px;color:#999;margin-bottom:16px;}
-.sec-title{font-size:14px;font-weight:500;color:#1677ff;border-left:3px solid #1677ff;padding-left:8px;margin-bottom:14px;}
+.btn-submit{height:32px;padding:0 20px;border:none;border-radius:16px;background:#1677ff;color:#fff;font-size:15px;cursor:pointer;font-weight:500;}
+.step-content{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;padding:20px 24px;min-width:0;}
+.step-desc{font-size:14px;color:#999;margin-bottom:16px;}
+.sec-title{font-size:16px;font-weight:500;color:#1677ff;border-left:3px solid #1677ff;padding-left:8px;margin-bottom:14px;}
 .sec-block{margin-bottom:24px;}
 .field-row{display:flex;align-items:flex-start;margin-bottom:14px;}
-.field-label{font-size:13px;color:#333;min-width:120px;padding-top:7px;flex-shrink:0;}
+.field-label{font-size:15px;color:#333;min-width:120px;padding-top:7px;flex-shrink:0;}
 .req{color:#ff4d4f;margin-right:2px;}
 .field-ctrl{flex:1;}
-.f-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;}
-.f-input::placeholder{color:#bbb;font-size:12px;}
+.f-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:15px;color:#333;background:#fff;outline:none;width:100%;}
+.f-input::placeholder{color:#bbb;font-size:14px;}
 .f-input:focus{border-color:#1677ff;}
 .f-input.disabled{background:#f5f5f5;color:#bbb;cursor:not-allowed;pointer-events:none;}
 .f-input[type=number]{-moz-appearance:textfield;}
 .f-input[type=number]::-webkit-outer-spin-button,.f-input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
-.f-textarea{border:1px solid #d9d9d9;border-radius:4px;padding:8px 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;resize:vertical;min-height:80px;}
-.f-select{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100%;}
+.f-textarea{border:1px solid #d9d9d9;border-radius:4px;padding:8px 10px;font-size:15px;color:#333;background:#fff;outline:none;width:100%;resize:vertical;min-height:80px;}
+.f-select{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:15px;color:#333;background:#fff;outline:none;width:100%;}
 .radio-group{display:flex;gap:16px;align-items:center;padding-top:6px;}
-.radio-item{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;}
+.radio-item{display:flex;align-items:center;gap:6px;font-size:15px;cursor:pointer;}
 .radio-item input{accent-color:#1677ff;}
 .radio-item.disabled{color:#bbb;cursor:not-allowed;}
 .time-range-input{display:flex;align-items:center;height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;gap:6px;background:#fff;max-width:420px;}
-.time-range-input input{border:none;outline:none;font-size:12px;color:#bbb;background:transparent;width:130px;}
+.time-range-input input{border:none;outline:none;font-size:14px;color:#bbb;background:transparent;width:130px;}
 .time-sep{color:#bbb;}
 .toggle{width:40px;height:22px;border-radius:11px;background:#d9d9d9;position:relative;cursor:pointer;flex-shrink:0;transition:background 0.2s;display:inline-block;}
 .toggle.on{background:#1677ff;}
 .toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left 0.2s;}
 .toggle.on::after{left:20px;}
 .toggle.disabled-toggle{opacity:0.4;cursor:not-allowed;pointer-events:none;}
-.hint{font-size:12px;color:#999;margin-top:4px;}
+.hint{font-size:14px;color:#999;margin-top:4px;}
 /* multiselect */
 .ms-wrap{border:1px solid #d9d9d9;border-radius:4px;padding:4px 8px;min-height:34px;display:flex;align-items:center;flex-wrap:wrap;gap:4px;cursor:pointer;background:#fff;position:relative;}
-.ms-tag{display:inline-flex;align-items:center;gap:4px;background:#f0f0f0;border-radius:3px;padding:2px 6px;font-size:12px;color:#333;}
-.ms-tag .ms-rm{cursor:pointer;color:#999;font-size:11px;}
+.ms-tag{display:inline-flex;align-items:center;gap:4px;background:#f0f0f0;border-radius:3px;padding:2px 6px;font-size:14px;color:#333;}
+.ms-tag .ms-rm{cursor:pointer;color:#999;font-size:13px;}
 .ms-tag .ms-rm:hover{color:#ff4d4f;}
-.ms-arrow{margin-left:auto;color:#999;font-size:11px;flex-shrink:0;}
+/* 本次写死不开放配置的栏位：灰底、灰字、点不动 */
+.ms-wrap.is-locked{background:#f5f5f5;cursor:not-allowed;border-color:#e8e8e8;}
+.ms-wrap.is-locked .ms-tag{background:#e9e9e9;color:#999;}
+.locked-note{background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 12px;font-size:14px;color:#ad6800;margin-bottom:14px;line-height:1.7;}
+.ms-arrow{margin-left:auto;color:#999;font-size:13px;flex-shrink:0;}
 .ms-dropdown{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #d9d9d9;border-radius:4px;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,0.08);max-height:200px;overflow-y:auto;}
-.ms-option{padding:8px 12px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+.ms-option{padding:8px 12px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
 .ms-option:hover{background:#f5f5f5;}
 .ms-option.selected{color:#1677ff;}
-.ms-check{color:#1677ff;font-size:12px;}
-.ms-placeholder{color:#bbb;font-size:12px;}
+.ms-check{color:#1677ff;font-size:14px;}
+.ms-placeholder{color:#bbb;font-size:14px;}
 /* lang tabs */
 .lang-tabs{display:flex;border-bottom:1px solid #e8e8e8;margin-bottom:16px;}
-.lang-tab{padding:8px 16px;font-size:13px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.lang-tab{padding:8px 16px;font-size:15px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
 .lang-tab.active{color:#1677ff;border-bottom-color:#1677ff;}
 /* image upload */
-.img-section-title{display:flex;align-items:center;font-size:13px;font-weight:500;margin-bottom:4px;}
-.img-num{width:20px;height:20px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;margin-right:6px;flex-shrink:0;}
-.upload-btn{height:34px;padding:0 20px;background:#1677ff;color:#fff;border:none;border-radius:17px;font-size:13px;cursor:pointer;}
+.img-section-title{display:flex;align-items:center;font-size:15px;font-weight:500;margin-bottom:4px;}
+.img-num{width:20px;height:20px;border-radius:50%;background:#1677ff;color:#fff;font-size:13px;display:inline-flex;align-items:center;justify-content:center;margin-right:6px;flex-shrink:0;}
+.upload-btn{height:34px;padding:0 20px;background:#1677ff;color:#fff;border:none;border-radius:17px;font-size:15px;cursor:pointer;}
 .img-upload-box{border:1px solid #d9d9d9;border-radius:4px;min-height:120px;display:flex;align-items:center;justify-content:center;background:#fafafa;}
 .rich-editor{border:1px solid #d9d9d9;border-radius:4px;overflow:hidden;}
 .rich-toolbar{background:#f5f5f5;border-bottom:1px solid #e8e8e8;padding:6px 10px;display:flex;gap:6px;flex-wrap:wrap;}
-.rich-tool{font-size:12px;color:#555;cursor:pointer;padding:2px 5px;border-radius:2px;}
-.rich-body{min-height:100px;padding:10px;font-size:13px;color:#bbb;}
+.rich-tool{font-size:14px;color:#555;cursor:pointer;padding:2px 5px;border-radius:2px;}
+.rich-body{min-height:100px;padding:10px;font-size:15px;color:#bbb;}
 /* award table */
-.award-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+.award-table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px;}
 .award-table th{background:#f5f7fa;padding:8px 10px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;}
 .award-table td{padding:8px 10px;border:1px solid #ebeef5;text-align:center;vertical-align:middle;}
-.btn-add{height:30px;padding:0 16px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;margin-bottom:10px;}
-.btn-del{height:28px;padding:0 12px;background:#ff4d4f;color:#fff;border:none;border-radius:4px;font-size:12px;cursor:pointer;}
-.td-input{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:12px;width:90px;outline:none;}
+.btn-add{height:30px;padding:0 16px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:15px;cursor:pointer;margin-bottom:10px;}
+.btn-del{height:28px;padding:0 12px;background:#ff4d4f;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer;}
+.td-input{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:14px;width:90px;outline:none;}
 .td-input[type=number]{-moz-appearance:textfield;}
 .td-input[type=number]::-webkit-inner-spin-button,.td-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
-.td-select{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 4px;font-size:12px;outline:none;}
+.td-select{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 4px;font-size:14px;outline:none;}
 /* claim */
-.ratio-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:100px;-moz-appearance:textfield;}
+.ratio-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:15px;color:#333;background:#fff;outline:none;width:100px;-moz-appearance:textfield;}
 .ratio-input::-webkit-outer-spin-button,.ratio-input::-webkit-inner-spin-button{-webkit-appearance:none;}
 .ratio-input:focus{border-color:#1677ff;}
-.game-btn{height:32px;padding:0 16px;border:1px solid #1677ff;border-radius:16px;background:#fff;color:#1677ff;font-size:13px;cursor:pointer;}
+.game-btn{height:32px;padding:0 16px;border:1px solid #1677ff;border-radius:16px;background:#fff;color:#1677ff;font-size:15px;cursor:pointer;}
 /* 风控 disabled */
 .risk-disabled{opacity:0.45;pointer-events:none;}
 .f-input-disabled{background:#f5f5f5;color:#bbb;cursor:not-allowed;}
@@ -122,85 +126,91 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:14px;color
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:500;}
 .modal{background:#fff;border-radius:8px;width:620px;max-height:580px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.15);}
 .modal-header{padding:16px 24px;border-bottom:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;}
-.modal-title{font-size:15px;font-weight:500;color:#333;}
-.modal-close{cursor:pointer;color:#999;font-size:20px;background:none;border:none;line-height:1;}
+.modal-title{font-size:17px;font-weight:500;color:#333;}
+.modal-close{cursor:pointer;color:#999;font-size:22px;background:none;border:none;line-height:1;}
 .modal-body{flex:1;padding:16px 24px;overflow-y:auto;}
 .game-category{margin-bottom:12px;border:0.5px solid #e8e8e8;border-radius:6px;overflow:hidden;}
 .cat-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f9f9f9;border-bottom:0.5px solid #e8e8e8;cursor:pointer;}
 .cat-check{width:16px;height:16px;accent-color:#1677ff;flex-shrink:0;}
-.cat-name{font-size:14px;font-weight:500;color:#1677ff;}
+.cat-name{font-size:16px;font-weight:500;color:#1677ff;}
 .cat-games{padding:12px 14px;display:flex;flex-wrap:wrap;}
-.game-row-item{display:flex;align-items:center;gap:6px;width:33%;cursor:pointer;font-size:13px;color:#333;padding:4px 0;}
+.game-row-item{display:flex;align-items:center;gap:6px;width:33%;cursor:pointer;font-size:15px;color:#333;padding:4px 0;}
 .game-row-item input{width:15px;height:15px;accent-color:#1677ff;flex-shrink:0;cursor:pointer;}
 .modal-footer{padding:12px 24px;border-top:0.5px solid #e8e8e8;display:flex;justify-content:flex-end;gap:8px;}
-.modal-cancel{height:32px;padding:0 20px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;font-size:13px;cursor:pointer;color:#666;}
-.modal-confirm{height:32px;padding:0 20px;border:none;border-radius:4px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;}
+.modal-cancel{height:32px;padding:0 20px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;font-size:15px;cursor:pointer;color:#666;}
+.modal-confirm{height:32px;padding:0 20px;border:none;border-radius:4px;background:#1677ff;color:#fff;font-size:15px;cursor:pointer;}
 /* preview */
-.preview-warn{background:#fff2f0;border:1px solid #ffccc7;border-radius:4px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#ff4d4f;}
-.preview-step-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:#333;}
-.preview-snum{width:22px;height:22px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.preview-warn{background:#fff2f0;border:1px solid #ffccc7;border-radius:4px;padding:10px 14px;margin-bottom:16px;font-size:15px;color:#ff4d4f;}
+.preview-step-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:500;color:#333;}
+.preview-snum{width:22px;height:22px;border-radius:50%;background:#1677ff;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;}
-.preview-row{display:flex;gap:6px;font-size:13px;padding:7px 0;border-bottom:0.5px solid #f5f5f5;}
+.preview-row{display:flex;gap:6px;font-size:15px;padding:7px 0;border-bottom:0.5px solid #f5f5f5;}
 .preview-row:last-child{border-bottom:none;}
 .pk{color:#999;min-width:90px;flex-shrink:0;}
 .pk.req::before{content:'*';color:#ff4d4f;margin-right:2px;}
 .pv{color:#333;}.pv.empty{color:#bbb;}.pv.red{color:#ff4d4f;}
-.prev-img-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+.prev-img-table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px;}
 .prev-img-table th{background:#f5f7fa;padding:8px 12px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;}
 .prev-img-table td{padding:8px 12px;border:1px solid #ebeef5;text-align:center;color:#bbb;}
 /* 领取条件区块 */
 .claim-cond-box{background:#f8faff;border:1px solid #d6e4ff;border-radius:6px;padding:16px 20px;margin-top:8px;}
-.claim-cond-text{font-size:13px;color:#333;line-height:2;display:flex;align-items:center;flex-wrap:wrap;gap:8px;}
-.claim-inline-input{height:32px;width:100px;border:1px solid #1677ff;border-radius:4px;padding:0 8px;font-size:13px;color:#333;outline:none;background:#fff;-moz-appearance:textfield;}
+.claim-cond-text{font-size:15px;color:#333;line-height:2;display:flex;align-items:center;flex-wrap:wrap;gap:8px;}
+.claim-inline-input{height:32px;width:100px;border:1px solid #1677ff;border-radius:4px;padding:0 8px;font-size:15px;color:#333;outline:none;background:#fff;-moz-appearance:textfield;}
 .claim-inline-input::-webkit-outer-spin-button,.claim-inline-input::-webkit-inner-spin-button{-webkit-appearance:none;}
 .hidden{display:none!important;}
 
 /* 存款规则区块专用样式 */
 .rule-block{border:1px solid #e8e8e8;border-radius:6px;padding:16px 18px;margin-bottom:14px;background:#fafbfc;}
-.block-summary{margin:10px 0 14px;padding:10px 14px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;font-size:13px;color:#237804;line-height:1.6;}
+.block-summary{margin:10px 0 14px;padding:10px 14px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;font-size:15px;color:#237804;line-height:1.6;}
 .rule-block-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px dashed #e0e0e0;flex-wrap:wrap;}
-.rule-block-num{width:22px;height:22px;border-radius:50%;background:#1677ff;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:500;}
-.block-type-tag{font-size:11px;color:#1677ff;background:#e6f4ff;padding:2px 9px;border-radius:10px;font-weight:500;}
-.vip-box{background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:12px 16px;margin-top:10px;}
+.rule-block-num{width:22px;height:22px;border-radius:50%;background:#1677ff;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:500;}
+.block-type-tag{font-size:13px;color:#1677ff;background:#e6f4ff;padding:2px 9px;border-radius:10px;font-weight:500;}
+/* 各 VIP 等级的奖励：页签版（VIP0～VIP10 横排在上方，点哪个显示哪个） */
+.vip-box{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:12px 16px 16px;margin-top:10px;}
 .vip-box-head{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
-.vip-box-title{font-size:13px;font-weight:500;color:#874d00;}
-.vip-accordion{background:#fff;border:1px solid #e8e8e8;border-radius:6px;margin-top:6px;overflow:hidden;}
-.vip-acc-item+.vip-acc-item{border-top:1px solid #e8e8e8;}
-.vip-acc-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;font-size:13px;font-weight:500;color:#333;}
-.vip-acc-head:hover{background:#f9f9f9;}
-.vip-acc-arrow{color:#999;font-size:11px;}
-.vip-acc-body{padding:4px 14px 16px;border-top:1px dashed #e8e8e8;}
-.vip-linked-tag{font-size:11px;color:#999;font-weight:400;background:#f0f0f0;padding:1px 8px;border-radius:8px;margin-left:6px;}
-.vip-acc-item.vip-linked .vip-acc-head{color:#999;}
-.vip-acc-head.is-linked{cursor:default;}
-.vip-acc-head.is-linked:hover{background:transparent;}
+.vip-box-title{font-size:16px;font-weight:500;color:#1677ff;border-left:3px solid #1677ff;padding-left:8px;}
+/* 页签列：等级多时自动换行，不会把版面撑爆 */
+.vip-tabs{display:flex;flex-wrap:wrap;border-bottom:1px solid #e8e8e8;margin-top:10px;min-width:0;}
+.vip-tab{background:#fff;border:1px solid #e8e8e8;border-bottom:none;border-radius:4px 4px 0 0;
+  padding:9px 18px;margin:0 2px -1px 0;font-size:15px;color:#333;line-height:1.2;cursor:pointer;font-family:inherit;}
+.vip-tab:hover{color:#1677ff;}
+.vip-tab.is-linked{color:#bbb;background:#f7f7f7;}
+/* is-active 写在最后，否则「已套用」的灰字与「未填」的红字会把目前页签的高亮盖掉 */
+.vip-tab.is-active{background:#fff;color:#1677ff;font-weight:500;border-bottom:1px solid #fff;}
+.vip-tab.is-active.is-linked{color:#1677ff;}
+/* 「还差几级没填」只在标题旁放一颗彙总徽章——页签本身保持干净，
+   不在每一级上标红字或红点（依运营 2026-09-10 指示，比照后台其他页面的页签样式） */
+.vip-miss-badge{font-size:14px;color:#ff4d4f;background:#fff1f0;border:1px solid #ffccc7;border-radius:10px;padding:1px 9px;font-weight:400;margin-left:8px;white-space:nowrap;}
+.vip-panel{background:#fff;border:1px solid #e8e8e8;border-top:none;border-radius:0 0 6px 6px;padding:14px 16px 16px;overflow-x:auto;}
+.vip-linked-note{background:#f5f5f5;border-radius:4px;padding:8px 12px;font-size:14px;color:#666;margin-bottom:10px;}
+.vip-apply-label{display:flex;align-items:center;gap:6px;font-size:15px;color:#333;margin-bottom:12px;cursor:pointer;}
 .vip-inline-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;padding:6px 0 10px;}
-.vip-inline-label{font-size:13px;color:#1677ff;font-weight:500;white-space:nowrap;}
-.vip-inline-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;width:130px;-moz-appearance:textfield;}
+.vip-inline-label{font-size:15px;color:#1677ff;font-weight:500;white-space:nowrap;}
+.vip-inline-input{height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:15px;color:#333;background:#fff;outline:none;width:130px;-moz-appearance:textfield;}
 .vip-inline-input::-webkit-outer-spin-button,.vip-inline-input::-webkit-inner-spin-button{-webkit-appearance:none;}
-.vip-inline-pct{font-size:13px;color:#333;}
-.vip-help-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#bbb;color:#fff;font-size:10px;margin-left:2px;cursor:help;flex-shrink:0;}
+.vip-inline-pct{font-size:15px;color:#333;}
+.vip-help-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#bbb;color:#fff;font-size:12px;margin-left:2px;cursor:help;flex-shrink:0;}
 .f-input:disabled,.f-select:disabled,.td-input:disabled,.td-select:disabled{background:#f5f5f5;color:#bbb;cursor:not-allowed;}
 .btn-add:disabled,.btn-del:disabled{background:#f5f5f5;color:#ccc;border-color:#e8e8e8;cursor:not-allowed;}
-.empty-hint{font-size:12px;color:#bbb;padding:10px 0;}
-.btn-add.small{height:26px;padding:0 12px;font-size:12px;background:#fff;color:#1677ff;border:1px solid #1677ff;}
+.empty-hint{font-size:14px;color:#bbb;padding:10px 0;}
+.btn-add.small{height:26px;padding:0 12px;font-size:14px;background:#fff;color:#1677ff;border:1px solid #1677ff;}
 .btn-del.ghost{background:#fff;color:#ff4d4f;border:1px solid #ffccc7;}
 .bell{width:26px;height:26px;border-radius:50%;border:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:center;}
 .page-card{background:#fff;border-radius:4px;border:0.5px solid #e8e8e8;}
 .tab-bar{display:flex;border-bottom:0.5px solid #e8e8e8;padding:0 16px;}
-.tab{padding:11px 4px;font-size:13px;color:#1677ff;border-bottom:2px solid #1677ff;margin-right:20px;}
+.tab{padding:11px 4px;font-size:15px;color:#1677ff;border-bottom:2px solid #1677ff;margin-right:20px;}
 .filter-area{padding:12px 16px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.fl{font-size:13px;color:#333;white-space:nowrap;}
-.fi-input{height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;}
-.fi-input::placeholder{color:#bbb;font-size:12px;}
+.fl{font-size:15px;color:#333;white-space:nowrap;}
+.fi-input{height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:15px;color:#333;background:#fff;outline:none;}
+.fi-input::placeholder{color:#bbb;font-size:14px;}
 .fi-input:focus{border-color:#1677ff;}
-.fi-select{height:32px;border:1px solid #1677ff;border-radius:4px;padding:0 8px;font-size:13px;color:#333;background:#fff;outline:none;}
+.fi-select{height:32px;border:1px solid #1677ff;border-radius:4px;padding:0 8px;font-size:15px;color:#333;background:#fff;outline:none;}
 .time-range{display:flex;align-items:center;height:32px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;padding:0 10px;gap:6px;}
-.time-range input{border:none;outline:none;font-size:12px;color:#bbb;background:transparent;width:95px;}
-.btn-search{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;}
-.btn-new{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;}
+.time-range input{border:none;outline:none;font-size:14px;color:#bbb;background:transparent;width:95px;}
+.btn-search{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:15px;cursor:pointer;}
+.btn-new{height:32px;padding:0 18px;background:#1677ff;color:#fff;border:none;border-radius:4px;font-size:15px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;}
 .list-area{padding:12px 16px 0;overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:12px;min-width:1200px;}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:1200px;}
 th{background:#fafafa;padding:9px 8px;text-align:left;font-weight:500;color:#888;border-bottom:1px solid #f0f0f0;white-space:nowrap;}
 th.sortable{cursor:pointer;}
 th.sortable:hover{color:#1677ff;}
@@ -212,47 +222,47 @@ th.sortable:hover{color:#1677ff;}
 td{padding:11px 8px;border-bottom:0.5px solid #f0f0f0;color:#333;vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:#fafafa;}
-.status-on{color:#52c41a;font-size:12px;}
-.status-off{color:#999;font-size:12px;}
-.alink{font-size:12px;color:#1677ff;cursor:pointer;background:none;border:none;padding:0;white-space:nowrap;text-decoration:none;}
+.status-on{color:#52c41a;font-size:14px;}
+.status-off{color:#999;font-size:14px;}
+.alink{font-size:14px;color:#1677ff;cursor:pointer;background:none;border:none;padding:0;white-space:nowrap;text-decoration:none;}
 .alink:hover{color:#4096ff;}
 .acts-row{display:flex;gap:12px;margin-bottom:4px;}
 .acts-row:last-child{margin-bottom:0;}
-.upload-pill{height:26px;padding:0 14px;background:#1677ff;color:#fff;border:none;border-radius:13px;font-size:12px;cursor:pointer;}
+.upload-pill{height:26px;padding:0 14px;background:#1677ff;color:#fff;border:none;border-radius:13px;font-size:14px;cursor:pointer;}
 .upload-pill:hover{background:#4096ff;}
-.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:10px 16px 14px;font-size:13px;color:#666;}
-.pg-btn{width:28px;height:28px;border-radius:4px;border:1px solid #d9d9d9;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;}
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:10px 16px 14px;font-size:15px;color:#666;}
+.pg-btn{width:28px;height:28px;border-radius:4px;border:1px solid #d9d9d9;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;}
 .pg-btn.active{background:#1677ff;color:#fff;border-color:#1677ff;}
-.pg-sel{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:13px;}
-.pg-input{width:40px;height:28px;border:1px solid #d9d9d9;border-radius:4px;text-align:center;font-size:13px;}
-/* 彈窗 */
+.pg-sel{height:28px;border:1px solid #d9d9d9;border-radius:4px;padding:0 6px;font-size:15px;}
+.pg-input{width:40px;height:28px;border:1px solid #d9d9d9;border-radius:4px;text-align:center;font-size:15px;}
+/* 弹窗 */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:flex;align-items:flex-start;justify-content:center;z-index:500;padding-top:40px;}
 .modal{background:#fff;border-radius:8px;width:920px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.15);}
 .modal-header{padding:14px 24px;border-bottom:0.5px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.modal-title{font-size:15px;font-weight:500;color:#1677ff;}
+.modal-title{font-size:17px;font-weight:500;color:#1677ff;}
 .modal-header-btns{display:flex;gap:8px;}
-.btn-cancel{height:30px;padding:0 16px;border:1px solid #ff4d4f;border-radius:15px;background:#fff;font-size:13px;cursor:pointer;color:#ff4d4f;}
-.btn-confirm{height:30px;padding:0 20px;border:none;border-radius:15px;background:#1677ff;color:#fff;font-size:13px;cursor:pointer;font-weight:500;}
+.btn-cancel{height:30px;padding:0 16px;border:1px solid #ff4d4f;border-radius:15px;background:#fff;font-size:15px;cursor:pointer;color:#ff4d4f;}
+.btn-confirm{height:30px;padding:0 20px;border:none;border-radius:15px;background:#1677ff;color:#fff;font-size:15px;cursor:pointer;font-weight:500;}
 .modal-body{flex:1;overflow-y:auto;padding:20px 24px;}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:20px;}
 .info-item{padding:6px 0;}
-.info-label{font-size:12px;color:#999;margin-bottom:3px;}
-.info-value{font-size:14px;font-weight:500;color:#333;}
-.img-table{width:100%;border-collapse:collapse;font-size:13px;}
+.info-label{font-size:14px;color:#999;margin-bottom:3px;}
+.info-value{font-size:16px;font-weight:500;color:#333;}
+.img-table{width:100%;border-collapse:collapse;font-size:15px;}
 .img-table th{background:#f5f7fa;padding:10px 14px;text-align:center;font-weight:500;color:#666;border:1px solid #ebeef5;white-space:nowrap;}
 .img-table td{padding:12px 14px;border:1px solid #ebeef5;text-align:center;vertical-align:top;}
-.img-table td.lang-cell{text-align:left;font-size:13px;color:#333;font-weight:500;vertical-align:middle;white-space:nowrap;}
+.img-table td.lang-cell{text-align:left;font-size:15px;color:#333;font-weight:500;vertical-align:middle;white-space:nowrap;}
 .upload-box{border:1.5px dashed #d9d9d9;border-radius:6px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fafafa;min-height:90px;gap:4px;}
 .upload-box:hover{border-color:#1677ff;background:#f0f7ff;}
-.upload-text{font-size:12px;color:#bbb;}
-.upload-hint{font-size:11px;color:#ccc;}
-.url-input{width:100%;margin-top:8px;height:28px;border:1px solid #e8e8e8;border-radius:4px;padding:0 8px;font-size:12px;color:#333;outline:none;background:#fff;}
-.url-input::placeholder{color:#ccc;font-size:11px;}
+.upload-text{font-size:14px;color:#bbb;}
+.upload-hint{font-size:13px;color:#ccc;}
+.url-input{width:100%;margin-top:8px;height:28px;border:1px solid #e8e8e8;border-radius:4px;padding:0 8px;font-size:14px;color:#333;outline:none;background:#fff;}
+.url-input::placeholder{color:#ccc;font-size:13px;}
 .url-input:focus{border-color:#1677ff;}
 .lang-tabs{display:flex;border-bottom:1px solid #e8e8e8;margin-bottom:16px;}
-.lang-tab{padding:8px 16px;font-size:13px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.lang-tab{padding:8px 16px;font-size:15px;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-1px;}
 .lang-tab.active{color:#1677ff;border-bottom-color:#1677ff;}
-.hint-text{font-size:12px;color:#999;margin-top:4px;}
+.hint-text{font-size:14px;color:#999;margin-top:4px;}
 .img-card{border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;}
 .img-card-head{background:#f5f7fa;padding:8px 14px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;}
 .img-dashed{cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;padding:16px 12px;}
@@ -268,7 +278,7 @@ tr:hover td{background:#fafafa;}
         <div class="menu-icon-box"><svg viewBox="0 0 12 12" fill="none" width="12" height="12"><circle cx="6" cy="6" r="4" stroke="#fff" stroke-width="1.3"/><path d="M4 6h4M6 4v4" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg></div>
         <span>活动配置<span class="new-badge">（新）</span></span>
       </div>
-      <span style="font-size:10px;color:#999;transform:rotate(90deg);display:inline-block;">›</span>
+      <span style="font-size:12px;color:#999;transform:rotate(90deg);display:inline-block;">›</span>
     </div>
     <a href="#" class="submenu-item" onclick="showList();return false;">活动列表</a>
     <a href="award_review.html" class="submenu-item">派奖审核</a>
@@ -294,10 +304,10 @@ tr:hover td{background:#fafafa;}
       <div class="page-card">
         <div class="tab-bar"><div class="tab">活动列表</div></div>
         <div style="position:relative;display:inline-block;width:100%;">
-          <span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">1</span>
+          <span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">1</span>
         <div class="filter-area" style="border:2px solid #ff4d4f;">
           <span class="fl">活动模板：</span>
-          <select class="fi-select" id="fTmpl"><option value="">全部</option><option>周卡活动</option><option>预约活动</option><option>存款活动</option></select>
+          <select class="fi-select" id="fTmpl"><option value="">全部</option><option>周卡活动</option><option>预约活动</option><option>存款活动＿复存</option><option>存款活动＿累计存款</option></select>
           <span class="fl">活动ID：</span>
           <input type="text" class="fi-input" placeholder="活动ID" style="width:110px;" id="fId">
           <span class="fl">活动名称：</span>
@@ -318,7 +328,7 @@ tr:hover td{background:#fafafa;}
         </div>
         </div>
         <div style="position:relative;display:inline-block;width:100%;">
-          <span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">2</span>
+          <span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">2</span>
         <div class="list-area" style="border:2px solid #ff4d4f;">
           <table>
             <thead><tr>
@@ -329,7 +339,7 @@ tr:hover td{background:#fafafa;}
               <th>币种</th><th>语系</th><th>活动模板</th><th>活动名称</th>
               <th>预览图片</th>
               <th>黑名单</th><th>指定代理</th><th>参与／中奖人数</th>
-              <th>彩金所需流水倍數</th><th>操作</th>
+              <th>彩金所需流水倍数</th><th>操作</th>
             </tr></thead>
             <tbody id="tBody"></tbody>
           </table>
@@ -344,7 +354,7 @@ tr:hover td{background:#fafafa;}
       </div>
       </div>
 <div id="wizardView" class="hidden">
-<div class="bc-bar">位置 <span>›</span> 活动配置 <span>›</span> <a href="#" onclick="showList();return false;">活动列表</a> <span>›</span> <span class="cur">新增活动（存款活动）</span></div>
+<div class="bc-bar">位置 <span>›</span> 活动配置 <span>›</span> <a href="#" onclick="showList();return false;">活动列表</a> <span>›</span> <span class="cur" id="bcActType">新增活动（存款活动＿复存）</span></div>
       <div class="step-page">
         <div class="step-nav" id="stepNav"></div>
         <div class="step-main">
@@ -375,17 +385,16 @@ tr:hover td{background:#fafafa;}
   </div>
 </div>
 
-<!-- 规则弹窗图提醒（决议 A25：第4步配置完成后引导回第2步补图） -->
-<div class="modal-overlay hidden" id="imgReminderModal">
+<!-- 各 VIP 奖励必填提醒（2026-09-10 定案：第4步各 VIP 等级的奖励为必填） -->
+<div class="modal-overlay hidden" id="vipRequiredModal">
   <div class="modal" style="width:520px;">
     <div class="modal-header">
-      <span class="modal-title">规则区块已建立，请补上规则弹窗图</span>
-      <button class="modal-close" onclick="imgReminderLater()">×</button>
+      <span class="modal-title">还有 VIP 等级的奖励没填</span>
+      <button class="modal-close" onclick="closeVipRequired()">&times;</button>
     </div>
-    <div class="modal-body" id="imgReminderBody"></div>
+    <div class="modal-body" id="vipRequiredBody"></div>
     <div class="modal-footer">
-      <button class="modal-cancel" onclick="imgReminderLater()">稍后再补，先到第5步</button>
-      <button class="modal-confirm" onclick="imgReminderGo()">现在去第2步补图</button>
+      <button class="modal-confirm" onclick="closeVipRequired()">回去补填</button>
     </div>
   </div>
 </div>
@@ -409,6 +418,40 @@ tr:hover td{background:#fafafa;}
 // ── 步骤名称（6步）──────────────────────────────────────────────
 const stepNames=['活动模板设置','活动图片','参与对象与名单','活动条件','风控条件','提交预览'];
 let cur=1, claimAuto=true, awardRows=[{}];
+// 第2步两组前台入口设定（2026-09-10 新增）：预设关闭，关闭时下方栏位收起，
+// 避免运营以为没设定也会出现在前台。
+let floatOn=false, listOn=false;
+
+// ── 活动类型（2026-09-10 定案：存款活动拆成两个配置）──────────────
+// 原本「复存／累计存款」是第4步每个规则区块各自选的单选钮；
+// 现在改成「一个活动只有一种玩法」——在第1步的活动类型就决定，
+// 第4步依选定的类型各自独立长出栏位（复存有次数上限、累计存款有阶梯）。
+// 要两种玩法就建两个活动。
+const DEPOSIT_TYPES=['复存','累计存款'];
+let actType='复存';                                   // 目前这个活动是哪一种玩法
+
+// 第1步下拉底下那句白话说明——切换类型时即时换掉
+function actTypeHintHtml(){
+  var d={
+    '复存':'<b>复存</b>：每一笔达门槛的存款都送（存一次送一次），用「参与次数上限」收口。',
+    '累计存款':'<b>累计存款</b>：不看单笔，看周期内的存款总额，达各档门槛逐档送、每档一次。'
+  }[actType]||'';
+  return d+'　这里选的类型决定<b>第4步「活动条件」</b>长什么样，两种类型的第4步各自独立；同一个活动只能是其中一种，需要两种玩法请分别建两个活动。';
+}
+
+// 切换活动类型：更新面包屑与说明，并把已建立的区块一律改成新玩法
+// （不重画第1步，否则运营已经打好的活动名称、时间会被清掉）
+function setActType(v){
+  var t=String(v).replace('存款活动＿','');
+  if(DEPOSIT_TYPES.indexOf(t)<0) return;              // 周卡／预约活动不在本原型范围内
+  if(t===actType) return;
+  actType=t;
+  blocks.forEach(function(b){ b.conditionType=actType; });   // 一个活动一种玩法
+  var bc=document.getElementById('bcActType');
+  if(bc) bc.textContent='新增活动（存款活动＿'+actType+'）';
+  var hint=document.getElementById('actTypeHint');
+  if(hint) hint.innerHTML=actTypeHintHtml();
+}
 
 // ── 语系 ────────────────────────────────────────────────────────
 const langOptions=[
@@ -479,38 +522,41 @@ function syncEndMin(){
   else { en.removeAttribute('min'); }
 }
 
-// 决议 A25：第4步的规则区块配置完成后，引导运营回第2步补上各区块的规则弹窗图。
-// 先跳提示弹窗，按「现在去补图」直接跳到第2步；同一批区块只提醒一次，区块有增删改才会再提醒。
-var lastImgReminderSig='';
-function blocksSig(){ return blocks.map(function(b){return b.id+':'+b.conditionType;}).join('|'); }
+// 第4步按「下一步」：各 VIP 等级的奖励为必填（2026-09-10 定案），有没填完的就挡下。
+// 原本这里还会提醒回第2步补「规则弹窗图」（A25），该栏位已于 2026-09-10 取消配置，提醒一并移除。
 function leaveStep4(){
-  var sig=blocksSig();
-  if(blocks.length>0 && sig!==lastImgReminderSig){ openImgReminder(); return; }
+  var miss=unfilledVips();
+  if(miss.length>0){ openVipRequired(miss); return; }
   goStep(5);
 }
-function openImgReminder(){
-  var list=blocks.map(function(b,i){
-    var tag=b.conditionType;
-    return '<li style="margin-bottom:4px;">区块'+(i+1)+'（'+tag+'）——需上传 PC 端与 H5 端各一张</li>';
-  }).join('');
-  document.getElementById('imgReminderBody').innerHTML=
-    '<p style="font-size:13px;color:#333;margin-bottom:10px;">第4步已建立 <b>'+blocks.length+'</b> 个规则区块。每个区块都需要在<b>第2步「活动图片」</b>上传对应的规则弹窗图，否则第6步提交时会被挡下：</p>'+
-    '<ul style="padding-left:20px;font-size:13px;color:#555;margin-bottom:10px;">'+list+'</ul>'+
-    '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 12px;font-size:12px;color:#ad6800;">之后若在第4步新增、删除或修改区块，系统会再次提醒，请回第2步确认弹窗图是否需要重新上传。</div>';
-  document.getElementById('imgReminderModal').classList.remove('hidden');
+// 未填提示弹窗：列出是哪个区块、哪一个 VIP 等级没填，让运营直接找得到
+function openVipRequired(miss){
+  document.getElementById('vipRequiredBody').innerHTML=
+    '<p style="font-size:15px;color:#333;margin-bottom:10px;">以下 <b>'+miss.length+'</b> 个 VIP 等级的奖励尚未填写完整（门槛金额与奖励数值都要填；奖励类型为<b>百分比</b>时，<b>单一会员奖励上限</b>也要填），请补齐后再进入下一步：</p>'+
+    '<ul style="padding-left:20px;font-size:15px;color:#555;margin-bottom:10px;">'+
+    miss.map(function(m){return '<li style="margin-bottom:4px;">'+m+'</li>';}).join('')+'</ul>'+
+    '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 12px;font-size:14px;color:#ad6800;">若各等级的奖励都一样，可在最低等级的页签内勾「<b>套用至其他等级</b>」一次填完。</div>';
+  document.getElementById('vipRequiredModal').classList.remove('hidden');
 }
-function imgReminderLater(){ lastImgReminderSig=blocksSig(); document.getElementById('imgReminderModal').classList.add('hidden'); goStep(5); }
-function imgReminderGo(){
-  lastImgReminderSig=blocksSig(); document.getElementById('imgReminderModal').classList.add('hidden'); goStep(2);
-  var sec=document.getElementById('popupImgSection'); if(sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
-}
+function closeVipRequired(){ document.getElementById('vipRequiredModal').classList.add('hidden'); }
 function toggle(el){el.classList.toggle('on');}
+// 首页浮窗／活动列表：选「关闭」就把下方整组收起来
+function setFloatOn(v){
+  floatOn=v;
+  var b=document.getElementById('floatBody');
+  if(b) b.classList.toggle('hidden', !v);
+}
+function setListOn(v){
+  listOn=v;
+  var b=document.getElementById('listBody');
+  if(b) b.classList.toggle('hidden', !v);
+}
 
 function renderStep(){
   var el=document.getElementById('stepContent');
   if(cur===1)el.innerHTML=step1();
   else if(cur===2){el.innerHTML=step2();setupLangDrop();}
-  else if(cur===3){el.innerHTML=step3();setupDrops();}
+  else if(cur===3){el.innerHTML=step3();}   // 第3步已写死反灰，不需要下拉事件
   else if(cur===4){el.innerHTML=step4();if(blocks.length===0)addBlock();else renderBlocks();}
   else if(cur===5)el.innerHTML=step5();
   else el.innerHTML=step6();
@@ -522,7 +568,14 @@ function renderStep(){
 function step1(){
   return '<div class="step-desc">将活动模板配置保存至系统，系统将自动配置相关功能</div>'+
   '<div class="sec-block"><div class="sec-title">活动模板</div>'+
-  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动类型：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>周卡活动</option><option>预约活动</option><option selected>存款活动</option></select></div></div>'+
+  '<div class="field-row"><div class="field-label"><span class="req">*</span>活动类型：</div><div class="field-ctrl">'+
+  '<select class="f-select" id="actTypeSelect" style="max-width:300px;" onchange="setActType(this.value)">'+
+    '<option>周卡活动</option><option>预约活动</option>'+
+    '<option '+(actType==='复存'?'selected':'')+'>存款活动＿复存</option>'+
+    '<option '+(actType==='累计存款'?'selected':'')+'>存款活动＿累计存款</option>'+
+  '</select>'+
+  '<div class="hint" id="actTypeHint">'+actTypeHintHtml()+'</div>'+
+'</div></div>'+
   '<div class="field-row"><div class="field-label"><span class="req">*</span>活动名称：</div><div class="field-ctrl"><input type="text" id="actNameInput" class="f-input" placeholder="请输入（前后台展示名称）" style="max-width:400px;"></div></div>'+
   '<div class="field-row"><div class="field-label"><span class="req">*</span>活动币种：</div><div class="field-ctrl"><select class="f-select" style="max-width:300px;"><option>PHP</option></select></div></div>'+
   '<div class="field-row"><div class="field-label"><span class="req">*</span>活动时间：</div><div class="field-ctrl"><div class="time-range-input"><svg viewBox="0 0 14 14" fill="none" width="13" height="13"><circle cx="7" cy="7" r="5.5" stroke="#bbb" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg><input type="text" id="actStart" placeholder="开始时间" onfocus="this.type=\'datetime-local\'" onblur="if(!this.value)this.type=\'text\'" onchange="syncEndMin()"><span class="time-sep">～</span><input type="text" id="actEnd" placeholder="结束时间" onfocus="this.type=\'datetime-local\';syncEndMin()" onblur="if(!this.value)this.type=\'text\'"></div>'+
@@ -565,7 +618,7 @@ function step2(){
     var isSel=selectedLangs.includes(o.val);
     var disableDefault=o.val==='default';
     return '<div class="ms-option '+(isSel?'selected':'')+'" onclick="'+(disableDefault?'':'toggleLang(\''+o.val+'\')')+'">'+
-      '<span>'+o.label+(disableDefault?' <span style="font-size:11px;color:#bbb;">（固定）</span>':'')+'</span>'+
+      '<span>'+o.label+(disableDefault?' <span style="font-size:13px;color:#bbb;">（固定）</span>':'')+'</span>'+
       (isSel?'<span class="ms-check">✓</span>':'')+
     '</div>';
   }).join('');
@@ -590,33 +643,38 @@ function step2(){
 function renderLangTabContent(){
   var gameTotal=Object.values(confirmedSelected).reduce(function(s,set){return s+set.size;},0);
   return (
-    // ══════════════════════════════════════════════════════════
-    // 规则弹窗图（每个规则区块各自一张，与第4步「活动条件」即时对应）
-    // ══════════════════════════════════════════════════════════
-    (blocks.length===0
-      ? '<div class="sec-block"><div class="sec-title"><span class="req">*</span>规则弹窗图</div>'+
-        '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:12px 16px;font-size:13px;color:#ad6800;">'+
-        '尚未于第4步「活动条件」新增规则区块，请先完成该步骤设定后，再回来上传各区块对应的规则弹窗图。'+
-        '</div></div>'
-      : '<div class="sec-block" id="popupImgSection"><div class="sec-title"><span class="req">*</span>规则弹窗图</div>'+
-        blocks.map(function(b,i){
-          var tag=b.conditionType;
-          return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-bottom:12px;">'+
-            '<div style="font-size:13px;font-weight:500;color:#1677ff;margin-bottom:10px;">区块'+(i+1)+'（'+tag+'）规则弹窗图</div>'+
-            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
-              imgCard('PC 端','建议尺寸 356×422px')+
-              imgCard('H5 端','建议尺寸 356×422px')+
-            '</div>'+
-          '</div>';
-        }).join('')+
-        '<div class="hint">此区与第4步「活动条件」的规则区块即时对应——若之后在第4步新增或删除区块，请回到本步骤确认弹窗图数量是否需要调整。</div>'+
-      '</div>')+
+    // 规则弹窗图：2026-09-10 定案取消配置（前台写死），本步骤不再上传
 
-    // ── 排序 ────────────────────────────────────────────────────
-    '<div class="sec-block">'+
-      '<div class="field-row" style="margin-bottom:0;">'+
-        '<div class="field-label">排序：</div>'+
-        '<div class="field-ctrl"><input type="number" class="f-input" style="max-width:160px;-moz-appearance:textfield;" placeholder="请输入" value="0"></div>'+
+    // ── 首页浮窗设置 ／ 活动列表设置（2026-09-10 新增，照既有后台样式）──
+    // 两者都是「存款活动要不要出现在前台某个位置」的开关，各自一组 PC／H5 图片。
+    // 依既有样式：开关用单选钮、图片框常驻显示（关闭时不收起）、排序属浮窗区块。
+    '<div class="sec-block"><div class="sec-title">首页浮窗设置</div>'+
+      '<div class="radio-group" style="margin-bottom:14px;">'+
+        '<label class="radio-item"><input type="radio" name="floatWin" '+(floatOn?'checked':'')+' onchange="setFloatOn(true)"> 开启</label>'+
+        '<label class="radio-item"><input type="radio" name="floatWin" '+(floatOn?'':'checked')+' onchange="setFloatOn(false)"> 关闭</label>'+
+      '</div>'+
+      '<div id="floatBody" class="'+(floatOn?'':'hidden')+'">'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+          imgPane('PC 图片')+imgPane('H5 图片')+
+        '</div>'+
+        '<div class="hint" style="margin-top:10px;">'+IMG_HINT+'</div>'+
+        '<div class="field-row" style="margin:14px 0 0;">'+
+          '<div class="field-label">排序：</div>'+
+          '<div class="field-ctrl"><input type="number" class="f-input" style="max-width:160px;-moz-appearance:textfield;" value="0"></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+
+    '<div class="sec-block"><div class="sec-title">活动列表设置</div>'+
+      '<div class="radio-group" style="margin-bottom:14px;">'+
+        '<label class="radio-item"><input type="radio" name="listImg" '+(listOn?'checked':'')+' onchange="setListOn(true)"> 开启</label>'+
+        '<label class="radio-item"><input type="radio" name="listImg" '+(listOn?'':'checked')+' onchange="setListOn(false)"> 关闭</label>'+
+      '</div>'+
+      '<div id="listBody" class="'+(listOn?'':'hidden')+'">'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'+
+          imgPane('PC 图片')+imgPane('H5 图片')+
+        '</div>'+
+        '<div class="hint" style="margin-top:10px;">用于前台 Rewards → Promotion 列表；'+IMG_HINT+'</div>'+
       '</div>'+
     '</div>'+
 
@@ -627,8 +685,8 @@ function renderLangTabContent(){
   );
 }
 
-// ── 附加配置資料 ────────────────────────────────────────────────
-var addonBlocks=[]; // 預設不顯示，點新增配置才展開
+// ── 附加配置资料 ────────────────────────────────────────────────
+var addonBlocks=[]; // 预设不显示，点新增配置才展开
 
 function renderAddonList(){
   if(addonBlocks.length===0) return '';
@@ -636,8 +694,8 @@ function renderAddonList(){
     return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;margin-bottom:12px;">'+
       // header：序号 + 删除
       '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">'+
-        '<span style="font-size:14px;font-weight:500;color:#1677ff;">附加配置 '+(i+1)+'</span>'+
-        '<button onclick="delAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:12px;cursor:pointer;">删除</button>'+
+        '<span style="font-size:16px;font-weight:500;color:#1677ff;">附加配置 '+(i+1)+'</span>'+
+        '<button onclick="delAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:14px;cursor:pointer;">删除</button>'+
       '</div>'+
       // 链接
       '<div class="field-row">'+
@@ -692,35 +750,49 @@ function refreshAddonList(){
 function imgCardAlt(label){
   return '<div style="border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;">'+
     '<div style="background:#f5f7fa;padding:8px 14px;border-bottom:1px solid #e8e8e8;">'+
-      '<span style="font-size:13px;font-weight:500;color:#333;">'+label+'</span>'+
+      '<span style="font-size:15px;font-weight:500;color:#333;">'+label+'</span>'+
     '</div>'+
     '<div style="padding:14px;">'+
       '<div style="min-height:100px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;">'+
         '<svg viewBox="0 0 24 24" fill="none" width="28" height="28"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>'+
-        '<span style="font-size:12px;color:#bbb;">点击上传图片</span>'+
+        '<span style="font-size:14px;color:#bbb;">点击上传图片</span>'+
       '</div>'+
     '</div>'+
   '</div>';
 }
 
 // 单张图片上传卡片（仅上传框，无 URL 输入）
+// 依既有后台样式的图片框：标题只写「PC 图片／H5 图片」，右下角一个「删除」
+function imgPane(label){
+  return '<div style="border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;">'+
+    '<div style="background:#f5f7fa;padding:10px 16px;border-bottom:1px solid #e8e8e8;font-size:15px;font-weight:500;color:#333;">'+label+'</div>'+
+    '<div style="padding:14px;">'+
+      '<div style="min-height:140px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;">'+
+        '<span style="font-size:14px;color:#bbb;">点击上传图片</span>'+
+      '</div>'+
+      '<div style="text-align:right;margin-top:8px;"><a href="#" onclick="return false;" style="font-size:14px;color:#1677ff;text-decoration:none;">🗑 删除</a></div>'+
+    '</div>'+
+  '</div>';
+}
+var IMG_HINT='图片格式：png、bmp、jpg、gif、webp；大小限制 5MB 内。';
+
 function imgCard(platform, sizeHint){
   return '<div style="border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;">'+
     '<div style="background:#f5f7fa;padding:8px 14px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;">'+
-      '<span style="font-size:13px;font-weight:500;color:#333;">'+platform+'</span>'+
-      '<span style="font-size:11px;color:#bbb;">'+sizeHint+'</span>'+
+      '<span style="font-size:15px;font-weight:500;color:#333;">'+platform+'</span>'+
+      '<span style="font-size:13px;color:#bbb;">'+sizeHint+'</span>'+
     '</div>'+
     '<div style="padding:14px;">'+
       '<div style="min-height:110px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed #d9d9d9;border-radius:4px;background:#fafafa;">'+
         '<svg viewBox="0 0 24 24" fill="none" width="28" height="28"><path d="M12 16V8M12 8l-3 3M12 8l3 3" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5A4.5 4.5 0 0 0 15.5 12H14a6 6 0 1 0-11.8 1.5" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>'+
-        '<span style="font-size:12px;color:#bbb;">点击上传图片</span>'+
-        '<span style="font-size:11px;color:#ccc;">PNG / JPG，≤ 2MB</span>'+
+        '<span style="font-size:14px;color:#bbb;">点击上传图片</span>'+
+        '<span style="font-size:13px;color:#ccc;">PNG / JPG，≤ 2MB</span>'+
       '</div>'+
     '</div>'+
   '</div>';
 }
 function imgBlock(num,title,size,link){
-  return '<div style="margin-bottom:16px;"><div class="img-section-title"><span class="img-num">'+num+'</span>'+title+'</div><div style="font-size:12px;color:#999;margin-bottom:8px;">尺寸：'+size+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;"><div class="img-upload-box"><button class="upload-btn">点击上传自定义图片</button></div><div><div style="font-size:13px;margin-bottom:6px;">'+link+'</div><input type="text" class="f-input" placeholder="请输入外部链接网址"></div></div></div>';
+  return '<div style="margin-bottom:16px;"><div class="img-section-title"><span class="img-num">'+num+'</span>'+title+'</div><div style="font-size:14px;color:#999;margin-bottom:8px;">尺寸：'+size+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;"><div class="img-upload-box"><button class="upload-btn">点击上传自定义图片</button></div><div><div style="font-size:15px;margin-bottom:6px;">'+link+'</div><input type="text" class="f-input" placeholder="请输入外部链接网址"></div></div></div>';
 }
 
 // 语系下拉逻辑
@@ -758,27 +830,40 @@ function step3(){
   var vipHtml=selectedVips.length===0?'<span class="ms-placeholder">请选择会员等级</span>':selectedVips.map(function(v){var lb=vipOptions.find(function(o){return o.val===v;});lb=lb?lb.label:v;return '<span class="ms-tag">'+lb+'<span class="ms-rm" onclick="removeVip(event,\''+v+'\')">×</span></span>';}).join('');
   var lvlDd='<div class="ms-option '+(selectedLevels.length===levelOptions.length?'selected':'')+'" onclick="toggleAllLevel()"><span>全选</span>'+(selectedLevels.length===levelOptions.length?'<span class="ms-check">✓</span>':'')+'</div>'+levelOptions.map(function(o){return '<div class="ms-option '+(selectedLevels.includes(o.val)?'selected':'')+'" onclick="toggleLevel(\''+o.val+'\')"><span>'+o.label+'</span>'+(selectedLevels.includes(o.val)?'<span class="ms-check">✓</span>':'')+'</div>';}).join('');
   var vipDd='<div class="ms-option" onclick="toggleAllVip()"><span>全选</span>'+(selectedVips.length===vipOptions.length?'<span class="ms-check">✓</span>':'')+'</div>'+vipOptions.map(function(o){return '<div class="ms-option '+(selectedVips.includes(o.val)?'selected':'')+'" onclick="toggleVip(\''+o.val+'\')"><span>'+o.label+'</span>'+(selectedVips.includes(o.val)?'<span class="ms-check">✓</span>':'')+'</div>';}).join('');
-  return '<div class="step-desc">设置活动的参与对象与黑名单规则</div>'+
+  // ── 2026-09-10 定案：第3步本次不开放配置，一律用预设值 ──────────
+  // 预设＝所有会员都可参加（黑名单除外）：充值层级全选、不指定代理、
+  // VIP0～VIP10 全选、用户标签不限、黑名单不设定。
+  // 栏位全部反灰点不动，避免运营以为改得动、改了却不生效。
+  // 连带效果：第4步的 VIP 奖励表固定列出 VIP0～VIP10 共 11 级，
+  //          不会有「第3步改勾选 → 第4步要跟着增删」的连动问题。
+  var lockTags=function(labels){
+    return '<div class="ms-wrap is-locked">'+labels.map(function(l){
+      return '<span class="ms-tag">'+l+'</span>';
+    }).join('')+'</div>';
+  };
+  return '<div class="step-desc">设置活动的参与对象与黑名单规则。<b>本次先以预设值写死，画面不开放配置。</b></div>'+
+  '<div class="locked-note"><b>本次不开放配置：</b>以下栏位一律使用预设值（充值层级全选、不指定代理、会员等级 VIP0～VIP10 全选、用户标签不限、黑名单不设定），效果等同<b>所有会员都可参加</b>。因此第4步的「各 VIP 等级的奖励」固定列出 <b>VIP0～VIP10 共 11 级</b>。日后要开放配置时，本步骤的栏位与第4步的连动规则需一并定义。</div>'+
   '<div class="sec-block"><div class="sec-title">参与对象设置</div>'+
-  '<div class="field-row"><div class="field-label">1. 充值层级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="levelWrap" onclick="toggleLevelDrop(event)">'+lvlHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(levelOpen?'':'hidden')+'" id="levelDropdown">'+lvlDd+'</div></div></div>'+
-  '<div class="field-row"><div class="field-label">2. 指定代理：</div><div class="field-ctrl">'+
-  '<div class="radio-group" style="flex-direction:column;align-items:flex-start;gap:10px;">'+
-    '<label class="radio-item"><input type="radio" name="agent" value="none" checked onchange="setAgentMode(\'none\')"> 不指定</label>'+
-    '<div>'+
-      '<label class="radio-item"><input type="radio" name="agent" value="line" onchange="setAgentMode(\'line\')"> 指定代理線</label>'+
-      '<div id="agentLineDrop" class="hidden" style="margin-top:8px;margin-left:4px;">'+
-        '<button class="game-btn" onclick="openAgentLineModal()">'+
-          (selectedAgentLines.length?'已选择 <strong>'+selectedAgentLines.length+'</strong> 个代理':'选择代理')+
-        '</button>'+
-      '</div>'+
-    '</div>'+
-  '</div>'+
-'</div></div>'+
-  '<div class="field-row"><div class="field-label">3. 会员等级：</div><div class="field-ctrl" style="position:relative;max-width:360px;"><div class="ms-wrap" id="vipWrap" onclick="toggleVipDrop(event)">'+vipHtml+'<span class="ms-arrow">▾</span></div><div class="ms-dropdown '+(vipOpen?'':'hidden')+'" id="vipDropdown">'+vipDd+'</div><div class="hint">此处勾选的VIP等级，会同步决定第4步「依会员层级设定不同数值」可以展开设定哪些VIP。</div></div></div>'+
-  '<div class="field-row"><div class="field-label">4. 用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>'+
+  '<div class="field-row"><div class="field-label">1. 充值层级：</div><div class="field-ctrl" style="max-width:360px;">'+
+    lockTags(levelOptions.map(function(o){return o.label;}))+
+  '</div></div>'+
+  '<div class="field-row"><div class="field-label">2. 指定代理：</div><div class="field-ctrl"><div class="radio-group">'+
+    '<label class="radio-item"><input type="radio" name="agent" checked disabled> 不指定</label>'+
+    '<label class="radio-item disabled"><input type="radio" name="agent" disabled> 指定代理线</label>'+
+  '</div></div></div>'+
+  '<div class="field-row"><div class="field-label">3. 会员等级：</div><div class="field-ctrl" style="max-width:360px;">'+
+    lockTags(vipOptions.map(function(o){return o.label;}))+
+  '</div></div>'+
+  '<div class="field-row"><div class="field-label">4. 用户标签：</div><div class="field-ctrl">'+
+    '<select class="f-select" style="max-width:360px;" disabled><option>不限</option></select>'+
+  '</div></div></div>'+
   '<div class="sec-block"><div class="sec-title">黑名单设置</div>'+
-  '<div class="field-row"><div class="field-label">黑名单：</div><div class="field-ctrl"><input type="text" class="f-input" style="max-width:360px;" placeholder="请输入"></div></div>'+
-  '<div class="field-row"><div class="field-label">用户标签：</div><div class="field-ctrl"><select class="f-select" style="max-width:360px;"><option value="">请选择用户标签</option><option>全选</option></select></div></div></div>';
+  '<div class="field-row"><div class="field-label">黑名单：</div><div class="field-ctrl">'+
+    '<input type="text" class="f-input" style="max-width:360px;" placeholder="本次不设定" disabled>'+
+  '</div></div>'+
+  '<div class="field-row"><div class="field-label">用户标签：</div><div class="field-ctrl">'+
+    '<select class="f-select" style="max-width:360px;" disabled><option>不限</option></select>'+
+  '</div></div></div>';
 }
 function setAgentMode(v){
   var lineDrop=document.getElementById('agentLineDrop');
@@ -795,13 +880,13 @@ function renderAgentLineModalBody(){
   document.getElementById('agentLineModalBody').innerHTML=
     '<div style="padding:10px 14px;border-bottom:1px solid #e8e8e8;background:#f9f9f9;display:flex;align-items:center;gap:10px;">'+
       '<input type="checkbox" class="cat-check" '+(allSel?'checked':'')+' onclick="toggleAllAgentLines(this.checked)">'+
-      '<span style="font-size:14px;font-weight:500;color:#333;">全选</span>'+
+      '<span style="font-size:16px;font-weight:500;color:#333;">全选</span>'+
     '</div>'+
     agentLineOptions.map(function(line){
       var chk=tempAgentLines.includes(line);
       return '<div style="padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid #f5f5f5;">'+
         '<input type="checkbox" class="cat-check" '+(chk?'checked':'')+' onchange="toggleAgentLine(\''+line+'\',this.checked)">'+
-        '<span style="font-size:13px;color:#333;">'+line+'</span>'+
+        '<span style="font-size:15px;color:#333;">'+line+'</span>'+
       '</div>';
     }).join('');
 }
@@ -822,10 +907,12 @@ function removeVip(e,v){e.stopPropagation();selectedVips=selectedVips.filter(fun
 // 步骤四：活动条件（原4 + 原6领取 + 原7提款）
 // ════════════════════════════════════════════════════════════════
 function step4(){
-  return '<div class="step-desc">新增规则区块——每个区块是一种存款玩法（一次存款／复存／连续性），可挂多个；流水与发放方式为整个活动共用。</div>'+
+  return '<div class="step-desc">本活动的玩法为「<b>'+actType+'</b>」（在<b>第1步「活动类型」</b>选定，此处不可改）。可新增多个规则区块，每个区块都是「'+actType+'」，差别只在周期／次数／金额；流水与发放方式为整个活动共用。</div>'+
 
   '<div class="sec-block"><div class="sec-title">规则区块设定</div>'+
-  '<button class="btn-add" onclick="addBlock()">+ 新增规则区块</button>'+
+  (blocks.length>=MAX_BLOCKS
+    ? '<button class="btn-add" disabled title="一个活动最多 '+MAX_BLOCKS+' 个规则区块">已达上限（最多 '+MAX_BLOCKS+' 个规则区块）</button>'
+    : '<button class="btn-add" onclick="addBlock()">+ 新增规则区块</button>')+
   '<div id="blocksContainer"></div></div>'+
 
   '<div class="sec-block"><div class="sec-title">流水规则</div>'+
@@ -833,33 +920,35 @@ function step4(){
   '<label class="radio-item"><input type="checkbox" id="turnoverPrincipal" checked> 本金</label>'+
   '<label class="radio-item"><input type="checkbox" id="turnoverBonus" checked> 奖金</label>'+
   '<input type="number" class="f-input" style="width:100px;max-width:100px;-moz-appearance:textfield;" placeholder="请输入" value="1">'+
-  '<span style="font-size:13px;color:#333;">倍</span>'+
+  '<span style="font-size:15px;color:#333;">倍</span>'+
   '</div></div>'+
   '<div class="hint" style="margin:-6px 0 14px;">本金／奖金可各自勾选，两者皆可单独或同时纳入流水计算（例如只勾「本金」＝奖金免流水、存款本金需流水）。</div>'+
   '<div class="field-row"><div class="field-label">适用游戏范围：</div><div class="field-ctrl"><button class="game-btn" onclick="openModal()">已选择 <strong>'+confirmedCount+'</strong> 个游戏</button><div class="hint">仅影响流水计算是否纳入该游戏的投注，不影响存款条件本身。</div></div></div>'+
   '</div>'+
 
   '<div class="sec-block"><div class="sec-title">奖励发放</div>'+
+  // ── 2026-09-10 定案：本次固定「自动审核 ＋ 自动领取」，两栏都写死反灰 ──
+  // 达标即自动入账，会员不必按领取，因此没有「领取天数」，也不会有「已过期」的奖励。
+  '<div class="locked-note">本次<b>发放方式固定「自动领取」、审核方式固定「自动审核」</b>，两者皆不开放配置——会员达标即自动入账，无需手动按领取。因此<b>没有「领取天数」设定</b>，奖励也<b>不会有「可领取／已过期」</b>这两种状态。日后要开放手动领取／人工审核时，须一并补上领取天数、逾期处理与前台领取按钮的规格。</div>'+
   '<div class="field-row"><div class="field-label">发放方式：</div><div class="field-ctrl">'+
   '<div class="radio-group">'+
-  '<label class="radio-item"><input type="radio" name="depositClaim" '+(claimAuto?'checked':'')+' onchange="setDepositClaim(true)"> 自动发放</label>'+
-  '<label class="radio-item"><input type="radio" name="depositClaim" '+(claimAuto?'':'checked')+' onchange="setDepositClaim(false)"> 手动领取</label>'+
+  '<label class="radio-item"><input type="radio" name="depositClaim" checked disabled> 自动领取</label>'+
+  '<label class="radio-item disabled"><input type="radio" name="depositClaim" disabled> 手动领取</label>'+
   '</div>'+
-  // 领取天数：仅「手动领取」时出现，展开即预设带入 1 天（决议 A42）
-  '<div id="depositClaimDaysWrap" class="'+(claimAuto?'hidden':'')+'" style="display:flex;align-items:center;gap:8px;font-size:13px;margin-top:8px;">'+
-  '<input type="number" class="f-input" min="1" value="1" style="width:120px;max-width:120px;" oninput="if(this.value!==\'\'&&+this.value<1)this.value=1">天内需领取，逾期状态自动变为「已过期」（预设 1 天）'+
-  '</div></div></div>'+
-  // 审核方式：与发放方式连动（决议 A41）——自动发放时固定「自动审核」并反灰，只有手动领取才开放选择
-  '<div class="field-row"><div class="field-label">审核方式：</div><div class="field-ctrl"><div class="radio-group">'+
-  '<label class="radio-item'+(claimAuto?' disabled':'')+'" id="auditManualLabel"><input type="radio" name="audit" id="auditManual" '+(claimAuto?'disabled':'')+'> 人工审核</label>'+
-  '<label class="radio-item"><input type="radio" name="audit" id="auditAuto" checked> 自动审核</label>'+
-  '</div>'+
-  '<div class="hint" id="auditHint"'+(claimAuto?'':' class="hidden" style="display:none;"')+'>发放方式为「自动发放」时，审核方式固定为「自动审核」；切换为「手动领取」后才可选择人工审核。</div>'+
+  '<div class="hint">达标即自动入账，会员无需手动领取（本次写死，不开放选择）。</div>'+
   '</div></div>'+
-  '<div class="hint" style="margin:4px 0 14px;">奖励状态共4种：未达标／可领取／已领取／已过期——由上方规则区块的达标情况与本区的领取天数设定共同决定，无需另外配置。</div>'+
+  '<div class="field-row"><div class="field-label">审核方式：</div><div class="field-ctrl"><div class="radio-group">'+
+  '<label class="radio-item disabled"><input type="radio" name="audit" disabled> 人工审核</label>'+
+  '<label class="radio-item"><input type="radio" name="audit" checked disabled> 自动审核</label>'+
+  '</div>'+
+  '<div class="hint">系统自动审核后即发放，不进人工派奖审核队列（本次写死，不开放选择）。</div>'+
+  '</div></div>'+
+  '<div class="hint" style="margin:4px 0 14px;">奖励状态本次<b>只有 2 种</b>：未达标／已发放——由上方规则区块的达标情况决定，无需另外配置。（原本的「可领取／已过期」只有手动领取才会出现，本次不适用。）</div>'+
   '</div>';
 }
 
+// setDepositClaim：2026-09-10 起发放方式写死为「自动领取」，画面上已无切换入口。
+// 函式保留不删，日后开放手动领取时可直接接回。
 function setDepositClaim(v){
   claimAuto=v;                                   // 记住状态，重新渲染时不会跑掉
   var el=document.getElementById('depositClaimDaysWrap');
@@ -872,47 +961,132 @@ function setDepositClaim(v){
   if(hint) hint.style.display=v?'':'none';
 }
 
-// ════ 存款规则区块（定案版，2026-09-08 晚）════
-// 存款条件回答「哪些存款算数」：一次存款／复存／连续性。
-// 奖励：一次存款／复存＝一列（达门槛 → 固定金额 或 该笔金额的百分比）；连续性＝多列阶梯（累计达 X → 送 Y 元，只有固定金额）。没有任何金额上限。
-// 上限：没有任何金额上限栏位（运营决议）；只有复存的「参与次数上限」。
+// ════ 存款规则区块（2026-09-10 定案：玩法上移到第1步的活动类型）════
+// 存款条件回答「哪些存款算数」：复存／累计存款（原名「连续性」，2026-09-10 改名）。
+//   原本还有「一次存款」，但它跟「复存 ＋ 次数上限 1」发挥的作用一模一样
+//   （周期内第一笔达门槛的存款送一次），属于同一件事的两个入口，已移除。
+//   要配「只送一次」的活动，就用复存＋次数上限 1。
+// 2026-09-10 起，区块内不再有「存款条件」单选钮——玩法由第1步的活动类型决定，
+//   区块的 conditionType 一律等于 actType，同一活动的所有区块都是同一种玩法。
+// 奖励：复存＝一列（达门槛 → 固定金额 或 该笔金额的百分比）；累计存款＝多列阶梯（累计达 X → 送 Y 元，只有固定金额）。
+// 上限：没有任何金额上限栏位（运营决议）；只有复存的「参与次数上限」，范围 1～20 次。
 let blocks=[]; let blockSeq=0;
 const vipList=Array.from({length:11},function(_,i){return 'VIP'+i;});
+// 两种玩法的白话定义（第4步区块内以唯读文字显示，不再是可点的单选钮）
 const CONDS=[
-  ['一次存款','只送一次：统计周期内第一笔达门槛的存款'],
-  ['复存',   '存一次送一次：第 2 笔起每一笔达门槛都送，有次数上限（固定以活动期间计算）'],
-  ['连续性', '存越多送越多：累计存款达各档门槛逐档送，每档一次']
+  ['复存',     '存一次送一次：每一笔达门槛都送（含第 1 笔），周期内领满次数上限为止。次数上限填 1 就是「只送一次」'],
+  ['累计存款', '存越多送越多：周期内累计存款达各档门槛逐档送，每档一次']
 ];
-function needsCycle(b){ return b.conditionType!=='复存'; }
+// 参与次数上限的允许范围（运营 2026-09-09 定案）
+var LIMIT_MIN=1, LIMIT_MAX=20;
+// 数量上限（运营 2026-09-10 定案）：一个活动最多挂 3 个规则区块；
+// 累计存款的档位最多 20 级。两者都做成「到上限就按不下去」，不是按了才报错。
+var MAX_BLOCKS=3, MAX_TIERS=20;
+// 「每周」的重置时点：依 2026-09-09 定案（A55）不开放配置，
+// 一律固定「每周一 00:00:00」归零。原本这里有一组星期几＋时:分的栏位，
+// 运营确认实务上不会用到「周三下午 6 点重置」这种排期，
+// 留着只是多一个会填错的地方，已整组移除。
+var WEEK_RESET='每周一 00:00:00';
+// 两种存款条件都要周期（2026-09-09 决议）：
+// 累计存款 靠周期界定「累计」的范围；
+// 复存虽然是逐笔判断、规则本身不需要范围，但它的「参与次数上限」需要——
+// 没有周期，次数上限就只能是「整个活动 N 次」，配不出「每天最多 3 次」。
+function needsCycle(b){ return true; }
 function needsLimit(b){ return b.conditionType==='复存'; }
-function isMulti(b){ return b.conditionType==='连续性'; }
-function noNeg(el,min){ if(el.value!==''&&+el.value<min) el.value=min; }   // 数字栏位不接受负数／低于下限
+function isMulti(b){ return b.conditionType==='累计存款'; }
+// 数字栏位夹在允许范围内：低于下限拉回下限，高于上限拉回上限。
+// max 省略时代表没有上限（金额栏位就是这样，依 A37 决议不做位数防呆）。
+function noNeg(el,min,max){
+  if(el.value==='') return;
+  if(+el.value<min) el.value=min;
+  if(max!==undefined && +el.value>max) el.value=max;
+}
 
-function newRow(){ return {threshold:'',rewardType:'固定金额',rewardValue:''}; }
+// memberCap＝「单一会员奖励上限」（2026-09-10 运营决议新增）。
+//   算的是「这个会员在本周期内、这个区块拿到的奖励合计」，不是单笔的天花板。
+//   单位跟着周期走：元／日、元／周、元／整个活动，与「参与次数上限」一起归零。
+//   会员快领满时「发到上限为止」（剩余额度不足也发，把额度用尽）。
+//   固定金额不需要（金额 × 次数上限就算得出天花板），此栏只在奖励类型＝百分比时出现并必填。
+function newRow(){ return {threshold:'',rewardType:'固定金额',rewardValue:'',memberCap:''}; }
 function addBlock(){
-  blocks.push({ id:++blockSeq, conditionType:'一次存款', cycleType:'活动期间累计', limitCount:'',
-    vipRows:{}, vipExpanded:{'VIP0':true}, vipLinkedTo:{} });
-  renderBlocks();
+  if(blocks.length>=MAX_BLOCKS) return;        // 防呆：按钮已反灰，这里再挡一次
+  blocks.push({ id:++blockSeq, conditionType:actType, cycleType:'活动期间累计', limitCount:'',
+    vipRows:{}, vipActiveTab:'', vipLinkedTo:{} });
+  renderStep();                                // 重画整步，让「新增区块」按钮跟着变状态
 }
-function removeBlock(i){blocks.splice(i,1);renderBlocks();}
-function setConditionType(i,val){
-  blocks[i].conditionType=val; renderBlocks();
-}
+function removeBlock(i){blocks.splice(i,1);renderStep();}   // 重画整步，让「新增区块」按钮恢复
+// setConditionType 已于 2026-09-10 移除：玩法改由第1步的活动类型决定，区块内不可切换。
 function setCycleType(i,val){blocks[i].cycleType=val;renderBlocks();}
 function updateField(i,key,val){blocks[i][key]=val;refreshSummary(i);}
 
 // ── 各 VIP 的奖励设定 ──
 function eligibleVipKeys(){ return vipList.filter(function(vk){return selectedVips.includes(vk.toLowerCase());}); }
 function rowsOf(b,vk){ var real=b.vipLinkedTo[vk]||vk; if(!b.vipRows[real]) b.vipRows[real]=[newRow()]; return b.vipRows[real]; }
-function addRow(i,vk){ var b=blocks[i]; if(b.vipLinkedTo[vk]||!isMulti(b))return; rowsOf(b,vk).push(newRow()); renderBlocks(); }
+// 这个 VIP 等级的奖励填完了没：每一列的门槛与数值都要有值才算填完。
+// 复存只看第一列（画面上也只显示一列）；累计存款要每一档都填。
+function vipFilled(b,vk){
+  var rows=rowsOf(b,vk);
+  if(!isMulti(b)) rows=rows.slice(0,1);
+  return rows.every(function(r){
+    if(r.threshold===''||r.rewardValue==='') return false;
+    // 百分比必须一并填「单一会员奖励上限」，否则等于开了一个没有天花板的百分比
+    if(r.rewardType==='百分比' && r.memberCap==='') return false;
+    return true;
+  });
+}
+// 这个区块还有哪几级没填完——页签着色、彙总徽章、下一步阻挡全部用这一支，
+// 保证画面上看到的与挡下来的完全一致。
+// 被「套用」的等级不算：它没有自己要填的东西，缺的是来源那一级。
+function unfilledVipsOf(b){
+  return eligibleVipKeys().filter(function(vk){
+    return !b.vipLinkedTo[vk] && !vipFilled(b,vk);
+  });
+}
+// 整个第4步还有没有没填完的等级——第6步的必填检查与「下一步」阻挡都用这一支
+function unfilledVips(){
+  var out=[];
+  blocks.forEach(function(b,i){
+    unfilledVipsOf(b).forEach(function(vk){ out.push('区块'+(i+1)+' '+vk); });
+  });
+  return out;
+}
+function addRow(i,vk){
+  var b=blocks[i];
+  if(b.vipLinkedTo[vk]||!isMulti(b)) return;
+  if(rowsOf(b,vk).length>=MAX_TIERS) return;   // 防呆：最多 20 级，按钮已反灰
+  rowsOf(b,vk).push(newRow());
+  renderBlocks();
+}
 function delRow(i,vk,j){ var b=blocks[i]; if(b.vipLinkedTo[vk])return; var r=rowsOf(b,vk); if(r.length>1){ r.splice(j,1); renderBlocks(); } }
-function updateRow(i,vk,j,key,val){ if(blocks[i].vipLinkedTo[vk])return; rowsOf(blocks[i],vk)[j][key]=val; if(key==='rewardType')renderBlocks(); else refreshSummary(i); }
-function toggleVipExpand(i,vk){ var b=blocks[i]; b.vipExpanded[vk]=!b.vipExpanded[vk]; renderBlocks(); }
+function updateRow(i,vk,j,key,val){
+  if(blocks[i].vipLinkedTo[vk])return;
+  rowsOf(blocks[i],vk)[j][key]=val;
+  if(key==='rewardType'){ renderBlocks(); return; }
+  refreshSummary(i);
+  refreshVipTabs(i);        // 填完就不再标红、徽章数字跟着降——不必重画整个区块
+}
+// 更新这个区块标题旁的「未填 N 级」徽章（页签本身不标记）
+function refreshVipTabs(i){
+  var miss=unfilledVipsOf(blocks[i]);
+  var badge=document.getElementById('vmiss-'+i);
+  if(badge){
+    badge.textContent = miss.length ? '未填 '+miss.length+' 级' : '';
+    badge.style.display = miss.length ? '' : 'none';
+  }
+}
+// 切换 VIP 页签（页签版取代原本的手风琴展开／收合）
+function setVipTab(i,vk){ blocks[i].vipActiveTab=vk; renderBlocks(); }
+// 目前该显示哪一级：没指定、或指定的那级已不在名单里，就退回第一级
+function activeVipKey(b){
+  var eligible=eligibleVipKeys();
+  if(eligible.length===0) return '';
+  return eligible.indexOf(b.vipActiveTab)>=0 ? b.vipActiveTab : eligible[0];
+}
 function isApplySource(b,vk){ return eligibleVipKeys().some(function(tk){return tk!==vk && b.vipLinkedTo[tk]===vk;}); }
 function toggleApplyAll(i,vk){
   var b=blocks[i]; var others=eligibleVipKeys().filter(function(tk){return tk!==vk;});
   if(isApplySource(b,vk)){ others.forEach(function(tk){ if(b.vipLinkedTo[tk]===vk){ var snap=rowsOf(b,tk); delete b.vipLinkedTo[tk]; b.vipRows[tk]=JSON.parse(JSON.stringify(snap)); } }); }
-  else { others.forEach(function(tk){ delete b.vipRows[tk]; b.vipLinkedTo[tk]=vk; b.vipExpanded[tk]=false; }); }
+  else { others.forEach(function(tk){ delete b.vipRows[tk]; b.vipLinkedTo[tk]=vk; }); }
   renderBlocks();
 }
 
@@ -922,13 +1096,26 @@ function describeBlock(b){
   var eligible=eligibleVipKeys();
   if(eligible.length===0) return '请先至第3步勾选可参加的 VIP 等级。';
   var vk=eligible[0]; var rows=rowsOf(b,vk);
-  var fmt=function(r){ var v=r.rewardValue===''?'？':r.rewardValue; return r.rewardType==='百分比'?'送该笔金额的 '+v+'%':'送 '+v+' 元'; };
+  var fmt=function(r){
+    var v=r.rewardValue===''?'？':r.rewardValue;
+    return r.rewardType==='百分比' ? '送该笔金额的 '+v+'%' : '送 '+v+' 元';
+  };
   var one=rows[0]; var th=one.threshold||'？';
   var s;
-  if(b.conditionType==='一次存款')  s='会员在'+cyc+'内第一笔达 '+th+' 元的存款'+fmt(one)+'，只送一次。';
-  else if(b.conditionType==='复存') s='会员活动期间第 2 笔起，每一笔存款达 '+th+' 元'+fmt(one)+(b.limitCount?'，整个活动最多领 '+b.limitCount+' 次':'')+'。';
+  if(b.conditionType==='复存'){
+    // 复存的周期只影响次数上限的范围，所以句子拆成「多久内每一笔」＋「多久最多领几次」
+    var pre={'活动期间累计':'在整个活动期间','每日':'每天','每周':'每周'}[b.cycleType]||'在整个活动期间';
+    var lim={'活动期间累计':'整个活动','每日':'每天','每周':'每周'}[b.cycleType]||'整个活动';
+    // 次数上限与金额上限并列写出来，运营才看得出两个收口谁先到
+    var lims=[];
+    if(b.limitCount) lims.push(lim+'最多领 '+b.limitCount+' 次');
+    if(one.rewardType==='百分比') lims.push(lim+'奖励合计上限 '+(one.memberCap===''?'？':one.memberCap)+' 元');
+    s='会员'+pre+'每一笔存款达 '+th+' 元'+fmt(one)+(lims.length?'，'+lims.join('、'):'')+'。';
+  }
   else { var used=rows.filter(function(r){return r.threshold!==''||r.rewardValue!=='';});
          s='会员在'+cyc+'内累计存款，'+(used.length?used.map(function(r){return '达 '+(r.threshold||'？')+' 元送 '+(r.rewardValue||'？')+' 元';}).join('、'):'（尚未填写档位）')+'，每档只送一次。'; }
+  // 「每周」要讲清楚是哪一天几点归零，不然「每周」两个字等于没讲
+  if(b.cycleType==='每周') s+='（'+WEEK_RESET+' 归零重算）';
   if(eligible.length>1) s+='（以 '+vk+' 为例'+(isApplySource(b,vk)?'，其余等级相同':'，其余等级各自设定')+'）';
   return s;
 }
@@ -938,14 +1125,14 @@ function refreshSummary(i){ var el=document.querySelectorAll('#blocksContainer .
 function renderBlocks(){
   var el=document.getElementById('blocksContainer');
   if(!el)return;
-  if(blocks.length===0){el.innerHTML='<div class="empty-hint">尚未新增任何规则区块，请点击上方按钮新增。一个活动页可挂多个区块，每个区块是一种存款玩法；同一笔存款符合几个区块就在几个区块各自算数、各自发奖。</div>';return;}
+  if(blocks.length===0){el.innerHTML='<div class="empty-hint">尚未新增任何规则区块，请点击上方按钮新增。一个活动可挂多个区块，<b>所有区块都是第1步选定的「'+actType+'」</b>，差别只在周期／次数／金额；同一笔存款符合几个区块就在几个区块各自算数、各自发奖。</div>';return;}
   el.innerHTML=blocks.map(function(b,i){return renderBlock(b,i);}).join('');
 }
 function renderBlock(b,i){
   return '<div class="rule-block">'
     +'<div class="rule-block-head">'
       +'<div class="rule-block-num">'+(i+1)+'</div>'
-      +'<div style="font-size:13px;color:#333;">玩法：</div>'
+      +'<div style="font-size:15px;color:#333;">玩法：</div>'
       +'<span class="block-type-tag">'+b.conditionType+'</span>'
       +'<div style="flex:1;"></div>'
       +'<button class="btn-del" onclick="removeBlock('+i+')">删除区块</button>'
@@ -956,23 +1143,35 @@ function renderBlock(b,i){
 }
 function renderBlockBody(b,i){
   var html='';
-  // 存款条件（四选一，选项旁直接写白话定义）
+  // 存款条件：唯读，直接显示第1步选定的玩法（2026-09-10 起不可在区块内切换）
   var cur=CONDS.filter(function(c){return c[0]===b.conditionType;})[0];
-  html += '<div class="field-row"><div class="field-label"><span class="req">*</span>存款条件：</div><div class="field-ctrl"><div class="radio-group">'
-    +CONDS.map(function(c){ return '<label class="radio-item"><input type="radio" name="ct'+i+'" '+(b.conditionType===c[0]?'checked':'')+' onchange="setConditionType('+i+',\''+c[0]+'\')"> '+c[0]+'</label>'; }).join('')
-    +'</div><div class="hint">'+cur[1]+'</div></div></div>';
-  // 统计周期（复存没有）
+  html += '<div class="field-row"><div class="field-label">存款条件：</div><div class="field-ctrl">'
+    +'<span class="block-type-tag">'+b.conditionType+'</span>'
+    +'<div class="hint">'+cur[1]+'</div>'
+    +'<div class="hint">此项由<b>第1步「活动类型」</b>决定，区块内不可更改；要换玩法请回第1步切换活动类型（已建立的区块会一并跟着改）。</div>'
+    +'</div></div>';
+  // 周期（复存没有）
   if(needsCycle(b)){
-    html += '<div class="field-row"><div class="field-label"><span class="req">*</span>统计周期：</div><div class="field-ctrl"><div class="radio-group">'
-      +[['活动期间累计','活动期间'],['每日','每日（00:00重置）'],['每周','每周（可设定重置日）']].map(function(c){
+    html += '<div class="field-row"><div class="field-label"><span class="req">*</span>周期：</div><div class="field-ctrl"><div class="radio-group">'
+      +[['活动期间累计','活动期间'],['每日','每日（00:00:00 重置）'],['每周','每周（周一 00:00:00 重置）']].map(function(c){
         return '<label class="radio-item"><input type="radio" name="cy'+i+'" '+(b.cycleType===c[0]?'checked':'')+' onchange="setCycleType('+i+',\''+c[0]+'\')"> '+c[1]+'</label>'; }).join('')
       +'</div></div></div>';
+    // 三种周期的重置时点都是写死的，没有任何可配置栏位：
+    // 活动期间＝全程不重置、每日＝每天 00:00:00、每周＝每周一 00:00:00（A55 定案不开放）。
+    // 选到「每周」时只在下方补一句说明，让运营知道是哪一天几点归零。
+    if(b.cycleType==='每周'){
+      html += '<div class="field-row"><div class="field-label"></div>'
+        +'<div class="field-ctrl"><div class="hint">'+WEEK_RESET
+        +' 进度归零、重新计算（已发出的奖励不受影响）；此时点固定，不开放调整</div></div></div>';
+    }
   }
   // 参与次数上限（只有复存）
   if(needsLimit(b)){
-    var unit='次／整个活动';
+    // 单位跟着周期改写，运营一眼看得出这个 N 是「每天 N 次」还是「整个活动 N 次」
+    var unit={'活动期间累计':'次／整个活动','每日':'次／日','每周':'次／周'}[b.cycleType]||'次／整个活动';
     html += '<div class="field-row"><div class="field-label"><span class="req">*</span>参与次数上限：</div><div class="field-ctrl">'
-      +'<input type="number" class="f-input" min="1" style="width:100px;max-width:100px;" placeholder="最少1" value="'+b.limitCount+'" oninput="noNeg(this,1);updateField('+i+',\'limitCount\',this.value)"> '+unit
+      +'<input type="number" class="f-input" min="'+LIMIT_MIN+'" max="'+LIMIT_MAX+'" style="width:100px;max-width:100px;" placeholder="1～20" value="'+b.limitCount+'" oninput="noNeg(this,'+LIMIT_MIN+','+LIMIT_MAX+');updateField('+i+',\'limitCount\',this.value)"> '+unit
+      +'<div class="hint">可填 1～20；填 <b>1</b> 就是「'+({'活动期间累计':'整个活动','每日':'每天','每周':'每周'}[b.cycleType]||'整个活动')+'只送一次」</div>'
       +'</div></div>';
   }
   html += renderVipTables(b,i);
@@ -981,39 +1180,79 @@ function renderBlockBody(b,i){
 function renderVipTables(b,i){
   var multi=isMulti(b);
   var eligible=eligibleVipKeys();
-  var box='<div class="vip-box"><div class="vip-box-head"><div class="vip-box-title">各 VIP 等级的奖励</div></div>';
-  if(eligible.length===0) return box+'<div class="hint" style="color:#ff4d4f;">第3步「参与对象与名单」尚未勾选任何会员等级，请先至第3步勾选可参加本活动的VIP等级。</div></div>';
-  box+='<div class="vip-accordion">';
+  var miss=unfilledVipsOf(b);
+  // 标题右边只放一颗彙总徽章，取代「每一级都挂一颗红点」
+  var badge='<span class="vip-miss-badge" id="vmiss-'+i+'"'+(miss.length?'':' style="display:none;"')+'>'
+    +(miss.length?'未填 '+miss.length+' 级':'')+'</span>';
+  var box='<div class="vip-box">'
+    +'<div class="vip-box-head"><div class="vip-box-title"><span class="req">*</span>各 VIP 等级的奖励</div>'+badge+'</div>'
+    +'<div class="hint" style="margin:8px 0 0;">点上方页签切换等级；<b>每一个等级都必须填写</b>，还没填完的级数显示在标题旁，按「下一步」时会列出是哪几级。各等级都一样时，在 '+(eligible[0]||'最低等级')+' 勾「套用至其他等级」一次填完，其余等级即<span style="color:#bbb;">反灰</span>、不必再填。</div>';
+  if(eligible.length===0) return box+'<div class="hint" style="color:#ff4d4f;margin-top:10px;">第3步「参与对象与名单」尚未勾选任何会员等级，请先至第3步勾选可参加本活动的VIP等级。</div></div>';
+
+  var src=eligible[0];                       // 套用的来源等级＝最低等级
+  var cur=activeVipKey(b);                   // 目前显示哪一级
+  // 「单一会员奖励上限」的单位与范围跟着周期走，与「参与次数上限」同一套写法
+  var capUnit={'活动期间累计':'元／整个活动','每日':'元／日','每周':'元／周'}[b.cycleType]||'元／整个活动';
+  var capScope={'活动期间累计':'整个活动期间','每日':'当天','每周':'当周'}[b.cycleType]||'整个活动期间';
+
+  // ── 页签列（VIP0～VIP10 横排在上方）──────────────────────
+  box+='<div class="vip-tabs">';
   eligible.forEach(function(vk){
-    var linkedFrom=b.vipLinkedTo[vk]; var isOpen=!linkedFrom && !!b.vipExpanded[vk];
-    box+='<div class="vip-acc-item'+(linkedFrom?' vip-linked':'')+'">'
-      +(linkedFrom
-        ? '<div class="vip-acc-head is-linked"><span>'+vk+' <span class="vip-linked-tag">已套用</span></span></div>'
-        : '<div class="vip-acc-head" onclick="toggleVipExpand('+i+',\''+vk+'\')"><span>'+vk+'</span><span class="vip-acc-arrow">'+(isOpen?'▾':'▸')+'</span></div>');
-    if(isOpen){
-      var rows=rowsOf(b,vk); if(!multi) rows=rows.slice(0,1);
-      box+='<div class="vip-acc-body">'
-        +(vk===eligible[0]?'<label class="radio-item" style="margin-bottom:10px;"><input type="checkbox" '+(isApplySource(b,vk)?'checked':'')+' onchange="toggleApplyAll('+i+',\''+vk+'\')"> 套用至所有其他 VIP 等级</label>':'')
-        +'<table class="award-table"><thead><tr>'
-          +(multi?'<th style="width:60px;">档位</th><th>累计存款达（金额）</th><th>奖励金额（元）</th><th style="width:70px;">操作</th>'
-                 :'<th>存款达（金额）</th><th style="width:130px;">奖励类型</th><th>奖励数值</th>')
-        +'</tr></thead><tbody>'
-        +rows.map(function(r,j){
-          var th='<td><input class="td-input" type="number" min="0" placeholder="金额" value="'+r.threshold+'" oninput="noNeg(this,0);updateRow('+i+',\''+vk+'\','+j+',\'threshold\',this.value)"></td>';
-          if(multi) return '<tr><td>'+(j+1)+'</td>'+th
-            +'<td><input class="td-input" type="number" min="0" placeholder="元" value="'+r.rewardValue+'" oninput="noNeg(this,0);updateRow('+i+',\''+vk+'\','+j+',\'rewardValue\',this.value)"></td>'
-            +'<td><button class="btn-del" '+(rows.length<=1?'disabled':'')+' onclick="delRow('+i+',\''+vk+'\','+j+')">删除</button></td></tr>';
-          return '<tr>'+th
-            +'<td><select class="td-select" onchange="updateRow('+i+',\''+vk+'\','+j+',\'rewardType\',this.value)"><option '+(r.rewardType==='固定金额'?'selected':'')+'>固定金额</option><option '+(r.rewardType==='百分比'?'selected':'')+'>百分比</option></select></td>'
-            +'<td><input class="td-input" type="number" min="0" placeholder="'+(r.rewardType==='百分比'?'该笔金额的 %':'元')+'" value="'+r.rewardValue+'" oninput="noNeg(this,0);updateRow('+i+',\''+vk+'\','+j+',\'rewardValue\',this.value)"></td></tr>';
-        }).join('')
-        +'</tbody></table>'
-        +(multi?'<button class="btn-add small" style="margin-top:8px;" onclick="addRow('+i+',\''+vk+'\')">+ 新增档位</button>':'')
-        +'</div>';
-    }
-    box+='</div>';
+    var linked=!!b.vipLinkedTo[vk];
+    // 页签只表达两件事：目前在哪一级、这一级是不是套用别人的。
+    // 「哪几级没填」交给标题旁的彙总徽章与「下一步」的弹窗清单，页签保持干净。
+    var cls='vip-tab'
+      +(linked?' is-linked':'')                 // 套用别人的 → 反灰
+      +(vk===cur?' is-active':'');              // 目前这一级 → 蓝字白底
+    box+='<button type="button" id="vt-'+i+'-'+vk+'" class="'+cls+'" onclick="setVipTab('+i+',\''+vk+'\')">'+vk+'</button>';
   });
-  return box+'</div></div>';
+  box+='</div>';
+
+  // ── 内容区（只画目前这一级）────────────────────────────
+  var linkedFrom=b.vipLinkedTo[cur];         // 有值代表这一级是「套用自」某一级，唯读
+  var rows=rowsOf(b,cur); if(!multi) rows=rows.slice(0,1);
+  var ro=linkedFrom?' disabled':'';          // 唯读时输入框反灰
+
+  box+='<div class="vip-panel">';
+  if(linkedFrom){
+    box+='<div class="vip-linked-note">本等级已<b>套用 '+linkedFrom+' 的配置</b>，不可单独编辑；如需分开设定，请回 <b>'+linkedFrom+'</b> 取消勾选「套用至其他等级」。</div>';
+  }else if(cur===src){
+    box+='<label class="vip-apply-label"><input type="checkbox" '+(isApplySource(b,src)?'checked':'')+' onchange="toggleApplyAll('+i+',\''+src+'\')">'
+      +'套用至其他等级（勾选后其余 VIP 等级套用 '+src+' 配置、不可再编辑）</label>';
+  }
+
+  box+='<table class="award-table"><thead><tr>'
+    +(multi?'<th style="width:60px;">档位</th><th>累计存款达（金额）</th><th>奖励金额（元）</th><th style="width:70px;">操作</th>'
+           :'<th>存款达（金额）</th><th style="width:130px;">奖励类型</th><th>奖励数值</th>'
+             +'<th style="width:210px;">单一会员奖励上限<div class="cell-sub" style="font-weight:400;color:#999;font-size:13px;">'+capUnit+'　仅「百分比」需填</div></th>')
+    +'</tr></thead><tbody>'
+    +rows.map(function(r,j){
+      var th='<td><input class="td-input" type="number" min="0" placeholder="金额" value="'+r.threshold+'"'+ro+' oninput="noNeg(this,0);updateRow('+i+',\''+cur+'\','+j+',\'threshold\',this.value)"></td>';
+      if(multi) return '<tr><td>'+(j+1)+'</td>'+th
+        +'<td><input class="td-input" type="number" min="0" placeholder="元" value="'+r.rewardValue+'"'+ro+' oninput="noNeg(this,0);updateRow('+i+',\''+cur+'\','+j+',\'rewardValue\',this.value)"></td>'
+        +'<td><button class="btn-del" '+(linkedFrom||rows.length<=1?'disabled':'')+' onclick="delRow('+i+',\''+cur+'\','+j+')">删除</button></td></tr>';
+      // 复存：百分比才出现「单一会员奖励上限」，固定金额显示「—」（本身就是定额）
+      var isPct=r.rewardType==='百分比';
+      var capCell=isPct
+        ? '<td><input class="td-input" type="number" min="1" placeholder="合计最多领多少元" value="'+r.memberCap+'"'+ro+' oninput="noNeg(this,1);updateRow('+i+',\''+cur+'\','+j+',\'memberCap\',this.value)"></td>'
+        : '<td><span style="color:#bbb;">—</span><div class="cell-sub" style="color:#bbb;font-size:13px;">固定金额不需要</div></td>';
+      return '<tr>'+th
+        +'<td><select class="td-select"'+ro+' onchange="updateRow('+i+',\''+cur+'\','+j+',\'rewardType\',this.value)"><option '+(r.rewardType==='固定金额'?'selected':'')+'>固定金额</option><option '+(isPct?'selected':'')+'>百分比</option></select></td>'
+        +'<td><input class="td-input" type="number" min="0" placeholder="'+(isPct?'该笔金额的 %':'元')+'" value="'+r.rewardValue+'"'+ro+' oninput="noNeg(this,0);updateRow('+i+',\''+cur+'\','+j+',\'rewardValue\',this.value)"></td>'
+        +capCell+'</tr>';
+    }).join('')
+    +'</tbody></table>'
+    +(multi&&!linkedFrom
+      ? (rows.length>=MAX_TIERS
+          ? '<button class="btn-add small" style="margin-top:8px;" disabled>已达上限（最多 '+MAX_TIERS+' 级）</button>'
+          : '<button class="btn-add small" style="margin-top:8px;" onclick="addRow('+i+',\''+cur+'\')">+ 新增档位</button>'
+            +'<span class="hint" style="margin-left:10px;">目前 '+rows.length+' / '+MAX_TIERS+' 级</span>')
+      : '')
+    +(!multi?'<div class="hint" style="margin-top:8px;">选「百分比」时<b>必须填「单一会员奖励上限」</b>——它算的是<b>这个会员在'+capScope+'内、本区块拿到的奖励合计</b>，不是单笔的天花板。例：门槛 100、100%、上限 500 → 会员存 300 送 300，再存 800 时只剩 <b>200 额度</b>，就<b>只发 200</b>（发到上限为止），之后再存不再发奖。'
+        +'<br><b>请注意：金额上限与「参与次数上限」谁先到就谁生效</b>——上限 500 元的话，会员一笔存 600 就把额度用光，次数上限设 3 次也只会发 1 次。白话说明会把两个上限一起写出来，请对照确认是不是想要的规则。</div>':'')
+    +'</div>';
+
+  return box+'</div>';
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1030,7 +1269,7 @@ function step5(){
   '<div id="autoRejectBlock" style="border:1px solid #ffccc7;border-radius:4px;padding:14px;opacity:0.4;pointer-events:none;">'+
     '<div class="sec-title" style="color:#ff4d4f;border-left-color:#ff4d4f;">自动拒绝</div>'+
     '<div class="field-row"><div class="field-label">自动拒绝：</div><div class="field-ctrl"><div class="toggle" id="tog-autorej"></div></div></div>'+
-    '<div class="field-row"><div class="field-label">触发条件：</div><div class="field-ctrl" style="display:flex;align-items:center;gap:8px;font-size:13px;">当违反 <input type="number" id="rejectInput" class="f-input f-input-disabled" style="width:80px;-moz-appearance:textfield;" placeholder="0" disabled> 笔以上，将自动拒绝</div></div>'+
+    '<div class="field-row"><div class="field-label">触发条件：</div><div class="field-ctrl" style="display:flex;align-items:center;gap:8px;font-size:15px;">当违反 <input type="number" id="rejectInput" class="f-input f-input-disabled" style="width:80px;-moz-appearance:textfield;" placeholder="0" disabled> 笔以上，将自动拒绝</div></div>'+
   '</div>';
 }
 
@@ -1076,20 +1315,23 @@ function step6(){
   var addonCount=addonBlocks.length;
   function row(req,k,v,red){return '<div class="preview-row"><span class="pk '+(req?'req':'')+'">'+(k)+'：</span><span class="pv '+(red?'red':v==='–'?'empty':'')+'">'+v+'</span></div>';}
   function pRow(num,title,body,last){return '<div style="display:grid;grid-template-columns:130px 1fr;border-bottom:'+(last?'none':'0.5px solid #e8e8e8')+'"><div style="padding:14px 16px;border-right:0.5px solid #e8e8e8;"><div class="preview-step-title"><div class="preview-snum">'+num+'</div>'+title+'</div></div><div style="padding:14px 16px;">'+body+'</div></div>';}
+  var miss=unfilledVips();
+  var warnItems=['有效时间','活动名称'].concat(miss.length?['各 VIP 等级的奖励（'+miss.join('、')+'）']:[]);
   return '<div class="step-desc">请确认以下活动配置信息，确认无误后点击提交按钮</div>'+
-  '<div class="preview-warn">● 请填写以下必填字段：有效时间、活动名称</div>'+
+  '<div class="preview-warn">● 请填写以下必填字段：'+warnItems.join('、')+'</div>'+
   '<div style="border:0.5px solid #e8e8e8;border-radius:4px;overflow:hidden;">'+
-  '<div style="display:grid;grid-template-columns:130px 1fr;background:#f5f7fa;border-bottom:0.5px solid #e8e8e8;"><div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;border-right:0.5px solid #e8e8e8;">步骤</div><div style="padding:10px 16px;font-size:13px;font-weight:500;color:#666;">相关字段</div></div>'+
+  '<div style="display:grid;grid-template-columns:130px 1fr;background:#f5f7fa;border-bottom:0.5px solid #e8e8e8;"><div style="padding:10px 16px;font-size:15px;font-weight:500;color:#666;border-right:0.5px solid #e8e8e8;">步骤</div><div style="padding:10px 16px;font-size:15px;font-weight:500;color:#666;">相关字段</div></div>'+
   pRow('1','活动模板设置',
     '<div class="preview-grid">'+
-    row(false,'活动ID','–')+row(true,'模板类型','存款活动')+
+    row(false,'活动ID','–')+row(true,'模板类型','存款活动＿'+actType)+
     row(true,'状态','关闭')+row(true,'活动币种','PHP')+
     row(true,'活动名称','–',true)+row(true,'活动时间','–',true)+
     '</div>')+
   pRow('2','活动图片',
     '<div>'+
     row(false,'语系',langStr)+row(false,'活动标题','–')+
-    row(true,'规则弹窗图（依区块）',blocks.length?blocks.length+'张（每区块1张）':'–')+
+    row(false,'首页浮窗',floatOn?'开启（PC／H5 图片各 1 张）':'关闭')+
+    row(false,'活动列表设置',listOn?'开启（PC／H5 图片各 1 张）':'关闭')+
     row(false,'排序','0')+
     '</div>')+
   pRow('3','参与对象与名单',
@@ -1104,8 +1346,8 @@ function step6(){
     blocks.map(function(b,i){ return row(false,'区块'+(i+1)+'（'+b.conditionType+'）',describeBlock(b)); }).join('')+
     row(false,'奖金所需流水倍数','–')+
     row(false,'流水计算基数','本金+奖金')+
-    row(false,'审核方式','自动审核')+
-    row(false,'领取方式','自动发放')+
+    row(false,'审核方式','自动审核（本次写死）')+
+    row(false,'领取方式','自动领取（本次写死）')+
     row(false,'适用游戏范围',total?total+'个':'–')+
     '</div>')+
   pRow('5','风控条件',
@@ -1136,7 +1378,7 @@ function renderModalBody(){
     // 全选行
     '<div style="padding:10px 14px;border-bottom:1px solid #e8e8e8;background:#f9f9f9;display:flex;align-items:center;gap:10px;">'+
       '<input type="checkbox" class="cat-check" '+(allSelected?'checked':'')+' onclick="toggleAllGames(this.checked)">'+
-      '<span style="font-size:14px;font-weight:500;color:#333;">全选</span>'+
+      '<span style="font-size:16px;font-weight:500;color:#333;">全选</span>'+
     '</div>'+
     gameCategories.map(function(c,ci){
       var sel=tempSelected[ci]||new Set();
@@ -1183,7 +1425,7 @@ function calcClaimMax(){
 
 const langMap={zh:'简体中文',en:'英文',ph:'菲律宾语',vn:'越南语',ceb:'宿雾语'};
 const rawData=[
-  {id:50009,sort:0,status:1,timeStart:'26/09/01',timeEnd:'26/09/15',currency:'PHP',lang:'菲律宾语',langs:['ph'],template:'存款活动',name:'存款嘉年华',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'—',feeRatio:'—',rechargeType:'—'},
+  {id:50009,sort:0,status:1,timeStart:'26/09/01',timeEnd:'26/09/15',currency:'PHP',lang:'菲律宾语',langs:['ph'],template:'存款活动＿累计存款',name:'存款嘉年华',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'—',feeRatio:'—',rechargeType:'—'},
   {id:50005,sort:0,status:0,timeStart:'26/04/07',timeEnd:'26/05/30',currency:'PHP',lang:'菲律宾语',langs:['ph'],template:'预约活动',name:'丹尼测试预约活动 PHP',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'2',feeRatio:'—',rechargeType:'笔笔充'},
   {id:50006,sort:0,status:0,timeStart:'26/04/08',timeEnd:'51/01/01',currency:'PHP',lang:'菲律宾语、简体中文',langs:['ph','zh'],template:'预约活动',name:'预约活动四月',blacklist:'—',agent:'—',winCount:'0/0',auditRatio:'—',feeRatio:'—',rechargeType:'—'},
   {id:50007,sort:0,status:1,timeStart:'26/04/08',timeEnd:'51/01/01',currency:'PHP',lang:'菲律宾语、英文、越南语',langs:['ph','en','vn'],template:'预约活动',name:'春季预约活动',blacklist:'第一层',memberIds:'vivian007',agent:'dannyagentsub',winCount:'0/0',auditRatio:'3',feeRatio:'—',rechargeType:'首充'},
@@ -1200,12 +1442,12 @@ function renderModalAddonList(){
   return modalAddonBlocks.map(function(block,i){
     return '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-bottom:12px;">'+
       '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'+
-        '<span style="font-size:14px;font-weight:500;color:#1677ff;">附加配置 '+(i+1)+'</span>'+
-        '<button onclick="delModalAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:12px;cursor:pointer;">删除</button>'+
+        '<span style="font-size:16px;font-weight:500;color:#1677ff;">附加配置 '+(i+1)+'</span>'+
+        '<button onclick="delModalAddon('+i+')" style="height:28px;padding:0 12px;border:1px solid #ff4d4f;border-radius:4px;background:#fff;color:#ff4d4f;font-size:14px;cursor:pointer;">删除</button>'+
       '</div>'+
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
-        '<span style="font-size:13px;color:#333;flex-shrink:0;">链接：</span>'+
-        '<input type="text" style="flex:1;height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;outline:none;" placeholder="请输入跳转链接" value="'+block.link+'" oninput="modalAddonBlocks['+i+'].link=this.value">'+
+        '<span style="font-size:15px;color:#333;flex-shrink:0;">链接：</span>'+
+        '<input type="text" style="flex:1;height:34px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:15px;outline:none;" placeholder="请输入跳转链接" value="'+block.link+'" oninput="modalAddonBlocks['+i+'].link=this.value">'+
       '</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 946×543px')+imgCard('H5 端','建议尺寸 356×294px')+'</div>'+
     '</div>';
@@ -1258,17 +1500,17 @@ function renderModalLangContent(){
   '<div class="sec-block">'+
     '<div class="sec-title"><span style="color:#ff4d4f;margin-right:2px;">*</span>按钮底图</div>'+
     '<div style="margin-bottom:10px;">'+
-      '<div style="font-size:13px;font-weight:500;color:#555;margin-bottom:8px;">可点击状态</div>'+
+      '<div style="font-size:15px;font-weight:500;color:#555;margin-bottom:8px;">可点击状态</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 348×104px')+imgCard('H5 端','建议尺寸 140×42px')+'</div>'+
     '</div>'+
     '<div>'+
-      '<div style="font-size:13px;font-weight:500;color:#555;margin-bottom:8px;">不可点击状态</div>'+
+      '<div style="font-size:15px;font-weight:500;color:#555;margin-bottom:8px;">不可点击状态</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'+imgCard('PC 端','建议尺寸 348×104px')+imgCard('H5 端','建议尺寸 140×42px')+'</div>'+
     '</div>'+
   '</div>'+
   '<div style="margin-bottom:12px;">'+
-    '<div style="font-size:14px;font-weight:500;color:#333;margin-bottom:6px;">附加显示配置</div>'+
-    '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 14px;font-size:13px;color:#ad6800;margin-bottom:12px;">以下配置为非必填，按需配置</div>'+
+    '<div style="font-size:16px;font-weight:500;color:#333;margin-bottom:6px;">附加显示配置</div>'+
+    '<div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 14px;font-size:15px;color:#ad6800;margin-bottom:12px;">以下配置为非必填，按需配置</div>'+
   '</div>'+
   '<div id="modalAddonList">'+renderModalAddonList()+'</div>'+
   (modalAddonBlocks.length<3
@@ -1277,16 +1519,16 @@ function renderModalLangContent(){
   )+
   '<div style="border:1px solid #e8e8e8;border-radius:6px;padding:14px 16px;margin-top:16px;margin-bottom:20px;">'+
     '<div style="margin-bottom:14px;">'+
-      '<div style="font-size:14px;font-weight:500;color:#333;margin-bottom:10px;">首页浮窗设置：'+
-        '<label style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="mFloatWin" checked> 关闭</label>'+
-        '<label style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="mFloatWin"> 开启</label>'+
+      '<div style="font-size:16px;font-weight:500;color:#333;margin-bottom:10px;">首页浮窗设置：'+
+        '<label style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;font-size:15px;cursor:pointer;"><input type="radio" name="mFloatWin" checked> 关闭</label>'+
+        '<label style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;font-size:15px;cursor:pointer;"><input type="radio" name="mFloatWin"> 开启</label>'+
       '</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px;">'+imgCardAlt('PC 图片')+imgCardAlt('H5 图片')+'</div>'+
-      '<div style="font-size:12px;color:#999;">图片格式：png、bmp、jpg、gif；大小限制 5MB 内</div>'+
+      '<div style="font-size:14px;color:#999;">图片格式：png、bmp、jpg、gif；大小限制 5MB 内</div>'+
     '</div>'+
     '<div style="display:flex;align-items:center;gap:10px;">'+
-      '<span style="font-size:13px;color:#333;flex-shrink:0;">排序：</span>'+
-      '<input type="number" style="height:34px;width:120px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;outline:none;-moz-appearance:textfield;" placeholder="请输入" value="0">'+
+      '<span style="font-size:15px;color:#333;flex-shrink:0;">排序：</span>'+
+      '<input type="number" style="height:34px;width:120px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:15px;outline:none;-moz-appearance:textfield;" placeholder="请输入" value="0">'+
     '</div>'+
   '</div>'+
   '<div class="sec-block">'+
@@ -1377,14 +1619,14 @@ function renderRows(){
     '<td>'+r.id+'</td>'+
     '<td>'+r.sort+'</td>'+
     '<td class="'+(r.status?'status-on':'status-off')+'">'+(r.status?'开启':'关闭')+'</td>'+
-    '<td style="font-size:11px;white-space:nowrap;">'+r.timeStart+'~'+r.timeEnd+'</td>'+
+    '<td style="font-size:13px;white-space:nowrap;">'+r.timeStart+'~'+r.timeEnd+'</td>'+
     '<td>'+r.currency+'</td>'+
-    '<td style="font-size:11px;">'+r.lang+'</td>'+
+    '<td style="font-size:13px;">'+r.lang+'</td>'+
     '<td>'+r.template+'</td>'+
     '<td>'+r.name+'</td>'+
-    '<td>'+(ri===0?'<div style="position:relative;display:inline-block;"><span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">3</span><div style="border:2px solid #ff4d4f;border-radius:4px;display:inline-block;"><button class="upload-pill" onclick="openPreview('+r.id+')">上传</button></div></div>':'<button class="upload-pill" onclick="openPreview('+r.id+')">上传</button>')+'</td>'+
-    '<td>'+(r.blacklist==='—'?'<span style="color:#bbb">—</span>':(r.memberIds?'<div style="font-size:11px;color:#666;">'+r.memberIds+'</div>':''))+'</td>'+
-    '<td style="font-size:11px;">'+(r.agent==='—'?'<span style="color:#bbb">—</span>':'<span style="color:#1677ff">'+r.agent+'</span>')+'</td>'+
+    '<td>'+(ri===0?'<div style="position:relative;display:inline-block;"><span style="position:absolute;top:-10px;right:-10px;width:20px;height:20px;background:#ff4d4f;color:#fff;border-radius:50%;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;">3</span><div style="border:2px solid #ff4d4f;border-radius:4px;display:inline-block;"><button class="upload-pill" onclick="openPreview('+r.id+')">上传</button></div></div>':'<button class="upload-pill" onclick="openPreview('+r.id+')">上传</button>')+'</td>'+
+    '<td>'+(r.blacklist==='—'?'<span style="color:#bbb">—</span>':(r.memberIds?'<div style="font-size:13px;color:#666;">'+r.memberIds+'</div>':''))+'</td>'+
+    '<td style="font-size:13px;">'+(r.agent==='—'?'<span style="color:#bbb">—</span>':'<span style="color:#1677ff">'+r.agent+'</span>')+'</td>'+
     '<td style="text-align:center;">'+r.winCount+'</td>'+
     '<td style="text-align:center;">'+r.auditRatio+'</td>'+
     '<td>'+
@@ -1413,6 +1655,10 @@ function showWizard(){
   document.getElementById('listView').classList.add('hidden');
   document.getElementById('wizardView').classList.remove('hidden');
   cur = 1; blocks = []; blockSeq = 0;
+  actType = '复存';                                  // 新建一档活动，类型回到预设
+  floatOn = false; listOn = false;                   // 两组前台入口回到预设（关闭）
+  var bc = document.getElementById('bcActType');
+  if (bc) bc.textContent = '新增活动（存款活动＿' + actType + '）';
   goStep(1);
 }
 function submitActivity(){
@@ -1422,7 +1668,7 @@ function submitActivity(){
   rawData.unshift({
     id: maxId+1, sort:0, status:0,
     timeStart:'26/09/03', timeEnd:'26/09/17', currency:'PHP',
-    lang:'菲律宾语', langs:['ph'], template:'存款活动', name:name,
+    lang:'菲律宾语', langs:['ph'], template:'存款活动＿'+actType, name:name,
     blacklist:'—', agent:'—', winCount:'0/0', auditRatio:'—', feeRatio:'—', rechargeType:'—'
   });
   showList();
@@ -1433,7 +1679,7 @@ filtered = rawData.slice();
 renderRows();
 
 </script>
-<!-- 預覽圖片彈窗 -->
+<!-- 预览图片弹窗 -->
 <div class="modal-overlay hidden" id="previewModal">
   <div class="modal">
     <div class="modal-header">

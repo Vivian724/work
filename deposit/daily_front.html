@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>每日存款活动 — 前台原型（复存）</title>
+
+<!--
+  ============================================================================
+  每日存款活动 前台原型（复存）
+  ----------------------------------------------------------------------------
+  这份原型在做什么？
+    现有「每日首充」的前台有三个地方会显示活动数字：
+      A. 存款页的优惠券
+      B. 存款页的 Payment Amount 区（快捷金额角标＋即时试算条）
+      C. 活动墙点进去的活动详情页
+    这三处的每一个数字都来自后台奖励矩阵的某一格。
+    复存要「效仿首存」，就是把这条对应关系原封不动复制过来，
+    再补上复存独有的部分：奖励按「当日第几笔」分阶，
+    最后一阶的终点就是每日可领上限。
+
+  「第几笔」怎么算？
+    只算达到门槛的存款。笔序 ＝ 当日在本活动「已成功领奖次数 ＋ 1」。
+    没达门槛、没勾券的存款都不计数，所以券面显示的百分比与门槛
+    会随玩家已领次数自动换到下一阶。
+
+  介面文字为什么是英文？
+    实际产品是英文介面（PH 市场），照现况画才不会误导前端。
+    新增与异动处另外用中文标注。
+
+  怎么看？
+    最上方深色工具列切换「玩家今天存到第几笔」，
+    两张券、角标、试算条都会跟著变。金额框可以直接打字试算。
+  ============================================================================
+-->
+
+<style>
+/* ==========================================================================
+   Design Token — 颜色取自实际截图
+   ========================================================================== */
+:root {
+  --c-primary:      #2f4fd8;
+  --c-primary-dark: #2440b8;
+  --c-link:         #2f6fe0;
+  --c-coupon-a:     #dcebfb;   /* 券左半淡蓝 */
+  --c-coupon-b:     #cfe3fa;   /* 券右半蓝 */
+  --c-coupon-line:  #9dbde8;
+  --c-accent:       #ef4136;   /* 金额红字、TOU、角标 */
+  --c-accent-2:     #f5871f;   /* 试算条左侧橘 */
+  --c-bg:           #f2f4f7;
+  --c-surface:      #ffffff;
+  --c-border:       #e3e6ea;
+  --c-text:         #1a1d21;
+  --c-text-2:       #5c6169;
+  --c-text-3:       #8b9099;
+  --c-mute-bg:      #f4f5f7;
+  --c-mute-txt:     #a5a9b0;
+  --c-ok-bg:        #eaf7ee;   --c-ok-txt:   #22682f;
+  --c-wait-bg:      #fdf4e5;   --c-wait-txt: #8a5a08;
+  --c-done-bg:      #f0f1f3;   --c-done-txt: #5c6169;
+
+  --tag-new-bg:    #e7f6ec;  --tag-new-text:    #256b34;
+  --tag-change-bg: #fdf2e3;  --tag-change-text: #8a5a08;
+  --tag-same-bg:   #eef0f3;  --tag-same-text:   #5c6068;
+
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
+  --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+
+  --radius: 8px;  --radius-lg: 14px;
+
+  --fs-xs:   0.667rem;  /* 12px，规范规定的最小字级 */
+  --fs-sm:   0.722rem;
+  --fs-base: 0.778rem;
+  --fs-md:   0.889rem;
+  --fs-lg:   1rem;
+  --fs-xl:   1.222rem;
+}
+
+/* ==========================================================================
+   Reset & Base
+   ========================================================================== */
+html { font-size: 18px; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--c-text);
+  background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { margin: 0; font-weight: 600; }
+:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em; }
+
+/* ==========================================================================
+   原型工具列（实作时整块删除）
+   ========================================================================== */
+.devbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-2) var(--sp-5);
+  padding: var(--sp-2) var(--sp-4);
+  background: #2b2f38; color: #e8eaed;
+  font-size: var(--fs-sm);
+}
+.devbar__brand { font-size: var(--fs-base); font-weight: 600; white-space: nowrap; }
+.devbar__group { display: flex; align-items: center; gap: var(--sp-2); }
+.devbar__label { color: #a9aeb8; font-size: var(--fs-xs); white-space: nowrap; }
+.devbar__options { display: flex; flex-wrap: wrap; gap: 2px; }
+.devbar__opt {
+  padding: 2px var(--sp-3);
+  background: #3a3f4a; border: 1px solid transparent; border-radius: var(--radius);
+  color: #e8eaed; font: inherit; font-size: var(--fs-xs);
+  cursor: pointer; white-space: nowrap;
+}
+.devbar__opt:hover { background: #474d5a; }
+.devbar__opt[aria-pressed="true"] { background: var(--c-primary); border-color: #8aa3f5; font-weight: 600; }
+.devbar__note { color: #a9aeb8; font-size: var(--fs-xs); margin: 0; }
+
+/* ==========================================================================
+   版面
+   ========================================================================== */
+.stage {
+  display: flex; flex-wrap: wrap; align-items: flex-start;
+  gap: var(--sp-6);
+  padding: var(--sp-5) var(--sp-4) 0;
+  max-width: 1400px; margin: 0 auto;
+}
+.screen { flex: 0 1 400px; min-width: 0; }
+.screen__head { margin-bottom: var(--sp-3); }
+.screen__title { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); font-size: var(--fs-md); }
+.screen__desc { margin: var(--sp-1) 0 0; color: var(--c-text-2); font-size: var(--fs-sm); line-height: 1.6; }
+
+.phone {
+  width: 100%;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 18px; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .07);
+}
+.phone__bar {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--c-surface); border-bottom: 1px solid var(--c-border);
+}
+.phone__back { font-size: var(--fs-lg); }
+.phone__title { font-size: var(--fs-md); font-weight: 700; }
+.phone__right { color: var(--c-text-2); font-size: var(--fs-base); }
+.phone__body { padding: var(--sp-4); }
+.phone__gap { height: var(--sp-3); background: var(--c-bg); margin: 0 calc(var(--sp-4) * -1); }
+
+/* ==========================================================================
+   标注
+   ========================================================================== */
+.tag {
+  display: inline-block; padding: 1px var(--sp-2); border-radius: 10px;
+  font-size: var(--fs-xs); font-weight: 600; line-height: 1.6; white-space: nowrap;
+}
+.tag--new    { background: var(--tag-new-bg);    color: var(--tag-new-text); }
+.tag--change { background: var(--tag-change-bg); color: var(--tag-change-text); }
+.tag--same   { background: var(--tag-same-bg);   color: var(--tag-same-text); }
+.app[data-annotate="off"] .tag,
+.app[data-annotate="off"] .anno { display: none; }
+
+.anno {
+  margin: var(--sp-2) 0 0;
+  padding: var(--sp-2) var(--sp-3);
+  background: #fbfdff;
+  border-left: 3px solid var(--c-primary);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--c-text-2); font-size: var(--fs-xs); line-height: 1.7;
+}
+
+/* ==========================================================================
+   付款方式（沿用现况，简化示意）
+   ========================================================================== */
+.pay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-2); }
+.pay-cell {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  height: 48px; padding: var(--sp-1);
+  background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius);
+  color: var(--c-accent); font-size: var(--fs-xs); text-align: center;
+}
+.pay-cell__bonus {
+  position: absolute; top: -7px; right: -7px;
+  padding: 1px 5px; border-radius: 10px;
+  background: var(--c-accent); color: #fff; font-size: var(--fs-xs); font-weight: 700;
+}
+
+/* ==========================================================================
+   Promotions ‧ 优惠券
+   ========================================================================== */
+.promo-head {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+.promo-head__title { font-size: var(--fs-lg); font-weight: 700; }
+.promo-head__more { font-size: var(--fs-base); }
+
+.coupon-row { display: flex; align-items: center; gap: var(--sp-3); }
+.coupon-row + .coupon-why + .coupon-row { margin-top: var(--sp-3); }
+
+.coupon-check {
+  flex: 0 0 auto; position: relative;
+  width: 22px; height: 22px;
+  border: 1.5px solid var(--c-text-3); border-radius: 4px;
+  background: var(--c-surface); cursor: pointer;
+}
+.coupon-check[aria-checked="true"] { background: var(--c-primary); border-color: var(--c-primary); }
+.coupon-check[aria-checked="true"]::after {
+  content: ""; position: absolute; left: 7px; top: 3px;
+  width: 5px; height: 11px;
+  border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
+}
+.coupon-check[aria-disabled="true"] { border-color: #ccd0d6; background: var(--c-mute-bg); cursor: not-allowed; }
+
+.coupon {
+  flex: 1 1 auto; min-width: 0; position: relative;
+  display: flex; align-items: stretch;
+  background: linear-gradient(90deg, var(--c-coupon-a) 0%, var(--c-coupon-a) 28%, var(--c-coupon-b) 28%, var(--c-coupon-b) 100%);
+  border: 1px solid #a9c6ea;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.coupon__left {
+  flex: 0 0 104px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: var(--sp-3) var(--sp-2);
+  border-right: 1px dashed var(--c-coupon-line);
+  text-align: center;
+}
+.coupon__pct  { color: var(--c-primary); font-size: var(--fs-xl); font-weight: 700; line-height: 1.2; }
+.coupon__kind { color: var(--c-primary); font-size: var(--fs-sm); line-height: 1.35; }
+.coupon__right { flex: 1 1 auto; min-width: 0; padding: var(--sp-3) var(--sp-3) var(--sp-3) var(--sp-4); }
+.coupon__cap { margin: 0; font-size: var(--fs-md); font-weight: 700; }
+.coupon__cap b { color: var(--c-accent); font-weight: 700; }
+.coupon__meta { margin: 0; color: var(--c-text-2); font-size: var(--fs-xs); line-height: 1.65; }
+.coupon__tou {
+  position: absolute; top: 10px; right: 10px;
+  padding: 2px var(--sp-2);
+  background: var(--c-accent); color: #fff;
+  border-radius: 11px; font-size: var(--fs-xs); font-weight: 700;
+}
+/* 复存券多出来的条件行 */
+.coupon__cond {
+  display: flex; align-items: flex-start; gap: var(--sp-1);
+  margin: var(--sp-2) 0 0; padding-top: var(--sp-2);
+  border-top: 1px dashed var(--c-coupon-line);
+  color: var(--c-primary); font-size: var(--fs-xs); font-weight: 700; line-height: 1.5;
+}
+
+/* 不可用状态：整张券转灰 */
+.coupon-row[data-usable="no"] .coupon { background: var(--c-mute-bg); border-color: #d8dbe0; }
+.coupon-row[data-usable="no"] .coupon__pct,
+.coupon-row[data-usable="no"] .coupon__kind,
+.coupon-row[data-usable="no"] .coupon__cond,
+.coupon-row[data-usable="no"] .coupon__cap,
+.coupon-row[data-usable="no"] .coupon__cap b,
+.coupon-row[data-usable="no"] .coupon__meta { color: var(--c-mute-txt); }
+.coupon-row[data-usable="no"] .coupon__tou { background: #c2c6cc; }
+.coupon-row[data-usable="no"] .coupon__left,
+.coupon-row[data-usable="no"] .coupon__cond { border-color: #d8dbe0; }
+
+.coupon-why {
+  margin: var(--sp-2) 0 0 34px;
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--radius);
+  font-size: var(--fs-xs); line-height: 1.6;
+}
+.coupon-why--wait { background: var(--c-wait-bg); color: var(--c-wait-txt); }
+.coupon-why--done { background: var(--c-done-bg); color: var(--c-done-txt); }
+.coupon-why[hidden] { display: none; }
+
+/* ==========================================================================
+   Payment Amount ‧ 快捷金额与试算
+   ========================================================================== */
+.pay-title { font-size: var(--fs-lg); font-weight: 700; margin-bottom: var(--sp-3); }
+
+.quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3) var(--sp-2); }
+.quick {
+  position: relative;
+  padding: var(--sp-3) var(--sp-2);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border); border-radius: var(--radius);
+  color: var(--c-text-2); font: inherit; font-size: var(--fs-md);
+  cursor: pointer;
+}
+.quick:hover { border-color: var(--c-primary); color: var(--c-primary); }
+/* 右上角的百分比角标——数字来自目前勾选那张券 */
+.quick__badge {
+  position: absolute; top: -9px; right: -6px;
+  padding: 2px 9px;
+  background: var(--c-accent); color: #fff;
+  border-radius: 11px 11px 11px 2px;
+  font-size: var(--fs-xs); font-weight: 700;
+  box-shadow: 0 2px 5px rgba(239, 65, 54, .3);
+}
+.quick__badge[hidden] { display: none; }
+
+.amount-box {
+  width: 100%; margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--c-border); border-radius: var(--radius);
+  font: inherit; font-size: var(--fs-lg); color: var(--c-text);
+}
+/* 只加强边框，不清掉 outline——键盘操作时仍要看得见全域的 focus 框 */
+.amount-box:focus { border-color: var(--c-primary); }
+.amount-box.is-error { border-color: var(--c-accent); }
+
+.amount-err { margin: var(--sp-2) 0 0; color: var(--c-accent); font-size: var(--fs-base); }
+.amount-err[hidden] { display: none; }
+
+/* 橘红渐层的试算条 */
+.extra-bar {
+  display: flex; align-items: center; justify-content: center; gap: var(--sp-2);
+  margin: var(--sp-4) calc(var(--sp-4) * -1) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: linear-gradient(90deg, var(--c-accent-2), var(--c-accent));
+  color: #fff; font-size: var(--fs-md); font-weight: 700;
+  text-align: center;
+}
+.extra-bar--none { background: #d9dce1; color: #6d727a; }
+.extra-bar__cap { font-size: var(--fs-xs); font-weight: 600; opacity: .95; }
+
+.btn-submit {
+  display: block; width: 100%; margin-top: var(--sp-4);
+  padding: var(--sp-3);
+  background: var(--c-primary); border: 0; border-radius: var(--radius);
+  color: #fff; font: inherit; font-size: var(--fs-md); font-weight: 600;
+  cursor: pointer;
+}
+.btn-submit:hover { background: var(--c-primary-dark); }
+.btn-submit:disabled { background: #9db2ec; cursor: not-allowed; }
+
+/* ==========================================================================
+   活动详情页
+   ========================================================================== */
+.banner {
+  height: 130px;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--sp-3);
+  background: linear-gradient(135deg, #23386e 0%, #3a5ba8 50%, #7e4f9e 100%);
+  border-radius: var(--radius-lg);
+  color: #fff; font-size: var(--fs-sm); letter-spacing: .08em; text-align: center;
+}
+.detail__name { margin: var(--sp-4) 0 var(--sp-1); font-size: var(--fs-xl); font-weight: 700; }
+.detail__time { margin: 0; color: var(--c-link); font-size: var(--fs-base); }
+
+.statcard {
+  margin-top: var(--sp-4); padding: var(--sp-4);
+  background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-lg);
+}
+.stats { display: grid; grid-template-columns: 1fr 1px 1fr; align-items: center; gap: var(--sp-2); }
+.stats + .stats { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--c-border); }
+.stats__divider { background: var(--c-border); height: 40px; }
+.stat { display: flex; align-items: center; gap: var(--sp-2); min-width: 0; }
+.stat__icon {
+  flex: 0 0 auto; width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: #eaf1fd; font-size: var(--fs-md); font-weight: 700; color: var(--c-primary);
+}
+.stat__icon--coin { background: #fdf0dd; }
+.stat__icon--new  { background: #e7f6ec; color: #256b34; }
+.stat__body { min-width: 0; }
+.stat__value { display: block; font-size: var(--fs-lg); font-weight: 700; line-height: 1.25; }
+.stat__label { display: block; color: var(--c-text-2); font-size: var(--fs-sm); line-height: 1.3; }
+
+/* 详情页的阶梯表 */
+.tier { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--c-border); }
+.tier__title { margin: 0 0 var(--sp-2); color: var(--c-text-2); font-size: var(--fs-sm); font-weight: 600; }
+.tier__table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+.tier__table th, .tier__table td { padding: var(--sp-1) var(--sp-2); text-align: left; }
+.tier__table th { color: var(--c-text-3); font-size: var(--fs-xs); font-weight: 600; }
+.tier__table td { border-top: 1px solid var(--c-border); }
+.tier__table td:nth-child(2) { color: var(--c-primary); font-weight: 700; }
+.tier__table tr.is-now td { background: #eaf1fd; }
+.tier__now { display: inline-block; margin-left: var(--sp-1); padding: 0 6px; border-radius: 8px; background: var(--c-primary); color: #fff; font-size: var(--fs-xs); font-weight: 700; }
+
+.progress {
+  display: flex; align-items: flex-start; gap: var(--sp-2);
+  margin: var(--sp-3) 0 0; padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius); font-size: var(--fs-sm); line-height: 1.6;
+}
+.progress--ok   { background: var(--c-ok-bg);   color: var(--c-ok-txt); }
+.progress--wait { background: var(--c-wait-bg); color: var(--c-wait-txt); }
+.progress--done { background: var(--c-done-bg); color: var(--c-done-txt); }
+
+.btn-deposit {
+  display: block; width: 100%; margin-top: var(--sp-3); padding: var(--sp-3);
+  background: var(--c-primary); border: 0; border-radius: var(--radius);
+  color: #fff; font: inherit; font-size: var(--fs-md); font-weight: 600; cursor: pointer;
+}
+.btn-deposit:hover { background: var(--c-primary-dark); }
+.btn-deposit--muted { background: #c2c6cc; }
+
+.detail__content { margin-top: var(--sp-4); color: var(--c-text-2); font-size: var(--fs-base); }
+
+/* ==========================================================================
+   前后台对应表
+   ========================================================================== */
+.mapping {
+  max-width: 1400px; margin: 0 auto;
+  padding: var(--sp-6) var(--sp-4);
+}
+.mapping__title { font-size: var(--fs-xl); margin-bottom: var(--sp-2); }
+.mapping__desc { margin: 0 0 var(--sp-4); color: var(--c-text-2); font-size: var(--fs-base); }
+.table-scroll { overflow-x: auto; background: var(--c-surface); border-radius: var(--radius-lg); border: 1px solid var(--c-border); }
+.map-table { width: 100%; min-width: 900px; border-collapse: collapse; font-size: var(--fs-sm); }
+.map-table th, .map-table td {
+  padding: var(--sp-3); border-bottom: 1px solid var(--c-border);
+  text-align: left; vertical-align: top;
+}
+.map-table th { background: #fafbfc; color: var(--c-text-2); font-weight: 600; white-space: nowrap; }
+.map-table tbody tr:last-child td { border-bottom: 0; }
+.map-table tbody tr:hover { background: #fafcff; }
+.map-table .col-num { width: 40px; color: var(--c-text-3); }
+
+/* ==========================================================================
+   响应式
+   ========================================================================== */
+@media (max-width: 1024px) { .devbar { position: static; } }
+@media (max-width: 768px) {
+  html { font-size: 17px; }
+  .stage { gap: var(--sp-5); padding: var(--sp-4) var(--sp-3) 0; }
+  .screen { flex: 1 1 100%; }
+  .mapping { padding: var(--sp-5) var(--sp-3); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ==========================================================================
+     原型工具列（实作时整块删除）
+     ========================================================================== -->
+<aside class="devbar" aria-label="原型情境切换">
+  <span class="devbar__brand">原型工具列</span>
+
+  <div class="devbar__group">
+    <span class="devbar__label">玩家今天已领几次</span>
+    <div class="devbar__options" role="group">
+      <button type="button" class="devbar__opt" data-set="state" data-value="d0" aria-pressed="true">今日 0 次</button>
+      <button type="button" class="devbar__opt" data-set="state" data-value="d1" aria-pressed="false">已领 1 次</button>
+      <button type="button" class="devbar__opt" data-set="state" data-value="d4" aria-pressed="false">已领 4 次（额满）</button>
+    </div>
+  </div>
+
+  <div class="devbar__group">
+    <span class="devbar__label">标注</span>
+    <div class="devbar__options" role="group">
+      <button type="button" class="devbar__opt" data-set="annotate" data-value="on"  aria-pressed="true">显示</button>
+      <button type="button" class="devbar__opt" data-set="annotate" data-value="off" aria-pressed="false">隐藏</button>
+    </div>
+  </div>
+
+  <p class="devbar__note">介面文字照实际产品用英文；新增／异动处以中文标注。金额框可直接打字试算。</p>
+</aside>
+
+<div class="app" id="app" data-state="d0" data-annotate="on">
+<main>
+
+<div class="stage">
+
+  <!-- ======================================================================
+       画面 A：存款页（券 ＋ Payment Amount ＋ 试算）
+       ====================================================================== -->
+  <section class="screen">
+    <header class="screen__head">
+      <h2 class="screen__title">
+        画面 A ‧ 存款页
+        <span class="tag tag--change">异动：多一张复存券</span>
+      </h2>
+      <p class="screen__desc">
+        玩家勾选券才算参加，一次只能勾一张（一笔订单只能带一个活动 id）。
+        下方角标与试算条的数字，跟著勾选的那张券走。
+      </p>
+    </header>
+
+    <div class="phone">
+      <div class="phone__bar">
+        <span class="phone__back">‹</span>
+        <span class="phone__title">Wallet</span>
+        <span class="phone__right">Record</span>
+      </div>
+
+      <div class="phone__body">
+        <!-- 付款方式：沿用现况，不动 -->
+        <div class="pay-grid" aria-hidden="true">
+          <div class="pay-cell">CoinPH<br>JOHN</div>
+          <div class="pay-cell">QRPh</div>
+          <div class="pay-cell">coins.ph<span class="pay-cell__bonus">1% Bonus</span></div>
+          <div class="pay-cell">Bank Transfer</div>
+          <div class="pay-cell">wow-paycools-maya</div>
+          <div class="pay-cell">wow-paycools-GrabPay</div>
+        </div>
+
+        <div class="phone__gap"></div>
+
+        <!-- ── Promotions ───────────────────────────────────── -->
+        <div class="promo-head">
+          <h3 class="promo-head__title">Promotions</h3>
+          <span class="promo-head__more">View More Offers ›</span>
+        </div>
+
+        <!-- 首存券（现况，不动） -->
+        <div class="coupon-row" id="rowFirst" data-usable="yes">
+          <span class="coupon-check" id="chkFirst" role="checkbox" aria-checked="false" tabindex="0" aria-label="Top-up Coupon"></span>
+          <article class="coupon">
+            <span class="coupon__tou">TOU</span>
+            <div class="coupon__left">
+              <span class="coupon__pct">4%</span>
+              <span class="coupon__kind">Top-up<br>Coupon</span>
+            </div>
+            <div class="coupon__right">
+              <p class="coupon__cap">Capped At <b>₱100</b></p>
+              <p class="coupon__meta">
+                Turnover:<br>
+                2x turnover of deposited and bonus<br>
+                Min Deposit 10.00
+              </p>
+            </div>
+          </article>
+        </div>
+        <p class="coupon-why" id="whyFirst" hidden></p>
+
+        <!-- 复存券（新增） -->
+        <div class="coupon-row" id="rowRepeat" data-usable="no">
+          <span class="coupon-check" id="chkRepeat" role="checkbox" aria-checked="false" aria-disabled="true" tabindex="0" aria-label="Re-deposit Coupon"></span>
+          <article class="coupon">
+            <span class="coupon__tou">TOU</span>
+            <div class="coupon__left">
+              <span class="coupon__pct" id="rPct">20%</span>
+              <span class="coupon__kind">Re-deposit<br>Coupon</span>
+            </div>
+            <div class="coupon__right">
+              <p class="coupon__cap">Capped At <b id="rCap">₱2,000</b></p>
+              <p class="coupon__meta">
+                Turnover:<br>
+                3x turnover of deposited and bonus<br>
+                Min Deposit <span id="rMin">500.00</span>
+              </p>
+              <!-- 复存独有：告诉玩家这是今天第几笔、阶梯到哪、每天上限几次 -->
+              <p class="coupon__cond">
+                <span aria-hidden="true">↻</span>
+                <span id="rCond">Your 1st deposit today · Up to 4x per day</span>
+              </p>
+            </div>
+          </article>
+        </div>
+        <p class="coupon-why" id="whyRepeat" hidden></p>
+
+        <p class="anno">
+          <strong>新增这张券。</strong>版型与首存券完全相同，只有三点不同：<br>
+          ① 券种文字 <code>Re-deposit Coupon</code>（来自后台「活动」）；<br>
+          ② 右下多一行 <code>Your 1st deposit today · Up to 4x per day</code>——
+          前半告诉玩家这笔是今天第几笔（决定套哪一阶），后半是每日上限（＝后台最后一段的终点）；<br>
+          ③ 今日次数用完时整张券转灰，下方补一句原因，避免玩家以为是故障。<br>
+          <strong>因为有阶梯，券上的百分比与上限会随「下一笔是第几笔」改变</strong>——
+          今天还没存时显示第 1 阶的 20%／₱2,000，存过 1 笔后自动变成第 2 阶的 15%／₱800。
+          显示玩家<strong>实际拿得到的那一阶</strong>，不是拿最高的那阶当广告。
+        </p>
+
+        <div class="phone__gap"></div>
+
+        <!-- ── Payment Amount ───────────────────────────────── -->
+        <h3 class="pay-title">Payment Amount</h3>
+
+        <div class="quick-grid">
+          <button type="button" class="quick js-quick" data-add="10">+ 10<span class="quick__badge js-badge">4%</span></button>
+          <button type="button" class="quick js-quick" data-add="50">+ 50<span class="quick__badge js-badge">4%</span></button>
+          <button type="button" class="quick js-quick" data-add="100">+ 100<span class="quick__badge js-badge">4%</span></button>
+          <button type="button" class="quick js-quick" data-add="500">+ 500<span class="quick__badge js-badge">4%</span></button>
+          <button type="button" class="quick js-quick" data-add="1000">+ 1000<span class="quick__badge js-badge">4%</span></button>
+          <button type="button" class="quick js-quick" data-add="10000">+ 10000<span class="quick__badge js-badge">4%</span></button>
+        </div>
+
+        <input class="amount-box" id="amount" type="text" inputmode="decimal" value="₱ 0" aria-label="Deposit amount">
+        <p class="amount-err" id="amountErr" hidden>Deposit amount less than min limit.</p>
+
+        <p class="extra-bar extra-bar--none" id="extraBar" style="margin-bottom:0">
+          <span id="extraText">Select a coupon to see your bonus</span>
+        </p>
+
+        <button type="button" class="btn-submit" id="btnSubmit">Submit</button>
+
+        <p class="anno">
+          <strong>这一整区不改版型，但数值来源要跟著勾选的券走。</strong><br>
+          ① 快捷金额右上角的百分比角标 ＝ 目前勾选那张券的 <code>percent</code>；<strong>没勾任何券时角标不显示</strong>。<br>
+          ② <code>You Will Receive An Extra ₱X</code> ＝ 输入金额 × percent，超过上限则取上限，小数第 2 位无条件舍去。<br>
+          ③ <code>Deposit amount less than min limit.</code> 的门槛 ＝ 该券的 <code>Min Deposit</code>，
+          所以勾首存券是 10、勾复存券是 500，门槛会跟著换。<br>
+          ④ 未达门槛时 Submit 不可按（沿用现况）。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       画面 B：活动详情页（复存）
+       ====================================================================== -->
+  <section class="screen">
+    <header class="screen__head">
+      <h2 class="screen__title">
+        画面 B ‧ 活动详情页（复存）
+        <span class="tag tag--change">异动：加阶梯表＋今日进度</span>
+      </h2>
+      <p class="screen__desc">
+        现况只有 Additional 与 Capped At 两格。复存的奖励按当日笔序分阶，
+        一个数字表达不了，所以加一张阶梯表，再加一条今日进度告诉玩家自己站在哪一阶。
+      </p>
+    </header>
+
+    <div class="phone">
+      <div class="phone__bar">
+        <span class="phone__back">‹</span>
+        <span class="phone__title">Event Details</span>
+        <span class="phone__right" aria-hidden="true">　</span>
+      </div>
+
+      <div class="phone__body">
+        <div class="banner">EVENT BANNER<br>（后台「内容图片」上传的那张）</div>
+
+        <h3 class="detail__name">每日复存加码</h3>
+        <p class="detail__time">Event time: 2026/09/08 – 2026/09/30</p>
+
+        <div class="statcard">
+          <!-- 第一排：与首存同样两格，但因为有阶梯，数字前面加 Up to -->
+          <div class="stats">
+            <div class="stat">
+              <span class="stat__icon" aria-hidden="true">%</span>
+              <span class="stat__body">
+                <span class="stat__value">Up to 20%</span>
+                <span class="stat__label">Additional</span>
+              </span>
+            </div>
+            <span class="stats__divider" aria-hidden="true"></span>
+            <div class="stat">
+              <span class="stat__icon stat__icon--coin" aria-hidden="true">₱</span>
+              <span class="stat__body">
+                <span class="stat__value">2,000.00</span>
+                <span class="stat__label">Capped At</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- 复存专属：阶梯表。后台配几段这里就列几列 -->
+          <div class="tier">
+            <p class="tier__title">Daily deposit tiers</p>
+            <table class="tier__table">
+              <thead>
+                <tr><th>Qualifying deposit</th><th>Min deposit</th><th>Bonus</th><th>Capped at</th></tr>
+              </thead>
+              <tbody id="tierRows"></tbody>
+            </table>
+          </div>
+
+          <!-- 今日进度：复存最需要、首存没有的资讯 -->
+          <p class="progress progress--wait" id="progress">
+            <span aria-hidden="true">⏳</span>
+            <span id="progressText">Today: 0 deposits. Make 1 more deposit to unlock this bonus.</span>
+          </p>
+
+          <button type="button" class="btn-deposit" id="btnDeposit">Deposit</button>
+        </div>
+
+        <p class="anno">
+          <strong>第一排两格版型不动</strong>，但因为有阶梯，百分比前面要加
+          <code>Up to</code>，取阶梯里最高的那一阶，否则会变成不实宣传。<br>
+          <strong>新增阶梯表</strong>：后台配几段，这里就列几列。
+          玩家下一笔会落在的那一阶标上 <code>NOW</code> 并highlight，
+          让他一眼看出「再存一笔会拿到多少」。<br>
+          <strong>新增今日进度列</strong>：今天存了几笔、下一笔是第几笔、能拿几 %。
+          少了它，玩家只能自己数今天存过几次。<br>
+          Deposit 按钮<strong>任何状态都不禁用</strong>（玩家本来就有权存款），
+          次数用完时改灰色次要样式，避免误导成「还能领」。
+        </p>
+
+        <p class="detail__content">活动说明文字（后台富文本）</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       对照：活动详情页（首存，现况不动）
+       ====================================================================== -->
+  <section class="screen">
+    <header class="screen__head">
+      <h2 class="screen__title">
+        对照 ‧ 活动详情页（首存）
+        <span class="tag tag--same">不异动</span>
+      </h2>
+      <p class="screen__desc">
+        现况原样放这里，一眼看出复存版多了什么。这个画面本次完全不动。
+      </p>
+    </header>
+
+    <div class="phone">
+      <div class="phone__bar">
+        <span class="phone__back">‹</span>
+        <span class="phone__title">Event Details</span>
+        <span class="phone__right" aria-hidden="true">　</span>
+      </div>
+
+      <div class="phone__body">
+        <div class="banner">EVENT BANNER</div>
+
+        <h3 class="detail__name">6666</h3>
+        <p class="detail__time">Event time: 2026/09/01 – 2026/09/30</p>
+
+        <div class="statcard">
+          <div class="stats">
+            <div class="stat">
+              <span class="stat__icon" aria-hidden="true">%</span>
+              <span class="stat__body">
+                <span class="stat__value">4.00%</span>
+                <span class="stat__label">Additional</span>
+              </span>
+            </div>
+            <span class="stats__divider" aria-hidden="true"></span>
+            <div class="stat">
+              <span class="stat__icon stat__icon--coin" aria-hidden="true">₱</span>
+              <span class="stat__body">
+                <span class="stat__value">100.00</span>
+                <span class="stat__label">Capped At</span>
+              </span>
+            </div>
+          </div>
+          <button type="button" class="btn-deposit">Deposit</button>
+        </div>
+
+        <p class="detail__content">5555</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ==========================================================================
+     前后台对应表
+     ========================================================================== -->
+<section class="mapping">
+  <h2 class="mapping__title">前后台对应表 — 复存的每个数字从哪来</h2>
+  <p class="mapping__desc">
+    复存「效仿首存」的具体意思：这条取值路径<strong>完全照抄</strong>，只是改读复存那笔活动的配置。
+    表中第 5、6、6b、9、10、12 列是复存独有、首存没有的。
+  </p>
+
+  <div class="table-scroll">
+    <table class="map-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th>前台显示的东西</th>
+          <th>范例值</th>
+          <th>后台栏位</th>
+          <th>后台位置</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-num">1</td>
+          <td>券左半的 <code>20%</code>；详情页 <code>Up to 20%</code></td>
+          <td>20%</td>
+          <td>平台用户每日复存奖励</td>
+          <td>奖励配置 → <strong>该笔数段</strong> → 该 VIP × 渠道那一格</td>
+          <td>券面取<strong>玩家下一笔所在那一阶</strong>的值；详情页标题取最高阶并加 <code>Up to</code></td>
+        </tr>
+        <tr>
+          <td class="col-num">2</td>
+          <td>券上 <code>Capped At ₱2,000</code>；详情页 <code>Capped At</code></td>
+          <td>2,000</td>
+          <td>上限金额</td>
+          <td>同上</td>
+          <td>奖励超过此值则取此值</td>
+        </tr>
+        <tr>
+          <td class="col-num">3</td>
+          <td>券上 <code>Min Deposit 500.00</code>；阶梯表的 <code>Min deposit</code> 栏</td>
+          <td>第 1 阶 500 / 第 2 阶 200</td>
+          <td>最低存款金额</td>
+          <td>同上（<strong>每阶各自可配</strong>）</td>
+          <td><strong>券面显示的是玩家当前那一阶的门槛</strong>，会随已领次数变；也是 Payment Amount 区「低于下限」的判断门槛。要跨过某阶门槛才算进入那一阶</td>
+        </tr>
+        <tr>
+          <td class="col-num">4</td>
+          <td>券上 <code>3x turnover of deposited and bonus</code></td>
+          <td>本金＋奖金 × 3</td>
+          <td>奖金所需流水</td>
+          <td>奖励配置最下方</td>
+          <td><strong>整活动共用一份，各阶不能各设不同倍数</strong>（现况限制）</td>
+        </tr>
+        <tr>
+          <td class="col-num">5</td>
+          <td>券上 <code>Your 1st deposit today</code>；详情页阶梯表的 <code>NOW</code> 那一列</td>
+          <td>第 1 笔</td>
+          <td><strong>笔数区间</strong> <span class="tag tag--new">新增</span></td>
+          <td>奖励配置 → 各笔数段（复存才显示）</td>
+          <td>起点固定当日第 1 笔；后端依「今日已存笔数 + 1」判断落在哪一段</td>
+        </tr>
+        <tr>
+          <td class="col-num">6</td>
+          <td>券上 <code>Up to 4x per day</code>；详情页进度列的 <code>(4/4)</code></td>
+          <td>4</td>
+          <td><strong>最后一个笔数段的终点</strong> <span class="tag tag--new">新增</span></td>
+          <td>同上</td>
+          <td>不是独立栏位，是从阶梯推导出来的。首存固定 1 次，不可配</td>
+        </tr>
+        <tr>
+          <td class="col-num">6b</td>
+          <td>详情页的整张阶梯表</td>
+          <td>1st 20% / 2nd–4th 15%</td>
+          <td><strong>每个笔数段各一套矩阵</strong> <span class="tag tag--new">新增</span></td>
+          <td>奖励配置 → 各笔数段 → VIP × 渠道矩阵</td>
+          <td>后台配几段，前台就列几列</td>
+        </tr>
+        <tr>
+          <td class="col-num">7</td>
+          <td>快捷金额右上角的红色角标</td>
+          <td>8%</td>
+          <td>同第 1 列</td>
+          <td>同第 1 列</td>
+          <td><strong>跟著目前勾选的券变</strong>；没勾券时不显示角标</td>
+        </tr>
+        <tr>
+          <td class="col-num">8</td>
+          <td><code>You Will Receive An Extra ₱X</code></td>
+          <td>即时试算</td>
+          <td>输入金额 × percent，超过 limit 取 limit</td>
+          <td>前端计算</td>
+          <td>小数第 2 位无条件舍去；结果为 0 不发奖</td>
+        </tr>
+        <tr>
+          <td class="col-num">9</td>
+          <td>券种文字 <code>Re-deposit Coupon</code></td>
+          <td>—</td>
+          <td><strong>活动 ＝ 每日复存</strong> <span class="tag tag--new">新增</span></td>
+          <td>基本信息配置最上方</td>
+          <td>首存显示 <code>Top-up Coupon</code></td>
+        </tr>
+        <tr>
+          <td class="col-num">10</td>
+          <td>券能不能勾（灰掉与否）</td>
+          <td>—</td>
+          <td><code>first</code> 旗标 <span class="tag tag--new">判定条件新增</span></td>
+          <td>后端计算，非后台栏位</td>
+          <td>复存：「今日已存笔数 + 1」仍落在某一个笔数段内</td>
+        </tr>
+        <tr>
+          <td class="col-num">11</td>
+          <td>详情页的活动名称、时间、Banner、说明文字</td>
+          <td>—</td>
+          <td>活动名称／活动时间／内容图片／活动内容</td>
+          <td>基本信息配置、内容配置</td>
+          <td>与首存完全相同，不动</td>
+        </tr>
+        <tr>
+          <td class="col-num">12</td>
+          <td>详情页的今日进度列 <span class="tag tag--new">新增</span></td>
+          <td>—</td>
+          <td>无对应后台栏位</td>
+          <td>后端依当日笔数与已领次数即时算</td>
+          <td>需 <code>v4/dailyConfig</code> 多回传当日笔数与已领次数</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+/* ==========================================================================
+   原型的 JavaScript
+   做三件事：
+     1. 依「玩家今天存到第几笔」切换两张券的可用状态
+     2. 勾选券时，角标、试算条、最低金额门槛跟著换
+     3. 金额输入时即时试算奖励，示范上限与舍去规则
+   没有连后端，资料都是假的。
+   ========================================================================== */
+
+const app = document.getElementById('app');
+
+/* --------------------------------------------------------------------------
+   两张券的配置——这些值在真实系统里来自后台奖励矩阵
+   （假设玩家是 VIP0、平台自有渠道）
+   -------------------------------------------------------------------------- */
+const COUPONS = {
+  // 首存：只有第 1 笔，一天一次，没有阶梯
+  first: { pct: 4, cap: 100, min: 10, flow: 2 },
+
+  // 复存：从当日第 1 笔起算，依笔序分阶
+  // tiers 的每一项对应后台「奖励配置」里的一个笔数段
+  repeat: {
+    flow: 3,
+    // 每一阶都有自己的最低存款金额、百分比、上限——全部来自该段矩阵的那一格
+    tiers: [
+      { from: 1, to: 1, pct: 20, cap: 2000, min: 500 },   // 后台：第 1 笔
+      { from: 2, to: 4, pct: 15, cap:  800, min: 200 }    // 后台：第 2–4 笔（终点 4 ＝ 每日最多 4 次）
+    ]
+  }
+};
+
+/* 每日可领上限 ＝ 最后一段的终点 */
+const REPEAT_LIMIT = COUPONS.repeat.tiers[COUPONS.repeat.tiers.length - 1].to;
+
+/* 找出「第 n 笔」落在哪一阶；超出范围回 null（代表今天不能再领了） */
+function tierOf(n) {
+  return COUPONS.repeat.tiers.find(function (t) { return n >= t.from && n <= t.to; }) || null;
+}
+
+/* 英文序数：1st / 2nd / 3rd / 4th… */
+function ordinal(n) {
+  const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+/* --------------------------------------------------------------------------
+   三种情境下，两张券各自能不能用
+   这张表就是规格，前端照这个实作即可。
+   前提：复存设定为「当日第 2 笔起算、每日最多 1 次」
+   -------------------------------------------------------------------------- */
+/* 情境 = 玩家今天已经领过几次。其余状态全部由这个数字推导出来，
+   不用再维护一张手写对照表——这也正是后端该有的算法。 */
+const SCENES = { d0: 0, d1: 1, d4: 4 };
+
+/* 今天已领 done 次时，下一笔合格存款就是第 done+1 笔 */
+function todayCount() { return SCENES[app.dataset.state]; }
+
+/* 目前勾选哪一张券：'first' / 'repeat' / null（都没勾） */
+let selected = null;
+
+/* --------------------------------------------------------------------------
+   把一张券画成可用或不可用
+   -------------------------------------------------------------------------- */
+function paintCoupon(rowId, chkId, whyId, usable, why) {
+  const row = document.getElementById(rowId);
+  const chk = document.getElementById(chkId);
+  const box = document.getElementById(whyId);
+
+  row.dataset.usable = usable ? 'yes' : 'no';
+  chk.setAttribute('aria-disabled', String(!usable));
+  if (!usable) chk.setAttribute('aria-checked', 'false');
+
+  if (why) {
+    box.hidden = false;
+    box.className = 'coupon-why coupon-why--' + why[0];
+    box.textContent = why[1];
+  } else {
+    box.hidden = true;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   取得目前「这一笔」的复存设定
+   玩家今天存了 n 笔，那么下一笔就是第 n+1 笔，看它落在哪一阶。
+   -------------------------------------------------------------------------- */
+function currentRepeat() {
+  // 笔序 ＝ 今日在本活动「已成功领奖次数」＋ 1
+  // 没达门槛、没勾券、条件不过的存款都不计数，所以这个数字就是「下一笔算第几笔」
+  const next = todayCount() + 1;
+  const tier = tierOf(next);
+  if (!tier) return null;                       // 超出最后一阶 → 今天领完了
+  return { order: next, pct: tier.pct, cap: tier.cap, min: tier.min };
+}
+
+function readAmount() {
+  const raw = document.getElementById('amount').value.replace(/[^\d.]/g, '');
+  const n = parseFloat(raw);
+  return isNaN(n) ? 0 : n;
+}
+
+/* 算奖励：金额 × 百分比，超过上限取上限，小数第 2 位无条件舍去 */
+function calcBonus(amount, pct, cap) {
+  return Math.floor(Math.min(amount * pct / 100, cap) * 100) / 100;
+}
+
+function money(n) {
+  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+/* 目前勾选那张券的有效参数（百分比、上限、最低金额） */
+function selectedParams() {
+  if (selected === 'first') return { pct: COUPONS.first.pct, cap: COUPONS.first.cap, min: COUPONS.first.min };
+  if (selected === 'repeat') {
+    const r = currentRepeat();
+    return r ? { pct: r.pct, cap: r.cap, min: r.min } : null;
+  }
+  return null;
+}
+
+/* --------------------------------------------------------------------------
+   重画 Payment Amount 区：角标、试算条、门槛错误、Submit 状态
+   -------------------------------------------------------------------------- */
+function renderPayment() {
+  const c = selectedParams();
+  const amount = readAmount();
+
+  document.querySelectorAll('.js-badge').forEach(function (b) {
+    b.hidden = !c;
+    if (c) b.textContent = c.pct + '%';
+  });
+
+  const belowMin = !!c && amount > 0 && amount < c.min;
+  document.getElementById('amountErr').hidden = !belowMin;
+  document.getElementById('amount').classList.toggle('is-error', belowMin);
+  document.getElementById('btnSubmit').disabled = belowMin || amount <= 0;
+
+  const bar = document.getElementById('extraBar');
+  const txt = document.getElementById('extraText');
+
+  if (!c) {
+    bar.className = 'extra-bar extra-bar--none';
+    txt.textContent = 'Select a coupon to see your bonus';
+  } else if (belowMin || amount <= 0) {
+    bar.className = 'extra-bar extra-bar--none';
+    txt.textContent = 'Min Deposit ' + money(c.min) + ' to get ' + c.pct + '% bonus';
+  } else {
+    const bonus = calcBonus(amount, c.pct, c.cap);
+    const hitCap = amount * c.pct / 100 > c.cap;
+    bar.className = 'extra-bar';
+    txt.innerHTML = 'You Will Receive An Extra ₱ ' + money(bonus)
+      + (hitCap ? ' <span class="extra-bar__cap">(capped)</span>' : '');
+  }
+}
+
+/* --------------------------------------------------------------------------
+   画详情页的阶梯表，并把玩家「下一笔」会落在的那一阶标出来
+   -------------------------------------------------------------------------- */
+function renderTiers() {
+  const next = todayCount() + 1;
+  document.getElementById('tierRows').innerHTML = COUPONS.repeat.tiers.map(function (t) {
+    const label = (t.from === t.to) ? ordinal(t.from) : ordinal(t.from) + '–' + ordinal(t.to);
+    const isNow = next >= t.from && next <= t.to;
+    return '<tr class="' + (isNow ? 'is-now' : '') + '">'
+      + '<td>' + label + (isNow ? '<span class="tier__now">NOW</span>' : '') + '</td>'
+      + '<td>₱' + t.min.toLocaleString('en-US') + '</td>'
+      + '<td>' + t.pct + '%</td>'
+      + '<td>₱' + t.cap.toLocaleString('en-US') + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+/* --------------------------------------------------------------------------
+   依情境重画整个画面
+   -------------------------------------------------------------------------- */
+function render() {
+  const done = todayCount();
+  const r = currentRepeat();
+
+  // 首存：今天还没领过才可用（首存固定一天一次）
+  paintCoupon('rowFirst', 'chkFirst', 'whyFirst',
+    done === 0, done === 0 ? null : ['done', 'Already claimed today — available again tomorrow.']);
+
+  // 复存：只要今天的笔数还没用完就可用
+  paintCoupon('rowRepeat', 'chkRepeat', 'whyRepeat',
+    !!r, r ? null : ['done', "Today's limit reached (" + REPEAT_LIMIT + '/' + REPEAT_LIMIT + '). Come back tomorrow.']);
+
+  // 券面的百分比、上限、条件行，都跟著「下一笔是第几笔」变
+  if (r) {
+    document.getElementById('rPct').textContent = r.pct + '%';
+    document.getElementById('rCap').textContent = '₱' + r.cap.toLocaleString('en-US');
+    document.getElementById('rMin').textContent = money(r.min);
+    document.getElementById('rCond').textContent =
+      'Your ' + ordinal(r.order) + ' qualifying deposit · Up to ' + REPEAT_LIMIT + 'x per day';
+  } else {
+    document.getElementById('rCond').textContent =
+      'Daily limit reached · Up to ' + REPEAT_LIMIT + 'x per day';
+  }
+
+  // 情境切换后，原本勾的券可能已经不能用了
+  if (selected === 'first'  && done !== 0) selected = null;
+  if (selected === 'repeat' && !r)         selected = null;
+
+  // 详情页的今日进度
+  const p = document.getElementById('progress');
+  const t = document.getElementById('progressText');
+  if (!r) {
+    p.className = 'progress progress--done';
+    t.textContent = 'Today: ' + done + ' claimed. Daily limit reached ('
+                  + REPEAT_LIMIT + '/' + REPEAT_LIMIT + '). Come back tomorrow.';
+  } else {
+    p.className = 'progress progress--ok';
+    t.textContent = 'Today: ' + done + ' claimed. Deposit ₱' + money(r.min)
+                  + ' or more to claim your ' + ordinal(r.order) + ' — it earns ' + r.pct + '%.';
+  }
+  document.getElementById('btnDeposit').classList.toggle('btn-deposit--muted', !r);
+
+  renderTiers();
+  renderPayment();
+}
+
+/* --------------------------------------------------------------------------
+   勾选行为：一次只能勾一张
+   （因为一笔存款订单只能带一个活动 id，再勾另一张会自动取消前一张）
+   -------------------------------------------------------------------------- */
+function bindCheck(id, key, otherId) {
+  const el = document.getElementById(id);
+  function toggle() {
+    if (el.getAttribute('aria-disabled') === 'true') return;
+    const next = el.getAttribute('aria-checked') !== 'true';
+    el.setAttribute('aria-checked', String(next));
+    if (next) {
+      document.getElementById(otherId).setAttribute('aria-checked', 'false');
+      selected = key;
+    } else {
+      selected = null;
+    }
+    renderPayment();
+  }
+  el.addEventListener('click', toggle);
+  el.addEventListener('keydown', function (e) {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
+  });
+}
+bindCheck('chkFirst',  'first',  'chkRepeat');
+bindCheck('chkRepeat', 'repeat', 'chkFirst');
+
+/* --------------------------------------------------------------------------
+   快捷金额：点一下累加到输入框（与现况行为一致）
+   -------------------------------------------------------------------------- */
+document.querySelectorAll('.js-quick').forEach(function (b) {
+  b.addEventListener('click', function () {
+    const next = readAmount() + Number(b.dataset.add);
+    document.getElementById('amount').value = '₱ ' + next;
+    renderPayment();
+  });
+});
+
+document.getElementById('amount').addEventListener('input', renderPayment);
+
+/* --------------------------------------------------------------------------
+   工具列切换
+   -------------------------------------------------------------------------- */
+document.querySelectorAll('.devbar__opt').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    const key = btn.dataset.set;
+    app.dataset[key] = btn.dataset.value;
+    document.querySelectorAll('.devbar__opt[data-set="' + key + '"]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b === btn));
+    });
+    if (key === 'state') render();
+  });
+});
+
+render();
+</script>
+
+</body>
+</html>

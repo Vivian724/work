@@ -1,0 +1,2605 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>存款活动公版 · 前台 H5 原型 —— 会员在手机上看到什么</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   存款活动公版 · 前台 H5 原型 —— 温暖阳光版 · 中文
+   ─────────────────────────────────────────────────────────────────────
+   这份档案是「前台长什么样」的原型图，对应规格文件第 2 章（前台规则）。
+   手机画面里的文字＝会员真正看到的文案；手机外面的灰字＝内部标注，
+   实际上线不会出现。
+
+   【配色思路：为什么是亮底】
+   「温暖阳光」的关键不在于加几个橘色，而在于底色要亮。
+   深色底再怎么加暖色都会变成「夜晚的霓虹灯」，不是阳光。
+   所以整体翻成：暖奶油白底 + 橘金主色 + 暖棕文字（不用纯黑，
+   纯黑在暖色底上会显得冷硬）。阴影也调成暖色的（带一点棕），
+   而不是一般的灰黑阴影。
+
+   【为什么根字级设 16px 而不是规范写的 18px】
+   规范里的 18px 是为了桌机版规格文件好读；这里模拟的是手机 H5，
+   手机网页的共同基准是 16px（1rem = 16px），换算干净——
+   0.75rem 刚好 = 12px，正好是规范的最小字级底线，美术前端不用心算。
+
+   【为什么手机框写死 390px】
+   规范说「外框容器不写死固定 px 宽度」，那是指网页版面。这里的 390px
+   是在「模拟一支手机」（iPhone 14 的逻辑宽度），本来就该固定，
+   否则看不出真实的换行与截断。手机外面的舞台仍是响应式的。
+
+   【颜色对比度】
+   亮底最容易踩的坑是「橘色字看不清楚」。所以这里把橘色拆成两支：
+   --sun 系列专门用来填色（进度条、按钮底），
+   --sun-ink 是压深过的橘棕，专门给文字用，对白底达 5:1，符合 WCAG AA。
+   ═══════════════════════════════════════════════════════════════════════ */
+
+html{font-size:16px;}
+
+:root{
+  /* ── 底色：暖奶油白，像清晨的阳光洒在纸上 ── */
+  --bg-1:#FFF6E7;
+  --bg-2:#FFEBD2;
+  --ph-top:#FFFDF9;           /* 手机画面顶部（近白，带一点暖） */
+  --ph-bottom:#FFF5E6;        /* 手机画面底部（往下更暖） */
+  --card:#FFFFFF;             /* 卡片：纯白，在暖底上会自己浮起来 */
+  --surface-2:#FFF6EA;        /* 卡片里再叠一层／小标签底 */
+  --line:#F4E5D0;             /* 一般分隔线 */
+  --line-2:#EBD2AC;           /* 需要强调的框线 */
+
+  /* ── 阳光色：填色用（亮） ── */
+  --sun:#FFB020;              /* 主橘金 */
+  --sun-2:#FF8A3D;            /* 深橘，渐层另一端 */
+  --sun-3:#FFD86B;            /* 浅阳光黄 */
+  --sun-dim:#FFF3DA;          /* 金色淡底 */
+  /* ── 阳光色：文字用（压深，确保看得清楚） ── */
+  --sun-ink:#A85A15;
+
+  --coral:#FF7A66;            /* 珊瑚：辅助强调 */
+  --green:#2E8F63;            /* 绿：文字用 */
+  --green-bright:#45C68C;     /* 绿：填色用 */
+  --green-dim:#E7F7EF;
+  --red:#C8412B;              /* 红：文字用 */
+  --red-dim:#FFEDE9;
+  --blue:#2F7DBF;             /* 蓝：资讯类文字 */
+  --blue-dim:#E9F3FC;
+
+  --text:#4A3626;             /* 主文字：暖棕黑，不用纯黑 */
+  --text-2:#6B543F;           /* 次标题 */
+  --muted:#8A705C;            /* 说明文（对白底 4.6:1，通过 AA） */
+  --muted-2:#B3A08F;          /* 最弱：仅用于停用／未解锁（停用元件不受对比规范限制） */
+
+  /* ── 间距刻度：一律 4px 的倍数，不随手填数字 ── */
+  --sp-1:.25rem; --sp-2:.5rem;  --sp-3:.75rem; --sp-4:1rem;
+  --sp-5:1.25rem; --sp-6:1.5rem; --sp-8:2rem;
+
+  /* ── 字级：最小 0.75rem＝12px，是规范的下限 ── */
+  --fs-xs:.75rem;    /* 12px 标签、单位 */
+  --fs-sm:.8125rem;  /* 13px 说明文 */
+  --fs-md:.875rem;   /* 14px 内文 */
+  --fs-base:1rem;    /* 16px 卡片标题 */
+  --fs-lg:1.25rem;   /* 20px 金额 */
+  --fs-xl:1.75rem;   /* 28px 主要金额 */
+
+  --radius:14px; --radius-lg:20px; --radius-pill:999px;
+  /* 阴影带一点棕色，而不是灰黑，才不会把暖底压脏 */
+  --shadow-sm:0 2px 8px rgba(184,124,44,.10);
+  --shadow:0 6px 20px rgba(184,124,44,.14);
+  --shadow-lg:0 14px 38px rgba(160,104,30,.18);
+  --phone-w:390px; --phone-h:800px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+/* 【一定要有这一条，否则 hidden 会失效】
+   浏览器对 hidden 属性的预设样式是 display:none，但那条规则的「权重」很低，
+   任何一条像 .tier{display:flex} 的 class 规则都会盖过它——
+   结果就是明明写了 hidden，元素还是显示出来。
+   加上 !important 把它拉回来，「藏起来」才真的藏得住。 */
+[hidden]{ display:none !important; }
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;
+  /* 光晕从两颗（浓度 .55／.32）降到一颗 .30 —— 背景越安静，
+     白色的手机框才浮得出来，眼睛才知道「要看的是框里面」 */
+  background:
+    radial-gradient(ellipse at 22% 0%, rgba(255,214,110,.30) 0%, transparent 46%),
+    linear-gradient(170deg,var(--bg-1) 0%,var(--bg-2) 100%);
+  background-attachment:fixed;
+  color:var(--text);
+  min-height:100vh;
+  padding:var(--sp-6) var(--sp-4) var(--sp-8);
+}
+
+/* ═══ 页首导读 ════════════════════════════════
+   为什么要有这一段：这份档案原本打开就是六支手机并排，没有任何说明。
+   不认识这个专案的人第一眼分不出「哪些字是会员看的、哪些是我们的注记」，
+   也不知道该从哪一支手机开始看。一段导读的成本很低，
+   却能省掉每次开会前的那一轮口头解释。 */
+.pagehead{
+  max-width:900px; margin:0 auto var(--sp-6);
+  background:rgba(255,255,255,.82); border:1px solid rgba(255,255,255,.95);
+  border-radius:var(--radius-lg); padding:var(--sp-6) var(--sp-6) var(--sp-5);
+  box-shadow:var(--shadow-sm);
+}
+.pagehead__kicker{ font-size:var(--fs-xs); font-weight:800; letter-spacing:.1em; color:var(--sun-ink); }
+.pagehead__h1{ margin-top:var(--sp-2); font-size:1.5rem; font-weight:800; line-height:1.3; }
+.pagehead__lede{ margin-top:var(--sp-3); font-size:var(--fs-md); line-height:1.8; color:var(--text-2); }
+.pagehead__lede b{ color:var(--sun-ink); font-weight:700; }
+/* 「怎么看」四条：编号用 CSS 生成，日后增删顺序不用手改数字 */
+.howto{ margin-top:var(--sp-4); padding-left:0; list-style:none; counter-reset:h; }
+.howto li{
+  counter-increment:h; position:relative; padding-left:2rem;
+  margin-bottom:var(--sp-2); font-size:var(--fs-sm); line-height:1.75; color:var(--text-2);
+}
+.howto li::before{
+  content:counter(h); position:absolute; left:0; top:2px;
+  width:1.25rem; height:1.25rem; border-radius:50%;
+  background:linear-gradient(135deg,var(--sun-3),var(--sun)); color:#6B3B00;
+  font-size:var(--fs-xs); font-weight:800; text-align:center; line-height:1.25rem;
+}
+.howto b{ color:var(--text); font-weight:700; }
+.pagehead__tip{
+  margin-top:var(--sp-4); padding:var(--sp-3) var(--sp-4);
+  background:var(--sun-dim); border:1px solid var(--line-2); border-radius:var(--radius);
+  font-size:var(--fs-sm); color:var(--sun-ink); line-height:1.7;
+}
+.pagehead__tip b{ font-weight:800; }
+/* 颜色图例：卡片的边框与徽章都在用颜色表达状态，先讲清楚可以省下很多问答 */
+.key{
+  margin-top:var(--sp-4); padding-top:var(--sp-4); border-top:1px dashed var(--line);
+  display:flex; flex-wrap:wrap; gap:var(--sp-2); align-items:center;
+}
+.key__t{ font-size:var(--fs-xs); font-weight:700; color:var(--muted); margin-right:var(--sp-1); }
+.key__i{
+  font-size:var(--fs-xs); font-weight:700; padding:var(--sp-1) var(--sp-3);
+  border-radius:var(--radius-pill); border:1px solid transparent;
+}
+.key__i--wait{ background:var(--surface-2); color:var(--muted); border-color:var(--line); }
+.key__i--done{ background:var(--green-dim); color:var(--green); }
+.key__i--cap{ background:var(--blue-dim); color:var(--blue); border-color:#C6E0F5; }
+
+/* ═══ 页签：一次只看一组画面 ══════════════════════
+   六组画面同时摊开，等于一面文字墙——画面本身不复杂，
+   是「同时出现的量」让人看不懂。改成页签之后内容一样多，
+   但同一时间只需要理解一组（设计上叫「渐进揭露」）。
+   左右两边用负 margin 拉成满版，钉在顶端时才不会从缝隙看到底下的内容穿过去。 */
+.tabs{
+  position:sticky; top:0; z-index:20;
+  margin:0 calc(-1 * var(--sp-4)) var(--sp-6); padding:var(--sp-3) var(--sp-4);
+  background:rgba(255,248,236,.94);
+  -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.tabs__list{ display:flex; flex-wrap:wrap; gap:var(--sp-2); justify-content:center;
+  max-width:1200px; margin:0 auto; }
+.tab{
+  cursor:pointer; font-family:inherit; font-size:var(--fs-sm); font-weight:700;
+  padding:var(--sp-2) var(--sp-4); border-radius:var(--radius-pill);
+  border:1px solid var(--line-2); background:rgba(255,255,255,.9); color:var(--text-2);
+}
+.tab:hover{ background:var(--sun-dim); color:var(--sun-ink); }
+.tab:focus-visible{ outline:2px solid var(--sun-2); outline-offset:2px; }
+.tab.is-active{
+  background:linear-gradient(135deg,var(--sun-3),var(--sun) 60%,var(--sun-2));
+  color:#5C3200; border-color:transparent; box-shadow:var(--shadow-sm);
+}
+
+/* ═══ 舞台与分组 ══════════════════════════════ */
+.stage{ max-width:1400px; margin:0 auto; }
+.panel{ display:none; }
+.panel.is-active{
+  display:flex; flex-wrap:wrap; gap:var(--sp-8);
+  align-items:flex-start; justify-content:center;
+}
+.screen{ display:flex; flex-direction:column; gap:var(--sp-3); width:var(--phone-w); max-width:100%; }
+/* 设计标注那一组是表格不是手机画面，给它宽一点，表格才不会挤成一行两个字 */
+.screen--wide{ width:720px; }
+
+/* 第 ① 组是「同一档活动、两种设定」的左右对照，两支手机的起跑线
+   必须在同一条水平线上，不然眼睛要自己校正，对照就不准。
+   问题是两边的标题行数不一样（左边多一行），单纯并排会差十几像素。
+   解法用 CSS 的 subgrid：外层先切出五条横列
+   （标题／说明条／跳段钮／手机／内部说明），两支手机各自把自己的五块
+   对齐到同一条横列上。旧浏览器不支援 subgrid 就退回原本的并排，
+   只是会差那十几像素，不会坏掉。 */
+@supports (grid-template-rows: subgrid){
+  .panel--pair.is-active{
+    display:grid; justify-content:center; align-items:start;
+    grid-template-columns:repeat(2,var(--phone-w));
+    grid-template-rows:repeat(5,auto);
+    column-gap:var(--sp-8); row-gap:var(--sp-3);
+  }
+  .panel--pair.is-active .screen{ display:grid; grid-row:span 5; grid-template-rows:subgrid; }
+}
+
+/* ═══ 每一组画面的标题区 ══════════════════════════
+   原本是一颗金色药丸，把「编号＋名称＋对应规格」全塞进一行小字，
+   资讯密度太高。改成三层：编号（眼球先落点）／白话名称（看得懂）／
+   一句「这一组在回答什么问题」（新人最需要的），
+   对应的规格章节降为最下面的灰字，要查的人才需要看。 */
+.screen__no{ font-size:var(--fs-xs); font-weight:800; letter-spacing:.1em; color:var(--sun-ink); }
+.screen__title{ margin-top:var(--sp-1); font-size:1.125rem; font-weight:800; line-height:1.35; }
+.screen__lede{ margin-top:var(--sp-2); font-size:var(--fs-sm); line-height:1.75; color:var(--text-2); }
+.screen__lede b{ color:var(--sun-ink); font-weight:700; }
+.screen__ref{ margin-top:var(--sp-2); font-size:var(--fs-xs); color:var(--muted); line-height:1.6; }
+
+/* ═══ 手机上方的说明条与「框内跳段」按钮 ══════════════
+   这一块是本次改版最要紧的东西：手机框高 800px，框里常常叠了
+   四五种状态，要在框内往下滑才看得完。第一次看的人不知道，
+   就会以为「这一组只有一张卡」而漏掉后面全部。
+   所以框上面直接列出框内有哪几段，点一下就滑到那一段。 */
+.device__cap{
+  font-size:var(--fs-xs); color:var(--text-2); line-height:1.7;
+  background:rgba(255,255,255,.72); border:1px solid rgba(255,255,255,.95);
+  border-radius:var(--radius); padding:var(--sp-2) var(--sp-3);
+}
+.device__cap b{ color:var(--text); font-weight:700; }
+.jump{ display:flex; flex-wrap:wrap; gap:var(--sp-1); align-items:center; }
+.jump__t{ font-size:var(--fs-xs); color:var(--muted); margin-right:var(--sp-1); }
+.jump__b{
+  cursor:pointer; font-family:inherit; font-size:var(--fs-xs); font-weight:700;
+  color:var(--sun-ink); background:rgba(255,255,255,.9);
+  border:1px solid var(--line-2); border-radius:var(--radius-pill);
+  padding:3px var(--sp-3);
+}
+.jump__b:hover{ background:var(--sun-dim); }
+.jump__b:focus-visible{ outline:2px solid var(--sun-2); outline-offset:2px; }
+
+/* ═══ 手机外框 ════════════════════════════════ */
+.phone{
+  width:100%; height:var(--phone-h); overflow-y:auto; overflow-x:hidden;
+  background:linear-gradient(180deg,var(--ph-top) 0%,#FFFAF0 55%,var(--ph-bottom) 100%);
+  border:1px solid rgba(255,255,255,.9); border-radius:26px;
+  box-shadow:var(--shadow-lg);
+}
+.phone::-webkit-scrollbar{ width:4px; }
+.phone::-webkit-scrollbar-thumb{ background:rgba(255,176,32,.45); border-radius:2px; }
+
+/* ═══ 顶栏 ════════════════════════════════════════════════════════ */
+.topbar{
+  position:sticky; top:0; z-index:5;
+  display:flex; align-items:center; gap:var(--sp-3);
+  padding:var(--sp-3) var(--sp-4);
+  background:rgba(255,253,249,.9); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.topbar__back{
+  width:28px; height:28px; flex-shrink:0; border:none; cursor:pointer;
+  border-radius:50%; background:var(--surface-2); color:var(--text-2);
+  font-size:var(--fs-md); line-height:1;
+}
+.topbar__title{ flex:1; min-width:0; font-size:var(--fs-md); font-weight:600; text-align:center;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.topbar__back:focus-visible,.btn:focus-visible{ outline:2px solid var(--sun-2); outline-offset:2px; }
+
+/* ═══ 主视觉 Banner（一块搞定全部头部资讯）══════════════════════
+   依 2026-09-09 讨论调整：返回键、行销字样、活动名称、活动时间
+   全部「叠在 banner 上」，不再另外占一条白色顶栏＋一张名称卡。
+   原因：真正重要的是下面那三个规则区块，头部每省下一像素，
+   会员就早一点看到「我能拿多少、还差多少」。
+   （原本的顶栏＋名称卡合计吃掉约 160px，现在全部并进 banner。） */
+.hero{ position:relative; height:240px; overflow:hidden;
+  background:
+    linear-gradient(120deg,var(--sun-3) 0%,var(--sun) 45%,var(--coral) 100%),
+    repeating-linear-gradient(45deg,rgba(255,255,255,.10) 0 12px,transparent 12px 24px);
+}
+/* 阳光光晕：右上角一颗淡淡的太阳 */
+.hero::before{ content:''; position:absolute; width:200px; height:200px; border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.55),transparent 68%); top:-74px; right:-48px; }
+/* 返回键：浮在 banner 左上角，半透明白底才不会被主视觉吃掉 */
+.hero__back{
+  position:absolute; top:var(--sp-3); left:var(--sp-3); z-index:3;
+  width:32px; height:32px; border:none; border-radius:50%; cursor:pointer;
+  background:rgba(255,255,255,.85); color:var(--text); font-size:var(--fs-md); line-height:1;
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); box-shadow:var(--shadow-sm);
+}
+.hero__back:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+/* 占位说明：实际上线换成第2步上传的图，行销字样是美术做在图里的 */
+.hero__ph{ position:absolute; inset:0; z-index:1;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color:#6B3B00; text-align:center; font-size:var(--fs-sm); font-weight:700; padding:0 var(--sp-6);
+}
+.hero__ph span{ display:block; font-size:var(--fs-xs); font-weight:500; opacity:.82; margin-top:3px; }
+/* 遮罩：让叠在图上的白字一定读得到，不管美术上传什么图 */
+.hero__scrim{ position:absolute; left:0; right:0; bottom:0; height:132px; z-index:2;
+  background:linear-gradient(transparent,rgba(84,42,0,.74)); }
+.hero__meta{ position:absolute; left:var(--sp-4); right:var(--sp-4); bottom:var(--sp-4); z-index:3; color:#fff; }
+.hero__name{ font-size:var(--fs-lg); font-weight:800; line-height:1.3;
+  text-shadow:0 1px 6px rgba(84,42,0,.4);
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.hero__time{ margin-top:var(--sp-1); font-size:var(--fs-xs); color:rgba(255,255,255,.9);
+  text-shadow:0 1px 4px rgba(84,42,0,.4); }
+.hero__time b{ color:var(--sun-3); font-variant-numeric:tabular-nums; font-weight:700; }
+
+/* ═══ 奖励卡：一个规则区块＝一张卡 ════════════════════════════════
+   这是整个前台最核心的元件。后台第4步每挂一个规则区块，
+   前台就多出一张这样的卡，卡里的数字全部来自那个区块的设定。
+
+   【2026-09-10 改版：卡片不再并排堆叠，改成一个周期一格页签】
+   后台第1步就选定玩法（复存／累计存款），同一档活动的所有区块
+   都是同一种玩法，区块之间唯一会不一样的是「统计周期」。
+   所以主画面从「三张卡上下堆」改成「三格页签，一次显示一张卡」。
+   区块只有 1 个时页签不出现，卡片直接显示——见画面 ③。 */
+.rule{
+  margin:var(--sp-3) var(--sp-4) 0; padding:var(--sp-4);
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm);
+}
+.rule--done{ border-color:#BFE6D2; }
+
+.rule__head{ display:flex; align-items:flex-start; gap:var(--sp-2); }
+.rule__no{
+  flex-shrink:0; width:22px; height:22px; border-radius:7px;
+  background:linear-gradient(135deg,var(--sun-3),var(--sun)); color:#6B3B00;
+  font-size:var(--fs-xs); font-weight:800;
+  display:flex; align-items:center; justify-content:center;
+}
+.rule__title{ flex:1; min-width:0; font-size:var(--fs-base); font-weight:700; line-height:1.3; }
+.rule__cycle{
+  flex-shrink:0; font-size:var(--fs-xs); color:var(--muted);
+  background:var(--surface-2); border:1px solid var(--line);
+  border-radius:var(--radius-pill); padding:2px var(--sp-2);
+}
+
+/* ── 玩法徽章：这张卡是「复存」还是「累计存款」──
+   【为什么需要这个】
+   2026-09-10 定案：同一个维度（周期）底下可以同时挂复存与累计存款两张卡。
+   两张卡的外框、圆角、字级全都一样，只有内部的进度呈现不同
+   （复存是次数点、累计存款是金额进度条＋阶梯）——
+   但会员不会去分析版面结构，他只会觉得「怎么有两张长得差不多的卡」。
+   所以玩法一定要有一个一眼可辨的标签，而且要跟周期标签在颜色上分开：
+     · 玩法徽章（这一支）＝ 有底色的实心 chip，看得见
+     · 周期徽章（.rule__cycle）＝ 淡底描边 chip，退到背景
+   两支同时出现时固定「玩法在左、周期在右」，顺序不要换。 */
+.rule__kind{
+  flex-shrink:0; font-size:var(--fs-xs); font-weight:700;
+  border-radius:var(--radius-pill); padding:2px var(--sp-2);
+}
+/* 复存＝橘金系：强调「一笔一笔、看次数」 */
+.rule__kind--re{ background:var(--sun-dim); color:var(--sun-ink); border:1px solid var(--line-2); }
+/* 累计存款＝蓝系：强调「累积、看总额」，跟橘金拉开距离 */
+.rule__kind--sum{ background:var(--blue-dim); color:var(--blue); border:1px solid #C6E0F5; }
+
+/* 每个区块右上角，各自的「规则」按钮 ──────────────────────────
+   点开的是「这个区块自己的规则弹窗图」，不是全活动共用的一张。
+   这跟后台第2步完全对得上：后台就是一个区块要上传 PC 端与 H5 端
+   各一张规则弹窗图，前台正好一个区块一颗按钮、一一对应。
+   也因为这样，顶栏不再放全站共用的「活动规则」——那颗按钮
+   在后台根本没有对应的图可以放（这同时回答了待确认项 A02）。 */
+.rule__rules{
+  flex-shrink:0; cursor:pointer; font-family:inherit;
+  border:1px solid var(--line-2); background:var(--sun-dim); color:var(--sun-ink);
+  font-size:var(--fs-xs); font-weight:700; padding:2px var(--sp-2);
+  border-radius:var(--radius-pill);
+}
+.rule__rules:hover{ background:#FFE9BE; }
+.rule__rules:focus-visible{ outline:2px solid var(--sun-2); outline-offset:2px; }
+/* 一句话规则：把后台那一行「白话说明」直接给会员看 */
+.rule__desc{ margin-top:var(--sp-2); font-size:var(--fs-sm); color:var(--muted); line-height:1.6; }
+.rule__desc em{ color:var(--sun-ink); font-style:normal; font-weight:700; }
+
+.rule__body{ margin-top:var(--sp-3); padding-top:var(--sp-3); border-top:1px dashed var(--line); }
+
+/* ── 进度：当前存款金额 vs 门槛 ── */
+.prog__row{ display:flex; align-items:baseline; justify-content:space-between; gap:var(--sp-2); }
+.prog__label{ font-size:var(--fs-xs); color:var(--muted); }
+.prog__val{ font-size:var(--fs-md); font-variant-numeric:tabular-nums; color:var(--muted); }
+.prog__val b{ font-size:var(--fs-lg); font-weight:800; color:var(--sun-ink); }
+.bar{ height:8px; margin-top:var(--sp-2); border-radius:var(--radius-pill);
+  background:#F3E7D6; overflow:hidden; }
+.bar__fill{ height:100%; border-radius:inherit;
+  background:linear-gradient(90deg,var(--sun-3),var(--sun) 55%,var(--sun-2)); }
+.bar__fill--green{ background:linear-gradient(90deg,#7BDCB0,var(--green-bright)); }
+/* 距离下一档还差多少 */
+.prog__gap{ margin-top:var(--sp-2); font-size:var(--fs-xs); color:var(--muted); }
+.prog__gap b{ color:var(--sun-ink); font-weight:700; }
+
+/* ── 复存的次数点：一眼看出领了几次、还剩几次 ── */
+.dots{ display:flex; gap:var(--sp-1); margin-top:var(--sp-2); }
+.dots i{ width:100%; height:6px; border-radius:var(--radius-pill); background:#F3E7D6; }
+.dots i.on{ background:linear-gradient(90deg,var(--sun),var(--sun-2)); }
+/* 这个周期已经领满：点全亮但转成绿色，跟「还有次数」的橘色区分开，
+   会员扫一眼就知道是「领完了」而不是「还能领」 */
+.dots--full i.on{ background:linear-gradient(90deg,#7BDCB0,var(--green-bright)); }
+.dots--many{ display:flex; align-items:center; gap:var(--sp-2); margin-top:var(--sp-2); }
+.dots--many .bar{ flex:1; min-width:0; margin-top:0; }
+.dots--many span{ flex-shrink:0; font-size:var(--fs-xs); color:var(--muted);
+  font-variant-numeric:tabular-nums; }
+
+/* ── 给美术看的设计标注面板（不是前台元件，上线不会出现） ── */
+.tokens{ width:100%;
+  background:rgba(255,255,255,.72); border:1px solid var(--line);
+  border-radius:var(--radius-lg); padding:var(--sp-4); font-size:var(--fs-xs);
+  color:var(--text-2); line-height:1.7; box-shadow:var(--shadow-sm); }
+.tokens h3{ font-size:var(--fs-sm); color:var(--sun-ink); margin-bottom:var(--sp-2); }
+.tokens table{ width:100%; border-collapse:collapse; margin-bottom:var(--sp-3); }
+.tokens th,.tokens td{ text-align:left; padding:3px 6px; border-bottom:1px solid var(--line);
+  vertical-align:middle; }
+.tokens th{ color:var(--muted); font-weight:600; }
+.sw{ display:inline-block; width:14px; height:14px; border-radius:4px;
+  border:1px solid rgba(0,0,0,.08); vertical-align:-2px; margin-right:5px; }
+
+/* ── 累计存款的阶梯表（旧称「连续性」，2026-09-10 改名）── */
+.tiers{ margin-top:var(--sp-3); display:flex; flex-direction:column; gap:var(--sp-1); }
+.tier{
+  display:flex; align-items:center; gap:var(--sp-2);
+  padding:var(--sp-2) var(--sp-3); border-radius:10px;
+  background:var(--surface-2); font-size:var(--fs-sm);
+}
+.tier--done{ background:var(--green-dim); }
+.tier--next{ background:var(--sun-dim); border:1px solid var(--line-2); }
+.tier--lock{ color:var(--muted-2); background:#FAF6F0; }
+.tier__n{ flex-shrink:0; font-size:var(--fs-xs); color:var(--muted); width:44px; }
+.tier__cond{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.tier__prize{ flex-shrink:0; font-weight:800; color:var(--sun-ink); font-variant-numeric:tabular-nums; }
+.tier--done .tier__prize{ color:var(--green); }
+.tier--lock .tier__prize{ color:var(--muted-2); }
+.tier__mark{ flex-shrink:0; width:16px; text-align:center; font-size:var(--fs-xs); }
+/* ── 最高档：一定要看得见，而且要看起来值得追 ──
+   【为什么单独做一支】
+   阶梯玩法的主要诱因就是最上面那一档（「存到底可以拿 ₱1,600」）。
+   如果最高档跟中间那几档长得一模一样，会员滑过去不会有感觉；
+   更糟的是折叠时把它藏起来——那等于把整个玩法最强的卖点收进抽屉。
+   所以：最高档永远显示、永远描边，不管展开还是折叠。 */
+.tier--top{ border:1px solid var(--line-2); background:linear-gradient(90deg,var(--sun-dim),#FFFDF7); }
+.tier--top .tier__n{ color:var(--sun-ink); font-weight:700; }
+.tier--top .tier__prize{ color:var(--sun-ink); }
+.tier--top.tier--lock{ color:var(--text-2); }
+.tier--top.tier--lock .tier__prize{ color:var(--sun-ink); }
+
+/* ── 奖励状态徽章：本次只有 2 种（未达标／已发放）＋ 1 个告知（次数已领满）── */
+.badge{
+  display:inline-flex; align-items:center; gap:var(--sp-1);
+  font-size:var(--fs-xs); font-weight:700; padding:var(--sp-1) var(--sp-3);
+  border-radius:var(--radius-pill);
+}
+.badge--wait{ background:var(--surface-2); color:var(--muted); border:1px solid var(--line); }
+.badge--done{ background:var(--green-dim); color:var(--green); }
+/* 已达本周期次数上限：这是「告知」不是「出错」，所以走蓝色资讯色，不用红色 */
+.badge--cap{ background:var(--blue-dim); color:var(--blue); border:1px solid #C6E0F5; }
+
+/* ── 按钮 ── */
+.btn{
+  display:block; width:100%; margin-top:var(--sp-3); cursor:pointer;
+  border:none; border-radius:var(--radius); padding:var(--sp-3);
+  font-size:var(--fs-md); font-weight:800; font-family:inherit;
+}
+/* 主按钮：亮金渐层 + 深棕字。深色字在亮金上对比 5.9:1，比白字清楚得多 */
+.btn--sun{ background:linear-gradient(135deg,var(--sun-3),var(--sun) 45%,var(--sun-2)); color:#5C3200;
+  box-shadow:0 6px 18px rgba(255,150,32,.35); }
+.btn--sun:hover{ filter:brightness(1.04); }
+.btn--sun:active{ transform:translateY(1px); }
+.btn--disabled{ background:#F2ECE3; color:var(--muted-2); cursor:not-allowed; box-shadow:none; }
+
+/* ═══ 自动发放模式专用 ════════════════════════════════════════════
+   后台「奖励发放」预设是<自动发放>：会员达标后系统直接入账，
+   前台没有「领取」这个动作，所以不该出现领取按钮。
+   这时会员最想知道的是「到底帮我发了多少」，因此顶部放一条汇总。 */
+.autobar{
+  margin:var(--sp-3) var(--sp-4) 0; padding:var(--sp-3) var(--sp-4);
+  background:linear-gradient(135deg,var(--green-dim),#F3FBF7);
+  border:1px solid #BFE6D2; border-radius:var(--radius);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2);
+  font-size:var(--fs-sm); color:var(--green); font-weight:700;
+}
+.autobar b{ font-size:var(--fs-lg); font-variant-numeric:tabular-nums; }
+/* 到账／领取纪录的小字 */
+.credit{ margin-top:var(--sp-2); font-size:var(--fs-xs); color:var(--muted); line-height:1.6; }
+.credit b{ color:var(--green); font-weight:700; }
+
+/* ═══ 底部固定的存款按钮 ══════════════════════════════════════════ */
+.dockbar{
+  position:sticky; bottom:0; z-index:5; margin-top:var(--sp-5);
+  padding:var(--sp-3) var(--sp-4) var(--sp-4);
+  background:linear-gradient(transparent,var(--ph-bottom) 30%);
+}
+.dockbar .btn{ margin-top:0; }
+
+/* ═══ 手机框内的原型注记 ══════════════════════════
+   这几行字不是会员看到的，是我们标给自己看的
+   「下面这张卡在演示哪一种状态」。原本它长得跟画面里的小标题很像
+   （一条底线＋小灰字），第一次看的人会把它当成前台文案。
+   现在改成灰底虚线框、前面挂一颗「注记」小标签，一眼就知道上线不会有。
+   注意：不要把 .seg 设成 flex——里面有 <b>，flex 会把每一段文字
+   拆成独立的排版项目，整句话会被拉成横向一格一格。 */
+.seg{
+  margin:var(--sp-5) var(--sp-4) 0; padding:var(--sp-2) var(--sp-3);
+  background:#F7F2EA; border:1px dashed #DBC9B1; border-radius:var(--radius);
+  font-size:var(--fs-xs); color:var(--text-2); line-height:1.7;
+}
+.seg::before{
+  content:'注记'; display:inline-block; margin-right:var(--sp-2);
+  padding:1px var(--sp-2); border-radius:var(--radius-pill);
+  background:#E8DBC7; color:#6B543F; font-weight:700;
+}
+.seg b{ color:var(--text); font-weight:700; }
+.seg:first-of-type{ margin-top:var(--sp-4); }
+
+/* ═══ 手机下方的「内部说明」（可收合）════════════════
+   给 PM／开发看的：画面上每个数字是从后台哪一个栏位来的、
+   哪几项还没拍板。这些内容有价值，但六组加起来三十几条长句
+   全部摊开＝文字墙，会盖掉真正要看的画面。
+   所以收进 <details>：预设收起，想看的人点一下展开。
+   原本那句粗体总结正好当成收合时的标题，一句话都没少。 */
+.notes{
+  width:100%; font-size:var(--fs-xs); color:var(--text-2); line-height:1.8;
+  background:rgba(255,255,255,.72); border:1px solid rgba(255,255,255,.95);
+  border-radius:var(--radius); box-shadow:var(--shadow-sm);
+}
+.notes > summary{
+  cursor:pointer; list-style:none; padding:var(--sp-3) var(--sp-4);
+  font-size:var(--fs-sm); font-weight:700; color:var(--sun-ink); line-height:1.6;
+}
+.notes > summary::-webkit-details-marker{ display:none; }
+.notes > summary::before{ content:'＋ 内部说明 · '; font-weight:800; color:var(--muted); }
+.notes[open] > summary::before{ content:'－ 内部说明 · '; }
+.notes > summary:hover{ color:var(--sun-2); }
+.notes > summary:focus-visible{ outline:2px solid var(--sun-2); outline-offset:2px; border-radius:var(--radius); }
+.notes__body{ padding:0 var(--sp-4) var(--sp-4); }
+.notes__body ul{ padding-left:1.1rem; }
+.notes__body li{ margin-bottom:var(--sp-1); }
+.notes__body b{ color:var(--text); font-weight:700; }
+
+
+/* ═══ 周期页签（手机框内）════════════════════════════════════════════
+   【这个元件在解决什么问题】
+   后台第 1 步选定玩法（复存／累计存款）之后，同一档活动的所有规则区块
+   都是同一种玩法，区块之间唯一会不一样的就是「统计周期」。
+   也就是说：前台一页里不会出现两种玩法，要区分的轴线只有周期。
+   所以页签切的是「每日／每周／限时」，不是切玩法。
+
+   【为什么要 sticky】
+   会员往下滑看阶梯时，很容易忘记「我现在看的是每日还是每周」——
+   两者的数字长得一模一样，只有归零时点不同，看错就会客诉。
+   页签钉在框顶，滑到哪都看得到自己在哪一格。
+
+   【为什么 z-index 是 6】
+   .topbar 与 .dockbar 是 5。周期页签必须压在它们之上，
+   否则同时出现时页签会被顶栏盖掉半截。 */
+.cyctab{
+  position:sticky; top:0; z-index:6;
+  display:flex; gap:var(--sp-1);
+  padding:var(--sp-3) var(--sp-4) var(--sp-3);
+  /* 上半段不透明、下缘渐隐，卡片滑到底下时不会出现一条硬边 */
+  background:linear-gradient(180deg,var(--ph-top) 0%,var(--ph-top) 72%,rgba(255,253,249,0) 100%);
+}
+.cyctab__btn{
+  position:relative; flex:1; min-width:0;
+  padding:var(--sp-2) var(--sp-2);
+  border:1px solid var(--line); border-radius:var(--radius-pill);
+  background:var(--card); color:var(--text-2);
+  font-family:inherit; font-size:var(--fs-sm); font-weight:700; line-height:1.4;
+  cursor:pointer;
+  /* 三个页签平分宽度；字太长时截断而不是把版面撑爆 */
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.cyctab__btn:hover{ background:var(--sun-dim); color:var(--sun-ink); }
+.cyctab__btn:focus-visible{ outline:2px solid var(--sun-2); outline-offset:2px; }
+.cyctab__btn.is-active{
+  background:linear-gradient(135deg,var(--sun-3),var(--sun) 55%,var(--sun-2));
+  border-color:transparent; color:#5C3200;
+  box-shadow:0 3px 10px rgba(255,150,32,.35);
+}
+/* 这个周期已经结束（例如活动已进入最后一天，「每周」那一格本周已结束）
+   → 仍可点进去看结果，但视觉上要退到背景 */
+.cyctab__btn.is-ended{ background:#FAF6F0; color:var(--muted-2); }
+
+/* ── 周期资讯条：页签下面那一行「什么时候归零」 ──
+   这一行是页签的另一半。页签只讲「哪一个周期」，
+   资讯条讲「这个周期什么时候归零重算」——会员真正会问的是后者。 */
+.cycbar{
+  display:flex; align-items:flex-start; gap:var(--sp-2);
+  margin:0 var(--sp-4); padding:var(--sp-2) var(--sp-3);
+  background:var(--surface-2); border:1px solid var(--line); border-radius:var(--radius);
+  font-size:var(--fs-xs); color:var(--muted); line-height:1.7;
+}
+.cycbar b{ color:var(--sun-ink); font-weight:700; font-variant-numeric:tabular-nums; }
+.cycbar__ico{ flex-shrink:0; }
+/* 不归零的「限时」用蓝色，跟会归零的每日／每周在颜色上就分开 */
+.cycbar--static{ background:var(--blue-dim); border-color:#C6E0F5; color:var(--blue); }
+.cycbar--static b{ color:var(--blue); }
+
+/* 周期内容区：一个页签一个 pane，切换只换 class，不动 DOM，
+   所以切回来时卡片展开状态、框内卷动位置都还在。 */
+.cycpane{ display:none; }
+.cycpane.is-active{ display:block; }
+
+/* ═══ 阶梯折叠（累计存款最多 20 档）════════════════════════════════
+   20 档全部摊开会有 20 列 × 约 34px ＝ 680px，一整支手机装不下一张卡。
+   预设只显示「已领的最后一档 → 下一档 → 再往后两档」，其余收起来。 */
+.tiers__skip{
+  display:flex; align-items:center; justify-content:center; gap:var(--sp-2);
+  padding:var(--sp-1) var(--sp-3);
+  font-size:var(--fs-xs); color:var(--muted-2);
+}
+.tiers__skip::before,.tiers__skip::after{
+  content:''; flex:1; height:1px; background:var(--line);
+}
+.tiers__more{
+  width:100%; margin-top:var(--sp-2); padding:var(--sp-2);
+  background:transparent; border:1px dashed var(--line-2); border-radius:var(--radius);
+  color:var(--sun-ink); font-family:inherit; font-size:var(--fs-xs); font-weight:700;
+  cursor:pointer;
+}
+.tiers__more:hover{ background:var(--sun-dim); }
+.tiers__more:focus-visible{ outline:2px solid var(--sun-2); outline-offset:2px; }
+
+/* ═══ 复存卡横向轮播（贴在 Banner 下缘）══════════════════════════
+   【为什么复存适合横向滑，累计存款不适合】
+   复存卡是「定高」的：不管次数上限是 1 还是 20，画面上都是
+   一行次数点，卡高固定约 210px。定高的东西横向排整齐、好滑。
+   累计存款卡高度跟着档数跑（5 档 320px、20 档 830px），
+   横向排会变成一排高高低低的柱子，滑起来很难看，所以那边留给页签。
+
+   【为什么要往上叠 -32px】
+   卡片压在 Banner 下缘，会员第一眼就知道「这张卡跟上面那张图是一组的」，
+   而且能省下一段留白。这是 H5 活动页很常见的作法。
+
+   【为什么每张卡只占 86%】
+   刻意露出下一张卡的边，会员不用教就知道可以左右滑。
+   如果做成 100% 满版，多数人不会发现后面还有东西。 */
+.swipe{
+  display:flex; gap:var(--sp-3);
+  margin-top:calc(-1 * var(--sp-8));      /* 往上叠进 Banner */
+  /* 【这一行不能省】.hero 里的遮罩与文字是 z-index 2／3 的绝对定位元素，
+     而 .hero 本身没有 z-index、不产生堆叠脉络，所以那两层会画在
+     后面这个「没有定位」的 .swipe 之上——结果就是卡片头部被 Banner 吃掉。
+     给 .swipe 一个定位与更高的 z-index，才叠得上去。 */
+  position:relative; z-index:4;
+  padding:0 var(--sp-4) var(--sp-3);
+  overflow-x:auto; overflow-y:visible;
+  scroll-snap-type:x mandatory;           /* 放手后自动对齐到某一张 */
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.swipe::-webkit-scrollbar{ display:none; }
+/* 卡片往上叠 32px，会正好压到 Banner 上的活动名称与时间。
+   所以横滑版的 Banner 要用这个修饰类，把文字往上让 44px，
+   让出卡片的位置——不要改 .hero__meta 本体，那是所有画面共用的。 */
+.hero--swipe .hero__meta{ bottom:calc(var(--sp-8) + var(--sp-3)); }
+.swipe > .rule{
+  flex:0 0 86%;                            /* 露边，暗示可以滑 */
+  margin:0;                                /* 盖掉 .rule 自己的外距 */
+  scroll-snap-align:center;
+}
+/* 指示点：目前在第几张。当前那一颗拉长成药丸，不只是变色——
+   小圆点只靠颜色区分，在阳光下的手机萤幕上几乎看不出来 */
+.swipe__dots{ display:flex; justify-content:center; align-items:center; gap:6px; padding-bottom:var(--sp-2); }
+.swipe__dot{ width:6px; height:6px; border-radius:50%; background:#EAD9C0; transition:width .2s; }
+.swipe__dot.is-on{ width:18px; border-radius:var(--radius-pill);
+  background:linear-gradient(90deg,var(--sun),var(--sun-2)); }
+
+/* ═══ 区段标题（一页里有两种玩法时，用来把两区隔开）══════════════
+   两种玩法给两个完全不同的呈现方式（上面横滑、下面页签）之后，
+   还需要一句话点明「这一区在讲什么」，会员才不会以为下面是上面的延续。 */
+.zone{ margin:var(--sp-6) var(--sp-4) var(--sp-3); }
+.zone__t{ display:flex; align-items:center; gap:var(--sp-2); font-size:var(--fs-base); font-weight:800; }
+.zone__sub{ margin-top:var(--sp-1); font-size:var(--fs-xs); color:var(--muted); line-height:1.7; }
+.zone--first{ margin-top:var(--sp-2); }
+
+/* ═══ 规则弹窗（每张卡右上角的「规则」点开的东西）══════════════════
+   【这个元件在解决什么问题】
+   后台第 2 步是「一个规则区块上传一张 PC 端 ＋ 一张 H5 端的规则弹窗图」。
+   也就是说：规则说明不是前台写死的文字，而是运营做好的一张图。
+   前台要做的只有三件事——把图撑开、可以卷动、可以关掉。
+
+   一张卡＝一个区块＝一颗「规则」钮＝一张自己的图。
+   因为玩法有 2 种、维度有 3 种，所以<b>一共 6 种卡片样式，就有 6 种规则弹窗</b>。
+
+   【为什么用 sticky ＋ absolute 这个组合，而不是 position:fixed】
+   这份原型是「手机框」，不是真的手机。.phone 自己就是卷动容器，
+   fixed 会relative to 整个网页（会盖住旁边那支手机），
+   absolute 又会跟着框内内容一起卷走（卷到下面就看不到弹窗了）。
+   解法：外层 sticky top:0 + height:0（钉在框顶、不占空间），
+   内层 absolute 撑满一整个框高（--phone-h）。这样弹窗永远正好盖住可视范围。
+   真的开发时用 position:fixed 就好，这是原型限定的作法。 */
+.rulepop{ position:sticky; top:0; z-index:20; height:0; }
+.rulepop__mask{
+  position:absolute; top:0; left:0; right:0; height:var(--phone-h);
+  background:rgba(74,54,38,.48);
+  display:flex; align-items:flex-end;      /* 从底部升上来，H5 的习惯作法 */
+  border-radius:26px; overflow:hidden;     /* 跟手机框同圆角，不然四角会露出直角 */
+}
+.rulepop__sheet{
+  width:100%; max-height:78%; display:flex; flex-direction:column;
+  background:var(--card);
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow:0 -8px 30px rgba(120,76,20,.28);
+}
+.rulepop__head{
+  flex-shrink:0; display:flex; align-items:center; gap:var(--sp-2);
+  padding:var(--sp-4) var(--sp-4) var(--sp-3);
+  border-bottom:1px solid var(--line);
+}
+.rulepop__title{ flex:1; min-width:0; font-size:var(--fs-base); font-weight:700; }
+.rulepop__x{
+  flex-shrink:0; width:28px; height:28px; border-radius:50%;
+  border:1px solid var(--line); background:var(--surface-2);
+  color:var(--muted); font-size:1rem; line-height:1; cursor:pointer; font-family:inherit;
+}
+.rulepop__x:hover{ background:#F3E7D6; color:var(--text); }
+.rulepop__x:focus-visible{ outline:2px solid var(--sun-2); outline-offset:2px; }
+.rulepop__body{ flex:1; min-height:0; overflow-y:auto; padding:var(--sp-4); }
+/* 图片占位：真实上线时这里是运营在后台第2步上传的那张图 */
+.rulepop__img{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--sp-1);
+  min-height:200px; padding:var(--sp-5) var(--sp-3);
+  border:1px dashed var(--line-2); border-radius:var(--radius);
+  background:var(--surface-2); color:var(--muted);
+  font-size:var(--fs-sm); text-align:center; line-height:1.7;
+}
+.rulepop__img b{ color:var(--sun-ink); font-size:var(--fs-base); }
+.rulepop__img span{ font-size:var(--fs-xs); }
+/* 图底下那段「这张图至少要写到什么」——给运营的备忘，不是前台文案 */
+.rulepop__must{
+  margin-top:var(--sp-3); padding:var(--sp-3);
+  background:#F7F2EA; border:1px dashed #DBC9B1; border-radius:var(--radius);
+  font-size:var(--fs-xs); color:var(--text-2); line-height:1.8;
+}
+.rulepop__must b{ color:var(--text); font-weight:700; }
+.rulepop__must ul{ margin:var(--sp-1) 0 0; padding-left:1.1rem; }
+.rulepop__foot{ flex-shrink:0; padding:var(--sp-3) var(--sp-4) var(--sp-4); border-top:1px solid var(--line); }
+.rulepop__foot .btn{ margin-top:0; }
+
+/* 第 ⑤ 组用的静态展示版：不要遮罩、不要钉住，直接把弹窗摊在页面上给美术看 */
+.rulepop--static{ position:static; height:auto; margin:var(--sp-3) var(--sp-4) 0; }
+.rulepop--static .rulepop__mask{ position:static; height:auto; background:none; border-radius:0; }
+.rulepop--static .rulepop__sheet{ max-height:none; border-radius:var(--radius-lg); border:1px solid var(--line); box-shadow:var(--shadow-sm); }
+
+/* ═══ 响应式 ══════════════════════════════════ */
+@media (max-width:900px){
+  /* 两支手机（390 × 2 ＋ 间距）放不下时，退回上下排，
+     比横向出现卷轴好读。这一条要写在 subgrid 那一段后面才盖得过它。 */
+  .panel--pair.is-active{ display:flex; flex-wrap:wrap; justify-content:center; gap:var(--sp-6); }
+  .panel--pair.is-active .screen{ display:flex; }
+}
+@media (max-width:768px){
+  body{ padding:var(--sp-4) var(--sp-2); }
+  .pagehead{ padding:var(--sp-4); }
+  .pagehead__h1{ font-size:1.25rem; }
+  /* 页签的满版负 margin 要跟着 body 的左右留白一起改，否则钉住时会露缝 */
+  .tabs{ margin-left:calc(-1 * var(--sp-2)); margin-right:calc(-1 * var(--sp-2));
+    padding-left:var(--sp-2); padding-right:var(--sp-2); }
+  .tab{ font-size:var(--fs-xs); padding:var(--sp-2) var(--sp-3); }
+  .screen--wide{ width:100%; }
+}
+</style>
+</head>
+<body>
+
+<header class="pagehead">
+  <p class="pagehead__kicker">存款活动公版 · 前台 H5 原型</p>
+  <h1 class="pagehead__h1">会员在手机上会看到什么</h1>
+  <p class="pagehead__lede">
+    这是<b>画面草稿</b>，还没有开发。用途是让美术、前端、运营在动工前先确认
+    「会员打开活动页时长什么样、每一句文案怎么写、每一种状况该显示什么」。
+  </p>
+  <p class="pagehead__tip">
+    <b>版面结构就一句话：一档活动只做一种玩法，页签切时间维度。</b><br>
+    玩法（<b>复存</b>／<b>累计存款</b>）在后台<b>第 1 步</b>就选定，整档活动只会是其中一种；
+    顶端一排页签＝<b>日／周／限时</b>三个维度，<b>一格一张卡</b>。
+    要两种玩法就<b>开两档活动</b>——运营反映混在同一页太复杂，2026-09-10 定案拆开。
+  </p>
+  <p class="pagehead__tip" style="background:var(--green-dim);border-color:#BFE6D2;color:var(--green);">
+    <b>本次全部是「自动发放」。</b>会员达标即自动入账，<b>整个前台没有任何「领取」动作</b>——
+    没有领取按钮、没有倒数、没有过期、没有领取成功／失败提示、页签上也没有红点。
+    因此奖励状态<b>只有 2 种：未达标／已发放</b>（后台第 4 步已写死，不开放配置）。
+  </p>
+  <ol class="howto">
+    <li><b>手机框里的字＝会员真正看到的。</b>框外的字、还有框内灰底虚线的「注记」，
+        都是给我们自己看的说明，上线不会出现。</li>
+    <li><b>手机框内的页签可以真的点。</b>点下去会换成那个维度的内容，请实际点点看。</li>
+    <li><b>第 ⓪ 组是新提案</b>：两种玩法放同一页，但<b>复存用横滑、累计存款用页签</b>，
+        靠版面而不是文字把两件事分开。跟第 ①② 组的「拆成两档活动」<b>二择一</b>，请比过再决定。</li>
+    <li><b>两种玩法的画面完全分开做：</b>第 <b>①</b> 组整组都是<span class="key__i" style="background:var(--sun-dim);color:var(--sun-ink);border-color:var(--line-2);">复存</span>、第 <b>②</b> 组整组都是<span class="key__i key__i--cap">累计存款</span>。同一档活动<b>不会</b>两种混着出现。</li>
+    <li>每一组里都有<b>两支手机</b>：左边是<b>挂满三个维度</b>（有页签）、右边是<b>只挂一个区块</b>（页签不出现）。后者才是多数活动上线后的实际长相。</li>
+    <li><b>每张卡右上角都有「规则」钮</b>，点开是运营做好的规则弹窗图。玩法 2 种 × 维度 3 种
+        ＝ <b>6 种卡片样式，就有 6 种规则弹窗</b>，第 ⑤ 组把六种都摊开了。</li>
+    <li><b>这一页不显示流水。</b>活动页只回答一件事：存款可以拿到什么奖励。
+        流水是奖金的提领条件，由钱包／优惠中心那边呈现，<b>我们不在这一页帮玩家算流水</b>。</li>
+    <li><b>T01、A13 这种编号</b>是还没拍板的问题，编号对得到规格书的〈待确认清单〉，
+        可以直接拿去开会逐条决议。</li>
+  </ol>
+  <div class="key">
+    <span class="key__t">卡片与徽章的颜色代表奖励状态</span>
+    <span class="key__i key__i--wait">灰 ＝ 未达标</span>
+    <span class="key__i key__i--done">绿 ＝ 已发放</span>
+    <span class="key__i key__i--cap">蓝 ＝ 告知（本周期次数已领满）</span>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="画面分组">
+  <div class="tabs__list" role="tablist">
+    <button class="tab is-active" type="button" role="tab" id="tab-p0" aria-controls="p0" aria-selected="true">⓪ 新提案：横滑＋页签</button>
+    <button class="tab" type="button" role="tab" id="tab-p1" aria-controls="p1" aria-selected="false">① 复存活动</button>
+    <button class="tab" type="button" role="tab" id="tab-p2" aria-controls="p2" aria-selected="false">② 累计存款活动</button>
+    <button class="tab" type="button" role="tab" id="tab-p3" aria-controls="p3" aria-selected="false">③ 状态与空画面</button>
+    <button class="tab" type="button" role="tab" id="tab-p4" aria-controls="p4" aria-selected="false">④ 边界与极限</button>
+    <button class="tab" type="button" role="tab" id="tab-p5" aria-controls="p5" aria-selected="false">⑤ 规则弹窗（六种）</button>
+    <button class="tab" type="button" role="tab" id="tab-p6" aria-controls="p6" aria-selected="false">⑥ 设计标注</button>
+  </div>
+</nav>
+
+<main class="stage">
+
+
+  <div class="panel panel--pair is-active" id="p0" role="tabpanel" aria-labelledby="tab-p0">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       画面 ⓪ 新提案：复存横滑在上、累计存款页签在下
+       【这个提案在回应什么】
+       运营说「复存、累计放在一起很复杂」。前一版的问题是：
+       两张卡外框一模一样、上下叠在同一格页签里，看起来像同一件事，
+       所以得另外写一句「两边会同时拿到，不是二选一」。
+       这一版换个思路——不是把两种玩法拆到两档活动，
+       而是给它们两种<b>完全不同的呈现方式</b>：
+         · 复存 → 贴在 Banner 下缘、横向滑的卡片带
+         · 累计存款 → 页面下半部、有日／周／限时页签的区块
+       视觉上一看就是两件事，就不需要用文字去解释它们不一样。
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="screen" id="fe0">
+    <header class="screen__head">
+      <p class="screen__no">画面 ⓪ · 新提案</p>
+      <h2 class="screen__title">复存横滑（上）＋ 累计存款页签（下）</h2>
+      <p class="screen__lede">同一档活动两种玩法都有，但<b>给两种完全不同的呈现方式</b>：复存是贴在 Banner 下缘、可左右滑的卡片带；累计存款在下半部，有自己的日／周／限时页签。<b>不靠文字解释，靠版面就分得出是两件事。</b></p>
+      <p class="screen__ref">回应运营「两种玩法混在一起很复杂」· 与第 ①② 组的「拆成两档活动」二择一</p>
+    </header>
+
+    <p class="device__cap"><b>上面那排卡可以左右滑</b>（露出的右边缘就是下一张）；<b>下面的日／周／限时可以点</b>。</p>
+    <div class="phone">
+      <header class="hero hero--swipe">
+        <button class="hero__back" type="button" aria-label="返回">‹</button>
+        <p class="hero__ph">活动主视觉 Banner<span>1125 × 600 · 行销字样做在图里</span></p>
+        <div class="hero__scrim"></div>
+        <div class="hero__meta">
+          <h3 class="hero__name">九月存款狂欢</h3>
+          <p class="hero__time">09/01 00:00 ～ 09/30 23:59 · 剩 <b>21 天 08 时</b></p>
+        </div>
+      </header>
+
+      <!-- ══ 上区：复存 ══
+           横向滑的卡片带，往上叠进 Banner 下缘。
+           一张卡＝一个复存区块，最多 3 张（每日／每周／限时）。
+           复存卡定高，所以横排整齐；周期徽章挂在卡上（这里没有页签可以讲）。 -->
+      <div class="swipe">
+        <article class="rule">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <h4 class="rule__title">每日存款奖励</h4>
+            <span class="rule__cycle">每日</span>
+            <button class="rule__rules" type="button" data-pop data-kind="复存" data-cyc="每日">规则</button>
+          </div>
+          <p class="rule__desc">今天<em>每一笔</em>存满 <em>₱100</em> 就送 <em>₱10</em>，每天最多 <em>3 次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row">
+              <span class="prog__label">今日已获得</span>
+              <span class="prog__val"><b>2</b> / 3 次</span>
+            </div>
+            <div class="dots"><i class="on"></i><i class="on"></i><i></i></div>
+            <p class="prog__gap">今天再存 <b>1 笔</b>满 ₱100，就能拿到今日最后一次</p>
+            <p class="credit">今日到账 <b>₱20</b> · 明日 00:00 归零重算</p>
+          </div>
+        </article>
+
+        <article class="rule rule--done">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <h4 class="rule__title">每周大额存款奖励</h4>
+            <span class="rule__cycle">每周</span>
+            <button class="rule__rules" type="button" data-pop data-kind="复存" data-cyc="每周">规则</button>
+          </div>
+          <p class="rule__desc">本周<em>每一笔</em>存满 <em>₱500</em> 就送 <em>₱60</em>，每周最多 <em>2 次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row">
+              <span class="prog__label">本周已获得</span>
+              <span class="prog__val"><b>2</b> / 2 次</span>
+            </div>
+            <div class="dots dots--full"><i class="on"></i><i class="on"></i></div>
+            <p style="margin-top:var(--sp-3);"><span class="badge badge--cap">本周次数已领满</span></p>
+            <p class="credit">本周到账 <b>₱120</b> · 下周一 00:00 归零重算</p>
+          </div>
+        </article>
+
+        <article class="rule">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <h4 class="rule__title">限时豪礼</h4>
+            <span class="rule__cycle">活动期间</span>
+            <button class="rule__rules" type="button" data-pop data-kind="复存" data-cyc="活动期间">规则</button>
+          </div>
+          <p class="rule__desc">单笔存满 <em>₱2,000</em>，送该笔的 <em>5%</em>，整个活动最多 <em>5 次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row">
+              <span class="prog__label">活动期间已获得</span>
+              <span class="prog__val"><b>1</b> / 5 次</span>
+            </div>
+            <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+            <p class="prog__gap">整个活动<b>不归零</b>，用完就没有了</p>
+            <p class="credit">已到账 <b>₱10</b> · 奖励合计上限 <b>₱800</b></p>
+          </div>
+        </article>
+      </div>
+      <div class="swipe__dots" aria-hidden="true">
+        <i class="swipe__dot is-on"></i><i class="swipe__dot"></i><i class="swipe__dot"></i>
+      </div>
+
+      <p class="autobar"><span>☀ 本活动已自动到账</span> <b>₱1,965</b></p>
+
+      <!-- ══ 下区：累计存款 ══
+           换成页签，因为累计存款卡高度跟着档数跑，横排会高高低低。 -->
+      <div class="zone">
+        <p class="zone__t"><span class="rule__kind rule__kind--sum">累计存款</span> 存越多送越多</p>
+        <p class="zone__sub">上面是「<b>每一笔</b>都送」，这一区是「看<b>周期内总额</b>走阶梯」。<b>两区各算各的，都会拿到。</b></p>
+      </div>
+
+      <nav class="cyctab" style="top:0;" role="tablist" aria-label="统计维度">
+        <button class="cyctab__btn is-active" type="button" role="tab" data-cyc="fe0-c1" aria-selected="true">每日</button>
+        <button class="cyctab__btn" type="button" role="tab" data-cyc="fe0-c2" aria-selected="false">每周</button>
+        <button class="cyctab__btn" type="button" role="tab" data-cyc="fe0-c3" aria-selected="false">限时</button>
+      </nav>
+
+      <div class="cycpane is-active" id="fe0-c1" role="tabpanel">
+        <p class="cycbar"><span class="cycbar__ico">⏱</span><span>今日累计 <b>00:00</b> 归零重算 · 距今日结束还有 <b>09:42:13</b></span></p>
+        <article class="rule">
+          <div class="rule__head">
+            <h4 class="rule__title">每日累计存款奖励</h4>
+            <button class="rule__rules" type="button" data-pop data-kind="累计存款" data-cyc="每日">规则</button>
+          </div>
+          <div class="rule__body" style="margin-top:0;border-top:none;padding-top:0;">
+            <div class="prog__row">
+              <span class="prog__label">今日累计存款</span>
+              <span class="prog__val"><b>₱1,250</b></span>
+            </div>
+            <div class="bar"><div class="bar__fill" style="width:83%;"></div></div>
+            <p class="prog__gap">再存 <b>₱250</b> 即可解锁 <b>档位 3</b> · 最高档 <b>₱1,600</b></p>
+            <!-- 10 阶是常态（运营 2026-09-10：有机率到 10 阶），不是极端值。
+                 10 阶 × 34px ＝ 340px，一屏塞得下，所以全部展开不折叠。
+                 最高档加 .tier--top 描边强调——阶梯最主要的诱因就是最上面那一档。 -->
+            <div class="tiers">
+              <div class="tier tier--done"><span class="tier__n">档位 1</span><span class="tier__cond">今日累计满 ₱500</span><span class="tier__prize">₱15</span><span class="tier__mark">✓</span></div>
+              <div class="tier tier--done"><span class="tier__n">档位 2</span><span class="tier__cond">今日累计满 ₱1,000</span><span class="tier__prize">₱35</span><span class="tier__mark">✓</span></div>
+              <div class="tier tier--next"><span class="tier__n">档位 3</span><span class="tier__cond">今日累计满 ₱1,500</span><span class="tier__prize">₱60</span><span class="tier__mark">→</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 4</span><span class="tier__cond">今日累计满 ₱2,500</span><span class="tier__prize">₱110</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 5</span><span class="tier__cond">今日累计满 ₱4,000</span><span class="tier__prize">₱190</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 6</span><span class="tier__cond">今日累计满 ₱6,000</span><span class="tier__prize">₱300</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 7</span><span class="tier__cond">今日累计满 ₱9,000</span><span class="tier__prize">₱480</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 8</span><span class="tier__cond">今日累计满 ₱13,000</span><span class="tier__prize">₱720</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 9</span><span class="tier__cond">今日累计满 ₱18,000</span><span class="tier__prize">₱1,050</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock tier--top"><span class="tier__n">档位 10</span><span class="tier__cond">今日累计满 ₱25,000</span><span class="tier__prize">₱1,600</span><span class="tier__mark">🔒</span></div>
+            </div>
+            <p class="credit">档位 1、2 已自动到账合计 <b>₱50</b> · 最近一次 09/09 10:31</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="cycpane" id="fe0-c2" role="tabpanel">
+        <p class="cycbar"><span class="cycbar__ico">⏱</span><span>本周累计 <b>周一 00:00</b> 归零重算 · 距本周结束还有 <b>2 天 09 时</b></span></p>
+        <article class="rule">
+          <div class="rule__head">
+            <h4 class="rule__title">每周累计存款奖励</h4>
+            <button class="rule__rules" type="button" data-pop data-kind="累计存款" data-cyc="每周">规则</button>
+          </div>
+          <div class="rule__body" style="margin-top:0;border-top:none;padding-top:0;">
+            <div class="prog__row">
+              <span class="prog__label">本周累计存款</span>
+              <span class="prog__val"><b>₱6,400</b></span>
+            </div>
+            <div class="bar"><div class="bar__fill" style="width:53%;"></div></div>
+            <p class="prog__gap">再存 <b>₱5,600</b> 即可解锁 <b>档位 2</b></p>
+            <div class="tiers">
+              <div class="tier tier--done"><span class="tier__n">档位 1</span><span class="tier__cond">本周累计满 ₱5,000</span><span class="tier__prize">₱300</span><span class="tier__mark">✓</span></div>
+              <div class="tier tier--next"><span class="tier__n">档位 2</span><span class="tier__cond">本周累计满 ₱12,000</span><span class="tier__prize">₱800</span><span class="tier__mark">→</span></div>
+            </div>
+            <p class="credit">档位 1 已于 09/08 19:47 自动到账 <b>₱300</b></p>
+          </div>
+        </article>
+      </div>
+
+      <div class="cycpane" id="fe0-c3" role="tabpanel">
+        <p class="cycbar cycbar--static"><span class="cycbar__ico">◷</span><span>活动累计 · 整个活动期间<b>不归零</b>，从 09/01 一路加到 09/30</span></p>
+        <article class="rule">
+          <div class="rule__head">
+            <h4 class="rule__title">限时累计豪礼</h4>
+            <button class="rule__rules" type="button" data-pop data-kind="累计存款" data-cyc="活动期间">规则</button>
+          </div>
+          <div class="rule__body" style="margin-top:0;border-top:none;padding-top:0;">
+            <div class="prog__row">
+              <span class="prog__label">活动期间累计存款</span>
+              <span class="prog__val"><b>₱23,600</b></span>
+            </div>
+            <div class="bar"><div class="bar__fill" style="width:47%;"></div></div>
+            <p class="prog__gap">再存 <b>₱26,400</b> 即可解锁 <b>档位 2</b></p>
+            <div class="tiers">
+              <div class="tier tier--done"><span class="tier__n">档位 1</span><span class="tier__cond">活动累计满 ₱20,000</span><span class="tier__prize">₱1,500</span><span class="tier__mark">✓</span></div>
+              <div class="tier tier--next"><span class="tier__n">档位 2</span><span class="tier__cond">活动累计满 ₱50,000</span><span class="tier__prize">₱5,000</span><span class="tier__mark">→</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 3</span><span class="tier__cond">活动累计满 ₱100,000</span><span class="tier__prize">₱12,000</span><span class="tier__mark">🔒</span></div>
+            </div>
+            <p class="credit">档位 1 已于 09/06 22:15 自动到账 <b>₱1,500</b></p>
+          </div>
+        </article>
+      </div>
+
+      <div class="dockbar">
+        <button class="btn btn--sun" type="button">立即存款</button>
+      </div>
+    </div>
+
+    <details class="notes">
+      <summary>这个版面在解什么问题，代价是什么</summary>
+      <div class="notes__body">
+        <ul>
+        <li><b>解掉的问题：</b>两种玩法不再是「两张长得一样的卡上下叠」。上面横滑、下面页签，<b>光看版面就知道是两件事</b>，不需要靠一句「两边会同时拿到」去解释</li>
+        <li><b>为什么复存适合横滑：</b>复存卡<b>定高</b>（约 210px，次数点固定一行），横排整齐。累计存款卡高度跟着档数跑（5 档 320px、20 档 830px），横排会高高低低，所以留给页签</li>
+        <li><b>为什么卡片只占 86% 宽：</b>刻意露出下一张的边缘，会员不用教就知道可以滑。满版 100% 的话多数人不会发现后面还有</li>
+        <li><b>指示点当前那一颗要拉长成药丸</b>，不能只靠变色——小圆点在阳光下的手机萤幕几乎分不出深浅</li>
+        <li><b>代价一：横滑区会被漏看。</b>会员习惯往下滑，横向的东西常常整区跳过。若复存是主打玩法，放横滑反而吃亏</li>
+        <li><b>代价二：后台还是要 6 个区块</b>（2 玩法 × 3 维度），<code>MAX_BLOCKS</code> 得从 3 提高到 6，图也要 12 张。这一点跟拆成两档活动比是净增成本</li>
+        <li><b>代价三：页面变长</b>，约 1,500px（Banner 240 ＋ 横滑区 250 ＋ 到账条 48 ＋ 区段标题 60 ＋ 页签 48 ＋ 累计卡 330）</li>
+        <li><b>T14 待确认：</b>横滑区要不要自动轮播？建议<b>不要</b>——会员正在读第一张时被换掉会很烦，而且这是功能资讯不是广告</li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ── 画面 ⓪-B 只有复存的活动，也用横滑 ── -->
+  <section class="screen" id="fe0b">
+    <header class="screen__head">
+      <p class="screen__no">画面 ⓪-B</p>
+      <h2 class="screen__title">只有复存的活动 · 横滑版</h2>
+      <p class="screen__lede">如果这一档<b>只有复存</b>，下半部就空了。这时横滑区要不要<b>往下移到正常位置</b>、卡片改成整页直排？这一支画的是「维持横滑、但补一块内容」的作法，请跟第 ① 组的页签版比。</p>
+      <p class="screen__ref">与第 ① 组「复存 × 维度页签」二择一 · 同样 3 个区块，两种呈现</p>
+    </header>
+
+    <p class="device__cap"><b>横滑 vs 页签，同样的三个区块。</b>横滑一次看一张但滑得快，页签一次看一张但要点。</p>
+    <div class="phone">
+      <header class="hero hero--swipe">
+        <button class="hero__back" type="button" aria-label="返回">‹</button>
+        <p class="hero__ph">活动主视觉 Banner<span>1125 × 600 · 行销字样做在图里</span></p>
+        <div class="hero__scrim"></div>
+        <div class="hero__meta">
+          <h3 class="hero__name">九月存款狂欢</h3>
+          <p class="hero__time">09/01 00:00 ～ 09/30 23:59 · 剩 <b>21 天 08 时</b></p>
+        </div>
+      </header>
+
+      <div class="swipe">
+        <article class="rule">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <h4 class="rule__title">每日存款奖励</h4>
+            <span class="rule__cycle">每日</span>
+            <button class="rule__rules" type="button" data-pop data-kind="复存" data-cyc="每日">规则</button>
+          </div>
+          <p class="rule__desc">今天<em>每一笔</em>存满 <em>₱100</em> 就送 <em>₱10</em>，每天最多 <em>3 次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row"><span class="prog__label">今日已获得</span><span class="prog__val"><b>2</b> / 3 次</span></div>
+            <div class="dots"><i class="on"></i><i class="on"></i><i></i></div>
+            <p class="prog__gap">今天再存 <b>1 笔</b>满 ₱100，就能拿到今日最后一次</p>
+            <p class="credit">今日到账 <b>₱20</b> · 明日 00:00 归零重算</p>
+          </div>
+        </article>
+        <article class="rule rule--done">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <h4 class="rule__title">每周大额存款奖励</h4>
+            <span class="rule__cycle">每周</span>
+            <button class="rule__rules" type="button" data-pop data-kind="复存" data-cyc="每周">规则</button>
+          </div>
+          <p class="rule__desc">本周<em>每一笔</em>存满 <em>₱500</em> 就送 <em>₱60</em>，每周最多 <em>2 次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row"><span class="prog__label">本周已获得</span><span class="prog__val"><b>2</b> / 2 次</span></div>
+            <div class="dots dots--full"><i class="on"></i><i class="on"></i></div>
+            <p style="margin-top:var(--sp-3);"><span class="badge badge--cap">本周次数已领满</span></p>
+            <p class="credit">本周到账 <b>₱120</b> · 下周一 00:00 归零重算</p>
+          </div>
+        </article>
+        <article class="rule">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <h4 class="rule__title">限时豪礼</h4>
+            <span class="rule__cycle">活动期间</span>
+            <button class="rule__rules" type="button" data-pop data-kind="复存" data-cyc="活动期间">规则</button>
+          </div>
+          <p class="rule__desc">单笔存满 <em>₱2,000</em>，送该笔的 <em>5%</em>，整个活动最多 <em>5 次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row"><span class="prog__label">活动期间已获得</span><span class="prog__val"><b>1</b> / 5 次</span></div>
+            <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+            <p class="prog__gap">整个活动<b>不归零</b>，用完就没有了</p>
+            <p class="credit">已到账 <b>₱10</b> · 奖励合计上限 <b>₱800</b></p>
+          </div>
+        </article>
+      </div>
+      <div class="swipe__dots" aria-hidden="true">
+        <i class="swipe__dot is-on"></i><i class="swipe__dot"></i><i class="swipe__dot"></i>
+      </div>
+
+      <p class="autobar"><span>☀ 本活动已自动到账</span> <b>₱150</b></p>
+
+      <!-- 只有复存时，下半部空出来。这里补「我的到账纪录」，
+           不然整页只有一排横滑卡，看起来像没做完。这一块是新提的，
+           后台目前没有对应设定 → T15 -->
+      <div class="zone">
+        <p class="zone__t">我的到账纪录</p>
+        <p class="zone__sub">全自动发放最大的风险是「发了会员不知道」。横滑版下半部空着，正好补这一块。<b>后台目前没有这个设定，属新增需求（T15）。</b></p>
+      </div>
+      <article class="rule">
+        <div class="rule__body" style="margin-top:0;border-top:none;padding-top:0;">
+          <div class="prog__row"><span class="prog__label">09/09 14:22 · 每日存款奖励</span><span class="prog__val"><b>₱10</b></span></div>
+          <div class="prog__row" style="margin-top:var(--sp-2);"><span class="prog__label">09/09 08:15 · 每日存款奖励</span><span class="prog__val"><b>₱10</b></span></div>
+          <div class="prog__row" style="margin-top:var(--sp-2);"><span class="prog__label">09/08 21:04 · 每周大额存款奖励</span><span class="prog__val"><b>₱60</b></span></div>
+          <p class="credit">仅显示最近 3 笔 · 完整纪录请至<b>优惠中心</b></p>
+        </div>
+      </article>
+
+      <div class="dockbar">
+        <button class="btn btn--sun" type="button">立即存款</button>
+      </div>
+    </div>
+
+    <details class="notes">
+      <summary>横滑 vs 页签，怎么选</summary>
+      <div class="notes__body">
+        <ul>
+        <li><b>横滑的好处：</b>三张卡都在同一个视线高度，滑一下就看完，不用点也不用往下卷。而且贴在 Banner 下缘，视觉重心高，一进页面就看到奖励</li>
+        <li><b>页签的好处：</b>「每日／每周／限时」三个字直接写出来，会员<b>一眼知道有三种</b>；横滑只能靠指示点，得先滑过才知道有几张</li>
+        <li><b>我的建议：</b>只有复存时用<b>页签</b>（三个维度名称写出来比较清楚）；<b>两种玩法都有时才用横滑</b>——那时横滑的价值不是省空间，是把复存跟累计存款在视觉上彻底分开</li>
+        <li><b>T15 待确认：</b>「我的到账纪录」是这一版新提的区块，后台没有对应设定。要不要做？做的话显示几笔、点了去哪？</li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+  </div>
+  <div class="panel panel--pair" id="p1" role="tabpanel" aria-labelledby="tab-p1">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       画面 ① 两种玩法，各自一档活动
+       【2026-09-10 定案：一档活动只做一种玩法】
+       原本试过「同一个维度底下同时挂复存与累计存款」，运营反映太复杂：
+       后台要配 6 个区块、备 12 张图；前台会员得同时理解两种规则，
+       还要另外写一句「两边会同时拿到，不是二选一」——
+       需要这种注解本身就是设计太绕的讯号。
+       所以拆开：一页只讲一件事，页签纯粹切时间维度。
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="screen" id="fe1">
+    <header class="screen__head">
+      <p class="screen__no">画面 ①</p>
+      <h2 class="screen__title"><b>复存</b>活动 · 三个时间维度</h2>
+      <p class="screen__lede">整档活动都是复存：<b>每一笔达门槛的存款都送</b>，用「次数上限」收口。三个页签是同一条规则的三个时间版本，<b>差别只在什么时候归零、次数怎么算</b>。</p>
+      <p class="screen__ref">对应规格 2.1、3.6 · 后台第1步＝存款活动＿复存 · 第4步三个区块（每日／每周／限时）</p>
+    </header>
+
+    <p class="device__cap"><b>页签可以点。</b>三格的卡片长得一样，只有归零时点与次数单位不同。</p>
+    <div class="phone">
+      <header class="hero">
+        <button class="hero__back" type="button" aria-label="返回">‹</button>
+        <p class="hero__ph">活动主视觉 Banner<span>1125 × 600 · 行销字样做在图里</span></p>
+        <div class="hero__scrim"></div>
+        <div class="hero__meta">
+          <h3 class="hero__name">九月存款狂欢</h3>
+          <p class="hero__time">09/01 00:00 ～ 09/30 23:59 · 剩 <b>21 天 08 时</b></p>
+        </div>
+      </header>
+
+      <!-- 全自动发放：会员没有任何动作，先告诉他系统总共已经发了多少。
+           这是「整档活动」的合计，跨三个维度，所以放在页签外面。 -->
+      <p class="autobar"><span>☀ 本活动已自动到账</span> <b>₱150</b></p>
+
+      <nav class="cyctab" role="tablist" aria-label="统计维度">
+        <button class="cyctab__btn is-active" type="button" role="tab" data-cyc="fe1-c1" aria-selected="true">每日</button>
+        <button class="cyctab__btn" type="button" role="tab" data-cyc="fe1-c2" aria-selected="false">每周</button>
+        <button class="cyctab__btn" type="button" role="tab" data-cyc="fe1-c3" aria-selected="false">限时</button>
+      </nav>
+
+      <div class="cycpane is-active" id="fe1-c1" role="tabpanel">
+        <p class="cycbar"><span class="cycbar__ico">⏱</span><span>每日 <b>00:00</b> 归零重算 · 距今日结束还有 <b>09:42:13</b></span></p>
+        <article class="rule">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <h4 class="rule__title">每日存款奖励</h4>
+            <button class="rule__rules" type="button" data-pop data-kind="复存" data-cyc="每日">规则</button>
+          </div>
+          <p class="rule__desc">今天<em>每一笔</em>存满 <em>₱100</em> 就送 <em>₱10</em>，每天最多 <em>3 次</em>。</p>
+          <div class="rule__body">
+            <!-- 复存是「单笔达标」：门槛看那一笔本身，金额不跨笔累积，
+                 所以不画金额进度条，只数「今天已经拿到几次」。
+                 画成金额进度条会让会员以为多笔可以凑——那是累计存款才有的玩法。 -->
+            <div class="prog__row">
+              <span class="prog__label">今日已获得</span>
+              <span class="prog__val"><b>2</b> / 3 次</span>
+            </div>
+            <div class="dots"><i class="on"></i><i class="on"></i><i></i></div>
+            <p class="prog__gap">今天再存 <b>1 笔</b>满 ₱100，就能拿到今日最后一次</p>
+            <p style="margin-top:var(--sp-3);"><span class="badge badge--done">✓ 每笔达标即自动到账</span></p>
+            <p class="credit">今日到账 <b>₱20</b> · 最近一笔 09/09 14:22</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="cycpane" id="fe1-c2" role="tabpanel">
+        <p class="cycbar"><span class="cycbar__ico">⏱</span><span>每周 <b>周一 00:00</b> 归零重算（后台固定，不可改）· 距本周结束还有 <b>2 天 09 时</b></span></p>
+        <article class="rule rule--done">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <h4 class="rule__title">每周大额存款奖励</h4>
+            <button class="rule__rules" type="button" data-pop data-kind="复存" data-cyc="每周">规则</button>
+          </div>
+          <p class="rule__desc">本周<em>每一笔</em>存满 <em>₱500</em> 就送 <em>₱60</em>，每周最多 <em>2 次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row">
+              <span class="prog__label">本周已获得</span>
+              <span class="prog__val"><b>2</b> / 2 次</span>
+            </div>
+            <div class="dots dots--full"><i class="on"></i><i class="on"></i></div>
+            <p style="margin-top:var(--sp-3);"><span class="badge badge--cap">本周次数已领满</span></p>
+            <p class="credit">本周到账 <b>₱120</b> · 下周一 00:00 重置后可再获得 2 次</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="cycpane" id="fe1-c3" role="tabpanel">
+        <p class="cycbar cycbar--static"><span class="cycbar__ico">◷</span><span>限时 · 整个活动期间<b>不归零</b>，次数用完就没有了 · 09/30 23:59 活动结束</span></p>
+        <article class="rule">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <h4 class="rule__title">限时豪礼</h4>
+            <button class="rule__rules" type="button" data-pop data-kind="复存" data-cyc="活动期间">规则</button>
+          </div>
+          <p class="rule__desc">单笔存满 <em>₱2,000</em>，送该笔的 <em>5%</em>，整个活动最多 <em>5 次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row">
+              <span class="prog__label">活动期间已获得</span>
+              <span class="prog__val"><b>1</b> / 5 次</span>
+            </div>
+            <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+            <p style="margin-top:var(--sp-3);"><span class="badge badge--done">✓ 每笔达标即自动到账</span></p>
+            <!-- 百分比玩法必须把「单一会员奖励上限」写在会员看得到的地方，
+                 否则会员存了 ₱100,000 却只拿到 ₱800，一定客诉。 -->
+            <p class="credit">已到账 <b>₱10</b>（存 ₱2,000 × 5%）· 本活动奖励合计上限 <b>₱800</b>，已用 ₱10</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="dockbar">
+        <button class="btn btn--sun" type="button">立即存款</button>
+      </div>
+    </div>
+
+    <details class="notes">
+      <summary>画面上的数字从哪来</summary>
+      <div class="notes__body">
+        <ul>
+        <li>活动名称／起止时间 → 后台<b>第1步</b>；<b>玩法（复存）也在第1步选定，整档活动只有一种</b></li>
+        <li>Banner 主视觉（含行销字样）→ 后台<b>第2步</b>；活动名称与起止时间叠在图上，<b>不另外占版面</b></li>
+        <li>每张卡右上角的「规则」→ 后台第2步<b>该区块自己</b>的规则弹窗图。因此顶栏<b>没有</b>全站共用的规则钮 → 这就是 <b>A02</b> 的答案</li>
+        <li><b>页签几格 → 后台挂了几个区块</b>，一个区块一张卡；区块的<b>统计周期</b>决定它归到哪一格</li>
+        <li>「每天最多 3 次」→ 区块的<b>参与次数上限</b>（1～20），单位跟着维度走（次／日、次／周、次／整个活动）</li>
+        <li>「本活动奖励合计上限 ₱800」→ 区块的<b>单一会员奖励上限</b>，只有奖励类型＝百分比时才有、且必填</li>
+        <li>奖励金额依会员<b>存款当下的 VIP 等级</b>取值（A13）</li>
+        <li><b>本页不显示流水。</b>活动页只负责告诉会员「存款可以拿到什么」，流水属于奖金本身的提领条件，由钱包／优惠中心呈现</li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+
+  <!-- ── 画面 ①-B 同样是复存，但只挂一个区块 ── -->
+  <section class="screen" id="fe1b">
+    <header class="screen__head">
+      <p class="screen__no">画面 ①-B</p>
+      <h2 class="screen__title">复存活动 · 只挂一个区块（<b>页签不出现</b>）</h2>
+      <p class="screen__lede">后台只挂 1 个区块（复存·每日·次数上限 1），这就是运营口语说的「<b>每日首存</b>」。<b>整排页签不显示</b>——一个维度没什么好切的。这是多数复存活动上线后的实际长相。</p>
+      <p class="screen__ref">对应规格 2.1 · 「复存 ＋ 次数上限 1」＝「每日首存」，后台没有独立的「一次存款」条件</p>
+    </header>
+
+    <p class="device__cap"><b>没有页签。</b>维度资讯改由卡上方的归零说明条 ＋ 卡片标题旁的周期徽章承担。</p>
+    <div class="phone">
+      <header class="hero">
+        <button class="hero__back" type="button" aria-label="返回">‹</button>
+        <p class="hero__ph">活动主视觉 Banner<span>1125 × 600 · 行销字样做在图里</span></p>
+        <div class="hero__scrim"></div>
+        <div class="hero__meta">
+          <h3 class="hero__name">每日首存送好礼</h3>
+          <p class="hero__time">09/01 00:00 ～ 09/30 23:59 · 剩 <b>21 天 08 时</b></p>
+        </div>
+      </header>
+
+      <p class="autobar"><span>☀ 本活动已自动到账</span> <b>₱10</b></p>
+
+      <!-- 没有页签，所以周期资讯条要自己长出上方留白（页签版是页签给的） -->
+      <p class="cycbar" style="margin-top:var(--sp-3);"><span class="cycbar__ico">⏱</span><span>每日 <b>00:00</b> 归零重算 · 距今日结束还有 <b>09:42:13</b></span></p>
+
+      <!-- 没有页签时，周期徽章（每日）必须挂回卡片标题旁——
+           否则会员完全没有线索知道这些数字是「今天的」还是「整档的」。 -->
+      <article class="rule">
+        <div class="rule__head">
+          <span class="rule__kind rule__kind--re">复存</span>
+          <h4 class="rule__title">每日首存奖励</h4>
+          <span class="rule__cycle">每日</span>
+          <button class="rule__rules" type="button" data-pop data-kind="复存" data-cyc="每日">规则</button>
+        </div>
+        <p class="rule__desc">每天<em>第一笔存满 ₱100</em>，即送 <em>₱10</em>，每天一次。</p>
+        <div class="rule__body">
+          <div class="prog__row">
+            <span class="prog__label">今日首笔达标存款</span>
+            <span class="prog__val"><b>₱200</b></span>
+          </div>
+          <p class="prog__gap">单笔需存满 <b>₱100</b>，这一笔已达标</p>
+          <!-- 次数上限＝1 时刻意不画次数点：一颗点没有任何资讯量，徽章已经讲完了 -->
+          <p style="margin-top:var(--sp-3);"><span class="badge badge--done">✓ 已达标，奖励已到账</span></p>
+          <p class="credit">09/09 08:15 自动到账 <b>₱10</b> · 明日 00:00 重置后可再获得一次</p>
+        </div>
+      </article>
+
+      <div class="dockbar">
+        <button class="btn btn--sun" type="button">立即存款</button>
+      </div>
+    </div>
+
+    <details class="notes">
+      <summary>复存卡的版面要点</summary>
+      <div class="notes__body">
+        <ul>
+        <li><b>卡片高度固定约 210px</b>：次数点是一列，不管上限是 1 还是 20 都不会长高。这让复存活动的版面很好预估</li>
+        <li><b>次数上限＝1 时不画次数点。</b>一颗点没有任何资讯量，徽章「已达标，奖励已到账」已经讲完了</li>
+        <li><b>不要画金额进度条。</b>复存看的是「单笔够不够」，不是「凑到多少」——画进度条会让会员以为多笔可以累加</li>
+        <li>整页高度约 <b>620px</b>，一屏出头，会员不用滑就看得到重点</li>
+        <li><b>切版请从这一支开始</b>，再往上加页签。页签是「有需要才长出来」的东西</li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+  </div>
+
+  <div class="panel panel--pair" id="p2" role="tabpanel" aria-labelledby="tab-p2">
+  <!-- ── 画面 ② 累计存款活动，挂满三个维度 ── -->
+  <section class="screen" id="fe2">
+    <header class="screen__head">
+      <p class="screen__no">画面 ②</p>
+      <h2 class="screen__title"><b>累计存款</b>活动 · 三个时间维度</h2>
+      <p class="screen__lede">整档活动都是累计存款：<b>不看单笔，看周期内的总额</b>，达各档门槛逐档送。页签在这里特别关键——「今日累计」「本周累计」「活动累计」是三个各自独立、互不相加的数字。</p>
+      <p class="screen__ref">对应规格 2.1、3.6 · 后台第1步＝存款活动＿累计存款 · 阶梯最多 20 档</p>
+    </header>
+
+    <p class="device__cap"><b>三格的金额不会互相累加。</b>同一笔存款会同时算进三个数字，不是三选一。</p>
+    <div class="phone">
+      <header class="hero">
+        <button class="hero__back" type="button" aria-label="返回">‹</button>
+        <p class="hero__ph">活动主视觉 Banner<span>1125 × 600 · 行销字样做在图里</span></p>
+        <div class="hero__scrim"></div>
+        <div class="hero__meta">
+          <h3 class="hero__name">存款嘉年华</h3>
+          <p class="hero__time">09/01 00:00 ～ 09/30 23:59 · 剩 <b>21 天 08 时</b></p>
+        </div>
+      </header>
+
+      <p class="autobar"><span>☀ 本活动已自动到账</span> <b>₱1,815</b></p>
+
+      <nav class="cyctab" role="tablist" aria-label="统计维度">
+        <button class="cyctab__btn is-active" type="button" role="tab" data-cyc="fe2-c1" aria-selected="true">每日</button>
+        <button class="cyctab__btn" type="button" role="tab" data-cyc="fe2-c2" aria-selected="false">每周</button>
+        <button class="cyctab__btn" type="button" role="tab" data-cyc="fe2-c3" aria-selected="false">限时</button>
+      </nav>
+
+      <div class="cycpane is-active" id="fe2-c1" role="tabpanel">
+        <p class="cycbar"><span class="cycbar__ico">⏱</span><span>今日累计 <b>00:00</b> 归零重算 · 距今日结束还有 <b>09:42:13</b>，未达标的档位<b>不会保留到明天</b></span></p>
+        <article class="rule">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--sum">累计存款</span>
+            <h4 class="rule__title">每日累计存款奖励</h4>
+            <button class="rule__rules" type="button" data-pop data-kind="累计存款" data-cyc="每日">规则</button>
+          </div>
+          <p class="rule__desc">今天<em>存款总额</em>越多送越多，<em>每一档各送一次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row">
+              <span class="prog__label">今日累计存款</span>
+              <span class="prog__val"><b>₱1,250</b></span>
+            </div>
+            <!-- 进度条的分母是「下一档的门槛」，不是最高档。
+                 用最高档当分母，前面几档看起来永远都是一小截，没有推进感。 -->
+            <div class="bar"><div class="bar__fill" style="width:83%;"></div></div>
+            <p class="prog__gap">再存 <b>₱250</b> 即可解锁 <b>档位 3</b> · 最高档 <b>₱1,600</b></p>
+            <!-- 10 阶是常态（运营 2026-09-10：有机率到 10 阶），不是极端值。
+                 10 阶 × 34px ＝ 340px，一屏塞得下，所以全部展开不折叠。
+                 最高档加 .tier--top 描边强调——阶梯最主要的诱因就是最上面那一档。 -->
+            <div class="tiers">
+              <div class="tier tier--done"><span class="tier__n">档位 1</span><span class="tier__cond">今日累计满 ₱500</span><span class="tier__prize">₱15</span><span class="tier__mark">✓</span></div>
+              <div class="tier tier--done"><span class="tier__n">档位 2</span><span class="tier__cond">今日累计满 ₱1,000</span><span class="tier__prize">₱35</span><span class="tier__mark">✓</span></div>
+              <div class="tier tier--next"><span class="tier__n">档位 3</span><span class="tier__cond">今日累计满 ₱1,500</span><span class="tier__prize">₱60</span><span class="tier__mark">→</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 4</span><span class="tier__cond">今日累计满 ₱2,500</span><span class="tier__prize">₱110</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 5</span><span class="tier__cond">今日累计满 ₱4,000</span><span class="tier__prize">₱190</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 6</span><span class="tier__cond">今日累计满 ₱6,000</span><span class="tier__prize">₱300</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 7</span><span class="tier__cond">今日累计满 ₱9,000</span><span class="tier__prize">₱480</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 8</span><span class="tier__cond">今日累计满 ₱13,000</span><span class="tier__prize">₱720</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 9</span><span class="tier__cond">今日累计满 ₱18,000</span><span class="tier__prize">₱1,050</span><span class="tier__mark">🔒</span></div>
+              <div class="tier tier--lock tier--top"><span class="tier__n">档位 10</span><span class="tier__cond">今日累计满 ₱25,000</span><span class="tier__prize">₱1,600</span><span class="tier__mark">🔒</span></div>
+            </div>
+            <p class="credit">档位 1、2 已自动到账合计 <b>₱50</b> · 最近一次 09/09 10:31</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="cycpane" id="fe2-c2" role="tabpanel">
+        <p class="cycbar"><span class="cycbar__ico">⏱</span><span>本周累计 <b>周一 00:00</b> 归零重算（后台固定，不可改）· 距本周结束还有 <b>2 天 09 时</b></span></p>
+        <article class="rule">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--sum">累计存款</span>
+            <h4 class="rule__title">每周累计存款奖励</h4>
+            <button class="rule__rules" type="button" data-pop data-kind="累计存款" data-cyc="每周">规则</button>
+          </div>
+          <p class="rule__desc">本周<em>存款总额</em>越多送越多，<em>每一档各送一次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row">
+              <span class="prog__label">本周累计存款</span>
+              <span class="prog__val"><b>₱6,400</b></span>
+            </div>
+            <div class="bar"><div class="bar__fill" style="width:53%;"></div></div>
+            <p class="prog__gap">再存 <b>₱5,600</b> 即可解锁 <b>档位 2</b></p>
+            <div class="tiers">
+              <div class="tier tier--done"><span class="tier__n">档位 1</span><span class="tier__cond">本周累计满 ₱5,000</span><span class="tier__prize">₱300</span><span class="tier__mark">✓</span></div>
+              <div class="tier tier--next"><span class="tier__n">档位 2</span><span class="tier__cond">本周累计满 ₱12,000</span><span class="tier__prize">₱800</span><span class="tier__mark">→</span></div>
+            </div>
+            <p class="credit">档位 1 已于 09/08 19:47 自动到账 <b>₱300</b></p>
+          </div>
+        </article>
+      </div>
+
+      <div class="cycpane" id="fe2-c3" role="tabpanel">
+        <p class="cycbar cycbar--static"><span class="cycbar__ico">◷</span><span>活动累计 · 整个活动期间<b>不归零</b>，从 09/01 一路加到 09/30 · 这一格的数字只会往上，不会重来</span></p>
+        <article class="rule">
+          <div class="rule__head">
+            <span class="rule__kind rule__kind--sum">累计存款</span>
+            <h4 class="rule__title">限时累计豪礼</h4>
+            <button class="rule__rules" type="button" data-pop data-kind="累计存款" data-cyc="活动期间">规则</button>
+          </div>
+          <p class="rule__desc">整个活动期间<em>存款总额</em>越多送越多，<em>每一档各送一次</em>。</p>
+          <div class="rule__body">
+            <div class="prog__row">
+              <span class="prog__label">活动期间累计存款</span>
+              <span class="prog__val"><b>₱23,600</b></span>
+            </div>
+            <div class="bar"><div class="bar__fill" style="width:47%;"></div></div>
+            <p class="prog__gap">再存 <b>₱26,400</b> 即可解锁 <b>档位 2</b></p>
+            <div class="tiers">
+              <div class="tier tier--done"><span class="tier__n">档位 1</span><span class="tier__cond">活动累计满 ₱20,000</span><span class="tier__prize">₱1,500</span><span class="tier__mark">✓</span></div>
+              <div class="tier tier--next"><span class="tier__n">档位 2</span><span class="tier__cond">活动累计满 ₱50,000</span><span class="tier__prize">₱5,000</span><span class="tier__mark">→</span></div>
+              <div class="tier tier--lock"><span class="tier__n">档位 3</span><span class="tier__cond">活动累计满 ₱100,000</span><span class="tier__prize">₱12,000</span><span class="tier__mark">🔒</span></div>
+            </div>
+            <p class="credit">档位 1 已于 09/06 22:15 自动到账 <b>₱1,500</b></p>
+          </div>
+        </article>
+      </div>
+
+      <p class="seg">同一笔 ₱1,000 的存款，会<b>同时</b>算进「今日累计」「本周累计」「活动累计」三个数字里，<b>不是三选一</b>。这一点建议在每一格的规则弹窗里都写一句。</p>
+
+      <div class="dockbar">
+        <button class="btn btn--sun" type="button">立即存款</button>
+      </div>
+    </div>
+
+    <details class="notes">
+      <summary>两种玩法差在哪（美术出图前要知道的）</summary>
+      <div class="notes__body">
+        <ul>
+        <li>复存看<b>单笔</b>、累计存款看<b>周期内总额</b>。所以复存卡上是「次数点」，累计存款卡上是「金额进度条 ＋ 阶梯清单」，<b>两者版面高度差很多</b>（约 210px vs 150px＋每档 34px）</li>
+        <li>累计存款<b>没有参与次数上限</b>（每一档各送一次，档数就是天花板），所以卡上不会出现「已获得 2/3 次」</li>
+        <li>累计存款的奖励类型<b>只有固定金额</b>，没有百分比，所以也不会有「单一会员奖励上限」那一句</li>
+        <li>阶梯最多 <b>20 档</b>（后台 MAX_TIERS）。超过 5 档就会折叠，见第 ④ 组</li>
+        <li><b>一档活动只有一种玩法</b>，所以这两支手机是两档不同的活动，各有自己的 Banner、名称与档期</li>
+        <li>玩法徽章（复存／累计存款）虽然整档都一样，<b>还是每张卡都要挂</b>——会员可能从站内其他入口直接进到某一格，需要立刻知道这是哪种玩法</li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+
+  <!-- ── 画面 ②-B 同样是累计存款，但只挂一个区块 ── -->
+  <section class="screen" id="fe2b">
+    <header class="screen__head">
+      <p class="screen__no">画面 ②-B</p>
+      <h2 class="screen__title">累计存款活动 · 只挂一个区块（<b>页签不出现</b>）</h2>
+      <p class="screen__lede">后台只挂 1 个区块（累计存款·活动期间·5 档）。<b>没有页签</b>，但卡片明显比复存高——<b>阶梯清单是版面高度的主要变数</b>。请跟第 ① 组的复存版比高度。</p>
+      <p class="screen__ref">对应规格 2.1 · 阶梯 5 档以内不折叠，超过才折叠（见第 ④ 组）</p>
+    </header>
+
+    <p class="device__cap"><b>5 档不折叠。</b>超过 5 档就会收起来，请看第 ④ 组的 20 档版。</p>
+    <div class="phone">
+      <header class="hero">
+        <button class="hero__back" type="button" aria-label="返回">‹</button>
+        <p class="hero__ph">活动主视觉 Banner<span>1125 × 600 · 行销字样做在图里</span></p>
+        <div class="hero__scrim"></div>
+        <div class="hero__meta">
+          <h3 class="hero__name">存越多送越多</h3>
+          <p class="hero__time">09/01 00:00 ～ 09/30 23:59 · 剩 <b>21 天 08 时</b></p>
+        </div>
+      </header>
+
+      <p class="autobar"><span>☀ 本活动已自动到账</span> <b>₱95</b></p>
+
+      <p class="cycbar cycbar--static" style="margin-top:var(--sp-3);"><span class="cycbar__ico">◷</span><span>活动累计 · 整个活动期间<b>不归零</b>，从 09/01 一路加到 09/30</span></p>
+
+      <article class="rule">
+        <div class="rule__head">
+          <span class="rule__kind rule__kind--sum">累计存款</span>
+          <h4 class="rule__title">累计存款奖励</h4>
+          <span class="rule__cycle">活动期间</span>
+          <button class="rule__rules" type="button" data-pop data-kind="累计存款" data-cyc="活动期间">规则</button>
+        </div>
+        <p class="rule__desc">活动期间<em>存款总额</em>越多送越多，<em>每一档各送一次</em>。</p>
+        <div class="rule__body">
+          <div class="prog__row">
+            <span class="prog__label">活动期间累计存款</span>
+            <span class="prog__val"><b>₱3,400</b></span>
+          </div>
+          <div class="bar"><div class="bar__fill" style="width:68%;"></div></div>
+          <p class="prog__gap">再存 <b>₱1,600</b> 即可解锁 <b>档位 3</b></p>
+          <div class="tiers">
+            <div class="tier tier--done"><span class="tier__n">档位 1</span><span class="tier__cond">累计满 ₱1,000</span><span class="tier__prize">₱20</span><span class="tier__mark">✓</span></div>
+            <div class="tier tier--done"><span class="tier__n">档位 2</span><span class="tier__cond">累计满 ₱3,000</span><span class="tier__prize">₱75</span><span class="tier__mark">✓</span></div>
+            <div class="tier tier--next"><span class="tier__n">档位 3</span><span class="tier__cond">累计满 ₱5,000</span><span class="tier__prize">₱150</span><span class="tier__mark">→</span></div>
+            <div class="tier tier--lock"><span class="tier__n">档位 4</span><span class="tier__cond">累计满 ₱10,000</span><span class="tier__prize">₱400</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock"><span class="tier__n">档位 5</span><span class="tier__cond">累计满 ₱30,000</span><span class="tier__prize">₱1,500</span><span class="tier__mark">🔒</span></div>
+          </div>
+          <p class="credit">档位 1、2 已自动到账合计 <b>₱95</b> · 最近一次 09/08 21:04</p>
+        </div>
+      </article>
+
+      <div class="dockbar">
+        <button class="btn btn--sun" type="button">立即存款</button>
+      </div>
+    </div>
+
+    <details class="notes">
+      <summary>累计存款卡的版面要点</summary>
+      <div class="notes__body">
+        <ul>
+        <li><b>卡片高度 ＝ 约 150px ＋ 每档 34px。</b>5 档 ≈ 320px、20 档 ≈ 830px——<b>一张卡就超过一整支手机</b>，这就是要折叠的原因</li>
+        <li><b>进度条的分母是「下一档」的门槛</b>，不是最高档。用最高档当分母，前面几档永远只有一小截，会员感觉不到在前进</li>
+        <li><b>阶梯的门槛文字一行省略号</b>（<code>text-overflow:ellipsis</code>）不折行——折行会让每列高度不一致，整条阶梯看起来歪掉</li>
+        <li>三个维度都挂 20 档时，光是三格页签的内容加起来就超过 2,500px。<b>累计存款活动几乎一定要用页签</b></li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+  </div>
+
+  <div class="panel panel--pair" id="p3" role="tabpanel" aria-labelledby="tab-p3">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       画面 ③ 奖励状态（只有 2 种）与各种空画面
+       后台第4步已写死自动发放＋自动审核，所以奖励状态只剩
+       「未达标」与「已发放」。原本的「可领取」「已过期」「审核中」
+       都不会出现——这一页就是把「到底剩下哪些状态」讲死。
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="screen" id="fe3">
+    <header class="screen__head">
+      <p class="screen__no">画面 ③</p>
+      <h2 class="screen__title">奖励只有两种状态</h2>
+      <p class="screen__lede">全自动发放之后，奖励状态<b>只剩「未达标」与「已发放」</b>。另外有一个「本周期次数已领满」，那是<b>告知</b>不是状态，所以走蓝色不走红色。</p>
+      <p class="screen__ref">对应后台第4步「奖励状态本次只有 2 种」· 规格 2.1</p>
+    </header>
+
+    <p class="device__cap"><b>这一支不是真的活动页</b>，是把状态排在一起方便比对。</p>
+    <div class="phone">
+      <header class="topbar">
+        <button class="topbar__back" type="button" aria-label="返回">‹</button>
+        <div class="topbar__title">奖励状态对照</div>
+      </header>
+
+      <p class="seg">① <b>未达标</b>：门槛还没到。灰徽章、没有任何按钮</p>
+      <article class="rule">
+        <div class="rule__head">
+          <h4 class="rule__title">每日存款奖励</h4>
+          <span class="rule__cycle">每日</span>
+        </div>
+        <p class="rule__desc">每天每笔存满 <em>₱100</em> 送 <em>₱10</em>，每天最多 <em>3 次</em>。</p>
+        <div class="rule__body">
+          <div class="prog__row"><span class="prog__label">今日已获得</span><span class="prog__val"><b>0</b> / 3 次</span></div>
+          <div class="dots"><i></i><i></i><i></i></div>
+          <p style="margin-top:var(--sp-3);"><span class="badge badge--wait">尚未达标</span></p>
+          <p class="credit">今天还没有存满 ₱100 的存款</p>
+        </div>
+      </article>
+
+      <p class="seg">② <b>已发放</b>：达标当下就入账了。绿框、绿徽章、写清楚何时到账多少</p>
+      <article class="rule rule--done">
+        <div class="rule__head">
+          <h4 class="rule__title">每日存款奖励</h4>
+          <span class="rule__cycle">每日</span>
+        </div>
+        <p class="rule__desc">每天每笔存满 <em>₱100</em> 送 <em>₱10</em>，每天最多 <em>3 次</em>。</p>
+        <div class="rule__body">
+          <div class="prog__row"><span class="prog__label">今日已获得</span><span class="prog__val"><b>1</b> / 3 次</span></div>
+          <div class="dots"><i class="on"></i><i></i><i></i></div>
+          <p style="margin-top:var(--sp-3);"><span class="badge badge--done">✓ 已到账</span></p>
+          <p class="credit">09/09 08:16 自动到账 <b>₱10</b> · 今天还可获得 2 次</p>
+        </div>
+      </article>
+
+      <p class="seg">③ 补充：<b>本周期次数已领满</b>。这是「告知」不是「出错」，所以用蓝色不用红色</p>
+      <article class="rule rule--done">
+        <div class="rule__head">
+          <h4 class="rule__title">每日存款奖励</h4>
+          <span class="rule__cycle">每日</span>
+        </div>
+        <p class="rule__desc">每天每笔存满 <em>₱100</em> 送 <em>₱10</em>，每天最多 <em>3 次</em>。</p>
+        <div class="rule__body">
+          <div class="prog__row"><span class="prog__label">今日已获得</span><span class="prog__val"><b>3</b> / 3 次</span></div>
+          <div class="dots dots--full"><i class="on"></i><i class="on"></i><i class="on"></i></div>
+          <p style="margin-top:var(--sp-3);"><span class="badge badge--cap">今日次数已领满</span></p>
+          <p class="credit">今日到账 <b>₱30</b> · 明日 00:00 重置后可再获得 3 次</p>
+        </div>
+      </article>
+
+      <p class="seg">④ 累计存款的档位也只有这两种：<b>已发放 ✓</b> 与<b>未达标 🔒</b>（下一档多一个 <b>→</b> 指标，那只是指路，不是状态）</p>
+      <article class="rule">
+        <div class="rule__head">
+          <h4 class="rule__title">每日累计存款奖励</h4>
+          <span class="rule__cycle">每日</span>
+        </div>
+        <div class="rule__body" style="margin-top:0;border-top:none;padding-top:0;">
+          <div class="tiers">
+            <div class="tier tier--done"><span class="tier__n">档位 1</span><span class="tier__cond">今日累计满 ₱500</span><span class="tier__prize">₱15</span><span class="tier__mark">✓</span></div>
+            <div class="tier tier--next"><span class="tier__n">档位 2</span><span class="tier__cond">今日累计满 ₱1,500</span><span class="tier__prize">₱60</span><span class="tier__mark">→</span></div>
+            <div class="tier tier--lock"><span class="tier__n">档位 3</span><span class="tier__cond">今日累计满 ₱3,000</span><span class="tier__prize">₱150</span><span class="tier__mark">🔒</span></div>
+          </div>
+        </div>
+      </article>
+
+      <p class="seg"><b>不会出现的状态</b>（原本画过、这次全部拿掉）：<br>
+        ✗ 可领取　✗ 已过期　✗ 审核中　✗ 领取成功弹窗　✗ 领取失败提示　✗ 页签红点<br>
+        原因：后台第 4 步写死「自动领取 ＋ 自动审核」，不开放配置，也<b>没有「领取天数」设定</b>，
+        所以奖励不可能停在「等人来领」的状态，自然也不会过期。</p>
+
+      <div style="height:var(--sp-6);"></div>
+    </div>
+
+    <details class="notes">
+      <summary>还有一件事要拍板：到账要不要通知会员</summary>
+      <div class="notes__body">
+        <ul>
+        <li>自动发放最大的风险是<b>「发了会员不知道」</b>。手动领取至少会员按过按钮、有印象；自动发放是无声的</li>
+        <li><b>T08 待确认</b>：奖励自动到账时要不要推播／站内信／下次打开活动页时跳一个「您已获得 ₱X」的提示？目前原型<b>没有画任何通知</b>，只在卡片上写「09/09 08:16 自动到账 ₱10」</li>
+        <li>如果不做通知，那卡片上的「到账时间 ＋ 金额」这一行就是会员<b>唯一</b>的凭据，字不能省、也不能只写「已到账」</li>
+        <li>会员若在活动页停留时正好达标（例如另开分页存款），画面要不要即时刷新？还是要等重新进页？这也归 <b>T08</b></li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ── 画面 ③-B 空画面与结束画面 ── -->
+  <section class="screen" id="fe3b">
+    <header class="screen__head">
+      <p class="screen__no">画面 ③-B</p>
+      <h2 class="screen__title">空画面与结束画面</h2>
+      <p class="screen__lede">「什么都还没拿到」「全部都拿完了」「活动已结束」这三种，<b>不画出来前端就会自己发明一个</b>。这一页把它们定死。</p>
+      <p class="screen__ref">出图前必看 · 规格 2.1 各情境</p>
+    </header>
+
+    <p class="device__cap"><b>这一支也不是真的活动页</b>，是把三种空画面排在一起。</p>
+    <div class="phone">
+      <header class="topbar">
+        <button class="topbar__back" type="button" aria-label="返回">‹</button>
+        <div class="topbar__title">空画面</div>
+      </header>
+
+      <p class="seg">① <b>什么都还没拿到</b>：顶端的「已自动到账」条要<b>照样显示</b>，金额写 ₱0，不要整条消失——消失会让会员以为页面坏了</p>
+      <p class="autobar" style="background:var(--surface-2);color:var(--muted);border:1px solid var(--line);"><span>本活动已自动到账</span> <b>₱0</b></p>
+      <article class="rule">
+        <div class="rule__head">
+          <h4 class="rule__title">限时累计豪礼</h4>
+          <span class="rule__cycle">活动期间</span>
+        </div>
+        <div class="rule__body" style="margin-top:0;border-top:none;padding-top:0;">
+          <div class="prog__row">
+            <span class="prog__label">活动期间累计存款</span>
+            <span class="prog__val"><b>₱0</b></span>
+          </div>
+          <div class="bar"><div class="bar__fill" style="width:0%;"></div></div>
+          <p class="prog__gap">再存 <b>₱20,000</b> 即可解锁 <b>档位 1</b></p>
+          <div class="tiers">
+            <div class="tier tier--next"><span class="tier__n">档位 1</span><span class="tier__cond">活动累计满 ₱20,000</span><span class="tier__prize">₱1,500</span><span class="tier__mark">→</span></div>
+            <div class="tier tier--lock"><span class="tier__n">档位 2</span><span class="tier__cond">活动累计满 ₱50,000</span><span class="tier__prize">₱5,000</span><span class="tier__mark">🔒</span></div>
+          </div>
+          <p style="margin-top:var(--sp-3);"><span class="badge badge--wait">尚未达标</span></p>
+          <p class="credit">还没有任何存款记录，<b>去存第一笔</b>就能开始累积</p>
+        </div>
+      </article>
+
+      <p class="seg">② <b>全部档位都拿完了</b>：进度条打满、没有「再存多少」那一句，改成一句恭喜。<b>不要留一个跑到底却没有下一档的进度条</b></p>
+      <article class="rule rule--done">
+        <div class="rule__head">
+          <h4 class="rule__title">限时累计豪礼</h4>
+          <span class="rule__cycle">活动期间</span>
+        </div>
+        <div class="rule__body" style="margin-top:0;border-top:none;padding-top:0;">
+          <div class="prog__row">
+            <span class="prog__label">活动期间累计存款</span>
+            <span class="prog__val"><b>₱120,000</b></span>
+          </div>
+          <div class="bar"><div class="bar__fill bar__fill--green" style="width:100%;"></div></div>
+          <div class="tiers">
+            <div class="tier tier--done"><span class="tier__n">档位 1</span><span class="tier__cond">活动累计满 ₱20,000</span><span class="tier__prize">₱1,500</span><span class="tier__mark">✓</span></div>
+            <div class="tier tier--done"><span class="tier__n">档位 2</span><span class="tier__cond">活动累计满 ₱50,000</span><span class="tier__prize">₱5,000</span><span class="tier__mark">✓</span></div>
+            <div class="tier tier--done"><span class="tier__n">档位 3</span><span class="tier__cond">活动累计满 ₱100,000</span><span class="tier__prize">₱12,000</span><span class="tier__mark">✓</span></div>
+          </div>
+          <p style="margin-top:var(--sp-3);"><span class="badge badge--done">🎉 全部档位已领完</span></p>
+          <p class="credit">本活动共到账 <b>₱18,500</b> · 已无更多档位</p>
+        </div>
+      </article>
+
+      <p class="seg">③ <b>活动已结束</b>：整页转成唯读。存款按钮<b>反灰</b>（不是消失——消失会让会员以为跑错页），周期条改写结束时间</p>
+      <p class="cycbar" style="background:var(--surface-2);"><span class="cycbar__ico">✓</span><span>本活动已于 <b>09/30 23:59</b> 结束 · 已发放的奖励不受影响</span></p>
+      <article class="rule rule--done">
+        <div class="rule__head">
+          <h4 class="rule__title">每日存款奖励</h4>
+          <span class="rule__cycle">每日</span>
+        </div>
+        <div class="rule__body" style="margin-top:0;border-top:none;padding-top:0;">
+          <div class="prog__row"><span class="prog__label">活动期间共获得</span><span class="prog__val"><b>28</b> 次</span></div>
+          <p style="margin-top:var(--sp-3);"><span class="badge badge--done">✓ 活动已结束，共到账 ₱280</span></p>
+        </div>
+      </article>
+      <div style="padding:0 var(--sp-4);margin-top:var(--sp-4);">
+        <button class="btn btn--disabled" type="button" disabled>活动已结束</button>
+      </div>
+
+      <div style="height:var(--sp-6);"></div>
+    </div>
+
+    <details class="notes">
+      <summary>三种空画面的共同原则</summary>
+      <div class="notes__body">
+        <ul>
+        <li><b>不要整块消失。</b>会员分不出「这里本来就没有」跟「页面坏了」。宁可显示 ₱0 或一句说明</li>
+        <li><b>不要留没有终点的进度条。</b>全部拿完时进度条要打满并转绿，同时拿掉「再存多少」那一句</li>
+        <li><b>活动结束后按钮反灰不消失。</b>版面高度维持一致，会员也知道自己没走错页</li>
+        <li><b>T09 待确认</b>：活动结束后这一页要保留几天才下架？会员可能还想回来查自己拿了多少</li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+  </div>
+
+  <div class="panel panel--pair" id="p4" role="tabpanel" aria-labelledby="tab-p4">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       画面 ④ 边界与极限
+       前面几组画的都是「刚刚好」的情况。真正会把版面撑爆、
+       或让页签逻辑破功的是这几种。
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="screen" id="fe4">
+    <header class="screen__head">
+      <p class="screen__no">画面 ④</p>
+      <h2 class="screen__title">页签与卡片的边界（切版前必看）</h2>
+      <p class="screen__lede">页签不是「固定三格」的装饰条，它的格数跟着后台配置变；一格里几张卡也是。这几种情况<b>先讲好，才不会出完图重画</b>。</p>
+      <p class="screen__ref">出图前必看 · 对应第 ⑤ 组〈页签显示逻辑表〉</p>
+    </header>
+
+    <p class="device__cap"><b>这一支不是真的活动页</b>，是把边界情况排在一起。</p>
+    <div class="phone">
+      <header class="topbar">
+        <button class="topbar__back" type="button" aria-label="返回">‹</button>
+        <div class="topbar__title">边界情况</div>
+      </header>
+
+      <p class="seg">① <b>只有 2 个维度</b>：两格<b>平分宽度</b>，不要留一个空位假装有三格</p>
+      <nav class="cyctab" style="position:static;">
+        <button class="cyctab__btn is-active" type="button">每日</button>
+        <button class="cyctab__btn" type="button">限时</button>
+      </nav>
+
+      <p class="seg">② <b>某个维度已经结束</b>：活动最后一天，「每周」那一格本周已经跑完。页签<b>灰掉但仍可点</b>——会员要看得到自己上周拿了什么</p>
+      <nav class="cyctab" style="position:static;">
+        <button class="cyctab__btn is-active" type="button">每日</button>
+        <button class="cyctab__btn is-ended" type="button">每周</button>
+        <button class="cyctab__btn" type="button">限时</button>
+      </nav>
+      <p class="cycbar" style="margin-top:var(--sp-2);"><span class="cycbar__ico">✓</span><span>本维度已结束（09/30 是活动最后一天，本周不会再重置）· 本周共获得 <b>₱120</b></span></p>
+
+      <p class="seg">③ <b>同一个维度挂了两个同玩法的区块</b>（后台目前没有挡）：一格里出现两张<b>徽章一模一样</b>的卡，只能靠标题分辨。<b>建议后台加检查：同一维度内同一玩法不可重复</b></p>
+      <article class="rule" style="margin-top:var(--sp-2);">
+        <div class="rule__head">
+          <span class="rule__kind rule__kind--re">复存</span>
+          <h4 class="rule__title">每日小额存款奖励</h4>
+        </div>
+        <p class="rule__desc">每笔存满 <em>₱100</em> 送 <em>₱10</em>，每天最多 <em>3 次</em>。</p>
+      </article>
+      <article class="rule">
+        <div class="rule__head">
+          <span class="rule__kind rule__kind--re">复存</span>
+          <h4 class="rule__title">每日大额存款奖励</h4>
+        </div>
+        <p class="rule__desc">每笔存满 <em>₱5,000</em> 送 <em>₱300</em>，每天最多 <em>1 次</em>。</p>
+      </article>
+
+      <p class="seg">④ <b>超长金额</b>：₱1,234,567 这种数字进到进度列与阶梯列会怎样。<b>金额一律不换行</b>，挤不下时让左边的说明文字截断，不是让金额断成两行</p>
+      <article class="rule">
+        <div class="rule__head">
+          <span class="rule__kind rule__kind--sum">累计存款</span>
+          <h4 class="rule__title">限时累计豪礼</h4>
+          <span class="rule__cycle">活动期间</span>
+        </div>
+        <div class="rule__body">
+          <div class="prog__row">
+            <span class="prog__label">活动期间累计存款</span>
+            <span class="prog__val"><b>₱1,234,567</b></span>
+          </div>
+          <div class="bar"><div class="bar__fill" style="width:62%;"></div></div>
+          <p class="prog__gap">再存 <b>₱765,433</b> 即可解锁 <b>档位 8</b></p>
+          <div class="tiers">
+            <div class="tier tier--done"><span class="tier__n">档位 7</span><span class="tier__cond">活动期间累计存款满 ₱1,000,000 元整</span><span class="tier__prize">₱88,888</span><span class="tier__mark">✓</span></div>
+            <div class="tier tier--next"><span class="tier__n">档位 8</span><span class="tier__cond">活动累计满 ₱2,000,000</span><span class="tier__prize">₱188,888</span><span class="tier__mark">→</span></div>
+          </div>
+        </div>
+      </article>
+
+      <p class="seg">⑤ <b>玩法徽章 ＋ 周期徽章 ＋ 长标题挤在同一行</b>：标题优先截断，两个徽章都不缩</p>
+      <article class="rule">
+        <div class="rule__head">
+          <span class="rule__kind rule__kind--sum">累计存款</span>
+          <h4 class="rule__title">九月限定超级加码存款累计回馈活动奖励</h4>
+          <span class="rule__cycle">活动期间</span>
+        </div>
+        <p class="rule__desc">标题过长时<b>折行</b>，不截断——卡片标题是会员辨认奖励的主要线索，截掉会看不懂。徽章则一律不缩、不折。</p>
+      </article>
+
+      <div style="height:var(--sp-6);"></div>
+    </div>
+
+    <details class="notes">
+      <summary>这五种要拍板的事</summary>
+      <div class="notes__body">
+        <ul>
+        <li><b>③ 要请后台补检查（T02）</b>：同一活动内「同一维度 ＋ 同一玩法」不可重复。目前 <code>add_activity_deposit.html</code> 没有挡</li>
+        <li><b>② 已结束的维度</b>要不要仍可点？建议可点——会员的发放纪录在里面。但要有一句「本维度已结束」</li>
+        <li><b>④ 金额位数</b>：依 A37 后台不做位数防呆，所以前台一定会遇到七位数。金额栏位设 <code>flex-shrink:0</code>，让左边说明文字截断</li>
+        <li>阶梯的门槛文字用<b>一行省略号</b>（<code>text-overflow:ellipsis</code>）不折行——折行会让每列高度不一致，整条阶梯看起来歪掉</li>
+        <li><b>⑤ 卡片标题折行、徽章不缩。</b>标题最多折 <b>2 行</b>，超过再截断加「…」</li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ── 画面 ④-B 20 档折叠 ── -->
+  <section class="screen" id="fe4b">
+    <header class="screen__head">
+      <p class="screen__no">画面 ④-B</p>
+      <h2 class="screen__title">累计存款挂满 20 档</h2>
+      <p class="screen__lede">后台阶梯上限是 20 档，全部摊开约 <b>830px</b>，比一整支手机还高。这里的做法是：只显示<b>已发放的最后一档 → 下一档 → 再往后两档</b>，其余收起来。<b>「展开全部」按钮可以真的点。</b></p>
+      <p class="screen__ref">对应后台 MAX_TIERS＝20 · 折叠规则待运营确认（T03）</p>
+    </header>
+
+    <p class="device__cap"><b>请点「展开全部 20 档」。</b>展开后再点一次会收回去。</p>
+    <div class="phone">
+      <header class="topbar">
+        <button class="topbar__back" type="button" aria-label="返回">‹</button>
+        <div class="topbar__title">20 档阶梯</div>
+      </header>
+
+      <p class="cycbar cycbar--static" style="margin-top:var(--sp-3);"><span class="cycbar__ico">◷</span><span>活动累计 · 整个活动期间<b>不归零</b></span></p>
+
+      <article class="rule">
+        <div class="rule__head">
+          <span class="rule__kind rule__kind--sum">累计存款</span>
+          <h4 class="rule__title">限时累计豪礼</h4>
+          <button class="rule__rules" type="button">规则</button>
+        </div>
+        <p class="rule__desc">活动期间<em>存款总额</em>越多送越多，<em>每一档各送一次</em>，共 <em>20 档</em>。</p>
+        <div class="rule__body">
+          <div class="prog__row">
+            <span class="prog__label">活动期间累计存款</span>
+            <span class="prog__val"><b>₱23,600</b></span>
+          </div>
+          <div class="bar"><div class="bar__fill" style="width:79%;"></div></div>
+          <p class="prog__gap">再存 <b>₱6,400</b> 即可解锁 <b>档位 6</b> · 最高档 <b>₱388,888</b></p>
+
+          <div class="tiers" data-fold>
+            <!-- 【折叠规则 2026-09-10 修订】
+                 运营说累计奖励有机率到 10 阶，所以先定：10 阶以内全部展开（340px，一屏塞得下）。
+                 超过 10 阶才折叠，而且折叠时一定要留下「最高档」——
+                 旧版规则只留「已发放的最后一档 → 下一档 → 再两档」，会把最高档藏起来，
+                 等于把整个玩法最强的卖点（存到底能拿 ₱388,888）收进抽屉，这是设计错误。
+                 现在收起时显示：已发放最后一档 → 下一档 → 再一档 → ⋯ → 最高档。 -->
+            <div class="tier tier--done" data-hide hidden><span class="tier__n">档位 1</span><span class="tier__cond">累计满 ₱1,000</span><span class="tier__prize">₱20</span><span class="tier__mark">✓</span></div>
+            <div class="tier tier--done" data-hide hidden><span class="tier__n">档位 2</span><span class="tier__cond">累计满 ₱3,000</span><span class="tier__prize">₱75</span><span class="tier__mark">✓</span></div>
+            <div class="tier tier--done" data-hide hidden><span class="tier__n">档位 3</span><span class="tier__cond">累计满 ₱5,000</span><span class="tier__prize">₱150</span><span class="tier__mark">✓</span></div>
+            <div class="tier tier--done" data-hide hidden><span class="tier__n">档位 4</span><span class="tier__cond">累计满 ₱10,000</span><span class="tier__prize">₱400</span><span class="tier__mark">✓</span></div>
+            <p class="tiers__skip" data-skip>档位 1～4 已发放</p>
+            <div class="tier tier--done"><span class="tier__n">档位 5</span><span class="tier__cond">累计满 ₱20,000</span><span class="tier__prize">₱900</span><span class="tier__mark">✓</span></div>
+            <div class="tier tier--next"><span class="tier__n">档位 6</span><span class="tier__cond">累计满 ₱30,000</span><span class="tier__prize">₱1,500</span><span class="tier__mark">→</span></div>
+            <div class="tier tier--lock"><span class="tier__n">档位 7</span><span class="tier__cond">累计满 ₱50,000</span><span class="tier__prize">₱2,800</span><span class="tier__mark">🔒</span></div>
+            <p class="tiers__skip" data-skip>档位 8～19 未解锁</p>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 8</span><span class="tier__cond">累计满 ₱80,000</span><span class="tier__prize">₱4,500</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 9</span><span class="tier__cond">累计满 ₱120,000</span><span class="tier__prize">₱7,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 10</span><span class="tier__cond">累计满 ₱180,000</span><span class="tier__prize">₱11,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 11</span><span class="tier__cond">累计满 ₱250,000</span><span class="tier__prize">₱16,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 12</span><span class="tier__cond">累计满 ₱350,000</span><span class="tier__prize">₱23,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 13</span><span class="tier__cond">累计满 ₱500,000</span><span class="tier__prize">₱34,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 14</span><span class="tier__cond">累计满 ₱700,000</span><span class="tier__prize">₱48,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 15</span><span class="tier__cond">累计满 ₱1,000,000</span><span class="tier__prize">₱70,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 16</span><span class="tier__cond">累计满 ₱1,400,000</span><span class="tier__prize">₱98,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 17</span><span class="tier__cond">累计满 ₱1,900,000</span><span class="tier__prize">₱135,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 18</span><span class="tier__cond">累计满 ₱2,500,000</span><span class="tier__prize">₱180,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock" data-hide hidden><span class="tier__n">档位 19</span><span class="tier__cond">累计满 ₱3,200,000</span><span class="tier__prize">₱235,000</span><span class="tier__mark">🔒</span></div>
+            <div class="tier tier--lock tier--top"><span class="tier__n">档位 20</span><span class="tier__cond">累计满 ₱5,000,000</span><span class="tier__prize">₱388,888</span><span class="tier__mark">🔒</span></div>
+          </div>
+          <button class="tiers__more" type="button" data-more>展开中间 12 档 ▾</button>
+          <p class="credit">档位 1～5 已自动到账合计 <b>₱1,545</b></p>
+        </div>
+      </article>
+
+      <div style="height:var(--sp-6);"></div>
+    </div>
+
+    <details class="notes">
+      <summary>折叠规则要运营拍板（T03）</summary>
+      <div class="notes__body">
+        <ul>
+        <li><b>10 档以内全部展开</b>（运营 2026-09-10：累计奖励有机率到 10 阶）。10 档 × 34px ＝ 340px，一屏塞得下，<b>不值得为它多一次点击</b></li>
+        <li><b>超过 10 档才折叠</b>，收起时显示：<b>已发放的最后一档 → 下一档 → 再一档 → ⋯ → 最高档</b></li>
+        <li><b>折叠时一定要留下最高档。</b>旧版规则只留「已发放最后一档 → 下一档 → 再两档」，会把最高档藏起来——那等于把整个玩法最强的卖点（存到底能拿 ₱388,888）收进抽屉。这是上一版的设计错误，已修正</li>
+        <li>为什么不是「只显示下一档」：会员需要看到<b>再往后一点的诱因</b>，才会想继续存</li>
+        <li><b>最高档永远描边强调</b>（<code>.tier--top</code>），不管展开还是折叠。阶梯玩法的主要诱因就是最上面那一档</li>
+        <li>展开状态<b>切页签后要保留</b>（这里的实作是切 class 不动 DOM，所以天生会保留）</li>
+        <li><b>一格里两张卡都是累计存款、又都 20 档</b>时会到 1,700px。这是 T02 要挡下来的另一个理由</li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+  </div>
+
+  <div class="panel panel--pair" id="p5" role="tabpanel" aria-labelledby="tab-p5">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       画面 ⑤ 六种规则弹窗
+       玩法 2 种 × 维度 3 种 ＝ 6 种卡片样式，每一种都要有自己的规则弹窗。
+       弹窗内容是「运营在后台第 2 步上传的一张图」，不是前台写死的文字，
+       所以这一组真正在定的是：这张图至少要写到什么、版面长什么样。
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="screen" id="fe5">
+    <header class="screen__head">
+      <p class="screen__no">画面 ⑤</p>
+      <h2 class="screen__title">规则弹窗 · <b>复存</b>的三种维度</h2>
+      <p class="screen__lede">每张卡右上角的「规则」点开的就是这个。弹窗内容<b>是一张图</b>（后台第 2 步上传，PC 与 H5 各一张），前台只负责撑开、可卷动、可关掉。<b>三种维度的差别全在「什么时候归零」与「次数怎么算」。</b></p>
+      <p class="screen__ref">对应后台第 2 步「规则弹窗图」· 一个区块一张图 · 玩法 2 × 维度 3 ＝ <b>6 种</b></p>
+    </header>
+
+    <p class="device__cap"><b>去第 ①② 组点任何一张卡的「规则」钮，会真的弹出来。</b>这一支是把版面摊平给美术看。</p>
+    <div class="phone">
+      <header class="topbar">
+        <button class="topbar__back" type="button" aria-label="返回">‹</button>
+        <div class="topbar__title">复存 · 三种维度的规则弹窗</div>
+      </header>
+
+      <p class="seg">① <b>复存 × 每日</b></p>
+      <div class="rulepop rulepop--static">
+        <div class="rulepop__mask"><div class="rulepop__sheet">
+          <div class="rulepop__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <span class="rule__cycle">每日</span>
+            <h4 class="rulepop__title">活动规则</h4>
+            <button class="rulepop__x" type="button" aria-label="关闭">✕</button>
+          </div>
+          <div class="rulepop__body">
+            <div class="rulepop__img"><b>规则弹窗图</b><span>H5：750 × 建议 1000～1600（可卷动）<br>PC：另上传一张，尺寸依后台第 2 步</span></div>
+            <div class="rulepop__must"><b>这张图至少要写到：</b>
+              <ul>
+                <li>单笔门槛（存满 ₱100）</li>
+                <li>奖励（送 ₱10／或该笔 5% ＋ 单一会员奖励上限）</li>
+                <li>次数上限：<b>N 次／日</b></li>
+                <li>归零时点：<b>每日 00:00</b>，当天没用完的次数不累积到明天</li>
+                <li>达标即<b>自动到账</b>，无需领取</li>
+              </ul>
+            </div>
+          </div>
+          <div class="rulepop__foot"><button class="btn btn--sun" type="button">我知道了</button></div>
+        </div></div>
+      </div>
+
+      <p class="seg">② <b>复存 × 每周</b>（只有归零时点与次数单位不同）</p>
+      <div class="rulepop rulepop--static">
+        <div class="rulepop__mask"><div class="rulepop__sheet">
+          <div class="rulepop__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <span class="rule__cycle">每周</span>
+            <h4 class="rulepop__title">活动规则</h4>
+            <button class="rulepop__x" type="button" aria-label="关闭">✕</button>
+          </div>
+          <div class="rulepop__body">
+            <div class="rulepop__img"><b>规则弹窗图</b><span>H5：750 × 建议 1000～1600（可卷动）</span></div>
+            <div class="rulepop__must"><b>与「每日」版的差别：</b>
+              <ul>
+                <li>次数上限单位改成 <b>N 次／周</b></li>
+                <li>归零时点改成 <b>每周一 00:00</b>（后台固定，不开放配置）</li>
+                <li>其余（单笔门槛、奖励、自动到账）写法相同</li>
+              </ul>
+            </div>
+          </div>
+          <div class="rulepop__foot"><button class="btn btn--sun" type="button">我知道了</button></div>
+        </div></div>
+      </div>
+
+      <p class="seg">③ <b>复存 × 限时</b>（不归零，用完就没了——这点一定要写重）</p>
+      <div class="rulepop rulepop--static">
+        <div class="rulepop__mask"><div class="rulepop__sheet">
+          <div class="rulepop__head">
+            <span class="rule__kind rule__kind--re">复存</span>
+            <span class="rule__cycle">活动期间</span>
+            <h4 class="rulepop__title">活动规则</h4>
+            <button class="rulepop__x" type="button" aria-label="关闭">✕</button>
+          </div>
+          <div class="rulepop__body">
+            <div class="rulepop__img"><b>规则弹窗图</b><span>H5：750 × 建议 1000～1600（可卷动）</span></div>
+            <div class="rulepop__must"><b>与「每日」版的差别：</b>
+              <ul>
+                <li>次数上限单位改成 <b>N 次／整个活动</b></li>
+                <li><b>不归零</b>：整档活动就这 N 次，用完到活动结束都不会再有</li>
+                <li>建议加一句「用完不再重置」——这是最容易被会员误会成「明天会回来」的地方</li>
+              </ul>
+            </div>
+          </div>
+          <div class="rulepop__foot"><button class="btn btn--sun" type="button">我知道了</button></div>
+        </div></div>
+      </div>
+
+      <div style="height:var(--sp-6);"></div>
+    </div>
+
+    <details class="notes">
+      <summary>弹窗的交互规格</summary>
+      <div class="notes__body">
+        <ul>
+        <li><b>从底部升起</b>（bottom sheet），最高占手机可视高度的 <b>78%</b>，内容超过就在弹窗内卷动，<b>不要连整页一起卷</b></li>
+        <li><b>三种关掉的方式</b>：右上 ✕、底部「我知道了」、点弹窗外的遮罩。三种都要做</li>
+        <li>弹窗打开时<b>背后的页面不可卷动</b>（真实开发时给 body 加 <code>overflow:hidden</code>）</li>
+        <li>标题列固定显示<b>玩法徽章 ＋ 维度徽章</b>——会员点开后要立刻确认「我点的是哪一张卡的规则」，尤其一格里有两张卡时</li>
+        <li>图<b>没上传</b>时怎么办？建议整颗「规则」钮不显示，而不是弹一个空白窗。这是 <b>T11</b></li>
+        <li>弹窗内容是图，<b>无法被搜寻、无法被翻译、萤幕阅读器读不到</b>。若日后要做多语或无障碍，这里要改成文字 → <b>T12</b></li>
+      </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ── 画面 ⑤-B 累计存款的三种维度 ── -->
+  <section class="screen" id="fe5b">
+    <header class="screen__head">
+      <p class="screen__no">画面 ⑤-B</p>
+      <h2 class="screen__title">规则弹窗 · <b>累计存款</b>的三种维度</h2>
+      <p class="screen__lede">累计存款的弹窗一定要多写两件事：<b>「累计的范围到哪」</b>与<b>「同一笔存款会同时算进别的维度」</b>。这两句不写，客诉会一直来。</p>
+      <p class="screen__ref">与画面 ⑤ 合起来就是完整的 6 种 · 运营共需准备 <b>6 × 2 ＝ 12 张图</b>（PC ＋ H5）</p>
+    </header>
+
+    <p class="device__cap"><b>三种维度的阶梯表长得一样</b>，差别全在最上面那句「累计范围」。</p>
+    <div class="phone">
+      <header class="topbar">
+        <button class="topbar__back" type="button" aria-label="返回">‹</button>
+        <div class="topbar__title">累计存款 · 三种维度的规则弹窗</div>
+      </header>
+
+      <p class="seg">④ <b>累计存款 × 每日</b></p>
+      <div class="rulepop rulepop--static">
+        <div class="rulepop__mask"><div class="rulepop__sheet">
+          <div class="rulepop__head">
+            <span class="rule__kind rule__kind--sum">累计存款</span>
+            <span class="rule__cycle">每日</span>
+            <h4 class="rulepop__title">活动规则</h4>
+            <button class="rulepop__x" type="button" aria-label="关闭">✕</button>
+          </div>
+          <div class="rulepop__body">
+            <div class="rulepop__img"><b>规则弹窗图</b><span>H5：750 × 建议 1200～2000<br>阶梯多时图会很长，务必确认可卷动</span></div>
+            <div class="rulepop__must"><b>这张图至少要写到：</b>
+              <ul>
+                <li><b>累计范围：今日 00:00 ～ 23:59 的存款总额</b></li>
+                <li>完整阶梯表：各档门槛 → 奖励金额（<b>后台最多 20 档，图上要全部列出</b>）</li>
+                <li>每一档<b>各送一次</b>，达标即自动到账</li>
+                <li>归零时点：<b>每日 00:00</b>；<b>未达标的档位不保留到明天</b></li>
+                <li><b>同一笔存款会同时计入其他维度</b>，不是三选一</li>
+                <li>奖励金额依<b>存款当下的 VIP 等级</b>取值（A13）</li>
+              </ul>
+            </div>
+          </div>
+          <div class="rulepop__foot"><button class="btn btn--sun" type="button">我知道了</button></div>
+        </div></div>
+      </div>
+
+      <p class="seg">⑤ <b>累计存款 × 每周</b></p>
+      <div class="rulepop rulepop--static">
+        <div class="rulepop__mask"><div class="rulepop__sheet">
+          <div class="rulepop__head">
+            <span class="rule__kind rule__kind--sum">累计存款</span>
+            <span class="rule__cycle">每周</span>
+            <h4 class="rulepop__title">活动规则</h4>
+            <button class="rulepop__x" type="button" aria-label="关闭">✕</button>
+          </div>
+          <div class="rulepop__body">
+            <div class="rulepop__img"><b>规则弹窗图</b><span>H5：750 × 建议 1200～2000</span></div>
+            <div class="rulepop__must"><b>与「每日」版的差别：</b>
+              <ul>
+                <li>累计范围改成 <b>本周一 00:00 ～ 周日 23:59</b></li>
+                <li>归零时点改成 <b>每周一 00:00</b>（后台固定）</li>
+                <li>建议写清楚<b>「周」是周一起算</b>，不是「从你参加那天算七天」</li>
+              </ul>
+            </div>
+          </div>
+          <div class="rulepop__foot"><button class="btn btn--sun" type="button">我知道了</button></div>
+        </div></div>
+      </div>
+
+      <p class="seg">⑥ <b>累计存款 × 限时</b>（唯一一种「数字只会往上」的）</p>
+      <div class="rulepop rulepop--static">
+        <div class="rulepop__mask"><div class="rulepop__sheet">
+          <div class="rulepop__head">
+            <span class="rule__kind rule__kind--sum">累计存款</span>
+            <span class="rule__cycle">活动期间</span>
+            <h4 class="rulepop__title">活动规则</h4>
+            <button class="rulepop__x" type="button" aria-label="关闭">✕</button>
+          </div>
+          <div class="rulepop__body">
+            <div class="rulepop__img"><b>规则弹窗图</b><span>H5：750 × 建议 1200～2000</span></div>
+            <div class="rulepop__must"><b>与「每日」版的差别：</b>
+              <ul>
+                <li>累计范围改成 <b>整个活动期间（09/01 00:00 ～ 09/30 23:59）</b></li>
+                <li><b>不归零</b>：数字只会往上加，不会重来</li>
+                <li>门槛通常最高、奖励最大，图上建议把<b>最高档当主视觉</b>，做成会员的长期目标</li>
+              </ul>
+            </div>
+          </div>
+          <div class="rulepop__foot"><button class="btn btn--sun" type="button">我知道了</button></div>
+        </div></div>
+      </div>
+
+      <div style="height:var(--sp-6);"></div>
+    </div>
+
+    <details class="notes">
+      <summary>六种弹窗 × 三种维度的配置规范总表</summary>
+      <div class="notes__body">
+        <ul>
+        <li><b>每日</b>：归零 <b>每日 00:00</b>；次数单位「次／日」；累计范围「今日 00:00～23:59」；<b>未达标的进度不保留</b></li>
+        <li><b>每周</b>：归零 <b>每周一 00:00</b>（后台固定不可改）；次数单位「次／周」；累计范围「本周一～周日」；<b>要讲明是周一起算，不是加入后七天</b></li>
+        <li><b>限时</b>：<b>不归零</b>；次数单位「次／整个活动」；累计范围「整个活动期间」；<b>要讲明用完不再重置</b></li>
+        <li>三种维度的<b>版面完全一样</b>，差别只在文字。所以美术只要出 <b>2 套版型</b>（复存版、累计存款版），运营再按维度改字，不必画 6 套</li>
+        <li>但<b>图档还是 6 × 2 ＝ 12 张</b>（每个区块 PC／H5 各一张），因为后台是按区块上传的</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  </div>
+
+  <div class="panel" id="p6" role="tabpanel" aria-labelledby="tab-p6">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       画面 ⑥ 设计标注 —— 给美术／前端直接取用
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="screen screen--wide" id="fe6">
+    <header class="screen__head">
+      <p class="screen__no">画面 ⑥</p>
+      <h2 class="screen__title">设计标注（给美术／前端取用）</h2>
+      <p class="screen__lede">色票、字级、间距、状态对照，以及<b>维度页签与玩法徽章</b>的规格，摊开成表格，出图与切版可以直接照抄。<b>这一块不是前台画面，上线不会出现。</b></p>
+      <p class="screen__ref">给美术／前端的交付清单 · 非前台画面</p>
+    </header>
+
+    <div class="tokens">
+      <h3>版面结构一句话</h3>
+      <p style="font-size:var(--fs-sm);line-height:1.9;margin-bottom:var(--sp-4);">
+        <b>一档活动只做一种玩法，页签切时间维度。</b><br>
+        玩法（复存／累计存款）在后台<b>第 1 步</b>选定，整档活动只会是其中一种；
+        一个规则区块＝一张卡，卡放在它所属维度的那一格页签里，<b>一格一张卡</b>。
+        要两种玩法就<b>开两档活动</b>（2026-09-10 定案：运营反映混在同一页太复杂）。
+        「已自动到账」总额是<b>活动层级</b>，放在页签外面，不跟着切换。<br>
+        <b>本页不显示流水。</b>活动页只回答「存款拿什么奖励」，流水是奖金的提领条件，由钱包／优惠中心呈现。
+      </p>
+
+      <h3>后台配置 → 前台呈现</h3>
+      <table>
+        <thead><tr><th style="width:26%;">后台栏位</th><th style="width:16%;">在第几步</th><th>前台变成什么</th></tr></thead>
+        <tbody>
+          <tr><td>不同「统计维度」的数量</td><td>第 4 步</td><td>决定<b>页签几格</b>；只有 1 个维度时<b>页签不出现</b></td></tr>
+          <tr><td>活动类型（复存／累计存款）</td><td><b>第 1 步</b></td><td>卡片上的<b>玩法徽章</b>，以及卡片内部长相：复存＝次数点，累计存款＝金额进度条＋阶梯。<b>整档活动只有一种，前台不会混着出现</b></td></tr>
+          <tr><td>统计周期（每日／每周／活动期间累计）</td><td>第 4 步 · 每区块各选</td><td>这张卡<b>归到哪一格页签</b>，以及归零说明条写什么</td></tr>
+          <tr><td>参与次数上限（1～20）</td><td>第 4 步 · 仅复存</td><td>卡上的「已获得 2 / 3 次」与次数点数量。填 <b>1</b> 就是「每日首存」那种玩法</td></tr>
+          <tr><td>阶梯档位（最多 20 档）</td><td>第 4 步 · 仅累计存款</td><td>阶梯清单的列数。<b>常态是 10 档</b>（运营 2026-09-10）→ 全部展开；<b>超过 10 档</b>才折叠，且折叠时永远保留最高档</td></tr>
+          <tr><td>奖励类型（固定金额／百分比）</td><td>第 4 步 · 百分比仅复存</td><td>百分比时卡上多一句「本活动奖励上限 ₱X，已用 ₱Y」</td></tr>
+          <tr><td>单一会员奖励上限</td><td>第 4 步 · 仅百分比</td><td>同上。<b>必填</b>，否则等于开了一个没有天花板的百分比</td></tr>
+          <tr><td>奖励发放 ／ 审核方式</td><td>第 4 步 · <b>本次写死</b></td><td>固定「自动领取 ＋ 自动审核」，<b>前台没有任何领取动作</b>，奖励状态只有 2 种</td></tr>
+          <tr><td>流水规则</td><td>第 4 步 · 活动层级</td><td><b>前台活动页不呈现。</b>这一页只负责「存款拿奖励」，流水由钱包／优惠中心那边显示</td></tr>
+        </tbody>
+      </table>
+
+      <h3>维度页签显示逻辑表（穷举）</h3>
+      <table>
+        <thead><tr><th style="width:14%;">不同维度数</th><th style="width:28%;">后台配置举例</th><th style="width:20%;">页签</th><th>每格几张卡</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>每日（1 个区块）</td><td><b>不出现</b></td><td>1 张（周期徽章挂回卡上）</td></tr>
+          <tr><td>2</td><td>每日 ＋ 每周</td><td>2 格平分</td><td>各 1 张</td></tr>
+          <tr><td>2</td><td>每日 ＋ 限时</td><td>2 格平分</td><td>各 1 张</td></tr>
+          <tr><td>2</td><td>每周 ＋ 限时</td><td>2 格平分</td><td>各 1 张</td></tr>
+          <tr><td>3</td><td>每日 ＋ 每周 ＋ 限时</td><td>3 格平分</td><td>各 1 张</td></tr>
+          <tr><td>1～3</td><td>同一维度挂了两个区块（后台目前没挡）</td><td>照常</td><td>该格出现两张<b>徽章相同</b>的卡，只能靠标题分辨 → <b>T02</b></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:var(--fs-xs);color:var(--muted);line-height:1.8;margin-bottom:var(--sp-4);">
+        <b>页签顺序固定「每日 → 每周 → 限时」</b>，不跟后台的建立顺序跑——会员每次打开都要重找位置的话，页签就没有意义。<br>
+        <b>预设停在最短的那个维度</b>（每日 &gt; 每周 &gt; 限时）。全自动发放没有「可领取」，所以<b>没有红点</b>，也没有「优先停在有奖励的那格」这种规则。<br>
+        <b>切换页签不重新载入</b>，只换显示，所以框内卷动位置、阶梯展开状态都会保留。
+      </p>
+
+      <h3>维度页签元件规格</h3>
+      <table>
+        <thead><tr><th style="width:24%;">项目</th><th>规格</th></tr></thead>
+        <tbody>
+          <tr><td>位置</td><td>主视觉与内容之间，<code>position:sticky; top:0</code> 钉在手机框顶（<code>z-index:6</code>，要压过顶栏与底部按钮的 5）</td></tr>
+          <tr><td>高度</td><td>约 48px（按钮 32px ＋ 上下 padding 12px×2 的视觉高）</td></tr>
+          <tr><td>宽度</td><td>每格 <code>flex:1</code> 平分；左右各留 16px 边距、格间 4px</td></tr>
+          <tr><td>字级</td><td>13px（<code>--fs-sm</code>）· 700 粗</td></tr>
+          <tr><td>未选中</td><td>白底 <code>#FFFFFF</code>、1px 边框 <code>#F4E5D0</code>、字色 <code>#6B543F</code></td></tr>
+          <tr><td>选中</td><td>金色渐层 <code>#FFD86B → #FFB020 → #FF8A3D</code>、无边框、字色 <code>#5C3200</code>、投影 <code>0 3px 10px rgba(255,150,32,.35)</code></td></tr>
+          <tr><td>已结束</td><td>底 <code>#FAF6F0</code>、字色 <code>#B3A08F</code>，<b>仍可点</b></td></tr>
+          <tr><td>红点</td><td><b>不做</b>。全自动发放没有「可领取」状态，没有需要提示的东西</td></tr>
+          <tr><td>点击区</td><td>整格可点，最小高度 32px（建议切版时用 padding 撑到 44px 触控区）</td></tr>
+        </tbody>
+      </table>
+
+      <h3>玩法徽章元件规格</h3>
+      <table>
+        <thead><tr><th style="width:24%;">项目</th><th>规格</th></tr></thead>
+        <tbody>
+          <tr><td>位置</td><td>卡片标题<b>左侧</b>，固定第一顺位。若同时有周期徽章，顺序为<b>玩法（左）→ 标题 → 周期（右）</b></td></tr>
+          <tr><td>复存</td><td>底 <code>#FFF3DA</code>、字 <code>#A85A15</code>、边框 <code>#EBD2AC</code>（橘金＝一笔一笔看次数）</td></tr>
+          <tr><td>累计存款</td><td>底 <code>#E9F3FC</code>、字 <code>#2F7DBF</code>、边框 <code>#C6E0F5</code>（蓝＝看总额走阶梯）</td></tr>
+          <tr><td>字级</td><td>12px（<code>--fs-xs</code>）· 700 粗 · 圆角 999px · padding 2px 8px</td></tr>
+          <tr><td>何时省略</td><td><b>永不省略。</b>虽然整档活动只有一种玩法、三格页签的徽章都一样，但会员可能从站内其他入口直接进到某一格，需要立刻知道这是哪种玩法</td></tr>
+          <tr><td>周期徽章何时出现</td><td><b>没有页签时必挂</b>（淡底描边款 <code>.rule__cycle</code>）；<b>有页签时可省略</b>，页签已经讲了</td></tr>
+        </tbody>
+      </table>
+
+      <h3>两种玩法的版面差异（高度差最多的地方）</h3>
+      <table>
+        <thead><tr><th style="width:18%;">玩法</th><th style="width:26%;">进度呈现</th><th style="width:22%;">卡片高度</th><th>特有元素</th></tr></thead>
+        <tbody>
+          <tr><td><b>复存</b></td><td>次数点（一列，固定高）</td><td>约 <b>210px</b>（固定）</td><td>参与次数上限；奖励类型可为百分比 → 多一句「奖励上限」</td></tr>
+          <tr><td><b>累计存款</b></td><td>金额进度条 ＋ 阶梯清单</td><td>约 <b>150px ＋ 每档 34px</b><br>10 档 ≈ <b>490px</b>（常态）<br>20 档 ≈ 830px（折叠后 ≈ 330px）</td><td>阶梯档位（最多 20 档）；最高档固定描边强调</td></tr>
+          <tr><td colspan="4"><b>一档活动只会是其中一种</b>，所以整份版面的高度很好预估：复存活动每一格都约 210px；累计存款活动看档数，5 档约 320px、20 档约 830px（会折叠）</td></tr>
+        </tbody>
+      </table>
+
+      <h3>奖励状态 × 视觉对照（本次只有 2 种 ＋ 1 个告知）</h3>
+      <table>
+        <thead><tr><th style="width:18%;">状态</th><th style="width:22%;">卡片框</th><th style="width:24%;">徽章</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>未达标</td><td>白底、灰框 <code>#F4E5D0</code></td><td>灰「尚未达标」</td><td>门槛还没到</td></tr>
+          <tr><td>已发放</td><td>绿框 <code>#BFE6D2</code></td><td>绿「✓ 已到账」</td><td>达标当下自动入账</td></tr>
+          <tr><td>次数已领满</td><td>绿框</td><td><b>蓝</b>「本周期次数已领满」</td><td><b>告知</b>不是错误，所以走蓝不走红</td></tr>
+          <tr><td colspan="4"><b>不会出现</b>：可领取／已过期／审核中／领取成功弹窗／领取失败提示／页签红点 —— 后台第4步写死「自动领取＋自动审核」，也没有「领取天数」设定</td></tr>
+        </tbody>
+      </table>
+
+      <h3>色票（Design Token）</h3>
+      <table>
+        <thead><tr><th style="width:34%;">用途</th><th style="width:26%;">色码</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><span class="sw" style="background:#FFB020;"></span> 主橘金 <code>--sun</code></td><td>#FFB020</td><td>进度条、按钮底、选中页签</td></tr>
+          <tr><td><span class="sw" style="background:#FF8A3D;"></span> 深橘 <code>--sun-2</code></td><td>#FF8A3D</td><td>渐层另一端</td></tr>
+          <tr><td><span class="sw" style="background:#FFD86B;"></span> 浅阳光黄 <code>--sun-3</code></td><td>#FFD86B</td><td>渐层起点</td></tr>
+          <tr><td><span class="sw" style="background:#A85A15;"></span> 橘棕（文字用）<code>--sun-ink</code></td><td>#A85A15</td><td><b>橘色的字一律用这支</b>，对白底 5:1 通过 AA。复存徽章的字色</td></tr>
+          <tr><td><span class="sw" style="background:#2F7DBF;"></span> 蓝（文字）<code>--blue</code></td><td>#2F7DBF</td><td>累计存款徽章、「次数已领满」告知、限时不归零</td></tr>
+          <tr><td><span class="sw" style="background:#2E8F63;"></span> 绿（文字）<code>--green</code></td><td>#2E8F63</td><td>已发放／已到账</td></tr>
+          <tr><td><span class="sw" style="background:#4A3626;"></span> 主文字 <code>--text</code></td><td>#4A3626</td><td>暖棕黑，不用纯黑</td></tr>
+          <tr><td><span class="sw" style="background:#8A705C;"></span> 说明文 <code>--muted</code></td><td>#8A705C</td><td>对白底 4.6:1，通过 AA</td></tr>
+          <tr><td><span class="sw" style="background:#C8412B;"></span> 红（文字）<code>--red</code></td><td>#C8412B</td><td>本次<b>几乎用不到</b>（没有过期、没有领取失败）。保留给系统级错误</td></tr>
+        </tbody>
+      </table>
+
+      <h3>字级、间距与圆角</h3>
+      <table>
+        <thead><tr><th style="width:26%;">Token</th><th style="width:24%;">值</th><th>用在哪</th></tr></thead>
+        <tbody>
+          <tr><td><code>--fs-xs</code></td><td>12px</td><td>标签、徽章、单位、注记。<b>最小字级，不可再小</b></td></tr>
+          <tr><td><code>--fs-sm</code></td><td>13px</td><td>说明文、页签文字</td></tr>
+          <tr><td><code>--fs-md</code></td><td>14px</td><td>内文</td></tr>
+          <tr><td><code>--fs-base</code></td><td>16px</td><td>卡片标题</td></tr>
+          <tr><td><code>--fs-lg</code></td><td>20px</td><td>金额</td></tr>
+          <tr><td><code>--sp-1 ~ --sp-8</code></td><td>4／8／12／16／20／24／32px</td><td>一律 4px 的倍数，不随手填数字</td></tr>
+          <tr><td><code>--radius</code> / <code>--radius-lg</code> / <code>--radius-pill</code></td><td>14px / 20px / 999px</td><td>资讯条 / 奖励卡 / 页签与徽章</td></tr>
+          <tr><td>卡片左右边距</td><td>16px</td><td>页签、资讯条、卡片<b>一律对齐同一条左右边线</b></td></tr>
+        </tbody>
+      </table>
+
+      <h3>还要拍板的事</h3>
+      <table>
+        <thead><tr><th style="width:12%;">编号</th><th style="width:36%;">问题</th><th>目前原型画的是</th></tr></thead>
+        <tbody>
+          <tr><td><b>T08</b></td><td>奖励自动到账时要不要通知会员（推播／站内信／页内提示）？</td><td>没有画通知，只在卡片写「09/09 08:16 自动到账 ₱10」</td></tr>
+          <tr><td><b>T02</b></td><td>同一个维度可否重复挂两个区块？</td><td>后台目前<b>没挡</b>，建议加检查禁止（一档活动只有一种玩法，同维度两个区块会长出两张几乎一样的卡）</td></tr>
+          <tr><td><b>T13</b></td><td>运营想同时推两种玩法时，两档活动的 Banner／档期要不要强制一致？活动列表会不会太挤？</td><td>原型画的是两档完全独立的活动，各有 Banner 与名称</td></tr>
+          <tr><td><b>T01</b></td><td>页签文字用「限时」还是「活动期间」？</td><td>「限时」（2 字，与每日／每周等宽好看），资讯条里补说明</td></tr>
+          <tr><td><b>T03</b></td><td>阶梯几档以内不折叠？</td><td><b>10 档</b>（运营说常态会到 10 阶，10 档 × 34px ＝ 340px，一屏塞得下，不值得为它多一次点击）。超过才折叠，<b>且一定保留最高档</b></td></tr>
+          <tr><td><b>T06</b></td><td>要不要记住会员上次停在哪一格页签？</td><td>不记住，每次都回到最短维度</td></tr>
+          <tr><td><b>T09</b></td><td>活动结束后这一页保留几天才下架？</td><td>未定；会员可能还想回来查自己拿了多少</td></tr>
+          <tr><td><b>A13</b></td><td>奖励金额取哪个时点的 VIP 等级？</td><td>存款当下</td></tr>
+          <tr><td><b>A37</b></td><td>后台金额栏位要不要做位数防呆？</td><td>不做，所以前台要能承受七位数（见画面 ④-④）</td></tr>
+          <tr><td><b>A02</b></td><td>活动规则说明放哪？</td><td>各区块自己的规则弹窗图，顶栏不放共用规则钮</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  </div>
+
+</main>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   这份原型的 JavaScript 只做四件事，刻意写得很短，
+   目的是让不写程式的人也能看懂「点了会发生什么」：
+     1. 上方的六组页签 —— 切换要看哪一组画面
+     2. 手机框内的「每日／每周／限时」周期页签 —— 这次改版的重点
+     3. 阶梯的「展开全部」
+     4. 框内跳段 ＋ 跟规格书的桥接
+   共通做法：全部只切 CSS class，不动 DOM。
+   好处是切回来时，框内卷到哪、阶梯有没有展开，通通都还在原位。
+   ════════════════════════════════════════════════════════════════ */
+(function(){
+  /* ── 1. 上方六组页签 ──────────────────────────────────────────── */
+  var tabs   = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+
+  function show(panelId, scrollUp){
+    panels.forEach(function(p){ p.classList.toggle('is-active', p.id === panelId); });
+    tabs.forEach(function(t){
+      var on = (t.getAttribute('aria-controls') === panelId);
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    /* 切页签时把画面拉到页签那一条，不然会停在上一组的中段，看起来像没反应 */
+    if(scrollUp){
+      var nav = document.querySelector('.tabs');
+      var y = nav ? nav.getBoundingClientRect().top + window.pageYOffset : 0;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+    report();
+  }
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){ show(t.getAttribute('aria-controls'), true); });
+  });
+
+  /* ── 2. 手机框内的周期页签（每日／每周／限时）──────────────────
+        这是这次改版的核心元件。
+        规则很单纯：点某一格 → 同一支手机里，
+        「这一格对应的内容」显示，其他格的内容隐藏。
+
+        为什么要限定「同一支手机里」（用 closest('.phone')）？
+        因为一个画面组里常常并排两支手机（自动发放 vs 手动领取），
+        两支手机各有一排自己的周期页签。
+        如果不限定范围，点左边那支的「每周」，右边那支也会跟着跳，
+        对照就失去意义了。 */
+  Array.prototype.slice.call(document.querySelectorAll('.cyctab__btn[data-cyc]')).forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var phone = btn.closest('.phone');
+      if(!phone) return;
+
+      /* 2-1 页签本身：把同一支手机里的所有页签都取消选中，再选中这一格 */
+      Array.prototype.slice.call(phone.querySelectorAll('.cyctab__btn[data-cyc]')).forEach(function(b){
+        var on = (b === btn);
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+
+      /* 2-2 内容区：同理，只显示 id 对得上的那一块 */
+      var target = btn.getAttribute('data-cyc');
+      Array.prototype.slice.call(phone.querySelectorAll('.cycpane')).forEach(function(pane){
+        pane.classList.toggle('is-active', pane.id === target);
+      });
+
+      /* 2-3 切页签后把框内卷回页签那一条。
+             不这样做的话，如果上一格内容很长、会员已经滑到很下面，
+             切过去会停在新内容的中段，看起来像「点了没反应」。 */
+      var nav = phone.querySelector('.cyctab');
+      if(nav){
+        var top = nav.offsetTop;
+        if(phone.scrollTo){ phone.scrollTo({ top: top, behavior: 'smooth' }); }
+        else { phone.scrollTop = top; }
+      }
+    });
+  });
+
+  /* ── 3. 阶梯「展开全部」──────────────────────────────────────
+        累计存款最多 20 档，全部摊开比一整支手机还高。
+        收起时只留「已领的最后一档 → 下一档 → 再往后两档」，
+        其余用 hidden 属性藏起来（不是 display:none 写死在 style，
+        这样切版的人一看 HTML 就知道那几列是「可以被展开的」）。 */
+  Array.prototype.slice.call(document.querySelectorAll('[data-more]')).forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var box = btn.parentElement.querySelector('[data-fold]');
+      if(!box) return;
+      var open = btn.getAttribute('data-open') === '1';
+      /* 被折叠的档位 */
+      Array.prototype.slice.call(box.querySelectorAll('[data-hide]')).forEach(function(el){
+        el.hidden = open;               /* 原本展开 → 收起；原本收起 → 展开 */
+      });
+      /* 「档位 1～4 已领取」那种灰字提示，展开后就没有存在意义了 */
+      Array.prototype.slice.call(box.querySelectorAll('[data-skip]')).forEach(function(el){
+        el.hidden = !open;
+      });
+      btn.setAttribute('data-open', open ? '0' : '1');
+      btn.textContent = open ? '展开中间 12 档 ▾' : '收起 ▴';
+    });
+  });
+
+  /* ── 3.5 规则弹窗 ───────────────────────────────────────────────
+        每张卡右上角的「规则」钮点开的东西。
+
+        【为什么弹窗内容是用 JS 组出来，不是写死在 HTML 里】
+        玩法 2 种 × 维度 3 种 ＝ 6 种规则弹窗，而原型里有 20 张卡。
+        每张卡都写一份弹窗 HTML 会有 20 段几乎一样的码，改一个字要改 20 次。
+        所以改成：钮上只标 data-kind（玩法）与 data-cyc（维度），
+        点下去时再依这两个值把弹窗组出来。真实开发时这里换成
+        「用区块 ID 去后端拿那张规则弹窗图的网址」，结构完全一样。
+
+        弹窗做成手机框的子元素（不是整页的），
+        这样并排两支手机时，各自的弹窗只会盖住自己那一支。 */
+  var POP_MUST = {
+    '复存': '<b>这张规则图至少要写到：</b><ul>'
+      + '<li>单笔门槛（例：存满 ₱100）</li>'
+      + '<li>奖励（固定金额，或该笔百分比 ＋ 单一会员奖励上限）</li>'
+      + '<li>次数上限：<b>N 次／{unit}</b></li>'
+      + '<li>{reset}</li>'
+      + '<li>达标即<b>自动到账</b>，无需领取</li></ul>',
+    '累计存款': '<b>这张规则图至少要写到：</b><ul>'
+      + '<li><b>累计范围：{range}</b></li>'
+      + '<li>完整阶梯表：各档门槛 → 奖励金额（最多 20 档，图上要全部列出）</li>'
+      + '<li>每一档<b>各送一次</b>，达标即自动到账</li>'
+      + '<li>{reset}</li>'
+      + '<li><b>同一笔存款会同时计入其他维度</b>，不是三选一</li>'
+      + '<li>奖励金额依<b>存款当下的 VIP 等级</b>取值</li></ul>'
+  };
+  /* 三个维度的差别全在这张表里——这就是「配置不同规范」的具体内容 */
+  var POP_CYC = {
+    '每日':     { unit:'日',        range:'今日 00:00 ～ 23:59 的存款总额',
+                  reset:'归零时点：<b>每日 00:00</b>，未达标的进度<b>不保留到明天</b>' },
+    '每周':     { unit:'周',        range:'本周一 00:00 ～ 周日 23:59 的存款总额',
+                  reset:'归零时点：<b>每周一 00:00</b>（后台固定不可改）。<b>是周一起算，不是加入后七天</b>' },
+    '活动期间': { unit:'整个活动',  range:'整个活动期间的存款总额',
+                  reset:'<b>不归零</b>：数字只会往上加，<b>用完不再重置</b>' }
+  };
+  function closePop(phone){
+    var old = phone.querySelector('.rulepop');
+    if(old) old.parentNode.removeChild(old);
+  }
+  function openPop(phone, kind, cyc){
+    closePop(phone);                       /* 一支手机同时只会有一个弹窗 */
+    var c = POP_CYC[cyc] || POP_CYC['每日'];
+    var must = (POP_MUST[kind] || '')
+      .replace('{unit}', c.unit).replace('{range}', c.range).replace(/\{reset\}/g, c.reset);
+    var kindCls = (kind === '复存') ? 'rule__kind--re' : 'rule__kind--sum';
+    var tall = (kind === '累计存款') ? '1200～2000' : '1000～1600';
+    var el = document.createElement('div');
+    el.className = 'rulepop';
+    el.innerHTML =
+      '<div class="rulepop__mask" data-mask>'
+      +  '<div class="rulepop__sheet" role="dialog" aria-modal="true" aria-label="活动规则">'
+      +    '<div class="rulepop__head">'
+      +      '<span class="rule__kind ' + kindCls + '">' + kind + '</span>'
+      +      '<span class="rule__cycle">' + cyc + '</span>'
+      +      '<h4 class="rulepop__title">活动规则</h4>'
+      +      '<button class="rulepop__x" type="button" aria-label="关闭" data-x>✕</button>'
+      +    '</div>'
+      +    '<div class="rulepop__body">'
+      +      '<div class="rulepop__img"><b>规则弹窗图</b>'
+      +        '<span>后台第 2 步上传 · H5：750 × 建议 ' + tall + '<br>PC 端另上传一张</span></div>'
+      +      '<div class="rulepop__must">' + must + '</div>'
+      +    '</div>'
+      +    '<div class="rulepop__foot"><button class="btn btn--sun" type="button" data-x>我知道了</button></div>'
+      +  '</div></div>';
+    /* 放在手机框的最前面，sticky 才会钉在框顶 */
+    phone.insertBefore(el, phone.firstChild);
+    /* 三种关法：✕、我知道了、点遮罩 */
+    Array.prototype.slice.call(el.querySelectorAll('[data-x]')).forEach(function(b){
+      b.addEventListener('click', function(){ closePop(phone); });
+    });
+    el.querySelector('[data-mask]').addEventListener('click', function(e){
+      if(e.target === this) closePop(phone);      /* 只有点到遮罩本身才关，点内容不关 */
+    });
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('[data-pop]') : null;
+    if(!b) return;
+    var phone = b.closest('.phone');
+    if(!phone) return;
+    openPop(phone, b.getAttribute('data-kind'), b.getAttribute('data-cyc'));
+  });
+  /* Esc 关掉目前开着的弹窗 */
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape') return;
+    Array.prototype.slice.call(document.querySelectorAll('.phone > .rulepop')).forEach(function(el){
+      el.parentNode.removeChild(el);
+    });
+  });
+
+  /* ── 3.6 横滑卡片带的指示点 ──────────────────────────────────
+        滑到第几张，底下第几颗点就拉长。
+        为什么要自己算而不是用现成套件：这里只需要「目前置中的是第几张」，
+        用卷动位置除以每张卡的间距就得到答案，几行就写完，
+        不值得为它多载一个 300KB 的轮播函式库。 */
+  Array.prototype.slice.call(document.querySelectorAll('.swipe')).forEach(function(track){
+    var dots = track.parentNode.querySelector('.swipe__dots');
+    if(!dots) return;
+    var pips = Array.prototype.slice.call(dots.querySelectorAll('.swipe__dot'));
+    function sync(){
+      var cards = track.children;
+      if(!cards.length) return;
+      /* 每张卡占的水平距离＝卡宽＋间距，用第二张的位置减第一张最准 */
+      var step = cards.length > 1
+        ? cards[1].offsetLeft - cards[0].offsetLeft
+        : cards[0].offsetWidth;
+      var i = step ? Math.round(track.scrollLeft / step) : 0;
+      i = Math.max(0, Math.min(pips.length - 1, i));
+      pips.forEach(function(d, n){ d.classList.toggle('is-on', n === i); });
+    }
+    track.addEventListener('scroll', sync, { passive:true });
+    sync();
+  });
+
+  /* ── 4. 框内跳段 ────────────────────────────────────────────────
+        不用 scrollIntoView，因为它会连整页一起卷动；
+        改成自己算「目标离手机框顶端多远」，只卷手机框内部。 */
+  Array.prototype.slice.call(document.querySelectorAll('.jump__b')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var el = document.getElementById(b.getAttribute('data-go'));
+      if(!el) return;
+      var box = el.closest('.phone');
+      if(!box) return;
+      var top = el.getBoundingClientRect().top - box.getBoundingClientRect().top
+                + box.scrollTop - 8;
+      if(box.scrollTo){ box.scrollTo({ top: top, behavior: 'smooth' }); }
+      else { box.scrollTop = top; }
+    });
+  });
+
+  /* ── 5. 跟规格书的桥接 ──────────────────────────────────────────
+        规格书（deposit_spec.html）把这份原型嵌在右边栏。
+        规格那边点到某一节时，会送一则讯息过来说「请显示 fe2」，
+        这里就负责切到那一组、再滑过去。这段不要删。 */
+  window.addEventListener('message', function(e){
+    var d = e.data || {};
+    if(d.src !== 'spec' || d.type !== 'goFe') return;
+    var el = document.getElementById(d.screen);
+    if(!el) return;
+    var panel = el.closest('.panel');          /* 目标可能在没显示的页签里 */
+    if(panel) show(panel.id, false);           /* 先切过去，再滑到它 */
+    el.scrollIntoView({ behavior:'smooth', block:'start', inline:'center' });
+  });
+
+  /* 回报目前看的是哪一张（同一组里有两支手机时取靠中间那一支） */
+  var last = null;
+  function report(){
+    var active = document.querySelector('.panel.is-active');
+    if(!active) return;
+    var list = Array.prototype.slice.call(active.querySelectorAll('.screen'));
+    var mid = window.innerWidth / 2, best = null, bestDist = Infinity;
+    list.forEach(function(s){
+      var r = s.getBoundingClientRect();
+      var dist = Math.abs((r.left + r.right) / 2 - mid);
+      if(dist < bestDist){ bestDist = dist; best = s; }
+    });
+    if(best && best.id !== last){
+      last = best.id;
+      parent.postMessage({ src:'proto-fe', type:'screen', screen:best.id }, '*');
+    }
+  }
+  window.addEventListener('scroll', report, { passive:true });
+  window.addEventListener('resize', report);
+  report();   /* 载入完成先回报一次，规格那边才知道原型活着 */
+})();
+</script>
+
+</body>
+</html>
