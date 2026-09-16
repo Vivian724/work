@@ -28,9 +28,12 @@ HERE = Path(__file__).resolve().parent
 PROTO = HERE / "daily_admin.html"
 SPEC = HERE / "daily_spec.html"
 
-# 内嵌副本区块的起讫标记
-OPEN_TAG = '<script type="text/plain" id="proto-src">'
-CLOSE_TAG = "</script>"
+# 内嵌副本区块的起讫标记。
+# ⚠ 刻意用这组 HTML 注解当标记，而不是直接找 <script ... id="proto-src">——
+#    因为档头的说明注解里也会提到那个标签，用标签当标记会比对到注解，
+#    结果把整份版面覆盖掉（2026-09-14 踩过这个坑）。
+MARK_BEGIN = "<!-- PROTO_EMBED_BEGIN -->"
+MARK_END = "<!-- PROTO_EMBED_END -->"
 
 
 def main() -> int:
@@ -41,10 +44,11 @@ def main() -> int:
 
     proto_html = PROTO.read_text(encoding="utf-8")
 
-    # 原型尾端必须有桥接程式，否则对照版不会连动
-    if "桥接程式" not in proto_html:
-        print("✗ daily_admin.html 里找不到桥接程式，对照版将无法连动。")
-        print("  请确认原型尾端那段 <script> 还在（注解标记「桥接程式」）。")
+    # 原型尾端必须有桥接程序，否则对照版不会连动
+    # （2026-09-15 起用词统一为简体惯用语，「程式」改成「程序」，这里跟著改）
+    if "桥接程序" not in proto_html:
+        print("✗ daily_admin.html 里找不到桥接程序，对照版将无法连动。")
+        print("  请确认原型尾端那段 <script> 还在（注解标记「桥接程序」）。")
         return 1
 
     # 把 </script 换成安全标记，才塞得进 <script type="text/plain">
@@ -52,21 +56,26 @@ def main() -> int:
 
     spec_html = SPEC.read_text(encoding="utf-8")
 
-    start = spec_html.find(OPEN_TAG)
-    if start == -1:
-        print("✗ daily_spec.html 里找不到内嵌副本区块的开始标记")
-        return 1
-    body_start = start + len(OPEN_TAG)
-    end = spec_html.find(CLOSE_TAG, body_start)
-    if end == -1:
-        print("✗ 内嵌副本区块没有结束标记")
+    # 标记必须各自只出现一次，否则宁可停下来也不要乱改
+    for mark in (MARK_BEGIN, MARK_END):
+        n = spec_html.count(mark)
+        if n != 1:
+            print(f"✗ daily_spec.html 里的 {mark} 出现 {n} 次，预期 1 次")
+            return 1
+
+    start = spec_html.find(MARK_BEGIN) + len(MARK_BEGIN)
+    end = spec_html.find(MARK_END)
+    if end < start:
+        print("✗ 内嵌副本区块的起讫标记顺序颠倒")
         return 1
 
     stamp = date.today().isoformat()
     new_spec = (
-        spec_html[:body_start]
-        + f"<!-- 内嵌副本 · 存档于 {stamp} · 由 merge_spec.py 自动产生，请勿手改 -->\n"
+        spec_html[:start]
+        + f"\n<!-- 内嵌副本 · 存档于 {stamp} · 由 merge_spec.py 自动产生，请勿手改 -->\n"
+        + '<script type="text/plain" id="proto-src">'
         + escaped
+        + "</script>\n"
         + spec_html[end:]
     )
 

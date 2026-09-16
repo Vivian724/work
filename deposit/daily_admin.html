@@ -19,11 +19,11 @@
     https://sportsadmin.cxsport.net/pc.html#/daily-recharge-activity-index
 
   规则来源：
-    每日首充活动_規則與設定整理.md（同资料夹）
+    每日首充活动_規則與設定整理.md（同文件夹）
 
   怎么看这份原型？
     右上角有一块灰色的「原型工具列」，那是给你比较方案用的，
-    不是后台真的会有的功能。实作时整块删掉即可。
+    不是后台真的会有的功能。实现时整块删掉即可。
   ============================================================================
 -->
 
@@ -31,7 +31,7 @@
 /* ==========================================================================
    Design Token — 设计变数
    把颜色、间距、字级集中管理。之后要调整整体视觉，改这里就好，
-   不用一个一个元件去找。就像家里的总电闸，而不是每个房间各拉一条电线。
+   不用一个一个组件去找。就像家里的总电闸，而不是每个房间各拉一条电线。
    ========================================================================== */
 :root {
   /* --- 颜色：尽量贴近现有后台（Element Plus 风格） --- */
@@ -98,14 +98,14 @@ body {
 
 h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 
-/* 所有可互动元件都要看得见焦点框，键盘操作的人才知道自己在哪里 */
+/* 所有可互动组件都要看得见焦点框，键盘操作的人才知道自己在哪里 */
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
 /* ==========================================================================
-   原型工具列 — 只存在于原型，实作时整块删除
+   原型工具列 — 只存在于原型，实现时整块删除
    用途：让你不必看文字描述，直接点一点就能比较不同方案长什么样。
    ========================================================================== */
 .devbar {
@@ -180,7 +180,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 .devbar.is-collapsed .devbar__body { display: none; }
 
 /* ==========================================================================
-   版面框架 — 面包屑、页签、卡片
+   版面框架 — 面包屑、标签页、卡片
    ========================================================================== */
 .layout {
   max-width: 1440px;
@@ -194,6 +194,13 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
   margin-bottom: var(--space-3);
 }
 .crumb__current { color: var(--color-text-2); }
+/* 改名的注记，只在原型出现，实现时整个拿掉 */
+.crumb__rename {
+  margin-left: var(--space-2); padding: 1px var(--space-2);
+  background: var(--tag-change-bg, #fdf2e3); color: var(--tag-change-text, #8a5a08);
+  border-radius: var(--radius); font-size: var(--fs-xs);
+}
+.app[data-annotate="off"] .crumb__rename { display: none; }
 
 .card {
   background: var(--color-surface);
@@ -202,7 +209,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
   padding: var(--space-5);
 }
 
-/* --- 页签：活动列表 / 活动记录 --- */
+/* --- 标签页：活动列表 / 活动记录 --- */
 .tabs {
   display: flex;
   gap: var(--space-5);
@@ -269,7 +276,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 }
 
 /* ==========================================================================
-   表单元件
+   表单组件
    ========================================================================== */
 .field {
   display: flex;
@@ -372,11 +379,11 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 .tag--change { background: var(--tag-change-bg); color: var(--tag-change-text); }
 .tag--same   { background: var(--tag-same-bg);   color: var(--tag-same-text); }
 
-/* 隐藏标注时，连带把「新增栏位」的黄色外框也收掉 */
+/* 隐藏标注时，连带把「新增字段」的黄色外框也收掉 */
 .app[data-annotate="off"] .tag { display: none; }
 .app[data-annotate="off"] .is-new-field { background: none; box-shadow: none; }
 
-/* 新增栏位给一层淡底，让它在一堆既有栏位里跳出来 */
+/* 新增字段给一层淡底，让它在一堆既有字段里跳出来 */
 .is-new-field {
   background: #fbfdff;
   box-shadow: inset 3px 0 0 var(--color-primary);
@@ -476,6 +483,70 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 .range[open] .range__arrow { transform: rotate(180deg); }
 .range__body { padding: var(--space-4); border-top: 1px solid var(--color-border-light); }
 .range__del { margin-left: var(--space-2); }
+.risk-who { font-size: var(--fs-sm); color: var(--color-text-2); font-weight: 400; }
+/* 查无数据时的空状态。查询条件保留不清空，营运才知道是用什么条件查出这个结果 */
+.empty { padding: var(--space-6); text-align: center; color: var(--color-text-3); font-size: var(--fs-base); }
+/* 备注弹窗 */
+.remark-old {
+  margin: 0 0 var(--space-3); padding: var(--space-3);
+  background: #fafbfc; border-radius: var(--radius); font-size: var(--fs-sm);
+  color: var(--color-text-2); line-height: 1.7; white-space: pre-wrap;
+}
+.remark-count { margin: var(--space-1) 0 var(--space-2); text-align: right; font-size: var(--fs-xs); color: var(--color-text-3); }
+.remark-count.is-full { color: var(--color-danger); }
+
+/* === 复存：每个 VIP 一个区块 ===
+   一个等级一张转置表——栏＝他自己的阶梯，列＝最低存款金额与三个渠道的奖励／上限。
+   三个渠道同时看得到，不必切标签页。 */
+.planbar { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3); }
+.planbar__hint { font-size: var(--fs-sm); color: var(--color-text-3); margin-left: var(--space-2); }
+.planbar__toggle { margin-left: var(--space-3); font-size: var(--fs-sm); white-space: nowrap; }
+/* 其他渠道收起来时，那四列不显示。只藏画面，数据照旧。 */
+#vipPlans.hide-other .row-other { display: none; }
+
+.plan { border: 1px solid var(--color-border); border-radius: var(--radius); margin-bottom: var(--space-2); background: var(--color-surface); }
+.plan__head {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4); cursor: pointer; list-style: none;
+  font-size: var(--fs-base);
+}
+.plan__head::-webkit-details-marker { display: none; }
+.plan__name { font-weight: 700; color: var(--color-text); min-width: 64px; }
+.plan__meta { color: var(--color-text-2); }
+.plan__cap { color: var(--color-text-3); font-size: var(--fs-sm); }
+/* 「再按一次确认」的状态：换成警示色，让人知道下一下就真的会盖掉 */
+.btn--confirm {
+  background: var(--color-danger) !important; color: #fff !important;
+  border-color: var(--color-danger) !important;
+}
+.plan[open] .range__arrow { transform: rotate(180deg); }
+.plan__body { padding: 0 var(--space-4) var(--space-4); }
+.plan__acts { display: flex; gap: var(--space-2); margin: var(--space-3) 0 0; }
+
+.plan__table { min-width: auto; }
+.plan__table th, .plan__table td { min-width: 104px; }
+.plan__table thead th { background: #f0f5ff; }
+/* 左侧那一栏是列标题（最低存款金额、平台 上限金额…），靠左、不跟著横向卷动 */
+.plan__rowhead {
+  background: #fafbfc; text-align: left !important; white-space: nowrap;
+  font-weight: 600; color: var(--color-text-2); font-size: var(--fs-xs);
+  position: sticky; left: 0; z-index: 1; min-width: 140px !important;
+}
+.plan__table .ch-platform { background: #f0f5ff; }
+.plan__table .ch-glife    { background: #f2fbf4; }
+.plan__table .ch-maya     { background: #fff8f0; }
+.plan__endcell { display: inline-flex; align-items: center; gap: var(--space-1); }
+.plan__del {
+  border: 0; background: transparent; cursor: pointer; padding: 0 2px;
+  color: var(--color-text-3); font-size: var(--fs-base); line-height: 1;
+}
+.plan__del:hover:not(:disabled) { color: var(--color-danger); }
+.plan__del:disabled { opacity: .3; cursor: not-allowed; }
+
+
+/* 复存一律发彩金，所以「奖励选择」那三栏在复存时整栏收起来。
+   不是 disabled 而是隐藏——留著一个永远只能选彩金的下拉，只会让人以为还有别的可选。 */
+[data-play="repeat"] .matrix .col-reward { display: none; }
 
 /* ==========================================================================
    奖励矩阵（VIP × 三渠道）
@@ -578,12 +649,12 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 
 /* ==========================================================================
    显示控制 — 玩法切换 / 标注开关
-   「选首存时，复存专属栏位整块不出现」就是靠这几行。
+   「选首存时，复存专属字段整块不出现」就是靠这几行。
    ========================================================================== */
 .app[data-play="first"]  .only-repeat { display: none; }
 .app[data-play="repeat"] .only-first  { display: none; }
 
-/* 唯读摘要列：看起来像结论，不像可填栏位 */
+/* 唯读摘要列：看起来像结论，不像可填字段 */
 .summary {
   display: inline-block;
   margin: 0;
@@ -607,9 +678,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 .view[hidden] { display: none; }
 
 /* ==========================================================================
-   响应式 — 小萤幕把标签改成上下排
+   响应式 — 小屏幕把标签改成上下排
    ========================================================================== */
-/* 窄萤幕：工具列不要一直钉在上面占位置，卷过去就好 */
+/* 窄屏幕：工具列不要一直钉在上面占位置，卷过去就好 */
 @media (max-width: 1024px) {
   .devbar { position: static; }
 }
@@ -628,29 +699,24 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 <body>
 
 <!-- ==========================================================================
-     原型工具列（实作时整块删除）
+     原型工具列（实现时整块删除）
      ========================================================================== -->
 <aside class="devbar" id="devbar" aria-label="原型比较工具">
   <span class="devbar__brand">原型工具列</span>
 
   <div class="devbar__body" id="devBody">
     <div class="devbar__group">
-      <span class="devbar__label">① 用语</span>
-      <div class="devbar__options" role="group">
-        <button type="button" class="devbar__opt" data-set="term" data-value="deposit"  aria-pressed="true">首存 / 复存</button>
-        <button type="button" class="devbar__opt" data-set="term" data-value="recharge" aria-pressed="false">首充 / 复存</button>
-      </div>
-    </div>
-
-    <div class="devbar__group">
-      <span class="devbar__label">② 新增／异动标注</span>
+      <span class="devbar__label">新增／异动标注</span>
       <div class="devbar__options" role="group">
         <button type="button" class="devbar__opt" data-set="annotate" data-value="on"  aria-pressed="true">显示</button>
         <button type="button" class="devbar__opt" data-set="annotate" data-value="off" aria-pressed="false">隐藏</button>
       </div>
     </div>
 
-    <p class="devbar__note">这排是给你比较方案用的，后台不会有，实作时整块删掉。</p>
+    <p class="devbar__note">
+      用语已定案：<strong>专项活动 &gt; 每日存款活动</strong>，活动字段为<strong>每日首存／每日复存</strong>。<br>
+      这排是原型用的，后台不会有，实现时整块删掉。
+    </p>
   </div>
 
   <button type="button" class="devbar__toggle" id="devToggle" aria-expanded="true">收合</button>
@@ -670,12 +736,13 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 <div class="layout">
 
   <nav class="crumb" aria-label="面包屑">
-    位置 &gt; <span class="crumb__current" data-term-page>每日存款活动</span>
+    专项活动 &gt; <span class="crumb__current" data-term-page>每日存款活动</span>
+    <span class="crumb__rename">原「每日首充活动」，本次改名</span>
   </nav>
 
   <main class="card">
 
-    <!-- 页签：活动列表 / 活动记录 -->
+    <!-- 标签页：活动列表 / 活动记录 -->
     <div class="tabs" role="tablist">
       <button type="button" class="tabs__item" role="tab" aria-selected="true"  id="tabList">活动列表</button>
       <button type="button" class="tabs__item" role="tab" aria-selected="false" id="tabRecord">活动记录</button>
@@ -711,8 +778,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
           </select>
         </div>
 
-        <button type="button" class="btn btn--primary btn--sm">搜索</button>
-        <button type="button" class="btn btn--sm">重置</button>
+        <button type="button" class="btn btn--primary btn--sm js-asis" data-what="查询">搜索</button>
+        <button type="button" class="btn btn--sm js-asis" data-what="查询条件重置">重置</button>
       </div>
 
       <p><button type="button" class="btn btn--primary btn--sm" id="btnAdd">新增</button></p>
@@ -743,8 +810,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               <td>vivian</td>
               <td><span class="status-dot">开启</span></td>
               <td>
-                <button type="button" class="btn btn--text btn--sm js-edit" data-play="repeat">编辑</button>
-                <button type="button" class="btn btn--text btn--sm">查看记录</button>
+                <button type="button" class="btn btn--text btn--sm js-edit" data-id="7" data-play="repeat">编辑</button>
+                <button type="button" class="btn btn--text btn--sm js-view-rec" data-id="7">查看记录</button>
               </td>
             </tr>
             <tr>
@@ -757,8 +824,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               <td>vivian</td>
               <td><span class="status-dot">开启</span></td>
               <td>
-                <button type="button" class="btn btn--text btn--sm js-edit" data-play="first">编辑</button>
-                <button type="button" class="btn btn--text btn--sm">查看记录</button>
+                <button type="button" class="btn btn--text btn--sm js-edit" data-id="6" data-play="first">编辑</button>
+                <button type="button" class="btn btn--text btn--sm js-view-rec" data-id="6">查看记录</button>
               </td>
             </tr>
             <tr>
@@ -771,8 +838,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               <td>admin</td>
               <td><span class="status-dot">开启</span></td>
               <td>
-                <button type="button" class="btn btn--text btn--sm js-edit" data-play="first">编辑</button>
-                <button type="button" class="btn btn--text btn--sm">查看记录</button>
+                <button type="button" class="btn btn--text btn--sm js-edit" data-id="5" data-play="first">编辑</button>
+                <button type="button" class="btn btn--text btn--sm js-view-rec" data-id="5">查看记录</button>
               </td>
             </tr>
             <tr>
@@ -785,8 +852,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               <td>admin</td>
               <td><span class="status-dot">开启</span></td>
               <td>
-                <button type="button" class="btn btn--text btn--sm js-edit" data-play="first">编辑</button>
-                <button type="button" class="btn btn--text btn--sm">查看记录</button>
+                <button type="button" class="btn btn--text btn--sm js-edit" data-id="4" data-play="first">编辑</button>
+                <button type="button" class="btn btn--text btn--sm js-view-rec" data-id="4">查看记录</button>
               </td>
             </tr>
             <tr>
@@ -799,13 +866,15 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               <td>admin</td>
               <td><span class="status-dot status-dot--off">关闭</span></td>
               <td>
-                <button type="button" class="btn btn--text btn--sm js-edit" data-play="first">编辑</button>
-                <button type="button" class="btn btn--text btn--sm">查看记录</button>
+                <button type="button" class="btn btn--text btn--sm js-edit" data-id="3" data-play="first">编辑</button>
+                <button type="button" class="btn btn--text btn--sm js-view-rec" data-id="3">查看记录</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
+      <p class="empty" id="listEmpty" hidden>暂无数据</p>
+
 
       <div class="pager">
         <span>Total 5</span>
@@ -833,11 +902,11 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             <span class="tag tag--change">异动：新增「活动」</span>
           </div>
 
-          <!-- ★ 核心新增栏位：活动 ★
+          <!-- ★ 核心新增字段：活动 ★
                这个单选决定整张表单长什么样，也决定后端怎么判定发奖。
                它跟下面的「活动类型」完全是两回事，别搞混：
                  活动 = 单选，控制发奖逻辑，前台看不到
-                 活动类型 = 复选，只是前台活动墙的分类页签 -->
+                 活动类型 = 复选，只是前台活动墙的分类标签页 -->
           <div class="is-new-field">
             <div class="field">
               <label class="field__label"><span class="req">*</span>活动</label>
@@ -889,9 +958,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             <div class="field__body">
               <div class="inline">
                 <input class="input" type="text" id="fName" value="每日复存加码">
-                <button type="button" class="btn btn--sm" id="btnI18n" title="多语设定">＋</button>
+                <button type="button" class="btn btn--sm" id="btnI18n" title="多语设置">＋</button>
               </div>
-              <span class="field__hint">必填，未填保存时回错误码 23104。点＋设定各语系名称。</span>
+              <span class="field__hint">必填，未填保存时回错误码 23104。点＋设置各语系名称。</span>
             </div>
           </div>
 
@@ -970,7 +1039,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
                 <span class="tag tag--same" style="margin-left:8px">不异动</span>
               </div>
               <span class="field__hint">
-                前台 Promotion 页上方的分类页签（All / 正盈利活动 / 负盈利活动…），勾了就出现在该页签底下。
+                前台 Promotion 页上方的分类标签页（All / 正盈利活动 / 负盈利活动…），勾了就出现在该标签页底下。
                 <strong>可复选、不影响发奖</strong>，本次完全不动。
               </span>
             </div>
@@ -983,32 +1052,28 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
         <section class="section" id="sec2">
           <div class="section__head">
             <h2 class="section__title">❷ 奖励配置</h2>
-            <span class="tag tag--change">异动：栏位标题随首存／复存变动</span>
+            <span class="tag tag--change">异动：复存改为每个 VIP 各自一组阶梯，且只发彩金</span>
           </div>
 
           <!-- ================================================================
-               复存：计次规则摘要（唯读，由下方笔数区间自动推导）
+               复存：风控天花板（唯读，由下方各 VIP 的阶梯自动算出）
                ================================================================ -->
           <div class="is-new-field only-repeat">
             <div class="field">
-              <label class="field__label">复存计次规则</label>
+              <label class="field__label">单人单日理论最高可领</label>
               <div class="field__body">
-                <p class="summary" id="orderSummary">每日最多发放 <b>4</b> 次 ‧ 涵盖当日第 <b>1</b>～<b>4</b> 笔</p>
-                <p class="summary summary--risk" style="margin-top:8px">
-                  单人单日理论最高可领　<b id="riskMax">—</b>
-                </p>
+                <p class="summary summary--risk"><b id="riskMax">—</b></p>
                 <span class="field__hint">
-                  上面两行都是<strong>唯读</strong>，由下方笔数区间自动算出，不必另外填。
-                  起点固定是<strong>当日第 1 笔</strong>；每日可领次数 ＝ 最后一段的终点，
-                  这个数字会传给前台，显示成券面上的 <code>Up to 4x per day</code>。<br>
-                  <strong>单人单日理论最高可领</strong>＝ 各阶取矩阵里最高的那个上限金额（通常是 VIP10），
-                  乘上该阶涵盖几笔再加总。这是风控要看的天花板——改任何一格上限或笔数，这个数字会即时重算。
+                  <strong>唯读</strong>，由下方各 VIP 的阶梯自动算出，不必另外填。
+                  算法：逐个等级把他能领到的每一笔上限金额加总，再取所有等级里最大的。
+                  <strong>以平台渠道计算</strong>——GLife‧OKFUN 与 Maya 目前没有在跑，算进来只会让天花板虚高。<br>
+                  这是风控要看的天花板，改任何一格都会即时重算；只要有任何一阶没填好就显示「—」，不给不完整的数字。
                 </span>
               </div>
             </div>
           </div>
 
-          <!-- ================================================================
+<!-- ================================================================
                首存：天数区间（现况，完全不动）
                ================================================================ -->
           <div class="only-first">
@@ -1057,59 +1122,34 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             <p><button type="button" class="btn btn--dashed btn--sm">＋ 新增天数区间</button></p>
           </div>
 
-          <!-- ================================================================
-               复存：笔数阶梯（借用天数区间的栏位，改装「第几笔」）
-               ================================================================ -->
-          <div class="only-repeat" id="structOrder">
+                    <div class="only-repeat" id="structOrder">
             <p class="alert alert--info">
               <span class="alert__icon">ⓘ</span>
               <span>
-                复存改用「<strong>当日第几笔</strong>」分段，每段各配一套奖励。
-                做法与首存的天数区间完全相同——起点固定（天数是 D1、笔数是第 1 笔），
-                各段必须<strong>连续、不重叠、无缺口</strong>，
-                差别只在分段依据从「第几天」换成「第几笔」。<br>
-                <strong>最后一段的终点，就是玩家每天最多能领几次。</strong>
+                复存以<strong>每个 VIP 等级各自一组阶梯</strong>来配，字段与首存相同：
+                <strong>最低存款金额</strong>、<strong>每日复存奖励</strong>、<strong>上限金额</strong>。<br>
+                每个等级可以有<strong>不一样的阶梯数</strong>（VIP1 两阶、VIP2 三阶都行），
+                <strong>最后一阶的终点就是他每日可领几笔</strong>，不必另外设置——
+                <strong>可领几笔自由决定，最多 10 笔</strong>。<br>
+                想要<strong>从第一笔开始每一笔各自定制化</strong>，连按几下「＋ 新增阶梯」就会排成
+                第 1 笔／第 2 笔／第 3 笔…；要合并成一段就把终点改大。<br>
+                多数等级设置相同时，配好一个再按「套用到其他等级」带过去。<br>
+                <strong>GLife‧OKFUN 与 Maya 目前实际没有在跑</strong>，默认收起来，
+                要配再勾上方「显示其他渠道」——功能保留，未来要用随时打开。
               </span>
             </p>
-            <details class="range js-seg">
-              <summary class="range__head">
-                <span class="js-seg-title">第 1 笔</span>
-                <span class="range__arrow" aria-hidden="true">▾</span>
-              </summary>
-              <div class="range__body">
-              <div class="field">
-                  <label class="field__label"><span class="req">*</span>此段结束（第几笔）</label>
-                  <div class="field__body">
-                    <div class="inline">
-                      <input class="input input--xs js-seg-end" type="number" value="1" min="1" max="99">
-                      <button type="button" class="btn btn--sm range__del">删除</button>
-                    </div>
-                    <span class="field__hint">起点固定是当日第 1 笔，与天数区间的 D1 同理。此段只涵盖第 1 笔；要让第 1、2 笔同一套奖励，这里填 2。</span>
-                  </div>
-                </div>
-                <div class="table-scroll"><table class="matrix"></table></div>
-              </div>
-            </details>
-            <details class="range js-seg" open>
-              <summary class="range__head">
-                <span class="js-seg-title">第 2–4 笔</span>
-                <span class="range__arrow" aria-hidden="true">▾</span>
-              </summary>
-              <div class="range__body">
-              <div class="field">
-                  <label class="field__label"><span class="req">*</span>此段结束（第几笔）</label>
-                  <div class="field__body">
-                    <div class="inline">
-                      <input class="input input--xs js-seg-end" type="number" value="4" min="1" max="99">
-                      <button type="button" class="btn btn--sm range__del">删除</button>
-                    </div>
-                    <span class="field__hint">上一段结束于第 1 笔，所以这段自动从第 2 笔开始。这是最后一段，终点 4 就代表<strong>每日最多可领 4 次</strong>。</span>
-                  </div>
-                </div>
-                <div class="table-scroll"><table class="matrix"></table></div>
-              </div>
-            </details>
-            <p><button type="button" class="btn btn--dashed btn--sm">＋ 新增笔数段</button></p>
+
+            <div class="planbar">
+              <button type="button" class="btn btn--sm" id="btnExpandAll">全部展开</button>
+              <button type="button" class="btn btn--sm" id="btnCollapseAll">全部收合</button>
+              <label class="choice planbar__toggle">
+                <input type="checkbox" id="chOther">
+                <span class="choice__text">显示其他渠道（GLife‧OKFUN／Maya）</span>
+              </label>
+              <span class="planbar__hint">一天最多算到第 <strong>10</strong> 笔。复存<strong>一律发彩金</strong>，没有「奖励选择」栏。</span>
+            </div>
+
+            <div id="vipPlans"></div>
           </div>
 
           <!-- 流水规则：整活动共用一份，首存不分天数、复存不分笔数段 -->
@@ -1127,7 +1167,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
                 稽核流水 =（勾选的本金 ＋ 勾选的奖金）× 倍数。
                 <strong>整个活动共用一份</strong>——首存不分天数区间、复存不分笔数段，
                 各阶不能各设不同倍数。
-                奖励类型选积分或免费投注时，后端会强制清空这组设定。
+                奖励类型选积分或免费投注时，后端会强制清空这组设置（<strong>仅首存会遇到</strong>——复存一律发彩金，流水设置一定生效）。
               </span>
             </div>
           </div>
@@ -1148,9 +1188,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               <div class="inline">
                 <label class="choice"><input type="checkbox"><span class="choice__text">同一IP每天有</span></label>
                 <input class="input input--sm" type="number" placeholder="请输入">
-                <span>个帐号可以申请领取</span>
+                <span>个账号可以申请领取</span>
               </div>
-              <span class="field__hint">不勾选＝不限制。其余条件为后端保留栏位，表单未开放。</span>
+              <span class="field__hint">不勾选＝不限制。其余条件为后端保留字段，表单未开放。</span>
             </div>
           </div>
 
@@ -1162,63 +1202,190 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
         <section class="section" id="sec4">
           <div class="section__head">
             <h2 class="section__title">❹ 内容配置</h2>
-            <span class="tag tag--same">不异动</span>
+            <span class="tag tag--change">异动：仅复存精简为两张图，首存不动</span>
           </div>
 
-          <div class="subtabs" role="tablist">
-            <button type="button" class="subtabs__item" role="tab" aria-selected="true">PC图片设置</button>
-            <button type="button" class="subtabs__item" role="tab" aria-selected="false">手机端图片设置</button>
+          <p class="alert alert--info only-first">
+            <span class="alert__icon">ⓘ</span>
+            <span>
+              <strong>首存的图片配置完全不动</strong>，维持 PC 与手机端各四张，下方字段即为现况。
+              本次精简只作用在复存——把「活动」切到每日复存就看得到差别。
+            </span>
+          </p>
+
+          <p class="alert alert--info only-repeat">
+            <span class="alert__icon">ⓘ</span>
+            <span>
+              复存的图片字段<strong>精简为两张</strong>：<strong>奖励列表</strong>与<strong>内容图片</strong>。<br>
+              移除<strong>弹窗图片</strong>与<strong>列表页图／首页图</strong>（实际没有在用）；
+              「PC首页推荐展示图」改名为「<strong>PC奖励列表</strong>」、「手机标题图片」改名为「<strong>手机奖励列表</strong>」，
+              名称改成实际用途，避免营运照旧名上传错位置。<br>
+              <strong>首存维持四张不动。</strong>
+            </span>
+          </p>
+
+          <div class="subtabs" id="imgTabs" role="tablist">
+            <button type="button" class="subtabs__item" role="tab" data-panel="imgPc" aria-selected="true">PC图片设置</button>
+            <button type="button" class="subtabs__item" role="tab" data-panel="imgMobile" aria-selected="false">手机端图片设置</button>
           </div>
 
-          <div class="field">
-            <label class="field__label"><span class="req">*</span>PC首页推荐展示图</label>
-            <div class="field__body">
-              <div class="uploader">
-                <div class="uploader__box">PC</div>
-                <div>
-                  <button type="button" class="btn btn--sm">选择文件</button>
-                  <span class="field__hint">仅支援 .PNG .JPG，大小不超过 2MB。</span>
+          <!-- PC 图片 ------------------------------------------------------ -->
+          <div id="imgPc">
+            <div class="only-first">
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>PC首页推荐展示图</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">PC</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="field">
-            <label class="field__label"><span class="req">*</span>PC弹窗图片</label>
-            <div class="field__body">
-              <div class="uploader">
-                <div class="uploader__box">PC</div>
-                <div>
-                  <button type="button" class="btn btn--sm">选择文件</button>
-                  <span class="field__hint">仅支援 .PNG .JPG，大小不超过 2MB。</span>
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>PC弹窗图片</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">PC</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="field">
-            <label class="field__label"><span class="req">*</span>PC列表页图</label>
-            <div class="field__body">
-              <div class="uploader">
-                <div class="uploader__box">PC</div>
-                <div>
-                  <button type="button" class="btn btn--sm">选择文件</button>
-                  <span class="field__hint">仅支援 .PNG .JPG，大小不超过 2MB。</span>
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>PC列表页图</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">PC</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="field">
-            <label class="field__label"><span class="req">*</span>PC内容图片</label>
-            <div class="field__body">
-              <div class="uploader">
-                <div class="uploader__box">PC</div>
-                <div>
-                  <button type="button" class="btn btn--sm">选择文件</button>
-                  <span class="field__hint">仅支援 .PNG .JPG，大小不超过 2MB。</span>
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>PC内容图片</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">PC</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
                 </div>
               </div>
+            </div>
+            </div>
+            <div class="only-repeat">
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>PC奖励列表</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">PC</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>PC内容图片</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">PC</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- 手机端图片 ---------------------------------------------------- -->
+          <div id="imgMobile" hidden>
+            <div class="only-first">
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>手机标题图片</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">手机</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>手机弹窗图片</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">手机</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>手机首页图片(移动端用)</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">手机</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>手机内容图片</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">手机</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+            <div class="only-repeat">
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>手机奖励列表</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">手机</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label"><span class="req">*</span>手机内容图片</label>
+              <div class="field__body">
+                <div class="uploader">
+                  <div class="uploader__box">手机</div>
+                  <div>
+                    <button type="button" class="btn btn--sm js-asis" data-what="图片上传">选择文件</button>
+                    <span class="field__hint">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
             </div>
           </div>
 
@@ -1254,9 +1421,49 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
       <p class="alert alert--info">
         <span class="alert__icon">ⓘ</span>
         <span>
-          奖励记录页沿用既有设计，本次只建议加一栏「活动」，方便对帐时分辨这笔奖是首存还是复存发的。
+          活动记录页<strong>沿用既有设计</strong>，本次新增六栏：<strong>活动</strong>、<strong>VIP等级</strong>、
+          <strong>渠道</strong>、<strong>当日第几笔</strong>、<strong>所属阶梯</strong>、<strong>奖励比例</strong>。<br>
+          复存一天发好几次奖，笔数是玩家最容易有争议的地方，这一页是唯一能回答这类客诉的地方。
+          又因为复存<strong>每个等级各自一组阶梯、而等级会升降</strong>，不把当下的等级与比例存下来，事后就还原不出这笔为什么发这个数字。<br>
+          触及上限时在奖励内容标示<strong>已达上限</strong>。导出档要同步加上这些字段。
         </span>
       </p>
+
+      <!-- 查询列：既有条件沿用，只新增「活动」一项 -->
+      <div class="filter">
+        <div class="filter__item">
+          <label class="filter__label" for="rAccount">会员账号</label>
+          <input class="input input--sm" type="text" id="rAccount" placeholder="请输入">
+        </div>
+
+        <div class="filter__item">
+          <label class="filter__label" for="rOrder">充值订单号</label>
+          <input class="input input--sm" type="text" id="rOrder" placeholder="请输入">
+        </div>
+
+        <!-- 新增的查询条件：与活动列表页同一份固定列举 -->
+        <div class="filter__item">
+          <label class="filter__label" for="rPlay">活动</label>
+          <select class="input input--sm select" id="rPlay">
+            <option>全部</option>
+            <option data-term-first>每日首存</option>
+            <option data-term-repeat>每日复存</option>
+          </select>
+          <span class="tag tag--new">新增</span>
+        </div>
+
+        <div class="filter__item">
+          <label class="filter__label" for="rTime">申请时间</label>
+          <input class="input input--sm" type="text" id="rTime" placeholder="起 ~ 迄">
+        </div>
+
+        <button type="button" class="btn btn--primary btn--sm js-asis" data-what="查询">搜索</button>
+        <button type="button" class="btn btn--sm js-asis" data-what="查询条件重置">重置</button>
+        <button type="button" class="btn btn--sm js-asis" data-what="导出">导出</button>
+      </div>
+
+      <p class="alert alert--info" id="recScope" hidden></p>
+
       <div class="table-scroll">
         <table class="table">
           <thead>
@@ -1264,43 +1471,74 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               <th>活动ID</th>
               <th>活动 <span class="tag tag--new">新增</span></th>
               <th>活动名称</th>
-              <th>会员帐号</th>
+              <th>会员账号</th>
               <th>充值订单号</th>
               <th>充值金额</th>
+              <th>VIP等级 <span class="tag tag--new">新增</span></th>
+              <th>渠道 <span class="tag tag--new">新增</span></th>
               <th>当日第几笔 <span class="tag tag--new">新增</span></th>
+              <th>所属阶梯 <span class="tag tag--new">新增</span></th>
+              <th>奖励比例 <span class="tag tag--new">新增</span></th>
               <th>申请时间</th>
               <th>奖励内容</th>
               <th>备注</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>7</td>
+            <tr data-act="7"><td>7</td>
               <td><span class="play-tag play-tag--repeat" data-term-repeat>每日复存</span></td>
               <td>每日复存加码</td>
               <td>test0912</td>
               <td>R2026091400031</td>
               <td>1,000</td>
+              <td>VIP1</td>
+              <td>平台</td>
               <td>第 2 笔</td>
+              <td>第 2–4 笔</td>
+              <td>15%</td>
               <td>2026/09/14 10:32</td>
               <td>彩金 150</td>
-              <td>—</td>
+              <td data-remark=""><span class="remark-text">—</span>
+                  <button type="button" class="btn btn--text btn--sm js-remark">编辑</button></td>
             </tr>
-            <tr>
-              <td>4</td>
+            <tr data-act="7">
+              <td>7</td>
+              <td><span class="play-tag play-tag--repeat" data-term-repeat>每日复存</span></td>
+              <td>每日复存加码</td>
+              <td>test0912</td>
+              <td>R2026091400045</td>
+              <td>20,000</td>
+              <td>VIP1</td>
+              <td>平台</td>
+              <td>第 3 笔</td>
+              <td>第 2–4 笔</td>
+              <td>15%</td>
+              <td>2026/09/14 13:05</td>
+              <td>彩金 800 <span class="tag tag--change">已达上限</span></td>
+              <td data-remark=""><span class="remark-text">—</span>
+                  <button type="button" class="btn btn--text btn--sm js-remark">编辑</button></td>
+            </tr>
+            <tr data-act="4"><td>4</td>
               <td><span class="play-tag play-tag--first" data-term-first>每日首存</span></td>
               <td>每日小首充1</td>
               <td>test0912</td>
               <td>R2026091400018</td>
               <td>500</td>
+              <td>VIP2</td>
+              <td>平台</td>
               <td>第 1 笔</td>
+              <td>D1–D1</td>
+              <td>23%</td>
               <td>2026/09/14 09:15</td>
               <td>彩金 115</td>
-              <td>—</td>
+              <td data-remark=""><span class="remark-text">—</span>
+                  <button type="button" class="btn btn--text btn--sm js-remark">编辑</button></td>
             </tr>
           </tbody>
         </table>
       </div>
+      <p class="empty" id="recEmpty" hidden>暂无数据</p>
+
     </section>
 
   </main>
@@ -1308,9 +1546,37 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 </div>
 
 <!-- 多语弹窗 -->
+<!-- 通用确认框：重置、离开表单这类「会遗失已填内容」的操作用它 -->
+<div class="modal" id="confirmModal" hidden role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal__panel">
+    <h3 class="modal__title" id="confirmTitle">确认</h3>
+    <p id="confirmText" style="margin:0;color:var(--color-text-2);line-height:1.7"></p>
+    <div class="modal__foot">
+      <button type="button" class="btn" id="confirmNo">取消</button>
+      <button type="button" class="btn btn--primary" id="confirmYes">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 备注编辑：记录页唯一可写入的操作 -->
+<div class="modal" id="remarkModal" hidden role="dialog" aria-modal="true" aria-labelledby="remarkTitle">
+  <div class="modal__panel">
+    <h3 class="modal__title" id="remarkTitle">备注</h3>
+    <p id="remarkOld" class="remark-old" hidden></p>
+    <textarea class="input input--full" id="remarkInput" rows="5" maxlength="2000"
+              placeholder="请输入要追加的备注"></textarea>
+    <p class="remark-count"><span id="remarkCount">0</span> / 2000</p>
+    <span class="field__hint">备注以<strong>追加</strong>方式记录，<strong>不会覆盖</strong>既有内容——每一次处理都要留痕。</span>
+    <div class="modal__foot">
+      <button type="button" class="btn" id="remarkCancel">取消</button>
+      <button type="button" class="btn btn--primary" id="remarkOk">确定</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="i18nModal" hidden role="dialog" aria-modal="true" aria-labelledby="i18nTitle">
   <div class="modal__panel">
-    <h3 class="modal__title" id="i18nTitle">活动名称 — 多语设定</h3>
+    <h3 class="modal__title" id="i18nTitle">活动名称 — 多语设置</h3>
     <div class="field"><label class="field__label" for="i18nZh">繁体中文</label><div class="field__body"><input class="input input--full" id="i18nZh" value="每日复存加码"></div></div>
     <div class="field"><label class="field__label" for="i18nEn">English</label><div class="field__body"><input class="input input--full" id="i18nEn" value="Daily Re-deposit Bonus"></div></div>
     <div class="field"><label class="field__label" for="i18nTl">Tagalog</label><div class="field__body"><input class="input input--full" id="i18nTl" placeholder="请输入"></div></div>
@@ -1326,9 +1592,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
    原型的 JavaScript
    目的只有三个：
      1. 切换画面（列表 ↔ 表单 ↔ 记录）
-     2. 切换玩法时，让表单跟著变（栏位显隐、标题文字）
+     2. 切换玩法时，让表单跟著变（字段显隐、标题文字）
      3. 按保存时跑一次校验，把规则演给你看
-   没有连后端，所有资料都是假的。
+   没有连后端，所有数据都是假的。
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -1359,9 +1625,9 @@ const TERMS = {
 };
 
 /* --------------------------------------------------------------------------
-   2. 奖励矩阵的资料
-   要改 VIP 等级或预设值，改这个阵列就好，不用去动 HTML。
-   每一列的栏位顺序：
+   2. 奖励矩阵的数据
+   要改 VIP 等级或默认值，改这个阵列就好，不用去动 HTML。
+   每一列的字段顺序：
      [VIP名称, 最低金额, 平台%, 平台上限, glife%, glife上限, maya%, maya上限]
    -------------------------------------------------------------------------- */
 const VIP_ROWS = [
@@ -1387,7 +1653,7 @@ const app = document.getElementById('app');
    3. 画出奖励矩阵
    同一张表要画两次（D1 一次、D2–D23 一次），所以写成函式重复使用。
    -------------------------------------------------------------------------- */
-/* 三个渠道，顺序固定，表头与资料都照这个顺序 */
+/* 三个渠道，顺序固定，表头与数据都照这个顺序 */
 const CHANNELS = [
   { key: 'platform', name: '平台用户' },
   { key: 'glife',    name: 'glife 用户' },
@@ -1403,16 +1669,17 @@ function matrixHeadHtml() {
 
   let head = '<tr><th>VIP等级</th><th>' + t.minMoney + '</th>';
   CHANNELS.forEach(function (c) {
-    head += '<th class="ch-' + c.key + '">' + c.name + '奖励选择</th>'
+    head += '<th class="ch-' + c.key + ' col-reward">' + c.name + '奖励选择</th>'
           + '<th class="ch-' + c.key + '">' + c.name + rewardLabel + '</th>'
           + '<th class="ch-' + c.key + '">上限金额</th>';
   });
   return head + '</tr>';
 }
 
-/* 只更新表头文字，资料列原封不动 */
+/* 只更新表头文字，数据列原封不动 */
 function updateMatrixHeaders() {
-  document.querySelectorAll('.matrix thead').forEach(function (thead) {
+  // 同上：只换首存那两张矩阵的表头
+  document.querySelectorAll('.only-first .matrix thead').forEach(function (thead) {
     thead.innerHTML = matrixHeadHtml();
   });
 }
@@ -1429,15 +1696,15 @@ function buildMatrix(table) {
       + '<td class="vip-col">' + r[0] + '</td>'
       + '<td><input class="cell-input" type="number" value="' + r[1] + '"></td>'
       // 平台渠道
-      + '<td><select class="cell-input">' + opts + '</select></td>'
+      + '<td class="col-reward"><select class="cell-input">' + opts + '</select></td>'
       + '<td><span class="cell-pct"><input class="cell-input" type="number" value="' + r[2] + '"><span class="unit">%</span></span></td>'
       + '<td><input class="cell-input" type="number" value="' + r[3] + '"></td>'
       // glife 渠道
-      + '<td><select class="cell-input">' + opts + '</select></td>'
+      + '<td class="col-reward"><select class="cell-input">' + opts + '</select></td>'
       + '<td><span class="cell-pct"><input class="cell-input" type="number" value="' + r[4] + '"><span class="unit">%</span></span></td>'
       + '<td><input class="cell-input" type="number" value="' + r[5] + '"></td>'
       // maya 渠道
-      + '<td><select class="cell-input">' + opts + '</select></td>'
+      + '<td class="col-reward"><select class="cell-input">' + opts + '</select></td>'
       + '<td><span class="cell-pct"><input class="cell-input" type="number" value="' + r[6] + '"><span class="unit">%</span></span></td>'
       + '<td><input class="cell-input" type="number" value="' + r[7] + '"></td>'
       + '</tr>';
@@ -1446,14 +1713,523 @@ function buildMatrix(table) {
   table.innerHTML = '<thead>' + head + '</thead><tbody>' + body + '</tbody>';
 }
 
+/* 只管首存的天数区间矩阵。
+   复存的两张二维表与「各 VIP 可领笔数」表虽然也挂 .matrix（为了共用表格样式），
+   但它们各自有自己的产生函式，绝不能被这里覆盖掉。 */
 function buildAllMatrices() {
-  document.querySelectorAll('.matrix').forEach(buildMatrix);
+  document.querySelectorAll('.only-first .matrix').forEach(buildMatrix);
 }
 
-/* --------------------------------------------------------------------------
-   4. 套用用语
-   把画面上所有标了 data-term-xxx 的元素，文字换成对应用语。
-   -------------------------------------------------------------------------- */
+/* 各 VIP 每日可领笔数：横向两列（一列 VIP 名称、一列输入框），
+   字段顺序与奖励矩阵的 VIP 列一致，对照时不会错行。 */
+const VIP_LIMIT_SEED = { VIP0: 3, VIP1: 5, VIP2: 6 };   // 其余 VIP 默认吃满
+
+/* ==========================================================================
+   复存的奖励配置
+
+   数据长这样：
+     vipPlans['VIP1'] = [ {end:2, min:300, pct:{...}, cap:{...}},
+                          {end:5, min:150, pct:{...}, cap:{...}} ]
+
+   一个等级一个阵列，阵列里一个元素就是一阶。
+   起点由前一阶的 end + 1 推出来，所以不用存；
+   最后一阶的 end 就是这个等级每日可领几笔，也不用另外设字段。
+   ========================================================================== */
+const MAX_ORDER = 10;                                     // 营运定案：一天最多算到第 10 笔
+const CH_KEYS   = ['platform', 'glife', 'maya'];
+const CH_NAMES  = { platform: '平台', glife: 'glife', maya: 'maya' };
+const vipPlans  = {};
+
+function initVipPlans() {
+  // 默认让各等级的阶梯数不一样，打开原型就看得出「可以不一样」这件事
+  const SEED = { VIP0: [3], VIP1: [2, 5], VIP2: [1, 3, 6] };
+  VIP_ROWS.forEach(function (r) {
+    const ends = SEED[r[0]] || [1, 6];
+    vipPlans[r[0]] = ends.map(function (end, i) {
+      const drop = i * 5;                                 // 后面的阶梯百分比递减，像个阶梯
+      return {
+        end: end,
+        min: (i === 0) ? r[1] : Math.round(r[1] / 2),
+        pct: { platform: Math.max(1, r[2] - drop), glife: Math.max(1, r[4] - drop), maya: Math.max(1, r[6] - drop) },
+        cap: { platform: r[3], glife: r[5], maya: r[7] }
+      };
+    });
+  });
+}
+
+/* 算出每一阶涵盖第几笔到第几笔 */
+function planRanges(tiers) {
+  let cursor = 1;
+  return tiers.map(function (t) {
+    const end = (t.end === null || t.end === '') ? null : Number(t.end);
+    const ok  = (end !== null) && Number.isInteger(end) && end >= cursor && end <= MAX_ORDER;
+    const r = { start: cursor, end: end, ok: ok };
+    if (ok) cursor = end + 1;                             // 填得不合法就停在原地，后面几阶的起点不乱跳
+    return r;
+  });
+}
+
+function tierLabel(r) {
+  if (r.end === null) return '（终点待填）';
+  if (!r.ok)          return '第 ' + r.start + ' 笔起 · 有误';
+  return (r.end > r.start) ? ('第 ' + r.start + '–' + r.end + ' 笔') : ('第 ' + r.start + ' 笔');
+}
+
+/* 画一个等级的区块。表是「转置」的：
+   栏＝这个等级自己的阶梯，列＝最低存款金额与三个渠道的奖励／上限。
+   三个渠道同时看得到，不必切标签页。 */
+function renderVipPlan(vip, open) {
+  const tiers  = vipPlans[vip];
+  const ranges = planRanges(tiers);
+  const last   = ranges[ranges.length - 1];
+  const canDaily = (last && last.ok) ? last.end : null;
+
+  function cellRow(label, kind, ch, cls, rowCls) {
+    let html = '<tr' + (rowCls ? ' class="' + rowCls + '"' : '') + '>'
+             + '<th class="plan__rowhead' + (cls ? ' ' + cls : '') + '">' + label + '</th>';
+    tiers.forEach(function (t, i) {
+      const v = (kind === 'min') ? t.min : (kind === 'pct' ? t.pct[ch] : t.cap[ch]);
+      html += '<td><input class="cell-input js-tier" type="number" min="0"'
+            + ' data-vip="' + vip + '" data-i="' + i + '" data-kind="' + kind + '"'
+            + (ch ? ' data-ch="' + ch + '"' : '') + ' value="' + v + '">'
+            + (kind === 'pct' ? '<span class="unit">%</span>' : '') + '</td>';
+    });
+    return html + '</tr>';
+  }
+
+  let head = '<tr><th class="plan__rowhead"></th>';
+  ranges.forEach(function (r) { head += '<th>' + tierLabel(r) + '</th>'; });
+  head += '</tr>';
+
+  let endRow = '<tr><th class="plan__rowhead">结束于第几笔</th>';
+  tiers.forEach(function (t, i) {
+    const bad = !ranges[i].ok && ranges[i].end !== null;
+    endRow += '<td><span class="plan__endcell">'
+           +  '<input class="cell-input js-tier' + (bad ? ' input--error' : '') + '" type="number"'
+           +  ' min="1" max="' + MAX_ORDER + '" data-vip="' + vip + '" data-i="' + i + '" data-kind="end"'
+           +  ' value="' + (t.end === null ? '' : t.end) + '" placeholder="?">'
+           +  '<button type="button" class="plan__del js-del-tier" data-vip="' + vip + '" data-i="' + i + '"'
+           +  (tiers.length <= 1 ? ' disabled' : '') + ' title="删除这一阶">✕</button>'
+           +  '</span></td>';
+  });
+  endRow += '</tr>';
+
+  let body = endRow + cellRow('最低存款金额', 'min', null);
+  CH_KEYS.forEach(function (ch) {
+    // GLife／Maya 目前实际没在用，但营运要保留功能，所以收起来而不是砍掉
+    const rowCls = (ch === 'platform') ? '' : 'row-other';
+    body += cellRow(CH_NAMES[ch] + ' 每日复存奖励', 'pct', ch, 'ch-' + ch, rowCls)
+          + cellRow(CH_NAMES[ch] + ' 上限金额',   'cap', ch, 'ch-' + ch, rowCls);
+  });
+
+  return '<details class="plan"' + (open ? ' open' : '') + ' data-vip="' + vip + '">'
+       +   '<summary class="plan__head">'
+       +     '<span class="plan__name">' + vip + '</span>'
+       +     '<span class="plan__meta">' + tiers.length + ' 阶 ‧ 每日可领 '
+       +       (canDaily === null ? '—' : canDaily) + ' 笔<span class="plan__cap">／上限 ' + MAX_ORDER + '</span></span>'
+       +     '<span class="range__arrow" aria-hidden="true">▾</span>'
+       +   '</summary>'
+       +   '<div class="plan__body">'
+       +     '<div class="table-scroll"><table class="matrix plan__table">'
+       +       '<thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>'
+       +     '<p class="plan__acts">'
+       +       '<button type="button" class="btn btn--dashed btn--sm js-add-tier" data-vip="' + vip + '"'
+       +         ((canDaily !== null && canDaily >= MAX_ORDER) ? ' disabled title="已排到第 ' + MAX_ORDER + ' 笔，没有空间了"' : '')
+       +         '>＋ 新增阶梯</button>'
+       +       '<button type="button" class="btn btn--sm js-copy-plan" data-vip="' + vip + '">套用到其他等级</button>'
+       +     '</p>'
+       +   '</div>'
+       + '</details>';
+}
+
+/* 重画全部等级。会记住哪些区块原本是展开的，重画后不会自己收起来。 */
+function renderVipPlans() {
+  const wrap = document.getElementById('vipPlans');
+  if (!wrap) return;
+  const openSet = {};
+  wrap.querySelectorAll('.plan').forEach(function (d) { openSet[d.dataset.vip] = d.open; });
+  const first = wrap.children.length === 0;               // 第一次画：只展开 VIP0，其余收合
+  if (copyArm) { clearTimeout(copyArm.timer); copyArm = null; }   // 重画会换掉按钮，确认状态要跟著收
+  wrap.innerHTML = VIP_ROWS.map(function (r) {
+    const open = first ? (r[0] === 'VIP0') : !!openSet[r[0]];
+    return renderVipPlan(r[0], open);
+  }).join('');
+  refreshRiskMax();
+}
+
+/* 风控天花板：逐个等级算他能领走多少，取最大 */
+function refreshRiskMax() {
+  const el = document.getElementById('riskMax');
+  if (!el) return;
+
+  let best = 0, who = '', broken = false;
+
+  VIP_ROWS.forEach(function (r) {
+    const vip = r[0], tiers = vipPlans[vip], ranges = planRanges(tiers);
+    let total = 0;
+
+    ranges.forEach(function (rg, i) {
+      if (!rg.ok) { broken = true; return; }
+      /* 只算平台渠道。
+         GLife／Maya 目前实际没有在跑，没有玩家会走那条路；
+         把它们算进来会让天花板凭空变大，风控就白看了。
+         未来那两条渠道启用时，这里要改成「取该玩家所属渠道」。 */
+      total += (Number(tiers[i].cap.platform) || 0) * (rg.end - rg.start + 1);
+    });
+
+    if (total > best) {
+      const last = ranges[ranges.length - 1];
+      best = total;
+      who = vip + ' 领满 ' + (last && last.ok ? last.end : '?') + ' 笔';
+    }
+  });
+
+  /* 只要有任何一阶没填好，这个数字就不成立。
+     宁可显示「—」，也不要给一个看起来正常、实际上算漏了的天花板——
+     那比没有数字更危险。 */
+  if (broken) {
+    el.innerHTML = '— <span class="risk-who">（尚有阶梯没填好，填完才算得出来）</span>';
+    return;
+  }
+  el.innerHTML = best > 0
+    ? '₱' + best.toLocaleString('en-US') + ' <span class="risk-who">（' + who + '，平台渠道）</span>'
+    : '—';
+}
+
+/* 只更新某个等级的字段标题与摘要，不动输入框——这样打字不会掉焦点 */
+function updatePlanLabels(vip) {
+  const box = document.querySelector('.plan[data-vip="' + vip + '"]');
+  if (!box) return;
+  const ranges = planRanges(vipPlans[vip]);
+
+  box.querySelectorAll('thead th').forEach(function (th, i) {
+    if (i === 0) return;                                  // 第一格是列标题栏，跳过
+    th.textContent = tierLabel(ranges[i - 1]);
+  });
+  box.querySelectorAll('input[data-kind="end"]').forEach(function (el, i) {
+    const r = ranges[i];
+    el.classList.toggle('input--error', r.end !== null && !r.ok);
+  });
+
+  const last = ranges[ranges.length - 1];
+  const canDaily = (last && last.ok) ? last.end : null;
+
+  const meta = box.querySelector('.plan__meta');
+  if (meta) meta.innerHTML = vipPlans[vip].length + ' 阶 ‧ 每日可领 '
+                           + (canDaily === null ? '—' : canDaily)
+                           + ' 笔<span class="plan__cap">／上限 ' + MAX_ORDER + '</span>';
+
+  const add = box.querySelector('.js-add-tier');
+  if (add) add.disabled = (canDaily !== null && canDaily >= MAX_ORDER);
+}
+
+/* 新增一阶：接在最后面。
+
+   终点默认带「上一阶终点 + 1」，也就是刚好再多涵盖一笔。
+   这样连按几下「＋ 新增阶梯」就会得到 第1笔／第2笔／第3笔…，
+   正好是「从第一笔开始逐笔各自定制化」那种配法，不用一格一格打。
+   要合并成一段的话，把终点改大就行。
+
+   其余字段沿用上一阶的值——多数情况只有百分比要调，不用整列重打。 */
+function addTier(vip) {
+  const tiers  = vipPlans[vip];
+  const ranges = planRanges(tiers);
+  const prev   = tiers[tiers.length - 1];
+  const lastRange = ranges.length ? ranges[ranges.length - 1] : null;
+
+  /* 上一阶还没填好就不给再加。
+     不挡的话会连锁出错：上一阶没填，下一阶的起点就算不出来，
+     新加的那阶一出生就是「有误」，营运只会越点越乱。 */
+  if (lastRange && !lastRange.ok) {
+    toast('warn', lastRange.end === null
+      ? '请先把上一阶的「结束于第几笔」填好，再新增下一阶'
+      : '上一阶的终点不合法（要是 1～' + MAX_ORDER + ' 的整数，且不小于起点），请先改好再新增下一阶');
+    return;
+  }
+
+  // 已经排到第 10 笔就没有空间了
+  const prevEnd = lastRange ? lastRange.end : 0;
+  if (prevEnd !== null && prevEnd >= MAX_ORDER) {
+    toast('warn', '一天最多算到第 ' + MAX_ORDER + ' 笔，' + vip + ' 已经排满，不能再加了');
+    return;
+  }
+
+  tiers.push({
+    end: (prevEnd === null) ? null : prevEnd + 1,
+    min: prev ? prev.min : 0,
+    pct: prev ? Object.assign({}, prev.pct) : { platform: 0, glife: 0, maya: 0 },
+    cap: prev ? Object.assign({}, prev.cap) : { platform: 0, glife: 0, maya: 0 }
+  });
+  renderVipPlans();
+  const box = document.querySelector('.plan[data-vip="' + vip + '"]');
+  const ins = box.querySelectorAll('input[data-kind="end"]');
+  ins[ins.length - 1].focus();
+  ins[ins.length - 1].select();
+}
+
+/* 「套用到其他等级」的两段式确认。
+
+   为什么这颗要确认、删除一阶却不用？
+   代价差很多：删一阶只影响一个等级的一列，加回来就好；
+   这颗一次盖掉其他 10 个等级已经配好的内容，盖掉就回不来了。
+   用「再按一次」取代跳弹窗——不打断流程，5 秒没动作就自动取消。 */
+let copyArm = null;
+
+function resetCopyBtns() {
+  if (copyArm) { clearTimeout(copyArm.timer); copyArm = null; }
+  document.querySelectorAll('.js-copy-plan').forEach(function (b) {
+    b.textContent = '套用到其他等级';
+    b.classList.remove('btn--confirm');
+  });
+}
+
+function onCopyClick(btn) {
+  const vip = btn.dataset.vip;
+
+  // 第二次按同一颗：真的执行
+  if (copyArm && copyArm.vip === vip) {
+    resetCopyBtns();
+    copyPlanToOthers(vip);
+    return;
+  }
+
+  // 第一次按：先问一次
+  resetCopyBtns();
+  btn.textContent = '再按一次，确认覆盖其他 ' + (VIP_ROWS.length - 1) + ' 个等级';
+  btn.classList.add('btn--confirm');
+  copyArm = { vip: vip, timer: setTimeout(resetCopyBtns, 5000) };
+}
+
+function copyPlanToOthers(vip) {
+  const src = vipPlans[vip];
+  VIP_ROWS.forEach(function (r) {
+    if (r[0] === vip) return;
+    vipPlans[r[0]] = src.map(function (t) {
+      return { end: t.end, min: t.min, pct: Object.assign({}, t.pct), cap: Object.assign({}, t.cap) };
+    });
+  });
+  renderVipPlans();
+  toast('success', '已把 ' + vip + ' 的阶梯套用到其他 ' + (VIP_ROWS.length - 1) + ' 个等级');
+}
+
+document.addEventListener('click', function (e) {
+  const add = e.target.closest && e.target.closest('.js-add-tier');
+  if (add) { addTier(add.dataset.vip); return; }
+
+  const del = e.target.closest && e.target.closest('.js-del-tier');
+  if (del) {
+    const vip = del.dataset.vip;
+    if (vipPlans[vip].length <= 1) return;                // 至少留一阶
+    vipPlans[vip].splice(Number(del.dataset.i), 1);
+    renderVipPlans();
+    return;
+  }
+
+  const cp = e.target.closest && e.target.closest('.js-copy-plan');
+  if (cp) { onCopyClick(cp); return; }
+
+  // 点别的地方就把「再按一次」的状态收掉，免得放著过一阵子误按
+  if (copyArm && !(e.target.closest && e.target.closest('.js-copy-plan'))) resetCopyBtns();
+});
+
+/* 首存的天数区间本次不异动，原型只呈现现有后台的样子，没有做互动。
+   但按钮画在那里却按不动，看起来像坏掉——点了就说明一下。 */
+document.addEventListener('click', function (e) {
+  const b = e.target.closest && e.target.closest('.only-first button');
+  if (!b) return;
+  toast('warn', '天数区间（首存）本次不异动，原型只呈现现有后台的样子，这里没有做互动。实际行为沿用现有后台。');
+});
+
+/* ==========================================================================
+   活动列表的五笔假数据
+
+   点「编辑」要带入那一笔活动的值、点「查看记录」要只看那一笔的记录，
+   所以这里把列表上看得到的东西整理成数据，让两个动作都有东西可带。
+   真实系统是跟后端要，这里写死。
+   ========================================================================== */
+const ACTIVITIES = {
+  '7': { name: '每日复存加码',        play: 'repeat', start: '2026-09-08', end: '2026-09-30',
+         plans: { VIP0: [3], VIP1: [2, 5], VIP2: [1, 3, 6] } },
+  '6': { name: '咖啡两两',            play: 'first',  start: '2026-09-10', end: '2026-09-11' },
+  '5': { name: '每日首充活动-长时间111', play: 'first',  start: '2026-09-01', end: '2026-09-30' },
+  '4': { name: '每日小首充1',          play: 'first',  start: '2026-09-08', end: '2026-09-30' },
+  '3': { name: '每日首充V2',          play: 'first',  start: '2026-09-08', end: '2026-09-10' }
+};
+
+/* 编辑：把那一笔活动的值带进表单。
+   玩法带进来之后锁定（改玩法会让已发出的活动记录对不上）。 */
+let lastLoadedId = null;     // 编辑时按「重置」要回到这一笔的值
+
+function loadActivity(id) {
+  const a = ACTIVITIES[id];
+  if (!a) return;
+  lastLoadedId = id;
+
+  setPlayType(a.play, 'edit');
+  document.getElementById('fName').value  = a.name;
+  document.getElementById('fStart').value = a.start;
+  document.getElementById('fEnd').value   = a.end;
+  refreshNaturalDays();
+
+  // 复存：带入这笔活动各等级的阶梯（没设置的等级用默认）
+  initVipPlans();
+  if (a.play === 'repeat' && a.plans) {
+    Object.keys(a.plans).forEach(function (vip) {
+      const ends = a.plans[vip];
+      const base = vipPlans[vip][0];
+      vipPlans[vip] = ends.map(function (end, i) {
+        const drop = i * 5;
+        return {
+          end: end,
+          min: (i === 0) ? base.min : Math.round(base.min / 2),
+          pct: { platform: Math.max(1, base.pct.platform - drop),
+                 glife:    Math.max(1, base.pct.glife    - drop),
+                 maya:     Math.max(1, base.pct.maya     - drop) },
+          cap: Object.assign({}, base.cap)
+        };
+      });
+    });
+  }
+  renderVipPlans();
+  applyOtherCh();
+  showView('viewForm');
+}
+
+/* 查看记录：切到记录页，只显示这一笔活动的记录。
+   没有记录时要显示空状态，不是显示全部——那会让人以为查错了。 */
+function viewRecordsOf(id) {
+  document.getElementById('tabRecord').click();
+
+  const rows = Array.from(document.querySelectorAll('#viewRecord tbody tr[data-act]'));
+  let shown = 0;
+  rows.forEach(function (tr) {
+    const hit = (tr.dataset.act === id);
+    tr.hidden = !hit;
+    if (hit) shown++;
+  });
+
+  // 查询条件要跟著带上，营运才知道现在看到的是哪一笔的数据
+  const a = ACTIVITIES[id];
+  const sel = document.getElementById('rPlay');
+  if (a && sel) sel.value = (a.play === 'repeat') ? '每日复存' : '每日首存';
+
+  const empty = document.getElementById('recEmpty');
+  if (empty) empty.hidden = (shown > 0);
+
+  const scope = document.getElementById('recScope');
+  if (scope) {
+    scope.hidden = false;
+    scope.innerHTML = '目前只看<b>活动编号 ' + id + '「' + (a ? a.name : '') + '」</b>的记录（' + shown
+                    + ' 笔）　<button type="button" class="btn btn--text btn--sm" id="recClear">显示全部</button>';
+  }
+}
+
+/* 清掉「只看某一笔」的筛选 */
+document.addEventListener('click', function (e) {
+  if (!e.target || e.target.id !== 'recClear') return;
+  document.querySelectorAll('#viewRecord tbody tr[data-act]').forEach(function (tr) { tr.hidden = false; });
+  const scope = document.getElementById('recScope'); if (scope) scope.hidden = true;
+  const empty = document.getElementById('recEmpty'); if (empty) empty.hidden = true;
+});
+
+/* ==========================================================================
+   通用确认框
+
+   「会一次遗失大量已填内容」的操作才用它——重置整张表单、有未保存修改时离开。
+   删一阶、删一段那种不用，误删的代价低，跳弹窗只会拖慢配置。
+   ========================================================================== */
+let confirmCb = null;
+
+function askConfirm(text, onYes) {
+  document.getElementById('confirmText').textContent = text;
+  confirmCb = onYes;
+  document.getElementById('confirmModal').hidden = false;
+}
+function closeConfirm() {
+  document.getElementById('confirmModal').hidden = true;
+  confirmCb = null;
+}
+document.getElementById('confirmNo').addEventListener('click', closeConfirm);
+document.getElementById('confirmYes').addEventListener('click', function () {
+  const cb = confirmCb; closeConfirm(); if (cb) cb();
+});
+document.getElementById('confirmModal').addEventListener('click', function (e) {
+  if (e.target === this) closeConfirm();
+});
+
+/* 表单有没有被改过。真实系统会逐栏比对，原型简化成「进过表单就算动过」。 */
+let formDirty = false;
+document.addEventListener('input', function (e) {
+  if (e.target.closest && e.target.closest('#actForm')) formDirty = true;
+});
+
+/* ==========================================================================
+   备注编辑（活动记录页唯一可写入的操作）
+   以追加方式记录，不覆盖既有内容——每一次处理都要留痕。
+   ========================================================================== */
+let remarkRow = null;
+
+function openRemark(td) {
+  remarkRow = td;
+  const old = td.dataset.remark || '';
+  const box = document.getElementById('remarkOld');
+  box.textContent = old;
+  box.hidden = !old;
+
+  const input = document.getElementById('remarkInput');
+  input.value = '';
+  updateRemarkCount();
+  document.getElementById('remarkModal').hidden = false;
+  input.focus();
+}
+
+function updateRemarkCount() {
+  const input = document.getElementById('remarkInput');
+  const el = document.getElementById('remarkCount');
+  el.textContent = input.value.length;
+  // 到 2000 就标红。浏览器的 maxlength 已经挡住再输入，这里只是让人知道为什么打不进去
+  el.parentNode.classList.toggle('is-full', input.value.length >= 2000);
+}
+
+document.getElementById('remarkInput').addEventListener('input', updateRemarkCount);
+document.getElementById('remarkCancel').addEventListener('click', function () {
+  document.getElementById('remarkModal').hidden = true;
+});
+document.getElementById('remarkModal').addEventListener('click', function (e) {
+  if (e.target === this) document.getElementById('remarkModal').hidden = true;
+});
+document.getElementById('remarkOk').addEventListener('click', function () {
+  const txt = document.getElementById('remarkInput').value.trim();
+  if (!txt) { toast('warn', '请先输入备注内容'); return; }
+  if (!remarkRow) return;
+
+  const old = remarkRow.dataset.remark || '';
+  const merged = old ? (old + '\n' + txt) : txt;      // 追加，不覆盖
+  remarkRow.dataset.remark = merged;
+  remarkRow.querySelector('.remark-text').textContent = merged;
+
+  document.getElementById('remarkModal').hidden = true;
+  toast('success', '备注已更新');
+});
+
+/* 点记录列的备注就开编辑 */
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest && e.target.closest('.js-remark');
+  if (btn) openRemark(btn.closest('td'));
+});
+
+/* ==========================================================================
+   本次不异动的按钮
+
+   查询、导出、图片上传这些沿用现有后台，原型没有做互动。
+   但按钮画在那里却按不动，看起来像坏掉——点了就说明一下。
+   ========================================================================== */
+document.addEventListener('click', function (e) {
+  const b = e.target.closest && e.target.closest('.js-asis');
+  if (!b) return;
+  toast('warn', (b.dataset.what || '这个功能') + '沿用现有后台，本次不异动，原型没有做互动。');
+});
+
 function applyTerms() {
   const t = TERMS[app.dataset.term];
   const map = {
@@ -1461,7 +2237,8 @@ function applyTerms() {
     'data-term-first':        t.first,
     'data-term-repeat':       t.repeat,
     'data-term-first-short':  t.firstShort,
-    'data-term-repeat-short': t.repeatShort
+    'data-term-repeat-short': t.repeatShort,
+    'data-term-reward-repeat': t.rewardRepeat      // 复存二维表的字段标题
   };
   Object.keys(map).forEach(function (attr) {
     document.querySelectorAll('[' + attr + ']').forEach(function (el) {
@@ -1471,72 +2248,6 @@ function applyTerms() {
   document.title = t.page + ' — 后台原型';
 }
 
-/* --------------------------------------------------------------------------
-   5. 复存的笔数阶梯
-   起点固定是「当日第 1 笔」，跟天数区间的起点固定 D1 是同一个道理。
-   每一段只要填「这段到第几笔结束」，下一段的起点自动接上。
-   最后一段的终点，就是玩家每天最多能领几次。
-   -------------------------------------------------------------------------- */
-
-/* 取得目前显示中那个方案里的所有笔数段 */
-function activeSegs() {
-  return Array.from(document.querySelectorAll('#structOrder .js-seg'));
-}
-
-/* 读出各段的起讫：第 1 段从 1 开始，之后每段从前一段结束 +1 开始 */
-function readTiers() {
-  let cursor = 1;
-  return activeSegs().map(function (seg) {
-    const end = Number(seg.querySelector('.js-seg-end').value);
-    const tier = { el: seg, start: cursor, end: end };
-    cursor = end + 1;
-    return tier;
-  });
-}
-
-/* 重写每段的标题，并更新最上方那行唯读摘要 */
-function refreshOrderTiers() {
-  const tiers = readTiers();
-
-  tiers.forEach(function (t) {
-    const title = t.el.querySelector('.js-seg-title');
-    if (!title) return;
-    // 只涵盖一笔就写「第 N 笔」，涵盖多笔才写「第 N–M 笔」
-    title.textContent = (t.end > t.start)
-      ? '第 ' + t.start + '–' + t.end + ' 笔'
-      : '第 ' + t.start + ' 笔';
-  });
-
-  const last = tiers[tiers.length - 1];
-  const box = document.getElementById('orderSummary');
-  if (box && last) {
-    box.innerHTML = '每日最多发放 <b>' + last.end + '</b> 次 ‧ 涵盖当日第 <b>1</b>～<b>'
-                  + last.end + '</b> 笔';
-  }
-
-  // 风控要看的数字：一个玩家一天理论上最多能领走多少
-  const risk = document.getElementById('riskMax');
-  if (risk) {
-    let total = 0;
-    tiers.forEach(function (t) {
-      // 取这一阶矩阵里最高的那个「上限金额」（通常是 VIP10），乘上这阶涵盖几笔
-      const caps = Array.from(t.el.querySelectorAll('.matrix tbody tr')).map(function (tr) {
-        const cells = tr.querySelectorAll('input.cell-input');
-        // 每列的栏位顺序：最低金额, [平台]%, 上限, [glife]%, 上限, [maya]%, 上限
-        return Math.max(Number(cells[2].value) || 0, Number(cells[4].value) || 0, Number(cells[6].value) || 0);
-      });
-      const maxCap = caps.length ? Math.max.apply(null, caps) : 0;
-      total += maxCap * (t.end - t.start + 1);
-    });
-    risk.textContent = '₱' + total.toLocaleString('en-US');
-  }
-}
-
-/* --------------------------------------------------------------------------
-   6. 算活动自然天数
-   规则：GMT+8 的日历日相差几天，再 +1。
-   例：9/8 到 9/30 → 相差 22 天 → 自然天数 23 天。
-   -------------------------------------------------------------------------- */
 function calcNaturalDays() {
   const s = document.getElementById('fStart').value.slice(0, 10);
   const e = document.getElementById('fEnd').value.slice(0, 10);
@@ -1586,10 +2297,10 @@ function validateAndSave(e) {
     name.classList.remove('input--error');
   }
 
-  // 最后一个天数区间的结束日，必须等于活动自然天数
+  // 最后一个天数区间的结束日，必须等于活动自然天数（只有首存有天数区间）
   const natural = calcNaturalDays();
   const lastEnd = Number(document.getElementById('fLastDayEnd').value);
-  if (natural !== null && lastEnd !== natural) {
+  if (app.dataset.play === 'first' && natural !== null && lastEnd !== natural) {
     errors.push('最后一个天数区间结束日是 ' + lastEnd + '，但活动自然天数是 ' + natural
               + ' 天，两者必须相同（DAILY_RECHARGE_DAY_RANGE_INVALID）');
   }
@@ -1600,46 +2311,89 @@ function validateAndSave(e) {
      判断方式：最低存款金额 × 百分比，舍去到小数第 2 位后必须 ≥ 0.01。 */
   const CH = ['平台用户', 'glife 用户', 'maya 用户'];
 
-  /* 圈出「目前这个玩法实际会存档」的那些矩阵。
-     不能用 offsetParent 判断有没有显示——收合起来的段落 offsetParent 是 null，
-     那样就会漏验，把坏资料放行。 */
-  const scope = (app.dataset.play === 'repeat')
-    ? document.getElementById('structOrder')
-    : document.querySelector('.only-first');
-
-  scope.querySelectorAll('.matrix tbody tr').forEach(function (tr) {
-    const seg = tr.closest('.range');
-    if (!seg) return;
-    const segName = (seg.querySelector('.js-seg-title') || seg.querySelector('.range__head')).textContent.trim();
-    const vip = tr.querySelector('.vip-col').textContent.trim();
-    const cells = tr.querySelectorAll('input.cell-input');
-    const minMoney = Number(cells[0].value) || 0;
-    [1, 3, 5].forEach(function (idx, i) {
-      const pct = Number(cells[idx].value) || 0;
-      if (minMoney <= 0 || pct <= 0) return;               // 空值由其他校验处理
-      const least = Math.floor(minMoney * pct / 100 * 100) / 100;
-      if (least < 0.01) {
-        errors.push(segName + ' 的 ' + vip + ' ' + CH[i] + '：最低金额 ' + minMoney
-                  + ' × ' + pct + '% ＝ ' + least + '，舍去后为 0，发不出奖励。请调高最低金额或百分比');
-      }
-    });
-  });
-
-  // 复存专属校验：笔数阶梯必须连续、递增、都是正整数
-  if (app.dataset.play === 'repeat') {
-    const tiers = readTiers();
-    tiers.forEach(function (t, idx) {
-      if (!Number.isInteger(t.end) || t.end < 1) {
-        errors.push('第 ' + (idx + 1) + ' 段的「此段结束（第几笔）」必填，且必须是 1 以上的整数');
-      } else if (t.end < t.start) {
-        errors.push('第 ' + (idx + 1) + ' 段结束于第 ' + t.end + ' 笔，但它应该从第 '
-                  + t.start + ' 笔开始——结束不能小于起点');
-      }
-    });
-    const last = tiers[tiers.length - 1];
-    if (last && last.end > 0) {
-      warns.push('这样配的效果是：玩家一天最多领 ' + last.end + ' 次，涵盖当日第 1～' + last.end + ' 笔');
+  function checkZero(segName, vip, chName, minMoney, pct) {
+    if (minMoney <= 0 || pct <= 0) return;                 // 空值由其他校验处理
+    const least = Math.floor(minMoney * pct / 100 * 100) / 100;
+    if (least < 0.01) {
+      errors.push(segName + ' 的 ' + vip + ' ' + chName + '：最低金额 ' + minMoney
+                + ' × ' + pct + '% ＝ ' + least + '，舍去后为 0，发不出奖励。请调高最低金额或百分比');
     }
+  }
+
+  if (app.dataset.play === 'repeat') {
+    /* ── 复存 ──────────────────────────────────────────────────
+       每个等级各自一套阶梯，所以逐个等级验。
+       不能用「有没有显示」来判断要不要验——收合起来的区块也要验，
+       否则收著的坏数据会被放行。 */
+    let anyOk = false;
+
+    VIP_ROWS.forEach(function (r) {
+      const vip    = r[0];
+      const tiers  = vipPlans[vip];
+      const ranges = planRanges(tiers);
+
+      if (!tiers.length) {
+        errors.push(vip + ' 至少要有一阶');
+        return;
+      }
+
+      ranges.forEach(function (rg, i) {
+        const t = tiers[i];
+
+        if (rg.end === null) {
+          errors.push(vip + ' 第 ' + (i + 1) + ' 阶的「结束于第几笔」必填');
+        } else if (!Number.isInteger(rg.end) || rg.end < 1) {
+          errors.push(vip + ' 第 ' + (i + 1) + ' 阶的「结束于第几笔」必须是 1 以上的整数');
+        } else if (rg.end > MAX_ORDER) {
+          errors.push(vip + ' 第 ' + (i + 1) + ' 阶结束于第 ' + rg.end
+                    + ' 笔，超过一天最多 ' + MAX_ORDER + ' 笔的上限');
+        } else if (rg.end < rg.start) {
+          errors.push(vip + ' 第 ' + (i + 1) + ' 阶结束于第 ' + rg.end
+                    + ' 笔，但它应该从第 ' + rg.start + ' 笔开始——结束不能小于起点');
+        }
+
+        if (!rg.ok) return;                                // 范围不对就先别验金额，讯息会洗版
+        anyOk = true;
+
+        const label = tierLabel(rg);
+        if (!(Number(t.min) > 0)) errors.push(vip + ' ' + label + ' 的最低存款金额必须大于 0');
+
+        CH_KEYS.forEach(function (ch, ci) {
+          if (!(Number(t.pct[ch]) > 0)) errors.push(vip + ' ' + label + ' 的 ' + CH[ci] + '奖励百分比必须大于 0');
+          if (!(Number(t.cap[ch]) > 0)) errors.push(vip + ' ' + label + ' 的 ' + CH[ci] + '上限金额必须大于 0');
+          checkZero(label, vip, CH[ci], Number(t.min) || 0, Number(t.pct[ch]) || 0);
+        });
+      });
+    });
+
+    if (!anyOk && !errors.length) errors.push('没有任何等级配出有效的阶梯');
+
+    /* 保存成功时把实际效果讲一句。
+       不逐个等级列出来——11 行会把提示框撑爆，反而没人看。
+       只讲范围，要看细节展开各等级区块就有。 */
+    if (!errors.length) {
+      const days = VIP_ROWS.map(function (r) {
+        const rg = planRanges(vipPlans[r[0]]);
+        return rg[rg.length - 1].end;
+      });
+      const lo = Math.min.apply(null, days), hi = Math.max.apply(null, days);
+      warns.push('这样配的效果是：各等级每日可领 ' + (lo === hi ? (lo + ' 笔') : (lo + '～' + hi + ' 笔'))
+               + '，共 ' + VIP_ROWS.length + ' 个等级');
+    }
+
+  } else {
+    /* ── 首存：沿用既有做法，值直接读 DOM。本次不异动。 ────────── */
+    document.querySelector('.only-first').querySelectorAll('.matrix tbody tr').forEach(function (tr) {
+      const seg = tr.closest('.range');
+      if (!seg) return;
+      const segName = (seg.querySelector('.range__head')).textContent.trim();
+      const vip = tr.querySelector('.vip-col').textContent.trim();
+      const cells = tr.querySelectorAll('input.cell-input');
+      const minMoney = Number(cells[0].value) || 0;
+      [1, 3, 5].forEach(function (idx, i) {
+        checkZero(segName, vip, CH[i], minMoney, Number(cells[idx].value) || 0);
+      });
+    });
   }
 
   if (errors.length) {
@@ -1648,6 +2402,16 @@ function validateAndSave(e) {
   }
   warns.forEach(function (m) { toast('warn', m); });
   toast('success', '保存成功');
+  formDirty = false;
+
+  /* 防重复点击：按下后先把钮锁住，收到回应才放开。
+     不锁的话，手快点两下会建出两笔一模一样的活动。
+     原型没有后端，用一个短延迟模拟。 */
+  const btn = document.querySelector('#actForm button[type="submit"]');
+  if (btn) {
+    btn.disabled = true;
+    setTimeout(function () { btn.disabled = false; }, 1200);
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -1681,15 +2445,35 @@ document.getElementById('devToggle').addEventListener('click', function () {
 document.querySelectorAll('input[name="playType"]').forEach(function (radio) {
   radio.addEventListener('change', function () {
     app.dataset.play = radio.value;
-    updateMatrixHeaders();   // 只换栏位标题，已填的数字保留
-    refreshOrderTiers();
+    updateMatrixHeaders();   // 只换字段标题，已填的数字保留
+    refreshRiskMax();
   });
 });
 
 // 改任一段的终点时，段标题与摘要要即时重算
 document.addEventListener('input', function (e) {
-  if (e.target.classList.contains('js-seg-end')) refreshOrderTiers();
-  if (e.target.classList.contains('cell-input')) refreshOrderTiers();
+  /* 复存：把值写回数据模型。
+     这里刻意「不重画整个区块」——重画会让正在打字的输入框失去焦点。
+     只有改「结束于第几笔」才需要更新字段标题，所以单独处理那一格。 */
+  if (e.target.classList.contains('js-tier')) {
+    const el   = e.target;
+    const tier = vipPlans[el.dataset.vip][Number(el.dataset.i)];
+    const raw  = el.value.trim();
+    const kind = el.dataset.kind;
+
+    if (kind === 'end')      tier.end = (raw === '') ? null : Number(raw);
+    else if (kind === 'min') tier.min = Number(raw);
+    else if (kind === 'pct') tier.pct[el.dataset.ch] = Number(raw);
+    else                     tier.cap[el.dataset.ch] = Number(raw);
+
+    if (kind === 'end') updatePlanLabels(el.dataset.vip);
+    refreshRiskMax();
+  }
+
+  // 首存的天数区间矩阵仍走旧路：值存在 DOM 里，本次不异动
+  if (e.target.classList.contains('cell-input') && !e.target.classList.contains('js-tier')) {
+    refreshNaturalDays();
+  }
   if (e.target.id === 'fStart' || e.target.id === 'fEnd') refreshNaturalDays();
 });
 
@@ -1700,8 +2484,8 @@ function showView(id) {
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-/* 设定玩法，并依「新增 / 编辑」决定这栏能不能改。
-   编辑既有活动时锁定，因为改玩法会让已发出的奖励记录对不上。 */
+/* 设置玩法，并依「新增 / 编辑」决定这栏能不能改。
+   编辑既有活动时锁定，因为改玩法会让已发出的活动记录对不上。 */
 function setPlayType(value, mode) {
   app.dataset.play = value;
   app.dataset.mode = mode;
@@ -1712,30 +2496,61 @@ function setPlayType(value, mode) {
   });
 
   updateMatrixHeaders();
-  refreshOrderTiers();
+  refreshRiskMax();
 }
 
-// 新增：玩法可自由选，预设每日首存
+// 新增：玩法可自由选，默认每日首存
+/* 新增：整张表单回到空白。
+   不清乾净的话，上一次编辑留下的活动时间、阶梯会跟著带进新活动，
+   营运不一定会发现，就这样存下去了。 */
 document.getElementById('btnAdd').addEventListener('click', function () {
+  lastLoadedId = null;
+  formDirty = false;
   setPlayType('first', 'add');
-  document.getElementById('fName').value = '';
+  document.getElementById('fName').value  = '';
+  document.getElementById('fStart').value = '';
+  document.getElementById('fEnd').value   = '';
+  refreshNaturalDays();
+  initVipPlans();
+  renderVipPlans();
+  applyOtherCh();
   showView('viewForm');
 });
 
-document.getElementById('btnBack').addEventListener('click', function () { showView('viewList'); });
-
-// 编辑：带入该笔活动的玩法并锁定
-document.querySelectorAll('.js-edit').forEach(function (b) {
-  b.addEventListener('click', function () {
-    setPlayType(b.dataset.play || 'first', 'edit');
-    showView('viewForm');
+document.getElementById('btnBack').addEventListener('click', function () {
+  if (!formDirty) { showView('viewList'); return; }
+  askConfirm('离开将遗失未保存的修改，确定离开吗？', function () {
+    formDirty = false;
+    showView('viewList');
   });
 });
 
-/* 按「重置」时，表单会把选项还原成 HTML 预设值，
+// 编辑：带入该笔活动的数据并锁定玩法
+document.querySelectorAll('.js-edit').forEach(function (b) {
+  b.addEventListener('click', function () { loadActivity(b.dataset.id); });
+});
+
+// 查看记录：跳到记录页，只看这一笔
+document.querySelectorAll('.js-view-rec').forEach(function (b) {
+  b.addEventListener('click', function () { viewRecordsOf(b.dataset.id); });
+});
+
+/* 按「重置」时，表单会把选项还原成 HTML 默认值，
    但画面状态（data-play）不会自己跟著变，要手动同步一次，
-   否则会出现「选了首存、复存栏位却还在」的鬼画面。 */
-document.getElementById('actForm').addEventListener('reset', function () {
+   否则会出现「选了首存、复存字段却还在」的鬼画面。 */
+/* 重置会一次清掉整张表单，所以先问。
+   按「重置」时先挡下浏览器的预设行为，确认后才真的重置。 */
+document.getElementById('actForm').addEventListener('reset', function (e) {
+  if (!this.dataset.confirmed) {
+    e.preventDefault();
+    askConfirm('确定要重置吗？未保存的修改将会遗失。', function () {
+      const f = document.getElementById('actForm');
+      f.dataset.confirmed = '1';
+      f.reset();
+      delete f.dataset.confirmed;
+    });
+    return;
+  }
   setTimeout(function () {
     const checked = document.querySelector('input[name="playType"]:checked');
     if (checked) setPlayType(checked.value, app.dataset.mode);
@@ -1743,11 +2558,27 @@ document.getElementById('actForm').addEventListener('reset', function () {
     document.querySelectorAll('.input--error').forEach(function (el) {
       el.classList.remove('input--error');
     });
+
+    /* 浏览器的 reset 只会把字段还原成 HTML 写死的默认值，
+       但规格要的是「回到刚进来的状态」——两者不一样：
+         新增：整张表单清空
+         编辑：回到该活动最后一次保存的值 */
+    if (app.dataset.mode === 'edit' && lastLoadedId) {
+      loadActivity(lastLoadedId);
+    } else {
+      document.getElementById('fName').value  = '';
+      document.getElementById('fStart').value = '';
+      document.getElementById('fEnd').value   = '';
+      initVipPlans();
+      renderVipPlans();
+    }
     refreshNaturalDays();
+    applyOtherCh();          // 重置会把勾选框清掉，收合状态要跟著回到默认
+    formDirty = false;
   }, 0);
 });
 
-// 上方两个页签
+// 上方两个标签页
 document.getElementById('tabList').addEventListener('click', function () {
   this.setAttribute('aria-selected', 'true');
   document.getElementById('tabRecord').setAttribute('aria-selected', 'false');
@@ -1759,11 +2590,21 @@ document.getElementById('tabRecord').addEventListener('click', function () {
   showView('viewRecord');
 });
 
-// PC / 手机 子页签
+// PC / 手机 子标签页
+/* 注意 closest('.subtabs')：标签页的作用范围要限定在自己那一组里。
+   原本写成「全站所有 .subtabs__item」，现在多了渠道标签页之后，
+   点 PC／手机 会把渠道标签页也一起取消选取。 */
 document.querySelectorAll('.subtabs__item').forEach(function (b) {
   b.addEventListener('click', function () {
-    document.querySelectorAll('.subtabs__item').forEach(function (x) {
+    const group = b.closest('.subtabs');
+    if (!group) return;
+    group.querySelectorAll('.subtabs__item').forEach(function (x) {
       x.setAttribute('aria-selected', String(x === b));
+      // 标签页带 data-panel 时，顺便切换对应的内容区块
+      if (x.dataset.panel) {
+        const panel = document.getElementById(x.dataset.panel);
+        if (panel) panel.hidden = (x !== b);
+      }
     });
   });
 });
@@ -1776,23 +2617,49 @@ document.getElementById('i18nOk').addEventListener('click', function () { modal.
 modal.addEventListener('click', function (e) { if (e.target === modal) modal.hidden = true; });
 
 // 保存
+/* 「显示其他渠道」开关。
+
+   GLife‧OKFUN 与 Maya 这两条渠道目前实际没有在跑，但营运要保留配置能力，
+   所以做成收合而不是拿掉。
+
+   这颗开关只管「看不看得到」，不动任何数据——
+   收起来时那些值照样存在、照样送后端、保存校验照常跑。
+   不这样做的话，会变成「画面没显示，但背后偷偷改了数据」，那种东西最难查。 */
+function applyOtherCh() {
+  const on = document.getElementById('chOther').checked;
+  document.getElementById('vipPlans').classList.toggle('hide-other', !on);
+}
+document.getElementById('chOther').addEventListener('change', applyOtherCh);
+
+document.getElementById('btnExpandAll').addEventListener('click', function () {
+  document.querySelectorAll('#vipPlans .plan').forEach(function (d) { d.open = true; });
+});
+document.getElementById('btnCollapseAll').addEventListener('click', function () {
+  document.querySelectorAll('#vipPlans .plan').forEach(function (d) { d.open = false; });
+});
+
 document.getElementById('actForm').addEventListener('submit', validateAndSave);
 
+
+
+
 /* --------------------------------------------------------------------------
-   11. 初始化
+   12. 初始化
    -------------------------------------------------------------------------- */
 applyTerms();
-buildAllMatrices();
-refreshOrderTiers();
+initVipPlans();         // 复存：每个等级各自一套阶梯
+renderVipPlans();       // 画出 11 个等级的区块（顺带算风控天花板）
+applyOtherCh();         // 其他渠道默认收起
+buildAllMatrices();     // 首存的天数区间矩阵（不异动）
 refreshNaturalDays();
 </script>
 
 
-<!-- ══ 桥接程式（由合并脚本自动注入）══
+<!-- ══ 桥接程序（由合并脚本自动注入）══
      用途：让这份原型被嵌在「规格书对照版」左栏时，能双向沟通——
        · 使用者在这里切换画面／玩法 → 通知外层，右侧规格自动跳到对应章节
        · 使用者在外层点章节         → 收到通知，这里跳到对应画面并卷到该区块
-     单独开启这个档案时，parent 就是自己，以下程式完全不作用。
+     单独开启这个文件时，parent 就是自己，以下程序完全不作用。
      ⚠ 不要删掉这段，删了对照版就不会连动。 -->
 <script>
 (function () {
