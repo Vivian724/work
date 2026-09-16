@@ -15,9 +15,16 @@
       B. 存款页的 Payment Amount 区（快捷金额角标＋即时试算条）
       C. 活动墙点进去的活动详情页
     这三处的每一个数字都来自后台奖励矩阵的某一格。
+    复存比首存再多一处露出：
+      D. 首页顶部栏的小猪计次（本次新增）
+         分子＝今天已经领到几笔，分母＝每日可领上限。
     复存要「效仿首存」，就是把这条对应关系原封不动复制过来，
     再补上复存独有的部分：奖励按「当日第几笔」分阶，
     最后一阶的终点就是每日可领上限。
+
+  玩家怎样才算「有参加」？
+    必须在存款页勾选复存券、金额达到该阶门槛、而且存款成功，这一笔才算数。
+    没勾券就是没参加——首页顶部栏的小猪不会计数，徽章一直是灰色的 0/N。
 
   「第几笔」怎么算？
     只算达到门槛的存款。笔序 ＝ 当日在本活动「已成功领奖次数 ＋ 1」。
@@ -30,7 +37,7 @@
 
   怎么看？
     最上方深色工具列切换「玩家今天存到第几笔」，
-    两张券、角标、试算条都会跟著变。金额框可以直接打字试算。
+    小猪徽章、两张券、角标、试算条都会跟著变。金额框可以直接打字试算。
   ============================================================================
 -->
 
@@ -172,6 +179,127 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   border-radius: 0 var(--radius) var(--radius) 0;
   color: var(--c-text-2); font-size: var(--fs-xs); line-height: 1.7;
 }
+
+/* ==========================================================================
+   首页顶部栏 ‧ 小猪计次（本次新增）
+   --------------------------------------------------------------------------
+   小猪是复存活动在首页唯一的露出：
+     徽章分子 ＝ 玩家今天在本活动「已成功领奖」的笔数
+     徽章分母 ＝ 每日可领上限（＝后台最后一个笔数段的终点）
+   玩家没在存款页勾券就等于没参加，分子永远是 0，这时徽章走灰色。
+   ========================================================================== */
+.phone__body--home {
+  padding: var(--sp-3);
+  background: linear-gradient(180deg, #e8f0fc 0%, #f2f4f7 100%);
+}
+
+/* 顶部栏本体：胶囊型浅蓝底，与现况一致 */
+.hdr {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: 5px 10px 5px 5px;
+  background: linear-gradient(180deg, #e6eefb 0%, #c9dcf6 100%);
+  border: 1px solid #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(35, 70, 140, .14);
+}
+
+/* 头像（沿用现况，这里只画占位圆） */
+.hdr__avatar {
+  flex: 0 0 auto; width: 46px; height: 46px;
+  border-radius: 50%; border: 2px solid #fff;
+  background: radial-gradient(circle at 35% 30%, #ffb877 0%, #f08a3c 55%, #d96f27 100%);
+}
+
+/* 两行余额（沿用现况，不动） */
+.hdr__wallet { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.hdr__row { display: flex; align-items: center; gap: 5px; }
+.hdr__coin {
+  flex: 0 0 auto; width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--c-accent-2); color: #fff;
+  font-size: var(--fs-xs); font-weight: 700; line-height: 1;
+}
+.hdr__coin--star { background: var(--c-accent); }
+.hdr__value { font-size: var(--fs-md); font-weight: 700; line-height: 1.2; }
+.hdr__refresh { color: var(--c-link); font-size: var(--fs-xs); }
+.hdr__spacer { flex: 1 1 auto; min-width: var(--sp-2); }
+
+/* 小猪按钮（新增） */
+.hdr__piggy {
+  position: relative; flex: 0 0 auto;
+  width: 42px; height: 42px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(180deg, #ffc964 0%, #f5a623 100%);
+  border: 0; border-radius: 50%;
+  color: #fff; cursor: pointer;
+  box-shadow: 0 2px 5px rgba(190, 125, 10, .35);
+}
+.hdr__piggy:hover { filter: brightness(1.06); }
+.hdr__piggy[hidden] { display: none; }
+/* 投币口、鼻孔、眼睛：比底色深一点，看起来像刻上去的 */
+.hdr__piggy-cut { fill: #e08f18; }
+
+/* 徽章：绿＝今天有计数，灰＝还没参加 */
+.hdr__badge {
+  position: absolute; top: -8px; right: -16px; z-index: 2;
+  min-width: 36px; padding: 1px 6px;
+  border: 2px solid #fff; border-radius: 11px;
+  font-size: var(--fs-xs); font-weight: 700; line-height: 1.45;
+  text-align: center; white-space: nowrap;
+}
+.hdr__badge--on  { background: #2fa85a; color: #fff; }
+.hdr__badge--off { background: #7c838d; color: #fff; }
+/* 额满：转金色，与「还能再领」的绿色区分开 */
+.hdr__badge--full {
+  background: linear-gradient(180deg, #ffd75e 0%, #f0a91b 100%);
+  color: #5a3d00;
+  box-shadow: 0 2px 8px rgba(240, 169, 27, .55);
+}
+/* 同一颗徽章放进说明表格里当示意用 */
+.hdr__badge--inline { position: static; display: inline-block; border-width: 1px; vertical-align: middle; }
+
+.hdr__deposit {
+  flex: 0 0 auto; margin-left: 6px;
+  padding: 7px 14px;
+  background: linear-gradient(180deg, #5b8df9 0%, #2f4fd8 100%);
+  border: 0; border-radius: 10px;
+  box-shadow: 0 3px 0 #22399f;
+  color: #fff; font: inherit; font-size: var(--fs-md); font-weight: 700;
+  cursor: pointer;
+}
+.hdr__deposit:hover { filter: brightness(1.06); }
+
+.hdr__search {
+  flex: 0 0 auto; display: flex; padding: 0 2px;
+  background: none; border: 0; color: var(--c-primary); cursor: pointer;
+}
+
+/* 顶部栏下方的情境说明（原型用，实作时不存在） */
+.hdr-state {
+  margin: var(--sp-3) 0 0; padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius);
+  font-size: var(--fs-xs); line-height: 1.6;
+}
+.hdr-state--on  { background: var(--c-ok-bg);   color: var(--c-ok-txt); }
+.hdr-state--off { background: var(--c-done-bg); color: var(--c-done-txt); }
+
+/* 首页其余内容的占位 */
+.home__stub {
+  display: flex; align-items: center; justify-content: center;
+  height: 96px; margin-top: var(--sp-3);
+  border: 1px dashed #b9c8de; border-radius: var(--radius-lg);
+  color: #7b8ca6; font-size: var(--fs-xs); text-align: center;
+}
+
+/* 情境穷举表（放在标注里，隐藏标注时一起收起来） */
+.anno--block { display: block; }
+.case__table { width: 100%; border-collapse: collapse; margin-top: var(--sp-2); font-size: var(--fs-xs); }
+.case__table th, .case__table td {
+  padding: var(--sp-1) var(--sp-2); text-align: left; vertical-align: top;
+  border-top: 1px solid var(--c-border);
+}
+.case__table thead th { border-top: 0; color: var(--c-text-3); font-weight: 600; white-space: nowrap; }
+.case__table tbody th { font-weight: 600; color: var(--c-text); }
 
 /* ==========================================================================
    付款方式（沿用现况，简化示意）
@@ -368,9 +496,13 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 .stat__value { display: block; font-size: var(--fs-lg); font-weight: 700; line-height: 1.25; }
 .stat__label { display: block; color: var(--c-text-2); font-size: var(--fs-sm); line-height: 1.3; }
 
-/* 详情页的阶梯表 */
+/* 详情页的阶梯表
+   后台配 2 段就 2 列、配 10 段就 10 列——决议：不折叠、不滚动，一次全部摊开，
+   玩家往下滑就能看完整条奖励曲线。 */
 .tier { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--c-border); }
+.tier__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-2); }
 .tier__title { margin: 0 0 var(--sp-2); color: var(--c-text-2); font-size: var(--fs-sm); font-weight: 600; }
+.tier__count { color: var(--c-text-3); font-size: var(--fs-xs); white-space: nowrap; }
 .tier__table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
 .tier__table th, .tier__table td { padding: var(--sp-1) var(--sp-2); text-align: left; }
 .tier__table th { color: var(--c-text-3); font-size: var(--fs-xs); font-weight: 600; }
@@ -440,11 +572,20 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   <span class="devbar__brand">原型工具列</span>
 
   <div class="devbar__group">
-    <span class="devbar__label">玩家今天已领几次</span>
+    <span class="devbar__label">后台配几段笔数区间</span>
     <div class="devbar__options" role="group">
-      <button type="button" class="devbar__opt" data-set="state" data-value="d0" aria-pressed="true">今日 0 次</button>
-      <button type="button" class="devbar__opt" data-set="state" data-value="d1" aria-pressed="false">已领 1 次</button>
-      <button type="button" class="devbar__opt" data-set="state" data-value="d4" aria-pressed="false">已领 4 次（额满）</button>
+      <button type="button" class="devbar__opt" data-set="tiers" data-value="t2"  aria-pressed="false">2 段</button>
+      <button type="button" class="devbar__opt" data-set="tiers" data-value="t10" aria-pressed="true">10 段</button>
+    </div>
+  </div>
+
+  <div class="devbar__group">
+    <span class="devbar__label">玩家今天已领几次（＝小猪徽章的分子）</span>
+    <div class="devbar__options" role="group">
+      <button type="button" class="devbar__opt" data-set="state" data-value="d0"   aria-pressed="true">今日 0 次</button>
+      <button type="button" class="devbar__opt" data-set="state" data-value="d1"   aria-pressed="false">已领 1 次</button>
+      <button type="button" class="devbar__opt" data-set="state" data-value="dmid" aria-pressed="false">领到一半</button>
+      <button type="button" class="devbar__opt" data-set="state" data-value="dmax" aria-pressed="false">额满</button>
     </div>
   </div>
 
@@ -456,21 +597,162 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
     </div>
   </div>
 
-  <p class="devbar__note">介面文字照实际产品用英文；新增／异动处以中文标注。金额框可直接打字试算。</p>
+  <p class="devbar__note">
+    介面文字照实际产品用英文；新增／异动处以中文标注。金额框可直接打字试算。
+    切换「2 段／10 段」可看阶梯表在段数变多时怎么排。
+  </p>
 </aside>
 
-<div class="app" id="app" data-state="d0" data-annotate="on">
+<div class="app" id="app" data-state="d0" data-tiers="t10" data-annotate="on">
 <main>
 
 <div class="stage">
 
   <!-- ======================================================================
-       画面 A：存款页（券 ＋ Payment Amount ＋ 试算）
+       画面 A：首页顶部栏（小猪计次）
        ====================================================================== -->
   <section class="screen">
     <header class="screen__head">
       <h2 class="screen__title">
-        画面 A ‧ 存款页
+        画面 A ‧ 首页顶部栏
+        <span class="tag tag--new">新增：小猪计次</span>
+      </h2>
+      <p class="screen__desc">
+        小猪是复存活动在首页唯一的露出。徽章的分子是「今天已经领到几笔」，
+        分母是每日可领上限。玩家没参加活动，小猪就不会计数，永远停在 0。
+      </p>
+    </header>
+
+    <div class="phone">
+      <!-- 这一条就是首页最上面那一条，本身即是 header，所以没有另外的标题列 -->
+      <div class="phone__body phone__body--home">
+
+        <header class="hdr">
+          <span class="hdr__avatar" role="img" aria-label="Player avatar"></span>
+
+          <!-- 两行余额：沿用现况，本次完全不动 -->
+          <div class="hdr__wallet">
+            <div class="hdr__row">
+              <span class="hdr__coin" aria-hidden="true">&#8369;</span>
+              <span class="hdr__value">0</span>
+              <span class="hdr__refresh" aria-hidden="true">&#8635;</span>
+            </div>
+            <div class="hdr__row">
+              <span class="hdr__coin hdr__coin--star" aria-hidden="true">&#9733;</span>
+              <span class="hdr__value">10</span>
+              <span class="hdr__refresh" aria-hidden="true">&#8635;</span>
+            </div>
+          </div>
+
+          <span class="hdr__spacer"></span>
+
+          <!-- ▼ 新增：小猪 ＋ 计次徽章 ───────────────────────────── -->
+          <button type="button" class="hdr__piggy" id="piggyBtn" aria-label="Daily re-deposit bonus">
+            <svg viewBox="0 0 40 34" width="26" height="22" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M13.2 2.6 20 8.6l-8.6 2.2z"/>
+              <rect fill="currentColor" x="13.5" y="24" width="4.6" height="6.4" rx="1.6"/>
+              <rect fill="currentColor" x="24.5" y="24" width="4.6" height="6.4" rx="1.6"/>
+              <ellipse fill="currentColor" cx="22" cy="18" rx="13.6" ry="9.6"/>
+              <rect fill="currentColor" x="3.4" y="14.6" width="9.6" height="7.6" rx="3.8"/>
+              <rect class="hdr__piggy-cut" x="19" y="9.6" width="9.4" height="2.6" rx="1.3"/>
+              <circle class="hdr__piggy-cut" cx="6.6" cy="17" r="1.1"/>
+              <circle class="hdr__piggy-cut" cx="6.6" cy="20.4" r="1.1"/>
+              <circle class="hdr__piggy-cut" cx="15.6" cy="15.4" r="1.3"/>
+            </svg>
+            <span class="hdr__badge hdr__badge--off" id="piggyBadge">0/10</span>
+          </button>
+          <!-- ▲ 新增到此 ────────────────────────────────────────── -->
+
+          <button type="button" class="hdr__deposit">Deposit</button>
+
+          <button type="button" class="hdr__search" aria-label="Search">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" focusable="false">
+              <circle cx="11" cy="11" r="6.6"/>
+              <path d="M16 16l5 5"/>
+            </svg>
+          </button>
+        </header>
+
+        <p class="hdr-state hdr-state--off" id="hdrState">
+          情境说明会随工具列切换。
+        </p>
+
+        <div class="home__stub">首页其余内容（轮播、游戏列表…）本次不动</div>
+      </div>
+    </div>
+
+    <div class="anno anno--block">
+      <p style="margin:0">
+        <strong>整块是新增。</strong>顶部栏版型不动，只在 Deposit 按钮左边多一颗小猪。<br>
+        ① <strong>徽章分母</strong>＝每日可领上限，也就是后台<strong>最后一个笔数段的终点</strong>，
+        与券上的 <code>Up to <span class="js-limit">10</span>x per day</code>、详情页进度列是同一个数字；<br>
+        ② <strong>徽章分子</strong>＝玩家今天在本活动<strong>已成功领奖的笔数</strong>，
+        与详情页 <code>Today: n claimed</code> 同一个数字；<br>
+        ③ <strong>没参加就不计数</strong>：要参加必须在存款页勾选复存券（画面 B）。
+        没勾券、勾了但没达该阶门槛、存款没成功——这三种都不算数，徽章停在
+        <span class="hdr__badge hdr__badge--off hdr__badge--inline js-badge-off">0/10</span> 并转灰；
+        只要成功领到第 1 笔，徽章就转绿
+        <span class="hdr__badge hdr__badge--on hdr__badge--inline js-badge-on">1/10</span>；<br>
+        ④ <strong>点小猪 → 活动详情页（画面 C）</strong>，灰色状态也要能点，
+        否则玩家不知道怎么参加；<br>
+        ⑤ <strong>文案长度</strong>：徽章最长 <code>99/99</code>（5 个字元，因为后台笔数段终点最大 99），
+        固定一行，不换行、不省略；<br>
+        ⑥ <strong>更新时机</strong>：存款成功并发奖后立即 +1；依活动时区跨日 00:00 归零成 0/N；<br>
+        ⑦ <strong>额满转金色</strong>：今天的次数领满时，徽章从绿色变成
+        <span class="hdr__badge hdr__badge--full hdr__badge--inline js-badge-full">10/10</span>
+        金色，与「还能再领」的绿色区分开。<strong>不做任何动画</strong>。
+      </p>
+
+      <table class="case__table">
+        <caption style="text-align:left;padding:8px 8px 4px;font-weight:600;color:#1a1d21">情境穷举 — 小猪的四种长相</caption>
+        <thead>
+          <tr><th>#</th><th>情境</th><th>小猪徽章</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>没有进行中的复存活动，或该会员不在活动的 VIP／渠道范围</td>
+            <td>不显示小猪</td>
+            <td>顶部栏回到现况版型，Deposit 按钮往右靠</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>有活动，但今天还没参加<br>（没勾券／未达门槛／存款失败）</td>
+            <td><span class="hdr__badge hdr__badge--off hdr__badge--inline js-badge-off">0/10</span></td>
+            <td>灰色。小猪<strong>不会去计算</strong>，玩家不勾券就永远是 0</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>今天已经领到 n 笔，还没到上限</td>
+            <td><span class="hdr__badge hdr__badge--on hdr__badge--inline js-badge-on">1/10</span></td>
+            <td>转绿。每成功领一笔就 +1</td>
+          </tr>
+          <tr>
+            <th scope="row">4</th>
+            <td>今天的次数已经领满</td>
+            <td><span class="hdr__badge hdr__badge--full hdr__badge--inline js-badge-full">10/10</span></td>
+            <td>徽章转<strong>金色</strong>；点进详情页显示 <code>Daily limit reached</code></td>
+          </tr>
+          <tr>
+            <th scope="row">5</th>
+            <td>活动资料读取失败（API 逾时）</td>
+            <td>沿用上一次成功的数字</td>
+            <td>顶部栏是全站共用，<strong>不因单一活动的 API 失败跳错误提示</strong>；
+                若从未成功取得过，则整颗小猪不显示</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       画面 B：存款页（券 ＋ Payment Amount ＋ 试算）
+       ====================================================================== -->
+  <section class="screen">
+    <header class="screen__head">
+      <h2 class="screen__title">
+        画面 B ‧ 存款页
         <span class="tag tag--change">异动：多一张复存券</span>
       </h2>
       <p class="screen__desc">
@@ -555,11 +837,11 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
         <p class="anno">
           <strong>新增这张券。</strong>版型与首存券完全相同，只有三点不同：<br>
           ① 券种文字 <code>Re-deposit Coupon</code>（来自后台「活动」）；<br>
-          ② 右下多一行 <code>Your 1st deposit today · Up to 4x per day</code>——
+          ② 右下多一行 <code>Your 1st deposit today · Up to <span class="js-limit">10</span>x per day</code>——
           前半告诉玩家这笔是今天第几笔（决定套哪一阶），后半是每日上限（＝后台最后一段的终点）；<br>
           ③ 今日次数用完时整张券转灰，下方补一句原因，避免玩家以为是故障。<br>
           <strong>因为有阶梯，券上的百分比与上限会随「下一笔是第几笔」改变</strong>——
-          今天还没存时显示第 1 阶的 20%／₱2,000，存过 1 笔后自动变成第 2 阶的 15%／₱800。
+          今天还没存时显示第 1 阶的 <span id="egT1">20%／₱2,000</span>，存过 1 笔后自动变成第 2 阶的 <span id="egT2">18%／₱1,800</span>。
           显示玩家<strong>实际拿得到的那一阶</strong>，不是拿最高的那阶当广告。
         </p>
 
@@ -599,17 +881,19 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   </section>
 
   <!-- ======================================================================
-       画面 B：活动详情页（复存）
+       画面 C：活动详情页（复存）
        ====================================================================== -->
   <section class="screen">
     <header class="screen__head">
       <h2 class="screen__title">
-        画面 B ‧ 活动详情页（复存）
+        画面 C ‧ 活动详情页（复存）
         <span class="tag tag--change">异动：加阶梯表＋今日进度</span>
       </h2>
       <p class="screen__desc">
         现况只有 Additional 与 Capped At 两格。复存的奖励按当日笔序分阶，
         一个数字表达不了，所以加一张阶梯表，再加一条今日进度告诉玩家自己站在哪一阶。
+        <br><strong>段数由营运决定</strong>——工具列可切换「后台配 2 段 / 10 段」，
+        看同一张版型在段数很多时怎么排。
       </p>
     </header>
 
@@ -632,7 +916,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
             <div class="stat">
               <span class="stat__icon" aria-hidden="true">%</span>
               <span class="stat__body">
-                <span class="stat__value">Up to 20%</span>
+                <span class="stat__value" id="statPct">Up to 20%</span>
                 <span class="stat__label">Additional</span>
               </span>
             </div>
@@ -640,15 +924,19 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
             <div class="stat">
               <span class="stat__icon stat__icon--coin" aria-hidden="true">₱</span>
               <span class="stat__body">
-                <span class="stat__value">2,000.00</span>
+                <span class="stat__value" id="statCap">2,000.00</span>
                 <span class="stat__label">Capped At</span>
               </span>
             </div>
           </div>
 
           <!-- 复存专属：阶梯表。后台配几段这里就列几列 -->
-          <div class="tier">
-            <p class="tier__title">Daily deposit tiers</p>
+          <div class="tier" id="tier">
+            <div class="tier__head">
+              <p class="tier__title">Daily deposit tiers</p>
+              <span class="tier__count" id="tierCount">2 tiers</span>
+            </div>
+
             <table class="tier__table">
               <thead>
                 <tr><th>Qualifying deposit</th><th>Min deposit</th><th>Bonus</th><th>Capped at</th></tr>
@@ -672,6 +960,13 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
           <strong>新增阶梯表</strong>：后台配几段，这里就列几列。
           玩家下一笔会落在的那一阶标上 <code>NOW</code> 并highlight，
           让他一眼看出「再存一笔会拿到多少」。<br>
+          <strong>配到 10 段时怎么排</strong>：段数是营运配出来的，可能 2 段，也可能 10 笔全部拆开配。
+          决议是<strong>不折叠、不滚动，一次全部摊开</strong>——奖励曲线是玩家决定今天要不要继续存的依据，
+          藏起来反而少了动力，玩家往下滑就能看完整条。<br>
+          标题右边固定写出 <code>10 tiers</code>，玩家才知道自己看到的是不是全部；
+          <code>NOW</code> 那一列 highlight，让玩家在长清单里一眼找到自己。<br>
+          <strong>要留意</strong>：10 段全部列出后，Deposit 按钮会被推到第一屏之外，玩家得往下滑才看得到。
+          若营运常配到 8 段以上，建议再讨论要不要把 Deposit 做成吸底。<br>
           <strong>新增今日进度列</strong>：今天存了几笔、下一笔是第几笔、能拿几 %。
           少了它，玩家只能自己数今天存过几次。<br>
           Deposit 按钮<strong>任何状态都不禁用</strong>（玩家本来就有权存款），
@@ -745,7 +1040,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   <h2 class="mapping__title">前后台对应表 — 复存的每个数字从哪来</h2>
   <p class="mapping__desc">
     复存「效仿首存」的具体意思：这条取值路径<strong>完全照抄</strong>，只是改读复存那笔活动的配置。
-    表中第 5、6、6b、9、10、12 列是复存独有、首存没有的。
+    表中第 5、6、6b、9、10、12、13、14、15 列是复存独有、首存没有的。
   </p>
 
   <div class="table-scroll">
@@ -780,7 +1075,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
         <tr>
           <td class="col-num">3</td>
           <td>券上 <code>Min Deposit 500.00</code>；阶梯表的 <code>Min deposit</code> 栏</td>
-          <td>第 1 阶 500 / 第 2 阶 200</td>
+          <td id="egMin">第 1 阶 500 / 第 2 阶 500</td>
           <td>最低存款金额</td>
           <td>同上（<strong>每阶各自可配</strong>）</td>
           <td><strong>券面显示的是玩家当前那一阶的门槛</strong>，会随已领次数变；也是 Payment Amount 区「低于下限」的判断门槛。要跨过某阶门槛才算进入那一阶</td>
@@ -803,8 +1098,8 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
         </tr>
         <tr>
           <td class="col-num">6</td>
-          <td>券上 <code>Up to 4x per day</code>；详情页进度列的 <code>(4/4)</code></td>
-          <td>4</td>
+          <td>券上 <code>Up to Nx per day</code>；详情页进度列的 <code>(N/N)</code>；<strong>首页小猪徽章的分母</strong></td>
+          <td><span class="js-limit">10</span></td>
           <td><strong>最后一个笔数段的终点</strong> <span class="tag tag--new">新增</span></td>
           <td>同上</td>
           <td>不是独立栏位，是从阶梯推导出来的。首存固定 1 次，不可配</td>
@@ -812,7 +1107,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
         <tr>
           <td class="col-num">6b</td>
           <td>详情页的整张阶梯表</td>
-          <td>1st 20% / 2nd–4th 15%</td>
+          <td id="egTiers">1st 20% / 2nd 18% …共 10 段</td>
           <td><strong>每个笔数段各一套矩阵</strong> <span class="tag tag--new">新增</span></td>
           <td>奖励配置 → 各笔数段 → VIP × 渠道矩阵</td>
           <td>后台配几段，前台就列几列</td>
@@ -865,6 +1160,31 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
           <td>后端依当日笔数与已领次数即时算</td>
           <td>需 <code>v4/dailyConfig</code> 多回传当日笔数与已领次数</td>
         </tr>
+        <tr>
+          <td class="col-num">13</td>
+          <td>首页顶部栏小猪徽章的<strong>分子</strong> <span class="tag tag--new">新增</span></td>
+          <td>0 / 1 / <span class="js-limit">10</span></td>
+          <td>无对应后台栏位</td>
+          <td>后端依「今日已成功领奖次数」即时算</td>
+          <td>与详情页进度列的 <code>Today: n claimed</code> 是同一个数字。
+              <strong>没勾券就不计数</strong>，永远是 0</td>
+        </tr>
+        <tr>
+          <td class="col-num">14</td>
+          <td>小猪徽章的<strong>分母</strong> <span class="tag tag--new">新增</span></td>
+          <td><span class="js-limit">10</span></td>
+          <td>同第 6 列（最后一个笔数段的终点）</td>
+          <td>奖励配置 → 最后一段</td>
+          <td>与券上 <code>Up to Nx per day</code> 同源。最长 <code>99/99</code>，不换行不省略</td>
+        </tr>
+        <tr>
+          <td class="col-num">15</td>
+          <td>小猪<strong>显不显示</strong> <span class="tag tag--new">新增</span></td>
+          <td>—</td>
+          <td>有无进行中的复存活动 ＋ 会员是否在 VIP／渠道范围内</td>
+          <td>后端判定，非后台栏位</td>
+          <td>没有可参加的活动就整颗不显示，顶部栏回到现况版型</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -891,26 +1211,46 @@ const app = document.getElementById('app');
    -------------------------------------------------------------------------- */
 const COUPONS = {
   // 首存：只有第 1 笔，一天一次，没有阶梯
-  first: { pct: 4, cap: 100, min: 10, flow: 2 },
-
-  // 复存：从当日第 1 笔起算，依笔序分阶
-  // tiers 的每一项对应后台「奖励配置」里的一个笔数段
-  repeat: {
-    flow: 3,
-    // 每一阶都有自己的最低存款金额、百分比、上限——全部来自该段矩阵的那一格
-    tiers: [
-      { from: 1, to: 1, pct: 20, cap: 2000, min: 500 },   // 后台：第 1 笔
-      { from: 2, to: 4, pct: 15, cap:  800, min: 200 }    // 后台：第 2–4 笔（终点 4 ＝ 每日最多 4 次）
-    ]
-  }
+  first: { pct: 4, cap: 100, min: 10, flow: 2 }
 };
 
-/* 每日可领上限 ＝ 最后一段的终点 */
-const REPEAT_LIMIT = COUPONS.repeat.tiers[COUPONS.repeat.tiers.length - 1].to;
+/* --------------------------------------------------------------------------
+   复存的两组示范配置——工具列的「后台配几段」就是在换这里
+   每一项 ＝ 后台「奖励配置」里的一个笔数段；
+   pct / cap / min 都来自该段矩阵里（该 VIP × 该渠道）那一格。
+   -------------------------------------------------------------------------- */
+const TIER_SETS = {
+  // 少段数：2 段就能把「第 1 笔多、后面少」讲完
+  t2: [
+    { from: 1, to: 1, pct: 20, cap: 2000, min: 500 },
+    { from: 2, to: 4, pct: 15, cap:  800, min: 200 }
+  ],
+
+  // 多段数：营运把 10 笔全部拆开配，是目前版型要撑住的极端值
+  // （笔数段终点最大 99，所以 10 段还不是最极端，但已足够验证版面）
+  t10: [
+    { from:  1, to:  1, pct: 20, cap: 2000, min: 500 },
+    { from:  2, to:  2, pct: 18, cap: 1800, min: 500 },
+    { from:  3, to:  3, pct: 16, cap: 1600, min: 500 },
+    { from:  4, to:  4, pct: 14, cap: 1400, min: 300 },
+    { from:  5, to:  5, pct: 12, cap: 1200, min: 300 },
+    { from:  6, to:  6, pct: 10, cap: 1000, min: 300 },
+    { from:  7, to:  7, pct:  9, cap:  900, min: 200 },
+    { from:  8, to:  8, pct:  8, cap:  800, min: 200 },
+    { from:  9, to:  9, pct:  7, cap:  700, min: 200 },
+    { from: 10, to: 10, pct:  5, cap:  500, min: 100 }
+  ]
+};
+
+/* 目前这组配置 */
+function tiers() { return TIER_SETS[app.dataset.tiers] || TIER_SETS.t10; }
+
+/* 每日可领上限 ＝ 最后一段的终点；小猪徽章的分母、券上的 Up to Nx 都读这个 */
+function dailyLimit() { const t = tiers(); return t[t.length - 1].to; }
 
 /* 找出「第 n 笔」落在哪一阶；超出范围回 null（代表今天不能再领了） */
 function tierOf(n) {
-  return COUPONS.repeat.tiers.find(function (t) { return n >= t.from && n <= t.to; }) || null;
+  return tiers().find(function (t) { return n >= t.from && n <= t.to; }) || null;
 }
 
 /* 英文序数：1st / 2nd / 3rd / 4th… */
@@ -920,16 +1260,20 @@ function ordinal(n) {
 }
 
 /* --------------------------------------------------------------------------
-   三种情境下，两张券各自能不能用
-   这张表就是规格，前端照这个实作即可。
-   前提：复存设定为「当日第 2 笔起算、每日最多 1 次」
+   情境 ＝ 玩家今天已经领过几次。
+   券可不可勾、小猪几分之几、详情页站在哪一阶，全部由这一个数字推导出来，
+   不用另外维护一张手写对照表——这也正是后端该有的算法。
+   「领到一半」与「额满」跟著当下的上限走，所以换成 10 段也不会失准。
    -------------------------------------------------------------------------- */
-/* 情境 = 玩家今天已经领过几次。其余状态全部由这个数字推导出来，
-   不用再维护一张手写对照表——这也正是后端该有的算法。 */
-const SCENES = { d0: 0, d1: 1, d4: 4 };
-
-/* 今天已领 done 次时，下一笔合格存款就是第 done+1 笔 */
-function todayCount() { return SCENES[app.dataset.state]; }
+function todayCount() {
+  const limit = dailyLimit();
+  switch (app.dataset.state) {
+    case 'd1':   return Math.min(1, limit);
+    case 'dmid': return Math.max(1, Math.floor(limit / 2));
+    case 'dmax': return limit;
+    default:     return 0;
+  }
+}
 
 /* 目前勾选哪一张券：'first' / 'repeat' / null（都没勾） */
 let selected = null;
@@ -1030,10 +1374,16 @@ function renderPayment() {
 
 /* --------------------------------------------------------------------------
    画详情页的阶梯表，并把玩家「下一笔」会落在的那一阶标出来
+
+   段数是营运配出来的，可能 2 段也可能 10 段。
+   决议：不折叠、不滚动，配几段就摊几列——奖励曲线是玩家要不要继续存的依据，
+   藏起来反而少了动力。
    -------------------------------------------------------------------------- */
 function renderTiers() {
+  const list = tiers();
   const next = todayCount() + 1;
-  document.getElementById('tierRows').innerHTML = COUPONS.repeat.tiers.map(function (t) {
+
+  document.getElementById('tierRows').innerHTML = list.map(function (t) {
     const label = (t.from === t.to) ? ordinal(t.from) : ordinal(t.from) + '–' + ordinal(t.to);
     const isNow = next >= t.from && next <= t.to;
     return '<tr class="' + (isNow ? 'is-now' : '') + '">'
@@ -1043,6 +1393,66 @@ function renderTiers() {
       + '<td>₱' + t.cap.toLocaleString('en-US') + '</td>'
       + '</tr>';
   }).join('');
+
+  // 标题右边直接写清楚一共几段，玩家才知道自己看到的是不是全部
+  document.getElementById('tierCount').textContent =
+    list.length + (list.length > 1 ? ' tiers' : ' tier');
+
+  // 第一排两格：百分比取最高的那一阶并加 Up to，上限取同一阶的上限
+  const best = list.reduce(function (a, b) { return b.pct > a.pct ? b : a; }, list[0]);
+  document.getElementById('statPct').textContent = 'Up to ' + best.pct + '%';
+  document.getElementById('statCap').textContent = money(best.cap);
+
+  // 券面标注里的举例数字，也跟著配置走，免得改了配置说明就对不上
+  const t1 = list[0], t2 = list[1];
+  const eg = function (t) { return t ? t.pct + '%／₱' + t.cap.toLocaleString('en-US') : '—'; };
+  document.getElementById('egT1').textContent = eg(t1);
+  document.getElementById('egT2').textContent = eg(t2);
+  document.getElementById('egMin').textContent =
+    '第 1 阶 ' + t1.min + (t2 ? ' / 第 2 阶 ' + t2.min : '');
+  document.getElementById('egTiers').textContent =
+    list.slice(0, 2).map(function (t) {
+      const label = (t.from === t.to) ? ordinal(t.from) : ordinal(t.from) + '–' + ordinal(t.to);
+      return label + ' ' + t.pct + '%';
+    }).join(' / ') + (list.length > 2 ? ' …共 ' + list.length + ' 段' : '');
+}
+
+/* --------------------------------------------------------------------------
+   首页顶部栏的小猪
+     分子 ＝ 今天已经领到几笔（＝已成功领奖次数）
+     分母 ＝ 每日可领上限
+   没参加（分子 0）走灰色，有计数才转绿——这就是营运说的
+   「会员没参与复存活动，小猪就不会去计算」。
+   -------------------------------------------------------------------------- */
+function renderHeaderPiggy() {
+  const done   = todayCount();
+  const limit  = dailyLimit();
+  const joined = done > 0;
+
+  const full  = joined && done >= limit;   // 今天领好领满
+
+  const badge = document.getElementById('piggyBadge');
+  badge.textContent = done + '/' + limit;
+  badge.className   = 'hdr__badge '
+    + (full ? 'hdr__badge--full' : (joined ? 'hdr__badge--on' : 'hdr__badge--off'));
+
+  document.getElementById('piggyBtn').setAttribute(
+    'aria-label', 'Daily re-deposit bonus, ' + done + ' of ' + limit + ' claimed today');
+
+  const st = document.getElementById('hdrState');
+  st.className = 'hdr-state ' + (joined ? 'hdr-state--on' : 'hdr-state--off');
+  st.textContent = full
+    ? '情境④：今天已经领好领满 ' + limit + '/' + limit
+      + ' → 徽章转金色，明天 00:00 归零重新开始。'
+    : joined
+      ? '情境②：今天已经领到 ' + done + ' 笔 → 徽章转绿，显示 ' + done + '/' + limit + '。'
+      : '情境①：今天还没参加（存款页没勾复存券）→ 小猪不计算，徽章维持灰色 0/' + limit + '。';
+
+  // 说明文字里的示意徽章与分母，跟著配置换，避免规格与画面对不上
+  document.querySelectorAll('.js-limit').forEach(function (el) { el.textContent = limit; });
+  document.querySelectorAll('.js-badge-off').forEach(function (el) { el.textContent = '0/' + limit; });
+  document.querySelectorAll('.js-badge-on').forEach(function (el) { el.textContent = '1/' + limit; });
+  document.querySelectorAll('.js-badge-full').forEach(function (el) { el.textContent = limit + '/' + limit; });
 }
 
 /* --------------------------------------------------------------------------
@@ -1058,7 +1468,7 @@ function render() {
 
   // 复存：只要今天的笔数还没用完就可用
   paintCoupon('rowRepeat', 'chkRepeat', 'whyRepeat',
-    !!r, r ? null : ['done', "Today's limit reached (" + REPEAT_LIMIT + '/' + REPEAT_LIMIT + '). Come back tomorrow.']);
+    !!r, r ? null : ['done', "Today's limit reached (" + dailyLimit() + '/' + dailyLimit() + '). Come back tomorrow.']);
 
   // 券面的百分比、上限、条件行，都跟著「下一笔是第几笔」变
   if (r) {
@@ -1066,10 +1476,10 @@ function render() {
     document.getElementById('rCap').textContent = '₱' + r.cap.toLocaleString('en-US');
     document.getElementById('rMin').textContent = money(r.min);
     document.getElementById('rCond').textContent =
-      'Your ' + ordinal(r.order) + ' qualifying deposit · Up to ' + REPEAT_LIMIT + 'x per day';
+      'Your ' + ordinal(r.order) + ' qualifying deposit · Up to ' + dailyLimit() + 'x per day';
   } else {
     document.getElementById('rCond').textContent =
-      'Daily limit reached · Up to ' + REPEAT_LIMIT + 'x per day';
+      'Daily limit reached · Up to ' + dailyLimit() + 'x per day';
   }
 
   // 情境切换后，原本勾的券可能已经不能用了
@@ -1082,7 +1492,7 @@ function render() {
   if (!r) {
     p.className = 'progress progress--done';
     t.textContent = 'Today: ' + done + ' claimed. Daily limit reached ('
-                  + REPEAT_LIMIT + '/' + REPEAT_LIMIT + '). Come back tomorrow.';
+                  + dailyLimit() + '/' + dailyLimit() + '). Come back tomorrow.';
   } else {
     p.className = 'progress progress--ok';
     t.textContent = 'Today: ' + done + ' claimed. Deposit ₱' + money(r.min)
@@ -1091,6 +1501,7 @@ function render() {
   document.getElementById('btnDeposit').classList.toggle('btn-deposit--muted', !r);
 
   renderTiers();
+  renderHeaderPiggy();
   renderPayment();
 }
 
@@ -1143,7 +1554,7 @@ document.querySelectorAll('.devbar__opt').forEach(function (btn) {
     document.querySelectorAll('.devbar__opt[data-set="' + key + '"]').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b === btn));
     });
-    if (key === 'state') render();
+    if (key === 'state' || key === 'tiers') render();
   });
 });
 

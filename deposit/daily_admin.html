@@ -544,6 +544,100 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 .plan__del:disabled { opacity: .3; cursor: not-allowed; }
 
 
+/* ==========================================================================
+   ❷ 奖励配置 · B 版（按周循环）专用样式
+   ── 只服务 #viewRewardB 这一页，不会影响 A 版的任何画面 ──
+   ========================================================================== */
+
+/* 版本对照条：一进来就让人知道自己在看哪一版、怎么切到另一版 */
+.abcmp {
+  display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
+  padding: var(--space-3) var(--space-4); margin-bottom: var(--space-4);
+  border: 1px solid var(--color-primary); border-radius: var(--radius);
+  background: var(--color-primary-soft);
+}
+.abcmp__badge {
+  flex: none; padding: 2px var(--space-3); border-radius: 999px;
+  background: var(--color-primary); color: #fff; font-weight: 700; font-size: var(--fs-sm);
+}
+.abcmp__text { flex: 1; min-width: 240px; margin: 0; font-size: var(--fs-sm); color: var(--color-text-2); }
+
+/* 星期页签：七天横排，页签上直接标最高％与是否有错，
+   这样即使内容收在别的页签里，也不会漏掉哪天配错了。 */
+.weekbar { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4); }
+.weekbar__item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  min-width: 86px; padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border); border-radius: var(--radius);
+  background: var(--color-surface); color: var(--color-text-2);
+  font: inherit; font-size: var(--fs-sm); cursor: pointer;
+}
+.weekbar__item:hover { border-color: var(--color-primary); }
+.weekbar__item[aria-selected="true"] { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.weekbar__name { font-weight: 700; }
+.weekbar__badge { font-size: var(--fs-xs); opacity: .85; }
+/* 第三行：这档活动期间内这个星期几会出现几天 */
+.weekbar__days { font-size: var(--fs-xs); opacity: .65; }
+.weekbar__item.is-unused .weekbar__days { color: var(--color-danger); opacity: 1; }
+.weekbar__item[aria-selected="true"] .weekbar__badge { opacity: 1; }
+/* 有错的那天：不管选没选中都挂红点，页签藏不住错误 */
+.weekbar__item.is-bad { border-color: var(--color-danger); }
+.weekbar__item.is-bad .weekbar__name::after { content: " ●"; color: var(--color-danger); }
+.weekbar__item.is-unused .weekbar__name { text-decoration: line-through; }
+
+/* 「复制这天到其他天」的勾选面板 */
+.copybar {
+  border: 1px dashed var(--color-primary); border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4); margin-bottom: var(--space-4);
+  background: var(--color-primary-soft);
+}
+.copybar__days { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-2) 0 var(--space-4); }
+.copybar__acts { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
+.copybar__hint { font-size: var(--fs-sm); color: var(--color-text-2); margin: 0; }
+
+/* 其他渠道收起来时那四列不显示（与 A 版同样的做法，只藏画面不动数据） */
+#weekPlans.hide-other .col-other { display: none; }
+
+/* 检查配置的结果清单 */
+/* B 版的表只有四栏（收起其他渠道时），别让它撑满整个宽度——
+   栏位被拉得太开，眼睛要跨很远才对得上同一列的数字。改成依内容宽度。 */
+#weekPlans .plan__table { width: auto; }
+#weekPlans .plan__table th, #weekPlans .plan__table td { min-width: 120px; }
+#weekPlans .plan__rowhead { min-width: 88px !important; }
+
+/* 复制面板：日期胶囊 */
+.daychip {
+  padding: 6px var(--space-4); border: 1px solid var(--color-border); border-radius: 999px;
+  background: var(--color-surface); color: var(--color-text-2);
+  font: inherit; font-size: var(--fs-sm); cursor: pointer;
+}
+.daychip:hover { border-color: var(--color-primary); }
+.daychip[aria-pressed="true"] { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+/* 活动期间内轮不到的那天：复制过去也不会发，先讲清楚 */
+.daychip.is-unused { color: var(--color-text-3); text-decoration: line-through; }
+.copybar__warn { font-size: var(--fs-sm); color: var(--color-warning); }
+
+/* 「每日可领几笔」下拉那一行 */
+.plan__count { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; margin: 0 0 var(--space-3); font-size: var(--fs-base); }
+.plan__count .input { width: 72px; }
+
+.bcheck { margin-top: var(--space-4); }
+.bcheck__list { margin: var(--space-2) 0 0; padding-left: var(--space-5); font-size: var(--fs-sm); color: var(--color-text-2); }
+.bcheck__list li { margin-bottom: var(--space-1); }
+/* 错误清单每一条都是可以点的——点了跳到那一格 */
+.bcheck__go {
+  border: 0; background: transparent; padding: 0; font: inherit; font-size: var(--fs-sm);
+  color: var(--color-danger); text-align: left; cursor: pointer; text-decoration: underline;
+}
+.bcheck__go:hover { color: var(--color-primary); }
+
+/* 有错的等级收起来时也看得出来 */
+.plan--bad { border-color: var(--color-danger); }
+.plan--bad .plan__name::after { content: " ●"; color: var(--color-danger); }
+
+/* 成功提示的底色（原本只有 warn / info / error 三种，B 版的检查结果需要「全部通过」这一种） */
+.alert--success { background: var(--color-success-bg); color: var(--color-success); }
+
 /* 复存一律发彩金，所以「奖励选择」那三栏在复存时整栏收起来。
    不是 disabled 而是隐藏——留著一个永远只能选彩金的下拉，只会让人以为还有别的可选。 */
 [data-play="repeat"] .matrix .col-reward { display: none; }
@@ -1019,8 +1113,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             <label class="field__label"><span class="req">*</span>活动状态</label>
             <div class="field__body">
               <div class="choice-group">
-                <label class="choice"><input type="radio" name="status" checked><span class="choice__text">开启</span></label>
-                <label class="choice"><input type="radio" name="status"><span class="choice__text">关闭</span></label>
+                <label class="choice"><input type="radio" name="status" value="on" checked><span class="choice__text">开启</span></label>
+                <label class="choice"><input type="radio" name="status" value="off"><span class="choice__text">关闭</span></label>
               </div>
               <span class="field__hint">关闭后前台立即不显示、也不发奖。无草稿状态。</span>
             </div>
@@ -1053,24 +1147,20 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
           <div class="section__head">
             <h2 class="section__title">❷ 奖励配置</h2>
             <span class="tag tag--change">异动：复存改为每个 VIP 各自一组阶梯，且只发彩金</span>
-          </div>
 
-          <!-- ================================================================
-               复存：风控天花板（唯读，由下方各 VIP 的阶梯自动算出）
-               ================================================================ -->
-          <div class="is-new-field only-repeat">
-            <div class="field">
-              <label class="field__label">单人单日理论最高可领</label>
-              <div class="field__body">
-                <p class="summary summary--risk"><b id="riskMax">—</b></p>
-                <span class="field__hint">
-                  <strong>唯读</strong>，由下方各 VIP 的阶梯自动算出，不必另外填。
-                  算法：逐个等级把他能领到的每一笔上限金额加总，再取所有等级里最大的。
-                  <strong>以平台渠道计算</strong>——GLife‧OKFUN 与 Maya 目前没有在跑，算进来只会让天花板虚高。<br>
-                  这是风控要看的天花板，改任何一格都会即时重算；只要有任何一阶没填好就显示「—」，不给不完整的数字。
-                </span>
-              </div>
+            <!-- ────────────────────────────────────────────────────────────
+                 A／B 两种配法的切换器（给老板挑选用）
+
+                 只换「❷ 奖励配置」这一块的内容，❶ 基本信息、❸ 参与条件、
+                 ❹ 内容配置、奖金所需流水、保存校验全部照旧，一个字都不动。
+                 首存没有 B 版，所以这排只在复存时出现。
+                 实现时只会留下选定的那一版，这排切换不会存在。
+                 ──────────────────────────────────────────────────────────── -->
+            <div class="subtabs only-repeat" id="rewardVerTabs" role="tablist" aria-label="奖励配置的两种配法">
+              <button type="button" class="subtabs__item" role="tab" data-panel="rewardA" aria-selected="true">A 版 · 每天都一样</button>
+              <button type="button" class="subtabs__item" role="tab" data-panel="rewardB" aria-selected="false">B 版 · 按周循环</button>
             </div>
+            <span class="tag tag--same only-repeat">两版择一，实现时只留一版</span>
           </div>
 
 <!-- ================================================================
@@ -1122,6 +1212,28 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             <p><button type="button" class="btn btn--dashed btn--sm">＋ 新增天数区间</button></p>
           </div>
 
+          <!-- ================================================================
+               A 版：每个 VIP 各自一组阶梯，整个活动期间每天都一样
+               ================================================================ -->
+          <div id="rewardA" class="only-repeat">
+
+          <!-- 复存：风控天花板（唯读，由下方各 VIP 的阶梯自动算出） -->
+          <div class="is-new-field">
+            <div class="field">
+              <label class="field__label">单人单日理论最高可领</label>
+              <div class="field__body">
+                <p class="summary summary--risk"><b id="riskMax">—</b></p>
+                <span class="field__hint">
+                  <strong>唯读</strong>，由下方各 VIP 的阶梯自动算出，不必另外填。
+                  算法：逐个等级把他能领到的每一笔上限金额加总，再取所有等级里最大的。
+                  <strong>以平台渠道计算</strong>——GLife‧OKFUN 与 Maya 目前没有在跑，算进来只会让天花板虚高。<br>
+                  这是风控要看的天花板，改任何一格都会即时重算；只要有任何一阶没填好就显示「—」，不给不完整的数字。
+                </span>
+              </div>
+            </div>
+          </div>
+
+
                     <div class="only-repeat" id="structOrder">
             <p class="alert alert--info">
               <span class="alert__icon">ⓘ</span>
@@ -1151,6 +1263,82 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 
             <div id="vipPlans"></div>
           </div>
+          </div><!-- /#rewardA -->
+
+          <!-- ================================================================
+               B 版：先按星期一～星期日分成七组，每组底下才是各 VIP 的多阶奖励
+               ================================================================ -->
+          <div id="rewardB" class="only-repeat" hidden>
+          <p class="alert alert--info">
+            <span class="alert__icon">ⓘ</span>
+            <span>
+              <strong>星期一～星期日各配一组</strong>，每组底下各等级自己决定<strong>每日可领几笔</strong>，
+              再<strong>一笔一笔</strong>填（第 1 笔多少、第 2 笔多少，一列一笔）。活动期间每过一周就循环一次。<br>
+              循环基准是<strong>日历上的星期几</strong>，不是「活动第几天」——不管哪天开跑，周六永远吃周六那一组。<br>
+              <strong>只作用在「每日复存」</strong>，首存与 ❶❸❹ 其他配置完全不动。
+            </span>
+          </p>
+
+          <!-- ── 先选星期，再配当天的等级 ── -->
+          <div class="weekbar" id="weekBar" role="tablist" aria-label="选择星期"><!-- 由程序产生 --></div>
+
+          <div class="planbar">
+            <button type="button" class="btn btn--sm" id="bExpandAll">全部展开</button>
+            <button type="button" class="btn btn--sm" id="bCollapseAll">全部收合</button>
+            <label class="choice planbar__toggle">
+              <input type="checkbox" id="bChOther">
+              <span class="choice__text">显示其他渠道（GLife‧OKFUN／Maya）</span>
+            </label>
+            <button type="button" class="btn btn--sm" id="bCopyDayOpen">复制这天到其他天…</button>
+            <span class="planbar__hint">配好一天就复制到其他天，再单独调周末。</span>
+          </div>
+
+          <!-- 复制面板：预设收起，按上面那颗才展开 -->
+          <div class="copybar" id="bCopyPanel" hidden>
+            <p class="copybar__hint">
+              把 <strong id="bCopySrcName">周一</strong> 的整套配置（11 个等级全部）复制到：
+            </p>
+            <!-- 日期做成可以点的胶囊：选中就变蓝，选了哪几天一眼看得出来，
+                 比一排长得一样的勾选框好认。 -->
+            <div class="copybar__days" id="bCopyDays"><!-- 由程序产生 --></div>
+            <div class="copybar__acts">
+              <button type="button" class="btn btn--primary btn--sm" id="bCopyGo" disabled>复制过去</button>
+              <button type="button" class="btn btn--sm" id="bCopyCancel">取消</button>
+              <span class="copybar__warn" id="bCopyWarn">⚠ <strong>会整个盖掉</strong>那几天现有的配置，按下之后还要再确认一次。</span>
+            </div>
+          </div>
+
+          <!-- 当天的 11 个等级：一个等级一张表，一列一笔 -->
+          <div id="weekPlans"><!-- 由程序产生 --></div>
+
+          <!-- 配完往下看：风控天花板在哪
+               （原本这里有一张「本周概览」表，已经拿掉——
+                 七天各自的最高％与期间内出现几天都写在上面的星期页签上了，
+                 页签一直在画面上，不必卷到下面再看一次。） -->
+          <div class="is-new-field">
+            <div class="field">
+              <label class="field__label">理论最高可领（唯读）</label>
+              <div class="field__body">
+                <p class="summary summary--risk">
+                  单人单日 <b id="bRiskDay">—</b><br>
+                  单人单周 <b id="bRiskWeek">—</b>
+                </p>
+                <span class="field__hint">
+                  由七天的配置自动算出，不必填。<strong>单人单日</strong>是七天里最肥的那一天；
+                  <strong>单人单周</strong>是同一个人七天都领满 ——
+                  周末加码看起来只肥两天，乘上活动有几周就不是小数目，配的当下就要看得到。
+                  两个数字都<strong>以平台渠道计算</strong>。
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bcheck">
+            <button type="button" class="btn btn--primary" id="bCheck">检查七天的配置</button>
+            <span class="planbar__hint">页签一次只看得到一天，保存前按这颗把七天一起检查。</span>
+            <div id="bCheckResult"></div>
+          </div>
+          </div><!-- /#rewardB -->
 
           <!-- 流水规则：整活动共用一份，首存不分天数、复存不分笔数段 -->
           <div class="field" style="margin-top:24px">
@@ -1233,7 +1421,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
           <div id="imgPc">
             <div class="only-first">
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC首页推荐展示图</label>
+              <label class="field__label">PC首页推荐展示图</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -1245,7 +1433,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC弹窗图片</label>
+              <label class="field__label">PC弹窗图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -1257,7 +1445,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC列表页图</label>
+              <label class="field__label">PC列表页图</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -1269,7 +1457,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC内容图片</label>
+              <label class="field__label">PC内容图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -1283,7 +1471,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             </div>
             <div class="only-repeat">
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC奖励列表</label>
+              <label class="field__label">PC奖励列表</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -1295,7 +1483,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC内容图片</label>
+              <label class="field__label">PC内容图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -1313,7 +1501,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
           <div id="imgMobile" hidden>
             <div class="only-first">
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机标题图片</label>
+              <label class="field__label">手机标题图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -1325,7 +1513,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机弹窗图片</label>
+              <label class="field__label">手机弹窗图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -1337,7 +1525,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机首页图片(移动端用)</label>
+              <label class="field__label">手机首页图片(移动端用)</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -1349,7 +1537,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机内容图片</label>
+              <label class="field__label">手机内容图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -1363,7 +1551,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             </div>
             <div class="only-repeat">
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机奖励列表</label>
+              <label class="field__label">手机奖励列表</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -1375,7 +1563,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机内容图片</label>
+              <label class="field__label">手机内容图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -1413,6 +1601,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
         </div>
       </form>
     </section>
+
 
     <!-- ====================================================================
          画面 C：活动记录（沿用既有，此处只放示意）
@@ -2048,13 +2237,49 @@ document.addEventListener('click', function (e) {
    真实系统是跟后端要，这里写死。
    ========================================================================== */
 const ACTIVITIES = {
-  '7': { name: '每日复存加码',        play: 'repeat', start: '2026-09-08', end: '2026-09-30',
+  /* status 要跟上面列表的「状态」栏一致——同期唯一性校验会读它，
+     关闭的那笔不计入冲突（换档时先关旧的再开新的）。 */
+  '7': { name: '每日复存加码',        play: 'repeat', status: 'on',  start: '2026-09-08', end: '2026-09-30',
          plans: { VIP0: [3], VIP1: [2, 5], VIP2: [1, 3, 6] } },
-  '6': { name: '咖啡两两',            play: 'first',  start: '2026-09-10', end: '2026-09-11' },
-  '5': { name: '每日首充活动-长时间111', play: 'first',  start: '2026-09-01', end: '2026-09-30' },
-  '4': { name: '每日小首充1',          play: 'first',  start: '2026-09-08', end: '2026-09-30' },
-  '3': { name: '每日首充V2',          play: 'first',  start: '2026-09-08', end: '2026-09-10' }
+  '6': { name: '咖啡两两',            play: 'first',  status: 'on',  start: '2026-09-10', end: '2026-09-11' },
+  '5': { name: '每日首充活动-长时间111', play: 'first',  status: 'on',  start: '2026-09-01', end: '2026-09-30' },
+  '4': { name: '每日小首充1',          play: 'first',  status: 'on',  start: '2026-09-08', end: '2026-09-30' },
+  '3': { name: '每日首充V2',          play: 'first',  status: 'off', start: '2026-09-08', end: '2026-09-10' }
 };
+
+/* 复存同期只能开一笔：找出会跟这次要存的时间「撞期」的那笔复存活动。
+
+   为什么用「活动时间有没有重叠」，而不是「只要有开启中的复存就挡」？
+   为了让营运能提前把下一档建好排著——9/30 旧档结束、10/1 新档开始，
+   时间不重叠就放行，换档那天不会开天窗。
+
+   三个不算冲突的情况：
+     ① 正在编辑的就是那一笔（改自己不算跟自己撞）
+     ② 对方是首存（这条规则只约束复存，首存维持多笔并行的现况）
+     ③ 对方状态是关闭（换档时先关旧的再开新的）
+
+   回传撞到的那一笔 { id, name }，没撞到回 null。 */
+function findOverlapRepeat(startStr, endStr, selfId) {
+  const s = toDay(startStr);
+  const e = toDay(endStr);
+  if (s === null || e === null) return null;        // 时间还没填好，交给「活动时间不可为空」那条去报
+
+  let hit = null;
+  Object.keys(ACTIVITIES).forEach(function (id) {
+    if (id === selfId) return;                      // ①
+    const a = ACTIVITIES[id];
+    if (a.play !== 'repeat') return;                // ②
+    if (a.status !== 'on') return;                  // ③
+
+    const as = toDay(a.start);
+    const ae = toDay(a.end);
+    if (as === null || ae === null) return;
+
+    // 两段期间有交集 ＝ 我的开始不晚于它的结束，且它的开始不晚于我的结束
+    if (s <= ae && as <= e) hit = { id: id, name: a.name };
+  });
+  return hit;
+}
 
 /* 编辑：把那一笔活动的值带进表单。
    玩法带进来之后锁定（改玩法会让已发出的活动记录对不上）。 */
@@ -2248,12 +2473,18 @@ function applyTerms() {
   document.title = t.page + ' — 后台原型';
 }
 
+/* 把日期字串转成可以比较大小的日期。只取到「日」——时分不影响自然天数，
+   也不影响「两档活动有没有重叠」的判定。
+   字串是空的、或格式不对，就回 null，让呼叫的人自己决定要不要报错。 */
+function toDay(str) {
+  const d = new Date(String(str || '').slice(0, 10) + 'T00:00:00+08:00');
+  return isNaN(d) ? null : d;
+}
+
 function calcNaturalDays() {
-  const s = document.getElementById('fStart').value.slice(0, 10);
-  const e = document.getElementById('fEnd').value.slice(0, 10);
-  const sd = new Date(s + 'T00:00:00+08:00');
-  const ed = new Date(e + 'T00:00:00+08:00');
-  if (isNaN(sd) || isNaN(ed)) return null;
+  const sd = toDay(document.getElementById('fStart').value);
+  const ed = toDay(document.getElementById('fEnd').value);
+  if (sd === null || ed === null) return null;
   return Math.round((ed - sd) / 86400000) + 1;
 }
 
@@ -2263,6 +2494,7 @@ function refreshNaturalDays() {
   const el = document.getElementById('naturalDays');
   if (el) el.textContent = text;
   document.querySelectorAll('.js-natural').forEach(function (n) { n.textContent = text; });
+  refreshWeekPeriod();   // B 版：活动时间变了，「期间内出现几天」与压灰要跟著重算
 }
 
 /* --------------------------------------------------------------------------
@@ -2297,6 +2529,30 @@ function validateAndSave(e) {
     name.classList.remove('input--error');
   }
 
+  /* 活动时间必填。起、迄两格都不可留空，缺哪一格就标哪一格。
+     这条要排在同期唯一性前面——时间都还没填，也就无从判断跟谁撞期。 */
+  const fStart = document.getElementById('fStart');
+  const fEnd   = document.getElementById('fEnd');
+  const timeBlank = !fStart.value.trim() || !fEnd.value.trim();
+  if (timeBlank) {
+    errors.push('活动时间不可为空（错误码 23105）');
+  }
+  fStart.classList.toggle('input--error', !fStart.value.trim());
+  fEnd.classList.toggle('input--error', !fEnd.value.trim());
+
+  /* 复存同期只能开一笔。
+     只有复存要验；时间没填好就先跳过，免得两条错误一起洗版。
+     编辑既有活动时要把自己排除掉，否则改活动 7 会变成「跟自己撞期」。 */
+  if (app.dataset.play === 'repeat' && !timeBlank) {
+    const clash = findOverlapRepeat(fStart.value, fEnd.value, lastLoadedId);
+    if (clash) {
+      errors.push('已有一笔活动时间重叠的每日复存活动（活动编号 ' + clash.id
+                + '「' + clash.name + '」），同一期间只能开启一笔复存活动');
+      fStart.classList.add('input--error');
+      fEnd.classList.add('input--error');
+    }
+  }
+
   // 最后一个天数区间的结束日，必须等于活动自然天数（只有首存有天数区间）
   const natural = calcNaturalDays();
   const lastEnd = Number(document.getElementById('fLastDayEnd').value);
@@ -2320,8 +2576,44 @@ function validateAndSave(e) {
     }
   }
 
-  if (app.dataset.play === 'repeat') {
-    /* ── 复存 ──────────────────────────────────────────────────
+  if (app.dataset.play === 'repeat' && bIsActive()) {
+    /* ── 复存 · B 版（按周循环）────────────────────────────────
+       B 版是另一套资料（七天各一份），所以保存时要验 B 版那一套。
+       A 版的资料原封不动摆著，只是这次不送出——两版择一，实现时只会留一版。
+
+       错误不逐条弹提示：七天 × 11 个等级 × 每笔好几格，
+       填错几个地方就会弹出几十个提示把画面洗掉。
+       改成「弹一句 + 下方列出完整清单（可点）+ 直接跳到第一个错」。 */
+    const res = bCollectIssues();
+    bMarkErrors();
+
+    if (res.errors.length) {
+      bRunCheck();                       // 把完整清单画在「检查七天的配置」下方
+      errors.push('奖励配置有 ' + res.errors.length + ' 项要修正，已列在下方清单，点任一条可跳到那一格');
+      bFocusIssue(res.errors[0]);        // 游标直接放到第一个有问题的格子
+    } else {
+      res.warns.forEach(function (m) { warns.push(m); });
+
+      /* 保存成功时把实际效果讲一句，让营运确认「我配的跟我想的一样吗」。
+         挑最肥的那天讲，因为那天最可能配错、也最该被看见。 */
+      let best = null;
+      WEEK_DAYS.forEach(function (d) {
+        const st = bDayStat(d.key);
+        if (!best || st.maxPct > best.pct) best = { name: d.name, pct: st.maxPct };
+      });
+      const cnts = [];
+      WEEK_DAYS.forEach(function (d) {
+        const st = bDayStat(d.key);
+        cnts.push(st.minCnt, st.maxCnt);
+      });
+      const lo = Math.min.apply(null, cnts), hi = Math.max.apply(null, cnts);
+      warns.push('这样配的效果是：周一～周日各一组，每人每日可领 '
+               + (lo === hi ? (lo + ' 笔') : (lo + '～' + hi + ' 笔'))
+               + '，最高的是' + best.name + ' ' + best.pct + '%，每过一周循环一次');
+    }
+
+  } else if (app.dataset.play === 'repeat') {
+    /* ── 复存 · A 版 ───────────────────────────────────────────
        每个等级各自一套阶梯，所以逐个等级验。
        不能用「有没有显示」来判断要不要验——收合起来的区块也要验，
        否则收著的坏数据会被放行。 */
@@ -2471,7 +2763,9 @@ document.addEventListener('input', function (e) {
   }
 
   // 首存的天数区间矩阵仍走旧路：值存在 DOM 里，本次不异动
-  if (e.target.classList.contains('cell-input') && !e.target.classList.contains('js-tier')) {
+  if (e.target.classList.contains('cell-input')
+      && !e.target.classList.contains('js-tier')
+      && !e.target.classList.contains('jsb-tier')) {
     refreshNaturalDays();
   }
   if (e.target.id === 'fStart' || e.target.id === 'fEnd') refreshNaturalDays();
@@ -2579,15 +2873,14 @@ document.getElementById('actForm').addEventListener('reset', function (e) {
 });
 
 // 上方两个标签页
-document.getElementById('tabList').addEventListener('click', function () {
-  this.setAttribute('aria-selected', 'true');
-  document.getElementById('tabRecord').setAttribute('aria-selected', 'false');
-  showView('viewList');
-});
-document.getElementById('tabRecord').addEventListener('click', function () {
-  this.setAttribute('aria-selected', 'true');
-  document.getElementById('tabList').setAttribute('aria-selected', 'false');
-  showView('viewRecord');
+/* 上方两个标签页：选中一个，另一个就取消选中。 */
+[['tabList', 'viewList'], ['tabRecord', 'viewRecord']].forEach(function (pair) {
+  document.getElementById(pair[0]).addEventListener('click', function () {
+    ['tabList', 'tabRecord'].forEach(function (id) {
+      document.getElementById(id).setAttribute('aria-selected', String(id === pair[0]));
+    });
+    showView(pair[1]);
+  });
 });
 
 // PC / 手机 子标签页
@@ -2643,6 +2936,683 @@ document.getElementById('actForm').addEventListener('submit', validateAndSave);
 
 
 
+
+/* ==========================================================================
+   11-B. ❷ 奖励配置 · B 版：按「星期」循环，一笔一笔配
+
+   给老板挑选用的第二套配法。A 版（同一区块切过去那一版）一行都没动。
+
+     A 版：每个 VIP 一组阶梯，用「第 1–3 笔」这种区间分段，整个活动期间每天都一样。
+     B 版：先分成 周一～周日 七组，每组底下各 VIP 自己决定「每日可领几笔」，
+           然后 一笔一笔 各自配 —— 第 1 笔多少、第 2 笔多少，一列一笔，不分段。
+           活动期间每过一周就循环一次，所以做得出「周末加码」。
+
+   数据长这样：
+     weekPlans['sat']['VIP1'] = [ {min, pct:{...}, cap:{...}},   ← 第 1 笔
+                                  {min, pct:{...}, cap:{...}} ]  ← 第 2 笔
+     阵列有几个元素，就是那个等级那天可以领几笔 —— 不需要另外存「可领几笔」，
+     也没有「结束于第几笔」这种字段。营运改下拉选单，阵列就跟著变长变短。
+
+   跟 A 版共用：VIP_ROWS / CH_KEYS / CH_NAMES / MAX_ORDER / toast()
+   跟 A 版刻意不共用：事件委派用的 class。A 版是 .js-tier…，B 版一律加 b：.jsb-tier…，
+   前缀不一样，两边才不会抓到对方的输入框。
+   -------------------------------------------------------------------------- */
+
+/* 七天的顺序固定从周一排到周日。getUTCDay() 回传 0 是周日，所以另外记 dow 对照。 */
+const WEEK_DAYS = [
+  { key: 'mon', name: '周一', dow: 1 },
+  { key: 'tue', name: '周二', dow: 2 },
+  { key: 'wed', name: '周三', dow: 3 },
+  { key: 'thu', name: '周四', dow: 4 },
+  { key: 'fri', name: '周五', dow: 5 },
+  { key: 'sat', name: '周六', dow: 6 },
+  { key: 'sun', name: '周日', dow: 0 }
+];
+
+const weekPlans   = {};        // 七天 × 11 个等级，各自一份「一笔一列」的清单
+let   bCurrentDay = 'mon';     // 目前在编辑哪一天
+let   bOpenVips   = { VIP0: true };   // 哪些等级是展开的（换天时沿用，方便跨天对照同一个等级）
+let   bCopyArm    = false;     // 「复制过去」是不是已经按过第一次（两段式确认）
+let   bCopyTimer  = null;
+
+/* 初始化：给一份看得出「周末加码」的示范数据。
+   平日与周末的笔数一样，只有百分比与上限不同，这样打开原型就看得出 B 版在解决什么。 */
+function initWeekPlans() {
+  const SEED_COUNT = { VIP0: 3, VIP1: 4, VIP2: 5 };   // 各等级可领笔数可以不一样
+  const WEEKEND    = { sat: true, sun: true };
+
+  WEEK_DAYS.forEach(function (d) {
+    /* 周末加码：百分比 +8 个百分点，上限金额 ×1.25。
+       两个都要加——只加百分比的话，玩家存多一点就撞到同一个上限，实拿没变多，
+       「周末加码」会变成看得到吃不到；而且风控天花板只看上限，
+       上限不动的话七天的数字会一模一样，老板第一个就会问「那加码加在哪」。 */
+    const boost  = WEEKEND[d.key] ? 8 : 0;
+    const capUp  = WEEKEND[d.key] ? 1.25 : 1;
+
+    weekPlans[d.key] = {};
+    VIP_ROWS.forEach(function (r) {
+      const count = SEED_COUNT[r[0]] || 5;
+      const rows  = [];
+      for (let i = 0; i < count; i++) {
+        const drop = i * 3;                            // 越后面那笔百分比越低
+        rows.push({
+          min: (i === 0) ? r[1] : Math.round(r[1] / 2),
+          pct: {
+            platform: Math.max(1, r[2] - drop + boost),
+            glife:    Math.max(1, r[4] - drop + boost),
+            maya:     Math.max(1, r[6] - drop + boost)
+          },
+          cap: {
+            platform: Math.round(r[3] * capUp / 100) * 100,   // 取整百，画面上的数字才好看
+            glife:    Math.round(r[5] * capUp / 100) * 100,
+            maya:     Math.round(r[7] * capUp / 100) * 100
+          }
+        });
+      }
+      weekPlans[d.key][r[0]] = rows;
+    });
+  });
+}
+
+/* 把日期字串转成「日历上的那一天」。
+
+   为什么不直接用前面的 toDay()？
+   toDay() 是用 +08:00 建出来的时间点，浏览器若在别的时区，getDay() 会算成前一天，
+   星期就整个错开一格。这里只关心「日历上是星期几」，
+   所以改用 UTC 零时建立、再用 getUTCDay() 读，不管电脑在哪个时区答案都一样。 */
+function bDate(str) {
+  const s = String(str || '').slice(0, 10);
+  const d = new Date(s + 'T00:00:00Z');
+  return isNaN(d) ? null : d;
+}
+
+/* 算出这档活动期间内，每个星期几各出现几天。
+
+   按周循环最容易踩的坑就是「头尾不是整周」：
+   活动 9/08（二）～9/30（三）跑 23 天，周二、周三各出现 4 次，其余五天各 3 次；
+   活动若短于 7 天，甚至会有某几个星期几一次都轮不到——配了也白配。
+   所以这个数字要摆在营运眼前，而不是让他自己数日历。 */
+function bWeekdayCounts() {
+  const sd = bDate(document.getElementById('fStart').value);
+  const ed = bDate(document.getElementById('fEnd').value);
+  if (sd === null || ed === null || ed < sd) return null;
+
+  const counts = {};
+  WEEK_DAYS.forEach(function (d) { counts[d.key] = 0; });
+
+  // 一天一天走过去数。活动最长也就几十天，直接数最不容易出错。
+  for (let t = sd.getTime(); t <= ed.getTime(); t += 86400000) {
+    const dow = new Date(t).getUTCDay();
+    const hit = WEEK_DAYS.filter(function (d) { return d.dow === dow; })[0];
+    if (hit) counts[hit.key]++;
+  }
+  return counts;
+}
+
+/* 某个等级那天「每笔都领满」会拿走多少（只算平台渠道）。
+   一笔一列之后这件事变得很单纯：把每一笔的上限金额加起来就是了。
+
+   只算平台渠道：GLife／Maya 目前实际没有在跑，没有玩家走那条路，
+   算进来只会让天花板凭空变大，风控就白看了。 */
+function bVipDayTotal(day, vip) {
+  return weekPlans[day][vip].reduce(function (sum, row) {
+    return sum + (Number(row.cap.platform) || 0);
+  }, 0);
+}
+
+/* 整理一天的统计：最高％、可领笔数范围、单人单日最高。 */
+function bDayStat(day) {
+  let maxPct = 0, minCnt = null, maxCnt = null, best = 0, who = '';
+
+  VIP_ROWS.forEach(function (r) {
+    const rows = weekPlans[day][r[0]];
+    rows.forEach(function (row) { maxPct = Math.max(maxPct, Number(row.pct.platform) || 0); });
+
+    minCnt = (minCnt === null) ? rows.length : Math.min(minCnt, rows.length);
+    maxCnt = (maxCnt === null) ? rows.length : Math.max(maxCnt, rows.length);
+
+    const total = bVipDayTotal(day, r[0]);
+    if (total > best) { best = total; who = r[0]; }
+  });
+
+  return { maxPct: maxPct, minCnt: minCnt, maxCnt: maxCnt, best: best, who: who };
+}
+
+/* 活动时间一变，「期间内出现几天」「轮不到的压灰」全部要重算。
+   初始化途中也会被呼叫到（那时资料还没填），所以先确认有资料再动手。 */
+function refreshWeekPeriod() {
+  if (!weekPlans.mon) return;
+  renderWeekBar();          // 页签上的「期间 N 天」与压灰跟著活动时间走
+}
+
+/* 画星期页签。页签上直接写最高％，活动期间轮不到的那天加删除线，
+   不用一天一天点进去也知道七天各配了什么。 */
+function renderWeekBar() {
+  const bar = document.getElementById('weekBar');
+  if (!bar) return;
+  const counts = bWeekdayCounts();
+
+  bar.innerHTML = WEEK_DAYS.map(function (d) {
+    const st     = bDayStat(d.key);
+    const n      = counts ? counts[d.key] : null;
+    const unused = (n === 0);
+    const nBad   = bBadDays[d.key] || 0;
+
+    /* 页签要扛三件事，因为它是唯一一直在画面上的地方：
+       ① 那天配到多高（七个排在一起就是这档活动的「周曲线」）
+       ② 这档活动期间内那天会出现几次——按周循环特有的坑，
+          活动头尾不是整周，不满一周时甚至有几天一次都轮不到，配了也白配
+       ③ 有错要挂红点。页签一次只看得到一天，别天配错了如果页签上没有痕迹，
+          等於被藏起来。 */
+    return '<button type="button" class="weekbar__item'
+         +   (unused ? ' is-unused' : '') + (nBad ? ' is-bad' : '') + '"'
+         +   ' role="tab" data-day="' + d.key + '" aria-selected="' + (d.key === bCurrentDay) + '"'
+         +   (nBad ? ' title="这天有 ' + nBad + ' 项要修正"'
+                   : (unused ? ' title="这档活动期间内轮不到这天"' : '')) + '>'
+         +   '<span class="weekbar__name">' + d.name + '</span>'
+         +   '<span class="weekbar__badge">' + (nBad ? nBad + ' 项要修正' : '最高 ' + st.maxPct + '%') + '</span>'
+         +   '<span class="weekbar__days">' + (n === null ? '期间 —' : '期间 ' + n + ' 天') + '</span>'
+         + '</button>';
+  }).join('');
+}
+
+/* 风控天花板：单日与单周。
+   单日＝七天里最肥的那一天；单周＝同一个人七天每天都领满会领走多少。
+   单周是按周循环才有的风险——周末加码看起来只肥两天，乘上活动有几周就不是小数目。 */
+function refreshBRisk() {
+  const elDay  = document.getElementById('bRiskDay');
+  const elWeek = document.getElementById('bRiskWeek');
+  if (!elDay || !elWeek) return;
+
+  let bestDay = 0, dayWho = '', bestWeek = 0, weekWho = '';
+
+  WEEK_DAYS.forEach(function (d) {
+    VIP_ROWS.forEach(function (r) {
+      const total = bVipDayTotal(d.key, r[0]);
+      if (total > bestDay) { bestDay = total; dayWho = d.name + ' ' + r[0]; }
+    });
+  });
+
+  VIP_ROWS.forEach(function (r) {
+    let sum = 0;
+    WEEK_DAYS.forEach(function (d) { sum += bVipDayTotal(d.key, r[0]); });
+    if (sum > bestWeek) { bestWeek = sum; weekWho = r[0]; }
+  });
+
+  elDay.innerHTML  = '₱' + bestDay.toLocaleString('en-US')
+                   + ' <span class="risk-who">（' + dayWho + ' 每笔都领满）</span>';
+  elWeek.innerHTML = '₱' + bestWeek.toLocaleString('en-US')
+                   + ' <span class="risk-who">（' + weekWho + ' 七天都领满）</span>';
+}
+
+/* 画一天里某个等级的区块。
+
+   一笔一列：列＝第 1 笔、第 2 笔…，栏＝最低存款金额与各渠道的奖励／上限。
+   要领几笔用上面的下拉选，选 3 就出现 3 列 —— 没有「结束于第几笔」，
+   也不用自己算区间，看到几列就是几笔。 */
+function renderWeekPlan(day, vip, open) {
+  const rows = weekPlans[day][vip];
+
+  // 「每日可领几笔」下拉：1～10
+  let opts = '';
+  for (let n = 1; n <= MAX_ORDER; n++) {
+    opts += '<option value="' + n + '"' + (n === rows.length ? ' selected' : '') + '>' + n + '</option>';
+  }
+
+  let head = '<tr><th class="plan__rowhead">笔序</th><th>最低存款金额</th>';
+  CH_KEYS.forEach(function (ch) {
+    const cls = (ch === 'platform') ? '' : ' col-other';
+    head += '<th class="ch-' + ch + cls + '">' + CH_NAMES[ch] + ' 每日复存奖励</th>'
+          + '<th class="ch-' + ch + cls + '">' + CH_NAMES[ch] + ' 上限金额</th>';
+  });
+  head += '</tr>';
+
+  function cell(i, kind, ch) {
+    const row = rows[i];
+    const v = (kind === 'min') ? row.min : (kind === 'pct' ? row.pct[ch] : row.cap[ch]);
+    return '<td' + (ch && ch !== 'platform' ? ' class="col-other"' : '') + '>'
+         +   '<input class="cell-input jsb-tier" type="number" min="0"'
+         +     ' data-day="' + day + '" data-vip="' + vip + '" data-i="' + i + '" data-kind="' + kind + '"'
+         +     (ch ? ' data-ch="' + ch + '"' : '') + ' value="' + v + '">'
+         +   (kind === 'pct' ? '<span class="unit">%</span>' : '')
+         + '</td>';
+  }
+
+  let body = '';
+  rows.forEach(function (row, i) {
+    body += '<tr><th class="plan__rowhead">第 ' + (i + 1) + ' 笔</th>' + cell(i, 'min', null);
+    CH_KEYS.forEach(function (ch) { body += cell(i, 'pct', ch) + cell(i, 'cap', ch); });
+    body += '</tr>';
+  });
+
+  return '<details class="plan"' + (open ? ' open' : '') + ' data-vip="' + vip + '">'
+       +   '<summary class="plan__head">'
+       +     '<span class="plan__name">' + vip + '</span>'
+       +     '<span class="plan__meta">每日可领 ' + rows.length + ' 笔</span>'
+       +     '<span class="range__arrow" aria-hidden="true">▾</span>'
+       +   '</summary>'
+       +   '<div class="plan__body">'
+       +     '<p class="plan__count">每日可领 '
+       +       '<select class="input input--sm jsb-count" data-day="' + day + '" data-vip="' + vip + '"'
+       +         ' aria-label="' + vip + ' 每日可领几笔">' + opts + '</select> 笔'
+       +       '<span class="field__hint">选几笔，下面就出现几列，一笔一笔各自配（一天最多 ' + MAX_ORDER + ' 笔）。</span>'
+       +     '</p>'
+       +     '<div class="table-scroll"><table class="matrix plan__table">'
+       +       '<thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>'
+       +     '<p class="plan__acts">'
+       +       '<button type="button" class="btn btn--sm jsb-copy-vip" data-day="' + day + '" data-vip="' + vip + '">套用到其他等级（本天）</button>'
+       +     '</p>'
+       +   '</div>'
+       + '</details>';
+}
+
+/* 画出「当天」的 11 个等级。
+
+   为什么一次只画一天？七天 × 11 个等级 = 77 组，全部塞进画面既卷不完、也拖慢浏览器。
+   改成一次一天，而「哪些等级是展开的」换天时沿用——同一个等级跨天对照才方便。 */
+function renderWeekPlans() {
+  const wrap = document.getElementById('weekPlans');
+  if (!wrap) return;
+
+  // 先把目前的展开状态记下来，重画后才不会自己收起来
+  wrap.querySelectorAll('.plan').forEach(function (d) { bOpenVips[d.dataset.vip] = d.open; });
+
+  wrap.innerHTML = VIP_ROWS.map(function (r) {
+    return renderWeekPlan(bCurrentDay, r[0], !!bOpenVips[r[0]]);
+  }).join('');
+
+  /* 其他渠道（GLife／Maya）预设收起来。每次重画都照开关的现况重设一次，
+     不然重画后那几栏会自己冒出来，跟开关对不上。 */
+  const chOther = document.getElementById('bChOther');
+  wrap.classList.toggle('hide-other', !(chOther && chOther.checked));
+
+  bMarkErrors();      // 重画后把有问题的格子重新标红（里面也会重画页签）
+  refreshBRisk();
+}
+
+/* 改「每日可领几笔」：变多就照最后一笔复制出新的几笔，变少就从后面砍掉。
+
+   为什么新的几笔要沿用最后一笔、而不是留空？
+   复存奖励通常是越后面越低，营运调的是「再低一点」，
+   给他一份可以直接改的数字，比给空格快得多，也不会忘了填。 */
+function bSetCount(day, vip, n) {
+  const rows = weekPlans[day][vip];
+  n = Math.max(1, Math.min(MAX_ORDER, Number(n) || 1));
+
+  while (rows.length > n) rows.pop();
+  while (rows.length < n) {
+    const last = rows[rows.length - 1];
+    rows.push({
+      min: last.min,
+      pct: Object.assign({}, last.pct),
+      cap: Object.assign({}, last.cap)
+    });
+  }
+  renderWeekPlans();
+}
+
+/* 切换到某一天 */
+function bShowDay(day) {
+  if (!weekPlans[day]) return;
+  bCurrentDay = day;
+  bCloseCopyPanel();                    // 换天了，复制的来源就变了，先收起来免得复制错
+  renderWeekPlans();
+  const src = document.getElementById('bCopySrcName');
+  if (src) src.textContent = bDayName(day);
+}
+
+function bDayName(key) {
+  const d = WEEK_DAYS.filter(function (x) { return x.key === key; })[0];
+  return d ? d.name : key;
+}
+
+/* 把某个等级的配置套用到「同一天」的其他 10 个等级。
+   与 A 版一样是两段式确认——一次盖掉 10 个等级，代价比改一格大得多。 */
+let bVipCopyArm = null;
+function bResetVipCopyBtns() {
+  document.querySelectorAll('#weekPlans .jsb-copy-vip').forEach(function (b) {
+    b.textContent = '套用到其他等级（本天）';
+    b.classList.remove('btn--confirm');
+  });
+  if (bVipCopyArm) { clearTimeout(bVipCopyArm.timer); bVipCopyArm = null; }
+}
+function bOnCopyVipClick(btn) {
+  const day = btn.dataset.day, vip = btn.dataset.vip;
+  if (bVipCopyArm && bVipCopyArm.vip === vip && bVipCopyArm.day === day) {   // 第二次按：真的盖过去
+    bResetVipCopyBtns();
+    weekPlans[day] = bCloneDay(weekPlans[day], vip);
+    renderWeekPlans();
+    toast('success', '已把 ' + bDayName(day) + ' 的 ' + vip + ' 配置套用到其他 ' + (VIP_ROWS.length - 1) + ' 个等级');
+    return;
+  }
+  bResetVipCopyBtns();
+  btn.textContent = '再按一次，确认覆盖本天其他 ' + (VIP_ROWS.length - 1) + ' 个等级';
+  btn.classList.add('btn--confirm');
+  bVipCopyArm = { day: day, vip: vip, timer: setTimeout(bResetVipCopyBtns, 5000) };
+}
+
+/* 把一天里某个等级的配置复制成「全等级都一样」。
+   一定要整份复制（不能直接指到同一个阵列），否则改一个等级会连动改到别的等级。 */
+function bCloneDay(dayObj, fromVip) {
+  const out = {};
+  VIP_ROWS.forEach(function (r) {
+    out[r[0]] = dayObj[fromVip].map(function (row) {
+      return { min: row.min, pct: Object.assign({}, row.pct), cap: Object.assign({}, row.cap) };
+    });
+  });
+  return out;
+}
+
+/* ── 「复制这天到其他天」面板 ────────────────────────────────────────────
+   七天 × 11 个等级 = 77 组，一组一组填是不可能的。
+   实际的配法是「配好一天 → 复制到其他六天 → 再单独把周末调高」，
+   所以这颗按钮是 B 版能不能用的关键，不是附加功能。 */
+function bRenderCopyDays() {
+  const box = document.getElementById('bCopyDays');
+  if (!box) return;
+  const counts = bWeekdayCounts();
+
+  // 来源那天不列出来——复制到自己没有意义，列出来只会让人误按
+  box.innerHTML = WEEK_DAYS.filter(function (d) { return d.key !== bCurrentDay; })
+    .map(function (d) {
+      const unused = counts && counts[d.key] === 0;
+      return '<button type="button" class="daychip jsb-copy-target' + (unused ? ' is-unused' : '') + '"'
+           +   ' data-day="' + d.key + '" aria-pressed="false"'
+           +   (unused ? ' title="这档活动期间内轮不到这天"' : '') + '>'
+           +   d.name + '</button>';
+    }).join('');
+  bSyncCopyBtn();
+}
+
+/* 目前选了哪几天 */
+function bPickedDays() {
+  return Array.prototype.slice
+    .call(document.querySelectorAll('.jsb-copy-target[aria-pressed="true"]'))
+    .map(function (el) { return el.dataset.day; });
+}
+
+/* 主按钮要讲清楚「按下去会发生什么」：没选时按不动，选了就写出几天。
+   按钮上直接写数量，比让人自己回头数胶囊快。 */
+function bSyncCopyBtn() {
+  const btn = document.getElementById('bCopyGo');
+  if (!btn) return;
+  const n = bPickedDays().length;
+  btn.disabled = (n === 0);
+  if (!bCopyArm) btn.textContent = n ? ('复制到 ' + n + ' 天') : '复制过去';
+}
+
+function bOpenCopyPanel() {
+  const p = document.getElementById('bCopyPanel');
+  if (!p) return;
+  bRenderCopyDays();
+  document.getElementById('bCopySrcName').textContent = bDayName(bCurrentDay);
+  p.hidden = false;
+}
+function bCloseCopyPanel() {
+  const p = document.getElementById('bCopyPanel');
+  if (p) p.hidden = true;
+  bResetCopyGo();
+}
+function bResetCopyGo() {
+  const btn = document.getElementById('bCopyGo');
+  if (btn) btn.classList.remove('btn--confirm');
+  bCopyArm = false;
+  if (bCopyTimer) { clearTimeout(bCopyTimer); bCopyTimer = null; }
+  bSyncCopyBtn();          // 回到「复制到 N 天」
+}
+function bDoCopyDay() {
+  const targets = bPickedDays();
+  if (targets.length === 0) { toast('warn', '请先选要复制到哪几天'); return; }
+
+  /* 第一次按：先问一次，而且把「会盖掉哪几天」写在按钮上。
+     只写「确认覆盖 3 天」的话，人不会回头去核对是哪 3 天。 */
+  if (!bCopyArm) {
+    const btn = document.getElementById('bCopyGo');
+    btn.textContent = '再按一次，确认覆盖 ' + targets.map(bDayName).join('、');
+    btn.classList.add('btn--confirm');
+    bCopyArm = true;
+    bCopyTimer = setTimeout(bResetCopyGo, 5000);
+    return;
+  }
+
+  const src = weekPlans[bCurrentDay];
+  targets.forEach(function (day) {
+    weekPlans[day] = {};
+    VIP_ROWS.forEach(function (r) {
+      weekPlans[day][r[0]] = src[r[0]].map(function (row) {
+        return { min: row.min, pct: Object.assign({}, row.pct), cap: Object.assign({}, row.cap) };
+      });
+    });
+  });
+  bCloseCopyPanel();
+  renderWeekPlans();
+  toast('success', '已把 ' + bDayName(bCurrentDay) + ' 的配置复制到 ' + targets.length + ' 天：'
+                 + targets.map(bDayName).join('、'));
+}
+
+/* ── 检查配置 ───────────────────────────────────────────────────────────
+   页签一次只看得到一天，别天的错误会被藏起来——所以要有一颗
+   「七天一起检查」的按钮，把问题全部列出来，而不是等保存时才一条一条冒。 */
+function bCollectIssues() {
+  const errors = [], warns = [];
+  const counts = bWeekdayCounts();
+
+  WEEK_DAYS.forEach(function (d) {
+    if (counts && counts[d.key] === 0) {
+      warns.push(d.name + '：这档活动期间内一次都轮不到，配了也不会发出去（活动不满一周才会这样）。');
+    }
+
+    VIP_ROWS.forEach(function (r) {
+      const vip = r[0];
+      weekPlans[d.key][vip].forEach(function (row, i) {
+        const where = d.name + ' · ' + vip + ' · 第 ' + (i + 1) + ' 笔';
+
+        /* 每一条错误都记下「是哪一格」，之后才点得回去。
+           只写一句话的错误清单，营运看完还要自己找是哪一天哪个等级，
+           七天 × 11 个等级找起来很痛苦。 */
+        function bad(kind, ch, msg) {
+          errors.push({ day: d.key, vip: vip, i: i, kind: kind, ch: ch, msg: where + '：' + msg });
+        }
+
+        if (!(Number(row.min) > 0)) bad('min', null, '最低存款金额要大于 0。');
+
+        CH_KEYS.forEach(function (ch) {
+          const pct = Number(row.pct[ch]), cap = Number(row.cap[ch]);
+          if (!(pct > 0)) bad('pct', ch, CH_NAMES[ch] + ' 的奖励％要大于 0。');
+          if (!(cap > 0)) bad('cap', ch, CH_NAMES[ch] + ' 的上限金额要大于 0。');
+
+          /* 奖励算出 0 的坑：百分比太小、门槛又低的时候，
+             刚好踩到门槛的玩家会领到 0 元——画面上看起来有奖励、实际拿到零，
+             这种客诉最难解释，所以配置阶段就挡。
+             标在百分比那一格：门槛通常是营运定好的，要调的多半是百分比。 */
+          if (pct > 0 && Number(row.min) > 0 && Math.floor(Number(row.min) * pct) / 100 <= 0) {
+            bad('pct', ch, CH_NAMES[ch] + ' 用最低存款金额（' + row.min
+              + '）算出来的奖励是 0，玩家会领到 0 元。');
+          }
+        });
+      });
+    });
+  });
+
+  return { errors: errors, warns: warns };
+}
+
+/* 把七天的错误整理成一包，方便画面上「哪一格要标红」「哪一天要挂红点」直接查。 */
+let bBadCells = {};          // 'sat|VIP1|0|pct|platform' -> true
+let bBadDays  = {};          // 'sat' -> 几个错
+function bRefreshBadIndex() {
+  bBadCells = {}; bBadDays = {};
+  bCollectIssues().errors.forEach(function (it) {
+    bBadCells[it.day + '|' + it.vip + '|' + it.i + '|' + it.kind + '|' + (it.ch || '')] = true;
+    bBadDays[it.day] = (bBadDays[it.day] || 0) + 1;
+  });
+}
+
+/* 点一条错误 → 跳到那一天、展开那个等级、把游标放进那一格。
+   这是「错误清单」跟「画面」之间的桥：看到问题就能直接去改，不用自己找。 */
+function bFocusIssue(it) {
+  if (it.day !== bCurrentDay) bShowDay(it.day);
+  const box = document.querySelector('#weekPlans .plan[data-vip="' + it.vip + '"]');
+  if (box) box.open = true;
+
+  const sel = '#weekPlans input[data-vip="' + it.vip + '"][data-i="' + it.i + '"]'
+            + '[data-kind="' + it.kind + '"]' + (it.ch ? '[data-ch="' + it.ch + '"]' : '');
+  const el = document.querySelector(sel);
+  if (!el) return;
+
+  // 那一格如果是收起来的渠道，先把渠道展开，不然游标会跑到看不见的地方
+  if (it.ch && it.ch !== 'platform') {
+    const ch = document.getElementById('bChOther');
+    if (ch && !ch.checked) { ch.checked = true; ch.dispatchEvent(new Event('change', { bubbles: true })); }
+  }
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  el.focus();
+  if (el.select) el.select();
+}
+
+/* 即时标红：只 toggle class、不重画 DOM，所以正在打字的输入框不会掉焦点。 */
+function bMarkErrors() {
+  bRefreshBadIndex();
+  document.querySelectorAll('#weekPlans input.jsb-tier').forEach(function (el) {
+    const key = bCurrentDay + '|' + el.dataset.vip + '|' + el.dataset.i
+              + '|' + el.dataset.kind + '|' + (el.dataset.ch || '');
+    el.classList.toggle('input--error', !!bBadCells[key]);
+  });
+  // 有错的等级，收起来时也要看得出来
+  document.querySelectorAll('#weekPlans .plan').forEach(function (box) {
+    const has = box.querySelector('input.input--error');
+    box.classList.toggle('plan--bad', !!has);
+  });
+
+  /* 页签的红点一起更新。
+     错误可能落在别天，只重画当天的格子会让别天的红点停在旧状态——
+     那等於又把错误藏回页签后面，B 版最怕的就是这个。 */
+  renderWeekBar();
+}
+
+/* B 版现在是不是「选中的那一版」。保存要验哪一套资料，看这个。 */
+function bIsActive() {
+  const box = document.getElementById('rewardB');
+  return !!box && !box.hidden;
+}
+
+let bLastIssues = [];        // 记住最近一次检查的结果，点清单时要用
+
+function bRunCheck() {
+  const box = document.getElementById('bCheckResult');
+  const res = bCollectIssues();
+  bLastIssues = res.errors;
+  bMarkErrors();               // 检查完顺便把有问题的格子标红
+
+  if (res.errors.length === 0 && res.warns.length === 0) {
+    box.innerHTML = '<p class="alert alert--success"><span class="alert__icon">✓</span>'
+                  + '<span>七天 × 11 个等级全部检查过，没有问题。</span></p>';
+    toast('success', '配置检查通过');
+    return;
+  }
+
+  let html = '';
+  if (res.errors.length) {
+    /* 每一条都做成可以点的——点了直接跳到那一天、那个等级、那一格。
+       只列文字的话，营运看完还要自己在七天 × 11 个等级里找，找到一半就放弃了。 */
+    html += '<p class="alert alert--error"><span class="alert__icon">✕</span><span>'
+          + '有 <strong>' + res.errors.length + '</strong> 项要修正，保存会被挡下'
+          + '（<strong>点一下就跳到那一格</strong>）：</span></p>'
+          + '<ul class="bcheck__list">'
+          + res.errors.slice(0, 20).map(function (it, i) {
+              return '<li><button type="button" class="bcheck__go" data-idx="' + i + '">'
+                   + it.msg + '</button></li>';
+            }).join('')
+          + (res.errors.length > 20 ? '<li>…另外还有 ' + (res.errors.length - 20) + ' 项</li>' : '')
+          + '</ul>';
+  }
+  if (res.warns.length) {
+    html += '<p class="alert alert--warn" style="margin-top:var(--space-3)"><span class="alert__icon">⚠</span><span>'
+          + '有 <strong>' + res.warns.length + '</strong> 项提醒（不挡保存）：</span></p>'
+          + '<ul class="bcheck__list">'
+          + res.warns.map(function (s) { return '<li>' + s + '</li>'; }).join('')
+          + '</ul>';
+  }
+  box.innerHTML = html;
+  toast(res.errors.length ? 'error' : 'warn',
+        res.errors.length ? ('有 ' + res.errors.length + ' 项要修正') : ('有 ' + res.warns.length + ' 项提醒'));
+}
+
+/* ── B 版的事件：全部绑在 #rewardB 这一块上 ────────────────────────────
+   绑在这一块而不是 document，好处是 B 版的点击永远传不到 A 版的处理器，
+   两版的行为彻底分开，改 B 版不可能弄坏 A 版。
+   A／B 的切换本身不用写程式——那排切换沿用既有的 .subtabs 处理器，
+   它会依 data-panel 把另一块 hidden 起来。 */
+(function bindRewardB() {
+  const view = document.getElementById('rewardB');
+  if (!view) return;
+
+  view.addEventListener('click', function (e) {
+    const t = e.target;
+
+    const dayBtn = t.closest && t.closest('.weekbar__item');
+    if (dayBtn) { bShowDay(dayBtn.dataset.day); return; }
+
+    const cpVip = t.closest && t.closest('.jsb-copy-vip');
+    if (cpVip) { bOnCopyVipClick(cpVip); return; }
+
+    // 点检查结果的某一条 → 跳到那一天、那个等级、那一格
+    const go = t.closest && t.closest('.bcheck__go');
+    if (go) { bFocusIssue(bLastIssues[Number(go.dataset.idx)]); return; }
+
+    // 复制面板：点日期胶囊选取／取消
+    const chip = t.closest && t.closest('.jsb-copy-target');
+    if (chip) {
+      bResetCopyGo();                        // 改了选取，先前的「再按一次」就不算数了
+      chip.setAttribute('aria-pressed', String(chip.getAttribute('aria-pressed') !== 'true'));
+      bSyncCopyBtn();
+      return;
+    }
+
+
+    // 点别的地方就把「再按一次」的状态收掉，免得放著过一阵子误按
+    bResetVipCopyBtns();
+  });
+
+  // 改「每日可领几笔」：列数要跟著增减，所以整块重画
+  view.addEventListener('change', function (e) {
+    if (!e.target.classList.contains('jsb-count')) return;
+    bSetCount(e.target.dataset.day, e.target.dataset.vip, e.target.value);
+  });
+
+  /* 输入：把值写回数据模型。
+     这里刻意「不重画整个区块」——重画会让正在打字的输入框失去焦点。 */
+  view.addEventListener('input', function (e) {
+    if (!e.target.classList.contains('jsb-tier')) return;
+    const el  = e.target;
+    const row = weekPlans[el.dataset.day][el.dataset.vip][Number(el.dataset.i)];
+    const v   = Number(el.value.trim());
+
+    if (el.dataset.kind === 'min')      row.min = v;
+    else if (el.dataset.kind === 'pct') row.pct[el.dataset.ch] = v;
+    else                                row.cap[el.dataset.ch] = v;
+
+    bMarkErrors();            // 填错当场标红＋页签跟著更新，不用等按保存才知道
+    refreshBRisk();
+  });
+
+  document.getElementById('bExpandAll').addEventListener('click', function () {
+    document.querySelectorAll('#weekPlans .plan').forEach(function (d) { d.open = true; });
+  });
+  document.getElementById('bCollapseAll').addEventListener('click', function () {
+    document.querySelectorAll('#weekPlans .plan').forEach(function (d) { d.open = false; });
+  });
+  document.getElementById('bChOther').addEventListener('change', function () {
+    // 只管看不看得到，不动任何数据：收起来时那些值照样存在、照样要检查
+    document.getElementById('weekPlans').classList.toggle('hide-other', !this.checked);
+  });
+
+  document.getElementById('bCopyDayOpen').addEventListener('click', bOpenCopyPanel);
+  document.getElementById('bCopyCancel').addEventListener('click', bCloseCopyPanel);
+  document.getElementById('bCopyGo').addEventListener('click', bDoCopyDay);
+  document.getElementById('bCheck').addEventListener('click', bRunCheck);
+})();
+
 /* --------------------------------------------------------------------------
    12. 初始化
    -------------------------------------------------------------------------- */
@@ -2652,6 +3622,9 @@ renderVipPlans();       // 画出 11 个等级的区块（顺带算风控天花�
 applyOtherCh();         // 其他渠道默认收起
 buildAllMatrices();     // 首存的天数区间矩阵（不异动）
 refreshNaturalDays();
+
+initWeekPlans();        // B 版：七天各一套配置（示范数据已做出周末加码）
+renderWeekPlans();      // 画出当天的 11 个等级，顺带算风控天花板与本周概览
 </script>
 
 

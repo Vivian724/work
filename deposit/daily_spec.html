@@ -266,7 +266,7 @@ table.t .nw { white-space: nowrap; }
   <section class="pane pane--spec" aria-label="规格文件">
     <div class="pane-bar">
       <span class="pane-bar__title">规格书</span>
-      <span class="pane-bar__hint">每日存款活动（首存＋复存）· v1.0</span>
+      <span class="pane-bar__hint">每日存款活动（首存＋复存）· v2.0</span>
       <span class="pane-bar__spacer"></span>
       <button class="pane-bar__btn" id="btnGoto" hidden>◀ 左侧跳到这一节</button>
     </div>
@@ -307,7 +307,7 @@ table.t .nw { white-space: nowrap; }
                     ④ 新增唯读的<b>风控天花板</b>（单人单日理论最高可领）<br>
                     ⑤ 新增「<b>套用到其他等级</b>」，配好一个等级可一键复制到其余 10 个<br>
                     ⑥ 活动列表页、活动记录页各新增「活动」栏与查询条件<br>
-                    ⑦ 活动记录页新增「当日第几笔」「所属阶梯」<br>
+                    ⑦ 活动记录页另新增「VIP 等级」「渠道」「当日第几笔」「所属阶梯」「奖励比例」（连同⑥的「活动」共六栏，导出档同步加）<br>
                     ⑧ 保存校验：复存同期唯一性、阶梯连续性、笔数上限、奖励不得算出 0<br>
                     ⑨ 前台新增复存优惠券与活动详情页的阶梯表、今日进度
                   </td>
@@ -754,7 +754,7 @@ table.t .nw { white-space: nowrap; }
                 <tr><td class="nw">最低存款金额</td><td class="nw"><b>否</b><br>三渠道共用</td><td class="nw">是</td>
                     <td><b>大于 0</b>，最多 2 位小数。未达此金额<b>不发奖，也不计入笔数</b>（见 4.1）。<br>与首存一致——首存的矩阵里最低金额也是一栏，不分渠道。</td></tr>
                 <tr><td class="nw">每日复存奖励（％）</td><td class="nw"><b>是</b></td><td class="nw">是</td>
-                    <td><b>大于 0</b>，最多 2 位小数。与最低存款金额相乘后不得舍去成 0（见 3.4.2）。</td></tr>
+                    <td><b>大于 0</b>，最多 2 位小数。与最低存款金额相乘后不得舍去成 0（见 3.5.2）。</td></tr>
                 <tr><td class="nw">上限金额</td><td class="nw"><b>是</b></td><td class="nw">是</td>
                     <td><b>大于 0</b>，最多 2 位小数。奖励超过此值取此值。复存<b>一律启用</b>。</td></tr>
               </tbody>
@@ -895,7 +895,7 @@ table.t .nw { white-space: nowrap; }
             <table class="t">
               <thead><tr><th class="nw">字段</th><th>限制</th></tr></thead>
               <tbody>
-                <tr><td class="nw">PC／手机端图片设置</td><td>两个子标签页。<b>图片张数与名称依「活动」而不同</b>，见 3.5.1。</td></tr>
+                <tr><td class="nw">PC／手机端图片设置</td><td>两个子标签页。<b>图片张数与名称依「活动」而不同</b>，见 3.4.1。</td></tr>
                 <tr><td class="nw">图片格式</td><td>仅支持 <code>.PNG</code> <code>.JPG</code>，单张不超过 <b>2MB</b></td></tr>
                 <tr><td class="nw">活动内容</td><td>富文本，支持多语</td></tr>
                 <tr><td class="nw">内容标题文字</td><td>文字输入，支持多语</td></tr>
@@ -1082,7 +1082,7 @@ table.t .nw { white-space: nowrap; }
                 <tr><td class="nw">重置</td>
                     <td><b>新增</b>：整张表单回到刚进来的初始状态（活动＝每日首存、各栏清空、区间段剩一段）。<br>
                         <b>编辑</b>：回到该活动<b>最后一次保存的值</b>，不是清空。<br>
-                        因为会一次清掉大量已填内容，<b>需跳确认弹窗</b>：「确定要重置吗？未保存的修改将会遗失。」（这点与 3.2.9 的删除段不同——那个删一段，这个清整张表。）</td></tr>
+                        因为会一次清掉大量已填内容，<b>需跳确认弹窗</b>：「确定要重置吗？未保存的修改将会遗失。」（这点与 3.2.3 的删除阶梯不同——那个删一阶，这个清整张表。）</td></tr>
                 <tr><td class="nw">‹ 返回列表</td>
                     <td>有未保存的修改时，跳确认弹窗：「离开将遗失未保存的修改，确定离开吗？」<br>没有修改则直接返回，不打扰。</td></tr>
                 <tr><td class="nw">保存成功后</td>
@@ -1449,7 +1449,7 @@ table.t .nw { white-space: nowrap; }
                 <tr><td class="nw">保存与校验</td><td class="nw"><span class="tag tag--change">中</span></td>
                     <td>复存要多一组校验（阶梯连续性、笔数上限、同期唯一性、奖励不得算出 0）。首存既有校验不动。</td></tr>
                 <tr><td class="nw">活动记录页</td><td class="nw"><span class="tag tag--change">小</span></td>
-                    <td>多三栏（活动、当日第几笔、所属阶梯）与一个查询条件；导出档要同步加这三栏。</td></tr>
+                    <td>多六栏（活动、VIP 等级、渠道、当日第几笔、所属阶梯、奖励比例）与一个查询条件；导出档要同步加这六栏。</td></tr>
                 <tr><td class="nw">权限</td><td class="nw"><span class="tag tag--same">无</span></td>
                     <td>沿用既有权限，不新增。</td></tr>
               </tbody>
@@ -1530,9 +1530,9 @@ table.t .nw { white-space: nowrap; }
                 <tr><td>4</td><td>「活动名称」DB 字段长度是多少？后台输入框要不要设硬上限？</td>
                     <td class="nw">3.1.3、3.1.6</td><td></td></tr>
                 <tr><td>5</td><td>内容配置的四张图，现况是否真的全部非必填？前台某些位置留白会不会破版？</td>
-                    <td class="nw">3.3.1</td><td></td></tr>
+                    <td class="nw">3.4.2</td><td></td></tr>
                 <tr><td>6</td><td>活动记录页现况的完整查询条件清单？（既有文件只列了字段，没列查询条件）</td>
-                    <td class="nw">3.5.3</td><td></td></tr>
+                    <td class="nw">3.6.3</td><td></td></tr>
                 <tr><td>7</td><td><b>活动详情页的「活动时间」现在是哪里来的？</b>若前台目前拿不到，需要补上——
                         这是玩家在<b>预热期</b>判断「活动开始了没」的<b>唯一依据</b>，没有它就会出现「看得到却领不到」的客诉</td>
                     <td class="nw">5.4</td><td></td></tr>
@@ -1570,7 +1570,7 @@ table.t .nw { white-space: nowrap; }
 </div>
 
 <!-- PROTO_EMBED_BEGIN -->
-<!-- 内嵌副本 · 存档于 2026-09-15 · 由 merge_spec.py 自动产生，请勿手改 -->
+<!-- 内嵌副本 · 存档于 2026-09-16 · 由 merge_spec.py 自动产生，请勿手改 -->
 <script type="text/plain" id="proto-src"><!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
@@ -2592,8 +2592,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             <label class="field__label"><span class="req">*</span>活动状态</label>
             <div class="field__body">
               <div class="choice-group">
-                <label class="choice"><input type="radio" name="status" checked><span class="choice__text">开启</span></label>
-                <label class="choice"><input type="radio" name="status"><span class="choice__text">关闭</span></label>
+                <label class="choice"><input type="radio" name="status" value="on" checked><span class="choice__text">开启</span></label>
+                <label class="choice"><input type="radio" name="status" value="off"><span class="choice__text">关闭</span></label>
               </div>
               <span class="field__hint">关闭后前台立即不显示、也不发奖。无草稿状态。</span>
             </div>
@@ -2806,7 +2806,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
           <div id="imgPc">
             <div class="only-first">
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC首页推荐展示图</label>
+              <label class="field__label">PC首页推荐展示图</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -2818,7 +2818,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC弹窗图片</label>
+              <label class="field__label">PC弹窗图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -2830,7 +2830,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC列表页图</label>
+              <label class="field__label">PC列表页图</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -2842,7 +2842,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC内容图片</label>
+              <label class="field__label">PC内容图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -2856,7 +2856,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             </div>
             <div class="only-repeat">
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC奖励列表</label>
+              <label class="field__label">PC奖励列表</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -2868,7 +2868,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>PC内容图片</label>
+              <label class="field__label">PC内容图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">PC</div>
@@ -2886,7 +2886,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
           <div id="imgMobile" hidden>
             <div class="only-first">
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机标题图片</label>
+              <label class="field__label">手机标题图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -2898,7 +2898,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机弹窗图片</label>
+              <label class="field__label">手机弹窗图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -2910,7 +2910,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机首页图片(移动端用)</label>
+              <label class="field__label">手机首页图片(移动端用)</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -2922,7 +2922,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机内容图片</label>
+              <label class="field__label">手机内容图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -2936,7 +2936,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             </div>
             <div class="only-repeat">
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机奖励列表</label>
+              <label class="field__label">手机奖励列表</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -2948,7 +2948,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
               </div>
             </div>
             <div class="field">
-              <label class="field__label"><span class="req">*</span>手机内容图片</label>
+              <label class="field__label">手机内容图片</label>
               <div class="field__body">
                 <div class="uploader">
                   <div class="uploader__box">手机</div>
@@ -3621,13 +3621,49 @@ document.addEventListener('click', function (e) {
    真实系统是跟后端要，这里写死。
    ========================================================================== */
 const ACTIVITIES = {
-  '7': { name: '每日复存加码',        play: 'repeat', start: '2026-09-08', end: '2026-09-30',
+  /* status 要跟上面列表的「状态」栏一致——同期唯一性校验会读它，
+     关闭的那笔不计入冲突（换档时先关旧的再开新的）。 */
+  '7': { name: '每日复存加码',        play: 'repeat', status: 'on',  start: '2026-09-08', end: '2026-09-30',
          plans: { VIP0: [3], VIP1: [2, 5], VIP2: [1, 3, 6] } },
-  '6': { name: '咖啡两两',            play: 'first',  start: '2026-09-10', end: '2026-09-11' },
-  '5': { name: '每日首充活动-长时间111', play: 'first',  start: '2026-09-01', end: '2026-09-30' },
-  '4': { name: '每日小首充1',          play: 'first',  start: '2026-09-08', end: '2026-09-30' },
-  '3': { name: '每日首充V2',          play: 'first',  start: '2026-09-08', end: '2026-09-10' }
+  '6': { name: '咖啡两两',            play: 'first',  status: 'on',  start: '2026-09-10', end: '2026-09-11' },
+  '5': { name: '每日首充活动-长时间111', play: 'first',  status: 'on',  start: '2026-09-01', end: '2026-09-30' },
+  '4': { name: '每日小首充1',          play: 'first',  status: 'on',  start: '2026-09-08', end: '2026-09-30' },
+  '3': { name: '每日首充V2',          play: 'first',  status: 'off', start: '2026-09-08', end: '2026-09-10' }
 };
+
+/* 复存同期只能开一笔：找出会跟这次要存的时间「撞期」的那笔复存活动。
+
+   为什么用「活动时间有没有重叠」，而不是「只要有开启中的复存就挡」？
+   为了让营运能提前把下一档建好排著——9/30 旧档结束、10/1 新档开始，
+   时间不重叠就放行，换档那天不会开天窗。
+
+   三个不算冲突的情况：
+     ① 正在编辑的就是那一笔（改自己不算跟自己撞）
+     ② 对方是首存（这条规则只约束复存，首存维持多笔并行的现况）
+     ③ 对方状态是关闭（换档时先关旧的再开新的）
+
+   回传撞到的那一笔 { id, name }，没撞到回 null。 */
+function findOverlapRepeat(startStr, endStr, selfId) {
+  const s = toDay(startStr);
+  const e = toDay(endStr);
+  if (s === null || e === null) return null;        // 时间还没填好，交给「活动时间不可为空」那条去报
+
+  let hit = null;
+  Object.keys(ACTIVITIES).forEach(function (id) {
+    if (id === selfId) return;                      // ①
+    const a = ACTIVITIES[id];
+    if (a.play !== 'repeat') return;                // ②
+    if (a.status !== 'on') return;                  // ③
+
+    const as = toDay(a.start);
+    const ae = toDay(a.end);
+    if (as === null || ae === null) return;
+
+    // 两段期间有交集 ＝ 我的开始不晚于它的结束，且它的开始不晚于我的结束
+    if (s <= ae && as <= e) hit = { id: id, name: a.name };
+  });
+  return hit;
+}
 
 /* 编辑：把那一笔活动的值带进表单。
    玩法带进来之后锁定（改玩法会让已发出的活动记录对不上）。 */
@@ -3821,12 +3857,18 @@ function applyTerms() {
   document.title = t.page + ' — 后台原型';
 }
 
+/* 把日期字串转成可以比较大小的日期。只取到「日」——时分不影响自然天数，
+   也不影响「两档活动有没有重叠」的判定。
+   字串是空的、或格式不对，就回 null，让呼叫的人自己决定要不要报错。 */
+function toDay(str) {
+  const d = new Date(String(str || '').slice(0, 10) + 'T00:00:00+08:00');
+  return isNaN(d) ? null : d;
+}
+
 function calcNaturalDays() {
-  const s = document.getElementById('fStart').value.slice(0, 10);
-  const e = document.getElementById('fEnd').value.slice(0, 10);
-  const sd = new Date(s + 'T00:00:00+08:00');
-  const ed = new Date(e + 'T00:00:00+08:00');
-  if (isNaN(sd) || isNaN(ed)) return null;
+  const sd = toDay(document.getElementById('fStart').value);
+  const ed = toDay(document.getElementById('fEnd').value);
+  if (sd === null || ed === null) return null;
   return Math.round((ed - sd) / 86400000) + 1;
 }
 
@@ -3868,6 +3910,30 @@ function validateAndSave(e) {
     name.classList.add('input--error');
   } else {
     name.classList.remove('input--error');
+  }
+
+  /* 活动时间必填。起、迄两格都不可留空，缺哪一格就标哪一格。
+     这条要排在同期唯一性前面——时间都还没填，也就无从判断跟谁撞期。 */
+  const fStart = document.getElementById('fStart');
+  const fEnd   = document.getElementById('fEnd');
+  const timeBlank = !fStart.value.trim() || !fEnd.value.trim();
+  if (timeBlank) {
+    errors.push('活动时间不可为空（错误码 23105）');
+  }
+  fStart.classList.toggle('input--error', !fStart.value.trim());
+  fEnd.classList.toggle('input--error', !fEnd.value.trim());
+
+  /* 复存同期只能开一笔。
+     只有复存要验；时间没填好就先跳过，免得两条错误一起洗版。
+     编辑既有活动时要把自己排除掉，否则改活动 7 会变成「跟自己撞期」。 */
+  if (app.dataset.play === 'repeat' && !timeBlank) {
+    const clash = findOverlapRepeat(fStart.value, fEnd.value, lastLoadedId);
+    if (clash) {
+      errors.push('已有一笔活动时间重叠的每日复存活动（活动编号 ' + clash.id
+                + '「' + clash.name + '」），同一期间只能开启一笔复存活动');
+      fStart.classList.add('input--error');
+      fEnd.classList.add('input--error');
+    }
   }
 
   // 最后一个天数区间的结束日，必须等于活动自然天数（只有首存有天数区间）
@@ -4414,7 +4480,7 @@ refreshNaturalDays();
       clearTimeout(liveTimer); clearTimeout(giveUpTimer);
       modeLabel.textContent = (mode === 'live')
         ? '即时载入 daily_admin.html · 原型改版会自动同步'
-        : '内嵌副本（存档于 2026-09-15）· 非即时';
+        : '内嵌副本（存档于 2026-09-16）· 非即时';
     }
     fallback.classList.add('hidden');
 
