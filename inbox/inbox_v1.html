@@ -63,8 +63,6 @@
   .visual-caption{font-size:16px;color:var(--text-muted);margin-top:14px;text-align:center;}
 
   .note{font-size:17px;line-height:1.7;color:var(--text-secondary);font-style:italic;background:var(--gray-bg);border-radius:6px;padding:16px 20px;margin:20px 0 0;}
-  .open-item{font-size:17px;line-height:1.7;background:var(--amber-bg);color:var(--amber-text);border-radius:6px;padding:16px 20px;margin:20px 0 0;}
-  .open-item b{font-weight:700;}
   /* 紅字說明：規格中「限制性、不可自行擴充」的規則，用紅字強調 */
   .redline{color:var(--red-text);font-weight:700;}
   .note-red{font-size:17px;line-height:1.7;background:#fdecea;color:var(--red-text);border-left:4px solid var(--red-text);border-radius:6px;padding:16px 20px;margin:20px 0 0;}
@@ -99,8 +97,6 @@
 
   .uiframe .toolbar{display:flex;justify-content:space-between;align-items:center;margin:0 0 14px;flex-wrap:wrap;gap:10px;}
   .uiframe .toolbar-right{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
-  .uiframe .filter-item{display:flex;align-items:center;gap:8px;}
-  .uiframe .filter-item label{font-size:15px;color:var(--text-primary);white-space:nowrap;}
 
   .uiframe button{font-family:inherit;font-size:15px;padding:9px 17px;border-radius:6px;border:1px solid var(--border-strong);background:#fff;color:var(--text-primary);cursor:pointer;-webkit-appearance:none;appearance:none;}
   .uiframe button:hover{background:#f5f6f8;}
@@ -125,6 +121,13 @@
   .uiframe thead th{text-align:left;color:var(--text-secondary);font-weight:500;padding:10px 8px;border-bottom:1px solid var(--border-strong);}
   .uiframe tbody td{padding:13px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
   .uiframe tbody tr:last-child td{border-bottom:none;}
+  /* 活动设定列表：比照实际后台样式，文字置中、每格加框线，右下角分页 */
+  .uiframe table.grid thead th{text-align:center;background:var(--gray-bg);border:1px solid var(--border);}
+  .uiframe table.grid tbody td{text-align:center;border:1px solid var(--border);vertical-align:middle;}
+  .uiframe table.grid tbody tr:last-child td{border-bottom:1px solid var(--border);}
+  .uiframe .pager{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:16px;font-size:14px;color:var(--text-secondary);}
+  .uiframe .pager-btn{padding:4px 11px;font-size:14px;}
+  .uiframe .pager-btn.active{background:var(--blue);border-color:var(--blue);color:#fff;}
   .uiframe .muted{color:var(--text-secondary);}
   .uiframe .sub{color:var(--text-muted);font-size:14px;}
 
@@ -144,6 +147,11 @@
   .uiframe .field-label .reset:hover{text-decoration:underline;}
   .uiframe .field select,.uiframe .field input,.uiframe .field textarea{width:100%;}
   .uiframe .count{text-align:right;font-size:14px;color:var(--text-muted);margin-top:4px;}
+  .uiframe .input-wrap{position:relative;}
+  .uiframe .input-wrap .count{position:absolute;right:12px;bottom:10px;margin:0;pointer-events:none;}
+  .uiframe .input-wrap input ~ .count{top:50%;bottom:auto;transform:translateY(-50%);}
+  .uiframe .input-wrap input{padding-right:66px;}
+  .uiframe .input-wrap textarea{padding-bottom:28px;}
   .uiframe .field .hint{font-size:14px;color:var(--text-muted);margin-top:6px;}
   /* 加上 .spec-only 的灰字＝僅供規格閱讀者理解，實際後台畫面不顯示 */
   .uiframe .field .hint.spec-only{border:1px dashed var(--border-strong);border-radius:6px;padding:8px 11px;background:#fafbfc;}
@@ -209,17 +217,30 @@
 
   <div class="doc-header">
     <h1>站内信提醒 — 活动消息（后台配置）规格文件</h1>
-    <p class="doc-meta">位置：消息推送 ＞ 活动消息（新增分页）　｜　版本：v1</p>
+    <p class="doc-meta">位置：公告管理 ＞ 消息推送 ＞ 活动消息（新增分页）　｜　版本：v1</p>
     <p class="doc-nav">本文件分三大区块：<b>一、活动设定列表</b>（后台列表、状态机、资料处理、消息列表整合）　→　<b>二、新增／编辑设定弹窗</b>（弹窗栏位、可绑定活动、灰字规则、还原功能、验证规则）　→　<b>三、前台呈现</b>（会员端消息中心与弹窗）</p>
     <div class="note-red" style="margin-top:22px;">
-      <b>本次调整摘要（9/16）</b>　本次新增或改写的章节，标题会加上「（9/16调整）」，既有章节则标于该章节第一条变动规则；章节内仅<b>规则本身变动的句子</b>以红字标示，其余说明维持一般字色，避免整页红字反而看不出重点：
+      <b>本次调整摘要（9/17）</b>
+      <ul>
+        <li><b>删除</b>｜2.1：移除新增／编辑设定弹窗内的「CTA 按钮文字」栏位与其相关规格（原为纯展示、不可编辑的固定值），后台画面不再呈现此栏位；前台按钮文字仍固定为「Claim Now」，前台规则不变（详见 3.1 前台呈现）。</li>
+        <li><b>异动</b>｜2.1、2.2：可绑定活动移除「盈利活动」，「② 选择活动」下拉选单仅剩「预约活动」「X-BOMB」两个活动。</li>
+        <li><b>新增</b>｜3.1：补上 X-BOMB 活动的发送规则——仅「刮刮卡」奖励会发送活动消息，其他奖励不发送。</li>
+        <li><b>异动</b>｜全文：后台栏位「模板类型」更名为「<b>消息类型</b>」，文件内相关字样一并调整（按钮文字改为「还原为默认值」）。</li>
+        <li><b>异动</b>｜1.5：消息列表的「消息类型」栏位显示该笔所属的消息类型名称（如 Reward Ready）；筛选下拉标明名称为「消息类型」（默认值「所有消息」）。</li>
+        <li><b>异动</b>｜1.2：列表筛选改为「消息类型」「活动」两个下拉＋「搜索」按钮，新增按钮文字为「新增」。</li>
+        <li><b>异动</b>｜1.2、2.2：列表「消息内容」改为一行显示不下以「…」截断（原为完整显示不截断），完整内容于编辑弹窗查看。</li>
+        <li><b>不异动</b>｜2.1：弹窗与按钮逻辑均未变动，仅画面依实际后台对齐（送出按钮文字「确认」、CTA跳转链接下方灰字用实际文案、字数统计移入输入框内），非规则异动。</li>
+        <li><b>不异动</b>｜1.2：列表原型依实际后台画面重绘，栏位用字统一为「CTA跳转链接」，范例资料改用实际后台资料（画面对齐，非规则异动）。</li>
+      </ul>
+    </div>
+    <div class="note-red" style="margin-top:22px;">
+      <b>9/16 调整摘要</b>　本次新增或改写的章节，标题会加上「（9/16调整）」，既有章节则标于该章节第一条变动规则；章节内仅<b>规则本身变动的句子</b>以红字标示，其余说明维持一般字色，避免整页红字反而看不出重点：
       <ul>
         <li><b>异动</b>｜2.1、2.2：「② 选择活动」下拉选单限定仅支援「盈利活动」「预约活动」「X-BOMB」三个活动，其余活动不得出现。</li>
-        <li><b>新增</b>｜2.1：注明弹窗内四段灰色说明文字各自「是否需呈现于后台画面」，其中仅「② 选择活动」下方灰字为规格说明用、不需实作。</li>
-        <li><b>新增</b>｜2.1、2.2：CTA 跳转连结须带上该活动指定的活动 ID，并于栏位下方常驻提醒操作员。</li>
-        <li><b>异动</b>｜2.1：CTA 跳转连结输入框内不得预设任何文案，开启弹窗时保持完全空白。</li>
-        <li><b>新增</b>｜2.1：「还原为模板预设值」确认为本次须实作的功能，补上完整功能规格与情境穷举表。</li>
-        <li><b>不异动</b>｜1.2、1.5 画面示意中的范例活动名称改用上述开放中的活动，仅为避免示意与规则矛盾，非规则异动。</li>
+        <li><b>新增</b>｜2.1：注明弹窗内各段灰色说明文字各自「是否需呈现于后台画面」，其中仅「② 选择活动」下方灰字为规格说明用、不需实作。</li>
+        <li><b>新增</b>｜2.1、2.2：CTA跳转链接须带上该活动指定的活动 ID，并于栏位下方常驻提醒操作员。</li>
+        <li><b>异动</b>｜2.1：CTA跳转链接输入框内不得默认任何文案，开启弹窗时保持完全空白。</li>
+        <li><b>新增</b>｜2.1：「还原为默认值」确认为本次须实作的功能，补上完整功能规格与情境穷举表。</li>
         <li><b>不异动</b>｜全文改以「列表／弹窗／前台」三大区块重新编排，章节重新编号，规则内容未变动。</li>
       </ul>
     </div>
@@ -246,66 +267,70 @@
           <div class="tab active new">活动消息</div>
         </div>
         <div class="card">
-          <div class="toolbar">
-            <div>
-              <p style="margin:0;font-size:13px;font-weight:600;">活动设定列表</p>
-            </div>
-            <div class="toolbar-right">
-              <div class="filter-item">
-                <label>模板类型：</label>
-                <select>
-                  <option>全部</option>
-                  <option>Reward Ready</option>
-                </select>
-              </div>
-              <button class="primary">＋ 新增</button>
+          <div class="toolbar" style="justify-content:flex-start;">
+            <div class="toolbar-right" style="gap:10px;">
+              <select style="min-width:150px;">
+                <option>消息类型</option>
+                <option>Reward Ready</option>
+              </select>
+              <select style="min-width:150px;">
+                <option>活动</option>
+                <option>预约活动</option>
+                <option>X-BOMB</option>
+              </select>
+              <button class="primary"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:5px;"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>搜索</button>
+              <button class="primary">新增</button>
             </div>
           </div>
           <div class="table-scroll">
-          <table style="min-width:1080px;">
+          <table class="grid" style="min-width:1120px;">
             <colgroup>
-              <col style="width:8%"><col style="width:10%"><col style="width:12%"><col style="width:13%"><col style="width:11%"><col style="width:8%"><col style="width:7%"><col style="width:10%"><col style="width:9%"><col style="width:12%">
+              <col style="width:10%"><col style="width:9%"><col style="width:15%"><col style="width:8%"><col style="width:13%"><col style="width:8%"><col style="width:7%"><col style="width:12%"><col style="width:9%"><col style="width:9%">
             </colgroup>
             <thead>
-              <tr><th>模板类型</th><th>活动</th><th>消息标题</th><th>消息内容</th><th>CTA 跳转连结</th><th>审核状态</th><th>已发送</th><th>新增时间</th><th>操作人名称</th><th>操作</th></tr>
+              <tr><th>消息类型</th><th>活动</th><th>消息标题</th><th>消息内容</th><th>CTA跳转链接</th><th>审核状态</th><th>已发送</th><th>新增时间</th><th>操作人名称</th><th>操作</th></tr>
             </thead>
             <tbody>
               <tr id="setting-row-1">
                 <td>Reward Ready</td>
-                <td><div class="cell-flex"><span class="truncate" title="盈利活动">盈利活动</span></div></td>
-                <td>🎉 {ActivityName} is Ready to Claim!</td>
-                <td class="muted">Hurry! Your {RewardName} bonus won't wait forever — claim it before it expires.</td>
-                <td class="muted"><div class="cell-flex"><span class="truncate" title="/promo/profit-activity?activityId=10021">/promo/profit-activity?activityId=10021</span></div></td>
+                <td>X-BOMB</td>
+                <td>{ActivityName} Reward Ready</td>
+                <td class="muted"><div class="cell-flex"><span class="truncate" title="Your {RewardName} reward is ready to claim! Don't miss out—claim it now.">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</span></div></td>
+                <td class="muted">－</td>
                 <td><span class="badge on">已确认</span></td>
-                <td>1,284</td>
-                <td class="sub">2026-08-20 09:30:00</td>
-                <td class="sub">admin_lisa</td>
+                <td>70</td>
+                <td class="sub">2026-09-16 18:55:32</td>
+                <td class="sub">wadeyu</td>
                 <td>
-                  <div class="action-group">
+                  <div class="action-group" style="justify-content:center;">
                     <button class="btn-sm btn-delete" onclick="showDeleteConfirm('setting-row-1')">删除</button>
                   </div>
                 </td>
               </tr>
               <tr id="setting-row-2">
                 <td>Reward Ready</td>
-                <td><div class="cell-flex"><span class="truncate" title="预约活动">预约活动</span></div></td>
-                <td>{ActivityName} Reward Ready</td>
-                <td class="muted">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</td>
-                <td class="muted">－</td>
-                <td><span class="badge pending">待确认</span></td>
-                <td>0</td>
-                <td class="sub">确认后产生</td>
-                <td class="sub">admin_chen</td>
+                <td>预约活动</td>
+                <td>{ActivityName} Reward Ready test</td>
+                <td class="muted"><div class="cell-flex"><span class="truncate" title="Your {RewardName} reward is ready to claim! Don't miss out—claim it now.">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</span></div></td>
+                <td class="muted" style="word-break:break-all;">/common-reserve?id={ActivityId}</td>
+                <td><span class="badge on">已确认</span></td>
+                <td>11</td>
+                <td class="sub">2026-09-16 17:54:19</td>
+                <td class="sub">wadeyu</td>
                 <td>
-                  <div class="action-group">
-                    <button class="btn-sm btn-confirm">确认</button>
-                    <button class="btn-sm btn-edit">编辑</button>
+                  <div class="action-group" style="justify-content:center;">
                     <button class="btn-sm btn-delete" onclick="showDeleteConfirm('setting-row-2')">删除</button>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
+          </div>
+          <div class="pager">
+            <span>Total 2</span>
+            <button class="pager-btn" disabled>‹</button>
+            <button class="pager-btn active">1</button>
+            <button class="pager-btn" disabled>›</button>
           </div>
         </div>
         <div class="modal-overlay" id="delete-overlay">
@@ -325,28 +350,28 @@
           </div>
         </div>
       </div>
-      <p class="visual-caption">分页位置示意，及活动设定列表完整栏位；可实际点击「删除」测试二次确认流程，栏位宽度不足时可左右滑动查看<br><span class="redline">（9/16调整）此画面调整处：范例活动改用开放中的「盈利活动」「预约活动」，CTA 连结范例补上活动 ID（范例资料调整，非规则异动）</span></p>
+      <p class="visual-caption">活动设定列表完整栏位与分页位置；可实际点击「删除」测试二次确认流程，栏位宽度不足时可左右滑动查看<br><span class="redline">（9/17调整）此画面调整处：依实际后台画面重绘——筛选改为「消息类型」「活动」两个下拉，右侧依序为「搜索」「新增」按钮；「消息内容」一行显示不下以「…」截断；栏位名称用字改为「CTA跳转链接」；右下角补上分页。</span><br>此示意两笔皆为「已确认」，故操作栏仅显示「删除」；「待确认」状态的三颗按钮呈现见 1.3 状态机。</p>
   </div>
   <div class="full">
       <h2>1.2 活动设定列表<span class="tag">页面主画面</span></h2>
-      <p>显示所有已配置的「模板 × 活动」设定（跨模板整并显示）。每笔设定绑定一个模板类型与一个活动。列表提供依「模板类型」筛选，以及依活动名称模糊搜寻。</p>
+      <p>显示所有已配置的「消息类型 × 活动」设定（跨消息类型整并显示）。每笔设定绑定一个消息类型与一个活动。<span class="redline">列表上方提供「消息类型」「活动」两个下拉筛选，选择后点「搜索」套用；右侧「新增」按钮开启新增设定弹窗。</span></p>
       <p>操作栏位（比照后台既有样式，三色实心按钮，横向排列）：</p>
       <ul>
         <li><b>确认（绿色）</b>：将「待确认」状态的设定转为「已确认」（各状态下按钮显示规则详见 1.3 状态机）。</li>
-        <li><b>编辑（蓝色）</b>：仅「待确认」状态可点击；点击后开启设定弹窗，栏位同 2.1 新增／编辑设定弹窗，可调整消息标题、消息内容、CTA跳转连结（设定确认后是否仍可编辑，详见 1.3 状态机）。</li>
+        <li><b>编辑（蓝色）</b>：仅「待确认」状态可点击；点击后开启设定弹窗，栏位同 2.1 新增／编辑设定弹窗，可调整消息标题、消息内容、CTA跳转链接（设定确认后是否仍可编辑，详见 1.3 状态机）。</li>
         <li><b>删除（红色）</b>：点击后先跳出二次确认弹窗（内容「确认删除吗？」，样式详见下方说明）；确认后执行删除，处理原则详见 1.4 资料处理原则。</li>
       </ul>
       <div class="note">本文件所有「提示」跳窗（含此处删除二次确认、2.2 验证失败阻挡提示）皆统一比照同一套样式：左上角标题「提示」、右上角「✕」可关闭、左侧橘色圆形惊叹号图示、右侧提示文字、按钮靠右对齐。需要操作员二次确认的情境用两个按钮（取消／确定）；纯粹告知、无需选择的情境用单一按钮（我知道了）。</div>
       <table class="spec">
         <tr><th style="width:22%">栏位</th><th style="width:15%">型态</th><th>说明 / 资料来源</th></tr>
-        <tr><td>模板类型</td><td>显示，唯读</td><td>此笔设定所属的模板类型名称，来源为新增当下选择的模板</td></tr>
+        <tr><td>消息类型</td><td>显示，唯读</td><td>此笔设定所属的消息类型名称，来源为新增当下选择的消息类型</td></tr>
         <tr><td>活动</td><td>显示，唯读</td><td>此笔设定绑定的活动名称，来源为新增当下选择的活动</td></tr>
         <tr><td>消息标题</td><td>显示，唯读</td><td>此设定目前存储的消息标题</td></tr>
-        <tr><td>消息内容</td><td>显示，唯读</td><td>此设定目前存储的消息内容前段预览</td></tr>
-        <tr><td>CTA 跳转连结</td><td>显示，唯读</td><td>此笔设定的活动专属页面连结；未配置时显示为「－」</td></tr>
+        <tr><td>消息内容</td><td>显示，唯读</td><td>此设定目前存储的消息内容；<span class="redline">一行显示不下时以「…」截断，完整内容可于编辑弹窗查看</span></td></tr>
+        <tr><td>CTA跳转链接</td><td>显示，唯读</td><td>此笔设定的活动专属页面链接；未配置时显示为「－」</td></tr>
         <tr><td>审核状态</td><td>系统栏位</td><td>待确认 / 已确认，见 1.3 状态机</td></tr>
-        <tr><td>已发送数</td><td>数字，唯读</td><td>统计此设定已成功发送的通知数</td></tr>
-        <tr><td>新增时间</td><td>显示，唯读</td><td>取值为操作员点击「确认」当下的时间，非建立设定的时间；「待确认」状态尚未产生此时间，明确显示文字「确认后产生」，不使用「－」（避免与 CTA 跳转连结栏位的「－」混淆为同一种意思）</td></tr>
+        <tr><td>已发送</td><td>数字，唯读</td><td>统计此设定已成功发送的通知数</td></tr>
+        <tr><td>新增时间</td><td>显示，唯读</td><td>取值为操作员点击「确认」当下的时间，非建立设定的时间；「待确认」状态尚未产生此时间，明确显示文字「确认后产生」，不使用「－」（避免与 CTA跳转链接栏位的「－」混淆为同一种意思）</td></tr>
         <tr><td>操作人名称</td><td>显示，唯读</td><td>建立此笔设定的操作人员帐号</td></tr>
       </table>
   </div>
@@ -394,66 +419,25 @@
   <div class="full">
     <h2>1.4 资料处理原则</h2>
     <ul style="margin-bottom:0;">
-      <li>删除：点击删除须先经二次确认弹窗（内容「确认删除吗？」）；确认后为真删除，整笔设定资料由资料库直接移除，不保留历史纪录。<b>删除设定不会影响「消息列表」中已经发送过的纪录，只有这笔设定本身会消失</b>（见 1.5 与「消息列表」整合）。</li>
-      <li>新增设定时，消息标题／消息内容会带入模板当下的预设文案；送出后此文字即存为这笔设定「自己的一份副本」，与模板不再有关联。之后若模板预设文案被修改，所有已存在的设定都维持原本存下来的文字，不会自动跟着变成新文案——即使某笔设定当初完全没被操作员微调过、文字跟模板预设值一模一样，也一样不会自动更新。</li>
+      <li>删除：确认后为真删除（二次确认弹窗见 1.2），整笔设定资料由资料库直接移除，不保留历史纪录。<b>删除设定不会影响「消息列表」中已经发送过的纪录，只有这笔设定本身会消失</b>（见 1.5 与「消息列表」整合）。</li>
+      <li>新增设定时，消息标题／消息内容会带入消息类型当下的默认文案；送出后此文字即存为这笔设定「自己的一份副本」，与消息类型不再有关联。之后若消息类型的默认文案被修改，所有已存在的设定都维持原本存下来的文字，不会自动跟着变成新文案——即使某笔设定当初完全没被操作员微调过、文字跟消息类型默认值一模一样，也一样不会自动更新。</li>
       <li>「每个奖励仅发送一次，领取后不再重复」之逻辑由系统自动记录发送状态，不开放后台配置。</li>
     </ul>
   </div>
 
   <!-- 1.5：与既有「消息列表」整合，文字配画面 -->
   <div class="topic-group">
-  <div class="visual-full">
-    <div class="uiframe">
-      <div class="breadcrumb">位置 &gt; 消息列表</div>
-      <div class="tabbar">
-        <div class="tab">消息推送</div>
-        <div class="tab active">消息列表</div>
-      </div>
-      <div class="card">
-        <div class="toolbar-right" style="margin-bottom:18px;">
-          <select>
-            <option>所有消息</option>
-            <option>活动消息</option>
-          </select>
-          <input type="text" placeholder="会员名" style="width:130px;">
-          <input type="text" placeholder="开始时间" style="width:120px;">
-          <span class="muted">～</span>
-          <input type="text" placeholder="结束时间" style="width:120px;">
-          <button class="primary">搜索</button>
-        </div>
-        <table>
-          <colgroup>
-            <col style="width:16%"><col style="width:34%"><col style="width:10%"><col style="width:12%"><col style="width:16%"><col style="width:12%">
-          </colgroup>
-          <thead>
-            <tr><th>标题</th><th>内容</th><th>消息类型</th><th>会员名</th><th>新增时间</th><th>操作人名称</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>盈利活动 Reward Ready</td>
-              <td class="muted">Your Summer Badge reward is ready to claim! Don't miss out—claim it now.</td>
-              <td>活动消息</td>
-              <td>player0088</td>
-              <td class="sub">2026-08-27 17:41:14</td>
-              <td class="sub">system</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <p class="visual-caption">既有消息列表页面，筛选下拉新增「活动消息」选项后的示意<br><span class="redline">（9/16调整）此画面调整处：范例消息标题改用开放中的活动名称（范例资料调整，非规则异动）</span></p>
-  </div>
   <div class="full">
     <h2>1.5 与「消息列表」整合<span class="tag">既有页面，非新增</span></h2>
     <p>「公告管理 ＞ 消息列表」为记录所有已发送消息的既有页面。活动消息一经系统发送，须比照其他消息类型，一并写入此页的发送纪录，供操作员查询与稽核。</p>
     <ul>
-      <li>「所有消息」筛选下拉选单需新增「活动消息」选项。活动消息的发送纪录一样归在「所有消息」底下（选「所有消息」时会一起显示）；操作员另外选择「活动消息」时，则只显示活动消息这个类型的发送纪录。</li>
+      <li><span class="redline">筛选下拉选单名称为「消息类型」，默认值「所有消息」</span>，需新增「活动消息」选项。活动消息的发送纪录一样归在「所有消息」底下（选「所有消息」时会一起显示）；操作员另外选择「活动消息」时，则只显示活动消息这个类型的发送纪录。</li>
     </ul>
     <table class="spec">
       <tr><th style="width:22%">栏位</th><th>取值来源</th></tr>
       <tr><td>标题</td><td>此笔发送当下的消息标题</td></tr>
       <tr><td>内容</td><td>此笔发送当下的消息内容</td></tr>
-      <tr><td>消息类型</td><td>固定显示「活动消息」</td></tr>
+      <tr><td>消息类型</td><td><span class="redline">显示该笔发送所属的消息类型名称（如 Reward Ready）</span></td></tr>
       <tr><td>新增时间</td><td>实际发送时间</td></tr>
     </table>
   </div>
@@ -467,10 +451,10 @@
         <div class="modal">
           <button class="modal-close">✕</button>
           <p class="modal-title">新增设定</p>
-          <p class="modal-subtitle">先选模板类型，决定套用哪一组触发条件与文案模板；再选活动</p>
+          <p class="modal-subtitle">先选消息类型，决定套用哪一组触发条件与默认文案；再选活动</p>
 
           <div class="field">
-            <label class="field-label"><span class="req">*</span>① 模板类型</label>
+            <label class="field-label"><span class="req">*</span>① 消息类型</label>
             <select><option selected>Reward Ready</option></select>
           </div>
 
@@ -480,39 +464,39 @@
             <label class="field-label"><span class="req">*</span>② 选择活动</label>
             <select>
               <option>请选择活动（单选）</option>
+              <option>预约活动</option>
               <option>X-BOMB</option>
             </select>
-            <div class="hint spec-only"><b>※（9/16调整）规格说明用，不呈现于后台画面：</b>本功能仅支援「盈利活动」「预约活动」「X-BOMB」三个活动，其余活动一律不显示于选单；一次仅能绑定一个活动，因 CTA 连结需指向该活动专属页面。此示意中「盈利活动」「预约活动」已被其他设定占用，故选单中仅剩「X-BOMB」。</div>
+            <div class="hint spec-only"><b>※（9/17调整）规格说明用，不呈现于后台画面：</b>本功能仅支援「预约活动」「X-BOMB」两个活动，其余活动一律不显示于选单；一次仅能绑定一个活动，因 CTA 链接需指向该活动专属页面。此示意为尚未有活动被占用时的状态，故两个活动皆出现在选单中；已被其他设定占用的活动不会显示。</div>
           </div>
 
           <div class="field">
-            <label class="field-label">消息标题 <span class="reset" onclick="resetField('v2-title-input','v2-title-count')">还原为模板预设值</span></label>
-            <input type="text" id="v2-title-input" value="{ActivityName} Reward Ready" data-default="{ActivityName} Reward Ready" oninput="updateCount('v2-title-input','v2-title-count',50)">
-            <div class="count" id="v2-title-count">12/50</div>
+            <label class="field-label">消息标题 <span class="reset" onclick="resetField('v2-title-input','v2-title-count')">还原为默认值</span></label>
+            <div class="input-wrap">
+              <input type="text" id="v2-title-input" value="{ActivityName} Reward Ready" data-default="{ActivityName} Reward Ready" oninput="updateCount('v2-title-input','v2-title-count',50)">
+              <div class="count" id="v2-title-count">12/50</div>
+            </div>
             <div class="field-error" id="v2-title-error" style="display:none;">消息标题缺少 {ActivityName} 变量，请补回后再送出</div>
           </div>
 
           <div class="field">
-            <label class="field-label">消息内容 <span class="reset" onclick="resetField('v2-content-input','v2-content-count')">还原为模板预设值</span></label>
-            <textarea rows="3" id="v2-content-input" data-default="Your {RewardName} reward is ready to claim! Don't miss out—claim it now." oninput="updateCount('v2-content-input','v2-content-count',1000)">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</textarea>
-            <div class="count" id="v2-content-count">64/1000</div>
+            <label class="field-label">消息内容 <span class="reset" onclick="resetField('v2-content-input','v2-content-count')">还原为默认值</span></label>
+            <div class="input-wrap">
+              <textarea rows="3" id="v2-content-input" data-default="Your {RewardName} reward is ready to claim! Don't miss out—claim it now." oninput="updateCount('v2-content-input','v2-content-count',1000)">Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</textarea>
+              <div class="count" id="v2-content-count">64/1000</div>
+            </div>
             <div class="field-error" id="v2-content-error" style="display:none;">消息内容缺少 {RewardName} 变量，请补回后再送出</div>
           </div>
 
-          <div class="field">
-            <label class="field-label">CTA 跳转连结</label>
-            <input type="text">
-            <div class="hint">请填写该活动专属页面连结，并加上指定的活动 ID；留空时前台不显示按钮。</div>
-          </div>
-
           <div class="field" style="margin-bottom:0;">
-            <label class="field-label">CTA 按钮文字</label>
-            <div class="hint-box" style="margin:0;">固定值，不可编辑：<b>Claim Now</b></div>
+            <label class="field-label">CTA跳转链接</label>
+            <input type="text">
+            <div class="hint">活动页面链接，结尾加 ?id={ActivityId}。请原样保留，系统自动带入；留空则不显示按钮。</div>
           </div>
 
           <div class="modal-actions">
             <button>取消</button>
-            <button class="primary" onclick="validateAndSubmit()">确定</button>
+            <button class="primary" onclick="validateAndSubmit()">确认</button>
           </div>
         </div>
         <div class="modal-overlay" id="validate-overlay">
@@ -531,64 +515,64 @@
           </div>
         </div>
       </div>
-      <p class="visual-caption">可实际输入文字并点击「还原为模板预设值」测试；亦可删除文字中的 {ActivityName} 或 {RewardName} 后点击「确定」，测试送出阻挡提示<br><span class="redline">（9/16调整）此画面调整处：活动下拉仅剩开放中的活动、活动下方灰字标示为「后台不呈现」、CTA 跳转连结输入框清空、不放任何预设文案，说明改以下方灰字呈现并新增活动 ID 提醒；CTA 按钮文字下方灰底字确认需呈现于后台</span></p>
+      <p class="visual-caption">可实际输入文字并点击「还原为默认值」测试；亦可删除文字中的 {ActivityName} 或 {RewardName} 后点击「确认」，测试送出阻挡提示<br><span class="redline">（9/17调整）此画面调整处：移除「CTA 按钮文字」栏位；活动下拉改为「预约活动」「X-BOMB」；其余依实际后台对齐——送出按钮「确认」、CTA跳转链接下方灰字改用实际文案、字数统计移入输入框内。</span></p>
   </div>
   <div class="full">
       <h2>2.1 新增／编辑设定弹窗<span class="tag">点击「＋新增」或「编辑」开启</span></h2>
-      <p>栏位依序标号「① 模板类型」「② 选择活动」，引导操作员依序填写：</p>
+      <p>栏位依序标号「① 消息类型」「② 选择活动」，引导操作员依序填写：</p>
       <ul>
-        <li>① 选择模板类型后，画面显示一段灰底提示文字，列出该模板固定的触发条件，供操作员确认，此区块不可编辑。</li>
-        <li>② 选择活动（单选）。消息标题 / 消息内容栏位会自动预填模板预设文案，操作员可微调；栏位旁提供「还原为模板预设值」，可一键还原并即时更新字数统计（右侧可实际试打），完整规格见下方专章。</li>
-        <li>CTA 按钮文字固定显示模板值、不可编辑；CTA 跳转连结为活动层级栏位，非必填，若填写需对应该活动专属页面并带上活动 ID（前台呈现规则详见 3.1 前台呈现）。</li>
+        <li>① 选择消息类型后，画面显示一段灰底提示文字，列出该消息类型固定的触发条件，供操作员确认，此区块不可编辑。</li>
+        <li>② 选择活动（单选）。消息标题 / 消息内容栏位会自动预填该消息类型的默认文案，操作员可微调；栏位旁提供「还原为默认值」，可一键还原并即时更新字数统计（右侧可实际试打），完整规格见下方专章。</li>
+        <li>CTA跳转链接为活动层级栏位，非必填（填写规则见下方栏位规格总表，前台呈现详见 3.1）。</li>
       </ul>
-      <div class="note">模板类型本身（名称、触发条件、预设文案、CTA按钮文字）目前仅有一组（如 Reward Ready），暂不建置独立的模板管理介面；模板以资料库/后端建置方式提供，本页「① 模板类型」下拉选单目前仅会显示此唯一选项。未来若模板数量增加，再评估是否需要独立的维护介面。</div>
-      <div class="note">编辑既有设定时，①模板类型、②选择活动两栏位改为唯读，不可变更，仅能编辑消息标题、消息内容、CTA跳转连结。</div>
+      <div class="note">消息类型本身（名称、触发条件、默认文案）目前仅有一组（如 Reward Ready），暂不建置独立的消息类型管理介面；消息类型以资料库/后端建置方式提供，本页「① 消息类型」下拉选单目前仅会显示此唯一选项。未来若消息类型数量增加，再评估是否需要独立的维护介面。</div>
+      <div class="note">编辑既有设定时，①消息类型、②选择活动两栏位改为唯读，不可变更，仅能编辑消息标题、消息内容、CTA跳转链接。</div>
 
-      <h3 class="redline">（9/16调整）可绑定活动范围</h3>
-      <p><span class="redline">「② 选择活动」下拉选单仅支援「盈利活动」「预约活动」「X-BOMB」三个活动，其余活动一律不显示于选单中。</span></p>
-      <p>三者以外的活动，即使在活动列表中设有「参与角标提醒」，本阶段也不开放绑定；日后若要扩充可绑定的活动，须另行提出需求评估，不可由后台自行新增。</p>
+      <h3 class="redline">（9/17调整）可绑定活动范围</h3>
+      <p><span class="redline">「② 选择活动」下拉选单仅支援「预约活动」「X-BOMB」两个活动，其余活动一律不显示于选单中。</span></p>
+      <p>两者以外的活动，即使在活动列表中设有「参与角标提醒」，本阶段也不开放绑定；日后若要扩充可绑定的活动，须另行提出需求评估，不可由后台自行新增。</p>
+      <p><span class="redline">X-BOMB 另有发送限制（仅刮刮卡奖励会发送），详见 3.1 前台呈现。</span></p>
 
       <h3 class="redline">（9/16调整）弹窗内灰色说明文字的呈现规则</h3>
-      <p>弹窗内共四段灰色说明文字，用途不同、请勿混用；除第②段仅供本文件说明外，其余三段皆需实际做进后台画面：</p>
+      <p>弹窗内共三段灰色说明文字，用途不同、请勿混用；除第②段仅供本文件说明外，其余两段皆需实际做进后台画面：</p>
       <table class="spec">
         <tr><th style="width:32%">位置</th><th style="width:16%">是否呈现于后台</th><th>用途说明</th></tr>
-        <tr><td>①「① 模板类型」下方灰底字（触发条件）</td><td><b>需呈现</b></td><td>列出该模板固定的触发条件，供操作员确认，不可编辑</td></tr>
+        <tr><td>①「① 消息类型」下方灰底字（触发条件）</td><td><b>需呈现</b></td><td>列出该消息类型固定的触发条件，供操作员确认，不可编辑</td></tr>
         <tr><td>②「② 选择活动」下方灰字</td><td><span class="redline">不需呈现</span></td><td>仅为本规格文件的说明用途，开发时不必实作</td></tr>
-        <tr><td>③「CTA 跳转连结」下方灰字</td><td><b>需呈现</b></td><td>提醒操作员连结必须加上该活动指定的活动 ID，否则前台点击后无法正确带入活动页</td></tr>
-        <tr><td>④「CTA 按钮文字」下方灰底字（固定值，不可编辑：Claim Now）</td><td><b>需呈现</b></td><td>让操作员一眼知道此栏位为模板固定值、后台无法修改，不需另外提供输入框</td></tr>
+        <tr><td>③「CTA跳转链接」下方灰字</td><td><b>需呈现</b></td><td>提醒操作员链接必须加上该活动指定的活动 ID，否则前台点击后无法正确带入活动页</td></tr>
       </table>
 
-      <h3 class="redline">（9/16调整）「还原为模板预设值」功能规格</h3>
+      <h3 class="redline">（9/16调整）「还原为默认值」功能规格</h3>
       <p>此功能本次确认须实作，规格如下：</p>
       <ul>
-        <li><b>位置</b>：「消息标题」「消息内容」两个栏位，各自于栏位标题右侧提供一个「还原为模板预设值」文字连结（蓝色、可点击），两者各自独立。</li>
+        <li><b>位置</b>：「消息标题」「消息内容」两个栏位，各自于栏位标题右侧提供一个「还原为默认值」文字链接（蓝色、可点击），两者各自独立。</li>
         <li><b>作用范围</b>：只还原自己所属的那一个栏位——点消息标题旁的只还原标题、点消息内容旁的只还原内容，互不影响。</li>
-        <li><b>点击后行为</b>：该栏位内容直接覆盖为「目前所选模板类型的预设文案」（即弹窗开启时预填的那份文字），栏位右下角字数统计同步即时更新；若该栏位当下正显示「缺少变量」的错误提示，该提示一并清除。</li>
+        <li><b>点击后行为</b>：该栏位内容直接覆盖为「目前所选消息类型的默认文案」（即弹窗开启时预填的那份文字），栏位右下角字数统计同步即时更新；若该栏位当下正显示「缺少变量」的错误提示，该提示一并清除。</li>
         <li><b>无二次确认、无成功提示</b>：点击即还原，不跳二次确认弹窗，也不显示操作成功提示；还原后操作员仍可继续编辑，或重复点击再次还原。</li>
-        <li><b>不等于送出</b>：此动作仅改变弹窗内输入框的内容；未按「确定」前取消或关闭弹窗，皆不影响已存储的设定。</li>
-        <li><b>还原来源</b>：还原为<b>该模板类型所配置的文案</b>，即弹窗开启时预填的那份预设文案，非该笔设定原本存下来的文字（模板配置的文案若有调整，还原后即为调整后的文案）。</li>
+        <li><b>不等于送出</b>：此动作仅改变弹窗内输入框的内容；未按「确认」前取消或关闭弹窗，皆不影响已存储的设定。</li>
+        <li><b>还原来源</b>：还原为<b>该消息类型所配置的文案</b>，即弹窗开启时预填的那份默认文案，非该笔设定原本存下来的文字（消息类型配置的文案若有调整，还原后即为调整后的文案）。</li>
         <li><b>可使用的状态</b>：仅「待确认」状态的设定可开启编辑弹窗，故新增与编辑两种情境下此功能皆可正常使用；「已确认」设定不可编辑，不会有使用此功能的情境（见 1.3 状态机）。</li>
       </ul>
       <p>各情境穷举：</p>
       <table class="spec">
-        <tr><th style="width:40%">情境</th><th>点击「还原为模板预设值」后的结果</th></tr>
-        <tr><td>栏位文字已被操作员修改过</td><td>覆盖为模板预设文案，字数统计同步更新</td></tr>
-        <tr><td>栏位文字与模板预设值完全相同</td><td>内容不变，不显示任何提示，不视为操作失败</td></tr>
-        <tr><td>栏位已被清空</td><td>覆盖为模板预设文案，字数统计同步更新</td></tr>
-        <tr><td>栏位缺少必留变量，正显示错误提示</td><td>覆盖为模板预设文案，错误提示同时消失（预设文案必定含变量）</td></tr>
-        <tr><td>已选模板类型、尚未选择活动</td><td>照常可还原（预设文案属模板层级，与所选活动无关）</td></tr>
-        <tr><td>编辑「待确认」的既有设定</td><td>照常可用；还原后为模板预设文案，非该笔设定原本存下来的文字</td></tr>
+        <tr><th style="width:40%">情境</th><th>点击「还原为默认值」后的结果</th></tr>
+        <tr><td>栏位文字已被操作员修改过</td><td>覆盖为消息类型默认文案，字数统计同步更新</td></tr>
+        <tr><td>栏位文字与消息类型默认值完全相同</td><td>内容不变，不显示任何提示，不视为操作失败</td></tr>
+        <tr><td>栏位已被清空</td><td>覆盖为消息类型默认文案，字数统计同步更新</td></tr>
+        <tr><td>栏位缺少必留变量，正显示错误提示</td><td>覆盖为消息类型默认文案，错误提示同时消失（默认文案必定含变量）</td></tr>
+        <tr><td>已选消息类型、尚未选择活动</td><td>照常可还原（默认文案属消息类型层级，与所选活动无关）</td></tr>
+        <tr><td>编辑「待确认」的既有设定</td><td>照常可用；还原后为消息类型默认文案，非该笔设定原本存下来的文字</td></tr>
       </table>
 
       <h3>栏位规格总表</h3>
       <table class="spec">
         <tr><th style="width:22%">栏位</th><th style="width:15%">必填</th><th>说明 / 资料来源</th></tr>
-        <tr><td>① 模板类型（选择）</td><td>是</td><td>下拉选单，来源：现有模板类型清单（触发条件提示区行为详见上方说明）</td></tr>
-        <tr><td>② 选择活动</td><td>是</td><td><span class="redline">仅支援「盈利活动」「预约活动」「X-BOMB」三个活动</span>；下拉选单，单选，并需排除「已被任一模板占用」的活动（已被占用者不显示于选单）</td></tr>
-        <tr><td>消息标题</td><td>是</td><td>预填模板预设值，可依活动微调，最长 50 字；{ActivityName}取值沿用该活动标题，为必留变量，不可删除（见 2.2 验证规则）；栏位右侧提供「还原为模板预设值」</td></tr>
-        <tr><td>消息内容</td><td>是</td><td>预填模板预设值，可依活动微调，最长 1000 字；{RewardName}取值沿用对应奖励名称，为必留变量，不可删除（见 2.2 验证规则）；栏位右侧提供「还原为模板预设值」</td></tr>
-        <tr><td>CTA 跳转连结</td><td>否</td><td>文字（URL），对应此活动专属页面，可留空（前台呈现规则详见 3.1 前台呈现）。<span class="redline">须带上该活动指定的活动 ID；输入框内不得预设任何文案，开启弹窗时保持完全空白，说明一律放在栏位下方灰字</span></td></tr>
-        <tr><td>触发条件 / CTA按钮文字</td><td>—</td><td>皆为模板固定值，此弹窗皆不可编辑；CTA按钮文字固定为「Claim Now」，套用于实际发送内容（两者下方灰底字是否呈现，详见上方呈现规则）</td></tr>
+        <tr><td>① 消息类型（选择）</td><td>是</td><td>下拉选单，来源：现有消息类型清单（触发条件提示区行为详见上方说明）</td></tr>
+        <tr><td>② 选择活动</td><td>是</td><td>下拉选单，单选；<span class="redline">可绑定范围见 2.1</span>，并需排除「已被任一消息类型占用」的活动（已被占用者不显示于选单）</td></tr>
+        <tr><td>消息标题</td><td>是</td><td>预填消息类型默认值，可依活动微调，最长 50 字；{ActivityName}取值沿用该活动标题，为必留变量，不可删除（见 2.2 验证规则）；栏位右侧提供「还原为默认值」</td></tr>
+        <tr><td>消息内容</td><td>是</td><td>预填消息类型默认值，可依活动微调，最长 1000 字；{RewardName}取值沿用对应奖励名称，为必留变量，不可删除（见 2.2 验证规则）；栏位右侧提供「还原为默认值」</td></tr>
+        <tr><td>CTA跳转链接</td><td>否</td><td>文字（URL），对应此活动专属页面，可留空（前台呈现规则详见 3.1 前台呈现）。<span class="redline">须带上该活动指定的活动 ID；输入框内不得默认任何文案，开启弹窗时保持完全空白，说明一律放在栏位下方灰字</span></td></tr>
+        <tr><td>触发条件</td><td>—</td><td>消息类型固定值，此弹窗不可编辑（下方灰底字是否呈现，详见上方呈现规则）</td></tr>
       </table>
   </div>
   </div>
@@ -597,18 +581,17 @@
   <div class="full">
     <h2>2.2 验证规则</h2>
     <ul>
-      <li><span class="redline">（9/16调整）「选择活动」下拉选单仅支援「盈利活动」「预约活动」「X-BOMB」三个活动</span>，三者以外的活动一律不得出现于选单；上述三个活动中，已被「任一」模板占用者亦需排除（非仅排除同模板内已存在的活动）。两个条件须同时满足才会出现在选单中。</li>
-      <li>消息标题最长 50 字、消息内容最长 1000 字，输入达上限即无法再继续输入（见 2.1 新增／编辑设定弹窗栏位说明）；活动设定列表与消息列表皆完整显示消息标题与消息内容全文，不做省略号截断。</li>
-      <li>{ActivityName} 取值沿用该活动于活动设定中的标题；{RewardName} 取值沿用对应奖励名称；两者为必留变量，微调文案时不可删除。操作员点击「确定」送出时，系统检查两个栏位是否仍包含对应变量：
+      <li><span class="redline">「选择活动」下拉选单仅支援「预约活动」「X-BOMB」（可绑定范围见 2.1）</span>，且其中已被「任一」消息类型占用者亦需排除（非仅排除同一消息类型内已存在的活动）；两个条件须同时满足才会出现在选单中。</li>
+      <li>消息标题最长 50 字、消息内容最长 1000 字，输入达上限即无法再继续输入（见 2.1 新增／编辑设定弹窗栏位说明）（列表的显示与截断方式见 1.2 栏位规格）。</li>
+      <li>{ActivityName} 取值沿用该活动于活动设定中的标题；{RewardName} 取值沿用对应奖励名称；两者为必留变量，微调文案时不可删除。操作员点击「确认」送出时，系统检查两个栏位是否仍包含对应变量：
         <ul>
           <li>缺少变量时，无法送出，跳出阻挡提示弹窗（沿用统一提示弹窗样式，见 1.2 活动设定列表说明）：标题「提示」，内容「消息标题缺少 {ActivityName} 变量」／「消息内容缺少 {RewardName} 变量」／两者皆缺时「消息标题缺少 {ActivityName} 变量；消息内容缺少 {RewardName} 变量」，皆统一加上「，请补回后再送出。」，单一按钮「我知道了」，点击后关闭弹窗、回到弹窗内容修改，不会送出。</li>
           <li>两个变量皆存在时，才允许实际送出。</li>
         </ul>
       </li>
-      <li>CTA 跳转连结为非必填栏位，是否配置会直接影响前台呈现样式，详见 3.1 前台呈现；<span class="redline">若有填写，连结末端须带上该活动指定的活动 ID，此提醒需常驻显示于栏位下方供操作员参考。</span></li>
-      <li class="redline-block">「还原为模板预设值」仅覆盖弹窗内该栏位的文字，不触发任何验证、也不等于送出；送出时仍须通过上述必留变量与必填栏位检查（完整规格见 2.1「还原为模板预设值」功能规格）。</li>
-      <li>消息标题、消息内容、所属活动、模板类型皆为必填，未填写不可送出；CTA 跳转连结为非必填栏位，可留空送出。</li>
-      <li>编辑既有设定时，模板类型与选择活动不可变更（见 2.1 新增／编辑设定弹窗说明）。</li>
+      <li>CTA跳转链接为非必填栏位，是否配置会直接影响前台呈现样式，详见 3.1 前台呈现；<span class="redline">若有填写，链接末端须带上该活动指定的活动 ID（栏位下方的常驻提醒文字见 2.1 灰字呈现规则）。</span></li>
+      <li class="redline-block">「还原为默认值」不触发任何验证、也不等于送出，送出时仍须通过上述检查（完整规格见 2.1）。</li>
+      <li>消息标题、消息内容、所属活动、消息类型皆为必填，未填写不可送出；CTA跳转链接为非必填栏位，可留空送出。</li>
     </ul>
   </div>
 
@@ -657,7 +640,7 @@
         </div>
       </div>
       <div>
-        <p class="visual-caption" style="margin:0 0 8px;">首页－消息中心－详情（已配置 CTA 连结）</p>
+        <p class="visual-caption" style="margin:0 0 8px;">首页－消息中心－详情（已配置 CTA 链接）</p>
         <div class="uiframe phone-frame" style="max-width:260px;padding:0;">
           <div class="phone-status">
             <span>09:41</span>
@@ -678,7 +661,7 @@
         </div>
       </div>
       <div>
-        <p class="visual-caption" style="margin:0 0 8px;">首页－消息中心－详情（未配置 CTA 连结）</p>
+        <p class="visual-caption" style="margin:0 0 8px;">首页－消息中心－详情（未配置 CTA 链接）</p>
         <div class="uiframe phone-frame" style="max-width:260px;padding:0;">
           <div class="phone-status">
             <span>09:41</span>
@@ -698,11 +681,11 @@
         </div>
       </div>
     </div>
-    <p class="visual-caption">左：收件箱列表；中：详情页（已配置 CTA 连结）；右：详情页（未配置 CTA 连结）——规则详见下方说明</p>
+    <p class="visual-caption">左：收件箱列表；中：详情页（已配置 CTA 链接）；右：详情页（未配置 CTA 链接）——规则详见下方说明</p>
 
     <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;margin-top:28px;">
       <div>
-        <p class="visual-caption" style="margin:0 0 8px;">跳出式弹窗（已配置 CTA 连结）</p>
+        <p class="visual-caption" style="margin:0 0 8px;">跳出式弹窗（已配置 CTA 链接）</p>
         <div class="uiframe" style="max-width:280px;">
           <div class="popup-backdrop">
             <div class="popup-card">
@@ -715,7 +698,7 @@
         </div>
       </div>
       <div>
-        <p class="visual-caption" style="margin:0 0 8px;">跳出式弹窗（未配置 CTA 连结，比照一般站内信弹窗）</p>
+        <p class="visual-caption" style="margin:0 0 8px;">跳出式弹窗（未配置 CTA 链接，比照一般站内信弹窗）</p>
         <div class="uiframe" style="max-width:280px;">
           <div class="popup-backdrop">
             <div class="popup-card">
@@ -727,35 +710,39 @@
         </div>
       </div>
     </div>
-    <p class="visual-caption">左：跳出式弹窗（已配置 CTA 连结）；右：跳出式弹窗（未配置连结，比照一般站内信弹窗）——<b>仅 PC 版会出现，App／H5 版无此弹窗</b>，规则详见下方说明</p>
+    <p class="visual-caption">左：跳出式弹窗（已配置 CTA 链接）；右：跳出式弹窗（未配置链接，比照一般站内信弹窗）——<b>仅 PC 版会出现，App／H5 版无此弹窗</b>，规则详见下方说明</p>
   </div>
   <div class="full">
     <h2>3.1 前台呈现（消息中心）</h2>
     <p>活动消息发送后，比照既有站内信规则显示于会员端「消息中心 ＞ 收件箱」，最新一笔以「本次新增」标示。</p>
     <h3>触发规则</h3>
     <ul>
-      <li>触发条件依所选模板固定规则判断（如 Reward Ready：已达成领奖条件＋奖励尚未领取），详见 2.1 新增／编辑设定弹窗。</li>
+      <li>触发条件依所选消息类型固定规则判断（如 Reward Ready：已达成领奖条件＋奖励尚未领取），详见 2.1 新增／编辑设定弹窗。</li>
       <li>每个奖励仅发送一次，领取后不再重复（见 1.4 资料处理原则）。</li>
       <li>站内信本身没有独立的开关可单独关闭；若要停止发送，须至 1.2 活动设定列表将对应设定删除，设定一旦删除即不再触发发送。</li>
     </ul>
+    <h3 class="redline">（9/17调整）X-BOMB 活动发送规则</h3>
+    <ul>
+      <li>X-BOMB 活动中，仅「刮刮卡」奖励会发送活动消息，其他奖励不发送。</li>
+    </ul>
     <h3>呈现形式</h3>
-    <p>活动消息以两种形式呈现给会员，两者皆归类于消息中心「收件箱」、与既有站内信并列，但 CTA 是否配置对两者呈现的影响不完全相同（详见下方 CTA 按钮呈现规则）：</p>
+    <p>活动消息以两种形式呈现给会员，两者皆归类于消息中心「收件箱」、与既有站内信并列：</p>
     <ul>
       <li><b>收件箱列表／详情页</b>：常态呈现，App／H5／PC 皆有，会员可在消息中心随时查看；<b>App／H5 无跳出式弹窗，以返回键返回列表，非「✕」关闭</b>。</li>
       <li><b>跳出式弹窗</b>：比照既有站内信弹窗机制，于会员进入前台时主动跳出提醒；<b>仅 PC 版才有此弹窗</b>，App／H5 版不会跳出弹窗（画面示意见下方第二排）。</li>
     </ul>
     <h3>CTA 按钮呈现规则</h3>
     <ul>
-      <li><b>PC 弹窗、有配置 CTA 跳转连结</b>：共两个可互动元素——「Claim Now」按钮（点击跳转至对应活动页）＋右上角「✕」关闭。</li>
-      <li><b>PC 弹窗、未配置 CTA 跳转连结</b>：比照一般站内信弹窗样式，仅一个「Confirm」按钮，点击仅关闭弹窗、不跳转；不显示「✕」。</li>
-      <li>收件箱详情页比照上述同一套「有／无 CTA」逻辑：有配置连结时显示「Claim Now」按钮并可跳转；未配置时按钮不显示。</li>
+      <li><b>PC 弹窗、有配置 CTA跳转链接</b>：共两个可互动元素——「Claim Now」按钮（点击跳转至对应活动页）＋右上角「✕」关闭。</li>
+      <li><b>PC 弹窗、未配置 CTA跳转链接</b>：比照一般站内信弹窗样式，仅一个「Confirm」按钮，点击仅关闭弹窗、不跳转；不显示「✕」。</li>
+      <li>收件箱详情页比照上述同一套「有／无 CTA」逻辑：有配置链接时显示「Claim Now」按钮并可跳转；未配置时按钮不显示。</li>
     </ul>
-    <h3>文案模板</h3>
+    <h3>默认文案</h3>
     <table class="spec">
       <tr><th style="width:15%">栏位</th><th>内容</th></tr>
       <tr><td>Title</td><td>{ActivityName} Reward Ready</td></tr>
       <tr><td>Content</td><td>Your {RewardName} reward is ready to claim! Don't miss out—claim it now.</td></tr>
-      <tr><td>CTA</td><td>Claim Now → 跳转至对应活动页（未配置连结时不显示）</td></tr>
+      <tr><td>CTA</td><td>Claim Now → 跳转至对应活动页（未配置链接时不显示）</td></tr>
     </table>
   </div>
   </div>
