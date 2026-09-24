@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>連贏挑戰賽 · 活動玩法說明</title>
+<style>
+  /* 顏色都集中在這裡，淺色／深色模式各一套 */
+  :root {
+    --bg: #eef0f4; --card: #ffffff; --soft: #f5f7fa; --line: #e3e6eb;
+    --text: #1f2430; --text-2: #5b6474; --muted: #9aa1ac;
+    --accent: #2f6fed; --accent-soft: #eaf1ff;
+    --red: #d63d4e; --red-soft: #fdecee;
+    --orange: #b5730a; --orange-soft: #fff6e6;
+    --green: #1a9c50; --green-soft: #e9f9ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101114; --card: #191b20; --soft: #22252b; --line: #33363d;
+      --text: #e8e9ec; --text-2: #a9b0bb; --muted: #6b7280;
+      --accent: #6d9bff; --accent-soft: #1d2740;
+      --red: #ff7b8a; --red-soft: #3a1b20;
+      --orange: #f0b429; --orange-soft: #3a2c0d;
+      --green: #4ade80; --green-soft: #113322;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); padding: 24px 16px 60px;
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    font-size: 17px; line-height: 1.7; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  header { margin-bottom: 20px; }
+  header h1 { font-size: 28px; margin: 0 0 4px; }
+  header p { margin: 0; color: var(--text-2); font-size: 15px; overflow-wrap: anywhere; }
+  .wrap, section { min-width: 0; overflow-wrap: anywhere; }
+  nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 22px; }
+  nav a { font-size: 14.5px; text-decoration: none; color: var(--accent); background: var(--accent-soft);
+    padding: 4px 10px; border-radius: 6px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px 22px; margin-bottom: 16px; }
+  h2 { font-size: 21px; margin: 0 0 12px; }
+  h2 .no { color: var(--accent); margin-right: 6px; }
+  h3 { font-size: 17.5px; margin: 18px 0 8px; }
+  p { margin: 6px 0; }
+  ul, ol { margin: 6px 0; padding-left: 22px; }
+  li { margin: 3px 0; }
+  .lead { background: var(--accent-soft); border-radius: 8px; padding: 12px 14px; }
+  .tbl { overflow-x: auto; margin: 8px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 16px; }
+  th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--soft); color: var(--text-2); font-weight: 600; white-space: nowrap; }
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
+  .flow span { background: var(--soft); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 15px; }
+  .flow b { color: var(--muted); font-weight: 400; }
+  .tag { display: inline-block; font-size: 14px; padding: 1px 8px; border-radius: 5px; margin-right: 4px; }
+  .t-red { background: var(--red-soft); color: var(--red); }
+  .t-orange { background: var(--orange-soft); color: var(--orange); }
+  .t-green { background: var(--green-soft); color: var(--green); }
+  .note { font-size: 15px; color: var(--text-2); }
+  .issue { border-left: 3px solid var(--line); padding: 4px 0 4px 12px; margin: 10px 0; }
+  .issue.hi { border-color: var(--red); }
+  .issue.mid { border-color: var(--orange); }
+  .issue.lo { border-color: var(--muted); }
+  .issue strong { display: block; }
+  .ex { background: var(--soft); border-radius: 8px; padding: 10px 14px; margin: 8px 0; font-size: 16px; }
+  .ex b { color: var(--accent); }
+  .words { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px; margin-top: 8px; }
+  .words div { background: var(--soft); border-radius: 8px; padding: 8px 12px; font-size: 16px; }
+  code { background: var(--soft); padding: 0 5px; border-radius: 4px; font-size: 14.5px; }
+  /* 圖的外框：圖太寬時框內左右捲動，不撐破頁面 */
+  .diagram { border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin: 10px 0; overflow-x: auto; }
+  .diagram .cap { font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+  /* 3.1 百家樂示意：庄 vs 閒 */
+  .game { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 10px 0; }
+  .game .side { width: 88px; height: 88px; border-radius: 12px; background: var(--soft); border: 2px solid var(--line);
+    display: flex; align-items: center; justify-content: center; font-size: 35px; font-weight: 700; }
+  .game .vs { color: var(--muted); font-size: 15px; }
+  .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 8px 0; }
+  .res { border-radius: 8px; padding: 8px 12px; text-align: center; }
+  .res b { margin-right: 4px; }
+  .res.win { background: var(--green-soft); color: var(--green); }
+  .res.lose { background: var(--red-soft); color: var(--red); }
+  .res.tie { background: var(--accent-soft); color: var(--accent); }
+  /* 3.2 四個步驟、5 節錢的流向：一格一格加箭頭 */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin: 8px 0; }
+  .step, .chain .box, .rule { background: var(--soft); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: 16px; }
+  .step b, .chain .box b, .rule b { display: block; font-size: 17.5px; margin-bottom: 2px; }
+  .n { display: inline-flex; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff;
+    align-items: center; justify-content: center; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .cards6 { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 2px; }
+  .cards6 span { width: 52px; height: 70px; border-radius: 8px; border: 2px solid var(--accent); color: var(--accent);
+    display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .cards6 span.used { border-color: var(--line); color: var(--muted); background: var(--soft); }
+  .chain { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; margin: 10px 0; }
+  .chain .box { flex: 1 1 150px; }
+  .chain .box.ok { background: var(--green-soft); border-color: var(--green); }
+  .chain .arr { align-self: center; color: var(--muted); font-size: 23.5px; }
+  .chain.states .box { text-align: center; }
+  /* 3.3 例子：10 局結果表 */
+  .strip-wrap { overflow-x: auto; margin: 8px 0; }
+  .strip { min-width: 560px; text-align: center; }
+  .strip th { text-align: left; }
+  .strip td { text-align: center; padding: 6px 4px; }
+  .strip td.hit { background: var(--green-soft); }
+  .strip td.zero { color: var(--muted); }
+  .dot { display: inline-flex; width: 30px; height: 30px; border-radius: 50%; align-items: center; justify-content: center;
+    font-style: normal; font-size: 14.5px; font-weight: 700; color: #fff; }
+  .dot.w { background: var(--green); } .dot.l { background: var(--red); }
+  .story { background: var(--soft); border-radius: 8px; padding: 10px 14px; }
+  .story .final { border-top: 1px solid var(--line); padding-top: 8px; margin-top: 8px; font-size: 17.5px; }
+  /* 3.4 不算的三種局 */
+  .rules3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 8px 0; }
+  .rule.bad { background: var(--red-soft); border-color: var(--red); }
+  /* 第 4 節：獎勵階梯、例子卡、比一比、算式 */
+  .ladders { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 8px 0; }
+  .ladder { border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 5px; }
+  .ladder > b { font-size: 17.5px; }
+  .ladder.win { background: var(--green-soft); } .ladder.lose { background: var(--red-soft); }
+  .rung { display: flex; justify-content: space-between; background: var(--card); border-radius: 6px; padding: 4px 10px; }
+  .ladder .rung:nth-child(3) { margin-left: 8px; } .ladder .rung:nth-child(4) { margin-left: 16px; } .ladder .rung:nth-child(5) { margin-left: 24px; }
+  .ladder.win strong { color: var(--green); } .ladder.lose strong { color: var(--red); }
+  .excard { border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin: 12px 0; }
+  .excard.bad { border-color: var(--red); }
+  .ex-title { font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .ex-title .n { margin: 0; }
+  .verdict { background: var(--soft); border-radius: 8px; padding: 8px 12px; margin-top: 6px; }
+  .strip td.hit-l { background: var(--red-soft); }
+  .strip td.warn { background: var(--orange-soft); color: var(--orange); font-size: 14px; }
+  .strip td.stop { background: var(--soft); color: var(--text-2); font-size: 15px; }
+  .dot.v { background: var(--orange); font-size: 13px; }
+  .compare { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0; }
+  .compare > div { flex: 1 1 140px; text-align: center; border-radius: 8px; padding: 8px; }
+  .compare .pick { background: var(--green-soft); color: var(--green); border: 2px solid var(--green); }
+  .compare .drop { background: var(--soft); color: var(--muted); text-decoration: line-through; }
+  .compare .vs { flex: 0 0 auto; color: var(--muted); font-size: 14px; }
+  .board td:nth-child(1) { font-weight: 700; text-align: center; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .calc { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
+  .calc .box { flex: 1 1 120px; text-align: center; background: var(--soft); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-size: 15px; }
+  .calc .box strong { font-size: 23.5px; display: block; }
+  .calc .box.ok { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+  .calc .op { font-size: 23.5px; color: var(--muted); }
+  /* 圖示磚：大圖示＋一行標題＋一行補充 */
+  .ico { font-style: normal; font-size: 30.5px; line-height: 1; display: block; margin-bottom: 6px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: 8px 0; }
+  .tile { background: var(--soft); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: 15px; color: var(--text-2); text-align: center; }
+  .tile b { display: block; font-size: 17.5px; color: var(--text); }
+  .tile.win { background: var(--green-soft); border-color: var(--green); }
+  .tile.lose { background: var(--red-soft); border-color: var(--red); }
+  .who { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin: 10px 0 4px; }
+  .who div { display: flex; align-items: center; gap: 10px; background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: 15px; }
+  .who .ico { margin: 0; } .who b { margin-right: 4px; }
+  .step, .rule, .chain .box { text-align: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .chips span { background: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px; font-size: 15px; }
+  .ends, .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 8px 0; }
+  .end, .two .col { border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .end b, .two .col b { font-size: 17.5px; }
+  .end span, .two .col span { background: var(--card); border-radius: 6px; padding: 5px 10px; font-size: 16px; }
+  .end.ok, .two .col.ok { background: var(--green-soft); }
+  .end.no { background: var(--red-soft); }
+  .two .col { background: var(--orange-soft); }
+  /* 分頁切換鈕 */
+  .tabbar { display: flex; gap: 6px; margin: 4px 0 14px; border-bottom: 2px solid var(--line); }
+  .tabbar button { font: inherit; font-size: 17.5px; background: none; border: 0; padding: 8px 16px; cursor: pointer;
+    color: var(--text-2); border-bottom: 3px solid transparent; margin-bottom: -2px; }
+  .tabbar button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+  .tabbar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+  .todo li { margin: 8px 0; }
+  .todo strong { display: block; }
+  /* 午夜寬限時間軸：三條色帶代表三種結束時間的可領取區間 */
+  .tl { position: relative; min-width: 560px; height: 150px; margin: 6px 0; }
+  .tl .axis { position: absolute; left: 0; right: 0; top: 112px; height: 2px; background: var(--muted); }
+  .tl .tick { position: absolute; top: 106px; font-size: 14px; color: var(--text-2); transform: translateX(-50%); text-align: center; }
+  .tl .tick::before { content: ""; display: block; width: 2px; height: 14px; background: var(--muted); margin: 0 auto 2px; }
+  .tl .bar { position: absolute; height: 10px; border-radius: 5px; }
+  .tl .lab { position: absolute; font-size: 14px; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>連贏挑戰賽 · 活動玩法說明</h1>
+  <p>給不會玩這個遊戲的人：照圖看一遍就懂怎麼玩、能拿到什麼。</p>
+  <p>資料來源：廠商原型＋PRD（strong-macaron-6dbbee.netlify.app/mobile，v4.1）｜整理日：2026-09-23</p>
+</header>
+
+<!-- 分頁切換：活動玩法／待確認清單 -->
+<div class="tabbar" role="tablist">
+  <button type="button" id="btn-play" role="tab" aria-selected="true" data-tab="tab-play">🎮 活動玩法</button>
+  <button type="button" id="btn-todo" role="tab" aria-selected="false" data-tab="tab-todo">📝 待確認清單</button>
+</div>
+
+<div id="tab-play" class="tab-panel">
+<nav>
+  <a href="#s1">1 一分鐘看懂</a><a href="#s2">2 玩家會看到什麼</a><a href="#s3">3 一輪挑戰怎麼玩</a>
+  <a href="#s4">4 獎勵怎麼拿</a><a href="#s5">5 會員用什麼下注</a><a href="#s6">6 防作弊</a><a href="#s7">7 特殊情況</a>
+</nav>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <h2><span class="no">1</span>一分鐘看懂</h2>
+  <div class="tiles">
+    <div class="tile"><i class="ico">🃏</i><b>猜庄或閒</b>押中算贏</div>
+    <div class="tile"><i class="ico">🎫</i><b>每天 6 張卡</b>一張打一輪</div>
+    <div class="tile"><i class="ico">🔟</i><b>一輪最多 10 局</b>系統自動數</div>
+    <div class="tile win"><i class="ico">🔥</i><b>連贏 5 局起</b>最高 3,000</div>
+    <div class="tile lose"><i class="ico">🛟</i><b>連輸 3 局起</b>安慰金最高 1,200</div>
+    <div class="tile"><i class="ico">🏆</i><b>排行榜前 50</b>自動發獎</div>
+    <div class="tile"><i class="ico">🪙</i><b>獎勵是代幣</b>不能直接提款</div>
+  </div>
+  <p class="note">適用：一期 ONLive 百家樂、龍虎（只限活動指定桌台）；二期加 EVO。</p>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <h2><span class="no">2</span>玩家會看到什麼</h2>
+  <h3>從哪裡進來</h3>
+  <div class="tiles">
+    <div class="tile"><i class="ico">📋</i><b>活動中心卡片</b>按「立即參與」</div>
+    <div class="tile"><i class="ico">💬</i><b>登入首次彈窗</b>可勾「今日不再提示」</div>
+    <div class="tile"><i class="ico">🔘</i><b>大廳右下懸浮鈕</b>可拖動</div>
+  </div>
+  <h3>活動頁 3 個分頁</h3>
+  <div class="tiles">
+    <div class="tile"><i class="ico">🎯</i><b>連贏挑戰</b>今天的 6 張卡、我的戰績</div>
+    <div class="tile"><i class="ico">📊</i><b>連贏榜單</b>前 50 名、我的名次、預計獎勵</div>
+    <div class="tile"><i class="ico">🧾</i><b>獎勵記錄</b>領過、作廢的紀錄</div>
+  </div>
+  <p class="note">上桌後有小浮窗：打到第幾局、連贏幾局、還剩多久要下注。</p>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <h2><span class="no">3</span>一輪挑戰怎麼玩</h2>
+
+  <h3>3.1 百家樂：猜哪一邊點數大</h3>
+  <div class="game">
+    <div class="side">庄</div><div class="vs">VS</div><div class="side">閒</div>
+  </div>
+  <div class="results">
+    <div class="res win"><b>猜中</b>＝贏</div>
+    <div class="res lose"><b>猜錯</b>＝輸</div>
+    <div class="res tie"><b>一樣大</b>＝和</div>
+  </div>
+  <p class="note">龍虎一樣，兩邊叫「龍」「虎」。發一次牌＝一局。</p>
+
+  <h3>3.2 四步驟</h3>
+  <div class="steps">
+    <div class="step"><i class="ico">🎫</i><b>1 拿卡</b>每天 6 張</div>
+    <div class="step"><i class="ico">🪑</i><b>2 選桌</b>百家樂／龍虎</div>
+    <div class="step"><i class="ico">🃏</i><b>3 打牌</b>最多 10 局</div>
+    <div class="step"><i class="ico">🎁</i><b>4 領獎</b>自己按「領取」</div>
+  </div>
+  <div class="chips"><span>▶️ 選好桌、第一次下注才開始計時</span><span>🕛 每天 00:00 補回 6 張</span><span>🚫 6 張用完：卡片變灰，明天再來</span></div>
+
+  <h3>3.3 例子：小明的 10 局</h3>
+  <div class="strip-wrap">
+    <table class="strip">
+      <tr><th>局</th><td>1</td><td>2</td><td>3</td><td>4</td><td class="hit">5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+      <tr><th>結果</th><td><i class="dot w">贏</i></td><td><i class="dot w">贏</i></td><td><i class="dot w">贏</i></td><td><i class="dot w">贏</i></td><td class="hit"><i class="dot w">贏</i></td><td><i class="dot l">輸</i></td><td><i class="dot l">輸</i></td><td><i class="dot w">贏</i></td><td><i class="dot l">輸</i></td><td><i class="dot w">贏</i></td></tr>
+      <tr><th>連贏</th><td>1</td><td>2</td><td>3</td><td>4</td><td class="hit"><b>5 🔒</b></td><td class="zero">0</td><td class="zero">0</td><td>1</td><td class="zero">0</td><td>1</td></tr>
+    </table>
+  </div>
+  <div class="verdict">🔒 第 5 局連贏 5 → 1,200 鎖定　·　輸了就歸零重數　·　打滿 10 局 → 領 <strong>1,200</strong></div>
+
+  <h3>3.4 這 3 種局不算（數字不變）</h3>
+  <div class="rules3">
+    <div class="rule"><i class="ico">🪙</i><b>押不到 50</b>同一局可分筆加總</div>
+    <div class="rule"><i class="ico">🤝</i><b>開「和」</b>不算也不打斷</div>
+    <div class="rule bad"><i class="ico">⚠️</i><b>兩邊都押</b>庄+閒、龍+虎、大+小…<br>第 1 次警告、第 2 次整輪沒收<br><span class="note">（單押「和」不算）</span></div>
+  </div>
+  <div class="chips"><span>📍 同一張桌</span><span>⏱️ 10 分鐘內要再下注（關 App 也照算）</span><span>🔀 換桌：在新桌下注才重新計時</span><span>🎰 押不到 50 桌台照收，只是不算挑戰</span></div>
+
+  <h3>3.5 一輪怎麼結束</h3>
+  <div class="ends">
+    <div class="end ok"><b>✅ 獎勵照發</b><span>🔟 打滿 10 局</span><span>🏆 連 10 局</span><span>⏰ 超過 10 分鐘沒下注</span><span>🚫 桌子被移出活動</span></div>
+    <div class="end no"><b>❌ 全部沒收</b><span>⚠️ 兩邊都押第 2 次</span><span>⛔ 被列入黑名單</span></div>
+  </div>
+  <div class="chips"><span>🎫 不管怎麼結束都用掉 1 張卡（黑名單待確認）</span><span>🌙 跨午夜不中斷</span></div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <h2><span class="no">4</span>獎勵怎麼拿（代幣，符號 G）</h2>
+
+  <h3>4.1 挑戰獎勵</h3>
+  <div class="ladders">
+    <div class="ladder win"><b>🔥 連續贏</b>
+      <div class="rung"><span>5 局</span><strong>1,200 代幣</strong></div>
+      <div class="rung"><span>7 局</span><strong>2,000 代幣</strong></div>
+      <div class="rung"><span>10 局</span><strong>3,000 代幣</strong></div>
+    </div>
+    <div class="ladder lose"><b>🛟 連續輸（安慰金）</b>
+      <div class="rung"><span>3 局</span><strong>100 代幣</strong></div>
+      <div class="rung"><span>5 局</span><strong>300 代幣</strong></div>
+      <div class="rung"><span>7 局</span><strong>600 代幣</strong></div>
+      <div class="rung"><span>10 局</span><strong>1,200 代幣</strong></div>
+    </div>
+  </div>
+
+  <div class="excard">
+    <div class="ex-title"><span class="n">A</span>一直輸也有錢</div>
+    <div class="strip-wrap"><table class="strip">
+      <tr><th>結果</th><td><i class="dot l">輸</i></td><td><i class="dot l">輸</i></td><td><i class="dot l">輸</i></td><td><i class="dot l">輸</i></td><td class="hit-l"><i class="dot l">輸</i></td><td><i class="dot w">贏</i></td><td><i class="dot l">輸</i></td><td><i class="dot w">贏</i></td><td><i class="dot w">贏</i></td><td><i class="dot l">輸</i></td></tr>
+      <tr><th>連輸</th><td>1</td><td>2</td><td>3</td><td>4</td><td class="hit-l"><b>5</b></td><td class="zero">0</td><td>1</td><td class="zero">0</td><td class="zero">0</td><td>1</td></tr>
+    </table></div>
+    <div class="verdict">連輸 5 → 安慰金 <strong>300 代幣</strong></div>
+  </div>
+
+  <div class="excard">
+    <div class="ex-title"><span class="n">B</span>兩種都達到 → 只拿多的</div>
+    <div class="strip-wrap"><table class="strip">
+      <tr><th>結果</th><td class="hit"><i class="dot w">贏</i></td><td class="hit"><i class="dot w">贏</i></td><td class="hit"><i class="dot w">贏</i></td><td class="hit"><i class="dot w">贏</i></td><td class="hit"><i class="dot w">贏</i></td><td class="hit-l"><i class="dot l">輸</i></td><td class="hit-l"><i class="dot l">輸</i></td><td class="hit-l"><i class="dot l">輸</i></td><td><i class="dot w">贏</i></td><td><i class="dot w">贏</i></td></tr>
+    </table></div>
+    <div class="compare">
+      <div class="pick">連贏 5 → <strong>1,200 代幣</strong> ✓</div>
+      <div class="vs">VS</div>
+      <div class="drop">連輸 3 → 100 代幣</div>
+    </div>
+  </div>
+
+  <div class="excard">
+    <div class="ex-title"><span class="n">C</span>鎖定後離開 → 照樣拿</div>
+    <div class="strip-wrap"><table class="strip">
+      <tr><th>結果</th><td><i class="dot w">贏</i></td><td><i class="dot w">贏</i></td><td><i class="dot w">贏</i></td><td><i class="dot w">贏</i></td><td class="hit"><i class="dot w">贏</i></td><td class="stop" colspan="5">⏰ 超過 10 分鐘沒下注 → 結束</td></tr>
+    </table></div>
+    <div class="verdict">領 <strong>1,200 代幣</strong>（當天要按領取）</div>
+  </div>
+
+  <div class="excard bad">
+    <div class="ex-title"><span class="n">D</span>兩邊都押 2 次 → 沒收</div>
+    <div class="strip-wrap"><table class="strip">
+      <tr><th>結果</th><td><i class="dot w">贏</i></td><td><i class="dot w">贏</i></td><td><i class="dot w">贏</i></td><td class="warn"><i class="dot v">⚠️1</i></td><td><i class="dot w">贏</i></td><td class="hit"><i class="dot w">贏</i></td><td class="warn"><i class="dot v">⚠️2</i></td></tr>
+    </table></div>
+    <div class="verdict">已鎖定 1,200 代幣 → 變 <strong>0 代幣</strong></div>
+  </div>
+
+  <h3>4.2 榜單獎勵：比「最長連贏」</h3>
+  <div class="tbl"><table class="board">
+    <tr><th>名次</th><th>玩家</th><th>最長連贏</th><th>連贏次數</th><th>下注總額</th></tr>
+    <tr><td>🥇</td><td>阿美</td><td><b>7 局</b></td><td>1</td><td>2,000</td></tr>
+    <tr><td>🥈</td><td>小明</td><td>5 局</td><td><b>2</b></td><td>1,500</td></tr>
+    <tr><td>🥉</td><td>小華</td><td>5 局</td><td>1</td><td><b>8,000</b></td></tr>
+    <tr><td>4</td><td>阿強</td><td>5 局</td><td>1</td><td>3,000</td></tr>
+  </table></div>
+  <div class="chips"><span>① 最長連贏</span><span>② 連贏次數（算法待確認）</span><span>③ 下注總額</span><span>④ 誰先下注</span><span>連輸不算</span></div>
+
+  <div class="grid-2">
+    <div class="tbl"><table>
+      <tr><th>名次</th><th>基本獎金</th></tr>
+      <tr><td>第 1 名</td><td>5,000 代幣</td></tr><tr><td>第 2 名</td><td>2,500 代幣</td></tr><tr><td>第 3 名</td><td>1,500 代幣</td></tr>
+      <tr><td>4–6 名</td><td>1,000 代幣</td></tr><tr><td>7–10 名</td><td>500 代幣</td></tr><tr><td>11–20 名</td><td>300 代幣</td></tr><tr><td>21–50 名</td><td>100 代幣</td></tr>
+    </table></div>
+    <div class="tbl"><table>
+      <tr><th>下注總額</th><th>乘幾倍</th></tr>
+      <tr><td>150–1,000</td><td>×1.0</td></tr><tr><td>1,001–5,000</td><td>×1.2</td></tr>
+      <tr><td>5,001–20,000</td><td>×1.5</td></tr><tr><td>20,001 以上</td><td>×2.0</td></tr>
+    </table></div>
+  </div>
+  <div class="calc">
+    <div class="box">🏅 第 12 名<br><strong>300 代幣</strong></div><div class="op">×</div>
+    <div class="box">💰 下注 5,320<br><strong>×1.5</strong></div><div class="op">=</div>
+    <div class="box ok">📅 隔天 00:00 到帳<br><strong>450 代幣</strong></div>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>榜單週期</th><th>比哪段時間</th><th>什麼時候發</th></tr>
+    <tr><td>日榜（預設）</td><td>當天 00:00–23:59</td><td>隔天 00:00</td></tr>
+    <tr><td>週榜</td><td>週一–週日</td><td>下週一 00:00</td></tr>
+    <tr><td>月榜</td><td>1 日–月底</td><td>下月 1 日 00:00</td></tr>
+  </table></div>
+  <div class="chips"><span>🔄 每 30 分鐘更新</span><span>🙈 別人暱稱打碼（lucifer → lu***er），自己不打碼</span><span>🔕 加成可被關掉：只發基本獎金</span><span>🎫 6 張卡永遠每天重置，不跟榜單週期</span><span>🔮 「榜單預計」＝現在結算大概拿多少，僅供參考</span><span>🎉 發獎後進活動會跳「恭喜上榜」</span></div>
+
+  <h3>4.3 兩種獎勵別搞混</h3>
+  <div class="two">
+    <div class="col"><b>🎯 挑戰獎勵</b><span>✋ 自己按領取</span><span>⏳ 當天 23:59:59 沒領＝作廢</span></div>
+    <div class="col ok"><b>🏆 榜單獎勵</b><span>🤖 系統自動發＋站內信</span><span>♾️ 不會作廢</span></div>
+  </div>
+  <div class="diagram"><div class="cap">🌙 快午夜才結束：從結束起多給 30 分鐘</div>
+    <div class="tl" aria-label="14:00 結束可領到 23:59:59；23:50 結束可領到 00:20；00:10 跨天結束可領到 00:40">
+      <div class="lab" style="left:4%;top:0;color:var(--green)">例 1：14:00 結束 → 領到當天 23:59:59</div>
+      <div class="bar" style="left:4%;width:66%;top:18px;background:var(--green)"></div>
+      <div class="lab" style="left:40%;top:36px;color:var(--orange)">例 2：23:50 結束 → 領到 00:20</div>
+      <div class="bar" style="left:58%;width:24%;top:54px;background:var(--orange)"></div>
+      <div class="lab" style="left:56%;top:72px;color:var(--accent)">例 3：跨天 00:10 結束 → 領到 00:40</div>
+      <div class="bar" style="left:76%;width:18%;top:90px;background:var(--accent)"></div>
+      <div class="axis"></div>
+      <div class="tick" style="left:4%">14:00</div>
+      <div class="tick" style="left:58%">23:50</div>
+      <div class="tick" style="left:70%">00:00</div>
+      <div class="tick" style="left:82%">00:20</div>
+      <div class="tick" style="left:94%">00:40</div>
+    </div>
+  </div>
+  <div class="chips"><span>不是 23:59:59 再加 30 分鐘</span><span>📌 寬限中的卡排最上面、顯示倒數</span><span>📆 用的是當天的卡、不佔隔天（算哪天的榜單待確認）</span><span>🚫 過期作廢不能申訴</span></div>
+  <p class="note">系統發不出去：挑戰獎勵延長 24 小時、榜單獎勵重試 3 次後人工補發。</p>
+
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <h2><span class="no">5</span>會員用什麼下注</h2>
+
+  <h3>5.1 會員手上有 3 種錢</h3>
+  <div class="tiles">
+    <div class="tile win"><i class="ico">💵</i><b>餘額（真錢）</b>✅ 可下注　✅ 可提款</div>
+    <div class="tile"><i class="ico">🪙</i><b>代幣</b>✅ 可下注　❌ 不可提款</div>
+    <div class="tile lose"><i class="ico">🎲</i><b>代幣彩金</b>用代幣贏來的<br>稽核中　❌ 不可提款</div>
+  </div>
+  <div class="verdict">🎁 領完挑戰獎勵，代幣<strong>立刻到帳</strong>，可以直接拿來下注（能用在哪些遊戲待確認）</div>
+
+  <h3>5.2 哪裡算真錢、哪裡算代幣</h3>
+  <div class="tbl"><table>
+    <tr><th>哪裡</th><th>💵 用真錢押</th><th>🪙 用代幣押</th></tr>
+    <tr><td>代幣彩金湊流水（5.3）</td><td><span class="tag t-green">✅ 算</span></td><td><span class="tag t-red">❌ 不算</span></td></tr>
+    <tr><td>挑戰每局 ≥ 50、算連贏連輸（第 3 節）</td><td><span class="tag t-orange">規格沒寫</span></td><td><span class="tag t-orange">規格沒寫</span></td></tr>
+    <tr><td>榜單下注總額、加成倍數（4.2）</td><td><span class="tag t-orange">規格沒寫</span></td><td><span class="tag t-orange">規格沒寫</span></td></tr>
+  </table></div>
+  <p class="note">已列入待確認清單 B 第 7 條。</p>
+
+  <h3>5.3 代幣怎麼變成真錢</h3>
+  <div class="chain">
+    <div class="box"><i class="ico">🪙</i><b>代幣</b>只能下注</div>
+    <div class="arr">→</div>
+    <div class="box"><i class="ico">🎲</i><b>用代幣贏了</b>變「代幣彩金」</div>
+    <div class="arr">→</div>
+    <div class="box"><i class="ico">💵</i><b>真錢下注湊滿流水</b>預設 1 倍、對方可調；7 天內，逾期失效</div>
+    <div class="arr">→</div>
+    <div class="box ok"><i class="ico">🏦</i><b>餘額</b>可以提款</div>
+  </div>
+  <div class="verdict">例：代幣贏 1,200 → 再用真錢下注 1,200 → 1,200 進餘額</div>
+  <div class="chips"><span>用代幣下注不算湊數</span><span>多筆彩金先到先湊</span><span>⏰ 失效前 24 小時提醒</span><span>對方可設 0 倍：贏了直接進餘額，玩家看不到「代幣彩金」</span></div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+  <h2><span class="no">6</span>防作弊</h2>
+  <div class="tiles">
+    <div class="tile lose"><i class="ico">⚠️</i><b>兩邊都押</b>1 次警告、2 次沒收（每輪重算）</div>
+    <div class="tile"><i class="ico">🚩</i><b>7 天 8 輪被沒收</b>自動標記、客服處理</div>
+    <div class="tile"><i class="ico">⛔</i><b>黑名單（對方操作）</b>不能玩、未領的收回</div>
+    <div class="tile"><i class="ico">🧊</i><b>帳號凍結</b>到期作廢、解凍不補</div>
+  </div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section id="s7">
+  <h2><span class="no">7</span>特殊情況</h2>
+  <div class="tiles">
+    <div class="tile"><i class="ico">🏁</i><b>活動結束時</b>正在打的可以打完，打完 30 分鐘內領</div>
+    <div class="tile"><i class="ico">🌙</i><b>跨過午夜</b>不中斷（算哪一天待確認）</div>
+    <div class="tile"><i class="ico">📶</i><b>斷線重連</b>進度、倒數都不會掉</div>
+    <div class="tile"><i class="ico">📱</i><b>多台手機登入</b>進度一致</div>
+    <div class="tile"><i class="ico">⛔</i><b>被列黑名單</b>入口看得到但不能玩；移出後下一輪可玩，作廢的不補</div>
+  </div>
+</section>
+
+
+</div>
+
+<!-- ============ 分頁：待確認清單 ============ -->
+<div id="tab-todo" class="tab-panel" hidden>
+<section>
+  <h2>🅰 廠商規格書矛盾／沒寫清楚</h2>
+  <ol class="todo">
+    <li><strong>對刷結束算哪個狀態？</strong>§3.2 狀態表說對刷 2 次是 over；§3.4 卡片表和 §4.5 卻寫 done（endReason=doubleSide）。這會影響後台報表的狀態篩選。</li>
+    <li><strong>進行中挑戰遇到黑名單，扣不扣次數？</strong>PRD 自己標示待確認。</li>
+    <li><strong>黑名單要沿用平台風控名單還是活動自己維護？</strong>PRD 自己標示待確認。</li>
+    <li><strong>已到帳的榜單獎勵要回收時，流程怎麼走？</strong>§8.2 寫「由運營按風控結論單獨處理」，PRD 自己標示待確認。</li>
+    <li><strong>週期投注不到 150 的上榜玩家，係數怎麼算？</strong>係數表從 150 開始，沒寫低於 150 的情況。原型程式當 ×1.0 處理，但沒說 150 是不是上榜門檻。</li>
+    <li>大廳入口寫「限時 30 天」，活動週期 05.01–05.31 卻是 31 天，文案小誤差。</li>
+    <li><strong>「等待第一次下注」這個狀態不在狀態表裡。</strong>§3.1 說選桌確認後進入 PENDING，但 §3.2 的 6 種狀態沒有它。選了桌沒下注就離開，這張挑戰卡算不算用掉？會不會一直卡著？</li>
+    <li><strong>換桌後連贏怎麼算？</strong>合規下注要求「同一桌」，但倒數規則又允許 10 分鐘內換桌、在新桌下注後重新計時。換桌後是同一輪延續、連贏歸零，還是換桌那局不算？</li>
+    <li><strong>開「和」、對刷佔不佔 10 格？</strong>規則（§4.3、§4.5）說開和、對刷都不算合規下注、不佔 10 局；但挑戰卡的 10 格進度點，把開和（藍點）、對刷（黃點）也畫進格子裡。以哪個為準？如果不佔，一輪可能打超過 10 手。</li>
+    <li><strong>「庄＋庄對子」算不算違規？</strong>活動規則說不能同時押兩種以上玩法；§4.5 的對刷定義卻是押「互斥結果」，庄和庄對子並不互斥。（多類下注和對刷共用同一個違規次數，這點 PRD 已寫明。）</li>
+    <li><strong>單押「和」算不算一局？</strong>PRD 只說單押「和」不算對刷，沒說只押「和」的那一局算不算挑戰、開出「和」算不算贏。</li>
+    <li><strong>跨午夜的輪次算哪一天？</strong>§7 寫「獎勵歸屬結束當天」，§5.4 寫「計入當日配額、不佔次日」。23:40 開始、00:10 結束的輪次，兩句會得出不同的日期，6 張卡和榜單都會受影響。</li>
+    <li><strong>排名第 2 條「連贏次數」怎麼算？</strong>是「打到最高連贏局數的次數」（畫面寫「3 局 ×2 次」），還是所有連贏的次數？</li>
+    <li><strong>榜單「累計獎勵」欄包含什麼？</strong>沒說是否包含挑戰獎勵、安慰金，還是只有榜單獎勵。</li>
+    <li><strong>「多拼一把 差約 X 投注」怎麼算？</strong>跟哪一名比、比什麼，PRD 沒寫。</li>
+    <li><strong>「完美通關」和「打滿 10 局」重疊。</strong>連贏或連輸 10 局一定也是打滿 10 局，要確認兩者同時成立時顯示哪一個。</li>
+  </ol>
+</section>
+<section>
+  <h2>🅱 要跟對方確認的事</h2>
+  <ol class="todo">
+    <li><strong>會員怎麼對上？</strong>對方的玩家 ID 是不是我方會員 ID？如果不是，要有對照表，不然我們無法只篩出自家會員。</li>
+    <li><strong>接口能不能查全部會員？</strong>報表會員帳號留空時要列出全部我方會員，接口需要支援「依日期區間＋狀態列出全部會員（分頁）」，不能只有「輸入一位會員查一位」。</li>
+    <li><strong>狀態會回傳哪幾種？</strong>對方 PRD 有 idle／live／done／claimed／voided／over，報表要拆成「挑戰狀態」和「領取狀態」兩欄；請對方確認「沒達檔就結束」回傳的是 done 還是 over，以及接口能不能直接給「領取期限」。報表另有「待結束」（進行中且已達檔），也請確認接口能不能給出已鎖定的檔位。</li>
+    <li><strong>怎麼給、多久給一次？</strong>API、每日檔案，還是開對方後台帳號給我們看？即時還是隔天（T+1）？歷史資料保留多久？</li>
+    <li><strong>錢在誰那邊？</strong>代幣和代幣彩金存在我方錢包還是對方？彩金轉入餘額時由誰出錢？這會決定之後要不要做代幣成本相關的報表。</li>
+    <li><strong>代幣能拿去玩哪些遊戲？</strong>PRD 只寫「可下注、不可提款」，沒寫範圍。只能在 ON 的百家樂／龍虎用，還是其他廠商、其他遊戲也能用？有沒有限定桌台？原型「我的代幣」獲取方式還有「達有效投注送代幣」，看起來像平台共用代幣，需對方確認。</li>
+    <li><strong>挑戰和榜單用什麼下注才算？</strong>PRD 只寫清楚「流水稽核只算真錢」。① 挑戰的下注（每局 ≥ 50、算連贏連輸）可以用代幣嗎？用代幣押算不算一局？② 榜單「下注總額」（決定加成倍數）有沒有包含代幣下注？③ 同一局真錢＋代幣混押，50 怎麼算？</li>
+    <li><strong>時間用哪個時區？</strong>「當日 23:59:59」和榜單週期的切點是依哪個時區，跟我方報表是否一致？</li>
+    <li><strong>請對方提供「運營後台 PRD」</strong>他們的手機端 PRD 寫「運營後台規格見各自 PRD」。先看他們後台原本就統計哪些數字，能直接給的就不用另外開發。</li>
+  </ol>
+</section>
+</div>
+
+</div>
+<script>
+  // 點分頁鈕：顯示對應內容、隱藏另一個；網址加 #todo 可直接開待確認清單
+  (function () {
+    var btns = document.querySelectorAll('.tabbar button');
+    function show(id) {
+      btns.forEach(function (b) {
+        var on = b.dataset.tab === id;
+        b.setAttribute('aria-selected', on);
+        document.getElementById(b.dataset.tab).hidden = !on;
+      });
+    }
+    btns.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.tab); }); });
+    if (location.hash === '#todo') show('tab-todo');
+  })();
+</script>
+</body>
+</html>

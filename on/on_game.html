@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>连赢挑战赛报表</title>
+<style>
+  /* 颜色照 ok 后台既有报表（Element UI 风格）：主色蓝、灰色框线、红字总计 */
+  :root {
+    --primary: #409eff;
+    --text: #303133;
+    --text-2: #606266;
+    --text-3: #909399;
+    --placeholder: #c0c4cc;
+    --border: #dcdfe6;
+    --border-light: #ebeef5;
+    --bg-page: #f0f2f5;
+    --bg-header: #fafafa;
+    --bg-tagbar: #f5f7fa;
+    --red: #f56c6c;
+    --red-bg: #fef0f0;
+    --blue-bg: #ecf5ff;
+    --green: #67c23a;
+    --green-bg: #f0f9eb;
+    --orange: #e6a23c;
+    --orange-bg: #fdf6ec;
+    --grey-bg: #f4f4f5;
+    --card: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --text: #e5eaf3; --text-2: #cfd3dc; --text-3: #a3a6ad; --placeholder: #6c6e72;
+      --border: #4c4d4f; --border-light: #363637; --bg-page: #141414; --bg-header: #1d1e1f;
+      --bg-tagbar: #1d1e1f; --card: #1d1e1f; --green-bg: #1c2518; --orange-bg: #292218; --grey-bg: #262727; --red-bg: #2b1d1d; --blue-bg: #18222c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 16px; background: var(--bg-page); color: var(--text-2);
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+  }
+  .page { background: var(--card); border-radius: 4px; padding: 16px 20px 20px; }
+
+  /* 位置（面包屑） */
+  .crumb { font-size: 17px; color: var(--text); margin-bottom: 12px; }
+  .crumb .gt { color: var(--text-3); margin: 0 8px; }
+
+  /* 已开启的报表标签 */
+  .tagbar { background: var(--bg-tagbar); padding: 8px 20px; margin: 0 -20px 16px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { border: 1px solid var(--border); background: var(--card); color: var(--text-2); font-size: 15px; padding: 5px 10px; border-radius: 2px; }
+  .tag.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .tag .x { margin-left: 6px; }
+
+  /* 筛选列 */
+  .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .input, .select, .range {
+    height: 36px; border: 1px solid var(--border); border-radius: 4px; background: var(--card);
+    color: var(--text-2); font-size: 16px; padding: 0 12px; display: flex; align-items: center; font-family: inherit;
+  }
+  .input { width: 180px; }
+  .input::placeholder { color: var(--placeholder); }
+  /* 下拉选单：拿掉浏览器预设外观，右侧画一个灰色小箭头 */
+  .select { width: 150px; appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23c0c4cc' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; }
+  .range { gap: 24px; width: 340px; justify-content: space-between; white-space: nowrap; }
+  .range .cal { color: var(--placeholder); }
+  .check { display: flex; align-items: center; gap: 6px; color: var(--text-2); }
+  .check input { accent-color: var(--primary); width: 14px; height: 14px; margin: 0; }
+  .btn { height: 36px; padding: 0 18px; border: none; border-radius: 4px; background: var(--primary); color: #fff; font-size: 16px; font-family: inherit; cursor: pointer; }
+
+  /* 快捷日期 + 总计 */
+  .bar2 { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+  .quick { display: flex; flex-wrap: wrap; }
+  .quick span { border: 1px solid var(--border); margin-left: -1px; padding: 8px 16px; font-size: 15px; color: var(--text-2); background: var(--card); cursor: pointer; }
+  .quick span:first-child { margin-left: 0; border-radius: 4px 0 0 4px; }
+  .quick span:last-child { border-radius: 0 4px 4px 0; }
+  .quick span.on { background: var(--primary); border-color: var(--primary); color: #fff; position: relative; }
+  .totals { margin-left: auto; font-size: 16px; color: var(--text-3); font-style: italic; display: flex; gap: 20px; flex-wrap: wrap; }
+  .totals b { color: var(--red); font-style: normal; font-weight: 400; }
+
+  /* 表格 */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border-light); }
+  table { width: 100%; border-collapse: collapse; font-size: 16px; }
+  th, td { border: 1px solid var(--border-light); padding: 12px 8px; text-align: center; white-space: nowrap; }
+  th { background: var(--bg-header); color: var(--text-2); font-weight: 600; }
+  td { color: var(--text-2); height: 56px; }
+  .sort::after { content: " ⇅"; color: var(--placeholder); font-size: 14px; }
+  .muted { color: var(--placeholder); }
+  .st { font-size: 14px; padding: 3px 8px; border-radius: 4px; }
+  .st.live { background: var(--green-bg); color: var(--green); }
+  .st.done { background: var(--grey-bg); color: var(--text-3); }
+  .st.wait { background: var(--orange-bg); color: var(--orange); }
+  .st.void { background: var(--red-bg); color: var(--red); }
+  .st.lock { background: var(--blue-bg); color: var(--primary); }
+
+  /* 分页 */
+  .pager { display: flex; justify-content: flex-end; align-items: center; gap: 16px; margin-top: 16px; font-size: 16px; color: var(--text-2); }
+  .pager .size { border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; }
+  .pager .num { color: var(--primary); font-weight: 600; }
+  .pager .arrow { color: var(--placeholder); }
+  .pager .goto { border: 1px solid var(--border); border-radius: 4px; padding: 5px 14px; }
+
+  @media (max-width: 760px) {
+    .input, .select, .range { width: 100%; }
+    .totals { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- 位置 -->
+    <div class="crumb">位置<span class="gt">›</span>连赢挑战赛报表</div>
+
+    <!-- 已开启的报表标签（示意） -->
+    <div class="tagbar">
+      <span class="tag">平台报表<span class="x">×</span></span>
+      <span class="tag">会员报表<span class="x">×</span></span>
+      <span class="tag on">连赢挑战赛报表<span class="x">×</span></span>
+    </div>
+
+    <!-- 筛选：会员账号留空 = 全部会员；输入账号 = 只看这位会员 -->
+    <div class="filters">
+      <input class="input" type="text" placeholder="会员账号">
+      <select class="select">
+        <option>全部挑战状态</option>
+        <option>进行中</option>
+        <option>已结束</option>
+      </select>
+      <select class="select">
+        <option>全部领取状态</option>
+        <option>待结束</option>
+        <option>未领取</option>
+        <option>已领取</option>
+        <option>已作废</option>
+      </select>
+      <span class="range"><span class="cal">📅</span><span>2026-09-20</span><span>~</span><span>2026-09-21</span></span>
+      <label class="check"><input type="checkbox" checked>过滤测试用户</label>
+      <button class="btn">搜索</button>
+      <button class="btn">导出</button>
+    </div>
+
+    <!-- 快捷日期 + 总计 -->
+    <div class="bar2">
+      <div class="quick">
+        <span>今日报表</span><span>昨日报表</span><span>本周报表</span><span>本月报表</span><span>上月报表</span>
+      </div>
+      <div class="totals">
+        <span>参与人数：<b>6</b></span>
+        <span>挑战次数：<b>8</b></span>
+        <span>打码总额：<b>23,170.00(PHP)</b></span>
+        <span>已领挑战代币：<b>2,600.00</b></span>
+        <span>待领挑战代币：<b>2,000.00</b></span>
+        <span>已作废挑战代币：<b>1,200.00</b></span>
+      </div>
+    </div>
+
+    <!-- 挑战记录：一轮一列 -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">会员账号</th>
+            <th rowspan="2" class="sort">挑战日期</th>
+            <th rowspan="2">第几次</th>
+            <th rowspan="2">玩法 / 桌台</th>
+            <th rowspan="2">挑战状态</th>
+            <th colspan="2">挑战进度</th>
+            <th colspan="5">本轮成绩</th>
+            <th colspan="5">奖励</th>
+          </tr>
+          <tr>
+            <th>局数</th>
+            <th>当前连续</th>
+            <th class="sort">最高连赢</th>
+            <th class="sort">最高连输</th>
+            <th class="sort">打码量(PHP)</th>
+            <th>结束时间</th>
+            <th>结束原因</th>
+            <th>奖励档位</th>
+            <th class="sort">奖励代币</th>
+            <th>领取状态</th>
+            <th>领取期限</th>
+            <th>领取时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ok_88213</td><td>2026-09-21</td><td>3</td><td>百家乐 · VNLB01</td>
+            <td><span class="st live">进行中</span></td>
+            <td>6 / 10</td><td>连输 1</td>
+            <td>5</td><td>1</td><td>3,400.00</td><td class="muted">—</td><td class="muted">—</td>
+            <td>连赢第 1 档</td><td>1,200.00</td><td><span class="st lock">待结束</span></td><td class="muted">—</td><td class="muted">—</td>
+          </tr>
+          <tr>
+            <td>ok_88213</td><td>2026-09-21</td><td>2</td><td>龙虎 · VNDT03</td>
+            <td><span class="st done">已结束</span></td>
+            <td>10 / 10</td><td class="muted">—</td>
+            <td>2</td><td>5</td><td>800.00</td><td>09-21 13:38:12</td><td>满 10 局</td>
+            <td>安慰金第 2 档</td><td>300.00</td><td><span class="st done">已领取</span></td><td>09-21 23:59:59</td><td>09-21 13:40:02</td>
+          </tr>
+          <tr>
+            <td>ok_88213</td><td>2026-09-21</td><td>1</td><td>百家乐 · VNLB02</td>
+            <td><span class="st done">已结束</span></td>
+            <td>7 / 10</td><td class="muted">—</td>
+            <td>7</td><td>0</td><td>1,120.00</td><td>09-21 11:52:47</td><td>超时</td>
+            <td>连赢第 2 档</td><td>2,000.00</td><td><span class="st done">已领取</span></td><td>09-21 23:59:59</td><td>09-21 11:55:10</td>
+          </tr>
+          <tr>
+            <td>ok_77042</td><td>2026-09-21</td><td>6</td><td>龙虎 · VNDT03</td>
+            <td><span class="st done">已结束</span></td>
+            <td>10 / 10</td><td class="muted">—</td>
+            <td>7</td><td>2</td><td>8,900.00</td><td>09-21 14:21:08</td><td>满 10 局</td>
+            <td>连赢第 2 档</td><td>2,000.00</td><td><span class="st wait">未领取</span></td><td>09-21 23:59:59</td><td class="muted">—</td>
+          </tr>
+          <tr>
+            <td>ok_61120</td><td>2026-09-21</td><td>2</td><td>百家乐 · VNLB02</td>
+            <td><span class="st done">已结束</span></td>
+            <td>10 / 10</td><td class="muted">—</td>
+            <td>2</td><td>5</td><td>1,000.00</td><td>09-21 10:31:52</td><td>满 10 局</td>
+            <td>安慰金第 2 档</td><td>300.00</td><td><span class="st done">已领取</span></td><td>09-21 23:59:59</td><td>09-21 10:33:14</td>
+          </tr>
+          <tr>
+            <td>ok_50391</td><td>2026-09-21</td><td>6</td><td>百家乐 · VNLB02</td>
+            <td><span class="st done">已结束</span></td>
+            <td>5 / 10</td><td class="muted">—</td>
+            <td>3</td><td>2</td><td>1,150.00</td><td>09-21 16:48:39</td><td>超时</td>
+            <td class="muted">无奖励</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td>
+          </tr>
+          <tr>
+            <td>ok_30218</td><td>2026-09-21</td><td>4</td><td>龙虎 · VNDT01</td>
+            <td><span class="st done">已结束</span></td>
+            <td>7 / 10</td><td class="muted">—</td>
+            <td>5</td><td>0</td><td>4,200.00</td><td>09-21 19:25:10</td><td>对刷 2 次</td>
+            <td class="muted">无奖励</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td><td class="muted">—</td>
+          </tr>
+          <tr>
+            <td>ok_42877</td><td>2026-09-20</td><td>1</td><td>百家乐 · VNLB01</td>
+            <td><span class="st done">已结束</span></td>
+            <td>6 / 10</td><td class="muted">—</td>
+            <td>5</td><td>1</td><td>2,600.00</td><td>09-20 08:44:02</td><td>超时</td>
+            <td>连赢第 1 档</td><td>1,200.00</td><td><span class="st void">已作废</span></td><td>09-20 23:59:59</td><td class="muted">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 分页 -->
+    <div class="pager">
+      <span>Total 8</span>
+      <span class="size">10/page ⌄</span>
+      <span class="arrow">‹</span><span class="num">1</span><span class="arrow">›</span>
+      <span>Go to</span><span class="goto">1</span>
+    </div>
+
+  </div>
+</body>
+</html>

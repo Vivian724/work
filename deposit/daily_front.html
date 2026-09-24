@@ -128,6 +128,8 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   cursor: pointer; white-space: nowrap;
 }
 .devbar__opt:hover { background: #474d5a; }
+.devbar__opt:disabled { opacity: .35; cursor: default; }
+.devbar__count { min-width: 150px; padding: 0 var(--sp-2); align-self: center; text-align: center; font-weight: 600; white-space: nowrap; }
 .devbar__opt[aria-pressed="true"] { background: var(--c-primary); border-color: #8aa3f5; font-weight: 600; }
 
 /* ==========================================================================
@@ -509,16 +511,31 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 .dlist__table th, .dlist__table td { padding: var(--sp-1) var(--sp-2); text-align: left; }
 .dlist__table th { color: var(--c-text-3); font-size: var(--fs-xs); font-weight: 600; }
 .dlist__table td { border-top: 1px solid var(--c-border); }
-.dlist__table td:nth-child(2) { color: var(--c-primary); font-weight: 700; }
+.dlist__table td:nth-child(2) { font-weight: 700; }
 /* 逐笔清单的三种列状态：
    is-done ＝ 今天已经领过的笔（反灰，不会再变动）
    is-now  ＝ 当前这一笔（下一笔会落在的那一笔，高亮）
-   is-fin  ＝ 今日最后一笔领完之后的那一列（完成样式，要跟反灰看得出差别） */
+   is-fin  ＝ 今日全部领完时的最后一列（黄色高亮＋右上角皇冠）
+   还没轮到的笔维持一般样式；全部领完时上方 Bonus % / Max Bonus 两格隐藏、清单下方出现恭喜文案 */
 .dlist__table tr.is-done td { background: #f5f6f8; color: var(--c-text-3); }
 .dlist__table tr.is-done td:nth-child(2) { color: var(--c-text-3); }
-.dlist__table tr.is-now  td { background: #eaf1fd; }
-.dlist__table tr.is-fin  td { background: #eaf7ee; color: #2f7d4a; font-weight: 700; }
-.dlist__table tr.is-fin  td:nth-child(2) { color: #2f7d4a; }
+.dlist__table tr.is-now  td { background: #eaf1fd; color: var(--c-primary); font-weight: 700; }
+.dlist__table tr.is-now  td:nth-child(2) { color: var(--c-primary); }
+.dlist__table tr.is-fin { background: linear-gradient(90deg, #f0a93f, #f8dc62); }
+.dlist__table tr.is-fin  td { color: #fff; font-weight: 700; }
+.dlist__table tr.is-fin  td:last-child { position: relative; }
+.dlist__crown {
+  position: absolute; top: -12px; right: 2px; width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+/* 全部领完：两格统计隐藏，清单顶端不再留分隔线 */
+.stats[hidden] { display: none; }
+.statcard.is-fin .dlist { margin-top: 0; padding-top: 0; border-top: 0; }
+
+/* 今日全部领完的恭喜文案：置中一行字，只是页内提示、不能点 */
+.dlist__fin { margin-top: var(--sp-3); text-align: center; font-size: var(--fs-base); font-weight: 700; color: var(--c-text); }
+.dlist__fin[hidden] { display: none; }
 
 .btn-deposit {
   display: block; width: 100%; margin-top: var(--sp-3); padding: var(--sp-3);
@@ -563,18 +580,19 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   </div>
 
   <div class="devbar__group">
-    <span class="devbar__label">玩家今天已领几次</span>
+    <span class="devbar__label">玩家今天到第几笔</span>
     <div class="devbar__options" role="group">
-      <button type="button" class="devbar__opt" data-set="state" data-value="d0"   aria-pressed="true">今日 0 次</button>
-      <button type="button" class="devbar__opt" data-set="state" data-value="d1"   aria-pressed="false">已领 1 次</button>
-      <button type="button" class="devbar__opt" data-set="state" data-value="dmid" aria-pressed="false">领到一半</button>
-      <button type="button" class="devbar__opt" data-set="state" data-value="dmax" aria-pressed="false">额满</button>
+      <button type="button" class="devbar__opt" id="doneZero">归零</button>
+      <button type="button" class="devbar__opt" id="doneMinus" aria-label="少领一笔">−</button>
+      <span class="devbar__count" id="doneCount" aria-live="polite">0 / 10</span>
+      <button type="button" class="devbar__opt" id="donePlus" aria-label="多领一笔">＋</button>
+      <button type="button" class="devbar__opt" id="doneFull">额满</button>
     </div>
   </div>
 
 </aside>
 
-<div class="app" id="app" data-state="d0" data-daily="n10">
+<div class="app" id="app" data-done="0" data-daily="n10">
 <main>
 
 <div class="stage">
@@ -866,6 +884,8 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
               </thead>
               <tbody id="dlistRows"></tbody>
             </table>
+            <!-- 今日全部领完才出现；隔天重置就消失 -->
+            <p class="dlist__fin" id="dlistFin" hidden>Congrats on completing today's tasks!</p>
           </div>
 
           <button type="button" class="btn-deposit" id="btnDeposit">Deposit</button>
@@ -947,16 +967,11 @@ function ordinal(n) {
    情境 ＝ 玩家今天已经用掉几次（勾券并送出充值就算，见规格 3.1）。
    券可不可勾、券面是第几笔、详情页站在第几笔，全部由这一个数字推导出来，
    不用另外维护一张手写对照表——这也正是后端该有的算法。
-   「领到一半」与「额满」跟著当下的上限走，所以换成 10 段也不会失准。
+   工具列用 −／＋ 一笔一笔加，「额满」＝直接跳到上限；换笔数时超过上限会自动压回上限。
    -------------------------------------------------------------------------- */
 function todayCount() {
   const limit = dailyLimit();
-  switch (app.dataset.state) {
-    case 'd1':   return Math.min(1, limit);
-    case 'dmid': return Math.max(1, Math.floor(limit / 2));
-    case 'dmax': return limit;
-    default:     return 0;
-  }
+  return Math.min(Number(app.dataset.done) || 0, limit);
 }
 
 /* 目前勾选哪一张券：'repeat' / null（没勾） */
@@ -1047,9 +1062,9 @@ function renderPayment() {
     txt.textContent = 'Min Deposit ' + money(c.min) + ' to get ' + c.pct + '% bonus';
   } else {
     const bonus = calcBonus(amount, c.pct, c.cap);
-    const hitCap = amount * c.pct / 100 > c.cap;
+    const hitCap = amount * c.pct / 100 >= c.cap;   // 刚好等于上限也标 (capped)
     bar.className = 'extra-bar';
-    txt.innerHTML = 'You Will Receive An Extra ₱ ' + money(bonus)
+    txt.innerHTML = 'You Will Receive An Extra ₱' + money(bonus)
       + (hitCap ? ' <span class="extra-bar__cap">(capped)</span>' : '');
   }
 }
@@ -1071,7 +1086,7 @@ function renderDailyList() {
   // 一笔一列，阵列的第几个就是第几笔，不再有「第 1–3 笔」这种区间
   document.getElementById('dlistRows').innerHTML = list.map(function (item, i) {
     const order = i + 1;
-    // 三种状态：领完最后一笔 → 最后一列用完成样式；领过的反灰；当前这一笔高亮
+    // 列的状态：领完最后一笔 → 最后一列黄色＋皇冠；领过的反灰；当前这一笔蓝色高亮；还没轮到的一般样式
     let cls = '';
     if (allDone && order === list.length) cls = 'is-fin';
     else if (order <= done)               cls = 'is-done';
@@ -1080,7 +1095,9 @@ function renderDailyList() {
       + '<td>' + ordinal(order) + '</td>'
       + '<td>₱' + amt(item.min) + '</td>'
       + '<td>' + item.pct + '%</td>'
-      + '<td>₱' + amt(item.cap) + '</td>'
+      + '<td>₱' + amt(item.cap)
+      + (cls === 'is-fin' ? '<span class="dlist__crown" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M3 7l4.5 4L12 4l4.5 7L21 7l-2 11H5z" fill="#f2b33d"/><rect x="5" y="19" width="14" height="2" rx="1" fill="#e89a2c"/></svg></span>' : '')
+      + '</td>'
       + '</tr>';
   }).join('');
 
@@ -1090,6 +1107,11 @@ function renderDailyList() {
   const cur = list[next - 1];
   document.getElementById('statPct').textContent = cur.pct + '%';
   document.getElementById('statCap').textContent = amt(cur.cap);
+
+  // 今天全部领完 → 两格统计隐藏、清单下方出现恭喜文案；还没领完（含隔天重置回第 1 笔）就恢复
+  document.getElementById('dlistFin').hidden = !allDone;
+  document.querySelector('.statcard .stats').hidden = allDone;
+  document.querySelector('.statcard').classList.toggle('is-fin', allDone);
 
 }
 
@@ -1197,18 +1219,38 @@ document.getElementById('amount').addEventListener('input', renderPayment);
 /* --------------------------------------------------------------------------
    工具列切换
    -------------------------------------------------------------------------- */
-document.querySelectorAll('.devbar__opt').forEach(function (btn) {
+document.querySelectorAll('.devbar__opt[data-set]').forEach(function (btn) {
   btn.addEventListener('click', function () {
     const key = btn.dataset.set;
     app.dataset[key] = btn.dataset.value;
     document.querySelectorAll('.devbar__opt[data-set="' + key + '"]').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b === btn));
     });
-    if (key === 'state' || key === 'daily') render();
+    if (key === 'daily') setDone(todayCount());   // 换笔数：已领次数超过新上限就压回上限
   });
 });
 
-render();
+/* 玩家今天已领几笔：−／＋ 一笔一笔调，归零＝今天还没领，额满＝领完最后一笔 */
+function setDone(n) {
+  const limit = dailyLimit();
+  n = Math.max(0, Math.min(n, limit));
+  app.dataset.done = n;
+  // 显示「当前第几笔」（＝已用掉次数 ＋ 1），跟详情页高亮那一列同一个数字；全部用完显示额满
+  document.getElementById('doneCount').textContent = (n === limit)
+    ? '额满（' + limit + ' / ' + limit + ' 已用完）'
+    : '当前第 ' + (n + 1) + ' 笔 · ' + (n + 1) + ' / ' + limit;
+  document.getElementById('doneZero').disabled  = (n === 0);
+  document.getElementById('doneMinus').disabled = (n === 0);
+  document.getElementById('donePlus').disabled  = (n === limit);
+  document.getElementById('doneFull').disabled  = (n === limit);
+  render();
+}
+document.getElementById('doneZero').addEventListener('click',  function () { setDone(0); });
+document.getElementById('doneMinus').addEventListener('click', function () { setDone(todayCount() - 1); });
+document.getElementById('donePlus').addEventListener('click',  function () { setDone(todayCount() + 1); });
+document.getElementById('doneFull').addEventListener('click',  function () { setDone(dailyLimit()); });
+
+setDone(0);
 </script>
 
 <!-- ══ 桥接程序 ══
@@ -1226,8 +1268,13 @@ render();
   /* 嵌在窄栏里时，单张画面置中，不要孤零零挤在左边 */
   var css = document.createElement('style');
   css.textContent = '.stage { justify-content: center; }'
-    + '.is-single .screen__head { display: none; }';   // 只剩一张画面时，标题也不要，左栏就是纯画面
+    + '.is-single .screen__head { display: none; }'    // 只剩一张画面时，标题也不要，左栏就是纯画面
+    + '.devbar[hidden] { display: none; }';
   document.head.appendChild(css);
+
+  /* 原型工具列只切换详情页的清单状态，所以嵌在规格书里时只有看 4.3 才出现 */
+  var devbar = document.querySelector('.devbar');
+  if (devbar) devbar.hidden = true;
 
   function show(key) {
     var only = MAP[key];                        // 没给或给 all 就三张全开
@@ -1235,6 +1282,7 @@ render();
       screens[i].hidden = (only !== undefined) && (i !== only);
     }
     document.body.classList.toggle('is-single', only !== undefined);
+    if (devbar) devbar.hidden = (key !== 'c');
     window.scrollTo(0, 0);
   }
 

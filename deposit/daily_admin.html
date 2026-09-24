@@ -263,6 +263,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 }
 .daterange__input::placeholder { color: var(--color-placeholder); }
 .daterange.input--error { border-color: var(--color-danger); }
+.daterange__input.is-missing { background: #fef0f0; border-radius: 2px; }
+.daterange__input.is-missing::placeholder { color: var(--color-danger); }
 .input--full { max-width: 100%; }
 .input--error { border-color: var(--color-danger); }
 .input[disabled] { background: #f5f7fa; color: var(--color-text-3); cursor: not-allowed; }
@@ -1005,9 +1007,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             <label class="field__label">奖金所需流水</label>
             <div class="field__body">
               <div class="inline">
-                <label class="choice"><input type="checkbox" checked><span class="choice__text">本金</span></label>
-                <label class="choice"><input type="checkbox" checked><span class="choice__text">奖金</span></label>
-                <input class="input input--sm" type="number" value="3">
+                <label class="choice"><input type="checkbox" id="fTurnPrin" checked><span class="choice__text">本金</span></label>
+                <label class="choice"><input type="checkbox" id="fTurnBonus" checked><span class="choice__text">奖金</span></label>
+                <input class="input input--sm" type="number" id="fTurnTimes" value="3">
                 <span>倍</span>
               </div>
             </div>
@@ -1149,6 +1151,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
             <option>每日复存加码</option>
             <option>十月复存加码</option>
             <option>八月复存活动</option>
+            <option>七月周末加码试办</option>
+            <option>六月复存V2</option>
           </select>
         </div>
 
@@ -1468,6 +1472,11 @@ function loadActivity(id) {
   document.getElementById('fStart').value     = a.start;
   document.getElementById('fEnd').value       = a.end;
   document.getElementById('fSort').value      = (a.sort === undefined) ? '' : a.sort;
+  document.getElementById('fTurnPrin').checked  = true;
+  document.getElementById('fTurnBonus').checked = true;
+  document.getElementById('fTurnTimes').value   = DEMO_FORM.turnTimes;
+  document.getElementById('fTitle').value       = DEMO_FORM.title;
+  document.getElementById('fContent').innerHTML = DEMO_FORM.content;
 
   /* 奖励配置：原型没有后端，这里一律带回示范数据。
      真实系统是把那一笔活动存下来的七天配置读回来。 */
@@ -1572,7 +1581,7 @@ document.getElementById('remarkModal').addEventListener('click', function (e) {
 });
 document.getElementById('remarkOk').addEventListener('click', function () {
   const txt = document.getElementById('remarkInput').value.trim();
-  if (!txt) { toast('warn', '请先输入备注内容'); return; }
+  if (!txt) { toast('error', '请先输入备注内容'); return; }
   if (!remarkRow) return;
 
   const old = remarkRow.dataset.remark || '';
@@ -1638,6 +1647,14 @@ function toast(type, message) {
    -------------------------------------------------------------------------- */
 function validateAndSave(e) {
   e.preventDefault();
+
+  /* 防重复点击：一按下就把钮锁住，收到回应才放开（原型用短延迟模拟回应）。
+     不锁的话，手快点两下会建出两笔一模一样的活动。 */
+  const btn = document.querySelector('#actForm button[type="submit"]');
+  if (btn && btn.disabled) return;
+  if (btn) btn.disabled = true;
+  function release(ms) { if (btn) setTimeout(function () { btn.disabled = false; }, ms); }
+
   document.getElementById('toastWrap').innerHTML = '';
 
   const errors = [];
@@ -1662,6 +1679,8 @@ function validateAndSave(e) {
   }
   const rangeAct = document.getElementById('rangeAct');
   rangeAct.classList.toggle('input--error', timeBlank);
+  fStart.classList.toggle('is-missing', !fStart.value.trim());   // 缺哪一格就标哪一格
+  fEnd.classList.toggle('is-missing', !fEnd.value.trim());
 
   /* 起讫顺序。时间没填好就先跳过，免得跟上一条一起洗版。 */
   if (!timeBlank) {
@@ -1768,20 +1787,13 @@ function validateAndSave(e) {
 
   if (errors.length) {
     errors.forEach(function (m) { toast('error', m); });
+    release(300);
     return;
   }
   warns.forEach(function (m) { toast('warn', m); });
   toast('success', '保存成功');
   formDirty = false;
-
-  /* 防重复点击：按下后先把钮锁住，收到回应才放开。
-     不锁的话，手快点两下会建出两笔一模一样的活动。
-     原型没有后端，用一个短延迟模拟。 */
-  const btn = document.querySelector('#actForm button[type="submit"]');
-  if (btn) {
-    btn.disabled = true;
-    setTimeout(function () { btn.disabled = false; }, 1200);
-  }
+  release(1200);
 }
 
 /* --------------------------------------------------------------------------
@@ -1803,10 +1815,15 @@ function showView(id) {
 /* 新增：整张表单回到空白。
    不清乾净的话，上一次编辑留下的活动时间、奖励配置会跟著带进新活动，
    营运不一定会发现，就这样存下去了。 */
-document.getElementById('btnAdd').addEventListener('click', function () {
-  lastLoadedId = null;
-  formDirty = false;
-  app.dataset.mode = 'add';
+/* 编辑时要带回的示范内容（原型没有后端，先把页面上写好的示范文字记下来） */
+const DEMO_FORM = {
+  title:   document.getElementById('fTitle').value,
+  content: document.getElementById('fContent').innerHTML,
+  turnTimes: document.getElementById('fTurnTimes').value
+};
+
+/* 整张表单回到新增时的空白状态：新增、以及新增状态下按「重置」都走这里 */
+function blankForm() {
   document.getElementById('fName').value  = '';
   document.getElementById('fStart').value = '';
   document.getElementById('fEnd').value   = '';
@@ -1817,10 +1834,26 @@ document.getElementById('btnAdd').addEventListener('click', function () {
   setStatus('off');                       // 新增时预设「关闭」，建好再自己开
   // 活动类型默认全不勾（见规格 2.2.1）
   document.querySelectorAll('#sec1 input[type="checkbox"]').forEach(function (c) { c.checked = false; });
+  // 流水、活动标题、活动内容也要清空，不能留示范文字
+  document.getElementById('fTurnPrin').checked  = false;
+  document.getElementById('fTurnBonus').checked = false;
+  document.getElementById('fTurnTimes').value   = '';
+  document.getElementById('fTitle').value       = '';
+  document.getElementById('fContent').innerHTML = '';
+  document.querySelectorAll('.input--error, .is-missing').forEach(function (el) {
+    el.classList.remove('input--error', 'is-missing');
+  });
   bSaveTried = false;            // 新的一张表单，还没按过保存
   initWeekPlans(true);           // 新增：奖励配置整份留空（见规格 2.3.2）
   renderWeekPlans();
   refreshWeekPeriod();
+}
+
+document.getElementById('btnAdd').addEventListener('click', function () {
+  lastLoadedId = null;
+  formDirty = false;
+  app.dataset.mode = 'add';
+  blankForm();
   showView('viewForm');
 });
 
@@ -1857,8 +1890,8 @@ document.getElementById('actForm').addEventListener('reset', function (e) {
   }
   setTimeout(function () {
     document.getElementById('toastWrap').innerHTML = '';
-    document.querySelectorAll('.input--error').forEach(function (el) {
-      el.classList.remove('input--error');
+    document.querySelectorAll('.input--error, .is-missing').forEach(function (el) {
+      el.classList.remove('input--error', 'is-missing');
     });
 
     /* 浏览器的 reset 只会把字段还原成 HTML 写死的默认值，
@@ -1868,11 +1901,7 @@ document.getElementById('actForm').addEventListener('reset', function (e) {
     if (app.dataset.mode === 'edit' && lastLoadedId) {
       loadActivity(lastLoadedId);
     } else {
-      document.getElementById('fName').value  = '';
-      document.getElementById('fStart').value = '';
-      document.getElementById('fEnd').value   = '';
-      initWeekPlans();
-      renderWeekPlans();
+      blankForm();                 // 新增：回到刚按「新增」时的空白状态（七天 × 11 级各 3 笔、全空）
     }
     refreshWeekPeriod();
     formDirty = false;
@@ -2483,13 +2512,19 @@ function bCollectIssues() {
           errors.push({ day: d.key, vip: vip, i: i, kind: kind, ch: ch, msg: where + '：' + msg });
         }
 
+        // 最多 2 位小数（规格 2.3.3）
+        const over2 = function (v) { return /\.\d{3,}$/.test(String(v).trim()); };
+
         if (!(Number(row.min) > 0)) bad('min', null, '最低存款金额要大于 0。');
+        else if (over2(row.min))    bad('min', null, '最低存款金额最多 2 位小数。');
 
         CH_KEYS.forEach(function (ch) {
           const pct = Number(row.pct[ch]), cap = Number(row.cap[ch]);
           if (!(pct > 0))   bad('pct', ch, CH_NAMES[ch] + ' 的奖励％要大于 0。');
           else if (pct > 100) bad('pct', ch, CH_NAMES[ch] + ' 的奖励％不可超过 100。');
+          else if (over2(row.pct[ch])) bad('pct', ch, CH_NAMES[ch] + ' 的奖励％最多 2 位小数。');
           if (!(cap > 0)) bad('cap', ch, CH_NAMES[ch] + ' 的上限金额要大于 0。');
+          else if (over2(row.cap[ch])) bad('cap', ch, CH_NAMES[ch] + ' 的上限金额最多 2 位小数。');
 
           /* 奖励算出 0 的坑：百分比太小、门槛又低的时候，
              刚好踩到门槛的玩家会领到 0 元——画面上看起来有奖励、实际拿到零，
@@ -2590,8 +2625,7 @@ function bRunCheck() {
           + '</ul>';
   }
   box.innerHTML = html;
-  toast(res.errors.length ? 'error' : 'warn',
-        res.errors.length ? ('有 ' + res.errors.length + ' 项要修正') : ('有 ' + res.warns.length + ' 项提醒'));
+  // 不在这里另弹提示：保存那边已经弹了「奖励配置有 N 项要修正…」，规格 2.6.2 只弹一句
 }
 
 /* ── 奖励配置的事件：全部绑在 #rewardB 这一块上 ──────────────────────
