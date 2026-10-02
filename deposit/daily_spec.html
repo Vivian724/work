@@ -291,6 +291,10 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 .box--stop  { background: #fef0f0; border-left: 4px solid var(--c-danger); color: var(--c-danger); }
 .box__t { display: block; font-weight: 700; margin-bottom: var(--sp-1); }
 
+/* 10/1 修订：红字只标这次变动的句子 */
+.rev { color: var(--c-danger); }
+.rev b, .rev code { color: inherit; }
+
 /* 表格底下的补充说明。灰字、比内文小一号，但仍在规范的 12px 底限之上。 */
 .hint {
   margin: calc(var(--sp-2) * -1) 0 var(--sp-4);
@@ -385,6 +389,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 
           <!-- 本次异动摘要：内容由程式扫各章标签生出来，不要手写，改内文标签这里就跟著变 -->
           <section class="sum" id="changeSummary"></section>
+          <p class="rev">红字＝10/1 新增：星期可设成不发奖（例如只发一三五或二四六），见 2.3.9、4.3.4。</p>
 
           <div class="box box--ok">
             <span class="box__t">这是一档独立的新活动</span>
@@ -415,7 +420,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <tbody>
                 <tr><th class="nw">奖金算法</th><td><b>存款金额 × 百分比</b>，超过上限取上限。</td></tr>
                 <tr><th class="nw">百分比取哪一格</th>
-                    <td><b>今天星期几 × VIP 等级 × 今天第几笔 × 渠道</b>。后台照这四个维度配：七天各一组，每组 11 个等级，一笔一列，每一笔再分三个渠道（平台／glife／maya）各填％与上限。</td></tr>
+                    <td><b>今天星期几 × VIP 等级 × 今天第几笔 × 渠道</b>。后台照这四个维度配：七天各一组，每组 11 个等级，一笔一列，每一笔再分三个渠道（平台／glife／maya）各填％与上限。<br><span class="rev"><b>每一天可以设成不发奖</b>，例如只发一三五、或只发二四六（见 2.3.9）。</span></td></tr>
                 <tr><th class="nw">每日可领笔数</th><td>后台配 <b>1～10 笔</b>，每一天、每个等级可以不一样。</td></tr>
                 <tr><th class="nw">怎么算用掉一次</th>
                     <td><b>勾券并送出充值</b>就算，<b>充值失败也算</b>（见 3.1）；没勾券、未达门槛的存款不计次。</td></tr>
@@ -540,7 +545,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <tbody>
                 <tr><th class="nw">① 星期页签</th>
-                    <td>横排七个，一次编一天，<b>默认周一</b>。轮不到的那天<b>压灰加删除线</b>（见 2.3.6）；<b>配错不挂红点</b>（见 2.3.5）。</td></tr>
+                    <td>横排七个，一次编一天，<b>默认周一</b>。轮不到的那天<b>压灰加删除线</b>（见 2.3.6）；<span class="rev"><b>不发奖的那天页签虚线框、下方标「不发奖」</b>（见 2.3.9）；</span><b>配错不挂红点</b>（见 2.3.5）。</td></tr>
                 <tr><th class="nw">② VIP 等级</th>
                     <td>VIP0～VIP10 共 11 个折叠区块（<b>VIP0 ＝ 既有系统的「一般会员（PT）」</b>；
                         <b>前台未登入展示 VIP10 那一组</b>，见 4.3.2）。折叠列显示「<b>每日可领 N 笔</b>」；
@@ -680,6 +685,31 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                         <b>错误标在百分比那一格。</b></td><td class="nw">是</td></tr>
                 <tr><td class="nw">收合中的渠道</td><td>glife／maya 的值<b>一样要通过上面四条</b>。</td><td class="nw">是</td></tr>
                 <tr><td class="nw">轮不到的星期</td><td>周三：这档活动期间内一次都轮不到，配了也不会发出去（活动不满一周才会这样）。（见 2.3.6）</td><td class="nw">否<br>仅提醒</td></tr>
+                <tr class="rev"><td class="nw">不发奖的那天</td><td>整天<b>不检查</b>，也<b>不提醒轮不到</b>（见 2.3.9）。</td><td class="nw">否</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="sub rev">2.3.9 （10/1 新增）哪几天发奖 <span class="tag tag--new">新增</span></h3>
+          <p class="rev">七天<b>不必天天发</b>：可以只发一三五、只发二四六，或任意几天。</p>
+          <div class="tbl-scroll">
+            <table class="t">
+              <tbody>
+                <tr><th class="nw">开关</th>
+                    <td>星期页签下方操作列最前面一个勾选框「<b>当天发奖</b>」，<b>管目前这一天</b>；七天各自一个，<b>默认七天都勾</b>。</td></tr>
+                <tr><th class="nw">不勾时</th>
+                    <td>这一天<b>不发奖</b>：下方 11 个等级区块整块收起，只显示「这天不发奖」；操作列的「全部展开／全部收合／显示其他渠道／复制这天到其他天…」一并隐藏。<br>
+                        页签<b>虚线框、名称下方标「不发奖」</b>，不用点进去也看得出哪几天不发。</td></tr>
+                <tr><th class="nw">已填的值</th>
+                    <td><b>不清掉</b>：取消勾选只是收起，<b>再勾回来原本的值都在</b>；保存时照样存下。</td></tr>
+                <tr><th class="nw">校验</th>
+                    <td>不发奖的那天<b>整天不检查</b>，空格也不挡保存；也<b>不提醒轮不到</b>（见 2.3.6）。</td></tr>
+                <tr><th class="nw">复制这天到其他天</th>
+                    <td>目标天<b>不发奖也可以选</b>，值照样盖过去，<b>不会顺便把那天打开</b>。</td></tr>
+                <tr><th class="nw">保存成功提示</th>
+                    <td>效果说明改成列出发奖的那几天（见 2.6.3）。</td></tr>
+                <tr><th class="nw">前台</th>
+                    <td>不发奖的那天：<b>没有复存券</b>（见 4.2.3）；活动详情页<b>只剩 banner、标题、活动期间、Deposit 按钮、活动说明</b>（见 4.3.4）。</td></tr>
               </tbody>
             </table>
           </div>
@@ -806,7 +836,9 @@ table.t th:last-child, table.t td:last-child { width: auto; }
           <ul>
             <li>绿色「<b>保存成功</b>」，<b>停留在表单页</b>。</li>
             <li>另跳黄色效果说明：「这样配的效果是：周一～周日各一组，<b>每人每日可领 4 笔，最高的是周六 28%</b>，每过一周循环一次」。
-                各等级笔数不同时写成范围（如「3～5 笔」）；百分比<b>只讲最高的那一天</b>、<b>以平台渠道为准</b>；<b>只统计活动期间内轮得到的星期</b>（见 2.3.6）。</li>
+                各等级笔数不同时写成范围（如「3～5 笔」）；百分比<b>只讲最高的那一天</b>、<b>以平台渠道为准</b>；<b>只统计活动期间内轮得到的星期</b>（见 2.3.6）。<br>
+                <span class="rev"><b>有几天不发奖时</b>（见 2.3.9），开头那句改成列出发奖的那几天：「这样配的效果是：周一、周三、周五 发奖，其他天不发，每人每日可领 4 笔，最高的是周五 28%，每过一周循环一次」；
+                <b>七天都不发奖</b>时只跳「这样配的效果是：七天都不发奖，前台不会出现复存券」，不挡保存。</span></li>
             <li>新增＝建一笔；编辑＝覆盖原本那笔；七天配置<b>以提交当下的内容为准</b>，整份取代旧的配置。</li>
             <li>保存成功后<b>前台立即反映新设置</b>。</li>
           </ul>
@@ -959,7 +991,8 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                     <td>一律看<b>送出充值的时间</b>（<b>GMT+8</b>，00:00 分界），不是入帐时间：23:59 送出、00:01 入帐，算<b>23:59 那一天</b>；
                         充值失败的也归送出那天。<b>笔序、吃哪个星期、在不在活动时间内，三件事同一个时点。</b></td></tr>
                 <tr><th class="nw">吃哪一组</th>
-                    <td>那一天<b>日历上的星期几</b>，不是「活动第几天」。活动不满整周时，轮不到的星期就是不会发生（后台已提醒，见 2.3.6）。</td></tr>
+                    <td>那一天<b>日历上的星期几</b>，不是「活动第几天」。活动不满整周时，轮不到的星期就是不会发生（后台已提醒，见 2.3.6）。<br>
+                        <span class="rev">那一天若设成<b>不发奖</b>（见 2.3.9）：前台没有券可勾，<b>不发、不计次</b>。</span></td></tr>
                 <tr><th class="nw">跨日</th>
                     <td>过了 00:00：<b>笔序归零、换成新的星期、昨天升上去的等级生效</b>。降级不在这里换（见 3.3）。</td></tr>
               </tbody>
@@ -1027,6 +1060,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td>15</td><td class="nw">周二</td><td class="nw">第 2 笔</td><td class="nw">1,000</td><td>外部投注站来源用户（后台不配置）</td><td>不发 · <b>次数已用掉</b></td></tr>
                 <tr><td>16</td><td class="nw">周六</td><td class="nw">第 1 笔</td><td class="nw">1,000</td><td>当天升级 → 次日才生效</td><td><b>依原等级发</b></td></tr>
                 <tr><td>17</td><td class="nw">周六</td><td class="nw">第 1 笔</td><td class="nw">1,000</td><td>当月降级 → 次月 1 号才生效</td><td><b>依原等级发</b></td></tr>
+                <tr class="rev"><td>18</td><td class="nw">周二</td><td class="nw">—</td><td class="nw">1,000</td><td>周二设成<b>不发奖</b>（见 2.3.9），存款页没有券</td><td>不发 · 次数不动</td></tr>
               </tbody>
             </table>
           </div>
@@ -1091,10 +1125,12 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <thead><tr><th class="nw">项目</th><th>需求</th></tr></thead>
               <tbody>
                 <tr><td class="nw"><b>出现条件</b></td>
-                    <td><b>活动开放中</b>（＝状态开启且在活动时间内，见 2.2.2）＋ <b>今日次数未用完</b>（见 3.1）——比 banner 多这一条。<br>
+                    <td><b>活动开放中</b>（＝状态开启且在活动时间内，见 2.2.2）<span class="rev">＋ <b>今天是发奖日</b>（见 2.3.9）</span>＋ <b>今日次数未用完</b>（见 3.1）——比 banner 多<span class="rev">后面两条</span>。<br>
                         <b>缺一条整张券不出现</b>，下面的券往上递补。</td></tr>
                 <tr><td class="nw">今日用完</td>
                     <td><b>整张券不显示</b>。此时 banner 照常；详情页最后一笔转黄色高亮＋皇冠、下方出现完成提示（见 4.3.1）；吊牌看还有没有别的券（见 4.1）。</td></tr>
+                <tr class="rev"><td class="nw">今天不发奖</td>
+                    <td><b>整张券不显示</b>，banner 照常（点进详情页见 4.3.4）；吊牌看还有没有别的券（见 4.1）。</td></tr>
                 <tr><td class="nw">领不到奖的<br>那几种人</td>
                     <td><b>前台完全看不出差别</b>：券照常出现、可勾选，存款照常成功，<b>不显示原因、不跳提示</b>。
                         哪几种人、为什么领不到见 3.1；玩家来问由客服查记录页（见 2.7）。</td></tr>
@@ -1206,7 +1242,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td class="nw">清单 · VIP 等级变动</td>
                     <td>只显示<b>现在生效中</b>那一级，<b>不预告</b>还没生效的等级：升级当天不变、次日才换；降级当月不变、次月 1 号才换（见 3.3）。</td></tr>
                 <tr><td class="nw">停留跨日</td>
-                    <td>停在详情页时跨过 00:00（GMT+8），<b>同存款页</b>（见 4.2.4）：页面挡下操作并自动刷新，统计格与清单换成<b>新一天那个星期的配置、回到第 1 笔高亮</b>；前一天的完成提示消失。</td></tr>
+                    <td>停在详情页时跨过 00:00（GMT+8），<b>同存款页</b>（见 4.2.4）：页面挡下操作并自动刷新，统计格与清单换成<b>新一天那个星期的配置、回到第 1 笔高亮</b>；前一天的完成提示消失。<span class="rev">新的一天<b>不发奖</b>时改成 4.3.4 的样子。</span></td></tr>
                 <tr><td class="nw">Deposit 按钮</td><td><b>任何状态都不禁用</b>。</td></tr>
                 <tr><td class="nw">页尾活动说明</td>
                     <td>取后台「<b>活动内容</b>」富文本（见 2.5.1），<b>完整呈现、自然折行、不截断</b>。</td></tr>
@@ -1240,6 +1276,27 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                         <b>卡片上不显示百分比、不显示上限、不显示逐笔资讯。</b></td></tr>
                 <tr><th class="nw">点进去</th>
                     <td>点 <code>Read More &gt;</code>（或整张卡片，沿用现况）→ 进本活动详情页：<b>H5／APP 开整页、PC 开弹窗</b>（见 4.3.1）。</td></tr>
+                <tr class="rev"><th class="nw">今天不发奖</th>
+                    <td><b>照常显示</b>，点进去是 4.3.4 的样子。</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="sub rev">4.3.4 （10/1 新增）当天不发奖时 <span class="tag tag--new">新增</span></h3>
+          <p class="rev">后台把今天设成不发奖（见 2.3.9）时，详情页<b>照常可进</b>，只是没有奖励资讯：</p>
+          <p class="hint rev">画面看左侧：原型工具列「今天」切到「<b>不发奖日</b>」。</p>
+          <div class="tbl-scroll">
+            <table class="t">
+              <thead><tr><th class="nw">元素</th><th>当天不发奖时</th></tr></thead>
+              <tbody>
+                <tr><td class="nw">页顶 banner 图、活动标题、<code>Event end time</code></td><td><b>照常显示</b>（同 4.3.1）。</td></tr>
+                <tr><td class="nw"><code>Bonus %</code>／<code>Max Bonus</code> 两格</td><td><b>整排隐藏</b>。</td></tr>
+                <tr><td class="nw">今日逐笔清单</td><td><b>整张隐藏</b>，不显示空表、不显示「今天不发奖」之类的字。</td></tr>
+                <tr><td class="nw">完成提示</td><td><b>不出现</b>。</td></tr>
+                <tr><td class="nw"><code>Deposit</code> 按钮</td><td><b>照常显示、照常可按</b>，进存款页（今天存款页没有复存券，见 4.2.3）。</td></tr>
+                <tr><td class="nw">页尾活动说明</td><td><b>照常显示</b>（同 4.3.1）。</td></tr>
+                <tr><td class="nw">未登入</td><td><b>同上</b>，一样只剩上面几样。</td></tr>
+                <tr><td class="nw">PC 弹窗</td><td><b>同上</b>，弹窗内容少了统计格与清单，其余不变。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1251,7 +1308,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 </div>
 
 <!-- PROTO_EMBED_BEGIN -->
-<!-- 内嵌副本 · daily_admin.html · 存档于 2026-09-21 · 由 merge_spec.py 自动产生，请勿手改 -->
+<!-- 内嵌副本 · daily_admin.html · 存档于 2026-10-01 · 由 merge_spec.py 自动产生，请勿手改 -->
 <script type="text/plain" id="proto-src"><!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
@@ -1710,6 +1767,16 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 .weekbar__item[aria-selected="true"] { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
 .weekbar__name { font-weight: 700; }
 .weekbar__item.is-unused .weekbar__name { text-decoration: line-through; }
+/* 关掉「当天发奖」的那天：页签下方多一行「不发奖」 */
+.weekbar__off { font-size: var(--fs-xs, 12px); }
+.weekbar__item.is-off:not([aria-selected="true"]) { color: var(--color-text-3); border-style: dashed; }
+.planbar__dayon { font-size: var(--fs-sm); font-weight: 700; white-space: nowrap; margin-right: var(--space-3); }
+/* 当天不发奖：操作列只留开关，等级区块整块收起 */
+#rewardB.is-day-off #bExpandAll,
+#rewardB.is-day-off #bCollapseAll,
+#rewardB.is-day-off .planbar__toggle,
+#rewardB.is-day-off #bCopyDayOpen,
+#rewardB.is-day-off #weekPlans { display: none; }
 
 /* 「复制这天到其他天」的勾选面板 */
 .copybar {
@@ -2214,6 +2281,11 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
           <div class="weekbar" id="weekBar" role="tablist" aria-label="选择星期"><!-- 由程序产生 --></div>
 
           <div class="planbar">
+            <!-- 当天发奖：关掉＝这天不发奖，下面的配置整块收起（值保留，再打开就回来） -->
+            <label class="choice planbar__dayon">
+              <input type="checkbox" id="bDayOn" checked>
+              <span class="choice__text">当天发奖</span>
+            </label>
             <button type="button" class="btn btn--sm" id="bExpandAll">全部展开</button>
             <button type="button" class="btn btn--sm" id="bCollapseAll">全部收合</button>
             <label class="choice planbar__toggle">
@@ -2239,6 +2311,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 
           <!-- 当天的 11 个等级：一个等级一张表，一列一笔 -->
           <div id="weekPlans"><!-- 由程序产生 --></div>
+          <div class="empty" id="bDayOffEmpty" hidden>这天不发奖</div>
 
           <!-- 没有另外的「检查」按钮：按保存就会跑校验，问题清单画在这里 -->
           <div class="bcheck">
@@ -3020,10 +3093,18 @@ function validateAndSave(e) {
     // 只统计「这档活动期间内轮得到」的星期：轮不到的那几天配了也不会发出去，
     // 讲进效果说明会变成宣传一个不会发生的数字（规格 2.6.1）
     const counts = bWeekdayCounts();
-    const usedDays = WEEK_DAYS.filter(function (d) { return !counts || counts[d.key] > 0; });
-    const statDays = usedDays.length ? usedDays : WEEK_DAYS;
+    const onDays   = WEEK_DAYS.filter(function (d) { return bDayOn[d.key]; });
+    const usedDays = onDays.filter(function (d) { return !counts || counts[d.key] > 0; });
+    const statDays = usedDays.length ? usedDays : onDays;
+    // 开头那句：七天都发就讲「周一～周日各一组」，否则列出发奖的那几天
+    const daysTxt  = (onDays.length === WEEK_DAYS.length)
+      ? '周一～周日各一组'
+      : onDays.map(function (d) { return d.name; }).join('、') + ' 发奖，其他天不发';
 
     let best = null;
+    if (!onDays.length) {
+      warns.push('这样配的效果是：七天都不发奖，前台不会出现复存券');
+    } else {
     statDays.forEach(function (d) {
       const st = bDayStat(d.key);
       if (!best || st.maxPct > best.pct) best = { name: d.name, pct: st.maxPct };
@@ -3034,9 +3115,10 @@ function validateAndSave(e) {
       cnts.push(st.minCnt, st.maxCnt);
     });
     const lo = Math.min.apply(null, cnts), hi = Math.max.apply(null, cnts);
-    warns.push('这样配的效果是：周一～周日各一组，每人每日可领 '
+    warns.push('这样配的效果是：' + daysTxt + '，每人每日可领 '
              + (lo === hi ? (lo + ' 笔') : (lo + '～' + hi + ' 笔'))
              + '，最高的是' + best.name + ' ' + best.pct + '%，每过一周循环一次');
+    }
   }
 
   if (errors.length) {
@@ -3249,6 +3331,9 @@ const WEEK_DAYS = [
 
 const weekPlans   = {};        // 七天 × 11 个等级，各自一份「一笔一列」的清单
 let   bCurrentDay = 'mon';     // 目前在编辑哪一天
+/* 哪几天发奖：bDayOn[天] ＝ false 代表这天不发奖（例如只配一三五、或二四六）。
+   关掉只是不发、不检查，已填的值留著，再打开就回来。 */
+const bDayOn = {};
 let   bOpenVips   = { VIP0: true };   // 哪些等级是展开的（换天时沿用，方便跨天对照同一个等级）
 let   bCopiedDays = {};        // 刚被复制盖过去的那几天（页签反蓝用，几秒后自动褪掉）
 /* 套用状态：bBound[天][等级] ＝ true 代表这个等级「跟著 VIP0」，反灰唯读。
@@ -3273,6 +3358,8 @@ function initWeekPlans(blank) {
      blank ＝ false／不给：原型的示范数据，方便一开画面就看得出这套配法在解决什么。 */
   const SEED_COUNT = { VIP0: 3, VIP1: 4, VIP2: 5 };   // 各等级可领笔数可以不一样
   const WEEKEND    = { sat: true, sun: true };
+
+  WEEK_DAYS.forEach(function (d) { bDayOn[d.key] = true; });   // 新增与示范都预设七天都发
 
   if (blank) {
     WEEK_DAYS.forEach(function (d) {
@@ -3395,12 +3482,15 @@ function renderWeekBar() {
     /* 页签上只写星期几，不挂红点——刚建好的活动整排都是空的，
        挂红点会七天全红，画面很吵。配错了按保存时会列完整清单。
        轮不到的那天仍然压灰加删除线，滑过去有 title 说明。 */
+    const off    = !bDayOn[d.key];
     return '<button type="button" class="weekbar__item'
          +   (unused ? ' is-unused' : '')
+         +   (off ? ' is-off' : '')
          +   (bCopiedDays[d.key] ? ' is-copied' : '') + '"'
          +   ' role="tab" data-day="' + d.key + '" aria-selected="' + (d.key === bCurrentDay) + '"'
          +   (unused ? ' title="这档活动期间内轮不到这天"' : '') + '>'
          +   '<span class="weekbar__name">' + d.name + '</span>'
+         +   (off ? '<span class="weekbar__off">不发奖</span>' : '')
          + '</button>';
   }).join('');
 }
@@ -3478,6 +3568,13 @@ function renderWeekPlan(day, vip, open) {
 function renderWeekPlans() {
   const wrap = document.getElementById('weekPlans');
   if (!wrap) return;
+
+  // 当天发奖开关跟著目前这一天走；关掉的那天整块收起
+  const on = !!bDayOn[bCurrentDay];
+  document.getElementById('bDayOn').checked = on;
+  document.getElementById('rewardB').classList.toggle('is-day-off', !on);
+  document.getElementById('bDayOffEmpty').hidden = on;
+  if (!on) bCloseCopyPanel();
 
   // 先把目前的展开状态记下来，重画后才不会自己收起来
   wrap.querySelectorAll('.plan').forEach(function (d) { bOpenVips[d.dataset.vip] = d.open; });
@@ -3748,6 +3845,7 @@ function bCollectIssues() {
   const counts = bWeekdayCounts();
 
   WEEK_DAYS.forEach(function (d) {
+    if (!bDayOn[d.key]) return;          // 不发奖的那天：不检查、也不提醒轮不到
     if (counts && counts[d.key] === 0) {
       warns.push(d.name + '：这档活动期间内一次都轮不到，配了也不会发出去（活动不满一周才会这样）。');
     }
@@ -3963,6 +4061,11 @@ function bRunCheck() {
     document.getElementById('weekPlans').classList.toggle('hide-other', !this.checked);
   });
 
+  document.getElementById('bDayOn').addEventListener('change', function () {
+    bDayOn[bCurrentDay] = this.checked;
+    renderWeekPlans();          // 收起／展开配置，页签也跟著标「不发奖」
+  });
+
   document.getElementById('bCopyDayOpen').addEventListener('click', bOpenCopyPanel);
   document.getElementById('bCopyCancel').addEventListener('click', bCloseCopyPanel);
   /* 套用面板画在 VIP0 区块里、会跟著重画，所以用委派绑事件 */
@@ -4057,7 +4160,7 @@ refreshWeekPeriod();    // 依活动时间算出七天各轮到几次
 <!-- PROTO_EMBED_END -->
 
 <!-- PROTO_EMBED_FRONT_BEGIN -->
-<!-- 内嵌副本 · daily_front.html · 存档于 2026-09-21 · 由 merge_spec.py 自动产生，请勿手改 -->
+<!-- 内嵌副本 · daily_front.html · 存档于 2026-10-01 · 由 merge_spec.py 自动产生，请勿手改 -->
 <script type="text/plain" id="proto-src-front"><!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
@@ -4179,6 +4282,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 }
 .devbar__brand { font-size: var(--fs-base); font-weight: 600; white-space: nowrap; }
 .devbar__group { display: flex; align-items: center; gap: var(--sp-2); }
+.devbar__group[hidden] { display: none; }
 .devbar__label { color: #a9aeb8; font-size: var(--fs-xs); white-space: nowrap; }
 .devbar__options { display: flex; flex-wrap: wrap; gap: 2px; }
 .devbar__opt {
@@ -4592,6 +4696,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 /* 全部领完：两格统计隐藏，清单顶端不再留分隔线 */
 .stats[hidden] { display: none; }
 .statcard.is-fin .dlist { margin-top: 0; padding-top: 0; border-top: 0; }
+.dlist[hidden] { display: none; }
 
 /* 今日全部领完的恭喜文案：置中一行字，只是页内提示、不能点 */
 .dlist__fin { margin-top: var(--sp-3); text-align: center; font-size: var(--fs-base); font-weight: 700; color: var(--c-text); }
@@ -4632,6 +4737,14 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   <span class="devbar__brand">原型工具列</span>
 
   <div class="devbar__group">
+    <span class="devbar__label">今天</span>
+    <div class="devbar__options" role="group">
+      <button type="button" class="devbar__opt" data-set="dayoff" data-value="no"  aria-pressed="true">发奖日</button>
+      <button type="button" class="devbar__opt" data-set="dayoff" data-value="yes" aria-pressed="false">不发奖日</button>
+    </div>
+  </div>
+
+  <div class="devbar__group" id="grpDaily">
     <span class="devbar__label">后台配每日可领几笔</span>
     <div class="devbar__options" role="group">
       <button type="button" class="devbar__opt" data-set="daily" data-value="n2"  aria-pressed="false">2 笔</button>
@@ -4639,7 +4752,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
     </div>
   </div>
 
-  <div class="devbar__group">
+  <div class="devbar__group" id="grpDone">
     <span class="devbar__label">玩家今天到第几笔</span>
     <div class="devbar__options" role="group">
       <button type="button" class="devbar__opt" id="doneZero">归零</button>
@@ -4652,7 +4765,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 
 </aside>
 
-<div class="app" id="app" data-done="0" data-daily="n10">
+<div class="app" id="app" data-done="0" data-daily="n10" data-dayoff="no">
 <main>
 
 <div class="stage">
@@ -5203,7 +5316,10 @@ function renderHeaderCharm() {
    -------------------------------------------------------------------------- */
 function render() {
   const done = todayCount();
-  const r = currentRepeat();
+  /* 今天不发奖（后台把这天设成不发奖，规格 2.3.9）：没有券，
+     详情页只剩 banner、标题、活动期间、Deposit 按钮、活动说明（规格 4.3.4） */
+  const dayOff = app.dataset.dayoff === 'yes';
+  const r = dayOff ? null : currentRepeat();
 
   // 今天的笔数用完了，这张券就不出现
   paintCoupon('rowRepeat', 'chkRepeat', !!r);
@@ -5226,6 +5342,16 @@ function render() {
   renderHeaderCharm();
   renderDailyList();
   renderPayment();
+
+  // 不发奖日：统计格、逐笔清单、完成提示整块收起；笔数相关的工具列也收起（那天用不到）
+  if (dayOff) {
+    document.querySelector('.statcard .stats').hidden = true;
+    document.getElementById('dlistFin').hidden = true;
+  }
+  document.getElementById('dlist').hidden = dayOff;
+  document.querySelector('.statcard').classList.toggle('is-off', dayOff);
+  document.getElementById('grpDaily').hidden = dayOff;
+  document.getElementById('grpDone').hidden  = dayOff;
 }
 
 /* --------------------------------------------------------------------------
@@ -5287,6 +5413,7 @@ document.querySelectorAll('.devbar__opt[data-set]').forEach(function (btn) {
       b.setAttribute('aria-pressed', String(b === btn));
     });
     if (key === 'daily') setDone(todayCount());   // 换笔数：已领次数超过新上限就压回上限
+    else render();
   });
 });
 
@@ -5583,7 +5710,10 @@ setDone(0);
       })[0];
       if (!cls) return;                                   // 「核心规则」这类强调标签跳过
 
-      var text = titleEl.textContent.replace(tag.textContent, '').trim();
+      // 拿掉标签本身再取文字（标题里若也写了「新增」二字，用字串替换会删错地方）
+      var tmp = titleEl.cloneNode(true);
+      [].slice.call(tmp.querySelectorAll('.tag')).forEach(function (x) { x.remove(); });
+      var text = tmp.textContent.trim();
       var num  = numEl ? numEl.textContent : (text.match(/^[0-9][0-9.]*/) || [''])[0];
       var name = numEl ? text : text.replace(/^[0-9][0-9.]*\s*/, '');
       var item = { num: num, name: name, kind: KIND[cls], cls: cls, pid: pid };

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>任务中心 · 快速上手</title>
+<style>
+  :root{
+    --c-primary:#2f80ed; --c-primary-l:#e8f1ff;
+    --c-text:#1f2733; --c-text-2:#4a5563; --c-text-3:#7c8796;
+    --c-border:#e4e8ee; --c-bg:#f2f4f7; --c-white:#fff; --c-head:#f6f8fb;
+    --c-green:#2eb872; --c-green-l:#e7f7ef; --c-orange:#e6a23c; --c-orange-l:#fdf6ec;
+    --c-red:#f56c6c; --c-red-l:#fef0f0;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--c-bg);color:var(--c-text);
+       font:19px/1.8 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:40px 16px 80px}
+  h1{font-size:32px;margin:0 0 6px}
+  .meta{color:var(--c-text-3);font-size:16px;margin-bottom:28px}
+  section{background:var(--c-white);border:1px solid var(--c-border);border-radius:12px;
+          padding:26px 30px;margin-bottom:24px}
+  h2{font-size:26px;margin:0 0 16px;padding-left:12px;border-left:5px solid var(--c-primary)}
+  h3{font-size:21px;margin:22px 0 10px}
+  p{margin:10px 0}
+  a{color:var(--c-primary)}
+  b{color:#0f1a2a}
+
+
+  /* 步骤方块：一条直线 */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0}
+  .step{background:var(--c-head);border:1px solid var(--c-border);border-radius:10px;padding:16px;position:relative}
+  .step__no{display:inline-flex;width:34px;height:34px;border-radius:50%;background:var(--c-primary);color:#fff;
+            font-weight:700;align-items:center;justify-content:center;font-size:18px}
+  .step__t{font-weight:700;font-size:20px;margin:8px 0 4px}
+  .step__d{color:var(--c-text-2);font-size:17px;line-height:1.6}
+  .step:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);
+            color:var(--c-primary);font-weight:700;font-size:22px}
+
+  /* 例子 */
+  .ex{border:2px dashed #b9d3f7;border-radius:10px;padding:16px 20px;margin:14px 0;background:#fbfdff}
+  .ex__hd{font-weight:700;color:var(--c-primary);margin-bottom:6px}
+  table{border-collapse:collapse;width:100%;font-size:18px;margin:10px 0}
+  .tbl-wrap{overflow-x:auto}
+  th,td{border:1px solid var(--c-border);padding:10px 12px;text-align:left;vertical-align:top}
+  th{background:var(--c-head);color:var(--c-text-2);white-space:nowrap}
+  td:first-child{white-space:nowrap}
+  .ok{color:var(--c-green);font-weight:700}
+  .no{color:var(--c-red);font-weight:700}
+
+  /* 新功能卡 */
+  .feat{border:1px solid var(--c-border);border-radius:10px;padding:18px 22px;margin:16px 0}
+  .feat__t{font-size:22px;font-weight:700;margin-bottom:6px}
+  .feat__t .n{display:inline-block;background:var(--c-green);color:#fff;border-radius:6px;
+              font-size:16px;padding:0 10px;margin-right:8px;vertical-align:2px}
+  .feat ul{margin:6px 0;padding-left:24px}
+  .tip{background:var(--c-orange-l);border-left:4px solid var(--c-orange);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0}
+
+  /* 运营确认问题卡 */
+  .q{background:var(--c-white);border:1px solid var(--c-border);border-radius:8px;
+     margin-bottom:16px;overflow:hidden}
+  .q__hd{display:flex;gap:10px;align-items:flex-start;padding:14px 18px;
+         border-bottom:1px solid var(--c-border)}
+  .q__no{flex:none;width:32px;height:32px;border-radius:50%;background:var(--c-primary);
+         color:#fff;font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .q__title{font-size:21px;font-weight:600}
+  .q__bd{padding:12px 18px 16px}
+  .row{display:grid;grid-template-columns:100px 1fr;gap:8px;margin:6px 0}
+  .row__k{color:var(--c-text-3);font-size:16px;padding-top:2px}
+  .ask{background:var(--c-orange-l);border-left:3px solid var(--c-orange);
+       padding:10px 14px;margin-top:10px;border-radius:0 6px 6px 0}
+  .ask b{color:#b07415}
+  .ask ol{margin:6px 0 0;padding-left:20px}
+  .ans{margin-top:10px;border:1px dashed var(--c-border);border-radius:6px;
+       padding:12px 16px;color:var(--c-text-3);font-size:17px;min-height:56px}
+  .rec{background:var(--c-green-l);border-left:3px solid var(--c-green);padding:10px 14px;margin-top:10px;border-radius:0 6px 6px 0}
+  .rec b{color:var(--c-green)}
+  ol.form{padding-left:28px} ol.form li{margin:6px 0}
+  .tag{display:inline-block;font-size:15px;padding:0 8px;border-radius:5px;background:var(--c-green-l);color:var(--c-green);margin-left:6px}
+
+  @media (max-width:720px){
+    body{font-size:18px}
+    section{padding:20px 18px}
+    .steps{grid-template-columns:1fr 1fr}
+    .step:not(:last-child)::after{display:none}
+  }
+
+  /* 活动规则 */
+  .hero{font-size:23px;line-height:1.7;background:var(--c-primary-l);border-radius:10px;padding:18px 22px}
+  .rule{background:var(--c-orange-l);border-left:4px solid var(--c-orange);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0}
+  .rule b{color:#9a6212}
+  .unsure{background:var(--c-red-l);border-left:4px solid var(--c-red);padding:10px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:17px}
+
+  /* 任务卡拆解 */
+  .card{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+  .card div{background:var(--c-head);border:1px solid var(--c-border);border-radius:10px;padding:14px}
+  .card .k{font-weight:700;font-size:20px;color:var(--c-primary)}
+  .card .v{font-size:17px;color:var(--c-text-2);line-height:1.6}
+
+  /* 关卡直线 */
+  .gates{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+  .gate{background:var(--c-head);border:1px solid var(--c-border);border-radius:10px;padding:10px 14px;font-weight:700}
+  .arrow{color:var(--c-primary);font-weight:700;font-size:22px}
+  @media (max-width:720px){ .card{grid-template-columns:1fr 1fr} }
+
+  /* 极简教学 */
+  .big{font-size:28px;line-height:1.6;font-weight:700;text-align:center;padding:26px 16px;background:var(--c-primary-l);border-radius:12px}
+  .big small{display:block;font-size:19px;font-weight:400;color:var(--c-text-2);margin-top:6px}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .one{border:1px solid var(--c-border);border-radius:12px;padding:20px;text-align:center;background:var(--c-head)}
+  .one .ic{font-size:44px;line-height:1}
+  .one .t{font-size:23px;font-weight:700;margin:10px 0 6px}
+  .one .d{font-size:18px;color:var(--c-text-2);line-height:1.6}
+  .one .e{margin-top:12px;font-size:17px;background:#fff;border:1px dashed #b9d3f7;border-radius:8px;padding:10px;text-align:left;line-height:1.7}
+  details{background:var(--c-white);border:1px solid var(--c-border);border-radius:12px;margin-bottom:24px}
+  details>summary{cursor:pointer;font-size:22px;font-weight:700;padding:20px 26px;list-style:none}
+  details>summary::before{content:"▶ ";color:var(--c-primary);font-size:16px}
+  details[open]>summary::before{content:"▼ "}
+  details>.inner{padding:0 18px 10px}
+  details section{border:none;padding:18px 12px;margin:0;border-top:1px solid var(--c-border);border-radius:0}
+  @media (max-width:720px){ .three{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>任务中心迭代 · 快速上手</h1>
+  <div class="meta">2026-09-24 整理（依专案夹内最新版原型）· 原型：
+    <a href="TaskCenter_Backend.html">后台</a> ·
+    <a href="TaskCenter_Frontend.html">前台 (H5)</a>
+  </div>
+
+  <section>
+    <p class="big">会员做任务 → 领奖励<small>例：今天充值 ₱50 → 领 100 积分</small></p>
+    <div class="steps">
+      <div class="step"><span class="step__no">1</span><div class="step__t">看到任务</div><div class="step__d">打开「奖励中心」，任务列表里有一张张任务卡</div></div>
+      <div class="step"><span class="step__no">2</span><div class="step__t">去做</div><div class="step__d">点「去充值」「去投注」，跳到对应页面</div></div>
+      <div class="step"><span class="step__no">3</span><div class="step__t">达标</div><div class="step__d">进度条走满，例：₱50 / ₱50</div></div>
+      <div class="step"><span class="step__no">4</span><div class="step__t">领奖</div><div class="step__d">按「领取」，或系统自动发</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>这次改版，新加 3 个玩法</h2>
+    <div class="three">
+      <div class="one"><div class="ic">🎯</div><div class="t">挑人</div><div class="d">任务只给指定的会员看</div>
+        <div class="e">只给「VIP1＋小额用户」<br>其他人看不到</div></div>
+      <div class="one"><div class="ic">🏃</div><div class="t">抢名额</div><div class="d">先到先得，领完就没了</div>
+        <div class="e">名额 1,000 人<br>第 1,001 人 → 「额满」</div></div>
+      <div class="one"><div class="ic">🧩</div><div class="t">任务组</div><div class="d">一组小任务，做越多拿越多</div>
+        <div class="e">3 个小任务<br>做完 2 个 → 再送彩金 100</div></div>
+    </div>
+    <p style="text-align:center;color:var(--c-text-2);margin-top:18px">另外后台多了 <b>2 张报表</b>：看会员领奖后，有没有继续充值。</p>
+  </section>
+
+  <details>
+    <summary>想看完整规则再点开（7 条规则、报表、后台栏位、前台按钮）</summary>
+    <div class="inner">
+  <!-- 1 -->
+  <section>
+    <h2 style="font-size:24px">规则 1：一个任务由 4 块组成</h2>
+    <p>把任何一个任务拆开来，都是这 4 块：</p>
+    <div class="card">
+      <div><div class="k">做什么</div><div class="v">任务条件<br>例：充值 ≥ ₱50</div></div>
+      <div><div class="k">拿什么</div><div class="v">奖励<br>例：100 积分</div></div>
+      <div><div class="k">多久一次</div><div class="v">任务时间<br>例：每日</div></div>
+      <div><div class="k">怎么拿</div><div class="v">审核＋发放<br>例：自动审核、手动领</div></div>
+    </div>
+    <p>奖励有 5 种：</p>
+    <div class="tbl-wrap"><table>
+      <tr><th>奖励类型</th><th>运营要设什么</th></tr>
+      <tr><td>积分</td><td>数量</td></tr>
+      <tr><td>彩金</td><td>金额＋<b>彩金打码倍数</b>（彩金类似现金，要先打够流水才能提现）</td></tr>
+      <tr><td>免费投注 <span class="tag">新增</span></td><td>从清单选一种：免费旋转／免费投注／道具卡</td></tr>
+      <tr><td>优惠券 <span class="tag">新增</span></td><td>从清单选一种：输返券／存送券</td></tr>
+      <tr><td>golden draw <span class="tag">新增</span></td><td>抽奖类奖励，另设「兜底奖励」：彩金若干（这笔<b>不需要打码</b>）</td></tr>
+    </table></div>
+    <p>注意：<b>任务组的子任务和额外奖励，目前只能选积分或彩金</b>，新的 3 种只出现在一般任务。</p>
+  </section>
+  <!-- 2 -->
+  <section>
+    <h2 style="font-size:24px">规则 2：做什么（任务条件）</h2>
+    <div class="tbl-wrap"><table>
+      <tr><th>大类</th><th>可以选的任务条件（共 20 种）</th><th>任务时间</th></tr>
+      <tr><td>信息完善</td><td>填写真实姓名、填写生日、填写手机号码、填写邮箱、KYC 认证、Maya 绑定、Glife 绑定</td><td>只能「永久」</td></tr>
+      <tr><td>资金 · 首充</td><td>首次充值、首次充值（阶级）</td><td>只能「永久」</td></tr>
+      <tr><td>资金 · 周期</td><td>充值、投注、Maya 充值、Maya 提款、Glife 充值、Glife 提款</td><td>每日／限时／周限时</td></tr>
+      <tr><td>其他</td><td>2025 新版访问、关注 Facebook、体验平台 PWA、圣诞倒计时专属任务、Brand Daily Passcode</td><td>原型没限制</td></tr>
+    </table></div>
+    <p><b>一个任务只选 1 个条件</b>。充值类要填金额门槛（0＝不限金额）；投注要填打码量。想让会员做好几件事，就用<b>任务组</b>（规则 7）。</p>
+    <p>「关注 Facebook」这类要会员上传截图、后台人工审核（规则 5）。</p>
+    <h3>投注算哪些游戏？</h3>
+    <p>运营可以限定「只算某些游戏的投注」，例如只算 CQ9 电子。<b>没设定＝全部体育＋全部第三方游戏都算。</b></p>
+  </section>
+  <!-- 3 -->
+  <section>
+    <h2 style="font-size:24px">规则 3：多久做一次（任务时间）</h2>
+    <div class="tbl-wrap"><table>
+      <tr><th>任务时间</th><th>意思</th><th>例子</th></tr>
+      <tr><td>永久</td><td>一辈子只做一次，做完就结束</td><td>完成 KYC 认证</td></tr>
+      <tr><td>每日</td><td>每天重来一次，只在每天的某个时段内有效（运营设开始～结束时间，24 小时内）</td><td>每天充值 ₱50</td></tr>
+      <tr><td>每周</td><td>每周重来一次</td><td>—</td></tr>
+      <tr><td>限时</td><td>只在运营指定的一段日期时间内有效</td><td>9/1～9/30 投注 ₱10,000</td></tr>
+      <tr><td>周限时</td><td>每周只开放指定的几天（星期几到星期几）</td><td>每周五到周日，投注 ₱5,000</td></tr>
+    </table></div>
+    <div class="rule"><b>搭配限制：</b>「信息完善」「首充」只能选<b>永久</b>；「充值」「投注」只能选<b>每日／限时／周限时</b>。<br>
+    道理：资料只需要填一次，所以是永久；充值、投注可以一直做，所以要有周期。</div>
+  </section>
+  <!-- 4 -->
+  <section>
+    <h2 style="font-size:24px">规则 4：谁能参加（本次新增）</h2>
+    <p>系统会依序检查 4 道关卡，任何一关没过，这个会员就<b>看不到</b>或<b>不能参加</b>这个任务：</p>
+    <div class="gates">
+      <span class="gate">① 黑名单</span><span class="arrow">→</span>
+      <span class="gate">② VIP 等级</span><span class="arrow">→</span>
+      <span class="gate">③ 用户标签</span><span class="arrow">→</span>
+      <span class="gate">④ 参与资格</span>
+    </div>
+    <div class="tbl-wrap"><table>
+      <tr><th>关卡</th><th>规则</th></tr>
+      <tr><td>① 黑名单</td><td>在名单上就直接出局，优先级最高。可以按「用户标签」整批排除，也可以排除单一会员帐号；可以排除全部任务，也可以只排除指定任务。</td></tr>
+      <tr><td>② VIP 等级</td><td>只有勾选的等级能看到。会员自己知道自己的 VIP 等级。</td></tr>
+      <tr><td>③ 用户标签</td><td>后台给会员贴的分类（例：TL 小额、TH 高额），<b>会员自己看不到</b>。</td></tr>
+      <tr><td>④ 参与资格</td><td>全部是选填，不勾就不限制：<br>
+        · 要完成 KYC（或完成部分 KYC）<br>
+        · 过去累计充值在某个范围内<br>
+        · 过去累计有效投注在某个范围内<br>
+        两个范围都勾时，运营选「符合一个就行」或「两个都要符合」。</td></tr>
+    </table></div>
+
+    <div class="ex">
+      <div class="ex__hd">例子：任务设定「VIP1 ＋ 标签 TL ＋ 累计充值 ₱1,000～₱10,000」，3 个会员来检查</div>
+      <div class="tbl-wrap"><table>
+        <tr><th>会员</th><th>情况</th><th>结果</th></tr>
+        <tr><td>阿华</td><td>VIP1、有 TL 标签、累计充值 ₱3,000</td><td class="ok">4 关都过，可以参加</td></tr>
+        <tr><td>小林</td><td>VIP1、有 TL 标签、累计充值 ₱50,000</td><td class="no">第 ④ 关没过（充值超出范围）</td></tr>
+        <tr><td>阿杰</td><td>VIP1、有 TL 标签，但在黑名单</td><td class="no">第 ① 关就出局，前台看不到这个任务</td></tr>
+      </table></div>
+    </div>
+
+    <h3>「过去累计」要算到什么时候？</h3>
+    <p>运营可以选资格判定的时间点：</p>
+    <ul>
+      <li><b>任务开始前</b>：从注册算到任务开始前 1 秒，不含活动当天。</li>
+      <li><b>昨日 23:59:59</b>：算到昨天结束。</li>
+      <li><b>实时</b>：算到现在这一刻。</li>
+    </ul>
+    <p>一次性的任务：任务开放后，会员只要符合条件就能直接领（用实时资格）。</p>
+    <div class="unsure">原型没写清楚：选项标着「任务开始前（默认）」，但说明又写「预设不勾选」。不勾的话要怎么算，需要确认（见「待运营确认」第 5 条）。后台设定里其实写着「可全不选」。</div>
+  </section>
+  <!-- 5 -->
+  <section>
+    <h2 style="font-size:24px">规则 5：怎么拿奖（审核＋发放）</h2>
+    <p>运营要做两个选择：</p>
+    <ul>
+      <li><b>审核方式</b>：自动审核（系统判定达标就通过）／人工审核（后台人员逐笔看）。</li>
+      <li><b>发放方式</b>：自动发放（直接进帐户）／用户手动领取（会员要按「领取」）。</li>
+    </ul>
+    <div class="ex">
+      <div class="ex__hd">例子：「关注 Facebook」任务（人工审核）</div>
+      <ol>
+        <li>会员按「关注」→ 跳去 Facebook 关注。</li>
+        <li>回来按「上传证明」，上传截图 → 卡片变「处理中」。</li>
+        <li>后台「资料审核」看截图：按<b>通过</b> → 发奖；按<b>驳回</b> → 会员看到「未通过」，可以重新上传。</li>
+      </ol>
+    </div>
+    <p>每一笔奖励在后台「任务完成记录」里会有一个状态：</p>
+    <div class="tbl-wrap"><table>
+      <tr><th>状态</th><th>意思</th></tr>
+      <tr><td>待审核</td><td>做完了，等后台人工审核</td></tr>
+      <tr><td>待领取</td><td>审核通过，等会员按领取</td></tr>
+      <tr><td>自动发放</td><td>系统已直接发给会员</td></tr>
+      <tr><td>已领取</td><td>会员已经按领取拿到</td></tr>
+      <tr><td>审核未通过</td><td>后台驳回</td></tr>
+      <tr><td>已过期</td><td>没在时间内领，奖励作废</td></tr>
+    </table></div>
+  </section>
+  <!-- 6 -->
+  <section>
+    <h2 style="font-size:24px">规则 6：名额（本次新增）</h2>
+    <p>运营可以设「这个奖励最多给 N 个人」。<b>先到先得，领完为止</b>。不填或填 0＝不限。</p>
+    <div class="rule">
+      <b>三个重点：</b><br>
+      1. 算的是<b>领取的人数</b>（以按领取的时间为准），不是做完的人数。<br>
+      2. 每个会员每个任务只能领 <b>1 次</b>，所以不会重复占名额。<br>
+      3. 先检查资格，资格过了才扣名额。
+    </div>
+    <div class="ex">
+      <div class="ex__hd">例子：名额 3 人，4 个会员都做完了</div>
+      <div class="tbl-wrap"><table>
+        <tr><th>按领取的顺序</th><th>会员</th><th>结果</th></tr>
+        <tr><td>第 1 个</td><td>阿华</td><td class="ok">领到，剩 2</td></tr>
+        <tr><td>第 2 个</td><td>小美</td><td class="ok">领到，剩 1</td></tr>
+        <tr><td>第 3 个</td><td>小明</td><td class="ok">领到，剩 0</td></tr>
+        <tr><td>第 4 个</td><td>阿杰</td><td class="no">领不到，跳出「奖励名额已满」</td></tr>
+      </table></div>
+      <p>第 4 个人最早做完也没用，看的是谁先<b>按领取</b>。</p>
+    </div>
+    <p>这一轮只做「人数上限」，<b>不做</b>「金额预算上限」。</p>
+  </section>
+  <!-- 7 -->
+  <section>
+    <h2 style="font-size:24px">规则 7：任务组（本次新增）</h2>
+    <p>任务组＝把几个小任务包成一组。有两层奖励：</p>
+    <ul>
+      <li><b>子任务奖励</b>：每个子任务做完，各领各的。最多 10 个子任务。</li>
+      <li><b>额外奖励</b>：<b>任意</b>完成 N 个子任务，再多领一份。不管先后顺序、不管是哪几个。最多设 5 档，N 不能超过子任务总数。</li>
+    </ul>
+    <div class="ex">
+      <div class="ex__hd">例子：3 个子任务的任务组，小美来玩</div>
+      <p>子任务：① 充值 ₱50 → 100 积分　② 投注 ₱200 → 150 积分　③ 打码 ₱300 → 200 积分<br>
+         额外奖励：任意完成 2 个 → 彩金 100；完成 3 个 → 积分 500</p>
+      <div class="tbl-wrap"><table>
+        <tr><th>小美做了</th><th>完成数</th><th>这一步领到</th></tr>
+        <tr><td>② 投注</td><td>1 / 3</td><td>150 积分</td></tr>
+        <tr><td>① 充值</td><td>2 / 3</td><td>100 积分 ＋ 彩金 100（额外奖励）</td></tr>
+        <tr><td>③ 打码</td><td>3 / 3</td><td>200 积分 ＋ 积分 500（额外奖励）</td></tr>
+      </table></div>
+      <p>小美总共拿到：450 积分（子任务）＋ 彩金 100 ＋ 积分 500（额外奖励）。</p>
+    </div>
+    <div class="rule">
+      <b>任务组的规则：</b><br>
+      1. 整组共用<b>一个任务时间</b>，子任务不能各自设定。所以子任务必须是<b>同一大类</b>：全部「永久类」（资料、首充）、或全部「周期类」（充值、投注、Maya／Glife），或全部「其他」。混了后台会跳红字警示（例：「首充」和「每日充值」不能放同一组）。<br>
+      2. 名额是<b>每一项奖励各算各的</b>：子任务 ① 满了，不影响 ② 和额外奖励。<br>
+      3. 任务组本身不设条件和奖励，条件和奖励都设在子任务上。
+    </div>
+  </section>
+
+  <section>
+    <h2 style="font-size:22px">两张新报表：看任务有没有效（本次新增）</h2>
+    <div class="feat">
+      
+      <p>运营想知道：<b>发出去的奖励，有没有换来会员继续充值、投注？</b></p>
+      <h3>报表 A：用户报表（一个会员一行）</h3>
+      <p>把一个会员的「前 → 中 → 后」串起来看。以原型里的一行为例：</p>
+      <div class="ex">
+        会员 okbet99910n0s3（VIP1）<br>
+        <b>做任务前</b>：累计充值 ₱12,300 → <b>做任务</b>：每日充值任务，达标领了 100 积分 →
+        <b>任务期间</b>：充值 ₱300、投注 ₱1,250 → <b>之后</b>：没有提现，<span class="ok">有再充值</span>
+      </div>
+      <h3>报表 B：日报表（每天、每个任务一行）</h3>
+      <p>只统计「每日」任务。每行告诉你：今天有几个人完成（点数字可以看名单）、发了多少奖励（只算真的发出去的）、这些人期间总共充值／投注多少、完成后第一笔充值多少。</p>
+      <div class="ex">
+        例：8/19「小额 · 每日充值任务」—— <b>820 人</b>完成，发了 82,000 积分，这些人期间投注 ₱1,025,000，完成后又充值 ₱132,800。
+      </div>
+    </div>
+    <p style="color:var(--c-text-3)">其他小改：「任务完成记录」多一栏任务 ID（子任务显示成 1030-1）；「黑名单设置」是新增的分页。</p>
+  </section>
+
+  <!-- ========== 4 ========== -->
+  <section>
+    <h2 style="font-size:22px">运营在后台建一个任务，要填什么</h2>
+    <p>后台位置：<b>运营后台 › 任务中心管理 › 任务设置 › 新增任务</b>。表单从上到下依序是：</p>
+    <ol class="form">
+      <li>币种</li>
+      <li>目标用户：VIP 等级、用户标签 <span class="tag">新增</span></li>
+      <li>参与要求：KYC、累计充值区间、累计投注区间 <span class="tag" style="background:var(--c-orange-l);color:var(--c-orange)">改动</span></li>
+      <li>资格判定时间 <span class="tag">新增</span></li>
+      <li>任务类别：基础任务／任务组 <span class="tag">新增任务组</span></li>
+      <li>任务名称</li>
+      <li>默认图标：无／投注-单一产品／投注-多产品／存款／存款＋投注／指定验证任务（前台任务卡左边会显示对应图标，原本的「任务标签」拿掉了） <span class="tag">新</span></li>
+      <li>任务条件（充值、投注、填资料…）</li>
+      <li>跳转地址：会员点「去做」会去哪一页</li>
+      <li>任务奖励：积分／彩金／免费投注／优惠券／golden draw <span class="tag">新增 3 种</span></li>
+      <li>任务组设定：子任务、额外奖励（选了任务组才出现） <span class="tag">新增</span></li>
+      <li>名额限制 <span class="tag">新增</span></li>
+      <li>适用端口：PC／H5／APP</li>
+      <li>任务时间：永久／每日／每周／限时／周限时</li>
+      <li>审核方式：自动／人工；发放方式：自动发／会员自己领</li>
+      <li>排序、开启或关闭</li>
+    </ol>
+  </section>
+
+  <!-- ========== 5 ========== -->
+  <section>
+    <h2 style="font-size:22px">前台按钮速查</h2>
+    <div class="tbl-wrap"><table>
+      <tr><th>会员看到的按钮</th><th>代表什么</th></tr>
+      <tr><td>去充值／去投注／去认证／去完成</td><td>还没做到，点了会跳去做</td></tr>
+      <tr><td>领取</td><td>做到了，按了就领奖</td></tr>
+      <tr><td>额满</td><td>名额被领光了</td></tr>
+      <tr><td>上传证明 → 处理中</td><td>要交截图，等后台审核</td></tr>
+      <tr><td>未通过</td><td>审核被退回，可以重交</td></tr>
+      <tr><td>领取任务</td><td>要先按一下「接任务」才开始算（本次新增，后台还没对应设定）</td></tr>
+      <tr><td>已完成</td><td>奖励拿到了</td></tr>
+    </table></div>
+    <h3>前台「任务规则」弹窗文案</h3>
+    <p>会员在任务列表按「规则」会看到这 5 条（原型目前的文案）：</p>
+    <ol>
+      <li>任务奖励采先到先得，名额有限，领完为止。</li>
+      <li>参与资格于任务开始前以历史数据快照判定。</li>
+      <li>每位用户每个任务仅可领取 1 次奖励；名额以去重领取人数计，不计领取次数。</li>
+      <li>奖励发放后的价值统计以平台结算时区（UTC+8）当日 23:59:59 为准。</li>
+      <li>最终解释权归平台所有。</li>
+    </ol>
+  </section>
+
+    </div>
+  </details>
+
+  <section id="ops">
+    <h2>待运营确认（9 条）</h2>
+    <p>以下是前台、后台原型对不上，或规则没写清楚的地方，需要运营决定后才能往下做。每条都附上<b>建议做法</b>（选最简单、改动最少的）。运营同意就回「照建议」，不同意再写想要的做法。</p>
+    <!-- 1 -->
+    <div class="q">
+      <div class="q__hd"><span class="q__no">1</span><div class="q__title">「每日」任务的名额，是每天重新计算，还是整个活动共用？</div></div>
+      <div class="q__bd">
+        <div class="row"><span class="row__k">后台</span><span>任务 1024「小额用户 · 每日充值任务」，任务时间设「每日」，名额写「总 1,000 人」。</span></div>
+        <div class="row"><span class="row__k">前台</span><span>任务规则第 3 条：「每位用户每个任务仅可领取 1 次奖励」。</span></div>
+        <div class="row"><span class="row__k">矛盾点</span><span>每日任务照理每天都能做、每天都能领，但规则写成只能领 1 次；名额也没说明是每天 1,000 人，还是总共 1,000 人领完就结束。</span></div>
+        <div class="ask"><b>请确认：</b>
+          <ol>
+            <li>每日任务：同一个会员可以每天都领吗？</li>
+            <li>名额：每天重新计算，还是整个活动期间共用一个总数？</li>
+          </ol>
+        </div>
+        <div class="rec"><b>建议（最简单）：</b>每天可以领 1 次，名额每天重新计算（例：每天前 1,000 人）。前台规则第 3 条改成「每个任务每个周期仅可领取 1 次」。</div>
+        <div class="ans">运营回复：</div>
+      </div>
+    </div>
+    <!-- 2 -->
+    <div class="q">
+      <div class="q__hd"><span class="q__no">2</span><div class="q__title">「先领取任务，才开始计算进度」这个玩法要做吗？</div></div>
+      <div class="q__bd">
+        <div class="row"><span class="row__k">前台</span><span>新增了「领取任务」按钮（示例：新人首充礼，进度显示「领取后开始」），点了跳出「任务已领取」弹窗。</span></div>
+        <div class="row"><span class="row__k">后台</span><span>新增任务页没有任何栏位可以设定「这个任务要先领取」。</span></div>
+        <div class="ask"><b>请确认：</b>
+          <ol>
+            <li>要做：后台要加一个设定（例如「需先领取任务：是／否」），另外进度从领取那一刻开始算，对吗？</li>
+            <li>不做：前台拿掉这个状态和弹窗。</li>
+          </ol>
+        </div>
+        <div class="rec"><b>建议（最简单）：</b>这次先不做，前台拿掉「领取任务」状态和弹窗。之后运营需要再另外开需求。</div>
+        <div class="ans">运营回复：</div>
+      </div>
+    </div>
+    <!-- 3 -->
+    <div class="q">
+      <div class="q__hd"><span class="q__no">3</span><div class="q__title">目标用户勾了多个标签时，会员要「全部都有」还是「有一个就行」？</div></div>
+      <div class="q__bd">
+        <div class="row"><span class="row__k">后台</span><span>表单说明：「VIP 与所勾选标签需完全符合，用户才能看到此任务」。任务 1024 勾了 VIP0、VIP1、TL、ML。</span></div>
+        <div class="row"><span class="row__k">不清楚处</span><span>VIP 勾两个一定是「其中一个就行」（一个人不会同时是 VIP0 和 VIP1）。但标签 TL（一级）和 ML（二级）是要两个都有，还是有一个就行？同一级里勾多个标签又怎么算？</span></div>
+        <div class="ask"><b>请确认：</b>
+          <ol>
+            <li>标签之间：全部都要有，还是有一个就行？</li>
+            <li>一级标签和二级标签之间，是不是算法不同？</li>
+          </ol>
+        </div>
+        <div class="rec"><b>建议（最简单）：</b>VIP 勾多个＝有一个就行；标签勾多个＝有一个就行；VIP 和标签两边都要符合。</div>
+        <div class="ans">运营回复：</div>
+      </div>
+    </div>
+    <!-- 4 -->
+    <div class="q">
+      <div class="q__hd"><span class="q__no">4</span><div class="q__title">前台「任务规则」第 2 条，跟后台可选的资格判定时间对不上</div></div>
+      <div class="q__bd">
+        <div class="row"><span class="row__k">前台</span><span>规则第 2 条固定写：「参与资格于任务开始前以历史数据快照判定。」</span></div>
+        <div class="row"><span class="row__k">后台</span><span>「资格判定时间」有三种可选：任务开始前（默认）／昨日 23:59:59／实时。</span></div>
+        <div class="row"><span class="row__k">矛盾点</span><span>任务设成「昨日」或「实时」时，前台规则就写错了。</span></div>
+        <div class="ask"><b>请确认：</b>
+          <ol>
+            <li>规则文案改成通用写法，不写死判定时间（请提供文案）；</li>
+            <li>规则文案跟着每个任务的设定显示不同内容。</li>
+          </ol>
+        </div>
+        <div class="rec"><b>建议（最简单）：</b>改成通用写法，不写死时间点，例：「参与资格依任务设定的时间点判定」。实际文案请运营提供。</div>
+        <div class="ans">运营回复：</div>
+      </div>
+    </div>
+    <!-- 5 -->
+    <div class="q">
+      <div class="q__hd"><span class="q__no">5</span><div class="q__title">「资格判定时间」不勾选时，要怎么判定？</div></div>
+      <div class="q__bd">
+        <div class="row"><span class="row__k">后台</span><span>选项写「任务开始前时间（默认）」，但同一处的说明又写「单选，至多勾选一项，预设不勾选」，后台设定也写明「可全不选」。</span></div>
+        <div class="row"><span class="row__k">矛盾点</span><span>一边说有默认值，一边说预设不勾选。如果运营都不勾，系统不知道该用哪个时间点的数据来判定参与资格。</span></div>
+        <div class="ask"><b>请确认：</b>
+          <ol>
+            <li>一律默认勾选「任务开始前」，不能不勾；</li>
+            <li>可以不勾，不勾时代表什么（例如：不看过去数据、只看实时）？</li>
+          </ol>
+        </div>
+        <div class="rec"><b>建议（最简单）：</b>一律默认勾选「任务开始前」，不允许不勾，后台不用多一种情况。</div>
+        <div class="ans">运营回复：</div>
+      </div>
+    </div>
+    <!-- 6 -->
+    <div class="q">
+      <div class="q__hd"><span class="q__no">6</span><div class="q__title">新的 3 种奖励（免费投注、优惠券、golden draw），任务组能不能用？</div></div>
+      <div class="q__bd">
+        <div class="row"><span class="row__k">后台</span><span>一般任务的「任务奖励」多了免费投注、优惠券、golden draw；但任务组的子任务、额外奖励，下拉还是只有积分、彩金。</span></div>
+        <div class="ask"><b>请确认：</b>
+          <ol>
+            <li>新的 3 种只给一般任务用；</li>
+            <li>任务组的子任务、额外奖励也要能选。</li>
+          </ol>
+        </div>
+        <div class="rec"><b>建议（最简单）：</b>这次新的 3 种只给一般任务用，任务组维持积分、彩金。</div>
+        <div class="ans">运营回复：</div>
+      </div>
+    </div>
+    <!-- 7 -->
+    <div class="q">
+      <div class="q__hd"><span class="q__no">7</span><div class="q__title">免费投注、优惠券：选了清单之后，发多少？</div></div>
+      <div class="q__bd">
+        <div class="row"><span class="row__k">后台</span><span>选「免费投注」或「优惠券」后，数值栏会藏起来，只剩一个清单（免费旋转／免费投注／道具卡；输返券／存送券）。</span></div>
+        <div class="row"><span class="row__k">不清楚处</span><span>只选了「免费旋转」，没办法设转几次、哪一款游戏；只选了「存送券」，也没办法设存多少送多少。</span></div>
+        <div class="ask"><b>请确认：</b>
+          <ol>
+            <li>清单是选「别的地方已经建好的那一张券／那一份奖励」，不用另外填数量；</li>
+            <li>清单只是类型，还要再补数量、面额等栏位。</li>
+          </ol>
+        </div>
+        <div class="rec"><b>建议（最简单）：</b>清单直接选已经建好的具体奖励（例：「存送券 · 存 ₱500 送 ₱50」），任务这边不另外填数量。</div>
+        <div class="ans">运营回复：</div>
+      </div>
+    </div>
+    <!-- 8 -->
+    <div class="q">
+      <div class="q__hd"><span class="q__no">8</span><div class="q__title">golden draw 是什么？奖池在哪里设定？</div></div>
+      <div class="q__bd">
+        <div class="row"><span class="row__k">后台</span><span>选「golden draw」后只多了「兜底奖励：彩金 ₱＿（不需要打码流水）」，没有设定抽奖奖品的地方。</span></div>
+        <div class="row"><span class="row__k">不清楚处</span><span>会员领到的是「一次抽奖机会」吗？抽的奖品从哪来？「兜底」是没抽中时才发，还是每个人都有？</span></div>
+        <div class="ask"><b>请确认：</b>
+          <ol>
+            <li>golden draw 的奖池用哪里的设定（沿用现有的 golden draw 活动，还是这里要新做）；</li>
+            <li>兜底彩金什么时候发。</li>
+          </ol>
+        </div>
+        <div class="rec"><b>建议（最简单）：</b>奖池沿用现有的 golden draw 设定，任务这边只给「一次抽奖机会」；没抽中才发兜底彩金。</div>
+        <div class="ans">运营回复：</div>
+      </div>
+    </div>
+    <!-- 9 -->
+    <div class="q">
+      <div class="q__hd"><span class="q__no">9</span><div class="q__title">「累计充值／投注」要从哪天算到哪天？</div></div>
+      <div class="q__bd">
+        <div class="row"><span class="row__k">参与要求</span><span>说明写：累计口径＝「注册至任务开始前一秒，不含活动当天」，也就是<b>从注册那天开始算</b>，起点固定。</span></div>
+        <div class="row"><span class="row__k">判定时间</span><span>「任务开始前时间」旁边有两个日期栏，说明写「可指定日期区间」，也就是<b>运营可以自己选起讫日</b>。</span></div>
+        <div class="row"><span class="row__k">矛盾点</span><span>两种算法挑出来的人不一样。例：门槛「累计充值 ₱1,000～₱10,000」，某会员去年充了 ₱50,000、8 月只充 ₱3,000 —— 从注册算他<b>不符合</b>，只算 8 月他<b>符合</b>。</span></div>
+        <div class="ask"><b>请确认：</b>
+          <ol>
+            <li>照判定时间：用运营选的日期区间来算，没选就从注册算起；</li>
+            <li>照参与要求：一律从注册算起，拿掉日期区间。</li>
+          </ol>
+        </div>
+        <div class="rec"><b>建议（最简单）：</b>照第 1 种。运营选了日期区间就只算那段期间，没选就从注册算到任务开始前一秒。</div>
+        <div class="ans">运营回复：</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>原型待修正（不用问运营，改原型时顺手修）</h2>
+    <ul>
+      <li>前台弹窗错字：「实施领取成功」「采取领取失败」。</li>
+      <li>后台 1030 只有 3 个子任务，额外奖励却写了「完成 5 个」「完成 10 个」。</li>
+      <li>完成记录有一笔写「完成全部额外奖励」，规则是「任意完成 N 个」。</li>
+      <li>任务 1024 在完成记录是彩金 222，在用户报表是积分 100。</li>
+      <li>后台 1030 的任务时间写「每周」，但充值、投注类只能选每日／限时／周限时（应为「周限时」）。</li>
+      <li>后台 1030 的参与资格写「3 个条件完成任意 2 项」，但表单只能设 2 个条件、选「符合任一」或「完全符合」。</li>
+      <li>前台「Small Stake Club」子任务取名「每日充值」「周末累计」，看起来像两种时间；实际整组只有一个任务时间，名字要改。</li>
+      <li>前台还没做新奖励的画面：任务卡、领取成功弹窗目前只有现金、积分，没有免费投注、优惠券、golden draw 的样子。</li>
+      <li>前台 1024 卡片把参与资格（充值≥₱50 AND 投注≥₱200）写在进度旁，容易误会成任务条件。</li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>

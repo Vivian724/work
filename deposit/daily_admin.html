@@ -456,6 +456,16 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 .weekbar__item[aria-selected="true"] { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
 .weekbar__name { font-weight: 700; }
 .weekbar__item.is-unused .weekbar__name { text-decoration: line-through; }
+/* 关掉「当天发奖」的那天：页签下方多一行「不发奖」 */
+.weekbar__off { font-size: var(--fs-xs, 12px); }
+.weekbar__item.is-off:not([aria-selected="true"]) { color: var(--color-text-3); border-style: dashed; }
+.planbar__dayon { font-size: var(--fs-sm); font-weight: 700; white-space: nowrap; margin-right: var(--space-3); }
+/* 当天不发奖：操作列只留开关，等级区块整块收起 */
+#rewardB.is-day-off #bExpandAll,
+#rewardB.is-day-off #bCollapseAll,
+#rewardB.is-day-off .planbar__toggle,
+#rewardB.is-day-off #bCopyDayOpen,
+#rewardB.is-day-off #weekPlans { display: none; }
 
 /* 「复制这天到其他天」的勾选面板 */
 .copybar {
@@ -960,6 +970,11 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
           <div class="weekbar" id="weekBar" role="tablist" aria-label="选择星期"><!-- 由程序产生 --></div>
 
           <div class="planbar">
+            <!-- 当天发奖：关掉＝这天不发奖，下面的配置整块收起（值保留，再打开就回来） -->
+            <label class="choice planbar__dayon">
+              <input type="checkbox" id="bDayOn" checked>
+              <span class="choice__text">当天发奖</span>
+            </label>
             <button type="button" class="btn btn--sm" id="bExpandAll">全部展开</button>
             <button type="button" class="btn btn--sm" id="bCollapseAll">全部收合</button>
             <label class="choice planbar__toggle">
@@ -985,6 +1000,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 
           <!-- 当天的 11 个等级：一个等级一张表，一列一笔 -->
           <div id="weekPlans"><!-- 由程序产生 --></div>
+          <div class="empty" id="bDayOffEmpty" hidden>这天不发奖</div>
 
           <!-- 没有另外的「检查」按钮：按保存就会跑校验，问题清单画在这里 -->
           <div class="bcheck">
@@ -1766,10 +1782,18 @@ function validateAndSave(e) {
     // 只统计「这档活动期间内轮得到」的星期：轮不到的那几天配了也不会发出去，
     // 讲进效果说明会变成宣传一个不会发生的数字（规格 2.6.1）
     const counts = bWeekdayCounts();
-    const usedDays = WEEK_DAYS.filter(function (d) { return !counts || counts[d.key] > 0; });
-    const statDays = usedDays.length ? usedDays : WEEK_DAYS;
+    const onDays   = WEEK_DAYS.filter(function (d) { return bDayOn[d.key]; });
+    const usedDays = onDays.filter(function (d) { return !counts || counts[d.key] > 0; });
+    const statDays = usedDays.length ? usedDays : onDays;
+    // 开头那句：七天都发就讲「周一～周日各一组」，否则列出发奖的那几天
+    const daysTxt  = (onDays.length === WEEK_DAYS.length)
+      ? '周一～周日各一组'
+      : onDays.map(function (d) { return d.name; }).join('、') + ' 发奖，其他天不发';
 
     let best = null;
+    if (!onDays.length) {
+      warns.push('这样配的效果是：七天都不发奖，前台不会出现复存券');
+    } else {
     statDays.forEach(function (d) {
       const st = bDayStat(d.key);
       if (!best || st.maxPct > best.pct) best = { name: d.name, pct: st.maxPct };
@@ -1780,9 +1804,10 @@ function validateAndSave(e) {
       cnts.push(st.minCnt, st.maxCnt);
     });
     const lo = Math.min.apply(null, cnts), hi = Math.max.apply(null, cnts);
-    warns.push('这样配的效果是：周一～周日各一组，每人每日可领 '
+    warns.push('这样配的效果是：' + daysTxt + '，每人每日可领 '
              + (lo === hi ? (lo + ' 笔') : (lo + '～' + hi + ' 笔'))
              + '，最高的是' + best.name + ' ' + best.pct + '%，每过一周循环一次');
+    }
   }
 
   if (errors.length) {
@@ -1995,6 +2020,9 @@ const WEEK_DAYS = [
 
 const weekPlans   = {};        // 七天 × 11 个等级，各自一份「一笔一列」的清单
 let   bCurrentDay = 'mon';     // 目前在编辑哪一天
+/* 哪几天发奖：bDayOn[天] ＝ false 代表这天不发奖（例如只配一三五、或二四六）。
+   关掉只是不发、不检查，已填的值留著，再打开就回来。 */
+const bDayOn = {};
 let   bOpenVips   = { VIP0: true };   // 哪些等级是展开的（换天时沿用，方便跨天对照同一个等级）
 let   bCopiedDays = {};        // 刚被复制盖过去的那几天（页签反蓝用，几秒后自动褪掉）
 /* 套用状态：bBound[天][等级] ＝ true 代表这个等级「跟著 VIP0」，反灰唯读。
@@ -2019,6 +2047,8 @@ function initWeekPlans(blank) {
      blank ＝ false／不给：原型的示范数据，方便一开画面就看得出这套配法在解决什么。 */
   const SEED_COUNT = { VIP0: 3, VIP1: 4, VIP2: 5 };   // 各等级可领笔数可以不一样
   const WEEKEND    = { sat: true, sun: true };
+
+  WEEK_DAYS.forEach(function (d) { bDayOn[d.key] = true; });   // 新增与示范都预设七天都发
 
   if (blank) {
     WEEK_DAYS.forEach(function (d) {
@@ -2141,12 +2171,15 @@ function renderWeekBar() {
     /* 页签上只写星期几，不挂红点——刚建好的活动整排都是空的，
        挂红点会七天全红，画面很吵。配错了按保存时会列完整清单。
        轮不到的那天仍然压灰加删除线，滑过去有 title 说明。 */
+    const off    = !bDayOn[d.key];
     return '<button type="button" class="weekbar__item'
          +   (unused ? ' is-unused' : '')
+         +   (off ? ' is-off' : '')
          +   (bCopiedDays[d.key] ? ' is-copied' : '') + '"'
          +   ' role="tab" data-day="' + d.key + '" aria-selected="' + (d.key === bCurrentDay) + '"'
          +   (unused ? ' title="这档活动期间内轮不到这天"' : '') + '>'
          +   '<span class="weekbar__name">' + d.name + '</span>'
+         +   (off ? '<span class="weekbar__off">不发奖</span>' : '')
          + '</button>';
   }).join('');
 }
@@ -2224,6 +2257,13 @@ function renderWeekPlan(day, vip, open) {
 function renderWeekPlans() {
   const wrap = document.getElementById('weekPlans');
   if (!wrap) return;
+
+  // 当天发奖开关跟著目前这一天走；关掉的那天整块收起
+  const on = !!bDayOn[bCurrentDay];
+  document.getElementById('bDayOn').checked = on;
+  document.getElementById('rewardB').classList.toggle('is-day-off', !on);
+  document.getElementById('bDayOffEmpty').hidden = on;
+  if (!on) bCloseCopyPanel();
 
   // 先把目前的展开状态记下来，重画后才不会自己收起来
   wrap.querySelectorAll('.plan').forEach(function (d) { bOpenVips[d.dataset.vip] = d.open; });
@@ -2494,6 +2534,7 @@ function bCollectIssues() {
   const counts = bWeekdayCounts();
 
   WEEK_DAYS.forEach(function (d) {
+    if (!bDayOn[d.key]) return;          // 不发奖的那天：不检查、也不提醒轮不到
     if (counts && counts[d.key] === 0) {
       warns.push(d.name + '：这档活动期间内一次都轮不到，配了也不会发出去（活动不满一周才会这样）。');
     }
@@ -2707,6 +2748,11 @@ function bRunCheck() {
   document.getElementById('bChOther').addEventListener('change', function () {
     // 只管看不看得到，不动任何数据：收起来时那些值照样存在、照样要检查
     document.getElementById('weekPlans').classList.toggle('hide-other', !this.checked);
+  });
+
+  document.getElementById('bDayOn').addEventListener('change', function () {
+    bDayOn[bCurrentDay] = this.checked;
+    renderWeekPlans();          // 收起／展开配置，页签也跟著标「不发奖」
   });
 
   document.getElementById('bCopyDayOpen').addEventListener('click', bOpenCopyPanel);

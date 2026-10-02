@@ -119,6 +119,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 }
 .devbar__brand { font-size: var(--fs-base); font-weight: 600; white-space: nowrap; }
 .devbar__group { display: flex; align-items: center; gap: var(--sp-2); }
+.devbar__group[hidden] { display: none; }
 .devbar__label { color: #a9aeb8; font-size: var(--fs-xs); white-space: nowrap; }
 .devbar__options { display: flex; flex-wrap: wrap; gap: 2px; }
 .devbar__opt {
@@ -532,6 +533,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 /* 全部领完：两格统计隐藏，清单顶端不再留分隔线 */
 .stats[hidden] { display: none; }
 .statcard.is-fin .dlist { margin-top: 0; padding-top: 0; border-top: 0; }
+.dlist[hidden] { display: none; }
 
 /* 今日全部领完的恭喜文案：置中一行字，只是页内提示、不能点 */
 .dlist__fin { margin-top: var(--sp-3); text-align: center; font-size: var(--fs-base); font-weight: 700; color: var(--c-text); }
@@ -572,6 +574,14 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   <span class="devbar__brand">原型工具列</span>
 
   <div class="devbar__group">
+    <span class="devbar__label">今天</span>
+    <div class="devbar__options" role="group">
+      <button type="button" class="devbar__opt" data-set="dayoff" data-value="no"  aria-pressed="true">发奖日</button>
+      <button type="button" class="devbar__opt" data-set="dayoff" data-value="yes" aria-pressed="false">不发奖日</button>
+    </div>
+  </div>
+
+  <div class="devbar__group" id="grpDaily">
     <span class="devbar__label">后台配每日可领几笔</span>
     <div class="devbar__options" role="group">
       <button type="button" class="devbar__opt" data-set="daily" data-value="n2"  aria-pressed="false">2 笔</button>
@@ -579,7 +589,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
     </div>
   </div>
 
-  <div class="devbar__group">
+  <div class="devbar__group" id="grpDone">
     <span class="devbar__label">玩家今天到第几笔</span>
     <div class="devbar__options" role="group">
       <button type="button" class="devbar__opt" id="doneZero">归零</button>
@@ -592,7 +602,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 
 </aside>
 
-<div class="app" id="app" data-done="0" data-daily="n10">
+<div class="app" id="app" data-done="0" data-daily="n10" data-dayoff="no">
 <main>
 
 <div class="stage">
@@ -1143,7 +1153,10 @@ function renderHeaderCharm() {
    -------------------------------------------------------------------------- */
 function render() {
   const done = todayCount();
-  const r = currentRepeat();
+  /* 今天不发奖（后台把这天设成不发奖，规格 2.3.9）：没有券，
+     详情页只剩 banner、标题、活动期间、Deposit 按钮、活动说明（规格 4.3.4） */
+  const dayOff = app.dataset.dayoff === 'yes';
+  const r = dayOff ? null : currentRepeat();
 
   // 今天的笔数用完了，这张券就不出现
   paintCoupon('rowRepeat', 'chkRepeat', !!r);
@@ -1166,6 +1179,16 @@ function render() {
   renderHeaderCharm();
   renderDailyList();
   renderPayment();
+
+  // 不发奖日：统计格、逐笔清单、完成提示整块收起；笔数相关的工具列也收起（那天用不到）
+  if (dayOff) {
+    document.querySelector('.statcard .stats').hidden = true;
+    document.getElementById('dlistFin').hidden = true;
+  }
+  document.getElementById('dlist').hidden = dayOff;
+  document.querySelector('.statcard').classList.toggle('is-off', dayOff);
+  document.getElementById('grpDaily').hidden = dayOff;
+  document.getElementById('grpDone').hidden  = dayOff;
 }
 
 /* --------------------------------------------------------------------------
@@ -1227,6 +1250,7 @@ document.querySelectorAll('.devbar__opt[data-set]').forEach(function (btn) {
       b.setAttribute('aria-pressed', String(b === btn));
     });
     if (key === 'daily') setDone(todayCount());   // 换笔数：已领次数超过新上限就压回上限
+    else render();
   });
 });
 
