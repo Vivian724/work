@@ -291,9 +291,24 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 .box--stop  { background: #fef0f0; border-left: 4px solid var(--c-danger); color: var(--c-danger); }
 .box__t { display: block; font-weight: 700; margin-bottom: var(--sp-1); }
 
+/* 懒人包：第 1 章最上面的重点整理，一格一个主题 */
+.lazy { border: 1px solid var(--c-border-light); border-radius: var(--radius-lg); padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-5); }
+.lazy__h { font-weight: 700; margin-bottom: var(--sp-1); }
+.lazy__one { font-size: var(--fs-sm); color: var(--c-text-2); margin: 0 0 var(--sp-3); line-height: 1.7; }
+.lazy__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-3); }
+.lazy__card { background: #f7f8fa; border-radius: var(--radius); padding: var(--sp-2) var(--sp-3); font-size: var(--fs-sm); line-height: 1.7; }
+.lazy__card b.lazy__t { display: block; color: var(--c-text); margin-bottom: 2px; }
+.lazy__card--todo { background: #f3effa; }
+
+/* 本次修订表：放在懒人包下面 */
+.revlog { border: 1px solid var(--c-border-light); border-radius: var(--radius-lg); padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-5); }
+.revlog .tbl-scroll { margin-bottom: 0; }
+.revlog__note { font-weight: 400; font-size: var(--fs-xs); color: var(--c-text-3); margin-left: var(--sp-2); }
+
 /* 10/1 修订：红字只标这次变动的句子 */
 .rev { color: var(--c-danger); }
 .rev b, .rev code { color: inherit; }
+.sub.rev, [id^="p-f"] h4.sub.rev { color: var(--c-danger); }
 
 /* 表格底下的补充说明。灰字、比内文小一号，但仍在规范的 12px 底限之上。 */
 .hint {
@@ -387,48 +402,99 @@ table.t th:last-child, table.t td:last-child { width: auto; }
         <article class="panel" id="p-purpose">
           <div class="panel__head"><span class="panel__num">1</span><h2 class="panel__title">这活动在干嘛</h2></div>
 
+          <!-- 懒人包：整份规格的重点，一眼看完；细节点进各章 -->
+          <section class="lazy">
+            <div class="lazy__h">懒人包 <span class="rev">（10/6 新增）</span></div>
+            <p class="lazy__one">玩家每天存多笔，<b>每一笔都有奖金</b>；奖金按「<b>星期 × VIP 等级 × 第几笔 × 渠道</b>」配，一律发彩金。</p>
+            <div class="lazy__grid">
+              <div class="lazy__card"><b class="lazy__t">玩家怎么玩</b>
+                ① 首页 Deposit 有 BONUS 条 → 进存款页<br>
+                ② 勾复存券、输入金额（达门槛），券面显示要打多少码<br>
+                ③ 送出＝用掉一次；钱入账才发奖<br>
+                ④ 券换下一笔；当天用完或不发奖日券不出现；00:00 重置</div>
+              <div class="lazy__card"><b class="lazy__t">后台要配（第 2 章）</b>
+                · 基本信息：活动时间不可重叠（2.2）<br>
+                · 奖励：七天 × 11 级 × 每天 1～10 笔 × 3 渠道；可设不发奖日（2.3）<br>
+                · 参与条件：活动流水倍数、同 IP 账号数（2.4）<br>
+                · 内容：4 张图＋标题＋说明（2.5）<br>
+                · 记录页：多 5 栏，查每笔怎么算（2.7）</div>
+              <div class="lazy__card"><b class="lazy__t">发奖关键规则（第 3 章）</b>
+                · 算哪天、第几笔、VIP 等级、用哪份配置：都看<b>送出时间</b>（GMT+8）<br>
+                · 用掉一次：勾券送出，充值失败也算<br>
+                · 奖金＝金额 × %，超过上限取上限<br>
+                · 升级隔天生效，降级下个月 1 号生效</div>
+              <div class="lazy__card"><b class="lazy__t">前台改哪里（第 4 章）</b>
+                · 4.1 首页：有券时 Deposit 上方加黄色 BONUS 条<br>
+                · 4.2 存款页：小 banner、复存券（排序、打码金额）、金额区角标与试算<br>
+                · 4.3 详情页：今日逐笔清单；不发奖日只剩基本资讯</div>
+            </div>
+          </section>
+
+          <section class="revlog">
+            <div class="lazy__h">本次修订 <span class="revlog__note">内文红字＝这几项</span></div>
+            <div class="tbl-scroll">
+              <table class="t">
+                <thead><tr><th class="nw">日期</th><th class="nw">类型</th><th>改了什么</th><th class="nw">见</th></tr></thead>
+                <tbody class="rev">
+                <tr><td class="nw">10/1</td><td class="nw">新增</td><td>星期可设成不发奖（例如只发一三五或二四六）</td><td class="nw">2.3.9、4.3.4</td></tr>
+                <tr><td class="nw">10/2</td><td class="nw">异动</td><td>券面改成直接显示打码金额</td><td class="nw">4.2.5</td></tr>
+                <tr><td class="nw">10/6</td><td class="nw">调整</td><td>打码金额的充值流水加乘 VIP 稽核比例</td><td class="nw">4.2.5</td></tr>
+                <tr><td class="nw">10/6</td><td class="nw">调整</td><td>没勾券时，券面打码金额显示 ₱0</td><td class="nw">4.2.5、4.2.6</td></tr>
+                <tr><td class="nw">10/6</td><td class="nw">调整</td><td>优惠券排序：彩金 → 积分 → 券类型，同类型比 %</td><td class="nw">4.2.2</td></tr>
+                <tr><td class="nw">10/6</td><td class="nw">调整</td><td>首页 Deposit 按钮改成上方黄色 BONUS 条</td><td class="nw">4.1</td></tr>
+                <tr><td class="nw">10/6</td><td class="nw">新增</td><td>进行中的活动改关闭，先跳确认弹窗；已勾券送出的照发</td><td class="nw">2.2.5</td></tr>
+                <tr><td class="nw">10/6</td><td class="nw">调整</td><td>奖金所需流水留空 → 只算充值流水</td><td class="nw">2.4、4.2.5</td></tr>
+                <tr><td class="nw">10/6</td><td class="nw">调整</td><td>VIP 等级、中途改配置都看送出时间</td><td class="nw">3.3、2.7.2</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
           <!-- 本次异动摘要：内容由程式扫各章标签生出来，不要手写，改内文标签这里就跟著变 -->
           <section class="sum" id="changeSummary"></section>
-          <p class="rev">红字＝10/1 新增：星期可设成不发奖（例如只发一三五或二四六），见 2.3.9、4.3.4。</p>
 
           <div class="box box--ok">
             <span class="box__t">这是一档独立的新活动</span>
-            <b>独立</b>：后台是另一张独立页面（专项活动 →「<b>每日存款活动</b>」，排在「每日首充活动」下方）。
-            活动、配置、领奖记录、后台授权、前台的券<b>全部与每日首充分开</b>，互不影响，两档可同时在跑。<br>
-            <b>参照</b>：后台怎么配，<b>参照每日首充活动现有的逻辑去做</b>——只是照它的做法，<b>不是共用同一份功能或数据</b>。<br>
-            <b>测试时两档要分开验</b>：改本活动不可影响每日首充，反之亦然。<br>
-            规格书用标签标清楚哪些照每日首充、哪些不一样：<br>
-            · <span class="tag tag--same">同每日首充</span> ＝ <b>做法照每日首充现有逻辑</b>，规格书不再重写细节；但仍是本活动自己的一份。<br>
-            · <span class="tag tag--diff">不同</span> ＝ 参照每日首充，但<b>本活动改掉</b>的地方，以本规格书为准。<br>
+            · 后台是<b>另一张独立页面</b>：专项活动 →「<b>每日存款活动</b>」，排在「每日首充活动」下方。<br>
+            · 活动、配置、领奖记录、后台授权、前台的券，<b>全部和每日首充分开</b>。两档互不影响，可同时在跑。<br>
+            · 后台怎么配，<b>照每日首充现有的做法</b>；但只是照做法，<b>不共用</b>同一份功能或数据。<br>
+            · 测试要<b>两档分开验</b>：改本活动不可影响每日首充，反过来也一样。<br>
+            <br>
+            标签意思：<br>
+            · <span class="tag tag--same">同每日首充</span> ＝ 做法照每日首充，这里不重写细节；但仍是本活动自己的一份。内文写「同每日首充」也是这个意思。<br>
+            · <span class="tag tag--diff">不同</span> ＝ 参照每日首充，但本活动<b>改掉</b>的地方，以本规格书为准。<br>
             · <span class="tag tag--new">新增</span> ＝ 每日首充<b>没有</b>、本活动新做的。<br>
-            · 前台章节的 <span class="tag tag--change">异动</span> ＝ 前台<b>现有页面要改</b>的地方；<span class="tag tag--same">同现况</span> ＝ 前台<b>现有元件照旧</b>。这两个跟每日首充无关。<br>
-            内文里写「同每日首充」也是同一个意思：那一项的做法照每日首充。
+            · 前台章节专用（和每日首充无关）：<span class="tag tag--change">异动</span> ＝ 前台现有页面<b>要改</b>；<span class="tag tag--same">同现况</span> ＝ 前台现有元件<b>照旧</b>。
           </div>
 
           <div class="box box--info">
             <span class="box__t">本文件用词</span>
-            · 「<b>存款</b>」与「<b>充值</b>」指同一件事。<br>
-            · 「<b>用掉一次</b>」＝勾券并送出存款，<b>不论成功失败</b>；「<b>领到奖</b>」＝钱入帐成功、奖金发出。两者不同（见 3.1）。<br>
+            · 「<b>存款</b>」＝「<b>充值</b>」，同一件事。<br>
+            · 「<b>用掉一次</b>」＝勾券并送出存款，<b>成功失败都算</b>。<br>
+            · 「<b>领到奖</b>」＝钱入账成功、奖金发出。和「用掉一次」不同（见 3.1）。<br>
             · 「<b>奖励列表</b>」＝前台 <code>Rewards ＞ Promotion</code> 区的活动卡片列表（见 4.3.3）。<br>
             · 「<b>渠道</b>」＝平台／glife／maya 三种（见 2.3.7）。
           </div>
 
-          <p class="lede">玩家一天内存多笔，<b>每一笔都能拿奖金，每一笔可以不一样</b>。</p>
+          <p class="lede">玩家一天存多笔，<b>每一笔都能拿奖金</b>，每一笔的奖金可以不一样。</p>
 
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
-                <tr><th class="nw">奖金算法</th><td><b>存款金额 × 百分比</b>，超过上限取上限。</td></tr>
-                <tr><th class="nw">百分比取哪一格</th>
-                    <td><b>今天星期几 × VIP 等级 × 今天第几笔 × 渠道</b>。后台照这四个维度配：七天各一组，每组 11 个等级，一笔一列，每一笔再分三个渠道（平台／glife／maya）各填％与上限。<br><span class="rev"><b>每一天可以设成不发奖</b>，例如只发一三五、或只发二四六（见 2.3.9）。</span></td></tr>
-                <tr><th class="nw">每日可领笔数</th><td>后台配 <b>1～10 笔</b>，每一天、每个等级可以不一样。</td></tr>
-                <tr><th class="nw">怎么算用掉一次</th>
-                    <td><b>勾券并送出充值</b>就算，<b>充值失败也算</b>（见 3.1）；没勾券、未达门槛的存款不计次。</td></tr>
-                <tr><th class="nw">周期</th><td>按<b>日历上的星期几</b>循环，不是「活动第几天」。</td></tr>
-                <tr><th class="nw">发什么</th><td><b>一律彩金</b>，计流水；不发积分、不发免费投注。</td></tr>
-                <tr><th class="nw">怎么参加</th><td>在存款页<b>主动勾选那张券</b>。</td></tr>
-                <tr><th class="nw">可以同时开几档</th>
-                    <td>档数不限，但<b>本活动各档时间不可重叠</b>（见 2.2.4）→ 任何时间点<b>最多一档在跑、前台最多一张复存券</b>。
+                <tr><th class="nw">奖金怎么算</th><td>存款金额 × 百分比，超过上限就取<b>上限</b>。</td></tr>
+                <tr><th class="nw">百分比看什么</th>
+                    <td>看四件事：<b>今天星期几、VIP 等级、今天第几笔、渠道</b>。<br>
+                        后台配法：七天各一组 → 每组 11 个等级 → 每个等级一笔一列 → 每一笔分平台／glife／maya 三个渠道，各填％与上限。<br>
+                        <span class="rev">每一天可以设成<b>不发奖</b>，例如只发一三五、或只发二四六（见 2.3.9）。</span></td></tr>
+                <tr><th class="nw">每天可领几笔</th><td>后台配 <b>1～10 笔</b>，每一天、每个等级可以不一样。</td></tr>
+                <tr><th class="nw">什么算用掉一次</th>
+                    <td>勾券并送出充值就算，<b>充值失败也算</b>（见 3.1）。<br>没勾券、或没达门槛的存款，不算。</td></tr>
+                <tr><th class="nw">周期</th><td>照<b>日历的星期几</b>循环，不是照「活动第几天」。</td></tr>
+                <tr><th class="nw">发什么</th><td>一律发<b>彩金</b>，要计流水。不发积分、不发免费投注。</td></tr>
+                <tr><th class="nw">怎么参加</th><td>在存款页<b>自己勾选那张券</b>。</td></tr>
+                <tr><th class="nw">能同时开几档</th>
+                    <td>档数不限，但本活动各档<b>时间不可重叠</b>（见 2.2.4）。<br>
+                        所以任何时间最多一档在跑、前台最多一张复存券。<br>
                         其他活动（含每日首充）不受影响。</td></tr>
               </tbody>
             </table>
@@ -440,21 +506,25 @@ table.t th:last-child, table.t td:last-child { width: auto; }
              ============================================================ -->
         <article class="panel" id="p-s0">
           <div class="panel__head"><span class="panel__num">2.1</span><h2 class="panel__title">后台 · 活动列表页</h2><span class="tag tag--same">同每日首充</span></div>
-          <p class="lede"><b>本活动自己的新页面</b>，版型与操作<b>同每日首充</b>的活动列表，列表里<b>只有本活动的活动</b>。活动建好之后就出现在这张列表里。</p>
+          <p class="lede">本活动自己的新页面，长相和操作<b>同每日首充</b>的活动列表。列表里<b>只放本活动</b>的活动，建好就出现在这里。</p>
 
-          <ul>
-            <li><b>栏位共 7 栏</b>：活动编号｜活动名称｜活动时间｜创建时间｜创建人｜状态｜操作，<b>同每日首充</b>。</li>
-            <li>三个入口：<b>新增</b>（表单全空，不可带入上一次编辑留下的值）、<b>编辑</b>（带入该笔活动的全部设置）、<b>查看记录</b>（只显示该笔活动的记录，还没有记录时显示空状态）。</li>
-            <li>「状态」栏是<b>唯读徽章</b>：<b>开启＝淡绿底绿字、关闭＝淡红底红字</b>。</li>
-            <li>要改活动状态，<b>进表单改「活动状态」再保存</b>（见 2.2.1）。</li>
-            <li><b>查询列</b>：活动名称（文字输入，placeholder「请输入」）、活动状态（下拉：全部／开启／关闭），两颗钮
-                <b>「搜索」与「重置」</b>。</li>
-            <li><b>「新增」钮</b>放在查询列下方、表格上方。</li>
-            <li><b>默认排序</b>：活动编号<b>由大到小</b>（新建的排前面）。</li>
-            <li><b>分页</b>：<code>Total N</code>、每页笔数下拉（10／20／50）、页码、<code>Go to</code> 跳页输入框。</li>
-            <li><b>查无数据</b>：表格区显示「暂无数据」，查询条件<b>保留不清空</b>。</li>
-            <li>其余（排序机制、权限）<b>同每日首充</b>，这一页没有本活动专有的规则。</li>
-          </ul>
+          <div class="tbl-scroll">
+            <table class="t">
+              <tbody>
+                <tr><th class="nw">栏位（7 栏）</th><td>活动编号｜活动名称｜活动时间｜创建时间｜创建人｜状态｜操作（同每日首充）</td></tr>
+                <tr><th class="nw">查询列</th><td>活动名称：文字输入，placeholder「请输入」<br>活动状态：下拉，全部／开启／关闭<br>按钮：「搜索」「重置」</td></tr>
+                <tr><th class="nw">「新增」钮</th><td>在查询列下方、表格上方。</td></tr>
+                <tr><th class="nw">新增</th><td>表单<b>全空</b>，不带入上次编辑的值。</td></tr>
+                <tr><th class="nw">编辑</th><td>带入这笔活动的全部设置。</td></tr>
+                <tr><th class="nw">查看记录</th><td>只显示这笔活动的记录；还没记录就显示空状态。</td></tr>
+                <tr><th class="nw">状态栏</th><td><b>只能看</b>的徽章：开启＝淡绿底绿字，关闭＝淡红底红字。<br>要改状态：进表单改「活动状态」再保存（见 2.2.1）。</td></tr>
+                <tr><th class="nw">默认排序</th><td>活动编号<b>由大到小</b>（新建的在前）。</td></tr>
+                <tr><th class="nw">分页</th><td><code>Total N</code>、每页笔数（10／20／50）、页码、<code>Go to</code> 跳页。</td></tr>
+                <tr><th class="nw">查无数据</th><td>表格显示「暂无数据」，查询条件<b>保留</b>不清空。</td></tr>
+                <tr><th class="nw">其他</th><td>排序机制、权限同每日首充。这页没有本活动专有的规则。</td></tr>
+              </tbody>
+            </table>
+          </div>
         </article>
 
         <!-- ============================================================
@@ -462,8 +532,8 @@ table.t th:last-child, table.t td:last-child { width: auto; }
              ============================================================ -->
         <article class="panel" id="p-s1">
           <div class="panel__head"><span class="panel__num">2.2</span><h2 class="panel__title">后台 · 基本信息配置</h2><span class="tag tag--diff">不同：活动时间不可重叠</span></div>
-          <p class="lede">字段顺序：活动名称 → 活动时间 → 排序 → 领取方式 → 发放方式 → 活动状态 → 活动类型。
-             字段行为、默认值与前台对应<b>同每日首充</b>，<b>只有「活动时间不可重叠」是本活动订定</b>（见 2.2.4）。</p>
+          <p class="lede">字段顺序：活动名称 → 活动时间 → 排序 → 领取方式 → 发放方式 → 活动状态 → 活动类型。<br>
+             全部<b>同每日首充</b>，本活动自己订的<span class="rev">两条</span>：<b>活动时间不可重叠</b>（见 2.2.4）<span class="rev">；<b>进行中改关闭先确认</b>（见 2.2.5）</span>。</p>
 
           <h3 class="sub">2.2.1 字段与必填</h3>
           <div class="tbl-scroll">
@@ -471,41 +541,43 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <thead><tr><th class="nw">#</th><th class="nw">字段</th><th class="nw">必填</th><th>规则</th></tr></thead>
               <tbody>
                 <tr><td>1</td><td class="nw">活动名称</td><td class="nw">是</td>
-                    <td>只填空白字元也算空。长度上限<b>同每日首充，不另订</b>。旁边「＋」开国际化列表（见 2.2.3）。</td></tr>
+                    <td>只填空白也算空。<br>长度上限同每日首充。<br>旁边「＋」开国际化列表（见 2.2.3）。</td></tr>
                 <tr><td>2</td><td class="nw">活动时间</td><td class="nw">是</td>
-                    <td>起 ≤ 迄，时区一律 <b>GMT+8</b>（与发奖判定同一个时区，见 3.1）。
-                        <span class="tag tag--new">本活动订定</span> <b>不可与本列表内其他开启中活动的时间重叠</b>（见 2.2.4）。<br>
-                        这段期间决定七个星期几各轮到几次（见 2.3.6）。</td></tr>
+                    <td>开始 ≤ 结束；时区一律 <b>GMT+8</b>（和发奖同一个时区，见 3.1）。<br>
+                        <span class="tag tag--new">本活动订定</span> 不可和本列表其他<b>开启中</b>活动的时间重叠（见 2.2.4）。<br>
+                        这段期间决定每个星期几各轮到几次（见 2.3.6）。</td></tr>
                 <tr><td>3</td><td class="nw">排序</td><td class="nw">是</td>
-                    <td>整数，不可留空、负数、小数；上限同每日首充。决定这张卡片在前台奖励列表的位置（见 4.3.3），<b>数字越大排越前面</b>。</td></tr>
-                <tr><td>4</td><td class="nw">领取方式</td><td class="nw">是</td><td>固定「自动发放」，等同唯读。</td></tr>
-                <tr><td>5</td><td class="nw">发放方式</td><td class="nw">是</td><td>固定「自动到账」，等同唯读。</td></tr>
+                    <td>整数；不可留空、负数、小数；上限同每日首充。<br>
+                        决定卡片在前台奖励列表的位置（见 4.3.3），<b>数字越大越前面</b>。</td></tr>
+                <tr><td>4</td><td class="nw">领取方式</td><td class="nw">是</td><td>固定「自动发放」，不能改。</td></tr>
+                <tr><td>5</td><td class="nw">发放方式</td><td class="nw">是</td><td>固定「自动到账」，不能改。</td></tr>
                 <tr><td>6</td><td class="nw">活动状态</td><td class="nw">是</td>
-                    <td>开启／关闭，<b>新增预设关闭</b>。关闭＝前台不显示、不发奖，<b>立即生效</b>，无草稿。</td></tr>
+                    <td>开启／关闭，新增时<b>预设关闭</b>。<br>
+                        关闭 → 前台不显示、不发奖，<b>立即生效</b>；没有草稿。<br><span class="rev">例外：关闭前<b>已勾券送出</b>的充值，入账成功<b>照发</b>（见 2.2.5）。</span></td></tr>
                 <tr><td>7</td><td class="nw">活动类型</td><td class="nw">否</td>
-                    <td>只决定<b>卡片在前台奖励列表分在哪个标签页</b>（见 4.3.3），<b>不影响发奖、券、参加资格</b>。
-                        选项沿用全站既有分类，<b>建活动时由营运自行勾选</b>。</td></tr>
+                    <td>只决定卡片在前台奖励列表<b>放哪个标签页</b>（见 4.3.3）；不影响发奖、券、参加资格。<br>
+                        选项用全站现有分类，营运建活动时自己勾。</td></tr>
               </tbody>
             </table>
           </div>
 
-          <h3 class="sub">2.2.2 活动状态 × 时间 → 前台与发奖 <span class="tag tag--same">同每日首充</span></h3>
+          <h3 class="sub">2.2.2 活动状态 × 时间 <span class="tag tag--same">同每日首充</span></h3>
           <div class="tbl-scroll">
             <table class="t">
-              <thead><tr><th class="nw">状态</th><th class="nw">现在时间落在</th><th class="nw">奖励列表</th><th class="nw">存款页 banner</th><th class="nw">存款页的券</th><th class="nw">发奖</th></tr></thead>
+              <thead><tr><th class="nw">状态</th><th class="nw">时间</th><th class="nw">活动开放中？</th><th class="nw">发奖</th></tr></thead>
               <tbody>
-                <tr><td class="nw">开启</td><td class="nw">活动时间之前</td><td class="nw">看不到</td><td class="nw">没有</td><td class="nw">没有</td><td class="nw">不发</td></tr>
-                <tr><td class="nw">开启</td><td class="nw"><b>活动时间内</b></td><td class="nw"><b>看得到</b></td><td class="nw"><b>有</b></td><td class="nw"><b>有</b></td><td class="nw"><b>发</b></td></tr>
-                <tr><td class="nw">开启</td><td class="nw">活动时间已过</td><td class="nw">看不到</td><td class="nw">没有</td><td class="nw">没有</td><td class="nw">不发</td></tr>
-                <tr><td class="nw"><b>关闭</b></td><td class="nw">任何时间</td><td class="nw">看不到</td><td class="nw">没有</td><td class="nw">没有</td><td class="nw">不发</td></tr>
+                <tr><td class="nw">开启</td><td class="nw">开始前</td><td class="nw">否</td><td class="nw">不发</td></tr>
+                <tr><td class="nw">开启</td><td class="nw"><b>进行中</b></td><td class="nw"><b>是</b></td><td class="nw"><b>发</b></td></tr>
+                <tr><td class="nw">开启</td><td class="nw">已结束</td><td class="nw">否</td><td class="nw">不发</td></tr>
+                <tr><td class="nw"><b>关闭</b></td><td class="nw">任何时间</td><td class="nw">否</td><td class="nw">不发</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="hint">唯一例外：<b>今日次数用完时券会先收起来</b>，banner 与奖励列表照常（见 4.2.3）。</p>
+          <p class="hint"><span class="rev">关闭前已勾券送出的充值，入账成功照发（见 2.2.5）。</span><br>前台怎么显示见 4.2.1（banner）、4.2.3（券）、4.3.3（奖励列表卡片）。</p>
 
           <h3 class="sub">2.2.3 国际化列表 <span class="tag tag--same">同每日首充</span></h3>
-          <p>活动名称旁「＋」开的是<b>全站共用的既有国际化列表</b>，表单那格填默认语系，其他语系在列表里补，没补的前台回退默认语系。
-             <b>本活动直接接上，不做任何修改</b>（弹窗长相、语言选项、字数上限都照现况）。</p>
+          <p>活动名称旁的「＋」，打开的是<b>全站共用的现有国际化列表</b>：表单那格填默认语系，其他语系到列表里补；没补的，前台显示默认语系。<br>
+             本活动<b>直接接上，不做任何修改</b>（弹窗长相、语言选项、字数上限都照现况）。</p>
 
           <h3 class="sub">2.2.4 保存时会挡下</h3>
           <div class="tbl-scroll">
@@ -517,20 +589,41 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td class="nw">活动时间起 &gt; 迄</td><td>活动时间的开始不可晚于结束</td></tr>
                 <tr><td class="nw">排序留空／负数／小数</td><td>排序不可为空，请填 0 以上的整数</td></tr>
                 <tr><td class="nw"><b>活动时间重叠</b></td>
-                    <td>活动时间与「{冲突活动的名称}」（活动编号 {编号}，{起}～{迄}）重叠，<b>同一天只能有一个活动在跑</b>，请改到不重叠的日期</td></tr>
+                    <td>活动时间与「{冲突活动的名称}」（活动编号 {编号}，{起}～{迄}）重叠，同一天只能有一个活动在跑，请改到不重叠的日期</td></tr>
               </tbody>
             </table>
           </div>
 
           <h4 class="sub">重叠怎么判</h4>
-          <ul>
-            <li>比较对象：<b>本列表内、状态开启</b>的其他活动（不含每日首充等其他活动）；<b>编辑时排除自己</b>。</li>
-            <li><b>以日期比对，不比时分秒</b>：两档只要有<b>任何一天重复就挡</b>。<br>
-                A 到 <b>9/30</b>、B 从 <b>9/30</b> 起 → <b>挡</b>（即使 A 当天 10:00 就结束、B 15:00 才开始）；A 到 <b>9/30</b>、B 从 <b>10/1</b> 起 → <b>放行</b>。</li>
-            <li><b>存成「关闭」不验</b>；从关闭改成开启并保存时<b>要验</b>。</li>
-            <li>挡的是<b>时间重叠</b>，不是「已有活动开启中」——时间错开就可以同时开启多档。</li>
-            <li>活动时间还没填好时不验这一条。</li>
-          </ul>
+          <div class="tbl-scroll">
+            <table class="t">
+              <thead><tr><th class="nw">情况</th><th>结果</th></tr></thead>
+              <tbody>
+                <tr><td class="nw">跟谁比</td><td>本列表里<b>开启中</b>的其他活动；编辑时不跟自己比。每日首充等其他活动不比。</td></tr>
+                <tr><td class="nw">怎么比</td><td><b>只比日期</b>，不看几点几分：只要有<b>一天重复就挡</b>。</td></tr>
+                <tr><td class="nw">A 到 9/30，B 从 9/30 起</td><td><b>挡</b>（就算 A 当天 10:00 结束、B 15:00 才开始）</td></tr>
+                <tr><td class="nw">A 到 9/30，B 从 10/1 起</td><td>放行</td></tr>
+                <tr><td class="nw">存成「关闭」</td><td>不检查</td></tr>
+                <tr><td class="nw">从关闭改开启再保存</td><td><b>要检查</b></td></tr>
+                <tr><td class="nw">活动时间还没填好</td><td>不检查这一条</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="hint">挡的是<b>时间重叠</b>，不是「已经有活动开着」。时间错开，就可以同时开启多档。</p>
+
+          <h3 class="sub rev">2.2.5 （10/6 新增）进行中的活动改成关闭 <span class="tag tag--new">新增</span></h3>
+          <div class="tbl-scroll">
+            <table class="t">
+              <tbody class="rev">
+                <tr><th class="nw">什么时候跳</th><td>原本<b>开启</b>、现在<b>在活动时间内</b>的活动，状态改成「关闭」后按保存。</td></tr>
+                <tr><th class="nw">确认弹窗</th><td>标题「确认」，内文「<b>活动进行中，关闭后将立即下架（已送出的充值仍会发奖），确定关闭吗？</b>」，按钮「取消」「确定」。</td></tr>
+                <tr><th class="nw">按确定</th><td>保存，活动立刻关闭：前台下架，<b>还没勾券送出的</b>不能再参加。</td></tr>
+                <tr><th class="nw">已送出的怎么办</th><td>关闭前<b>已勾券送出</b>的充值，入账成功<b>照发奖</b>（跟 3.1 一样看送出时间）。</td></tr>
+                <tr><th class="nw">按取消</th><td><b>不保存</b>，留在表单页，已改的内容保留。</td></tr>
+                <tr><th class="nw">不跳的情况</th><td>活动还没开始、已经结束、或原本就是关闭。</td></tr>
+              </tbody>
+            </table>
+          </div>
         </article>
 
         <!-- ============================================================
@@ -538,37 +631,46 @@ table.t th:last-child, table.t td:last-child { width: auto; }
              ============================================================ -->
         <article class="panel" id="p-s2">
           <div class="panel__head"><span class="panel__num">2.3</span><h2 class="panel__title">后台 · 奖励配置</h2><span class="tag tag--diff">不同：按星期配</span></div>
-          <p class="lede">七天各一组 × 11 个 VIP 等级 × 一笔一列，<b>按星期分组</b>。版型同每日首充，差别在多了星期这一层。</p>
+          <p class="lede">版型同每日首充，只多了一层<b>星期</b>：七天 × 11 个 VIP 等级，每个等级一笔一列。</p>
 
           <h3 class="sub">2.3.1 画面结构（三层）</h3>
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
                 <tr><th class="nw">① 星期页签</th>
-                    <td>横排七个，一次编一天，<b>默认周一</b>。轮不到的那天<b>压灰加删除线</b>（见 2.3.6）；<span class="rev"><b>不发奖的那天页签虚线框、下方标「不发奖」</b>（见 2.3.9）；</span><b>配错不挂红点</b>（见 2.3.5）。</td></tr>
+                    <td>横排七个，一次编一天，<b>默认周一</b>。<br>
+                        · 轮不到的那天：压灰＋删除线（见 2.3.6）。<br>
+                        · <span class="rev">不发奖的那天：虚线框，下方标「不发奖」（见 2.3.9）。</span><br>
+                        · 配错<b>不挂红点</b>（见 2.3.5）。</td></tr>
                 <tr><th class="nw">② VIP 等级</th>
-                    <td>VIP0～VIP10 共 11 个折叠区块（<b>VIP0 ＝ 既有系统的「一般会员（PT）」</b>；
-                        <b>前台未登入展示 VIP10 那一组</b>，见 4.3.2）。折叠列显示「<b>每日可领 N 笔</b>」；
-                        套用中的<b>整块反灰</b>并标「跟著 VIP0」（见 2.3.4）。有「全部展开／全部收合」；<b>换星期保持原本展开的等级</b>。</td></tr>
+                    <td>VIP0～VIP10，共 11 个可折叠区块。<br>
+                        · VIP0 ＝ 既有系统的「一般会员（PT）」。<br>
+                        · 折叠时显示「每日可领 N 笔」。<br>
+                        · 套用中的等级整块反灰，标「跟著 VIP0」（见 2.3.4）。<br>
+                        · 有「全部展开／全部收合」；换星期时，原本展开的等级保持展开。</td></tr>
                 <tr><th class="nw">③ 逐笔表格</th>
-                    <td>一列一笔，栏＝最低存款金额＋各渠道的奖励％与上限金额，<b>列数由「每日可领笔数」决定</b>（见 2.3.2）。<br>
-                        收起其他渠道 <b>4 栏</b>（笔序、最低存款金额、平台％、平台上限）、展开 <b>8 栏</b>（见 2.3.7）；
-                        放不下<b>横向卷动，笔序栏固定在左侧</b>。</td></tr>
+                    <td>一笔一列，列数＝「每日可领笔数」（见 2.3.2）。<br>
+                        · 其他渠道收起：<b>4 栏</b>（笔序、最低存款金额、平台％、平台上限）。<br>
+                        · 其他渠道展开：<b>8 栏</b>（见 2.3.7）。<br>
+                        · 放不下就横向卷动，笔序栏固定在左侧。</td></tr>
               </tbody>
             </table>
           </div>
 
           <h3 class="sub">2.3.2 每日可领笔数</h3>
-          <p>每个等级区块上方一个<b>输入框</b>，<b>填几就出现几列</b>。</p>
+          <p>每个等级区块上方一个输入框，<b>填几就出现几列</b>。</p>
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
-                <tr><th class="nw">输入限制</th>
-                    <td><b>1～10 的正整数</b>，不可 0／负数／小数。超出范围<b>拉回边界</b>（0→1、12→10）；<b>清空后离开输入框回到原值</b>。</td></tr>
+                <tr><th class="nw">能填什么</th>
+                    <td><b>1～10 的正整数</b>。不能填 0、负数、小数。<br>
+                        · 超出范围 → 拉回边界（0→1、12→10）。<br>
+                        · 清空后离开输入框 → <span class="rev">回到清空前的数字</span>。</td></tr>
                 <tr><th class="nw">调大／调小</th>
-                    <td>调大：新增的那几笔<b>沿用最后一笔的值</b>。调小：<b>从后面砍掉</b>，值不保留。</td></tr>
+                    <td>· 调大 → 新增的笔<b>沿用最后一笔</b>的值。<br>
+                        · 调小 → <b>从后面砍掉</b>，值不保留。</td></tr>
                 <tr><th class="nw">范围</th><td>每一天、每个等级<b>各自填</b>；套用中的等级跟著 VIP0（见 2.3.4）。</td></tr>
-                <tr><th class="nw">初值</th><td>新增活动时七天 × 11 级各 <b>3 笔</b>，<b>每一格都是空的</b>（三个字段必填，见 2.3.8）。</td></tr>
+                <tr><th class="nw">初值</th><td>新增活动时，七天 × 11 级都是 <b>3 笔</b>，每一格都是空的（三个字段必填，见 2.3.8）。</td></tr>
               </tbody>
             </table>
           </div>
@@ -578,32 +680,36 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <thead><tr><th class="nw">字段</th><th class="nw">分渠道</th><th>限制</th></tr></thead>
               <tbody>
-                <tr><td class="nw">最低存款金额</td><td class="nw"><b>否</b>，三渠道共用</td>
-                    <td><b>大于 0</b>，最多 2 位小数。＝前台 <code>Min Deposit</code>（见 4.2.6）。</td></tr>
-                <tr><td class="nw">每日复存奖励（％）</td><td class="nw"><b>是</b></td>
-                    <td><b>大于 0、最高 100</b>，最多 2 位小数；与最低存款金额相乘不得舍去成 0（见 2.3.8）。</td></tr>
-                <tr><td class="nw">上限金额</td><td class="nw"><b>是</b></td>
-                    <td><b>大于 0</b>，最多 2 位小数，<b>一律启用</b>。</td></tr>
+                <tr><td class="nw">最低存款金额</td><td class="nw">否，三渠道共用</td>
+                    <td>大于 0，最多 2 位小数。＝前台 <code>Min Deposit</code>（见 4.2.6）。</td></tr>
+                <tr><td class="nw">每日复存奖励（％）</td><td class="nw">是</td>
+                    <td>大于 0、<b>最高 100</b>，最多 2 位小数。<br>和最低存款金额相乘后不能是 0（见 2.3.8）。</td></tr>
+                <tr><td class="nw">上限金额</td><td class="nw">是</td>
+                    <td>大于 0，最多 2 位小数，<b>一律启用</b>。</td></tr>
               </tbody>
             </table>
           </div>
 
           <h3 class="sub">2.3.4 复制与套用</h3>
+          <p>两颗钮的来源<b>都只有 VIP0</b>。</p>
           <div class="tbl-scroll">
             <table class="t">
               <thead><tr><th class="nw">功能</th><th class="nw">位置</th><th>行为</th></tr></thead>
               <tbody>
                 <tr><td class="nw"><b>复制这天<br>到其他天…</b></td><td class="nw">星期页签<br>下方操作列</td>
-                    <td><b>只复制这一天的 VIP0</b> 到勾选的天。目标天<b>套用中的等级跟著变、已取消套用的不动</b>。<br>
-                        面板：来源那天不列出、可多选、<b>没选时主按钮不可点</b>、选了显示「复制到 N 天」、换星期自动收起。<br>
-                        回馈：目标页签<b>反蓝打勾约 5 秒</b>；绿色提示「已把周一的 VIP0 配置复制到 2 天：周六、周日（含每日可领笔数）」。</td></tr>
-                <tr><td class="nw"><b>套用到<br>其他等级…</b></td><td class="nw"><b>只有 VIP0</b><br>区块内</td>
-                    <td>在 VIP0 区块内展开勾选面板：列 VIP1～VIP10、<b>预设全勾</b>，只有「套用」「取消」两颗钮（勾了几个等级，主按钮就显示「套用到 N 个等级」；一个都没勾时显示「套用」且不可点），<b>不跳确认弹窗</b>。<br>
-                        套用后<b>勾起来的等级反灰唯读、跟著 VIP0 走</b>（改 VIP0 任何一格含笔数，当场跟著变），<b>没勾的不动</b>。<br>
-                        <b>再套用一次会重新盖掉并重新绑定</b>（含之前已取消套用的）。<br>
-                        回馈：绿色提示「已把周六的 VIP0 配置套用到 5 个等级：VIP1、VIP2…（含每日可领笔数）」。</td></tr>
+                    <td>把<b>这一天的 VIP0</b> 复制到勾选的天。<br>
+                        · 目标天：套用中的等级跟著变；已取消套用的不动。<br>
+                        · 面板：不列来源那天；可多选；没选时主按钮不可点；选了显示「复制到 N 天」；换星期自动收起。<br>
+                        · 完成后：目标页签反蓝打勾约 5 秒；绿色提示「已把周一的 VIP0 配置复制到 2 天：周六、周日（含每日可领笔数）」。</td></tr>
+                <tr><td class="nw"><b>套用到<br>其他等级…</b></td><td class="nw">只在 VIP0<br>区块内</td>
+                    <td>在 VIP0 区块内展开勾选面板，<b>不跳确认弹窗</b>。<br>
+                        · 面板：列 VIP1～VIP10，<b>预设全勾</b>；只有「套用」「取消」两颗钮。勾了 N 个 → 主按钮显示「套用到 N 个等级」；一个都没勾 → 显示「套用」且不可点。<br>
+                        · 套用后：勾到的等级<b>反灰唯读、跟著 VIP0 走</b>（改 VIP0 任何一格，含笔数，当场跟著变）；没勾的不动。<br>
+                        · 再套用一次：重新盖掉、重新绑定（包括之前已取消套用的）。<br>
+                        · 完成后：绿色提示「已把周六的 VIP0 配置套用到 5 个等级：VIP1、VIP2…（含每日可领笔数）」。</td></tr>
                 <tr><td class="nw"><b>取消套用</b></td><td class="nw">套用中的<br>等级区块内</td>
-                    <td>解锁可编辑，<b>保留当下的值</b>（不是回到套用前）；之后改 VIP0 不再影响它。<br>回馈：绿色提示「VIP3 已取消套用，现在可以单独调整；之后改 VIP0 不会再影响它」。</td></tr>
+                    <td>解锁、可编辑，<b>保留当下的值</b>（不是回到套用前）；之后改 VIP0 不再影响它。<br>
+                        · 完成后：绿色提示「VIP3 已取消套用，现在可以单独调整；之后改 VIP0 不会再影响它」。</td></tr>
               </tbody>
             </table>
           </div>
@@ -611,11 +717,12 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <tbody>
                 <tr><th class="nw">带走的内容</th>
-                    <td><b>每日可领笔数</b>＋每一笔的最低存款金额＋三渠道的奖励％与上限金额。
-                        <b>两颗钮都只以 VIP0 为来源</b>；复制<b>不会改变</b>目标天谁套用中、谁已解锁。</td></tr>
+                    <td>每日可领笔数＋每一笔的最低存款金额＋三渠道的奖励％与上限金额。<br>
+                        复制<b>不改变</b>目标天谁套用中、谁已解锁。</td></tr>
                 <tr><th class="nw">保存与还原</th>
-                    <td>套用中的值<b>照样保存</b>，校验时<b>只报 VIP0 那一条，不重复列 11 条</b>（见 2.3.8）；
-                        <b>套用状态跟著活动一起保存</b>，编辑既有活动时原样还原。</td></tr>
+                    <td>· 套用中的值照样保存。<br>
+                        · 校验出错时<b>只报 VIP0 那一条</b>，不重复列 11 条（见 2.3.8）。<br>
+                        · 套用状态跟著活动一起保存，编辑既有活动时原样还原。</td></tr>
               </tbody>
             </table>
           </div>
@@ -625,14 +732,16 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <tbody>
                 <tr><th class="nw">① 当场标红</th>
-                    <td>填错的格子<b>即时标红</b>，改回合法值即时恢复。<b>打字过程中不能被打断</b>（游标留在原格，不跳走）。<br>
-                        <b>没填过的空格按过保存后才标红</b>。星期页签与等级区块<b>都不挂红点／红框</b>。</td></tr>
+                    <td>· 填错的格子<b>立刻标红</b>，改对立刻恢复。<br>
+                        · 打字时不能被打断（游标留在原格）。<br>
+                        · 没填过的空格：<b>按过保存后</b>才标红。<br>
+                        · 星期页签、等级区块<b>都不挂红点／红框</b>。</td></tr>
                 <tr><th class="nw">② 保存时列清单</th>
-                    <td>七天 × 11 级的问题<b>一次列在奖励配置区块下方</b>：<br>
-                        · 每条写明<b>哪一天 · 哪个等级 · 第几笔 · 哪一格</b>，例「周六 · VIP1 · 第 3 笔：平台 的奖励％要大于 0。」<br>
-                        · <b>可点跳到那一格</b>（若属收起来的渠道<b>要先展开</b>）。<br>
-                        · 超过 20 条只列前 20 条，其余「…另外还有 N 项」；自然折行不截断。<br>
-                        · 顶端弹一句提示、游标跳到第一个错（见 2.6.2）。</td></tr>
+                    <td>七天 × 11 级的问题，<b>一次列在奖励配置区块下方</b>：<br>
+                        · 每条写明 哪一天 · 哪个等级 · 第几笔 · 哪一格，例「周六 · VIP1 · 第 3 笔：平台 的奖励％要大于 0。」<br>
+                        · 点一下跳到那一格（在收起的渠道里就先展开）。<br>
+                        · 超过 20 条只列前 20 条，其余写「…另外还有 N 项」；文字自然折行，不截断。<br>
+                        · 顶端弹一句提示，游标跳到第一个错（见 2.6.2）。</td></tr>
               </tbody>
             </table>
           </div>
@@ -643,33 +752,36 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <tbody>
                 <tr><th class="nw">怎么算</th>
-                    <td>依活动时间算每个星期几出现几次，<b>活动时间一改立刻重算</b>，不必按保存。<br>
-                        例：9/08（二）～9/30（三）共 23 天 → 周二、周三各 4 次，其余各 3 次；只跑 9/08～9/10 → 周五到周一一次都轮不到。</td></tr>
+                    <td>按活动时间算每个星期几出现几次。<b>活动时间一改就重算</b>，不用按保存。<br>
+                        例：9/08（二）～9/30（三）共 23 天 → 周二、周三各 4 次，其余各 3 次。<br>
+                        例：只跑 9/08～9/10 → 周五到周一一次都轮不到。</td></tr>
                 <tr><th class="nw">画面</th>
-                    <td>轮不到的那天<b>页签压灰加删除线</b>，停留显示「这档活动期间内轮不到这天」；复制面板的日期<b>同样压灰但仍可选</b>。</td></tr>
+                    <td>· 页签：压灰＋删除线，停留显示「这档活动期间内轮不到这天」。<br>
+                        · 复制面板：那天同样压灰，<b>但仍可选</b>。</td></tr>
                 <tr><th class="nw">挡不挡</th>
-                    <td><b>不挡保存</b>，保存成功后黄色提示：「周三：这档活动期间内一次都轮不到，配了也不会发出去（活动不满一周才会这样）。」（见 2.6.3）</td></tr>
+                    <td><b>不挡保存</b>。保存成功后黄色提示：「周三：这档活动期间内一次都轮不到，配了也不会发出去（活动不满一周才会这样）。」（见 2.6.3）</td></tr>
               </tbody>
             </table>
           </div>
 
           <h3 class="sub">2.3.7 其他渠道（GLife‧OKFUN／Maya）</h3>
-          <p>下文简称 <b>glife</b>、<b>maya</b>。<b>这两条渠道目前没有功能在跑</b>，但<b>后台要做</b>：要能配、要能校验、要能存。<b>前台不会用到。</b></p>
+          <p>下文简称 <b>glife</b>、<b>maya</b>。这两条渠道目前没在用，但<b>后台要做</b>：能配、能校验、能存。<b>前台不用。</b></p>
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
                 <tr><th class="nw">开关</th>
-                    <td>「<b>显示其他渠道（GLife‧OKFUN／Maya）</b>」<b>默认不勾</b>；不勾时每笔只显示最低存款金额与<b>平台</b>的％、上限（连笔序共 4 栏，见 2.3.1）。
-                        <b>一颗开关管当天 11 个等级</b>，<b>换星期维持勾选状态</b>。</td></tr>
+                    <td>「<b>显示其他渠道（GLife‧OKFUN／Maya）</b>」，<b>默认不勾</b>。<br>
+                        · 不勾 → 每笔只显示最低存款金额、平台％、平台上限（连笔序共 4 栏，见 2.3.1）。<br>
+                        · 一颗开关管当天 11 个等级；换星期维持勾选状态。</td></tr>
                 <tr><th class="nw">只管显示</th>
-                    <td>收起来的值<b>仍然有效、照样保存、照样校验</b>，不合法一样挡下。<b>不可因收起来就跳过检查或清空。</b></td></tr>
-                <tr><th class="nw">笔数调大时</th><td>三个渠道的值<b>都沿用最后一笔</b>，不会留空值。</td></tr>
+                    <td>收起来的值<b>照样有效、照样保存、照样校验</b>，不合法一样挡下。不能因为收起来就跳过检查或清空。</td></tr>
+                <tr><th class="nw">笔数调大时</th><td>三个渠道都沿用最后一笔的值，不留空。</td></tr>
               </tbody>
             </table>
           </div>
 
           <h3 class="sub">2.3.8 保存时会挡下</h3>
-          <p>七天 × 11 个等级 × 每一笔 × 三个渠道，<b>每一格都检查</b>。讯息写法与清单行为见 2.3.5。</p>
+          <p>七天 × 11 级 × 每一笔 × 三个渠道，<b>每一格都检查</b><span class="rev">（不发奖的那天除外，见 2.3.9）</span>。清单怎么列见 2.3.5。</p>
           <div class="tbl-scroll">
             <table class="t">
               <thead><tr><th class="nw">情况</th><th>失败提示文案</th><th class="nw">挡保存</th></tr></thead>
@@ -682,8 +794,8 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td class="nw">超过 2 位小数</td><td>周六 · VIP1 · 第 3 笔：平台 的奖励％最多 2 位小数。<br>（最低存款金额、上限金额同样写法）</td><td class="nw">是</td></tr>
                 <tr><td class="nw"><b>奖励算出 0</b><br>（最低存款金额 × ％ 舍去后 &lt; 0.01）</td>
                     <td>周六 · VIP1 · 第 3 笔：平台 用最低存款金额（10）算出来的奖励是 0，玩家会领到 0 元。<br>
-                        <b>错误标在百分比那一格。</b></td><td class="nw">是</td></tr>
-                <tr><td class="nw">收合中的渠道</td><td>glife／maya 的值<b>一样要通过上面四条</b>。</td><td class="nw">是</td></tr>
+                        错误标在<b>百分比</b>那一格。</td><td class="nw">是</td></tr>
+                <tr><td class="nw">收合中的渠道</td><td>glife／maya 的值一样要通过<span class="rev">上面各条</span>。</td><td class="nw">是</td></tr>
                 <tr><td class="nw">轮不到的星期</td><td>周三：这档活动期间内一次都轮不到，配了也不会发出去（活动不满一周才会这样）。（见 2.3.6）</td><td class="nw">否<br>仅提醒</td></tr>
                 <tr class="rev"><td class="nw">不发奖的那天</td><td>整天<b>不检查</b>，也<b>不提醒轮不到</b>（见 2.3.9）。</td><td class="nw">否</td></tr>
               </tbody>
@@ -691,25 +803,27 @@ table.t th:last-child, table.t td:last-child { width: auto; }
           </div>
 
           <h3 class="sub rev">2.3.9 （10/1 新增）哪几天发奖 <span class="tag tag--new">新增</span></h3>
-          <p class="rev">七天<b>不必天天发</b>：可以只发一三五、只发二四六，或任意几天。</p>
+          <p class="rev">不用天天发：可以只发一三五、只发二四六，或任选几天。</p>
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
                 <tr><th class="nw">开关</th>
-                    <td>星期页签下方操作列最前面一个勾选框「<b>当天发奖</b>」，<b>管目前这一天</b>；七天各自一个，<b>默认七天都勾</b>。</td></tr>
+                    <td>星期页签下方操作列最前面，勾选框「<b>当天发奖</b>」，只管目前这一天。七天各一个，<b>默认七天都勾</b>。</td></tr>
                 <tr><th class="nw">不勾时</th>
-                    <td>这一天<b>不发奖</b>：下方 11 个等级区块整块收起，只显示「这天不发奖」；操作列的「全部展开／全部收合／显示其他渠道／复制这天到其他天…」一并隐藏。<br>
-                        页签<b>虚线框、名称下方标「不发奖」</b>，不用点进去也看得出哪几天不发。</td></tr>
+                    <td>这一天<b>不发奖</b>：<br>
+                        · 11 个等级区块整块收起，只显示「这天不发奖」。<br>
+                        · 操作列的「全部展开／全部收合／显示其他渠道／复制这天到其他天…」一起隐藏。<br>
+                        · 页签虚线框，名称下方标「不发奖」，不用点进去就看得出来。</td></tr>
                 <tr><th class="nw">已填的值</th>
-                    <td><b>不清掉</b>：取消勾选只是收起，<b>再勾回来原本的值都在</b>；保存时照样存下。</td></tr>
+                    <td><b>不清掉</b>。取消勾选只是收起，再勾回来值都还在；保存时照样存。</td></tr>
                 <tr><th class="nw">校验</th>
-                    <td>不发奖的那天<b>整天不检查</b>，空格也不挡保存；也<b>不提醒轮不到</b>（见 2.3.6）。</td></tr>
+                    <td>整天<b>不检查</b>，空格也不挡保存；也<b>不提醒轮不到</b>（见 2.3.6）。</td></tr>
                 <tr><th class="nw">复制这天到其他天</th>
-                    <td>目标天<b>不发奖也可以选</b>，值照样盖过去，<b>不会顺便把那天打开</b>。</td></tr>
+                    <td>不发奖的天<b>也能选</b>为目标，值照样盖过去，但<b>不会顺便把那天打开</b>。</td></tr>
                 <tr><th class="nw">保存成功提示</th>
                     <td>效果说明改成列出发奖的那几天（见 2.6.3）。</td></tr>
                 <tr><th class="nw">前台</th>
-                    <td>不发奖的那天：<b>没有复存券</b>（见 4.2.3）；活动详情页<b>只剩 banner、标题、活动期间、Deposit 按钮、活动说明</b>（见 4.3.4）。</td></tr>
+                    <td>见 4.2.3（券）、4.3.4（详情页）。</td></tr>
               </tbody>
             </table>
           </div>
@@ -720,30 +834,34 @@ table.t th:last-child, table.t td:last-child { width: auto; }
              ============================================================ -->
         <article class="panel" id="p-s3">
           <div class="panel__head"><span class="panel__num">2.4</span><h2 class="panel__title">后台 · 活动参与条件配置</h2><span class="tag tag--diff">不同：本活动要套 IP 判定</span></div>
-          <p class="lede">这一区两个设置：<b>奖金所需流水</b>与<b>同一 IP 每天可领的账号数</b>。字段长相同每日首充；本活动另外处理的只有两点：<b>流水倍数多笔共用一份</b>、<b>同 IP 超限时次数照样用掉</b>。</p>
+          <p class="lede">这一区只有两个设置：<b>奖金所需流水</b>、<b>同一 IP 每天可领的账号数</b>。长相同每日首充，不同的只有两点：流水倍数<b>全活动共用一份</b>；同 IP 超限时<b>次数照样用掉</b>。</p>
 
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
                 <tr><th class="nw">奖金所需流水 <span class="tag tag--diff">多笔共用同一份倍数</span></th>
-                    <td>☑ 本金 ☑ 奖金 ＋ [　] 倍。算法同每日首充：稽核流水 ＝（勾选的本金 ＋ 勾选的奖金）× 倍数。<br>
-                        <b>倍数整个活动共用一份</b>，不分星期、不分第几笔，<b>不可各笔各设</b>；一天发出的每一笔都并入同一份倍数。<br>
-                        <b>非必填</b>，留空<b>不挡保存</b>；留空时的效果同每日首充。<br><b>放在「同一IP每天有…」上方。</b></td></tr>
+                    <td>☑ 本金 ☑ 奖金 ＋ [　] 倍。<br>
+                        稽核流水 ＝（勾选的本金 ＋ 勾选的奖金）× 倍数，算法同每日首充。<br>
+                        倍数<b>只有一份</b>：不分星期、不分第几笔，不能各笔各设。<br>
+                        <b>非必填</b>，留空也能保存。<span class="rev">留空（本金、奖金都不勾）＝<b>不算活动流水</b>，只算充值流水（见 4.2.5）。</span><br>
+                        <span class="rev">前台显示见 4.2.5。</span><br>
+                        位置：放在「同一IP每天有…」<b>上方</b>。</td></tr>
                 <tr><th class="nw">字段</th><td>☐ 同一IP每天有 [　] 个账号可以申请领取。</td></tr>
-                <tr><th class="nw"><b>不勾选</b>（默认）</th><td>输入框<b>灰掉不可点</b>，<b>完全不限制</b>，不看 IP。</td></tr>
+                <tr><th class="nw"><b>不勾选</b>（默认）</th><td>输入框灰掉不能点，<b>不限制</b>，不看 IP。</td></tr>
                 <tr><th class="nw"><b>勾选</b></th>
-                    <td>输入框可填、<b>必填</b>。同一 IP <b>当日</b>已<b>领到奖</b>（入帐成功、奖金发出）的<b>不重复账号数</b>达到设置值后，之后的账号
-                        <b>不发奖，但次数照样用掉</b>（券已勾、充值已送出，见 3.1、3.4 第 14 项）；IP 计数与笔序一样<b>每日归零</b>。</td></tr>
-                <tr><th class="nw">算账号数<br>不是次数</th><td>同一账号当天领 4 次仍只占 <b>1 个名额</b>。</td></tr>
+                    <td>输入框<b>必填</b>。<br>
+                        同一 IP 当天<b>已领到奖</b>（入账成功、奖金发出）的账号数到达设置值 → 之后的账号<b>不发奖，但次数照样用掉</b>（券已勾、充值已送出，见 3.1、3.4 第 14 项）。<br>
+                        IP 计数和笔序一样，<b>每天归零</b>。</td></tr>
+                <tr><th class="nw">算账号数<br>不是次数</th><td>同一账号当天领 4 次，仍只占 <b>1 个名额</b>。</td></tr>
               </tbody>
             </table>
           </div>
 
           <h3 class="sub">2.4.1 输入框限制</h3>
           <ul>
-            <li><b>正整数</b>，不可 0／负数／小数。</li>
-            <li>取消勾选：输入框<b>立即灰掉但保留已填的值</b>，<b>保存时以「未勾选」为准</b>。</li>
-            <li>编辑既有活动：原本有值则<b>带出并自动勾选</b>；无值则不勾选、输入框灰掉。</li>
+            <li>只能填<b>正整数</b>（不能 0、负数、小数）。</li>
+            <li>取消勾选：输入框马上灰掉，已填的值留着；但保存时<b>当作没勾选</b>。</li>
+            <li>编辑旧活动：原本有值 → 带出并自动勾选；没值 → 不勾选、输入框灰掉。</li>
           </ul>
 
           <h3 class="sub">2.4.2 保存时会挡下</h3>
@@ -763,7 +881,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
              ============================================================ -->
         <article class="panel" id="p-s4">
           <div class="panel__head"><span class="panel__num">2.5</span><h2 class="panel__title">后台 · 内容配置</h2><span class="tag tag--diff">不同：只有两种图（各分 PC／手机，共四张）</span></div>
-          <p class="lede">上传玩家在前台看到的图与文字。</p>
+          <p class="lede">上传玩家在前台看到的图和文字。<b>全部必填。</b></p>
 
           <h3 class="sub">2.5.1 字段</h3>
           <div class="tbl-scroll">
@@ -771,18 +889,19 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <thead><tr><th class="nw">字段</th><th class="nw">必填</th><th>限制与用途</th></tr></thead>
               <tbody>
                 <tr><td class="nw">PC奖励列表<br>手机奖励列表</td><td class="nw">是</td>
-                    <td>用在<b>前台奖励列表的卡片</b>（见 4.3.3），依装置选。</td></tr>
+                    <td>前台<b>奖励列表的卡片</b>（见 4.3.3），按装置显示。</td></tr>
                 <tr><td class="nw">PC内容图片<br>手机内容图片</td><td class="nw">是</td>
-                    <td>用在<b>活动详情页最上方的 banner</b>（见 4.3），依装置选。</td></tr>
+                    <td>活动详情页<b>最上方的 banner</b>（见 4.3），按装置显示。</td></tr>
                 <tr><td class="nw">图片格式</td><td class="nw">—</td>
-                    <td>仅 <code>.PNG</code> <code>.JPG</code>，单张 ≤ <b>2MB</b>。四张<b>全部必填</b>。
-                        PC／手机端是两个子标签页，<b>两边各有各的内容</b>，切换要真的换一组字段。</td></tr>
+                    <td>只收 <code>.PNG</code> <code>.JPG</code>，每张 ≤ <b>2MB</b>，四张都要传。<br>
+                        PC、手机是两个子标签页，<b>各有各的图</b>，切换就换一组字段。</td></tr>
                 <tr><td class="nw">活动标题</td><td class="nw">是</td>
-                    <td>多行输入框，支持多语（见 2.2.3）；
-                        <b>用在活动详情页的标题</b>（见 4.3.1），前台只单行呈现，过长以「…」截断。<br>
-                        表单顺序：<b>活动标题在上、活动内容在下</b>。</td></tr>
+                    <td>多行输入框，支持多语（见 2.2.3）。<br>
+                        用作<b>活动详情页标题</b>（前台显示见 4.3.1）。<br>
+                        表单里<b>标题在上、内容在下</b>。</td></tr>
                 <tr><td class="nw">活动内容</td><td class="nw">是</td>
-                    <td>富文本，支持多语，<b>不设字数上限</b>。<b>用在活动详情页页尾的说明</b>（见 4.3.1），完整呈现、自然折行、不截断。</td></tr>
+                    <td>富文本，支持多语，<b>不限字数</b>。<br>
+                        用作<b>活动详情页页尾说明</b>（前台显示见 4.3.1）。</td></tr>
               </tbody>
             </table>
           </div>
@@ -792,14 +911,14 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <thead><tr><th class="nw">情境</th><th class="nw">结果</th><th>提示文案与行为</th></tr></thead>
               <tbody>
-                <tr><td class="nw">格式正确、≤ 2MB</td><td class="nw">上传成功</td><td>该格换成<b>缩图预览</b>，旁边出现「重新选择」，不另跳提示。</td></tr>
-                <tr><td class="nw">副档名不是 PNG／JPG</td><td class="nw">挡下</td><td>红色「图片格式仅支持 PNG、JPG」，<b>原本的图保留不动</b>。</td></tr>
-                <tr><td class="nw">单张超过 2MB</td><td class="nw">挡下</td><td>红色「单张图片不可超过 2MB」，<b>原本的图保留不动</b>。</td></tr>
-                <tr><td class="nw">上传中断</td><td class="nw">失败</td><td>红色「图片上传失败，请重试」，该格<b>回到未上传状态</b>。</td></tr>
-                <tr><td class="nw">图片缺一张就保存</td><td class="nw"><b>挡下</b></td>
-                    <td>错误<b>标在缺的那一格</b>，<b>自动切到该格所在的子标签页</b>，讯息指出缺哪一张。</td></tr>
-                <tr><td class="nw">活动标题／活动内容留空</td><td class="nw"><b>挡下</b></td>
-                    <td>红色「活动标题不可为空」／「活动内容不可为空」，<b>标在那一格</b>。</td></tr>
+                <tr><td class="nw">格式对、≤ 2MB</td><td class="nw">上传成功</td><td>该格变成<b>缩图</b>，旁边出现「重新选择」，不另外提示。</td></tr>
+                <tr><td class="nw">不是 PNG／JPG</td><td class="nw">挡下</td><td>红色「图片格式仅支持 PNG、JPG」，<b>原图不动</b>。</td></tr>
+                <tr><td class="nw">超过 2MB</td><td class="nw">挡下</td><td>红色「单张图片不可超过 2MB」，<b>原图不动</b>。</td></tr>
+                <tr><td class="nw">上传中断</td><td class="nw">失败</td><td>红色「图片上传失败，请重试」，该格<b>回到没上传</b>。</td></tr>
+                <tr><td class="nw">少一张图就保存</td><td class="nw"><b>挡下</b></td>
+                    <td>错误标在缺图那一格，并<b>自动切到那个子标签页</b>，讯息说明缺哪一张。</td></tr>
+                <tr><td class="nw">标题／内容留空</td><td class="nw"><b>挡下</b></td>
+                    <td>红色「活动标题不可为空」／「活动内容不可为空」，标在那一格。</td></tr>
               </tbody>
             </table>
           </div>
@@ -810,37 +929,41 @@ table.t th:last-child, table.t td:last-child { width: auto; }
              ============================================================ -->
         <article class="panel" id="p-save">
           <div class="panel__head"><span class="panel__num">2.6</span><h2 class="panel__title">后台 · 保存与提示</h2><span class="tag tag--diff">不同：提示文案本活动另订</span></div>
-          <p class="lede">各字段的失败文案写在各自那一节：基本信息 2.2.4、奖励配置 2.3.8、参与条件 2.4.2、内容配置 2.5.2。</p>
+          <p class="lede">各字段的错误文案写在各自那一节：基本信息 2.2.4、奖励配置 2.3.8、参与条件 2.4.2、内容配置 2.5.2。这里只讲提示怎么出现。</p>
 
           <h3 class="sub">2.6.1 提示元件</h3>
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
-                <tr><th class="nw">位置</th><td>画面<b>顶端置中</b>浮层，盖在内容之上，不推挤版面。</td></tr>
-                <tr><th class="nw">颜色</th><td><b>红</b>＝校验失败、未保存　<b>黄</b>＝已保存但要提醒　<b>绿</b>＝保存成功</td></tr>
-                <tr><th class="nw">停留</th><td>约 <b>5 秒</b>自动消失，期间可继续操作表单。</td></tr>
-                <tr><th class="nw">多则并存</th><td>按保存<b>先清掉上一轮</b>，再依 <b>错误 → 警告 → 成功</b> 堆叠。</td></tr>
-                <tr><th class="nw">过长</th><td>自然折行，<b>不截断</b>。</td></tr>
+                <tr><th class="nw">位置</th><td>画面<b>顶端置中</b>的浮层，盖在内容上，不推动版面。</td></tr>
+                <tr><th class="nw">颜色</th><td><b>红</b>＝出错、没保存　<b>黄</b>＝已保存但要提醒　<b>绿</b>＝保存成功</td></tr>
+                <tr><th class="nw">停留</th><td>约 <b>5 秒</b>自动消失，期间可以继续操作。</td></tr>
+                <tr><th class="nw">多则同时出现</th><td>每次按保存<b>先清掉上一轮</b>，再按 <b>错误 → 警告 → 成功</b> 由上往下排。</td></tr>
+                <tr><th class="nw">太长</th><td>自动换行，<b>不截断</b>。</td></tr>
               </tbody>
             </table>
           </div>
 
           <h3 class="sub">2.6.2 有错误时</h3>
           <ul>
-            <li><b>不送出、不显示成功提示。</b></li>
-            <li>基本信息、参与条件、内容配置：<b>逐条显示</b>。</li>
-            <li>奖励配置：<b>只弹一句</b>「奖励配置有 N 项要修正，已列在下方清单，点任一条可跳到那一格」，清单本身见 2.3.5。</li>
+            <li><b>不保存</b>，也不出现成功提示。</li>
+            <li>基本信息、参与条件、内容配置：<b>每个错误各一条</b>。</li>
+            <li>奖励配置：<b>只弹一句</b>「奖励配置有 N 项要修正，已列在下方清单，点任一条可跳到那一格」，清单见 2.3.5。</li>
           </ul>
 
           <h3 class="sub">2.6.3 保存成功</h3>
           <ul>
-            <li>绿色「<b>保存成功</b>」，<b>停留在表单页</b>。</li>
-            <li>另跳黄色效果说明：「这样配的效果是：周一～周日各一组，<b>每人每日可领 4 笔，最高的是周六 28%</b>，每过一周循环一次」。
-                各等级笔数不同时写成范围（如「3～5 笔」）；百分比<b>只讲最高的那一天</b>、<b>以平台渠道为准</b>；<b>只统计活动期间内轮得到的星期</b>（见 2.3.6）。<br>
-                <span class="rev"><b>有几天不发奖时</b>（见 2.3.9），开头那句改成列出发奖的那几天：「这样配的效果是：周一、周三、周五 发奖，其他天不发，每人每日可领 4 笔，最高的是周五 28%，每过一周循环一次」；
-                <b>七天都不发奖</b>时只跳「这样配的效果是：七天都不发奖，前台不会出现复存券」，不挡保存。</span></li>
-            <li>新增＝建一笔；编辑＝覆盖原本那笔；七天配置<b>以提交当下的内容为准</b>，整份取代旧的配置。</li>
-            <li>保存成功后<b>前台立即反映新设置</b>。</li>
+            <li>绿色「<b>保存成功</b>」，<b>留在表单页</b>。</li>
+            <li>同时跳一则黄色效果说明，例如：「这样配的效果是：周一～周日各一组，每人每日可领 4 笔，最高的是周六 28%，每过一周循环一次」。
+                <ul>
+                  <li>各等级笔数不同 → 写范围，如「3～5 笔」。</li>
+                  <li>百分比<b>只讲最高那天</b>，<b>以平台渠道为准</b>。</li>
+                  <li><b>只算活动期间内轮得到的星期</b>（见 2.3.6）。</li>
+                  <li><span class="rev"><b>有几天不发奖</b>（见 2.3.9）→ 开头改成列出发奖的天：「这样配的效果是：周一、周三、周五 发奖，其他天不发，每人每日可领 4 笔，最高的是周五 28%，每过一周循环一次」。</span></li>
+                  <li><span class="rev"><b>七天都不发奖</b> → 只跳「这样配的效果是：七天都不发奖，前台不会出现复存券」，不挡保存。</span></li>
+                </ul></li>
+            <li>新增＝建一笔；编辑＝覆盖原来那笔。七天配置以<b>这次提交的内容</b>整份取代旧的。</li>
+            <li>保存后<b>前台马上生效</b>。</li>
           </ul>
 
           <h3 class="sub">2.6.4 系统层失败</h3>
@@ -848,10 +971,10 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <thead><tr><th class="nw">情境</th><th>提示文案与行为</th></tr></thead>
               <tbody>
-                <tr><td class="nw">网络中断／逾时</td><td>红色「保存失败，请稍后再试」。<b>表单内容保留</b>，不清空、不跳回列表。</td></tr>
-                <tr><td class="nw">无保存权限</td><td>红色「您没有此操作的权限」。</td></tr>
-                <tr><td class="nw">编辑时活动不存在</td><td>红色「此活动已不存在，请重新整理列表」。</td></tr>
-                <tr><td class="nw">重复快速点击</td><td>按下后保存钮<b>立即灰掉</b>，收到回应才恢复；<b>只送出一次</b>。</td></tr>
+                <tr><td class="nw">断网／逾时</td><td>红色「保存失败，请稍后再试」。<b>表单内容保留</b>，不清空、不跳回列表。</td></tr>
+                <tr><td class="nw">没有保存权限</td><td>红色「您没有此操作的权限」。</td></tr>
+                <tr><td class="nw">编辑时活动已不存在</td><td>红色「此活动已不存在，请重新整理列表」。</td></tr>
+                <tr><td class="nw">连点保存</td><td>按下后保存钮<b>马上灰掉</b>，有回应才恢复；<b>只送出一次</b>。</td></tr>
               </tbody>
             </table>
           </div>
@@ -862,9 +985,10 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <thead><tr><th class="nw">操作</th><th>行为</th></tr></thead>
               <tbody>
                 <tr><td class="nw">重置</td>
-                    <td>新增＝回到刚进来的初始状态；编辑＝回到<b>最后一次保存的值</b>。
-                        跳确认「确定要重置吗？未保存的修改将会遗失。」<b>改一格数字、改笔数不必确认。</b></td></tr>
-                <tr><td class="nw">‹ 返回列表</td><td>有未保存的修改时跳确认「离开将遗失未保存的修改，确定离开吗？」；没有修改直接返回。</td></tr>
+                    <td>新增 → 回到刚打开的样子；编辑 → 回到<b>上次保存的值</b>。<br>
+                        先跳确认「确定要重置吗？未保存的修改将会遗失。」<br>
+                        （平时改一格数字、改笔数<b>不需要</b>确认。）</td></tr>
+                <tr><td class="nw">‹ 返回列表</td><td>有没保存的修改 → 跳确认「离开将遗失未保存的修改，确定离开吗？」；没改 → 直接返回。</td></tr>
               </tbody>
             </table>
           </div>
@@ -875,35 +999,35 @@ table.t th:last-child, table.t td:last-child { width: auto; }
              ============================================================ -->
         <article class="panel" id="p-record">
           <div class="panel__head"><span class="panel__num">2.7</span><h2 class="panel__title">后台 · 活动记录页</h2><span class="tag tag--diff">不同：多五栏</span></div>
-          <p class="lede">查每一笔奖怎么算出来的。<b>唯一可写入的操作是「备注」</b>，其余唯读，记录不可删除、不可改金额。</p>
+          <p class="lede">用来查每一笔奖是怎么算出来的。<b>只能加「备注」</b>，其他都只能看；记录不能删、金额不能改。</p>
 
           <h3 class="sub">2.7.1 页面行为</h3>
           <ul>
-            <li>入口两个：标签页「<b>活动记录</b>」＝全部活动；活动列表「查看记录」＝<b>只显示该笔活动</b>，上方标示筛选范围并提供「显示全部」。</li>
-            <li>默认排序：<b>领取时间由新到旧</b>。</li>
+            <li>两个入口：「<b>活动记录</b>」标签页 → 看全部活动；活动列表的「查看记录」→ <b>只看那一个活动</b>，上方标出筛选范围，并有「显示全部」。</li>
+            <li>默认排序：<b>领取时间新的在前</b>。</li>
             <li>查询列两颗钮：<b>「搜索」「导出」</b>（同每日首充）。</li>
             <li>分页：<code>Total N</code>、每页笔数下拉、页码、<code>Go to</code>。</li>
-            <li><b>只有发奖成功才有一列</b>。「次数已用掉但没发奖」（充值失败、同 IP 超限、外部投注站来源用户，见 3.1）<b>这一页查不到</b>，要查充值订单。</li>
+            <li><b>发奖成功才有记录。</b>次数用掉但没发奖的（充值失败、同 IP 超限、外部投注站来源用户，见 3.1）<b>这里查不到</b>，要去查充值订单。</li>
           </ul>
 
           <h3 class="sub">2.7.2 栏位（共 14 栏）</h3>
           <p>顺序固定：活动ID｜活动名称｜会员账号｜充值订单号｜充值金额｜<b>VIP等级｜渠道｜当日第几笔｜适用星期｜奖励比例</b>｜领取时间｜奖励内容/金额｜备注｜操作。<br>
-             粗体五栏集中放在「充值金额」之后、「领取时间」之前，记的是<b>发奖当下的值</b>，之后改配置也不会跟著变。</p>
+             粗体五栏是本活动新加的，放在「充值金额」和「领取时间」之间；记的是这一笔<b><span class="rev">实际套用</span>的值</b>，之后改配置也不会变。</p>
           <div class="tbl-scroll">
             <table class="t">
               <thead><tr><th class="nw">栏位</th><th>值与规则</th></tr></thead>
               <tbody>
-                <tr><td class="nw"><b>VIP等级</b></td><td>发奖当下<b>生效中</b>的等级：升级当天记原等级、降级当月记原等级（见 3.3）。</td></tr>
+                <tr><td class="nw"><b>VIP等级</b></td><td><span class="rev">送出那天</span><b>生效中</b>的等级：升级当天记原等级、降级当月记原等级（见 3.3）。</td></tr>
                 <tr><td class="nw"><b>渠道</b></td><td>平台／glife／maya。</td></tr>
-                <tr><td class="nw"><b>当日第几笔</b></td><td>「第 N 笔」实际笔序，<b>不可留白</b>。</td></tr>
+                <tr><td class="nw"><b>当日第几笔</b></td><td>实际是「第 N 笔」，<b>不能空白</b>。</td></tr>
                 <tr><td class="nw"><b>适用星期</b></td><td>周一～周日。</td></tr>
-                <tr><td class="nw"><b>奖励比例</b></td><td>当时套用的百分比。</td></tr>
+                <tr><td class="nw"><b>奖励比例</b></td><td>当时用的百分比。</td></tr>
                 <tr><td class="nw">领取时间</td>
-                    <td><b>实际发奖的时间</b>；<b>可能与「适用星期」不是同一天</b>——星期看送出时间、发奖看入帐时间，见 3.1。</td></tr>
+                    <td><b>实际发奖时间</b>。可能和「适用星期」<b>不是同一天</b>：星期看送出时间，发奖看入账时间（见 3.1）。</td></tr>
                 <tr><td class="nw">奖励内容/金额 <span class="tag tag--diff">不同</span></td>
-                    <td>格式 <code>₱150.00</code>。<b>触及上限时在金额下面一行标示「已达上限」</b>。</td></tr>
-                <tr><td class="nw">备注</td><td>只显示内容；没有备注留白，过长以「…」截断。</td></tr>
-                <tr><td class="nw">操作</td><td>蓝色文字钮「备注」，<b>固定最后一栏</b>，点了开弹窗（见 2.7.5）。</td></tr>
+                    <td>格式 <code>₱150.00</code>。<b>碰到上限</b>时，金额下一行标「已达上限」。</td></tr>
+                <tr><td class="nw">备注</td><td>只显示内容；没备注就空白，太长用「…」截断。</td></tr>
+                <tr><td class="nw">操作</td><td>蓝色文字钮「备注」，<b>永远在最后一栏</b>，点了打开弹窗（见 2.7.5）。</td></tr>
               </tbody>
             </table>
           </div>
@@ -913,10 +1037,10 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <thead><tr><th class="nw">条件</th><th>来源与限制</th><th class="nw">默认</th></tr></thead>
               <tbody>
-                <tr><td class="nw">活动名称</td><td><b>下拉</b>，选项是<b>本活动</b>的活动清单（不含每日首充等其他活动）。</td><td class="nw">请选择</td></tr>
+                <tr><td class="nw">活动名称</td><td><b>下拉</b>，只列<b>本活动</b>的活动（不含每日首充等其他活动）。</td><td class="nw">请选择</td></tr>
                 <tr><td class="nw">会员账号</td><td>文字输入，placeholder「请输入账号」。</td><td class="nw">空</td></tr>
-                <tr><td class="nw">领取金额</td><td><b>区间</b>，两格数字输入，分隔符 <code>~</code>（沿用现况）。</td><td class="nw">空</td></tr>
-                <tr><td class="nw"><b>领取时间</b></td><td><b>唯一必填</b>（标红星）。日期时间区间，分隔文字是「<b>至</b>」。</td><td class="nw">今天整天</td></tr>
+                <tr><td class="nw">领取金额</td><td><b>区间</b>，两格数字，中间用 <code>~</code>（沿用现况）。</td><td class="nw">空</td></tr>
+                <tr><td class="nw"><b>领取时间</b></td><td><b>唯一必填</b>（红星）。日期时间区间，中间文字「<b>至</b>」。</td><td class="nw">今天整天</td></tr>
                 <tr><td class="nw">奖励类型</td><td>下拉。本活动一律发彩金。</td><td class="nw">全部</td></tr>
               </tbody>
             </table>
@@ -924,10 +1048,11 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 
           <h3 class="sub">2.7.4 导出</h3>
           <ul>
-            <li>字段＝画面 14 栏（<b>含备注</b>），顺序与画面一致；<b>「操作」不导出</b>。</li>
-            <li>范围＝<b>当前查询条件的全部结果</b>，不是只导出当前页。</li>
-            <li>机制同每日首充：笔数少直接下载；笔数多转背景导出，黄色提示「数据量较大，已转为背景导出，完成后可至下载中心取档」。</li>
-            <li>失败：红色「导出失败，请稍后再试」，查询结果<b>不清空</b>。查无数据：「导出」钮<b>灰掉</b>。</li>
+            <li><span class="rev">栏位＝画面上除「操作」以外的 <b>13 栏</b>（含备注），顺序一样。</span></li>
+            <li>范围＝<b>目前查询条件的全部结果</b>，不只当前这一页。</li>
+            <li>同每日首充：笔数少 → 直接下载；笔数多 → 转背景导出，黄色提示「数据量较大，已转为背景导出，完成后可至下载中心取档」。</li>
+            <li>失败 → 红色「导出失败，请稍后再试」，查询结果<b>不清空</b>。</li>
+            <li>查无数据 → 「导出」钮<b>灰掉</b>。</li>
           </ul>
 
           <h3 class="sub">2.7.5 备注弹窗 <span class="tag tag--same">同每日首充</span></h3>
@@ -935,12 +1060,12 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <thead><tr><th class="nw">情境</th><th>行为与提示文案</th></tr></thead>
               <tbody>
-                <tr><td class="nw">弹窗内容</td><td>标题「备注」、右上角「✕」、多行输入框、底部「取消」「确认」（确认蓝底）。</td></tr>
-                <tr><td class="nw">每次开启</td><td>输入框<b>清空</b>；既有备注看该列的备注栏。</td></tr>
-                <tr><td class="nw">输入限制</td><td><b>单次 ≤ 2000 字</b>，以<b>追加</b>方式记录，<b>不覆盖既有备注</b>。</td></tr>
-                <tr><td class="nw">没填就按确认</td><td>「请先输入备注内容」，<b>不关弹窗</b>。</td></tr>
-                <tr><td class="nw">成功</td><td>绿色「备注已更新」，弹窗关闭，该列备注栏<b>即时更新</b>。</td></tr>
-                <tr><td class="nw">失败</td><td>红色「备注更新失败，请稍后再试」，<b>输入内容保留</b>。</td></tr>
+                <tr><td class="nw">弹窗内容</td><td>标题「备注」、右上「✕」、多行输入框、底部「取消」「确认」（确认是蓝底）。</td></tr>
+                <tr><td class="nw">每次打开</td><td>输入框是<b>空的</b>；旧备注看该列的备注栏。</td></tr>
+                <tr><td class="nw">输入限制</td><td>每次 <b>≤ 2000 字</b>；新备注<b>接在旧备注后面</b>，不覆盖。</td></tr>
+                <tr><td class="nw">没填就按确认</td><td>「请先输入备注内容」，<b>弹窗不关</b>。</td></tr>
+                <tr><td class="nw">成功</td><td>绿色「备注已更新」，弹窗关闭，备注栏<b>马上更新</b>。</td></tr>
+                <tr><td class="nw">失败</td><td>红色「备注更新失败，请稍后再试」，<b>输入的字保留</b>。</td></tr>
                 <tr><td class="nw">取消／✕／点遮罩</td><td>关闭，<b>不保存</b>。</td></tr>
               </tbody>
             </table>
@@ -948,17 +1073,17 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 
           <h3 class="sub">2.7.6 空数据与失败</h3>
           <ul>
-            <li>查无数据：表格显示「暂无数据」，查询条件<b>不清空</b>，「导出」钮灰掉。<b>活动还没有人领过也是这个状态，不是错误。</b></li>
-            <li>查询失败：红色「查询失败，请稍后再试」，表格<b>维持前次结果不清空</b>。</li>
+            <li>查无数据 → 表格显示「暂无数据」，查询条件<b>不清空</b>，「导出」灰掉。活动还没人领过也是这样，<b>不算错误</b>。</li>
+            <li>查询失败 → 红色「查询失败，请稍后再试」，表格<b>保留上一次结果</b>。</li>
           </ul>
 
           <h3 class="sub">2.7.7 权限</h3>
-          <p>同每日首充：没有「查看记录」权限看不到「活动记录」标签页与列表上的「查看记录」；没有「编辑」权限看不到「新增／编辑」。</p>
+          <p>同每日首充：没有「查看记录」权限 → 看不到「活动记录」标签页和列表上的「查看记录」；没有「编辑」权限 → 看不到「新增／编辑」。</p>
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
                 <tr><th class="nw">授权范围</th>
-                    <td>本活动是<b>单独的活动</b>，后台授权<b>与每日首充分开</b>：两档各自授权，可以只开其中一档给某个人。</td></tr>
+                    <td>本活动是<b>独立活动</b>，后台权限<b>和每日首充分开</b>：可以只开其中一个给某个人。</td></tr>
               </tbody>
             </table>
           </div>
@@ -973,28 +1098,34 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 
           <div class="box box--ok">
             <span class="box__t">四个条件定出一格</span>
-            <b>① 今天星期几</b> → <b>② 玩家 VIP 等级</b> → <b>③ 今天第几笔</b> → <b>④ 玩家所属渠道</b>。
-            四个定了，那一格的<b>最低存款金额（三渠道共用）、奖励％、上限金额</b>就是这一笔的规则。
+            <b>① 今天星期几</b> → <b>② 玩家 VIP 等级</b> → <b>③ 今天第几笔</b> → <b>④ 玩家所属渠道</b>。<br>
+            这四个定了，就找到一格。这一格的<b>最低存款金额（三渠道共用）、奖励％、上限金额</b>，就是这一笔的规则。
           </div>
 
           <h3 class="sub">3.1 笔序与「当日」 <span class="tag tag--key">核心规则</span></h3>
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
-                <tr><th class="nw">笔序</th>
-                    <td><b>当日已用掉的次数 ＋ 1</b>。同一个数字决定<b>套哪一列</b>，也决定<b>今天还能不能再领</b>。</td></tr>
-                <tr><th class="nw">什么叫用掉一次</th>
-                    <td><b>勾了这张券并送出充值</b>，<b>不论充值成功或失败都算</b>。没勾券的存款不计次、也不发奖。</td></tr>
+                <tr><th class="nw">第几笔</th>
+                    <td>＝今天<b>已用掉的次数 ＋ 1</b>。<br>
+                        这个数字决定两件事：套哪一列、今天还能不能再领。</td></tr>
+                <tr><th class="nw">怎样算用掉一次</th>
+                    <td>勾了券、送出充值，就算用掉一次。<b>充值成功或失败都算。</b><br>
+                        没勾券的存款：不算次数、也不发奖。</td></tr>
                 <tr><th class="nw">什么时候发奖</th>
-                    <td>要<b>钱实际入帐成功</b>才发。所以会有<b>「用掉一次但没领到奖」</b>：充值失败、同 IP 超限（见 2.4）、外部投注站来源用户（会员既有属性，后台不配置）。</td></tr>
+                    <td>钱<b>入账成功</b>才发。<br>
+                        以下情况会「用掉一次，但没领到奖」：充值失败、同 IP 超限（见 2.4）、外部投注站来源用户（会员本来就有的属性，后台不配置）。</td></tr>
                 <tr><th class="nw">算哪一天</th>
-                    <td>一律看<b>送出充值的时间</b>（<b>GMT+8</b>，00:00 分界），不是入帐时间：23:59 送出、00:01 入帐，算<b>23:59 那一天</b>；
-                        充值失败的也归送出那天。<b>笔序、吃哪个星期、在不在活动时间内，三件事同一个时点。</b></td></tr>
-                <tr><th class="nw">吃哪一组</th>
-                    <td>那一天<b>日历上的星期几</b>，不是「活动第几天」。活动不满整周时，轮不到的星期就是不会发生（后台已提醒，见 2.3.6）。<br>
-                        <span class="rev">那一天若设成<b>不发奖</b>（见 2.3.9）：前台没有券可勾，<b>不发、不计次</b>。</span></td></tr>
-                <tr><th class="nw">跨日</th>
-                    <td>过了 00:00：<b>笔序归零、换成新的星期、昨天升上去的等级生效</b>。降级不在这里换（见 3.3）。</td></tr>
+                    <td>看<b>送出充值的时间</b>，不看入账时间。时区 <b>GMT+8</b>，00:00 换日。<br>
+                        例：23:59 送出、00:01 入账 → 算 23:59 那一天。充值失败的，也算送出那天。<br>
+                        第几笔、用哪个星期、在不在活动时间内<span class="rev">、VIP 等级、用哪份配置</span>，<b>都看这个时间</b>。</td></tr>
+                <tr><th class="nw">用哪一组</th>
+                    <td>看那一天<b>日历上的星期几</b>，不是「活动第几天」。<br>
+                        活动不满一整周时，轮不到的星期就不会发生（后台已提醒，见 2.3.6）。<br>
+                        <span class="rev">那一天如果设成<b>不发奖</b>（见 2.3.9）：前台没有券可勾，不发奖、不算次数。</span></td></tr>
+                <tr><th class="nw">过了 00:00</th>
+                    <td>第几笔重新从 1 算；换成新一天的星期；昨天升上去的等级开始生效。<br>
+                        降级不在这时候换（见 3.3）。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1004,18 +1135,22 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <tbody>
                 <tr><th class="nw">门槛</th>
-                    <td>每一笔各有自己的<b>最低存款金额</b>，判定用<b>当前这一笔</b>的。未达门槛<b>前台 Submit 按不下去</b>（见 4.2.6），
-                        订单送不出来，也就不会用掉次数。</td></tr>
-                <tr><th class="nw">算式</th>
-                    <td>① <code>存款金额 × 该笔百分比</code> → ② <b>与该笔上限取小者</b> → ③ <b>保留 2 位小数，第 3 位起无条件舍去</b>（例：112.459 → 112.45）。<br>
-                        一律发<b>彩金</b>并计流水（流水倍数见 2.4）。</td></tr>
+                    <td>每一笔有自己的<b>最低存款金额</b>，看<b>现在这一笔</b>的。<br>
+                        <span class="rev">勾了券</span>但没达到门槛 → 前台 Submit 按不下去（见 4.2.6）→ 送不出去，所以不算次数。</td></tr>
+                <tr><th class="nw">怎么算</th>
+                    <td>① 存款金额 × 这一笔的百分比<br>
+                        ② 跟这一笔的上限比，<b>取小的</b><br>
+                        ③ 留 2 位小数，第 3 位起<b>直接舍去</b>（例：112.459 → 112.45）<br>
+                        发的一律是<b>彩金</b>，要算流水（流水倍数见 2.4）。</td></tr>
                 <tr><th class="nw">上限</th>
-                    <td><b>只比该笔自己的上限</b>——今天领 4 笔就是 4 个上限各自成立。</td></tr>
+                    <td>只跟<b>这一笔自己的上限</b>比。今天领 4 笔，就是 4 个上限各算各的。</td></tr>
                 <tr><th class="nw">显示格式</th>
-                    <td><b>活动详情页</b>（统计格与逐笔清单）：金额<b>不补 <code>.00</code></b>，整数就显示整数（<code>₱2,000</code>），有小数才显示、最多 2 位。<br>
-                        <b>存款页的券面与试算条</b>：<b>维持现况，本次不动</b>——券面上所有数字（含 <code>Capped At</code>、<code>Min Deposit</code>）的格式与显示逻辑都照现在的券，<b>只是数字改成抓后台配置的值</b>（取哪一格见 4.2.5）。后台记录页见 2.7.2。</td></tr>
-                <tr><th class="nw">前台对得上</th>
-                    <td>券面 <code>Capped At</code> 与清单 <code>Max Bonus</code> 是同一个数字；<code>Min Deposit</code> 也跟著当前这一笔走。</td></tr>
+                    <td><b>活动详情页</b>（统计格和逐笔清单）：整数就显示整数（<code>₱2,000</code>），<b>不补 <code>.00</code></b>；有小数才显示，最多 2 位。<br>
+                        <b>存款页的券面和试算条</b>：<b>照现在的样子，不改</b>。只是数字改成抓后台配置的值（含 <code>Capped At</code>、<code>Min Deposit</code>，抓哪一格见 4.2.5）<span class="rev">；<b>只有流水那一行</b>改成显示算好的打码金额（见 4.2.5）</span>。<br>
+                        后台记录页见 2.7.2。</td></tr>
+                <tr><th class="nw">前台数字要一致</th>
+                    <td>券面的 <code>Capped At</code> ＝ 清单的 <code>Max Bonus</code>，是同一个数字。<br>
+                        <code>Min Deposit</code> 也跟着现在这一笔变。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1023,44 +1158,51 @@ table.t th:last-child, table.t td:last-child { width: auto; }
           <h3 class="sub">3.3 等级升降与改配置</h3>
           <div class="tbl-scroll">
             <table class="t">
+              <thead><tr><th class="nw">什么情况</th><th>怎样</th></tr></thead>
               <tbody>
                 <tr><th class="nw">升级</th>
-                    <td><b>次日生效</b>：今天升上去的，今天整天仍套原等级。</td></tr>
+                    <td><b>隔天</b>生效。今天升的，今天整天还是用原等级。</td></tr>
                 <tr><th class="nw">降级</th>
-                    <td><b>次月 1 号生效</b>：当月剩下的每一天都还是原等级。</td></tr>
+                    <td><b>下个月 1 号</b>生效。这个月剩下的天数，还是用原等级。</td></tr>
                 <tr><th class="nw">同一天会不会换表</th>
-                    <td>不会。每一笔以<b>发奖当下生效中的等级</b>为准（记录页会存下来，见 2.7.2）。<b>笔序也不因升降级重算。</b></td></tr>
+                    <td>不会。每一笔看<b><span class="rev">送出那天</span></b>生效的等级（记录页会存下来，见 2.7.2）。<br>
+                        <span class="rev">跟星期、第几笔一样看送出时间（见 3.1）。例：周一升级、23:59 送出、周二 00:01 入账 → 用周一的原等级。</span><br>
+                        升降级也<b>不会</b>让第几笔重算。</td></tr>
                 <tr><th class="nw">中途改配置</th>
-                    <td><b>改完之后发的奖才吃新配置</b>，已发出去的不追溯、不回收。</td></tr>
+                    <td><span class="rev">看<b>送出时间</b>：改完之后才送出的，用新配置；改之前已送出、改之后才入账的，<b>用旧配置</b>（跟 3.1 一样）。</span><br>已经发的<b>不追溯、不收回</b>。</td></tr>
               </tbody>
             </table>
           </div>
 
           <h3 class="sub">3.4 情境穷举表</h3>
-          <p class="hint">前提：<b>平日</b>第 1 笔 20%／上限 2,000／门槛 500，第 2～4 笔 15%／上限 800／门槛 200；
-             <b>周六日</b>第 1 笔 28%／上限 2,500／门槛 500，第 2～4 笔 23%／上限 1,000／门槛 200；每日可领 4 笔。</p>
+          <p class="hint">以下例子的设定：每天最多领 4 笔。<br>
+             <b>平日</b>：第 1 笔 20%／上限 2,000／门槛 500；第 2～4 笔 15%／上限 800／门槛 200。<br>
+             <b>周六日</b>：第 1 笔 28%／上限 2,500／门槛 500；第 2～4 笔 23%／上限 1,000／门槛 200。</p>
           <div class="tbl-scroll">
             <table class="t">
-              <thead><tr><th class="nw">#</th><th class="nw">星期</th><th class="nw">第几笔</th><th class="nw">金额</th><th>情境</th><th class="nw">结果</th></tr></thead>
+              <thead><tr><th class="nw">#</th><th class="nw">星期 · 第几笔</th><th class="nw">金额</th><th>情境</th><th class="nw">结果</th></tr></thead>
               <tbody>
-                <tr><td>1</td><td class="nw">周二</td><td class="nw">第 1 笔</td><td class="nw">1,000</td><td>≥ 门槛 500</td><td><b>发 200</b></td></tr>
-                <tr><td>2</td><td class="nw">周六</td><td class="nw">第 1 笔</td><td class="nw">1,000</td><td>吃周六那组</td><td><b>发 280</b></td></tr>
-                <tr><td>3</td><td class="nw">周二</td><td class="nw">第 2 笔</td><td class="nw">1,000</td><td>正常</td><td><b>发 150</b></td></tr>
-                <tr><td>4</td><td class="nw">周二</td><td class="nw">第 2 笔</td><td class="nw">20,000</td><td>3,000 &gt; 上限 800</td><td><b>发 800</b>（上限）</td></tr>
-                <tr><td>5</td><td class="nw">周二</td><td class="nw">第 4 笔</td><td class="nw">1,000</td><td>仍在可领笔数内</td><td><b>发 150</b></td></tr>
-                <tr><td>6</td><td class="nw">周日→周一</td><td class="nw">第 1 笔</td><td class="nw">1,000</td><td>跨日归零，改吃平日那组</td><td><b>发 200</b></td></tr>
-                <tr><td>7</td><td class="nw">周二</td><td class="nw">第 1 笔</td><td class="nw">100</td><td>未达门槛 500，前台送不出去</td><td>不发 · 次数不动</td></tr>
-                <tr><td>8</td><td class="nw">周二</td><td class="nw">第 2 笔</td><td class="nw">1,000</td><td>没勾券</td><td>不发 · 次数不动</td></tr>
-                <tr><td>9</td><td class="nw">周二</td><td class="nw">第 2 笔</td><td class="nw">1,000</td><td>活动状态＝关闭</td><td>不发</td></tr>
-                <tr><td>10</td><td class="nw">周二</td><td class="nw">第 2 笔</td><td class="nw">1,000</td><td><b>送出当下</b>不在活动时间内（见 3.1）</td><td>不发</td></tr>
-                <tr><td>11</td><td class="nw">周二</td><td class="nw">第 5 笔</td><td class="nw">1,000</td><td>超过当天 4 笔，券已收起</td><td>不发</td></tr>
-                <tr><td>12</td><td class="nw">周六</td><td class="nw">第 5 笔</td><td class="nw">1,000</td><td>周六也只配 4 笔</td><td>不发</td></tr>
-                <tr><td>13</td><td class="nw">周二</td><td class="nw">第 1 笔</td><td class="nw">1,000</td><td>券已勾、已送出，<b>充值失败</b></td><td>不发 · <b>次数已用掉</b></td></tr>
-                <tr><td>14</td><td class="nw">周二</td><td class="nw">第 2 笔</td><td class="nw">1,000</td><td>同 IP 已达账号数上限（见 2.4）</td><td>不发 · <b>次数已用掉</b></td></tr>
-                <tr><td>15</td><td class="nw">周二</td><td class="nw">第 2 笔</td><td class="nw">1,000</td><td>外部投注站来源用户（后台不配置）</td><td>不发 · <b>次数已用掉</b></td></tr>
-                <tr><td>16</td><td class="nw">周六</td><td class="nw">第 1 笔</td><td class="nw">1,000</td><td>当天升级 → 次日才生效</td><td><b>依原等级发</b></td></tr>
-                <tr><td>17</td><td class="nw">周六</td><td class="nw">第 1 笔</td><td class="nw">1,000</td><td>当月降级 → 次月 1 号才生效</td><td><b>依原等级发</b></td></tr>
-                <tr class="rev"><td>18</td><td class="nw">周二</td><td class="nw">—</td><td class="nw">1,000</td><td>周二设成<b>不发奖</b>（见 2.3.9），存款页没有券</td><td>不发 · 次数不动</td></tr>
+                <tr><td>1</td><td class="nw">周二<br>第 1 笔</td><td class="nw">1,000</td><td>≥ 门槛 500</td><td><b>发 200</b></td></tr>
+                <tr><td>2</td><td class="nw">周六<br>第 1 笔</td><td class="nw">1,000</td><td>用周六那组</td><td><b>发 280</b></td></tr>
+                <tr><td>3</td><td class="nw">周二<br>第 2 笔</td><td class="nw">1,000</td><td>正常</td><td><b>发 150</b></td></tr>
+                <tr><td>4</td><td class="nw">周二<br>第 2 笔</td><td class="nw">20,000</td><td>算出 3,000，超过上限 800</td><td><b>发 800</b>（上限）</td></tr>
+                <tr><td>5</td><td class="nw">周二<br>第 4 笔</td><td class="nw">1,000</td><td>还在 4 笔以内</td><td><b>发 150</b></td></tr>
+                <tr><td>6</td><td class="nw">周日→周一<br>第 1 笔</td><td class="nw">1,000</td><td>换日重新算，改用平日那组</td><td><b>发 200</b></td></tr>
+                <tr><td>7</td><td class="nw">周二<br>第 1 笔</td><td class="nw">100</td><td>没到门槛 500，前台送不出去</td><td>不发 · 次数不动</td></tr>
+                <tr><td>8</td><td class="nw">周二<br>第 2 笔</td><td class="nw">1,000</td><td>没勾券</td><td>不发 · 次数不动</td></tr>
+                <tr><td>9</td><td class="nw">周二<br>第 2 笔</td><td class="nw">1,000</td><td>送出时活动<span class="rev">已经</span>关闭</td><td>不发</td></tr>
+                <tr><td>10</td><td class="nw">周二<br>第 2 笔</td><td class="nw">1,000</td><td><b>送出时</b>不在活动时间内（见 3.1）</td><td>不发</td></tr>
+                <tr><td>11</td><td class="nw">周二<br>第 5 笔</td><td class="nw">1,000</td><td>今天 4 笔已用完，券已收起</td><td>不发</td></tr>
+                <tr><td>12</td><td class="nw">周六<br>第 5 笔</td><td class="nw">1,000</td><td>周六也只有 4 笔</td><td>不发</td></tr>
+                <tr><td>13</td><td class="nw">周二<br>第 1 笔</td><td class="nw">1,000</td><td>勾了券、送出了，但<b>充值失败</b></td><td>不发 · <b>次数已用掉</b></td></tr>
+                <tr><td>14</td><td class="nw">周二<br>第 2 笔</td><td class="nw">1,000</td><td>同 IP 账号数已到上限（见 2.4）</td><td>不发 · <b>次数已用掉</b></td></tr>
+                <tr><td>15</td><td class="nw">周二<br>第 2 笔</td><td class="nw">1,000</td><td>外部投注站来源用户（后台不配置）</td><td>不发 · <b>次数已用掉</b></td></tr>
+                <tr><td>16</td><td class="nw">周六<br>第 1 笔</td><td class="nw">1,000</td><td>今天升级，隔天才生效</td><td><b>用原等级发</b></td></tr>
+                <tr><td>17</td><td class="nw">周六<br>第 1 笔</td><td class="nw">1,000</td><td>这个月降级，下个月 1 号才生效</td><td><b>用原等级发</b></td></tr>
+                <tr class="rev"><td>18</td><td class="nw">周二<br>—</td><td class="nw">1,000</td><td>周二设成<b>不发奖</b>（见 2.3.9），存款页没有券</td><td>不发 · 次数不动</td></tr>
+                <tr class="rev"><td>19</td><td class="nw">周一→周二<br>第 1 笔</td><td class="nw">1,000</td><td>周一 23:59 勾券送出，周二 00:01 入账；周二设成不发奖</td><td><b>发 200</b>（算周一，见 3.1）</td></tr>
+                <tr class="rev"><td>20</td><td class="nw">周二<br>第 1 笔</td><td class="nw">1,000</td><td>勾券送出后、入账前，后台把活动关闭（见 2.2.5）</td><td><b>发 200</b>（送出时活动还开着）</td></tr>
+                <tr class="rev"><td>21</td><td class="nw">周二<br>第 1 笔</td><td class="nw">1,000</td><td>送出时 20%，入账前后台改成 10%</td><td><b>发 200</b>（用送出时的 20%）</td></tr>
               </tbody>
             </table>
           </div>
@@ -1070,17 +1212,18 @@ table.t th:last-child, table.t td:last-child { width: auto; }
              4 前台规则
              ============================================================ -->
         <article class="panel" id="p-f1">
-          <div class="panel__head"><span class="panel__num">4.1</span><h2 class="panel__title">前台 · 首页存款按钮</h2><span class="tag tag--new">新增吊牌</span></div>
-          <p class="lede"><b>存款页有券可勾就挂，一张都没有就不挂</b>（不限哪一个活动的券）。</p>
+          <div class="panel__head"><span class="panel__num">4.1</span><h2 class="panel__title">前台 · 首页存款按钮（10/6 调整）</h2><span class="tag tag--new">新增 BONUS 条</span></div>
+          <p class="lede">存款页<b>有券可勾就显示</b>，一张都没有就不显示（哪个活动的券都算）。</p>
           <div class="tbl-scroll">
             <table class="t">
               <thead><tr><th class="nw">项目</th><th>需求</th></tr></thead>
               <tbody>
-                <tr><td class="nw">位置</td><td>Deposit 按钮<b>右下角外侧</b>；<b>不占版位</b>——不撑大按钮、不挤掉右边的搜寻图示。</td></tr>
-                <tr><td class="nw">样式 <span class="tag tag--tbd">待定</span></td>
-                    <td>依最终设计稿。</td></tr>
-                <tr><td class="nw">点按</td><td><b>等同点 Deposit 按钮</b>，进存款页（不是详情页）；<b>吊牌不可单独点击</b>。</td></tr>
-                <tr><td class="nw">不挂时</td><td>顶部栏回到现况版型，<b>不留空位、不跳错误提示</b>。</td></tr>
+                <tr class="rev"><td class="nw">样式</td><td>Deposit 按钮<b>上方多一条黄色 BONUS 条</b>：礼物图示 ＋ 红色斜体 <code>BONUS</code>，跟按钮<b>同宽、连成一块</b>，依设计稿。<br>
+                    取代原本挂在按钮右下角的吊牌。</td></tr>
+                <tr class="rev"><td class="nw">位置</td><td>按钮会<b>变高</b>（多了黄条那一层），宽度不变；右边的搜寻图示不能被挤掉。</td></tr>
+                <tr><td class="nw">点按</td><td>点黄条或点按钮<b>都一样</b>，进存款页（不是详情页）。黄条没有自己的功能。</td></tr>
+                <tr><td class="nw">不显示时</td><td>按钮跟现在一样，<b>不留空位、不跳错误提示</b>。</td></tr>
+                <tr class="rev"><td class="nw">动画</td><td>动画效果<b>依前端配置</b>。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1088,7 +1231,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 
         <article class="panel" id="p-f2">
           <div class="panel__head"><span class="panel__num">4.2</span><h2 class="panel__title">前台 · 存款页</h2><span class="tag tag--change">异动</span></div>
-          <p class="lede">三处会动到：<b>活动小 banner</b>（新增）、<b>Promotions</b>（多一张复存券）、<b>Payment Amount</b>（角标与试算跟著券走）。其余版面沿用现况。</p>
+          <p class="lede">只改三处：<b>活动小 banner</b>（新增）、<b>Promotions</b>（多一张复存券）、<b>Payment Amount</b>（角标和试算跟著券走）。其他照现况。</p>
 
           <h3 class="sub">4.2.1 活动小 banner <span class="tag tag--new">新增</span></h3>
           <div class="tbl-scroll">
@@ -1096,45 +1239,68 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <thead><tr><th class="nw">项目</th><th>需求</th></tr></thead>
               <tbody>
                 <tr><td class="nw">显示条件</td>
-                    <td><b>活动开放中就显示</b>（＝状态开启且在活动时间内，见 2.2.2）；其余情况<b>整条不显示</b>，Payment Methods 往上递补。</td></tr>
+                    <td>活动<b>开放中</b>（状态开启＋在活动时间内，见 2.2.2）→ 显示。<br>
+                        其他情况 → <b>整条不显示</b>，Payment Methods 往上补。</td></tr>
                 <tr><td class="nw">位置</td>
-                    <td><b>余额卡与 Payment Methods 标题之间</b>，左右与余额卡切齐，<b>不满版、不出血</b>。上下三块沿用现况。</td></tr>
+                    <td>放在<b>余额卡和 Payment Methods 标题中间</b>。<br>
+                        左右跟余额卡对齐，<b>不满版</b>。其他区块照现况。</td></tr>
                 <tr><td class="nw">内容</td>
-                    <td>左侧图示 ＋ <code>Deposit &amp; Claim Your Bonus Now!</code>，右侧白色胶囊内 <code>View</code> ＋ 红色圆形箭头，依设计稿。
-                        图与文案<b>前台写死，后台不配</b>。</td></tr>
-                <tr><td class="nw">点按</td><td><b>整条可点</b>，进本活动详情页；<code>View</code> 与箭头<b>只是视觉提示</b>，不是另一个按钮。</td></tr>
-                <tr><td class="nw">数量</td><td><b>固定一条。</b></td></tr>
-                <tr><td class="nw">文案长度</td><td>单行以「…」截断，右侧 <code>View</code> 胶囊<b>永远不被挤掉</b>。</td></tr>
-                <tr><td class="nw">读取失败</td><td><b>整条不显示</b>，不挡存款、不跳错误提示。</td></tr>
+                    <td>左：图示 ＋ <code>Deposit &amp; Claim Your Bonus Now!</code><br>
+                        右：白色胶囊 <code>View</code> ＋ 红色圆形箭头（照设计稿）。<br>
+                        图和文案<b>前台写死</b>，后台不配。</td></tr>
+                <tr><td class="nw">点按</td><td><b>整条都能点</b>，进活动详情页。<code>View</code> 和箭头只是装饰，不是另一个按钮。</td></tr>
+                <tr><td class="nw">数量</td><td>固定<b>一条</b>。</td></tr>
+                <tr><td class="nw">文案太长</td><td>单行，超出用「…」截断；右边 <code>View</code> <b>不能被挤掉</b>。</td></tr>
+                <tr><td class="nw">读取失败</td><td><b>整条不显示</b>。不挡存款，不跳错误提示。</td></tr>
               </tbody>
             </table>
           </div>
 
-          <h3 class="sub">4.2.2 Promotions 优惠券区 <span class="tag tag--change">需支援逐笔数值</span></h3>
-          <p>本区版型与逻辑<b>全部沿用现况</b>（排序、一次只能勾一张、没券时整区收起都不变）。
-             本活动只是多一张 <code>Re-deposit Coupon</code>，<b>最多一张</b>，属<b>彩金类</b>，照现有排序规则排位置。</p>
+          <h3 class="sub rev">4.2.2 （10/6 调整）Promotions 优惠券区 <span class="tag tag--change">需支援逐笔数值</span></h3>
+          <p>这一区<b>全部照现况</b>（排序、一次只能勾一张、没券就整区收起）。<br>
+             本活动只多一张 <code>Re-deposit Coupon</code>：<b>最多一张</b>，算<b>彩金类</b>，<span class="rev">位置照下面的排序。</span></p>
+          <div class="tbl-scroll">
+            <table class="t">
+              <thead><tr><th class="nw">券怎么排</th><th>规则</th></tr></thead>
+              <tbody class="rev">
+                <tr><td class="nw">① 先看类型</td><td><b>彩金 → 积分 → 券类型</b>。彩金权重最高：积分券 % 再高，也排在彩金券后面。</td></tr>
+                <tr><td class="nw">② 同类型看 %</td><td>百分比<b>高的排前面</b>。</td></tr>
+                <tr><td class="nw">③ 同类型、同 %</td><td>沿用现况。</td></tr>
+                <tr><td class="nw">例</td><td>彩金 10% → 彩金 5% → 积分 30% → 积分 20% → 券类型 50%。本活动的复存券是彩金，跟其他彩金券比 %。</td></tr>
+              </tbody>
+            </table>
+          </div>
           <div class="box box--warn">
-            <span class="box__t">唯一的新要求：券面数值要能逐笔变动</span>
-            玩家<b>每用掉一笔，券面立即换成下一笔，不需重新整理页面</b>；用完最后一笔整张券收掉，隔天回到第 1 笔。
-            数字取哪一格见 4.2.5。
+            <span class="box__t">新要求<span class="rev">两点</span></span>
+            ① 券面数字<b>逐笔换</b>：每用掉一笔，券面<b>马上换成下一笔</b>，不用重新整理。<br>
+            · 最后一笔用完 → 整张券收掉。<br>
+            · 隔天 → 回到第 1 笔<span class="rev">（隔天不发奖就整天不出现，见 4.2.3）</span>。<br>
+            · 数字取哪一格见 4.2.5。<br>
+            <span class="rev">② 券面的打码金额<b>跟著 Payment Amount 输入的金额即时变</b>（见 4.2.5、4.2.6）。</span>
           </div>
 
           <h3 class="sub">4.2.3 券 · 什么时候出现</h3>
           <div class="tbl-scroll">
             <table class="t">
-              <thead><tr><th class="nw">项目</th><th>需求</th></tr></thead>
+              <thead><tr><th class="nw">情况</th><th>怎样</th></tr></thead>
               <tbody>
                 <tr><td class="nw"><b>出现条件</b></td>
-                    <td><b>活动开放中</b>（＝状态开启且在活动时间内，见 2.2.2）<span class="rev">＋ <b>今天是发奖日</b>（见 2.3.9）</span>＋ <b>今日次数未用完</b>（见 3.1）——比 banner 多<span class="rev">后面两条</span>。<br>
-                        <b>缺一条整张券不出现</b>，下面的券往上递补。</td></tr>
-                <tr><td class="nw">今日用完</td>
-                    <td><b>整张券不显示</b>。此时 banner 照常；详情页最后一笔转黄色高亮＋皇冠、下方出现完成提示（见 4.3.1）；吊牌看还有没有别的券（见 4.1）。</td></tr>
+                    <td>下面<b>全部满足</b>才出现：<br>
+                        · 活动开放中（见 2.2.2）<br>
+                        <span class="rev">· 今天是发奖日（见 2.3.9）<br></span>
+                        · 今天次数还没用完（见 3.1）<br>
+                        <span class="rev">比 banner 多了后面两条。</span><b>少一条就不出现</b>，下面的券往上补。</td></tr>
+                <tr><td class="nw">今天用完了</td>
+                    <td>券<b>不显示</b>；banner 照常。<br>
+                        详情页：最后一笔变黄＋皇冠，下方出现完成提示（见 4.3.1）。<br>
+                        首页 BONUS 条：看还有没有别的券（见 4.1）。</td></tr>
                 <tr class="rev"><td class="nw">今天不发奖</td>
-                    <td><b>整张券不显示</b>，banner 照常（点进详情页见 4.3.4）；吊牌看还有没有别的券（见 4.1）。</td></tr>
-                <tr><td class="nw">领不到奖的<br>那几种人</td>
-                    <td><b>前台完全看不出差别</b>：券照常出现、可勾选，存款照常成功，<b>不显示原因、不跳提示</b>。
-                        哪几种人、为什么领不到见 3.1；玩家来问由客服查记录页（见 2.7）。</td></tr>
-                <tr><td class="nw">读取失败</td><td>这张券不出现，<b>其他活动的券照常</b>；不挡存款、不跳错误提示。</td></tr>
+                    <td>券<b>不显示</b>；banner 照常（点进详情页见 4.3.4）。<br>
+                        首页 BONUS 条：看还有没有别的券（见 4.1）。</td></tr>
+                <tr><td class="nw">领不到奖的人</td>
+                    <td>前台<b>跟一般人完全一样</b>：券照常出现、能勾、存款照常成功，<b>不说原因、不跳提示</b>。<br>
+                        哪些人领不到见 3.1；玩家来问，客服查记录页（见 2.7）。</td></tr>
+                <tr><td class="nw">读取失败</td><td>只有这张券不出现，<b>别的券照常</b>。不挡存款，不跳错误提示。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1144,55 +1310,146 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <table class="t">
               <tbody>
                 <tr><th class="nw">计次与发奖</th>
-                    <td><b>勾券 ＋ 送出充值</b>＝用掉一次；<b>钱入帐成功</b>才发奖。完整口径见 3.1。</td></tr>
-                <tr><th class="nw">没勾券</th><td><b>不计次、不发奖</b>，详情页高亮停在原来那一笔，券面数字不变。</td></tr>
-                <tr><th class="nw">券绑在订单上</th>
-                    <td>送出即<b>绑在那笔订单、算已使用</b>；同一笔订单<b>不会再发一次奖</b>，系统<b>不把券退回</b>。</td></tr>
+                    <td><b>勾券 ＋ 送出</b> → 算用掉一次。<br>
+                        <b>钱入账成功</b> → 才发奖。细节见 3.1。</td></tr>
+                <tr><th class="nw">没勾券</th><td><b>不计次、不发奖</b>。详情页高亮不动，券面数字不变。</td></tr>
+                <tr><th class="nw">券绑订单</th>
+                    <td>一送出，券就<b>绑在这笔订单上、算用掉</b>。<br>
+                        同一笔订单<b>只发一次奖</b>；券<b>不退回</b>。</td></tr>
                 <tr><th class="nw">订单失败</th>
-                    <td>存款订单<b>只有成功与失败两种结果</b>。失败时<b>次数不退回</b>，下一次存款吃下一笔的百分比与门槛，<b>不补发</b>。</td></tr>
+                    <td>订单只有成功、失败两种。<br>
+                        失败 → <b>次数不退</b>、<b>不补发</b>；下次存款直接用下一笔的百分比和门槛。</td></tr>
                 <tr><th class="nw">停留跨日 <span class="tag tag--same">同每日首充</span></th>
-                    <td>玩家停在存款页时跨过 00:00（GMT+8），<b>页面挡下当下的操作并自动刷新</b>，显示最新数据：券面与试算换成<b>新一天那个星期的第 1 笔</b>。<br>
-                        例：周一晚上停在这页，跨到周二 → 刷新后显示<b>周二配置的第 1 笔</b>。</td></tr>
+                    <td>停在存款页时过了 00:00（GMT+8）→ <b>挡下当下操作，自动刷新</b>。<br>
+                        刷新后：券面和试算换成<b>新一天那个星期的第 1 笔</b>。<br>
+                        例：周一晚上停著，跨到周二 → 显示<b>周二的第 1 笔</b>。<span class="rev"><br>新的一天<b>不发奖</b> → 刷新后券不出现，试算条回到 <code>Select a coupon to see your bonus</code>。</span></td></tr>
                 <tr><th class="nw">勾选行为 <span class="tag tag--same">同现况</span></th>
-                    <td>勾选<b>互斥</b>（勾另一张自动取消前一张）；取消勾选<b>金额保留</b>。</td></tr>
+                    <td>只能勾一张（勾别张会自动取消前一张）。取消勾选，<b>金额保留</b>。</td></tr>
               </tbody>
             </table>
           </div>
 
-          <h3 class="sub">4.2.5 券 · 数字从哪来</h3>
-          <p>取这位玩家<b>下一笔</b>那一格：<b>今天星期几 × VIP 等级 × 渠道 × 第「今日已用掉次数 ＋ 1」笔</b>（等级取生效中的那一级，见 3.3）。</p>
+          <h3 class="sub rev">4.2.5 （10/2 异动、10/6 调整）券 · 数字从哪来 <span class="tag tag--change">券面改显示打码金额</span></h3>
+          <p>券面显示的是这位玩家<b>下一笔</b>的数字，取后台这一格：<br>
+             <b>今天星期几 × VIP 等级 × 渠道 × 第（今天已用次数 ＋ 1）笔</b><br>
+             VIP 等级取现在生效的那一级（见 3.3）。</p>
           <div class="tbl-scroll">
             <table class="t">
               <thead><tr><th class="nw">券面上的</th><th>取后台哪一栏</th></tr></thead>
               <tbody>
                 <tr><td class="nw">百分比</td>
-                    <td>奖励配置 →<b>该玩家所属渠道</b>那一栏的「每日复存奖励」（平台／glife／maya）。<b>上限金额同理</b>。</td></tr>
-                <tr><td class="nw"><code>Capped At</code></td><td><b>上限金额</b></td></tr>
-                <tr><td class="nw"><code>Min Deposit</code></td><td><b>最低存款金额</b>，也是金额区「低于下限」的门槛（见 4.2.6）</td></tr>
-                <tr><td class="nw"><code>Turnover</code></td><td><b>奖金所需流水</b>（见 2.4）：<b>不随笔数、星期、等级、渠道变</b></td></tr>
-                <tr><td class="nw"><code>Re-deposit Coupon</code>、<code>TOU</code></td><td><b>后台不配</b>：券种文字前台写死，TOU 是现况共用元件</td></tr>
+                    <td>奖励配置 → 玩家<b>所属渠道</b>那一栏（平台／glife／maya）的「每日复存奖励」。</td></tr>
+                <tr><td class="nw"><code>Capped At</code></td><td><b>上限金额</b>（一样取所属渠道那一栏）</td></tr>
+                <tr><td class="nw"><code>Min Deposit</code></td><td><b>最低存款金额</b><span class="rev">（三个渠道共用）</span>；也是金额区「低于下限」的门槛（见 4.2.6）</td></tr>
+                <tr class="rev"><td class="nw"><code>Conditions:</code><br><code>Complete ₱X Bets To Withdraw</code></td><td>直接显示<b>系统算好的打码金额</b>（算法见下表），取代原本的 <code>Turnover: 3x turnover of deposited and bonus</code>。文案照设计稿。</td></tr>
+                <tr><td class="nw"><code>Re-deposit Coupon</code>、<code>TOU</code></td><td><b>后台不配</b>：券名前台写死；TOU 是现有共用元件。</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="hint">券面文案单行以「…」截断，<b>百分比与 <code>Capped At</code> 不被挤掉</b>。</p>
+          <p class="hint">券面文案太长用「…」截断；<b>百分比和 <code>Capped At</code> 不能被挤掉</b>。</p>
 
-          <h3 class="sub">4.2.6 Payment Amount 金额与试算 <span class="tag tag--change">需支援逐笔数值</span></h3>
-          <p>角标、试算条、「低于下限」提示<b>都是现有元件</b>。数字全部取那张券的（见 4.2.5），券面一换这一区跟著换。</p>
+          <h4 class="sub rev">打码金额 X 怎么算（10/6 调整）</h4>
           <div class="tbl-scroll">
             <table class="t">
-              <thead><tr><th class="nw">状态</th><th>呈现</th></tr></thead>
+              <tbody class="rev">
+                <tr><th class="nw">公式</th>
+                    <td><b>X ＝ 充值流水 ＋ 活动流水</b><br><br>
+                        <b>① 充值流水 ＝ 充值金额 × 会员层级稽核比例 × VIP 稽核比例</b><br>
+                        · 会员层级比例：用<b>现有会员层级配置</b>，本活动不配。<br>
+                        · VIP 比例：用<b>现有 VIP 配置</b>，和层级比例<b>相乘</b>。<br>
+                        &nbsp;&nbsp;例：层级 80%、VIP1 50% → 80% × 50% ＝ <b>40%</b>。<br>
+                        · <b>VIP 流水设成不计算 → 不乘 VIP 比例</b>，只用层级比例。<br><br>
+                        <b>② 活动流水 ＝（勾选的本金 ＋ 勾选的奖金）× 活动流水倍数</b><br>
+                        · 勾哪些、几倍：看本活动「奖金所需流水」（见 2.4）。<span class="rev">2.4 留空 → 这一段是 0，只算 ①。</span><br>
+                        · 本金＝充值金额；奖金＝这笔充值算出的奖金（见 3.2，有上限）。</td></tr>
+                <tr><th class="nw">充值金额用哪个</th>
+                    <td>用 Payment Amount <b>现在输入的金额</b>，即时算，不用按 Submit。<br>
+                        <span class="rev">· <b>没勾券 → 显示 <code>₱0</code></b>（这笔不带券、不发奖，不用打活动的码）（10/6 调整）</span><br>
+                        · 还没输入 → 显示 <code>₱0</code><br>
+                        · 低于这一笔的 <code>Min Deposit</code> → 显示 <code>₱0</code><br>
+                        · 达到门槛 → 开始算</td></tr>
+                <tr><th class="nw">换下一笔时</th>
+                    <td>百分比、上限、门槛变了，<b>X 跟著重算</b>。</td></tr>
+                <tr><th class="nw">金额格式</th>
+                    <td><span class="rev">计算时留 2 位小数，第 3 位起直接舍去；显示跟券面其他金额一样（整数不补 .00）。</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="sub rev">例子（10/6 调整）</h4>
+          <p class="rev">设定：这一笔 <b>20%</b>、上限 2,000、门槛 500；充值流水比例 <b>40%</b>（层级 80% × VIP 50%）；活动流水 <b>3 倍</b>（勾本金＋奖金）。</p>
+          <p class="rev">玩家勾了券，输入 <b>1,000</b>：</p>
+          <div class="tbl-scroll">
+            <table class="t">
+              <thead><tr><th class="nw">步骤</th><th class="nw">怎么算</th><th class="nw">结果</th></tr></thead>
+              <tbody class="rev">
+                <tr><td class="nw">奖金</td><td class="nw">1,000 × 20%</td><td class="nw">200</td></tr>
+                <tr><td class="nw">① 充值流水</td><td class="nw">1,000 × 40%</td><td class="nw">400</td></tr>
+                <tr><td class="nw">② 活动流水</td><td class="nw">（1,000 ＋ 200）× 3</td><td class="nw">3,600</td></tr>
+                <tr><td class="nw"><b>券面显示</b></td><td class="nw">400 ＋ 3,600</td><td class="nw"><b>₱4,000</b></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="hint rev">其他情况：没勾券、没输入、或低于门槛 500 → <b>₱0</b>；VIP 流水不计算 → ① 改成 1,000 × 80% ＝ 800 → <b>₱4,400</b>。<span class="rev">奖金所需流水留空 → 只算 ① ＝ <b>₱400</b>。</span></p>
+
+          <h3 class="sub rev">4.2.6 （10/2 异动）优惠券 ＋ Payment Amount 交互 <span class="tag tag--change">需支援逐笔数值</span></h3>
+          <p>这一区<b>照现有逻辑</b>：角标、试算条、「低于下限」红字、快捷金额都是现有元件。<br>
+             本活动只是<b>数字全取这张券的</b>（见 4.2.5）；券面换笔，这一区跟著换。</p>
+          <p class="rev">玩家从进页到送出，会依序看到下面几种状态（例：券 5%／上限 50／门槛 100）：</p>
+          <div class="tbl-scroll">
+            <table class="t">
+              <thead><tr><th class="nw">#</th><th class="nw">玩家做了什么</th><th>画面会怎样</th></tr></thead>
+              <tbody class="rev">
+                <tr><td>1</td><td class="nw">刚进来<br>没勾券、没输入</td>
+                    <td>打码金额：<code>₱0</code><br>
+                        角标：不显示<br>
+                        试算条：<code>Select a coupon to see your bonus</code><br>
+                        Submit：不能按</td></tr>
+                <tr><td>2</td><td class="nw">勾券<br>没输入</td>
+                    <td>打码金额：<code>₱0</code><br>
+                        角标：不显示<br>
+                        试算条：<code>Min Deposit 100.00 to get 5% bonus</code><br>
+                        Submit：不能按</td></tr>
+                <tr><td>3</td><td class="nw">勾券<br>输入 ₱10<br>（低于门槛）</td>
+                    <td>打码金额：<code>₱0</code><br>
+                        角标：<b>不显示</b><br>
+                        输入框下方：红字 <code>Deposit amount less than min limit.</code><br>
+                        试算条：同第 2 列<br>
+                        Submit：不能按</td></tr>
+                <tr><td>4</td><td class="nw">勾券<br>输入 ₱100<br>（达门槛）</td>
+                    <td>打码金额：照金额算（见 4.2.5）<br>
+                        角标：<b>每一颗</b>都标 <code>5%</code><br>
+                        试算条：橘红底 <code>You Will Receive An Extra</code> ＋ 金币图示 ＋ <code>5</code><br>
+                        Submit：能按</td></tr>
+                <tr><td>5</td><td class="nw">勾券<br>输入 ₱20,000<br>（超过上限）</td>
+                    <td>打码金额：照金额算<br>
+                        角标：每一颗都标<br>
+                        试算条：显示上限 <code>50</code>，后面加 <code>(capped)</code>；刚好等于上限也加<br>
+                        Submit：能按</td></tr>
+                <tr><td>6</td><td class="nw">没勾券<br>输入 ₱100</td>
+                    <td>打码金额：<code>₱0</code>（10/6 调整）<br>
+                        角标：不显示<br>
+                        试算条：<code>Select a coupon to see your bonus</code><br>
+                        Submit：能按（不带券：不计次、不发奖）</td></tr>
+                <tr><td>7</td><td class="nw">取消勾选</td>
+                    <td>打码金额：变回 <code>₱0</code>（10/6 调整）<br>
+                        角标、红字：收起<br>
+                        试算条：回到 <code>Select a coupon to see your bonus</code>；<b>输入的金额保留</b><br>
+                        Submit：同第 6 列</td></tr>
+                <tr><td>8</td><td class="nw">勾券<br>按 Submit</td>
+                    <td>＝<b>用掉一次</b>（见 3.1），之后流程照现况。<br>
+                        回到存款页 → <b>券面已是下一笔</b>（百分比、上限、门槛、打码金额一起换），不用重新整理。<br>
+                        送出的是今天最后一笔 → 券收起，这一区回到第 1 列；BONUS 条看还有没有别的券（见 4.1）。</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tbl-scroll">
+            <table class="t">
               <tbody>
-                <tr><td class="nw">勾了券</td>
-                    <td><b>每一个</b>快捷金额右上角标<b>该券的百分比</b>。</td></tr>
-                <tr><td class="nw">输入金额后</td>
-                    <td><code>You Will Receive An Extra ₱X</code> ＝ 输入金额 × 该券百分比，超过该券上限取上限，保留 2 位小数、第 3 位起无条件舍去；<b>达到或超过上限（刚好等于也算）</b>标 <code>(capped)</code>。<br>
-                        例：券 17%／上限 2,004 —— 输入 650 → <code>₱110.50</code>；输入 20,000 → <code>₱2,004.00 (capped)</code>。</td></tr>
-                <tr><td class="nw">还没输金额<br>或低于门槛</td><td>试算条显示 <code>Min Deposit 500.00 to get 17% bonus</code>（取该券的 <code>Min Deposit</code> 与百分比；例子同上一列那张券）。低于门槛时另外显示下一列的错误提示。</td></tr>
-                <tr><td class="nw">Submit 什么<br>时候可按</td>
-                    <td><b>金额达该券的 <code>Min Deposit</code> 才可按</b>；<b>未输入金额（0 或空白）时也不可按</b>（沿用现况）。<br>
-                        低于门槛时显示 <code>Deposit amount less than min limit.</code>。</td></tr>
-                <tr><td class="nw">没勾券</td>
-                    <td>角标不显示；试算条显示 <code>Select a coupon to see your bonus</code>。取消勾选也回到这一句，<b>已输入的金额保留不清空</b>。</td></tr>
+                <tr><th class="nw">快捷金额</th>
+                    <td><code>+10</code> <code>+50</code> <code>+100</code> <code>+500</code> <code>+1000</code> <code>+10000</code> <code>+20000</code>：点一下<b>加</b>到输入框（照现况），加完照上表重新判断。</td></tr>
+                <tr><th class="nw">试算金额</th>
+                    <td>算法同 3.2；显示照现况：金币图示＋数字，整数不补 <code>.00</code>。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1200,9 +1457,9 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 
         <article class="panel" id="p-f3">
           <div class="panel__head"><span class="panel__num">4.3</span><h2 class="panel__title">前台 · 活动详情页</h2><span class="tag tag--change">加今日逐笔清单</span></div>
-          <p class="lede">路径：<code>Rewards ＞ Promotion</code> 区点这张卡片（见 4.3.3），存款页小 banner 也是进这里。
-             <b>H5／APP 是整页，PC 是弹窗</b>，两边内容相同。本次<b>加一张今日逐笔清单</b>。<br>
-             <b>这一页的栏名一律以设计稿为准，照写不改。</b></p>
+          <p class="lede">怎么进来：<code>Rewards ＞ Promotion</code> 点这张卡片（见 4.3.3），或点存款页小 banner。<br>
+             <b>H5／APP 是整页，PC 是弹窗</b>，内容一样。本次<b>新增今日逐笔清单</b>。<br>
+             <b>栏名一律照设计稿，不改。</b></p>
 
           <h3 class="sub">4.3.1 页面元素</h3>
           <div class="tbl-scroll">
@@ -1210,72 +1467,79 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <thead><tr><th class="nw">元素</th><th>需求</th></tr></thead>
               <tbody>
                 <tr><td class="nw">页顶 banner 图</td>
-                    <td>取后台「<b>PC／手机内容图片</b>」，依装置选（见 2.5.1）。</td></tr>
+                    <td>后台「<b>PC／手机内容图片</b>」，看装置选（见 2.5.1）。</td></tr>
                 <tr><td class="nw">活动标题</td>
-                    <td>取后台「<b>内容配置 → 活动标题</b>」（见 2.5.1），依语系回退默认语系。</td></tr>
+                    <td>后台「<b>内容配置 → 活动标题</b>」（见 2.5.1）；没有该语系就用默认语系。<br>只显示一行，太长用「…」截断。</td></tr>
                 <tr><td class="nw"><code>Event end time</code></td>
-                    <td>显示后台「活动时间」的<b>起讫</b>（栏名依设计稿，虽写 end time 但显示的是整段期间）。<b>一定要显示</b>。</td></tr>
+                    <td>显示活动时间的<b>开始～结束</b>（栏名虽写 end time，内容是整段期间）。<b>一定要显示</b>。</td></tr>
                 <tr><td class="nw"><code>Bonus %</code><br><code>Max Bonus</code> <span class="tag tag--change">栏名改成与清单一致</span></td>
-                    <td>两格统计数字，<b>栏名与下方清单同名</b>（设计稿为准；原本叫 <code>Additional</code>／<code>Capped At</code>）。<br>
-                        取这位玩家<b>下一笔</b>的百分比与上限金额——与清单<b>高亮那一列</b>、存款页券面<b>是同一个数字</b>（取值见 4.2.5）。<br>
-                        <b>确定值，不加 <code>Up To</code></b>；每用掉一笔就换成下一笔。<b>今日次数全部用掉时两格整排隐藏</b>，隔天重置后恢复。未登入另有规则（见 4.3.2）。<br><b>设计稿的统计格数字只是示意、没跟清单同步</b>（例如清单高亮第 1 笔，统计格却写 <code>Up To 20%</code>／<code>2000</code>）：<b>数字一律以本规格为准</b>，已登入永远等于高亮那一列。</td></tr>
+                    <td>两格数字，栏名<b>跟清单一样</b>（原本叫 <code>Additional</code>／<code>Capped At</code>）。<br>
+                        · 显示玩家<b>下一笔</b>的百分比和上限＝清单<b>高亮那一列</b>＝存款页券面（见 4.2.5）。<br>
+                        · <b>确定值，不加 <code>Up To</code></b>；用掉一笔就换下一笔。<br>
+                        · 今天次数<b>全用完 → 两格隐藏</b>，隔天恢复。<br>
+                        · 未登入另有规则（见 4.3.2）。<br>
+                        设计稿这两格的数字只是示意，<b>以本规格为准</b>：已登入时永远等于高亮那一列。</td></tr>
                 <tr><td class="nw"><b>今日逐笔清单</b> <span class="tag tag--new">新增</span></td>
-                    <td>列这位玩家<b>今天</b>可领的每一笔，一笔一列；<b>列数 ＝ 后台「每日可领笔数」</b>（1～10），前台不自行决定、不截断。</td></tr>
+                    <td>列出玩家<b>今天</b>能领的每一笔，一笔一列。<br>
+                        <b>列数 ＝ 后台「每日可领笔数」</b>（1～10），前台不自己删减。</td></tr>
                 <tr><td class="nw">清单 · 呈现方式 <span class="tag tag--new">新增</span></td>
-                    <td><b>PC ＝ 弹窗</b>（标题「活动详情」＋右上角 ✕，底部一颗 <code>Confirm</code> 关闭）：
-                        整页内容全部放在弹窗内，<b>超过高度时整个弹窗一起卷，清单不另外卷</b>。<br>
-                        <b>H5／APP ＝ 整页</b>：清单<b>全部展开</b>，不折叠、不卷动；配满 10 笔时 Deposit 按钮会被推到第一屏之外，玩家往下滑即可。</td></tr>
+                    <td><b>PC 弹窗</b>：标题「活动详情」＋右上 ✕，底部 <code>Confirm</code> 关闭。内容太长<b>整个弹窗一起卷</b>，清单不单独卷。<br>
+                        <b>H5／APP 整页</b>：清单<b>全部展开</b>，不折叠、不卷。10 笔时 Deposit 按钮会在第一屏下面，往下滑即可。</td></tr>
                 <tr><td class="nw">清单 · 四栏栏名</td>
-                    <td>顺序与栏名固定：<code>Deposit No.</code>（第几笔，值用<b>英文序数</b> <code>1st</code>／<code>2nd</code>／<code>3rd</code>…）｜<code>Eligible Deposit</code>（最低存款金额）｜
-                        <code>Bonus %</code>（奖励百分比）｜<code>Max Bonus</code>（上限金额）。</td></tr>
+                    <td>顺序固定：<br>
+                        <code>Deposit No.</code>：第几笔，用<b>英文序数</b> <code>1st</code>／<code>2nd</code>／<code>3rd</code>…<br>
+                        <code>Eligible Deposit</code>：最低存款金额<br>
+                        <code>Bonus %</code>：奖励百分比<br>
+                        <code>Max Bonus</code>：上限金额</td></tr>
                 <tr><td class="nw">清单 · 列的三种状态 <span class="tag tag--new">新规则</span></td>
-                    <td><b>① 已用掉</b>：整列反灰（定义见 3.1）。<br>
-                        <b>② 当前这一笔</b>：整列<b>蓝色高亮</b>；还没轮到的笔维持一般样式。这一笔<b>用掉后</b>（送出即算，见 3.1）转反灰，高亮移到下一笔。<br>
-                        <b>③ 今日次数全部用掉</b>（最后一笔已送出）：前面各列反灰，<b>最后一列改黄色高亮＋右上角皇冠</b>；上方两格统计隐藏；清单下方出现完成提示（见下一列）。<br>
-                        配色依设计稿。</td></tr>
+                    <td><b>① 已用掉</b> → 整列变灰（定义见 3.1）。<br>
+                        <b>② 当前这一笔</b> → 整列<b>蓝色高亮</b>；还没轮到的照一般样式。送出就算用掉（见 3.1），变灰，高亮移到下一笔。<br>
+                        <b>③ 今天全用完</b>（最后一笔已送出）→ 前面都变灰，<b>最后一列变黄＋右上皇冠</b>；上方两格隐藏；清单下方出现完成提示。<br>
+                        颜色照设计稿。</td></tr>
                 <tr><td class="nw">清单 · 完成提示 <span class="tag tag--new">新增</span></td>
-                    <td>位置：<b>清单最后一列下方、<code>Deposit</code> 按钮上方</b>；置中一行文案，样式依设计稿。<br>
-                        文案：<code>Congrats on completing today's tasks!</code>（营运定案，照写不改）。<br>
-                        出现时机：<b>只有最后一笔用掉之后才出现</b>（已登入、今天的次数全部用掉；依 3.1，送出即算用掉，<b>最后一笔充值失败也一样出现</b>）；之后当天再进详情页都照常显示。<br>
-                        不出现：未登入、今天次数还没用完；<b>隔天重置后消失</b>，清单回到第 1 笔高亮。<br>
-                        只是页内的一行字，<b>不跳弹窗</b>、不能点；<code>Deposit</code> 按钮照常可按。</td></tr>
+                    <td>文案：<code>Congrats on completing today's tasks!</code>（运营定案，照写）。<br>
+                        位置：<b>清单最后一列下面、<code>Deposit</code> 按钮上面</b>，置中一行，样式照设计稿。<br>
+                        什么时候出现：已登入且<b>最后一笔用掉之后</b>（送出就算，<b>最后一笔充值失败也出现</b>，见 3.1）；当天之后再进来都还在。<br>
+                        不出现：未登入、今天还没用完。<b>隔天消失</b>，清单回到第 1 笔高亮。<br>
+                        只是一行字：<b>不跳弹窗</b>、不能点；<code>Deposit</code> 按钮照常能按。</td></tr>
                 <tr><td class="nw">清单 · VIP 等级变动</td>
-                    <td>只显示<b>现在生效中</b>那一级，<b>不预告</b>还没生效的等级：升级当天不变、次日才换；降级当月不变、次月 1 号才换（见 3.3）。</td></tr>
+                    <td>只显示<b>现在生效</b>的等级，不提前显示：升级隔天才换，降级下个月 1 号才换（见 3.3）。</td></tr>
                 <tr><td class="nw">停留跨日</td>
-                    <td>停在详情页时跨过 00:00（GMT+8），<b>同存款页</b>（见 4.2.4）：页面挡下操作并自动刷新，统计格与清单换成<b>新一天那个星期的配置、回到第 1 笔高亮</b>；前一天的完成提示消失。<span class="rev">新的一天<b>不发奖</b>时改成 4.3.4 的样子。</span></td></tr>
-                <tr><td class="nw">Deposit 按钮</td><td><b>任何状态都不禁用</b>。</td></tr>
+                    <td>停在详情页过了 00:00（GMT+8）→ <b>跟存款页一样</b>（见 4.2.4）：挡下操作、自动刷新。<br>
+                        刷新后：两格和清单换成<b>新一天那个星期的配置，第 1 笔高亮</b>；昨天的完成提示消失。<span class="rev"><br>新的一天<b>不发奖</b> → 变成 4.3.4 的样子。</span></td></tr>
+                <tr><td class="nw">Deposit 按钮</td><td><b>永远能按</b>。</td></tr>
                 <tr><td class="nw">页尾活动说明</td>
-                    <td>取后台「<b>活动内容</b>」富文本（见 2.5.1），<b>完整呈现、自然折行、不截断</b>。</td></tr>
+                    <td>后台「<b>活动内容</b>」富文本（见 2.5.1），<b>全部显示、自动换行、不截断</b>。</td></tr>
               </tbody>
             </table>
           </div>
 
           <h3 class="sub">4.3.2 未登入时</h3>
           <ul>
-            <li>显示「<b>平台渠道 × 最高 VIP 等级（VIP10）</b>」那一组——未登入不知道玩家是哪一级，<b>一律用最高那一组展示</b>。</li>
-            <li><code>Bonus %</code>／<code>Max Bonus</code> 取该组今天<b>百分比最高的那一笔</b>，<b>两格取同一笔</b>（<code>Max Bonus</code> 是那一笔的上限，不另找上限最高的）；百分比相同时取<b>笔序较前</b>的那一笔。百分比前<b>加 <code>Up To</code></b>（沿用现况）。</li>
-            <li>逐笔清单<b>照常显示</b>该组每一笔，但<b>每一列都是一般样式</b>——不高亮、不反灰。</li>
-            <li>登入后换成他实际等级的清单，两格改为<b>下一笔的确定值</b>、<b>不再加 <code>Up To</code></b>。</li>
+            <li>不知道玩家几级，<b>一律显示「平台渠道 × VIP10（最高级）」那一组</b>。</li>
+            <li><code>Bonus %</code>／<code>Max Bonus</code>：取这组今天<b>百分比最高的那一笔</b>，两格<b>用同一笔</b>（不另外找上限最高的）。百分比一样就取<b>比较前面</b>的那笔。百分比前面<b>加 <code>Up To</code></b>（照现况）。</li>
+            <li>清单<b>照常列出</b>这组每一笔，但<b>都是一般样式</b>：不高亮、不变灰。</li>
+            <li>登入后 → 换成他自己等级的清单；两格改成<b>下一笔的确定值</b>，<b>不加 <code>Up To</code></b>。</li>
           </ul>
 
           <h3 class="sub">4.3.3 奖励列表上的这张卡片 <span class="tag tag--new">补规格</span></h3>
-          <p>位置：<code>Rewards ＞ Promotion</code> 区。这一区<b>版型、分类标签、Expand 全部沿用现况</b>，本活动只是多一张卡片。</p>
+          <p>位置：<code>Rewards ＞ Promotion</code>。版型、分类标签、Expand <b>都照现况</b>，只是多一张卡片。</p>
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
                 <tr><th class="nw">什么时候出现</th>
-                    <td><b>与 banner 同一组条件</b>（见 4.2.1）。<b>今日次数用完仍照常显示。</b></td></tr>
+                    <td><b>跟 banner 同条件</b>（见 4.2.1）。<b>今天次数用完也照常显示。</b></td></tr>
                 <tr><th class="nw">分在哪个标签</th>
-                    <td>依后台「<b>活动类型</b>」归到 Promotion 区上方的分类标签（见 2.2.1）；<code>All</code> 标签一律都列。</td></tr>
+                    <td>看后台「<b>活动类型</b>」（见 2.2.1）；<code>All</code> 标签一定有。</td></tr>
                 <tr><th class="nw">排序</th>
-                    <td>依后台「<b>排序</b>」值（见 2.2.1）。</td></tr>
+                    <td>看后台「<b>排序</b>」值（见 2.2.1）。</td></tr>
                 <tr><th class="nw">卡片内容</th>
-                    <td><b>图</b>：取后台「PC／手机奖励列表」，依装置选（见 2.5.1）。<br>
-                        <b>活动期间那一行</b>（现况永久活动显示 <code>Permanent event</code>）与<b>活动名称</b>：沿用现况元件，名称取活动名称，依语系回退默认语系。<br>
-                        右侧一颗 <code>Read More &gt;</code>。<br>
-                        <b>卡片上不显示百分比、不显示上限、不显示逐笔资讯。</b></td></tr>
+                    <td>图：后台「PC／手机奖励列表」，看装置选（见 2.5.1）。<br>
+                        活动期间那一行（永久活动显示 <code>Permanent event</code>）和活动名称：照现有元件；名称没有该语系就用默认语系。<br>
+                        右边一颗 <code>Read More &gt;</code>。<br>
+                        <b>卡片上不显示百分比、上限、逐笔资讯。</b></td></tr>
                 <tr><th class="nw">点进去</th>
-                    <td>点 <code>Read More &gt;</code>（或整张卡片，沿用现况）→ 进本活动详情页：<b>H5／APP 开整页、PC 开弹窗</b>（见 4.3.1）。</td></tr>
+                    <td>点 <code>Read More &gt;</code>（或整张卡片，照现况）→ 进详情页：<b>H5／APP 整页，PC 弹窗</b>（见 4.3.1）。</td></tr>
                 <tr class="rev"><th class="nw">今天不发奖</th>
                     <td><b>照常显示</b>，点进去是 4.3.4 的样子。</td></tr>
               </tbody>
@@ -1283,20 +1547,20 @@ table.t th:last-child, table.t td:last-child { width: auto; }
           </div>
 
           <h3 class="sub rev">4.3.4 （10/1 新增）当天不发奖时 <span class="tag tag--new">新增</span></h3>
-          <p class="rev">后台把今天设成不发奖（见 2.3.9）时，详情页<b>照常可进</b>，只是没有奖励资讯：</p>
+          <p class="rev">后台把今天设成不发奖（见 2.3.9）→ 详情页<b>照常能进</b>，只是没有奖励资讯：</p>
           <p class="hint rev">画面看左侧：原型工具列「今天」切到「<b>不发奖日</b>」。</p>
           <div class="tbl-scroll">
             <table class="t">
               <thead><tr><th class="nw">元素</th><th>当天不发奖时</th></tr></thead>
               <tbody>
                 <tr><td class="nw">页顶 banner 图、活动标题、<code>Event end time</code></td><td><b>照常显示</b>（同 4.3.1）。</td></tr>
-                <tr><td class="nw"><code>Bonus %</code>／<code>Max Bonus</code> 两格</td><td><b>整排隐藏</b>。</td></tr>
-                <tr><td class="nw">今日逐笔清单</td><td><b>整张隐藏</b>，不显示空表、不显示「今天不发奖」之类的字。</td></tr>
+                <tr><td class="nw"><code>Bonus %</code>／<code>Max Bonus</code> 两格</td><td><b>隐藏</b>。</td></tr>
+                <tr><td class="nw">今日逐笔清单</td><td><b>整张隐藏</b>；不放空表，也不写「今天不发奖」。</td></tr>
                 <tr><td class="nw">完成提示</td><td><b>不出现</b>。</td></tr>
-                <tr><td class="nw"><code>Deposit</code> 按钮</td><td><b>照常显示、照常可按</b>，进存款页（今天存款页没有复存券，见 4.2.3）。</td></tr>
+                <tr><td class="nw"><code>Deposit</code> 按钮</td><td><b>照常显示、能按</b>，进存款页（今天存款页没有复存券，见 4.2.3）。</td></tr>
                 <tr><td class="nw">页尾活动说明</td><td><b>照常显示</b>（同 4.3.1）。</td></tr>
-                <tr><td class="nw">未登入</td><td><b>同上</b>，一样只剩上面几样。</td></tr>
-                <tr><td class="nw">PC 弹窗</td><td><b>同上</b>，弹窗内容少了统计格与清单，其余不变。</td></tr>
+                <tr><td class="nw">未登入</td><td><b>一样</b>，只剩上面这几样。</td></tr>
+                <tr><td class="nw">PC 弹窗</td><td><b>一样</b>，少了两格和清单，其他不变。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1308,7 +1572,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 </div>
 
 <!-- PROTO_EMBED_BEGIN -->
-<!-- 内嵌副本 · daily_admin.html · 存档于 2026-10-01 · 由 merge_spec.py 自动产生，请勿手改 -->
+<!-- 内嵌副本 · daily_admin.html · 存档于 2026-10-06 · 由 merge_spec.py 自动产生，请勿手改 -->
 <script type="text/plain" id="proto-src"><!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
@@ -3126,10 +3390,25 @@ function validateAndSave(e) {
     release(300);
     return;
   }
-  warns.forEach(function (m) { toast('warn', m); });
-  toast('success', '保存成功');
-  formDirty = false;
-  release(1200);
+  function finish() {
+    warns.forEach(function (m) { toast('warn', m); });
+    toast('success', '保存成功');
+    formDirty = false;
+    if (lastLoadedId && ACTIVITIES[lastLoadedId]) ACTIVITIES[lastLoadedId].status = savingOn ? 'on' : 'off';
+    release(1200);
+  }
+
+  /* 进行中的活动改成关闭：先跳确认（规格 2.2.5）。按取消就不保存。 */
+  const was = lastLoadedId && ACTIVITIES[lastLoadedId];
+  const now = Date.now();
+  const running = was && was.status === 'on'
+               && now >= toDay(was.start) && now <= new Date(was.end.replace(' ', 'T') + '+08:00').getTime();
+  if (!savingOn && running) {
+    askConfirm('活动进行中，关闭后将立即下架（已送出的充值仍会发奖），确定关闭吗？', finish);
+    release(300);
+    return;
+  }
+  finish();
 }
 
 /* --------------------------------------------------------------------------
@@ -4160,7 +4439,7 @@ refreshWeekPeriod();    // 依活动时间算出七天各轮到几次
 <!-- PROTO_EMBED_END -->
 
 <!-- PROTO_EMBED_FRONT_BEGIN -->
-<!-- 内嵌副本 · daily_front.html · 存档于 2026-10-01 · 由 merge_spec.py 自动产生，请勿手改 -->
+<!-- 内嵌副本 · daily_front.html · 存档于 2026-10-06 · 由 merge_spec.py 自动产生，请勿手改 -->
 <script type="text/plain" id="proto-src-front"><!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
@@ -4181,7 +4460,7 @@ refreshWeekPeriod();    // 依活动时间算出七天各轮到几次
         ③ 活动墙点进去的活动详情页
 
       本次新增的两处
-        ④ 首页顶部栏 Deposit 按钮右下角的 BONUS 吊牌挂饰
+        ④ 首页顶部栏 Deposit 按钮上方的黄色 BONUS 条
            纯图示、不带数字，只回答「进去有没有优惠可领」——
            挂不挂完全看存款页当下有没有券可勾。
         ⑤ 存款页的活动小 banner，点一下直接进活动详情页。
@@ -4338,10 +4617,10 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 .tag--change { background: var(--tag-change-bg); color: var(--tag-change-text); }
 .tag--same   { background: var(--tag-same-bg);   color: var(--tag-same-text); }
 /* ==========================================================================
-   首页顶部栏 ‧ Deposit 按钮的 BONUS 吊牌挂饰（本次新增）
+   首页顶部栏 ‧ Deposit 按钮的黄色 BONUS 条（本次新增，10/6 换新设计稿）
    --------------------------------------------------------------------------
-   顶部栏的版型完全不动，只在原本的 Deposit 按钮右下角挂一块红色 BONUS 吊牌
-   （用两个小挂钩吊著，吊牌后方露出一枚金币）——依设计稿的样子做。
+   顶部栏其他地方不动，有券时 Deposit 按钮上方多一条黄色 BONUS 条
+   （礼物图示＋红色斜体 BONUS），跟按钮连成一块——依 10/6 新设计稿。
    它是纯图示，不带任何数字，只回答一件事：「进去有没有优惠可领」——
    判断依据就是存款页当下有没有券可勾，不绑任何单一活动。
    今天领了几笔、下一笔几 %，留到存款页的券与活动详情页再讲——
@@ -4383,11 +4662,11 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 .hdr__refresh { color: var(--c-link); font-size: var(--fs-xs); }
 .hdr__spacer { flex: 1 1 auto; min-width: var(--sp-2); }
 
-/* Deposit 按钮：版型沿用现况，只多了右下角那块 BONUS 吊牌挂饰 */
+/* Deposit 按钮：版型沿用现况；有券时上方多一条黄色 BONUS 条（10/6 新设计稿） */
 .hdr__deposit {
-  position: relative;               /* 让吊牌能挂在它的右下角 */
   flex: 0 0 auto; margin-left: 6px;
-  padding: 7px 14px;
+  display: flex; flex-direction: column; align-items: stretch;
+  padding: 0; overflow: hidden;
   background: linear-gradient(180deg, #5b8df9 0%, #2f4fd8 100%);
   border: 0; border-radius: 10px;
   box-shadow: 0 3px 0 #22399f;
@@ -4395,19 +4674,21 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   cursor: pointer;
 }
 .hdr__deposit:hover { filter: brightness(1.06); }
+.hdr__deposit-text { padding: 7px 14px; }
 
-/* ▼ 新增：BONUS 吊牌挂饰 --------------------------------------------------
-   纯装饰图示，用两个小挂钩吊在 Deposit 按钮右下角外侧，后方露出一枚金币，
-   看起来像「挂上去的」。它压在按钮外缘，不把按钮撑大、
-   也不把右边的搜寻图示挤掉；没有数字，也不做任何动画。
-   存款页没有任何可勾的券时整块不显示，顶部栏就和现况一模一样。      */
-.hdr__charm {
-  position: absolute; right: -13px; bottom: -13px; z-index: 2;
-  width: 49px; height: 35px;
-  pointer-events: none;             /* 点到吊牌＝点到 Deposit 按钮本身 */
-  filter: drop-shadow(0 2px 3px rgba(130, 60, 0, .42));
+/* 黄色 BONUS 条：礼物图示＋红色斜体 BONUS，跟按钮同宽连成一块。
+   存款页没有任何可勾的券时整条不显示，按钮就和现况一模一样。 */
+.hdr__bonus {
+  display: flex; align-items: center; justify-content: center; gap: 3px;
+  padding: 2px 8px;
+  background: linear-gradient(180deg, #fff1a6 0%, #f7cf55 100%);
+  border-bottom: 1px solid #e3b23c;
 }
-.hdr__charm[hidden] { display: none; }
+.hdr__bonus[hidden] { display: none; }
+.hdr__gift { width: 14px; height: 14px; flex: 0 0 auto; }
+.hdr__bonus-text {
+  color: #e2261b; font-size: var(--fs-xs); font-weight: 900; font-style: italic; letter-spacing: .5px;
+}
 
 .hdr__search {
   flex: 0 0 auto; display: flex; padding: 0 2px;
@@ -4622,6 +4903,11 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   text-align: center;
 }
 .extra-bar--none { background: #d9dce1; color: #6d727a; }
+.extra-bar__coin {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #f6b73c; color: #fff; font-size: var(--fs-xs); font-weight: 700;
+}
 .extra-bar__cap { font-size: var(--fs-xs); font-weight: 600; opacity: .95; }
 
 .btn-submit {
@@ -4771,13 +5057,13 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 <div class="stage">
 
   <!-- ======================================================================
-       4.1 首页存款按钮（Deposit 按钮的 BONUS 吊牌挂饰）
+       4.1 首页存款按钮（Deposit 按钮上方的 BONUS 条）
        ====================================================================== -->
   <section class="screen">
     <header class="screen__head">
       <h2 class="screen__title">
         4.1 ‧ 首页存款按钮
-        <span class="tag tag--new">新增：Deposit BONUS 吊牌挂饰</span>
+        <span class="tag tag--new">新增：Deposit 上方 BONUS 条</span>
       </h2>
     </header>
 
@@ -4804,47 +5090,19 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 
           <span class="hdr__spacer"></span>
 
-          <!-- ▼ Deposit 按钮沿用现况，只在右下角多挂一块 BONUS 吊牌（本次新增）
-               吊牌构造由后往前：金币 → 两个小挂钩 → 红色吊牌 → BONUS 字样。
-               整块微微倾斜（rotate -6 度），看起来才像真的吊著而不是贴上去。 -->
+          <!-- ▼ Deposit 按钮：有券时按钮上方多一条黄色 BONUS 条（10/6 照新设计稿替换原本的吊牌）
+               黄条跟按钮同宽、连成一块；没券时整条拿掉，按钮回到现况。 -->
           <button type="button" class="hdr__deposit">
-            Deposit
-            <svg class="hdr__charm" id="hdrCharm" viewBox="0 0 48 34" aria-hidden="true" focusable="false">
-              <defs>
-                <linearGradient id="charmGold" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#ffefb0"/>
-                  <stop offset=".55" stop-color="#ffd257"/>
-                  <stop offset="1" stop-color="#eda310"/>
-                </linearGradient>
-                <linearGradient id="charmTag" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#ff7a45"/>
-                  <stop offset=".5" stop-color="#f23c1d"/>
-                  <stop offset="1" stop-color="#d81f0c"/>
-                </linearGradient>
-              </defs>
-
-              <!-- 金币：藏在吊牌右后方，只露出右半边一角 -->
-              <circle cx="38.5" cy="16.5" r="9"   fill="#c8860a"/>
-              <circle cx="38.5" cy="16.5" r="7.7" fill="url(#charmGold)"/>
-              <circle cx="38.5" cy="16.5" r="5"   fill="none" stroke="#e0a017" stroke-width="1.1"/>
-
-              <!-- 吊牌本体（含挂钩与字）整组一起倾斜 -->
-              <g transform="rotate(-6 21 20)">
-                <!-- 两个金色小挂钩，从吊牌上缘往上勾出去 -->
-                <g fill="none" stroke="#f0b429" stroke-width="2.3" stroke-linecap="round">
-                  <path d="M11.5 14.5V8.6a2.7 2.7 0 0 1 2.7-2.7"/>
-                  <path d="M29.5 14.5V8.6a2.7 2.7 0 0 1 2.7-2.7"/>
-                </g>
-                <!-- 红色吊牌，外圈一道金边 -->
-                <rect x="4" y="13" width="33" height="16.5" rx="4.5"
-                      fill="url(#charmTag)" stroke="#ffd35e" stroke-width="1.5"/>
-                <!-- BONUS：用 textLength 锁死宽度，任何字体都不会撑出吊牌 -->
-                <text x="20.5" y="25.1" text-anchor="middle"
-                      font-family="system-ui, -apple-system, sans-serif"
-                      font-size="9" font-weight="800" fill="#fff"
-                      textLength="25" lengthAdjust="spacingAndGlyphs">BONUS</text>
-              </g>
-            </svg>
+            <span class="hdr__bonus" id="hdrCharm">
+              <svg class="hdr__gift" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="3" y="9" width="18" height="12" rx="1.5" fill="#e8392a"/>
+                <rect x="2" y="7" width="20" height="4" rx="1" fill="#f25a3c"/>
+                <rect x="10.5" y="7" width="3" height="14" fill="#ffd35e"/>
+                <path d="M12 7c-2-4-6-4-6-1.5S10 7 12 7zm0 0c2-4 6-4 6-1.5S14 7 12 7z" fill="#ffd35e"/>
+              </svg>
+              <span class="hdr__bonus-text">BONUS</span>
+            </span>
+            <span class="hdr__deposit-text">Deposit</span>
           </button>
           <!-- ▲ 新增到此 ────────────────────────────────────────── -->
 
@@ -4967,9 +5225,10 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
             </div>
             <div class="coupon__right">
               <p class="coupon__cap">Capped At <b id="rCap">₱2,000</b></p>
+              <!-- 打码金额直接算好给玩家看（规格 4.2.5）：跟著 Payment Amount 输入的金额即时变 -->
               <p class="coupon__meta">
-                Turnover:<br>
-                3x turnover of deposited and bonus<br>
+                Conditions:<br>
+                Complete ₱<span id="rBets">0</span> Bets To Withdraw<br>
                 Min Deposit <span id="rMin">500.00</span>
               </p>
             </div>
@@ -4989,6 +5248,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
           <button type="button" class="quick js-quick" data-add="500">+ 500<span class="quick__badge js-badge">4%</span></button>
           <button type="button" class="quick js-quick" data-add="1000">+ 1000<span class="quick__badge js-badge">4%</span></button>
           <button type="button" class="quick js-quick" data-add="10000">+ 10000<span class="quick__badge js-badge">4%</span></button>
+          <button type="button" class="quick js-quick" data-add="20000">+ 20000<span class="quick__badge js-badge">4%</span></button>
         </div>
 
         <input class="amount-box" id="amount" type="text" inputmode="decimal" value="₱ 0" aria-label="Deposit amount">
@@ -5154,7 +5414,7 @@ let selected = null;
    把一张券画成可用或不可用
    -------------------------------------------------------------------------- */
 /* 今日领满 ＝ 这张券整列不显示（不是转灰）。
-   券不在版面上，首页吊牌也跟著不挂——两边用同一个依据。 */
+   券不在版面上，首页 BONUS 条也跟著不显示——两边用同一个依据。 */
 function paintCoupon(rowId, chkId, usable) {
   const row = document.getElementById(rowId);
   const chk = document.getElementById(chkId);
@@ -5183,6 +5443,23 @@ function readAmount() {
   const raw = document.getElementById('amount').value.replace(/[^\d.]/g, '');
   const n = parseFloat(raw);
   return isNaN(n) ? 0 : n;
+}
+
+/* 原型假设的流水设置（真实系统读后台）：
+   会员层级稽核 80%、VIP 稽核 50%（相乘 40%；VIP 流水不计算时 vipOn＝false 就不乘）；
+   本活动「奖金所需流水」勾 本金＋奖金、3 倍（规格 2.4） */
+const TURN = { level: 0.8, vip: 0.5, vipOn: true, actPrin: true, actBonus: true, act: 3 };
+
+/* 券面的打码金额（规格 4.2.5）：
+   充值 × 会员层级稽核比例 × VIP 稽核比例 ＋（勾的本金 ＋ 勾的奖金）× 活动倍数
+   用哪个金额：输入金额达门槛就用输入金额；还没输或低于门槛一律显示 0 */
+function calcBets(amount, r) {
+  if (!(amount >= r.min)) return 0;
+  const dep   = amount;
+  const bonus = calcBonus(dep, r.pct, r.cap);
+  const act   = ((TURN.actPrin ? dep : 0) + (TURN.actBonus ? bonus : 0)) * TURN.act;
+  const depRate = TURN.level * (TURN.vipOn ? TURN.vip : 1);   // 充值流水比例
+  return Math.floor((dep * depRate + act) * 100) / 100;
 }
 
 /* 算奖励：金额 × 百分比，超过上限取上限，小数第 2 位无条件舍去 */
@@ -5214,12 +5491,19 @@ function renderPayment() {
   const c = selectedParams();
   const amount = readAmount();
 
-  document.querySelectorAll('.js-badge').forEach(function (b) {
-    b.hidden = !c;
-    if (c) b.textContent = c.pct + '%';
-  });
+  // 券面的打码金额跟著输入金额走
+  // 没勾券 → 显示 0（这笔不带券、不发奖）；勾了券才照输入金额算
+  const rr = currentRepeat();
+  if (rr) document.getElementById('rBets').textContent = (selected === 'repeat') ? amt(calcBets(amount, rr)) : '0';
 
   const belowMin = !!c && amount > 0 && amount < c.min;
+
+  // 角标：勾了券、而且金额达门槛才出现（照现有前台：₱10 低于门槛时不挂，₱100 达门槛才挂）
+  const showBadge = !!c && amount >= c.min;
+  document.querySelectorAll('.js-badge').forEach(function (b) {
+    b.hidden = !showBadge;
+    if (c) b.textContent = c.pct + '%';
+  });
   document.getElementById('amountErr').hidden = !belowMin;
   document.getElementById('amount').classList.toggle('is-error', belowMin);
   document.getElementById('btnSubmit').disabled = belowMin || amount <= 0;
@@ -5237,7 +5521,8 @@ function renderPayment() {
     const bonus = calcBonus(amount, c.pct, c.cap);
     const hitCap = amount * c.pct / 100 >= c.cap;   // 刚好等于上限也标 (capped)
     bar.className = 'extra-bar';
-    txt.innerHTML = 'You Will Receive An Extra ₱' + money(bonus)
+    // 金额前面是金币图示（照现有前台），数字不补 .00
+    txt.innerHTML = 'You Will Receive An Extra <span class="extra-bar__coin" aria-hidden="true">₱</span>' + amt(bonus)
       + (hitCap ? ' <span class="extra-bar__cap">(capped)</span>' : '');
   }
 }
@@ -5289,9 +5574,9 @@ function renderDailyList() {
 }
 
 /* --------------------------------------------------------------------------
-   首页顶部栏的 BONUS 吊牌挂饰
+   首页顶部栏的 BONUS 条
      规则只有一条：存款页现在有没有券「可勾」。
-     有任何一张可勾就挂，一张都没有（或全部灰掉）就整块不挂。
+     有任何一张可勾就显示，一张都没有（或全部灰掉）就整条不显示。
      这里直接数券列上的 data-usable，paintCoupon 已经把状态写在上面了，
      不另外维护一份判断，才不会两边说法不一致。
    -------------------------------------------------------------------------- */
@@ -5306,8 +5591,7 @@ function renderPromoHead() {
 function renderHeaderCharm() {
   const usable = document.querySelectorAll('.coupon-row[data-usable="yes"]').length;
 
-  // 吊牌是一块 SVG，SVG 不支援 el.hidden = true 这种捷径写法，
-  // 必须直接加／拿掉 hidden 属性，CSS 那条 .hdr__charm[hidden] 才会生效。
+  // BONUS 条：有券可勾才显示（规格 4.1）
   document.getElementById('hdrCharm').toggleAttribute('hidden', usable === 0);
 }
 

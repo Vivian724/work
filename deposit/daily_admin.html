@@ -1815,10 +1815,25 @@ function validateAndSave(e) {
     release(300);
     return;
   }
-  warns.forEach(function (m) { toast('warn', m); });
-  toast('success', '保存成功');
-  formDirty = false;
-  release(1200);
+  function finish() {
+    warns.forEach(function (m) { toast('warn', m); });
+    toast('success', '保存成功');
+    formDirty = false;
+    if (lastLoadedId && ACTIVITIES[lastLoadedId]) ACTIVITIES[lastLoadedId].status = savingOn ? 'on' : 'off';
+    release(1200);
+  }
+
+  /* 进行中的活动改成关闭：先跳确认（规格 2.2.5）。按取消就不保存。 */
+  const was = lastLoadedId && ACTIVITIES[lastLoadedId];
+  const now = Date.now();
+  const running = was && was.status === 'on'
+               && now >= toDay(was.start) && now <= new Date(was.end.replace(' ', 'T') + '+08:00').getTime();
+  if (!savingOn && running) {
+    askConfirm('活动进行中，关闭后将立即下架（已送出的充值仍会发奖），确定关闭吗？', finish);
+    release(300);
+    return;
+  }
+  finish();
 }
 
 /* --------------------------------------------------------------------------

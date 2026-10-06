@@ -168,6 +168,7 @@ th.op,td.op{white-space:nowrap;}
 .op a{margin:0 4px;display:inline-block;white-space:nowrap;word-break:keep-all;}
 .op a.del{color:var(--c-danger);}
 .status-dot{display:inline-flex;align-items:center;gap:5px;}
+.danger-txt{color:var(--c-danger);font-weight:600;}
 .status-dot::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c-success);}
 .status-dot--off::before{background:var(--c-text-3);}
 
@@ -321,8 +322,15 @@ th.cell-id,td.cell-id{white-space:nowrap;}
 .tier-ln .input{min-width:0;}
 .tier-ln{flex-wrap:nowrap;gap:8px;font-size:.84rem;color:var(--c-text-2);white-space:nowrap;}
 .link-add{display:inline-block;color:var(--c-primary);font-size:.82rem;cursor:pointer;}
+.link-add.is-off{color:var(--c-text-3);opacity:.6;cursor:not-allowed;pointer-events:none;}
 .link-del{color:var(--c-danger);font-size:.8rem;cursor:pointer;white-space:nowrap;}
 .hidden{display:none !important;}
+.i18n-add{color:var(--c-primary);font-size:.95rem;margin-left:4px;}
+/* 任务报表统计：组任务＝汇总行＋缩排明细；小计/总计 */
+.rp-grp td{font-weight:600;color:var(--c-text);}
+.rp-sub td{background:#fafbfc;font-size:.78rem;color:var(--c-text-3);padding-top:8px;padding-bottom:8px;}
+.rp-sub td.cell-name{padding-left:28px;}
+.rp-total td{background:var(--c-bg-head);font-weight:600;color:var(--c-text);}
 </style>
 </head>
 <body>
@@ -369,9 +377,8 @@ th.cell-id,td.cell-id{white-space:nowrap;}
           <button class="subtab subtab--active" data-tab="setting" role="tab">任务设置</button>
           <button class="subtab" data-tab="audit" role="tab">资料审核 <span class="badge">89</span></button>
           <button class="subtab" data-tab="record" role="tab">任务完成记录 <span class="badge">3398</span></button>
-          <button class="subtab" data-tab="report" role="tab">任务完成明细</button>
-          <button class="subtab" data-tab="tasklog" role="tab">每日任务统计 <span class="tag tag--new" style="margin-left:6px">本次新增</span></button>
-          <button class="subtab" data-tab="blacklist" role="tab">黑名单设置 <span class="tag tag--new" style="margin-left:6px">对应排除包</span></button>
+          <button class="subtab" data-tab="report" role="tab">任务报表统计</button>
+          <button class="subtab" data-tab="blacklist" role="tab">黑名单设置</button>
         </div>
 
         <!-- ============ TAB: 任务设置 ============ -->
@@ -389,87 +396,125 @@ th.cell-id,td.cell-id{white-space:nowrap;}
               <thead>
                 <tr>
                   <th class="cell-id">任务ID</th><th>任务类别</th><th class="cell-name">任务名称</th><th>任务条件</th><th>任务奖励</th>
-                  <th>适用等级/标签 <span class="tag tag--new">新增</span><br><span class="note" style="font-weight:400">同步「目标用户」勾选项</span></th>
-                  <th>参与资格 <span class="tag tag--new">新增</span></th>
-                  <th>名额上限 <span class="tag tag--new">新增</span></th>
-                  <th>适用端口</th><th>任务时间</th><th>审核方式</th><th>奖励发放方式</th><th>排序</th><th>任务状态</th><th>操作</th>
+                  <th>适用等级/层级</th>
+                  <th>任务参与要求</th>
+                  <th>名额<br><span class="note" style="font-weight:400">已发送 / 上限</span></th>
+                  <th>适用端口</th><th>任务时间</th><th>审核方式</th><th>排序</th><th>任务状态</th><th>操作</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td class="cell-id">944</td><td>基础任务</td><td class="cell-name">填写真实姓名-不要删除</td><td>信息完善<br><span class="note">填写真实姓名</span></td><td>积分 10</td>
+                  <td class="cell-id">944</td><td>基础任务</td><td class="cell-name">填写真实姓名-不要删除 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>信息完善<br><span class="note">填写真实姓名</span></td><td>积分 10</td>
                   <td><span class="stack-chip"><span class="tag tag--info">全部VIP</span><span class="tag tag--gray">不限标签</span></span></td>
                   <td class="note">不限</td>
                   <td class="note">不限</td>
-                  <td>PC,H5,APP</td><td>永久</td><td>自动审核</td><td>自动发放</td><td>101</td>
-                  <td><span class="status-dot">开启</span></td>
-                  <td class="op"><a>关闭</a><a class="del">删除</a><a onclick="openModal('edit')">编辑</a></td>
+                  <td>PC,H5,APP</td><td>永久</td><td>自动审核</td><td>101</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
                 </tr>
                 <tr>
-                  <td class="cell-id">1024</td><td>基础任务</td><td class="cell-name">小额用户 · 每日充值任务</td><td>充值 ₱50</td><td>积分 100</td>
+                  <td class="cell-id">1024</td><td>基础任务</td><td class="cell-name">小额用户 · 每日充值任务 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>资金<br><span class="note">充值 ₱50</span></td><td>积分 100</td>
                   <td><span class="stack-chip"><span class="tag tag--info">VIP0</span><span class="tag tag--info">VIP1</span><span class="tag tag--gray">TL</span><span class="tag tag--gray">ML</span></span></td>
                   <td><span class="stack-chip"><span class="tag tag--info">累计充值 ₱50~₱5,000</span><span class="pill">完全符合</span><span class="tag tag--info">累计有效投注 ₱200~₱10,000</span></span></td>
-                  <td><span class="tag tag--edit">每日1,000人</span></td>
-                  <td>H5,APP</td><td>每日<br><span class="note">00:00~23:59</span></td><td>自动审核</td><td>用户手动领取</td><td>10</td>
-                  <td><span class="status-dot">开启</span></td>
-                  <td class="op"><a>关闭</a><a class="del">删除</a><a onclick="openModal('edit')">编辑</a></td>
+                  <td>790 / 1,000</td>
+                  <td>H5,APP</td><td>每日</td><td>自动审核</td><td>10</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
                 </tr>
                 <tr>
-                  <td class="cell-id">1025</td><td>基础任务</td><td class="cell-name">高价值用户 · 周限时投注</td><td>投注 ₱5,000</td><td>彩金 222</td>
+                  <td class="cell-id">1080</td><td>基础任务</td><td class="cell-name">每日投注任务 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>资金<br><span class="note">投注 ₱100</span></td><td>彩金 50</td>
+                  <td><span class="stack-chip"><span class="tag tag--info">全部VIP</span><span class="tag tag--gray">不限标签</span></span></td>
+                  <td class="note">不限</td>
+                  <td>356 / 1,000</td>
+                  <td>PC,H5,APP</td><td>每日</td><td>自动审核</td><td>9</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
+                </tr>
+                <tr>
+                  <td class="cell-id">1040</td><td>基础任务</td><td class="cell-name">中额·每日投注任务 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>资金<br><span class="note">投注 ₱200</span></td><td>积分 100</td>
+                  <td><span class="stack-chip"><span class="tag tag--info">全部VIP</span><span class="tag tag--gray">不限标签</span></span></td>
+                  <td class="note">不限</td>
+                  <td>512 / 1,000</td>
+                  <td>PC,H5,APP</td><td>每日</td><td>自动审核</td><td>4</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
+                </tr>
+                <tr>
+                  <td class="cell-id">1042</td><td>基础任务</td><td class="cell-name">每日游戏任务·CQ9电子 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>资金<br><span class="note">投注 ₱100（CQ9电子）</span></td><td>积分 100</td>
+                  <td><span class="stack-chip"><span class="tag tag--info">全部VIP</span><span class="tag tag--gray">不限标签</span></span></td>
+                  <td class="note">不限</td>
+                  <td><span class="danger-txt" style="white-space:nowrap">200 / 200 已满</span></td>
+                  <td>PC,H5,APP</td><td>每日</td><td>自动审核</td><td>3</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
+                </tr>
+                <tr>
+                  <td class="cell-id"><div class="tid">1050<span class="tid__subs"><span class="tid__sub">1050-1</span><span class="tid__sub">1050-2</span><span class="tid__sub">1050-3</span></span></div></td><td><span class="tag tag--new">任务组</span></td><td class="cell-name">每日三连·组任务 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td><span class="note">1050-1 充值 ₱50<br>1050-2 投注 ₱200<br>1050-3 投注 ₱300</span></td><td><span class="note">1050-1 积分 100<br>1050-2 积分 150<br>1050-3 积分 200<br>额外奖励：任意完成 2 个 彩金 100；3 个 积分 300</span></td>
+                  <td><span class="stack-chip"><span class="tag tag--info">全部VIP</span><span class="tag tag--gray">不限标签</span></span></td>
+                  <td class="note">不限</td>
+                  <td>每项上限 1,000</td>
+                  <td>PC,H5,APP</td><td>每日</td><td>自动审核</td><td>2</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
+                </tr>
+                <tr>
+                  <td class="cell-id">1025</td><td>基础任务</td><td class="cell-name">高价值用户 · 周限时投注 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>资金<br><span class="note">投注 ₱5,000</span></td><td>彩金 222</td>
                   <td><span class="stack-chip"><span class="tag tag--info">VIP3</span><span class="tag tag--info">VIP4</span><span class="tag tag--gray">TH</span><span class="tag tag--gray">RH</span></span></td>
                   <td><span class="stack-chip"><span class="tag tag--info">累计有效投注 ₱5,000~₱500,000</span></span></td>
-                  <td><span class="tag tag--edit">每期200人</span></td>
-                  <td>PC,H5,APP</td><td>周限时<br><span class="note">星期一 至 星期五</span></td><td>自动审核</td><td>自动发放</td><td>8</td>
-                  <td><span class="status-dot">开启</span></td>
-                  <td class="op"><a>关闭</a><a class="del">删除</a><a onclick="openModal('edit')">编辑</a></td>
+                  <td><span class="danger-txt" style="white-space:nowrap">200 / 200 已满</span></td>
+                  <td>PC,H5,APP</td><td>周限时<br><span class="note">星期一 至 星期五</span></td><td>自动审核</td><td>8</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
                 </tr>
                 <tr>
-                  <td class="cell-id"><div class="tid">1030<span class="tid__subs"><span class="tid__sub">1030-1</span><span class="tid__sub">1030-2</span><span class="tid__sub">1030-3</span></span></div></td><td><span class="tag tag--new">任务组</span></td><td class="cell-name">Small Stake Club · 组任务</td><td><span class="note">1030-1 充值 ₱100<br>1030-2 投注 ₱1,000<br>1030-3 投注 ₱200</span></td><td><span class="note">1030-1 积分 100<br>1030-2 积分 150<br>1030-3 积分 200<br>额外奖励：任意完成 2 个 彩金 100；3 个 积分 500</span></td>
+                  <td class="cell-id"><div class="tid">1030<span class="tid__subs"><span class="tid__sub">1030-1</span><span class="tid__sub">1030-2</span><span class="tid__sub">1030-3</span></span></div></td><td><span class="tag tag--new">任务组</span></td><td class="cell-name">Small Stake Club · 组任务 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td><span class="note">1030-1 充值 ₱100<br>1030-2 投注 ₱1,000<br>1030-3 投注 ₱200</span></td><td><span class="note">1030-1 积分 100<br>1030-2 积分 150<br>1030-3 积分 200<br>额外奖励：任意完成 2 个 彩金 100；3 个 积分 500</span></td>
                   <td><span class="stack-chip"><span class="tag tag--info">VIP1</span><span class="tag tag--gray">TH</span></span></td>
                   <td><span class="stack-chip"><span class="tag tag--info">累计充值 ₱100~₱5,000</span><span class="pill">符合任一</span><span class="tag tag--info">累计有效投注 ₱1,000~₱20,000</span></span></td>
-                  <td><span class="tag tag--edit">总500人</span></td>
-                  <td>H5,APP</td><td>限时<br><span class="note">2026-08-01 00:00~2026-08-31 23:59</span></td><td>自动审核</td><td>用户手动领取</td><td>6</td>
-                  <td><span class="status-dot">开启</span></td>
-                  <td class="op"><a>关闭</a><a class="del">删除</a><a onclick="openModal('edit')">编辑</a></td>
+                  <td>每项上限 500</td>
+                  <td>H5,APP</td><td>限时<br><span class="note">2026-08-01 00:00~2026-08-31 23:59</span></td><td>自动审核</td><td>6</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
                 </tr>
                 <tr>
-                  <td class="cell-id"><div class="tid">1060<span class="tid__subs"><span class="tid__sub">1060-1</span><span class="tid__sub">1060-2</span></span></div></td><td><span class="tag tag--new">任务组</span></td><td class="cell-name">充值投注挑战 · 组任务</td><td><span class="note">1060-1 充值 ₱500 AND 投注 ₱2,000<br>1060-2 充值 ₱1,000 AND 投注 ₱5,000</span></td><td><span class="note">1060-1 彩金 100<br>1060-2 彩金 300<br>额外奖励：任意完成 1 个 彩金 200；2 个 彩金 500</span></td>
+                  <td class="cell-id"><div class="tid">1060<span class="tid__subs"><span class="tid__sub">1060-1</span><span class="tid__sub">1060-2</span></span></div></td><td><span class="tag tag--new">任务组</span></td><td class="cell-name">充值投注挑战 · 组任务 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td><span class="note">1060-1 充值 ₱500<br>1060-2 投注 ₱5,000</span></td><td><span class="note">1060-1 彩金 100<br>1060-2 彩金 300<br>额外奖励：任意完成 1 个 彩金 200；2 个 彩金 500</span></td>
                   <td><span class="stack-chip"><span class="tag tag--info">VIP2</span><span class="tag tag--info">VIP3</span><span class="tag tag--gray">不限标签</span></span></td>
                   <td><span class="tag tag--info">完成KYC</span></td>
-                  <td><span class="tag tag--edit">总300人</span></td>
-                  <td>PC,H5,APP</td><td>限时<br><span class="note">2026-08-10 00:00~2026-08-31 23:59</span></td><td>自动审核</td><td>用户手动领取</td><td>5</td>
-                  <td><span class="status-dot">开启</span></td>
-                  <td class="op"><a>关闭</a><a class="del">删除</a><a onclick="openModal('edit')">编辑</a></td>
+                  <td>每项上限 300</td>
+                  <td>PC,H5,APP</td><td>限时<br><span class="note">2026-08-10 00:00~2026-08-31 23:59</span></td><td>自动审核</td><td>5</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
                 </tr>
                 <tr>
-                  <td class="cell-id">951</td><td>基础任务</td><td class="cell-name">关注Facebook</td><td>其他<br><span class="note">关注Facebook</span></td><td>积分 20</td>
+                  <td class="cell-id">1070</td><td>基础任务</td><td class="cell-name">每周投注送免费旋转 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>资金<br><span class="note">投注 ₱1,000</span></td><td>免费旋转<br><span class="note">ON色碟</span></td>
+                  <td><span class="stack-chip"><span class="tag tag--info">全部VIP</span><span class="tag tag--gray">不限标签</span></span></td>
+                  <td class="note">不限</td>
+                  <td>86 / 500</td>
+                  <td>PC,H5,APP</td><td>每周</td><td>自动审核</td><td>7</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
+                </tr>
+                <tr>
+                  <td class="cell-id">951</td><td>基础任务</td><td class="cell-name">关注Facebook <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>其他<br><span class="note">关注Facebook</span></td><td>积分 20</td>
                   <td><span class="stack-chip"><span class="tag tag--info">全部VIP</span><span class="tag tag--gray">不限标签</span></span></td>
                   <td class="note">不限</td>
                   <td class="note">不限</td>
-                  <td>PC,H5,APP</td><td>永久</td><td>人工审核</td><td>自动发放</td><td>20</td>
-                  <td><span class="status-dot">开启</span></td>
-                  <td class="op"><a>关闭</a><a class="del">删除</a><a onclick="openModal('edit')">编辑</a></td>
+                  <td>PC,H5,APP</td><td>永久</td><td>人工审核</td><td>20</td>
+                  <td>开启</td>
+                  <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
                 </tr>
                 <tr>
-                  <td class="cell-id">949</td><td>基础任务</td><td class="cell-name">KYC认证-不要删除</td><td>信息完善<br><span class="note">KYC认证</span></td><td>彩金 20</td>
+                  <td class="cell-id">949</td><td>基础任务</td><td class="cell-name">KYC认证-不要删除 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>信息完善<br><span class="note">KYC认证</span></td><td>彩金 20</td>
                   <td><span class="stack-chip"><span class="tag tag--info">全部VIP</span><span class="tag tag--gray">不限标签</span></span></td>
                   <td><span class="tag tag--info">完成KYC部分认证</span></td>
                   <td class="note">不限</td>
-                  <td>PC,H5,APP</td><td>永久</td><td>自动审核</td><td>自动发放</td><td>105</td>
-                  <td><span class="status-dot status-dot--off">关闭</span></td>
-                  <td class="op"><a>开启</a><a class="del">删除</a><a onclick="openModal('edit')">编辑</a></td>
+                  <td>PC,H5,APP</td><td>永久</td><td>自动审核</td><td>105</td>
+                  <td>关闭</td>
+                  <td class="op"><a>开启</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <div class="tag-legend">
-            图例：
-            <span class="tag tag--new">新增</span> 本次新增字段/功能 ·
-            <span class="tag tag--edit">异动</span> 现有字段本次调整 ·
-            <span class="tag tag--info">条件</span> 参与资格/条件 ·
-            <span class="pill">完全符合</span><span class="pill">符合任一</span> 充值与投注资格的组合方式
-          </div>
         </section>
 
         <!-- ============ TAB: 资料审核 ============ -->
@@ -483,8 +528,8 @@ th.cell-id,td.cell-id{white-space:nowrap;}
             <table>
               <thead><tr><th class="cell-id">任务ID</th><th class="cell-name">任务名称</th><th>会员名</th><th>上传资料</th><th>提交时间</th><th>状态</th><th>操作</th></tr></thead>
               <tbody>
-                <tr><td class="cell-id">951</td><td class="cell-name">关注Facebook</td><td>okbet0469afbr7</td><td><a>查看截图</a></td><td class="cell-time">2026-08-19 10:24:00</td><td><span class="tag tag--edit">待审核</span></td><td class="op"><a>通过</a><a class="del">驳回</a></td></tr>
-                <tr><td class="cell-id">951</td><td class="cell-name">关注Facebook</td><td>okbet99910n0s3</td><td><a>查看截图</a></td><td class="cell-time">2026-08-19 10:22:00</td><td><span class="tag tag--edit">待审核</span></td><td class="op"><a>通过</a><a class="del">驳回</a></td></tr>
+                <tr><td class="cell-id">951</td><td class="cell-name">关注Facebook</td><td>okbet0469afbr7</td><td><a>查看截图</a></td><td class="cell-time">2026-08-19 10:27:41</td><td><span class="tag tag--edit">待审核</span></td><td class="op"><a>通过</a><a class="del">驳回</a></td></tr>
+                <tr><td class="cell-id">951</td><td class="cell-name">关注Facebook</td><td>okbet99910n0s3</td><td><a>查看截图</a></td><td class="cell-time">2026-08-18 16:05:20</td><td><span class="tag tag--gray">审核未通过</span></td><td class="op note">—</td></tr>
               </tbody>
             </table>
           </div>
@@ -497,29 +542,46 @@ th.cell-id,td.cell-id{white-space:nowrap;}
             <input class="input" placeholder="任务ID（如 1030 或 1030-2）" style="min-width:240px"/>
             <input class="input" placeholder="帐户" />
             <select class="select"><option>选择币别</option><option>PHP</option></select>
-            <select class="select"><option>全部状态</option><option>待审核</option><option>待领取</option><option>自动发放</option><option>已领取</option><option>审核未通过</option><option>已过期</option></select>
+            <select class="select"><option>全部状态</option><option>待审核</option><option>待领取</option><option>自动发放</option><option>已领取</option><option>审核未通过</option><option>已过期</option><option>名额已满</option></select>
             <button class="btn btn--primary">搜索</button>
             <button class="btn btn--primary">导出</button>
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th class="cell-id">任务ID <span class="tag tag--new">新增</span></th><th class="cell-name">任务名称</th><th>会员名</th><th>币种</th><th>奖励类型</th><th>奖励值</th><th>创建时间</th><th>发放状态</th><th>审核人</th><th>审核时间</th><th>操作</th></tr></thead>
+              <thead><tr><th class="cell-id">任务ID</th><th class="cell-name">任务名称</th><th>会员名</th><th>币种</th><th>奖励类型</th><th>奖励值</th><th>创建时间</th><th>发放状态</th><th>领取时间</th><th>审核人</th><th>审核时间</th><th>操作</th></tr></thead>
               <tbody>
-                <tr><td class="cell-id">944</td><td class="cell-name">填写真实姓名-不要删除</td><td>okbet99910n0s3</td><td>PHP</td><td>积分</td><td>10</td><td class="cell-time">2026-08-19 10:28:12</td><td>自动发放</td><td>SYSTEM</td><td class="cell-time">2026-08-19 10:28:12</td><td class="op note">—</td></tr>
-                <tr><td class="cell-id">1024</td><td class="cell-name">小额用户 · 每日充值任务</td><td>okbet99910n0s3</td><td>PHP</td><td>积分</td><td>100</td><td class="cell-time">2026-08-19 10:28:35</td><td><span class="tag tag--info">待领取</span></td><td>SYSTEM</td><td class="cell-time">2026-08-19 10:28:47</td><td class="op note">—</td></tr>
-                <tr><td class="cell-id">1024</td><td class="cell-name">小额用户 · 每日充值任务</td><td>okbet99910n0s3</td><td>PHP</td><td>积分</td><td>100</td><td class="cell-time">2026-08-18 22:10:05</td><td><span class="tag tag--gray">已过期</span></td><td>SYSTEM</td><td class="cell-time">2026-08-18 22:10:05</td><td class="op note">—</td></tr>
-                <tr><td class="cell-id">1030-1</td><td class="cell-name">Small Stake Club · 子任务1 <span class="tag tag--new">子任务</span></td><td>okbet7712kd9m</td><td>PHP</td><td>积分</td><td>100</td><td class="cell-time">2026-08-19 20:41:07</td><td>已领取</td><td>SYSTEM</td><td class="cell-time">2026-08-19 20:41:07</td><td class="op note">—</td></tr>
-                <tr><td class="cell-id">1030-2</td><td class="cell-name">Small Stake Club · 子任务2 <span class="tag tag--new">子任务</span></td><td>okbet7712kd9m</td><td>PHP</td><td>积分</td><td>150</td><td class="cell-time">2026-08-19 21:04:22</td><td><span class="tag tag--info">待领取</span></td><td>SYSTEM</td><td class="cell-time">2026-08-19 21:04:33</td><td class="op note">—</td></tr>
-                <tr><td class="cell-id">1030</td><td class="cell-name">Small Stake Club · 额外奖励（任意完成 2 个）</td><td>okbet7712kd9m</td><td>PHP</td><td>彩金</td><td>100</td><td class="cell-time">2026-08-19 21:04:58</td><td><span class="tag tag--info">待领取</span></td><td>SYSTEM</td><td class="cell-time">2026-08-19 21:04:58</td><td class="op note">—</td></tr>
-                <tr><td class="cell-id">1060-1</td><td class="cell-name">充值投注挑战 · 子任务1 <span class="tag tag--new">子任务</span></td><td>okbet0469afbr7</td><td>PHP</td><td>彩金</td><td>100</td><td class="cell-time">2026-08-19 15:12:40</td><td>已领取</td><td>SYSTEM</td><td class="cell-time">2026-08-19 15:12:40</td><td class="op note">—</td></tr>
-                <tr><td class="cell-id">951</td><td class="cell-name">关注Facebook</td><td>okbet0469afbr7</td><td>PHP</td><td>积分</td><td>20</td><td class="cell-time">2026-08-19 10:27:41</td><td><span class="tag tag--edit">待审核</span></td><td>—</td><td>—</td><td class="op"><a>审核通过</a><a class="del">驳回</a></td></tr>
+                <tr><td class="cell-id">944</td><td class="cell-name">填写真实姓名-不要删除</td><td>okbet99910n0s3</td><td>PHP</td><td>积分</td><td>10</td><td class="cell-time">2026-08-19 10:28:12</td><td>自动发放</td><td class="cell-time">2026-08-19 10:28:12</td><td>SYSTEM</td><td class="cell-time">2026-08-19 10:28:12</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">1024</td><td class="cell-name">小额用户 · 每日充值任务</td><td>okbet99910n0s3</td><td>PHP</td><td>积分</td><td>100</td><td class="cell-time">2026-08-19 10:28:05</td><td>已领取</td><td class="cell-time">2026-08-19 10:28:41</td><td>SYSTEM</td><td class="cell-time">2026-08-19 10:28:05</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">1024</td><td class="cell-name">小额用户 · 每日充值任务</td><td>okbet12091ab</td><td>PHP</td><td>积分</td><td><span class="note">—</span></td><td class="cell-time">2026-08-17 19:02:13</td><td><span class="tag tag--gray">已过期</span></td><td class="cell-time"><span class="note">—</span></td><td>SYSTEM</td><td class="cell-time">2026-08-17 19:02:13</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">1080</td><td class="cell-name">每日投注任务</td><td>okbet55120ab</td><td>PHP</td><td>彩金</td><td>50</td><td class="cell-time">2026-08-18 21:30:02</td><td>已领取</td><td class="cell-time">2026-08-19 09:12:40</td><td>SYSTEM</td><td class="cell-time">2026-08-18 21:30:02</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">1080</td><td class="cell-name">每日投注任务</td><td>okbet31207mk</td><td>PHP</td><td>彩金</td><td>50</td><td class="cell-time">2026-08-19 14:20:11</td><td>已领取</td><td class="cell-time">2026-08-19 14:20:40</td><td>SYSTEM</td><td class="cell-time">2026-08-19 14:20:11</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">1042</td><td class="cell-name">每日游戏任务·CQ9电子</td><td>okbet88820qq</td><td>PHP</td><td>积分</td><td><span class="note">—</span></td><td class="cell-time">2026-08-19 22:41:09</td><td><span class="danger-txt">名额已满</span></td><td class="cell-time"><span class="note">—</span></td><td>SYSTEM</td><td class="cell-time">2026-08-19 22:41:09</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">1070</td><td class="cell-name">每周投注送免费旋转</td><td>okbet55501x2a</td><td>PHP</td><td>免费旋转<br><span class="note">ON色碟</span></td><td>1 张</td><td class="cell-time">2026-08-16 20:05:33</td><td>自动发放</td><td class="cell-time">2026-08-16 20:05:33</td><td>SYSTEM</td><td class="cell-time">2026-08-16 20:05:33</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">1030-1</td><td class="cell-name">Small Stake Club · 子任务1 · 充值 ₱100 <span class="tag tag--new">子任务</span></td><td>okbet7712kd9m</td><td>PHP</td><td>积分</td><td>100</td><td class="cell-time">2026-08-19 20:41:07</td><td>已领取</td><td class="cell-time">2026-08-19 20:41:30</td><td>SYSTEM</td><td class="cell-time">2026-08-19 20:41:07</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">1030-2</td><td class="cell-name">Small Stake Club · 子任务2 · 投注 ₱1,000 <span class="tag tag--new">子任务</span></td><td>okbet7712kd9m</td><td>PHP</td><td>积分</td><td>150</td><td class="cell-time">2026-08-19 21:03:52</td><td>已领取</td><td class="cell-time">2026-08-19 21:04:19</td><td>SYSTEM</td><td class="cell-time">2026-08-19 21:03:52</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">1030</td><td class="cell-name">Small Stake Club · 额外奖励 · 任意完成 2 个 <span class="tag tag--new">额外奖励</span></td><td>okbet7712kd9m</td><td>PHP</td><td>彩金</td><td>100</td><td class="cell-time">2026-08-19 21:03:52</td><td><span class="tag tag--edit">待领取</span></td><td class="cell-time"><span class="note">—</span></td><td>SYSTEM</td><td class="cell-time">2026-08-19 21:03:52</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">1060-1</td><td class="cell-name">充值投注挑战 · 子任务1 · 充值 ₱500 <span class="tag tag--new">子任务</span></td><td>okbet0469afbr7</td><td>PHP</td><td>彩金</td><td>100</td><td class="cell-time">2026-08-19 15:12:40</td><td>已领取</td><td class="cell-time">2026-08-19 15:13:02</td><td>SYSTEM</td><td class="cell-time">2026-08-19 15:12:40</td><td class="op note">—</td></tr>
+                <tr><td class="cell-id">951</td><td class="cell-name">关注Facebook</td><td>okbet0469afbr7</td><td>PHP</td><td>积分</td><td>20</td><td class="cell-time">2026-08-19 10:27:41</td><td><span class="tag tag--edit">待审核</span></td><td class="cell-time"><span class="note">—</span></td><td><span class="note">—</span></td><td class="cell-time"><span class="note">—</span></td><td class="op"><a>审核通过</a><a class="del">驳回</a></td></tr>
+                <tr><td class="cell-id">951</td><td class="cell-name">关注Facebook</td><td>okbet99910n0s3</td><td>PHP</td><td>积分</td><td>20</td><td class="cell-time">2026-08-18 16:05:20</td><td><span class="tag tag--gray">审核未通过</span></td><td class="cell-time"><span class="note">—</span></td><td>admin_ops</td><td class="cell-time">2026-08-18 18:30:12</td><td class="op note">—</td></tr>
               </tbody>
             </table>
           </div>
           <div class="pager">Total 4082 <span class="pg pg--on">1</span><span class="pg">2</span><span class="pg">3</span><span class="pg">…</span><span class="pg">409</span></div>
         </section>
 
-        <!-- ============ TAB: 任务完成明细（原：任务报表统计(用户)）============ -->
+        <!-- ============ TAB: 任务报表统计（既有格式；本次只补券类奖励栏位）============
+          说明（之后写进规格书，画面不放）：
+          · 按「任务」汇总所选时间区间（UTC+8）的数据，所有任务时间类型都统计；看单日＝时间区间选同一天。
+          · 累计完成次数＝区间内完成任务的次数（每日／每周任务同一人每期可各算一次；含完成但遇名额已满、没发到奖励的）；人工审核的任务以「审核通过」才算完成。
+          · 累计发放＝会员实际领到的部分（自动发放＋已领取，含从「奖励找回」补领的）；待领取／待审核／审核未通过／已过期／名额已满不计。
+            （与「名额」口径不同：名额在奖励发送时就占用，不论领不领；报表只算真正领到的，用来看实际发出的成本。）
+          · 统计时间归属：累计完成次数按「完成时间」落在查询区间内计；累计发放按「领取时间」（自动发放＝完成时间）计——补领落在领取当天。
+          · 彩金、积分为金额；免费旋转／免费投注／优惠券／golden draw券为张数；该任务没有此奖励显示「—」。
+          · 组任务：先一行「汇总」（与基础任务同一层级）——累计完成次数＝各子任务完成次数合计（额外奖励不是任务，不算完成次数）；累计发放＝子任务＋额外奖励的发放合计。
+            汇总行下方缩排列明细：子任务（ID＝母ID-序号，名称带条件）、额外奖励每一档（不另给 ID，名称标「任意完成 n 个」，完成次数＝达成该档的次数）。
+          · 小计＝本页、总计＝全部查询结果；都只加「基础任务行＋组任务汇总行」，明细行不重复加总。
+          · 每个用户的完成明细看「任务完成记录」，本页不重复列。
+        -->
         <section data-panel="report" class="hidden">
           <div class="field-row">
             <select class="select"><option>选择币别</option><option>PHP</option></select>
@@ -528,140 +590,61 @@ th.cell-id,td.cell-id{white-space:nowrap;}
             <button class="btn btn--primary">搜索</button>
             <button class="btn btn--primary">导出</button>
           </div>
-          <div class="report-note">
-            🆕 「任务完成明细」：用户<b>每完成一次任务记一行</b>，追踪「完成任务 → 领奖 → 价值表现」。时区统一 <b>UTC+8</b>，结算 <b>23:59:59</b>。栏位依计算区间分组：<br>
-            <b>任务开始前</b>＝注册至本期任务开始前一秒的历史记录（与参与资格口径一致）；<b>完成任务期间</b>＝本期任务时间开始到任务完成（与任务完成值同一区间）；<b>完成后</b>＝任务完成后至<b>本期任务时间结束</b>（永久任务算至查询时间的迄日）。退款/撤单不回溯。
-          </div>
           <div class="table-wrap">
-            <table style="min-width:1720px">
-              <thead>
-                <tr class="th-group">
-                  <th colspan="3">会员</th><th colspan="2">任务开始前</th><th colspan="5">任务</th><th colspan="3">奖励</th><th colspan="3">完成任务期间</th><th colspan="2">完成后</th>
-                </tr>
-                <tr>
-                  <th>会员名</th><th>任务完成时间</th><th>VIP</th>
-                  <th>充值金额</th><th>有效投注</th>
-                  <th class="cell-id">任务id</th><th class="cell-name">任务名称</th>
-                  <th>任务条件</th><th>任务目标值</th><th>任务完成值</th>
-                  <th>奖励类型</th><th>奖励金额</th><th>奖励领取时间</th>
-                  <th>充值金额</th><th>有效投注</th><th>GGR</th>
-                  <th>提现金额</th><th>是否再充值</th>
-                </tr>
-              </thead>
+            <table style="min-width:1300px">
+              <thead><tr><th class="cell-id">任务ID</th><th>任务名称</th><th>累计完成次数</th><th>累计发放积分</th><th>累计发放彩金</th><th>累计发放免费旋转</th><th>累计发放免费投注</th><th>累计发放优惠券</th><th>累计发放golden draw券</th></tr></thead>
               <tbody>
-                <tr><td>okbet99910n0s3</td><td class="cell-time">2026-08-19 10:28:05</td><td>VIP1</td><td>₱12,300</td><td>₱48,900</td><td class="cell-id">1024</td><td class="cell-name">小额用户 · 每日充值任务</td><td>充值</td><td>₱50</td><td>₱300</td><td>积分</td><td>100</td><td class="cell-time">2026-08-19 10:28:41</td><td>₱300</td><td>₱1,250</td><td>₱180</td><td>₱0</td><td>是</td></tr>
-                <tr><td>okbet0469afbr7</td><td class="cell-time">2026-08-19 09:11:48</td><td>VIP3</td><td>₱156,000</td><td>₱980,400</td><td class="cell-id">1025</td><td class="cell-name">高价值用户 · 周限时投注</td><td>投注</td><td>₱5,000</td><td>₱6,600</td><td>彩金</td><td>222</td><td class="cell-time">2026-08-19 09:12:26</td><td>₱0</td><td>₱6,600</td><td>₱1,020</td><td>₱2,000</td><td>否</td></tr>
-                <tr><td>okbet0469afbr7</td><td class="cell-time">2026-08-19 15:12:40</td><td>VIP3</td><td>₱150,200</td><td>₱941,000</td><td class="cell-id">1060-1</td><td class="cell-name">充值投注挑战 · 子任务1</td><td>充值 AND 投注</td><td>₱500 / ₱2,000</td><td>₱800 / ₱2,400</td><td>彩金</td><td>100</td><td class="cell-time">2026-08-19 15:13:02</td><td>₱800</td><td>₱2,400</td><td>₱310</td><td>₱0</td><td>否</td></tr>
-                <tr><td>okbet7712kd9m</td><td class="cell-time">2026-08-19 21:03:52</td><td>VIP1</td><td>₱8,400</td><td>₱31,500</td><td class="cell-id">1030-2</td><td class="cell-name">Small Stake Club · 子任务2</td><td>投注</td><td>₱1,000</td><td>₱1,180</td><td>积分</td><td>150</td><td class="cell-time">2026-08-19 21:04:19</td><td>₱200</td><td>₱1,180</td><td>₱95</td><td>₱0</td><td>是</td></tr>
+                <tr><td class="cell-id">944</td><td class="cell-name">填写真实姓名-不要删除</td><td>1,260</td><td>12,600</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr><td class="cell-id">1024</td><td class="cell-name">小额用户 · 每日充值任务</td><td>18,450</td><td>1,790,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr><td class="cell-id">1080</td><td class="cell-name">每日投注任务</td><td>9,820</td><td><span class="note">—</span></td><td>465,500</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr><td class="cell-id">1040</td><td class="cell-name">中额·每日投注任务</td><td>12,600</td><td>1,260,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr><td class="cell-id">1042</td><td class="cell-name">每日游戏任务·CQ9电子</td><td>7,050</td><td>600,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-grp"><td class="cell-id">1050</td><td class="cell-name">每日三连·组任务 <span class="tag tag--new">任务组</span></td><td>5,410</td><td>1,109,000</td><td>165,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1050-1</td><td class="cell-name">└ 子任务1 · 充值 ₱50</td><td>2,180</td><td>218,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1050-2</td><td class="cell-name">└ 子任务2 · 投注 ₱200</td><td>1,820</td><td>273,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1050-3</td><td class="cell-name">└ 子任务3 · 投注 ₱300</td><td>1,410</td><td>282,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>1,650</td><td><span class="note">—</span></td><td>165,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 3 个</td><td>1,120</td><td>336,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr><td class="cell-id">1025</td><td class="cell-name">高价值用户 · 周限时投注</td><td>860</td><td><span class="note">—</span></td><td>177,600</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-grp"><td class="cell-id">1030</td><td class="cell-name">Small Stake Club · 组任务 <span class="tag tag--new">任务组</span></td><td>1,260</td><td>272,800</td><td>27,500</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1030-1</td><td class="cell-name">└ 子任务1 · 充值 ₱100</td><td>430</td><td>41,800</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1030-2</td><td class="cell-name">└ 子任务2 · 投注 ₱1,000</td><td>310</td><td>45,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1030-3</td><td class="cell-name">└ 子任务3 · 投注 ₱200</td><td>520</td><td>100,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>290</td><td><span class="note">—</span></td><td>27,500</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 3 个</td><td>180</td><td>86,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-grp"><td class="cell-id">1060</td><td class="cell-name">充值投注挑战 · 组任务 <span class="tag tag--new">任务组</span></td><td>400</td><td><span class="note">—</span></td><td>182,100</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1060-1</td><td class="cell-name">└ 子任务1 · 充值 ₱500</td><td>260</td><td><span class="note">—</span></td><td>24,800</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1060-2</td><td class="cell-name">└ 子任务2 · 投注 ₱5,000</td><td>140</td><td><span class="note">—</span></td><td>41,400</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 1 个</td><td>270</td><td><span class="note">—</span></td><td>52,400</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>130</td><td><span class="note">—</span></td><td>63,500</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr><td class="cell-id">1070</td><td class="cell-name">每周投注送免费旋转</td><td>1,640</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td>1,640</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr><td class="cell-id">951</td><td class="cell-name">关注Facebook</td><td>310</td><td>6,200</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-total"><td></td><td class="cell-name">小计</td><td>59,060</td><td>5,050,600</td><td>1,017,700</td><td>1,640</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-total"><td></td><td class="cell-name">总计</td><td>86,390</td><td>7,326,900</td><td>1,562,300</td><td>2,310</td><td>420</td><td>185</td><td>96</td></tr>
               </tbody>
             </table>
           </div>
-        </section>
-
-        <!-- ============ TAB: 每日任务统计（原：任务报表统计(日)）============ -->
-        <section data-panel="tasklog" class="hidden">
-          <div class="field-row">
-            <select class="select"><option>选择币别</option><option>PHP</option></select>
-            <div class="range-inline">
-              <span class="note">日期</span>
-              <input class="input" type="date" value="2026-08-13" style="max-width:160px" aria-label="统计起日"/>
-              <span>~</span>
-              <input class="input" type="date" value="2026-08-19" style="max-width:160px" aria-label="统计迄日"/>
-            </div>
-            <input class="input" placeholder="输入任务名 / 任务ID 关键字" />
-            <button class="btn btn--primary">搜索</button>
-            <button class="btn btn--primary">导出</button>
-          </div>
-          <div class="report-note">
-            <div class="report-note__title">🆕 「每日任务统计」：呈现任务<b>完成后的成效</b>，按 <b>每日</b> 统计（时区 UTC+8 · 结算 23:59:59）。</div>
-            <ul class="report-note__list">
-              <li><b>报表范围</b>：<b>仅统计任务时间设定为「每日」的任务</b>；其他任务时间（每周／永久／限时／周限时）不纳入本报表。</li>
-              <li><b>完成人数</b>＝当日完成此任务的<b>去重人数</b>，点击数字可查看完成用户清单。</li>
-              <li>栏位依「任务 → 完成情况 → 奖励 → 完成任务期间 → 完成后」分组；除任务目标值外，数值皆为<b>当日完成此任务全部用户的总计</b>。</li>
-              <li><b>任务完成值 / 有效投注 / 充值金额</b>：统计口径为该用户「当日任务开始 → 任务完成当下」期间的累计（与任务时间同一区间，<b>非完成后数据</b>）。</li>
-              <li><b>任务完成后第一笔充值</b>：任务完成后才起算，至当日任务时间结束为止（用户完成任务后的第一笔充值金额）。</li>
-              <li><b>奖励金额</b>：仅计入已实际发放的部分（发放状态＝自动发放 或 已领取），<b>不含</b>待领取 / 待审核 / 未通过 / 已过期。</li>
-              <li><b>组任务</b>：依各「子任务」分别记录（任务id 显示为母ID-序号，如 1030-1），每个子任务完成记一笔；设了 2 个条件（AND）的，2 个都达标才算完成。</li>
-              <li><b>组任务的「额外奖励」</b>：<b>每一档单独一行</b>（任务id 为母ID，名称标示「任意完成 n 个」）；完成人数＝当日达成该档的去重人数，奖励金额＝该档已发放的奖励总计。</li>
-            </ul>
-          </div>
-          <div class="table-wrap">
-            <table style="min-width:1380px">
-              <thead>
-                <tr class="th-group">
-                  <th colspan="5">任务</th><th colspan="2">完成情况</th><th colspan="2">奖励</th><th colspan="2">完成任务期间</th><th>完成后</th>
-                </tr>
-                <tr>
-                  <th>日期</th><th class="cell-id">任务id</th><th class="cell-name">任务名称</th><th>任务条件</th><th>任务目标值</th>
-                  <th>完成人数<br><span class="note">去重·可点击</span></th><th>任务完成值</th>
-                  <th>奖励类型</th><th>奖励金额<br><span class="note">仅计已发放</span></th>
-                  <th>有效投注</th><th>充值金额</th>
-                  <th>第一笔充值</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>2026-08-19</td><td class="cell-id">1024</td><td class="cell-name">小额用户 · 每日充值任务</td><td>充值</td><td>₱50</td>
-                  <td><a onclick="openUserList('1024','小额用户 · 每日充值任务',820,'积分 100')">820</a></td><td>₱246,000</td>
-                  <td>积分</td><td>82,000</td><td>₱1,025,000</td><td>₱246,000</td><td>₱132,800</td>
-                </tr>
-                <tr>
-                  <td>2026-08-19</td><td class="cell-id">1040</td><td class="cell-name">中额·每日投注任务</td><td>投注</td><td>₱200</td>
-                  <td><a onclick="openUserList('1040','中额·每日投注任务',512,'积分 100')">512</a></td><td>₱1,860,000</td>
-                  <td>积分</td><td>51,200</td><td>₱1,860,000</td><td>₱96,000</td><td>₱44,800</td>
-                </tr>
-                <tr>
-                  <td>2026-08-19</td><td class="cell-id">1042</td><td class="cell-name">每日游戏任务·CQ9电子</td><td>投注</td><td>₱100</td>
-                  <td><a onclick="openUserList('1042','每日游戏任务·CQ9电子',240,'积分 100')">240</a></td><td>₱520,000</td>
-                  <td>积分</td><td>24,000</td><td>₱520,000</td><td>₱62,000</td><td>₱18,000</td>
-                </tr>
-                <tr>
-                  <td>2026-08-19</td><td class="cell-id">1050-1</td><td class="cell-name">每日三连·组任务 · 子任务1（每日充值） <span class="tag tag--info">子任务</span></td><td>充值</td><td>₱50</td>
-                  <td><a onclick="openUserList('1050-1','每日三连·子任务1',78,'积分 100')">78</a></td><td>₱46,000</td>
-                  <td>积分</td><td>7,800</td><td>₱240,000</td><td>₱46,000</td><td>₱16,000</td>
-                </tr>
-                <tr>
-                  <td>2026-08-19</td><td class="cell-id">1050-2</td><td class="cell-name">每日三连·组任务 · 子任务2（每日投注） <span class="tag tag--info">子任务</span></td><td>投注</td><td>₱200</td>
-                  <td><a onclick="openUserList('1050-2','每日三连·子任务2',65,'积分 150')">65</a></td><td>₱205,000</td>
-                  <td>积分</td><td>9,750</td><td>₱205,000</td><td>₱33,000</td><td>₱10,200</td>
-                </tr>
-                <tr>
-                  <td>2026-08-19</td><td class="cell-id">1050-3</td><td class="cell-name">每日三连·组任务 · 子任务3（每日打码） <span class="tag tag--info">子任务</span></td><td>投注</td><td>₱300</td>
-                  <td><a onclick="openUserList('1050-3','每日三连·子任务3',52,'积分 200')">52</a></td><td>₱168,000</td>
-                  <td>积分</td><td>10,400</td><td>₱168,000</td><td>₱25,000</td><td>₱7,300</td>
-                </tr>
-                <tr>
-                  <td>2026-08-19</td><td class="cell-id">1050</td><td class="cell-name">每日三连·组任务 · 额外奖励（任意完成 2 个）</td><td class="note">组任务·额外奖励</td><td class="note">任意完成 2 个</td>
-                  <td><a onclick="openUserList('1050','额外奖励·任意完成 2 个',60,'彩金 100')">60</a></td><td class="note">—</td>
-                  <td>彩金</td><td>5,800</td><td>₱186,000</td><td>₱38,000</td><td>₱12,600</td>
-                </tr>
-                <tr>
-                  <td>2026-08-19</td><td class="cell-id">1050</td><td class="cell-name">每日三连·组任务 · 额外奖励（任意完成 3 个）</td><td class="note">组任务·额外奖励</td><td class="note">任意完成 3 个</td>
-                  <td><a onclick="openUserList('1050','额外奖励·任意完成 3 个',40,'积分 300')">40</a></td><td class="note">—</td>
-                  <td>积分</td><td>12,000</td><td>₱142,000</td><td>₱29,000</td><td>₱9,800</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="pager">Total 128 <span class="pg pg--on">1</span><span class="pg">2</span><span class="pg">3</span><span class="pg">…</span><span class="pg">13</span></div>
+          <div class="pager">Total 16 <span class="pg pg--on">1</span><span class="pg">2</span></div>
         </section>
 
         <!-- ============ TAB: 黑名单设置 ============ -->
         <section data-panel="blacklist" class="hidden">
           <div class="field-row">
-            <input class="input" placeholder="输入会员帐户 / 用户标签" style="min-width:240px"/>
-            <button class="btn btn--primary">加入排除包</button>
-            <span class="note">名单内的用户看不到、也不能参加任务</span>
+            <input class="input" placeholder="*请输入账号" style="max-width:200px"/>
+            <button class="btn btn--primary">搜索</button>
+            <span style="margin-left:auto"></span>
+            <button class="btn btn--primary" onclick="openBlModal()">新增黑名单</button>
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>排除项</th><th>类型</th><th>命中范围</th><th>加入时间</th><th>操作</th></tr></thead>
+              <thead><tr><th>创建时间</th><th>会员ID</th><th>会员名</th><th>操作</th></tr></thead>
               <tbody>
-                <tr><td>风险用户包</td><td><span class="tag tag--gray">用户标签</span></td><td>全部任务</td><td class="cell-time">2026-08-10 09:12:33</td><td class="op"><a class="del">移除</a></td></tr>
-                <tr><td>okbet_test001</td><td><span class="tag tag--gray">会员帐户</span></td><td>指定任务：1024</td><td class="cell-time">2026-08-12 16:40:05</td><td class="op"><a class="del">移除</a></td></tr>
+                <tr><td class="cell-time">2026-08-12 16:40:05</td><td>3021457</td><td>okbet_test001</td><td class="op"><a class="del">删除</a></td></tr>
+                <tr><td class="cell-time">2026-08-10 09:12:33</td><td>2987730</td><td>okbet55120zz</td><td class="op"><a class="del">删除</a></td></tr>
               </tbody>
             </table>
           </div>
+          <div class="pager">Total 2 <span class="pg pg--on">1</span></div>
         </section>
 
       </div>
@@ -679,14 +662,17 @@ th.cell-id,td.cell-id{white-space:nowrap;}
     <div class="modal__body">
 
       <!-- 说明文字已移出画面，之后写进规格书：
-        · 预设选择「无」；选择后前台任务卡左侧显示对应图标
-        · VIP 与所勾选标签需「完全符合」，用户才能看到此任务。排除包（黑名单设置）优先——命中排除即不可参加。
-        · 「完成KYC／完成KYC部分认证」为选填条件：勾选后才生效——用户须符合所勾选项目才能触发/领取此任务；未勾选则不限制。「符合任一条件／完全符合」为单选，需同时勾选「累计充值区间」与「累计有效投注区间」后才可选；上限不得低于下限。累计口径＝任务开始前历史记录（注册至本期任务开始前一秒）。任务条件的进度则在「任务时间」区间内计算，达标即给予奖励。
-        · 用户手动领取：须在本期任务时间结束前领取，逾期未领视为放弃（发放状态＝已过期，不补发、不占名额）。
+        · VIP 与所勾选标签需「完全符合」，用户才能看到此任务。黑名单（黑名单设置，按帐户）优先——命中即不可参加。P0「排除包」本期沿用既有黑名单（只按帐户），不做按标签排除。
+        · 「完成KYC／完成KYC部分认证」为选填条件：勾选后才生效——用户须符合所勾选项目才能触发/领取此任务；未勾选则不限制。「符合任一条件／完全符合」为单选，需同时勾选「累计充值区间」与「累计有效投注区间」后才可选，勾齐时预选「完全符合」。区间没勾＝最低／最高反灰不能填；最高低于最低时最高清空重填；最低留空＝0 起算（可设「累计充值 ≤ 某数值」），最高留空＝不设上限。累计口径＝任务开始前历史记录（注册至本期任务开始前一秒）。任务条件的进度则在「任务时间」区间内计算，达标即给予奖励。
+        · 奖励领取时限／前台「奖励找回」为既有功能，本期逻辑不改（以下照既有说明整理；前台为示意）。
+        · 用户手动领取＋奖励领取时限（单位：天）：任务完成未领取，在本期任务重置／结束后 N 天内可于前台「奖励找回」补领；超过 N 天未领视为放弃（发放状态＝已过期，不补发；名额已在发送时占用，不释放）。期间发放状态维持「待领取」。
+          奖励在完成当期发送时已占该期名额，补领不再占名额、也不会额满（找回列表只会出现可领的奖励）。自动发放不需此设定（栏位隐藏）。
+          仅适用任务时间：每日（重置后起算）、限时（结束后起算）。永久、每周、周限时不显示此栏位——手动领取须在本期结束前领取，逾期即已过期（永久不会结束，随时可领）。
         · 最多可配置 10 个子任务，每个子任务各自设奖励，完成一个领一个；可另设「额外奖励」。每个子任务只设一个条件，达标即完成。
-        · 组任务的「任务时间」统一由下方「任务时间」设定、套用至所有子任务，子任务不单独配置任务时间。原始规则：「信息完善」类型仅支持「永久」；「充值」「投注」类型仅支持「每日」「每周」「限时」「周限时」——各子任务条件类型须与所选任务时间相容。
-        · 「任意完成 n 个子任务」各自对应一笔奖励，最多可配置 3 笔；不限定完成哪几个子任务、亦无先后顺序，n 不可超过子任务总数。奖励为彩金时须额外配置彩金流水倍数。例：任意完成 2 个 → 100 彩金；任意完成 3 个 → 500 积分。
-        · 每位用户每期仅可领取 1 次 奖励（期＝任务时间的一个周期：每日＝过 00:00:00 即为新的一期；每周＝每周一 00:00 重启；周限时＝每周到「开始日」重新开始；永久、限时只有一期），故名额只计「领取人数」、不计领取次数——名额＝当期去重领取人数（以领取时间 claim_time 为准），新的一期名额重新计算（任务时间重启，名额也跟着重启）。永久任务不适用名额限制（栏位反灰不可填，列表显示「不限」）。此名额限制为单一配置，套用于本任务的每一项奖励：组任务的每个子任务奖励、额外奖励皆各自独立计算名额（各自以此上限为准，互不共用）。额外奖励每一档各领 1 次、各档各自计算名额，同样只计领取人数。满额后前台该项奖励显示「奖励名额已满」；名额挂「奖励」级（每项奖励各自计算）。金额预算上限本轮不做。
+        · 组任务的「任务时间」统一由下方「任务时间」设定、套用至所有子任务，子任务不单独配置任务时间。依「任务系统各时间类型支援对照」：信息完善／绑定／一次性标记仅永久；充值提款／投注为每日、每周、限时、周限时；品牌活动仅限时——子任务的可选任务时间取交集，没有交集的条件不能放同一组。
+        · 任务条件下拉照既有后台（首次充值／首次充值(階級) 已移除）。Maya／Glife 相关（Maya绑定、Glife绑定、Maya充值、Maya提款、Glife充值、Glife提款，及跳转地址 Maya／Glife）保留选项，但目前无功能，QA 不需测试。
+        · 「任意完成 n 个子任务」各自对应一笔奖励，最多可配置 3 笔；不限定完成哪几个子任务、亦无先后顺序，n 不可超过子任务总数；「完成数」按当期计算，随任务时间一起重置（例：每日任务组＝每天从 0 重新累计）。交互限制：子任务满 10 个「添加子任务」反灰；额外奖励满 3 笔或已等于子任务数时「添加额外奖励」反灰；n 为下拉（1~子任务数），别档已选的数字反灰；子任务删除不挡；删到比某档 n 少时，该档「数量」清空，由运营重选或删除该档。奖励为彩金时须额外配置彩金流水倍数。例：任意完成 2 个 → 100 彩金；任意完成 3 个 → 500 积分。
+        · 每位用户每期仅可领取 1 次 奖励（期＝任务时间的一个周期：每日＝过 00:00:00 即为新的一期；每周＝每周一 00:00 重启；周限时＝每周到「开始日」重新开始；永久、限时只有一期），名额只计人数、不计次数——名额在「奖励发送」时即占用（任务完成、奖励发出那一刻；不论会员是否领取、之后是否过期），名额＝当期去重获发奖励人数（以发送时间为准）；名额已满后才完成的用户不发送奖励（发放状态＝名额已满）。人工审核的任务以「审核通过」为完成、发送并占名额的时间点（提交待审核时不占）。新的一期名额重新计算（任务时间重启，名额也跟着重启）。永久任务不适用名额限制（栏位反灰不可填，列表显示「不限」）。此名额限制为单一配置，套用于本任务的每一项奖励：组任务的每个子任务奖励、额外奖励皆各自独立计算名额（各自以此上限为准，互不共用）。额外奖励每一档各发 1 次、各档各自计算名额，同样在发送时占用。满额后前台该项奖励显示「奖励名额已满」；名额挂「奖励」级（每项奖励各自计算）。金额预算上限本轮不做。
       -->
       <div class="fs-hd"><span class="fs-hd__ic">!</span>基本信息</div>
       <div class="form__row">
@@ -704,17 +690,8 @@ th.cell-id,td.cell-id{white-space:nowrap;}
         <div class="form__control"><input class="input" placeholder="请输入任务名称"/></div>
       </div>
       <div class="form__row">
-        <label class="form__label">默认图标：</label>
-        <div class="form__control">
-          <select class="select" id="defaultIcon" onchange="onDefaultIcon()">
-            <option value="none">无</option>
-            <option value="bet1">投注-单一产品</option>
-            <option value="betN">投注-多产品</option>
-            <option value="deposit">存款</option>
-            <option value="deposit_bet">存款 + 投注</option>
-            <option value="verify">指定验证任务</option>
-          </select>
-        </div>
+        <label class="form__label">任务标签：</label>
+        <div class="form__control"><select class="select"><option>无</option></select></div>
       </div>
       <div class="fs-hd"><span class="fs-hd__ic">!</span>任务内容</div>
       <div class="form__row" id="rowCond">
@@ -724,17 +701,9 @@ th.cell-id,td.cell-id{white-space:nowrap;}
             <div class="cond-ln">
               <select class="select" id="condCat" onchange="onCond()" style="max-width:150px"><option value="info">信息完善</option><option value="fund">资金</option><option value="other">其他</option></select>
               <select class="select" id="condSub" onchange="onCondSub()" style="max-width:170px"></select>
-              <span id="condAmt" class="hidden inl"><input class="input" placeholder="金额门槛（0＝不限）" style="max-width:210px"/></span>
-              <span id="condBet" class="hidden inl"><button class="btn btn--sm" style="white-space:nowrap" onclick="openGameModal(event)">限制游戏配置</button><input class="input" placeholder="打码量" style="max-width:140px"/></span>
+              <span id="condAmt" class="hidden inl"><input class="input" placeholder="充值金额（0＝不限）" style="max-width:210px"/></span>
+              <span id="condBet" class="hidden inl"><button class="btn btn--sm" style="white-space:nowrap" onclick="openGameModal(event)">限制游戏配置</button><input class="input" placeholder="有效投注金额" style="max-width:140px"/></span>
             </div>
-            <div id="cond2" class="hidden cond-ln">
-              <span class="pill">AND</span>
-              <select class="select" id="condSub2" onchange="onCondSub2()" style="max-width:170px"></select>
-              <span id="condAmt2" class="hidden inl"><input class="input" placeholder="金额门槛（0＝不限）" style="max-width:210px"/></span>
-              <span id="condBet2" class="hidden inl"><button class="btn btn--sm" style="white-space:nowrap" onclick="openGameModal(event)">限制游戏配置</button><input class="input" placeholder="打码量" style="max-width:140px"/></span>
-              <a class="link-del" onclick="delCond2(event)">删除</a>
-            </div>
-            <a class="link-add" id="addCondBtn" onclick="addCond2(event)">＋ 加条件</a>
           </div>
         </div>
       </div>
@@ -790,7 +759,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
         </div>
       </div>
       <div class="form__row" id="quotaRow">
-        <label class="form__label">人数上限：</label>
+        <label class="form__label">名额上限：</label>
         <div class="form__control"><input class="input" id="quotaInput" value="1000" placeholder="留空或 0＝不限" style="max-width:200px"/></div>
       </div>
       <div class="fs-hd"><span class="fs-hd__ic">!</span>参与对象</div>
@@ -842,15 +811,15 @@ th.cell-id,td.cell-id{white-space:nowrap;}
           <div style="display:flex;flex-direction:column;gap:12px;margin-top:6px">
             <div class="range-inline">
               <label class="check-row" style="margin:0;min-width:170px"><input type="checkbox" id="chkDep" onchange="onQualDep()"/> 累计充值区间</label>
-              <input class="input" placeholder="最低" style="max-width:130px"/>
+              <input class="input qMin" type="number" min="0" placeholder="最低" style="max-width:130px" onchange="onQualRange(this)"/>
               <span>~</span>
-              <input class="input" placeholder="最高" style="max-width:130px"/>
+              <input class="input qMax" type="number" min="0" placeholder="最高" style="max-width:130px" onchange="onQualRange(this)"/>
             </div>
             <div class="range-inline">
               <label class="check-row" style="margin:0;min-width:170px"><input type="checkbox" id="chkBet" onchange="onQualDep()"/> 累计有效投注区间</label>
-              <input class="input" placeholder="最低" style="max-width:130px"/>
+              <input class="input qMin" type="number" min="0" placeholder="最低" style="max-width:130px" onchange="onQualRange(this)"/>
               <span>~</span>
-              <input class="input" placeholder="最高" style="max-width:130px"/>
+              <input class="input qMax" type="number" min="0" placeholder="最高" style="max-width:130px" onchange="onQualRange(this)"/>
             </div>
             <div class="range-inline" id="qualBox" style="opacity:.5">
               <span style="min-width:170px">充值及有效投注资格</span>
@@ -879,9 +848,9 @@ th.cell-id,td.cell-id{white-space:nowrap;}
           <div id="timeRangeLimited" class="hidden" style="margin-top:10px">
             <div style="display:flex;align-items:center;gap:10px;border:1px solid var(--c-border);border-radius:var(--radius-s);background:#fafbfc;padding:0 12px;height:36px;max-width:460px">
               <span style="color:var(--c-text-3);font-size:.9rem">🕐</span>
-              <input type="text" placeholder="开始时间" onfocus="this.type='datetime-local'" onblur="if(!this.value)this.type='text'" style="border:none;background:transparent;flex:1;min-width:0;outline:none;color:var(--c-text);font-size:.85rem"/>
+              <input type="text" id="limStart" onchange="onLimRange()" placeholder="开始时间" onfocus="this.type='datetime-local'" onblur="if(!this.value)this.type='text'" style="border:none;background:transparent;flex:1;min-width:0;outline:none;color:var(--c-text);font-size:.85rem"/>
               <span style="color:var(--c-text-3)">~</span>
-              <input type="text" placeholder="结束时间" onfocus="this.type='datetime-local'" onblur="if(!this.value)this.type='text'" style="border:none;background:transparent;flex:1;min-width:0;outline:none;color:var(--c-text);font-size:.85rem"/>
+              <input type="text" id="limEnd" onchange="onLimRange()" placeholder="结束时间" onfocus="this.type='datetime-local'" onblur="if(!this.value)this.type='text'" style="border:none;background:transparent;flex:1;min-width:0;outline:none;color:var(--c-text);font-size:.85rem"/>
             </div>
           </div>
           <!-- 周限时：星期区间（星期一 至 星期日） -->
@@ -892,7 +861,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
               <select class="select" style="flex:1"><option>星期一</option><option>星期二</option><option>星期三</option><option>星期四</option><option>星期五</option><option>星期六</option><option>星期日</option></select>
             </div>
           </div>
-          <p class="hint" style="margin-top:8px">“信息完善”类型的任务仅支持「永久」时限；<br>“充值”和“投注”类型任务仅支持「每日」、「每周」、「限时」和「周限时」</p>
+          <p class="hint" style="margin-top:8px">“信息完善”“绑定”“一次性标记”类型的任务仅支持「永久」时限；<br>“充值／提款”“投注”类型任务仅支持「每日」、「每周」、「限时」和「周限时」；<br>“品牌活动”类型任务仅支持「限时」</p>
         </div>
       </div>
       <div class="form__row">
@@ -901,7 +870,11 @@ th.cell-id,td.cell-id{white-space:nowrap;}
       </div>
       <div class="form__row">
         <label class="form__label"><span class="req">*</span>奖励发放方式：</label>
-        <div class="form__control"><div class="radio-grp"><label><input type="radio" name="grant" checked/> 自动发放</label><label><input type="radio" name="grant"/> 用户手动领取</label></div></div>
+        <div class="form__control"><div class="radio-grp"><label><input type="radio" name="grant" value="auto" checked onchange="onGrant()"/> 自动发放</label><label><input type="radio" name="grant" value="manual" onchange="onGrant()"/> 用户手动领取</label></div></div>
+      </div>
+      <div class="form__row hidden" id="claimLimitRow">
+        <label class="form__label">奖励领取时限：</label>
+        <div class="form__control"><div class="range-inline"><input class="input" type="number" min="0" value="1" style="max-width:120px"/><span>天</span><span class="note">若任务为每日/限时类型，则为任务重置/结束后，奖励补领时限。</span></div></div>
       </div>
       <div class="fs-hd"><span class="fs-hd__ic">!</span>其他</div>
       <div class="form__row">
@@ -964,25 +937,42 @@ th.cell-id,td.cell-id{white-space:nowrap;}
   </div>
 </div>
 
-<!-- ================= Modal：完成用户清单（每日任务统计·完成人数）================= -->
-<div class="modal-mask" id="userListModal" role="dialog" aria-modal="true" aria-labelledby="ulTitle">
-  <div class="modal" style="width:min(600px,100%);max-height:calc(100vh - 80px);display:flex;flex-direction:column">
+<!-- ================= Modal：国际化列表（既有：任务名称旁「＋」打开）================= -->
+<div class="modal-mask" id="i18nModal" role="dialog" aria-modal="true" aria-labelledby="i18nTitle">
+  <div class="modal" style="width:min(1100px,100%)">
     <div class="modal__head">
-      <h2 class="modal__title" id="ulTitle">完成用户清单</h2>
-      <button class="modal__close" onclick="closeUserList()" aria-label="关闭">✕</button>
+      <h2 class="modal__title" id="i18nTitle">国际化列表</h2>
+      <button class="modal__close" onclick="closeI18n()" aria-label="关闭">✕</button>
     </div>
-    <div class="modal__body" style="flex:1 1 auto;min-height:0;overflow:auto">
-      <p class="note" style="margin:0 0 10px">任务 <b id="ulTask"></b>（ID <span id="ulId"></span>）· 2026-08-19 当日完成的<b>去重用户</b>，共 <b id="ulCount">0</b> 人。「有效投注 / 充值金额」为该用户「当日任务开始→完成当下」期间的累计；「任务完成后第一笔充值」为完成后至当日任务时间结束的首笔。</p>
+    <div class="modal__body">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btn btn--primary">＋ 新增</button></div>
       <div class="table-wrap" style="padding:0">
         <table style="min-width:0">
-          <thead><tr><th>会员名</th><th>VIP</th><th>奖励</th><th>有效投注</th><th>充值金额</th><th>任务完成后<br>第一笔充值</th></tr></thead>
-          <tbody id="ulBody"></tbody>
+          <thead><tr><th>行号</th><th>表名</th><th>字段名</th><th>语言</th><th>内容</th><th>操作</th></tr></thead>
+          <tbody><tr><td colspan="6" class="note" style="padding:24px">No Data</td></tr></tbody>
         </table>
+      </div>
+      <div class="pager" style="padding-right:0">Total 0 <span class="pg pg--on">1</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= Modal：新增黑名单（既有：只填帐户）================= -->
+<div class="modal-mask" id="blModal" role="dialog" aria-modal="true" aria-labelledby="blTitle">
+  <div class="modal" style="width:min(560px,100%)">
+    <div class="modal__head">
+      <h2 class="modal__title" id="blTitle">新增黑名单</h2>
+      <button class="modal__close" onclick="closeBlModal()" aria-label="关闭">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="form__row" style="grid-template-columns:80px 1fr;margin-bottom:0">
+        <label class="form__label">帐户：</label>
+        <div class="form__control"><input class="input"/></div>
       </div>
     </div>
     <div class="modal__foot">
-      <button class="btn" onclick="closeUserList()">关闭</button>
-      <button class="btn btn--primary" onclick="closeUserList()">导出清单</button>
+      <button class="btn" onclick="closeBlModal()">取消</button>
+      <button class="btn btn--primary" onclick="closeBlModal()">确认</button>
     </div>
   </div>
 </div>
@@ -1001,40 +991,37 @@ document.querySelectorAll('.subtab').forEach(function(t){
 });
 
 /* ===== modal ===== */
-/* ===== 每日任务统计：完成人数 → 完成用户清单弹窗 ===== */
-function openUserList(id,name,count,reward){
-  document.getElementById('ulTask').textContent=name;
-  document.getElementById('ulId').textContent=id;
-  document.getElementById('ulCount').textContent=count.toLocaleString();
-  var vips=['VIP0','VIP1','VIP2','VIP3'];
-  var peso=function(n){ return '₱'+n.toLocaleString(); };
-  var seed=parseInt(String(id).replace(/[^0-9]/g,''))||1;   /* 支援子任务ID（如 1030-1）*/
-  var rows='';
-  for(var i=0;i<count;i++){                     /* 全部完成用户皆列出（弹窗内可上下滚动）*/
-    var acc='okbet'+(10000+((seed*37+i*613)%89999));
-    var bet=1200+((seed*53+i*811)%9000);        /* 有效投注 */
-    var dep=300+((seed*29+i*307)%2400);          /* 充值金额 */
-    var fd =(i%3===0)?0:(120+((seed*17+i*211)%1600)); /* 任务完成后第一笔充值 */
-    rows+='<tr><td>'+acc+'</td><td>'+vips[i%vips.length]+'</td><td>'+reward+'</td>'
-      +'<td>'+peso(bet)+'</td><td>'+peso(dep)+'</td><td>'+(fd?peso(fd):'<span class="note">₱0</span>')+'</td></tr>';
-  }
-  document.getElementById('ulBody').innerHTML=rows;
-  document.getElementById('userListModal').classList.add('open');
-}
-function closeUserList(){ document.getElementById('userListModal').classList.remove('open'); }
+/* 黑名单：新增黑名单弹窗（只填帐户）*/
+function openI18n(){ document.getElementById('i18nModal').classList.add('open'); }
+function closeI18n(){ document.getElementById('i18nModal').classList.remove('open'); }
+function openBlModal(){ document.getElementById('blModal').classList.add('open'); }
+function closeBlModal(){ document.getElementById('blModal').classList.remove('open'); }
 
 function openModal(mode){
   document.getElementById('taskModalTitle').textContent = (mode==='edit'?'编辑任务':'新增任务');
+  /* 防呆：编辑时「任务类别」反灰不可改（基础任务↔任务组切换会让任务ID、完成记录对不上）*/
+  var cat=document.getElementById('taskCat'); cat.disabled=(mode==='edit');
+  var w=cat.closest('.dropdown'); if(w){ var bt=w.querySelector('button.select'); bt.disabled=cat.disabled; bt.style.opacity=cat.disabled?'.5':''; bt.style.cursor=cat.disabled?'not-allowed':''; }
+  /* 示例：编辑＝带入一笔「资金·充值／每日／用户手动领取」的任务，一打开就看得到「奖励领取时限」*/
+  if(mode==='edit'){
+    if(cat.value!=='basic'){ cat.value='basic'; onTaskCat(); }
+    var cc=document.getElementById('condCat'); cc.value='fund'; onCond(); syncDd(cc);
+    var td=document.querySelector('input[name="ttime"][value="每日"]'); if(!td.disabled){ td.checked=true; onTaskTime(); }
+    document.querySelector('input[name="grant"][value="manual"]').checked=true; onGrant();
+  }
   document.getElementById('taskModal').classList.add('open');
 }
 function closeModal(){ document.getElementById('taskModal').classList.remove('open'); }
 document.getElementById('taskModal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
-document.getElementById('userListModal').addEventListener('click',function(e){ if(e.target===this) closeUserList(); });
+document.getElementById('i18nModal').addEventListener('click',function(e){ if(e.target===this) closeI18n(); });
+document.getElementById('blModal').addEventListener('click',function(e){ if(e.target===this) closeBlModal(); });
 document.addEventListener('keydown',function(e){
   if(e.key!=='Escape') return;
   if(ddCloseAll()) return;
-  var ul=document.getElementById('userListModal');
-  if(ul && ul.classList.contains('open')){ closeUserList(); return; }
+  var im=document.getElementById('i18nModal');
+  if(im && im.classList.contains('open')){ closeI18n(); return; }
+  var bl=document.getElementById('blModal');
+  if(bl && bl.classList.contains('open')){ closeBlModal(); return; }
   var gm=document.getElementById('gameModal');
   if(gm && gm.classList.contains('open')){ closeGameModal(); return; }
   closeModal();
@@ -1042,7 +1029,8 @@ document.addEventListener('keydown',function(e){
 
 /* ===== conditional fields ===== */
 var COND_SUB = {
-  info:['填写真实姓名','填写生日','填写手机号码','填写邮箱','KYC认证','Maya绑定','Glife绑定'],
+  /* 选项与顺序照既有后台下拉；首次充值／首次充值(階級) 已移除。Maya／Glife 相关保留但目前无功能，QA 不需测试 */
+  info:['填写真实姓名','填写生日','填写手机号码','填写邮箱','KYC认证','Maya绑定','Glife绑定','填写生日（CP）','加电子钱包','加银行卡','加加密钱包','加C2C钱包'],
   fund:['充值','投注','Maya充值','Maya提款','Glife充值','Glife提款'],
   other:['2025新版访问','关注Facebook','体验平台PWA','圣诞倒计时专属任务','Brand Daily Passcode']
 };
@@ -1059,27 +1047,7 @@ function onCondSub(){
   var isBet = (cat==='fund' && sub==='投注');
   document.getElementById('condAmt').classList.toggle('hidden', !isDeposit);
   document.getElementById('condBet').classList.toggle('hidden', !isBet);
-  /* 多条件 AND：仅资金类可加第 2 个条件（最多 2 个，需同时达标）*/
-  var c2=document.getElementById('cond2'), add=document.getElementById('addCondBtn');
-  if(cat!=='fund') c2.classList.add('hidden');
-  add.style.display = (cat==='fund' && c2.classList.contains('hidden')) ? '' : 'none';
   checkGroupTime();
-}
-function addCond2(e){ if(e)e.preventDefault();
-  var sel=document.getElementById('condSub2');
-  if(!sel.options.length){ sel.innerHTML=['充值','投注'].map(function(o){return '<option>'+o+'</option>';}).join(''); sel.value='投注'; ddInitAll(document.getElementById('cond2')); }
-  document.getElementById('cond2').classList.remove('hidden');
-  document.getElementById('addCondBtn').style.display='none';
-  onCondSub2();
-}
-function delCond2(e){ if(e)e.preventDefault();
-  document.getElementById('cond2').classList.add('hidden');
-  document.getElementById('addCondBtn').style.display='';
-}
-function onCondSub2(){
-  var v=document.getElementById('condSub2').value;
-  document.getElementById('condAmt2').classList.toggle('hidden', v!=='充值');
-  document.getElementById('condBet2').classList.toggle('hidden', v!=='投注');
 }
 /* ===== 打码量限定游戏设置弹窗 ===== */
 function openGameModal(e){ if(e) e.preventDefault(); document.getElementById('gameModal').classList.add('open'); }
@@ -1100,12 +1068,6 @@ function gmAll(a,on){
 /* 整个分页签：全部游戏 / 删除全部 */
 function gmAllPane(a,on){
   a.closest('.gm__pane').querySelectorAll('.gm__games input[type=checkbox]').forEach(function(c){ c.checked=!!on; });
-}
-function onDefaultIcon(){
-  var v=document.getElementById('defaultIcon').value;
-  var map={ none:'前台不显示默认图标（预设）', bet1:'🎰 投注-单一产品', betN:'🎲 投注-多产品', deposit:'💰 存款', deposit_bet:'💰🎲 存款 + 投注', verify:'✅ 指定验证任务' };
-  var p=document.getElementById('iconPreview');
-  if(p) p.textContent = '前台任务卡左侧图标：'+ (map[v]||'');
 }
 /* 奖励类型（主任务／子任务／额外奖励共用）：彩金、积分、免费旋转、免费投注、优惠券、golden draw券 */
 var REWARD_OPTS='<option value="c">彩金</option><option value="p">积分</option><option value="fs">免费旋转</option><option value="fb">免费投注</option><option value="cp">优惠券</option><option value="gd">golden draw券</option>';
@@ -1148,57 +1110,30 @@ function subRowHTML(i){
   return '<div class="range-inline sub-card">'
     +'<div class="sub-card__hd"><span class="pill">子任务'+i+'</span><a class="link-del" onclick="delSub(event,this)">删除</a></div>'
     +'<div class="sub-card__ln"><span class="sub-card__lb">条件</span><div class="subConds" style="display:flex;flex-direction:column;gap:8px;flex:1">'+condLineHTML(true)+'</div></div>'
-    +'<div class="sub-card__ln sub-add"><span class="sub-card__lb"></span><a class="link-add" onclick="addCond(event,this)">＋ 加条件</a></div>'
     +'<div class="sub-card__ln"><span class="sub-card__lb">奖励</span>'
     +'<select class="select subReward" style="max-width:150px" onchange="onSubReward(this)">'+rewardOptsHTML('p')+'</select>'
     +subRewardFieldsHTML()+'</div>'
+    +'<div class="sub-card__ln"><span class="sub-card__lb">跳转</span>'
+    +'<select class="select subJump" style="width:320px;max-width:100%">'+jumpOptsHTML()+'</select></div>'
     +'</div>';
 }
+/* 跳转地址：每个任务一个；任务组＝每个子任务各一个，选项沿用任务的跳转地址清单 */
+function jumpOptsHTML(){ return document.getElementById('jumpUrl').innerHTML; }
 /* 子任务的条件（每个子任务只设一个条件）*/
 function condLineHTML(first){
   return '<div class="cond-line" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
     +'<select class="select subCat" style="max-width:150px" onchange="onSubCat(this)"><option value="info">信息完善</option><option value="fund" selected>资金</option><option value="other">其他</option></select>'
     +'<select class="select subCond" style="max-width:170px" onchange="onSubCond(this)"></select>'
-    +'<span class="subAmt" style="display:none;align-items:center;gap:6px"><input class="input" placeholder="金额门槛（0＝不限）" style="max-width:210px"/></span>'
-    +'<span class="subBet" style="display:none;align-items:center;gap:6px"><button class="btn btn--sm" style="white-space:nowrap" onclick="openGameModal(event)">限制游戏配置</button><input class="input" placeholder="打码量" style="max-width:140px"/></span>'
+    +'<span class="subAmt" style="display:none;align-items:center;gap:6px"><input class="input" placeholder="充值金额（0＝不限）" style="max-width:210px"/></span>'
+    +'<span class="subBet" style="display:none;align-items:center;gap:6px"><button class="btn btn--sm" style="white-space:nowrap" onclick="openGameModal(event)">限制游戏配置</button><input class="input" placeholder="有效投注金额" style="max-width:140px"/></span>'
     +'</div>';
 }
 /* 子任务：先选类别（信息完善/资金/其他）→ 再选对应任务条件 */
-/* 子任务第 2 个条件：AND，只能选充值／投注（跟一般任务一致），最多 2 个 */
-function cond2LineHTML(){
-  return '<div class="cond-line cond-line--and" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
-    +'<span class="pill">AND</span>'
-    +'<select class="select subCond" style="max-width:170px" onchange="onSubCond(this)"><option>充值</option><option selected>投注</option></select>'
-    +'<span class="subAmt" style="display:none;align-items:center;gap:6px"><input class="input" placeholder="金额门槛（0＝不限）" style="max-width:210px"/></span>'
-    +'<span class="subBet" style="display:none;align-items:center;gap:6px"><button class="btn btn--sm" style="white-space:nowrap" onclick="openGameModal(event)">限制游戏配置</button><input class="input" placeholder="打码量" style="max-width:140px"/></span>'
-    +'<a class="link-del" onclick="delCond(event,this)">删除</a>'
-    +'</div>';
-}
-function addCond(e,btn){ if(e)e.preventDefault();
-  var card=btn.closest('.sub-card'), box=card.querySelector('.subConds');
-  if(box.children.length>=2) return;
-  var d=document.createElement('div'); d.innerHTML=cond2LineHTML();
-  var line=d.firstChild; box.appendChild(line); ddInitAll(line);
-  onSubCond(line.querySelector('.subCond'));
-  syncSubAdd(card);
-}
-function delCond(e,btn){ if(e)e.preventDefault();
-  var card=btn.closest('.sub-card'); btn.closest('.cond-line').remove();
-  syncSubAdd(card); checkGroupTime();
-}
-/* 「＋ 加条件」：第 1 个条件是资金类、且还没有第 2 个条件时才显示 */
-function syncSubAdd(card){
-  var cat=card.querySelector('.subCat').value, n=card.querySelectorAll('.subConds .cond-line').length;
-  card.querySelector('.sub-add').style.display = (cat==='fund' && n<2) ? '' : 'none';
-}
 function onSubCat(catSel){
   var cat=catSel.value;
   var condSel=catSel.closest('.cond-line').querySelector('.subCond');
   condSel.innerHTML = COND_SUB[cat].map(function(o){return '<option>'+o+'</option>';}).join('');
-  var card=catSel.closest('.sub-card');
-  if(card && cat!=='fund'){ var c2=card.querySelector('.cond-line--and'); if(c2) c2.remove(); }
   onSubCond(condSel);
-  if(card) syncSubAdd(card);
 }
 /* 子任务条件目标值：与基础任务一致——充值类填金额门槛；「投注」另需限制游戏配置＋打码量 */
 function onSubCond(condSel){
@@ -1211,49 +1146,53 @@ function onSubCond(condSel){
   checkGroupTime();
 }
 
-/* ===== 任务完成时间类别（对应「任务时间」原始规则） =====
-   永久：信息完善各项
-   周期：资金类（每日/每周/限时/周限时）
-   其他：其他类活动条件                                    */
+/* ===== 任务条件 ↔ 任务时间（依「任务系统各时间类型支援对照」）=====
+   永久：资料完善类、绑定类、一次性标记类（使用 2025 新版／使用 PWA／追踪 Facebook）
+   周期：充值／提款类、投注 → 每日／每周／限时／周限时
+   限时：品牌活动类（圣诞品牌活动／每日品牌通关密码）→ 只能「限时」 */
 var TIME_BUCKET={
-  '填写真实姓名':'永久','填写生日':'永久','填写手机号码':'永久','填写邮箱':'永久','KYC认证':'永久','Maya绑定':'永久','Glife绑定':'永久',
-  '充值':'周期','投注':'周期','Maya充值':'周期','Maya提款':'周期','Glife充值':'周期','Glife提款':'周期'
+  '填写真实姓名':'永久','填写生日':'永久','填写生日（CP）':'永久','填写手机号码':'永久','填写邮箱':'永久','KYC认证':'永久',
+  'Maya绑定':'永久','Glife绑定':'永久','加电子钱包':'永久','加银行卡':'永久','加加密钱包':'永久','加C2C钱包':'永久',
+  '2025新版访问':'永久','关注Facebook':'永久','体验平台PWA':'永久',
+  '充值':'周期','投注':'周期','Maya充值':'周期','Maya提款':'周期','Glife充值':'周期','Glife提款':'周期',
+  '圣诞倒计时专属任务':'限时','Brand Daily Passcode':'限时'
 };
+var ALL_TIMES=['永久','每日','每周','限时','周限时'];
+var TIME_ALLOW={'永久':['永久'],'周期':['每日','每周','限时','周限时'],'限时':['限时']};
 function bucketOf(cond){ return TIME_BUCKET[cond] || '其他'; }
-/* ===== 防呆：任务条件 ↔ 任务时间 =====
-   信息完善 → 只能选「永久」；充值、投注等资金类 → 可选「每日」「每周」「限时」「周限时」；其他类不限。
-   任务组：子任务须同一类，先选的子任务决定类别，其他子任务里不同类的条件反灰不可选。 */
-var TIME_ALLOW={'永久':['永久'],'周期':['每日','每周','限时','周限时']};
+function allowOf(cond){ return TIME_ALLOW[bucketOf(cond)] || ALL_TIMES; }
+function meet(a,b){ return a.filter(function(x){ return b.indexOf(x)>-1; }); }
+/* ===== 防呆：不支援的任务时间反灰；任务组的子任务要有共同可选的任务时间 ===== */
 function isGroupTask(){ return document.getElementById('taskCat').value==='group'; }
-/* 除了 exceptRow 以外，子任务已选的时间类别（没有则 null）*/
-function groupBucket(exceptRow){
-  var b=null;
+/* 除了 exceptRow 以外，所有子任务条件共同可选的任务时间 */
+function groupAllow(exceptRow){
+  var set=ALL_TIMES.slice();
   document.querySelectorAll('#subTasks .subCond').forEach(function(c){
     if(exceptRow && exceptRow.contains(c)) return;
-    var k=bucketOf(c.value); if(k!=='其他' && !b) b=k;
+    if(c.value) set=meet(set,allowOf(c.value));
   });
-  return b;
+  return set;
 }
 function syncDd(sel){ var w=sel.closest('.dropdown'); if(w) ddSync(w); }
 function checkGroupTime(){
   var group=isGroupTask();
-  /* 1) 任务组：子任务条件下拉，跟其他子任务不同类的反灰 */
+  /* 1) 任务组：会让子任务之间没有共同任务时间的条件反灰（例：投注 ＋ 追踪 Facebook） */
   if(group){
     document.querySelectorAll('#subTasks .sub-card').forEach(function(row){
-      var lock=groupBucket(row);
+      var lock=groupAllow(row);
       var cond=row.querySelector('.subCond'), cat=row.querySelector('.subCat');
-      [].forEach.call(cond.options,function(o){ var k=bucketOf(o.value||o.textContent); o.disabled=!!(lock && k!=='其他' && k!==lock); });
+      [].forEach.call(cond.options,function(o){ o.disabled = meet(lock,allowOf(o.value||o.textContent)).length===0; });
       [].forEach.call(cat.options,function(o){   /* 整个类别都不能选时，类别也反灰 */
-        o.disabled=!!lock && COND_SUB[o.value].every(function(c){ var k=bucketOf(c); return k!=='其他' && k!==lock; });
+        o.disabled = COND_SUB[o.value].every(function(c){ return meet(lock,allowOf(c)).length===0; });
       });
       syncDd(cond); syncDd(cat);
     });
   }
-  /* 2) 任务时间：不符合条件的选项反灰；目前选的不能用就自动换成第一个可选的 */
-  var b = group ? groupBucket(null) : bucketOf(document.getElementById('condSub').value);
-  var allow=TIME_ALLOW[b], radios=document.querySelectorAll('input[name="ttime"]'), firstOk=null, curBad=false;
+  /* 2) 任务时间：不支援的反灰；目前选的不能用就自动换成第一个可选的 */
+  var allow = group ? groupAllow(null) : allowOf(document.getElementById('condSub').value);
+  var radios=document.querySelectorAll('input[name="ttime"]'), firstOk=null, curBad=false;
   radios.forEach(function(rd){
-    var off=!!allow && allow.indexOf(rd.value)<0;
+    var off=allow.indexOf(rd.value)<0;
     rd.disabled=off; rd.parentNode.style.opacity=off?'.4':'';
     if(!off && !firstOk) firstOk=rd;
     if(off && rd.checked) curBad=true;
@@ -1277,21 +1216,34 @@ function renumberSubs(){
     row.querySelector('.pill').textContent='子任务'+(idx+1);
     var sid=row.querySelector('.subId'); if(sid) sid.textContent=GROUP_TASK_ID+'-'+(idx+1);
   });
-  document.getElementById('addSubBtn').style.display = (box.children.length>=10?'none':'inline-flex');
+  /* 配置限制：子任务最多 10 个——满 10 个「添加子任务」反灰不可点 */
+  document.getElementById('addSubBtn').classList.toggle('is-off', box.children.length>=10);
+  syncTiers();
 }
 function addSub(e){ if(e)e.preventDefault();
   var box=document.getElementById('subTasks');
   if(box.children.length>=10) return;
   var d=document.createElement('div'); d.innerHTML=subRowHTML(box.children.length+1);
   var row=d.firstChild; box.appendChild(row); ddInitAll(row);
-  onSubCat(row.querySelector('.subCat')); onSubReward(row.querySelector('.subReward')); renumberSubs();
+  onSubCat(row.querySelector('.subCat')); fitSub(row); onSubReward(row.querySelector('.subReward')); renumberSubs();
+}
+/* 防呆：新加的子任务预设条件若跟其他子任务没有共同任务时间（例：已有追踪 Facebook，新加的预设「充值」），
+   自动换成第一个可以放在一起的类别／条件，避免选到反灰项、任务时间全部不能选 */
+function fitSub(row){
+  var lock=groupAllow(row), catSel=row.querySelector('.subCat'), condSel=row.querySelector('.subCond');
+  if(meet(lock,allowOf(condSel.value)).length) return;
+  var cats=['fund','info','other'];
+  for(var i=0;i<cats.length;i++){
+    var ok=COND_SUB[cats[i]].filter(function(c){ return meet(lock,allowOf(c)).length>0; });
+    if(ok.length){ catSel.value=cats[i]; onSubCat(catSel); condSel.value=ok[0]; onSubCond(condSel); syncDd(catSel); syncDd(condSel); return; }
+  }
 }
 function delSub(e,btn){ if(e)e.preventDefault();
   btn.closest('.range-inline').remove(); renumberSubs(); checkGroupTime(); }
 /* ===== 额外奖励：任意完成 n 个子任务 → 获得一笔奖励（最多 3 笔；奖励类型同子任务；彩金需配流水倍数）===== */
 function tierRowHTML(n,type,val){
   return '<div class="range-inline tier-ln">'
-    +'任意完成<input class="input" placeholder="数量" value="'+(n||'')+'" style="max-width:60px;min-width:0"/>个'
+    +'任意完成<select class="select tierN" style="max-width:80px;min-width:0" onchange="syncTiers()"></select>个'
     +'<select class="select tierReward" style="max-width:120px" onchange="onSubReward(this)">'+rewardOptsHTML(type)+'</select>'
     +subRewardFieldsHTML(val)
     +'<a class="link-del" onclick="delTier(event,this)">删除</a>'
@@ -1299,19 +1251,37 @@ function tierRowHTML(n,type,val){
 }
 function addTier(e,n,type,val){ if(e)e.preventDefault();
   var box=document.getElementById('tierRewards');
-  if(box.children.length>=3) return;
+  if(box.children.length>=tierMax()) return;
   var d=document.createElement('div'); d.innerHTML=tierRowHTML(n,type||'p',val);
   var row=d.firstChild; box.appendChild(row); ddInitAll(row);
+  syncTiers(); if(n){ row.querySelector('.tierN').value=n; syncTiers(); }
   onSubReward(row.querySelector('.tierReward')); renumberTiers();
 }
-function delTier(e,btn){ if(e)e.preventDefault(); btn.closest('.range-inline').remove(); renumberTiers(); }
+function delTier(e,btn){ if(e)e.preventDefault(); btn.closest('.range-inline').remove(); syncTiers(); }
+/* 配置限制：额外奖励最多 3 笔，且不超过子任务数（n 只能 1~子任务数、各档不重复）*/
+function subCount(){ return document.getElementById('subTasks').children.length; }
+function tierMax(){ return Math.min(3, subCount()); }
 function renumberTiers(){
   var box=document.getElementById('tierRewards');
-  document.getElementById('addTierBtn').style.display = (box.children.length>=3?'none':'inline-flex');
+  document.getElementById('addTierBtn').classList.toggle('is-off', box.children.length>=tierMax());
+}
+/* 「任意完成 n 个」下拉：选项＝1~子任务数；别档已选的反灰；子任务删到比 n 少时，该档清空重选 */
+function syncTiers(){
+  var box=document.getElementById('tierRewards'); if(!box) return;
+  var sels=[].slice.call(box.querySelectorAll('.tierN')), max=subCount();
+  sels.forEach(function(sel){ if(sel.value && +sel.value>max) sel.value=''; });
+  sels.forEach(function(sel){
+    var cur=sel.value, used=sels.filter(function(x){ return x!==sel && x.value; }).map(function(x){ return x.value; });
+    var h='<option value="" selected disabled hidden>数量</option>';
+    for(var i=1;i<=max;i++) h+='<option value="'+i+'"'+(used.indexOf(String(i))>-1?' disabled':'')+'>'+i+'</option>';
+    sel.innerHTML=h; sel.value=cur;
+    syncDd(sel);
+  });
+  renumberTiers();
 }
 function seedTiers(){
   var box=document.getElementById('tierRewards'); if(!box||box.children.length) return;
-  addTier(null,'2','c','100'); addTier(null,'3','p','500');
+  addTier(null,'1','c','100'); addTier(null,'2','p','500');   /* 预设 2 个子任务，示例档数不超过子任务数 */
 }
 function onTaskCat(){
   var isGroup=document.getElementById('taskCat').value==='group';
@@ -1319,6 +1289,7 @@ function onTaskCat(){
   document.getElementById('groupExtra').classList.toggle('hidden',!isGroup);
   document.getElementById('rowCond').classList.toggle('hidden',isGroup);
   document.getElementById('rowReward').classList.toggle('hidden',isGroup);
+  document.getElementById('rowJump').classList.toggle('hidden',isGroup);
   if(isGroup) document.getElementById('rowChip').style.display='none'; else onReward();
   var box=document.getElementById('subTasks');
   if(isGroup && box.children.length===0){ addSub(); addSub(); }
@@ -1327,25 +1298,57 @@ function onTaskCat(){
 }
 
 /* ===== 充值/投注区间资格联动 ===== */
+/* 奖励领取时限（既有，本期不改；对应前台「奖励找回」）：仅「用户手动领取」＋任务时间为每日／限时才出现；
+   永久、每周、周限时不显示 */
+var CLAIM_LIMIT_TIMES=['每日','限时'];
+function onGrant(){
+  var manual=(document.querySelector('input[name="grant"]:checked')||{}).value==='manual';
+  var t=(document.querySelector('input[name="ttime"]:checked')||{}).value;
+  var row=document.getElementById('claimLimitRow'); if(!row) return;
+  row.classList.toggle('hidden',!(manual && CLAIM_LIMIT_TIMES.indexOf(t)>-1));
+}
 function onQualDep(){
+  /* 没勾的区间：最低／最高反灰不能填（并清空），避免填了数字却没生效 */
+  ['chkDep','chkBet'].forEach(function(id){
+    var chk=document.getElementById(id), row=chk.closest('.range-inline');
+    row.querySelectorAll('.qMin,.qMax').forEach(function(i){ i.disabled=!chk.checked; if(!chk.checked) i.value=''; i.style.opacity=chk.checked?'':'.5'; });
+  });
   var both=document.getElementById('chkDep').checked && document.getElementById('chkBet').checked;
   document.getElementById('qualBox').style.opacity = both?'1':'.5';
-  document.querySelectorAll('.qualRadio').forEach(function(r){ r.disabled=!both; if(!both) r.checked=false; });
+  var rs=document.querySelectorAll('.qualRadio');
+  rs.forEach(function(r){ r.disabled=!both; if(!both) r.checked=false; });
+  /* 两个区间都勾了：预选「完全符合」，运营可再改 */
+  if(both && ![].some.call(rs,function(r){ return r.checked; })) rs[1].checked=true;
+}
+/* 区间：最高不可低于最低——填完若最高 < 最低，最高清空重填（最低留空＝0 起算；最高留空＝不设上限）*/
+function onQualRange(inp){
+  var row=inp.closest('.range-inline'), mn=row.querySelector('.qMin'), mx=row.querySelector('.qMax');
+  if(mn.value!=='' && mx.value!=='' && +mx.value < +mn.value) mx.value='';
 }
 
-/* 任务时间：每日＝时段；限时＝日期时间区间；周限时＝星期区间；永久／每周（沿用后台既有周期计算）不需额外设定 */
+/* 任务时间：限时＝日期时间区间；周限时＝星期区间；永久／每日／每周（沿用后台既有周期计算）不需额外设定 */
 function onTaskTime(){
   var v=(document.querySelector('input[name="ttime"]:checked')||{}).value;
   var lim=document.getElementById('timeRangeLimited');
   var wk=document.getElementById('timeRangeWeekly');
-  var day=document.getElementById('timeRangeDaily');
   if(lim) lim.classList.toggle('hidden', v!=='限时');
   if(wk)  wk.classList.toggle('hidden', v!=='周限时');
-  if(day) day.classList.toggle('hidden', v!=='每日');
   /* 永久：不适用名额限制，反灰不可填 */
   var qi=document.getElementById('quotaInput'), qr=document.getElementById('quotaRow');
-  if(qi) qi.disabled=(v==='永久');
+  if(qi){
+    if(v==='永久'){ if(qi.value) qi.dataset.keep=qi.value; qi.value=''; qi.placeholder='不限'; }
+    else { if(!qi.value && qi.dataset.keep) qi.value=qi.dataset.keep; qi.placeholder='留空或 0＝不限'; }
+    qi.disabled=(v==='永久');
+  }
   if(qr) qr.style.opacity=(v==='永久'?'.5':'1');
+  onGrant();   /* 任务时间改了，奖励领取时限跟着显示／隐藏 */
+}
+
+/* 防呆（限时）：结束时间不可早于开始时间——早于开始的日期反灰不可选；先选了结束、再把开始改到它之后，结束清空重选 */
+function onLimRange(){
+  var st=document.getElementById('limStart'), ed=document.getElementById('limEnd');
+  if(st.value && ed.value && ed.value<=st.value) ed.value='';
+  ed.min=st.value||''; st.max=ed.value||'';
 }
 
 /* ===== 自定义下拉：弹窗高度固定、超出可上下滚动 =====
@@ -1432,7 +1435,7 @@ function ddCloseAll(except){
 }
 document.addEventListener('click',function(e){ if(!e.target.closest('.dropdown')) ddCloseAll(); });
 
-onCond(); onReward(); onTaskCat(); onQualDep(); onTaskTime();
+onCond(); onReward(); onTaskCat(); onQualDep(); onTaskTime(); onGrant();
 ddInitAll(document.getElementById('taskModal'));
 </script>
 </body>

@@ -18,7 +18,7 @@
         ③ 活动墙点进去的活动详情页
 
       本次新增的两处
-        ④ 首页顶部栏 Deposit 按钮右下角的 BONUS 吊牌挂饰
+        ④ 首页顶部栏 Deposit 按钮上方的黄色 BONUS 条
            纯图示、不带数字，只回答「进去有没有优惠可领」——
            挂不挂完全看存款页当下有没有券可勾。
         ⑤ 存款页的活动小 banner，点一下直接进活动详情页。
@@ -175,10 +175,10 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 .tag--change { background: var(--tag-change-bg); color: var(--tag-change-text); }
 .tag--same   { background: var(--tag-same-bg);   color: var(--tag-same-text); }
 /* ==========================================================================
-   首页顶部栏 ‧ Deposit 按钮的 BONUS 吊牌挂饰（本次新增）
+   首页顶部栏 ‧ Deposit 按钮的黄色 BONUS 条（本次新增，10/6 换新设计稿）
    --------------------------------------------------------------------------
-   顶部栏的版型完全不动，只在原本的 Deposit 按钮右下角挂一块红色 BONUS 吊牌
-   （用两个小挂钩吊著，吊牌后方露出一枚金币）——依设计稿的样子做。
+   顶部栏其他地方不动，有券时 Deposit 按钮上方多一条黄色 BONUS 条
+   （礼物图示＋红色斜体 BONUS），跟按钮连成一块——依 10/6 新设计稿。
    它是纯图示，不带任何数字，只回答一件事：「进去有没有优惠可领」——
    判断依据就是存款页当下有没有券可勾，不绑任何单一活动。
    今天领了几笔、下一笔几 %，留到存款页的券与活动详情页再讲——
@@ -220,11 +220,11 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 .hdr__refresh { color: var(--c-link); font-size: var(--fs-xs); }
 .hdr__spacer { flex: 1 1 auto; min-width: var(--sp-2); }
 
-/* Deposit 按钮：版型沿用现况，只多了右下角那块 BONUS 吊牌挂饰 */
+/* Deposit 按钮：版型沿用现况；有券时上方多一条黄色 BONUS 条（10/6 新设计稿） */
 .hdr__deposit {
-  position: relative;               /* 让吊牌能挂在它的右下角 */
   flex: 0 0 auto; margin-left: 6px;
-  padding: 7px 14px;
+  display: flex; flex-direction: column; align-items: stretch;
+  padding: 0; overflow: hidden;
   background: linear-gradient(180deg, #5b8df9 0%, #2f4fd8 100%);
   border: 0; border-radius: 10px;
   box-shadow: 0 3px 0 #22399f;
@@ -232,19 +232,21 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   cursor: pointer;
 }
 .hdr__deposit:hover { filter: brightness(1.06); }
+.hdr__deposit-text { padding: 7px 14px; }
 
-/* ▼ 新增：BONUS 吊牌挂饰 --------------------------------------------------
-   纯装饰图示，用两个小挂钩吊在 Deposit 按钮右下角外侧，后方露出一枚金币，
-   看起来像「挂上去的」。它压在按钮外缘，不把按钮撑大、
-   也不把右边的搜寻图示挤掉；没有数字，也不做任何动画。
-   存款页没有任何可勾的券时整块不显示，顶部栏就和现况一模一样。      */
-.hdr__charm {
-  position: absolute; right: -13px; bottom: -13px; z-index: 2;
-  width: 49px; height: 35px;
-  pointer-events: none;             /* 点到吊牌＝点到 Deposit 按钮本身 */
-  filter: drop-shadow(0 2px 3px rgba(130, 60, 0, .42));
+/* 黄色 BONUS 条：礼物图示＋红色斜体 BONUS，跟按钮同宽连成一块。
+   存款页没有任何可勾的券时整条不显示，按钮就和现况一模一样。 */
+.hdr__bonus {
+  display: flex; align-items: center; justify-content: center; gap: 3px;
+  padding: 2px 8px;
+  background: linear-gradient(180deg, #fff1a6 0%, #f7cf55 100%);
+  border-bottom: 1px solid #e3b23c;
 }
-.hdr__charm[hidden] { display: none; }
+.hdr__bonus[hidden] { display: none; }
+.hdr__gift { width: 14px; height: 14px; flex: 0 0 auto; }
+.hdr__bonus-text {
+  color: #e2261b; font-size: var(--fs-xs); font-weight: 900; font-style: italic; letter-spacing: .5px;
+}
 
 .hdr__search {
   flex: 0 0 auto; display: flex; padding: 0 2px;
@@ -459,6 +461,11 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   text-align: center;
 }
 .extra-bar--none { background: #d9dce1; color: #6d727a; }
+.extra-bar__coin {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #f6b73c; color: #fff; font-size: var(--fs-xs); font-weight: 700;
+}
 .extra-bar__cap { font-size: var(--fs-xs); font-weight: 600; opacity: .95; }
 
 .btn-submit {
@@ -608,13 +615,13 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 <div class="stage">
 
   <!-- ======================================================================
-       4.1 首页存款按钮（Deposit 按钮的 BONUS 吊牌挂饰）
+       4.1 首页存款按钮（Deposit 按钮上方的 BONUS 条）
        ====================================================================== -->
   <section class="screen">
     <header class="screen__head">
       <h2 class="screen__title">
         4.1 ‧ 首页存款按钮
-        <span class="tag tag--new">新增：Deposit BONUS 吊牌挂饰</span>
+        <span class="tag tag--new">新增：Deposit 上方 BONUS 条</span>
       </h2>
     </header>
 
@@ -641,47 +648,19 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 
           <span class="hdr__spacer"></span>
 
-          <!-- ▼ Deposit 按钮沿用现况，只在右下角多挂一块 BONUS 吊牌（本次新增）
-               吊牌构造由后往前：金币 → 两个小挂钩 → 红色吊牌 → BONUS 字样。
-               整块微微倾斜（rotate -6 度），看起来才像真的吊著而不是贴上去。 -->
+          <!-- ▼ Deposit 按钮：有券时按钮上方多一条黄色 BONUS 条（10/6 照新设计稿替换原本的吊牌）
+               黄条跟按钮同宽、连成一块；没券时整条拿掉，按钮回到现况。 -->
           <button type="button" class="hdr__deposit">
-            Deposit
-            <svg class="hdr__charm" id="hdrCharm" viewBox="0 0 48 34" aria-hidden="true" focusable="false">
-              <defs>
-                <linearGradient id="charmGold" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#ffefb0"/>
-                  <stop offset=".55" stop-color="#ffd257"/>
-                  <stop offset="1" stop-color="#eda310"/>
-                </linearGradient>
-                <linearGradient id="charmTag" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#ff7a45"/>
-                  <stop offset=".5" stop-color="#f23c1d"/>
-                  <stop offset="1" stop-color="#d81f0c"/>
-                </linearGradient>
-              </defs>
-
-              <!-- 金币：藏在吊牌右后方，只露出右半边一角 -->
-              <circle cx="38.5" cy="16.5" r="9"   fill="#c8860a"/>
-              <circle cx="38.5" cy="16.5" r="7.7" fill="url(#charmGold)"/>
-              <circle cx="38.5" cy="16.5" r="5"   fill="none" stroke="#e0a017" stroke-width="1.1"/>
-
-              <!-- 吊牌本体（含挂钩与字）整组一起倾斜 -->
-              <g transform="rotate(-6 21 20)">
-                <!-- 两个金色小挂钩，从吊牌上缘往上勾出去 -->
-                <g fill="none" stroke="#f0b429" stroke-width="2.3" stroke-linecap="round">
-                  <path d="M11.5 14.5V8.6a2.7 2.7 0 0 1 2.7-2.7"/>
-                  <path d="M29.5 14.5V8.6a2.7 2.7 0 0 1 2.7-2.7"/>
-                </g>
-                <!-- 红色吊牌，外圈一道金边 -->
-                <rect x="4" y="13" width="33" height="16.5" rx="4.5"
-                      fill="url(#charmTag)" stroke="#ffd35e" stroke-width="1.5"/>
-                <!-- BONUS：用 textLength 锁死宽度，任何字体都不会撑出吊牌 -->
-                <text x="20.5" y="25.1" text-anchor="middle"
-                      font-family="system-ui, -apple-system, sans-serif"
-                      font-size="9" font-weight="800" fill="#fff"
-                      textLength="25" lengthAdjust="spacingAndGlyphs">BONUS</text>
-              </g>
-            </svg>
+            <span class="hdr__bonus" id="hdrCharm">
+              <svg class="hdr__gift" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="3" y="9" width="18" height="12" rx="1.5" fill="#e8392a"/>
+                <rect x="2" y="7" width="20" height="4" rx="1" fill="#f25a3c"/>
+                <rect x="10.5" y="7" width="3" height="14" fill="#ffd35e"/>
+                <path d="M12 7c-2-4-6-4-6-1.5S10 7 12 7zm0 0c2-4 6-4 6-1.5S14 7 12 7z" fill="#ffd35e"/>
+              </svg>
+              <span class="hdr__bonus-text">BONUS</span>
+            </span>
+            <span class="hdr__deposit-text">Deposit</span>
           </button>
           <!-- ▲ 新增到此 ────────────────────────────────────────── -->
 
@@ -804,9 +783,10 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
             </div>
             <div class="coupon__right">
               <p class="coupon__cap">Capped At <b id="rCap">₱2,000</b></p>
+              <!-- 打码金额直接算好给玩家看（规格 4.2.5）：跟著 Payment Amount 输入的金额即时变 -->
               <p class="coupon__meta">
-                Turnover:<br>
-                3x turnover of deposited and bonus<br>
+                Conditions:<br>
+                Complete ₱<span id="rBets">0</span> Bets To Withdraw<br>
                 Min Deposit <span id="rMin">500.00</span>
               </p>
             </div>
@@ -826,6 +806,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
           <button type="button" class="quick js-quick" data-add="500">+ 500<span class="quick__badge js-badge">4%</span></button>
           <button type="button" class="quick js-quick" data-add="1000">+ 1000<span class="quick__badge js-badge">4%</span></button>
           <button type="button" class="quick js-quick" data-add="10000">+ 10000<span class="quick__badge js-badge">4%</span></button>
+          <button type="button" class="quick js-quick" data-add="20000">+ 20000<span class="quick__badge js-badge">4%</span></button>
         </div>
 
         <input class="amount-box" id="amount" type="text" inputmode="decimal" value="₱ 0" aria-label="Deposit amount">
@@ -991,7 +972,7 @@ let selected = null;
    把一张券画成可用或不可用
    -------------------------------------------------------------------------- */
 /* 今日领满 ＝ 这张券整列不显示（不是转灰）。
-   券不在版面上，首页吊牌也跟著不挂——两边用同一个依据。 */
+   券不在版面上，首页 BONUS 条也跟著不显示——两边用同一个依据。 */
 function paintCoupon(rowId, chkId, usable) {
   const row = document.getElementById(rowId);
   const chk = document.getElementById(chkId);
@@ -1020,6 +1001,23 @@ function readAmount() {
   const raw = document.getElementById('amount').value.replace(/[^\d.]/g, '');
   const n = parseFloat(raw);
   return isNaN(n) ? 0 : n;
+}
+
+/* 原型假设的流水设置（真实系统读后台）：
+   会员层级稽核 80%、VIP 稽核 50%（相乘 40%；VIP 流水不计算时 vipOn＝false 就不乘）；
+   本活动「奖金所需流水」勾 本金＋奖金、3 倍（规格 2.4） */
+const TURN = { level: 0.8, vip: 0.5, vipOn: true, actPrin: true, actBonus: true, act: 3 };
+
+/* 券面的打码金额（规格 4.2.5）：
+   充值 × 会员层级稽核比例 × VIP 稽核比例 ＋（勾的本金 ＋ 勾的奖金）× 活动倍数
+   用哪个金额：输入金额达门槛就用输入金额；还没输或低于门槛一律显示 0 */
+function calcBets(amount, r) {
+  if (!(amount >= r.min)) return 0;
+  const dep   = amount;
+  const bonus = calcBonus(dep, r.pct, r.cap);
+  const act   = ((TURN.actPrin ? dep : 0) + (TURN.actBonus ? bonus : 0)) * TURN.act;
+  const depRate = TURN.level * (TURN.vipOn ? TURN.vip : 1);   // 充值流水比例
+  return Math.floor((dep * depRate + act) * 100) / 100;
 }
 
 /* 算奖励：金额 × 百分比，超过上限取上限，小数第 2 位无条件舍去 */
@@ -1051,12 +1049,19 @@ function renderPayment() {
   const c = selectedParams();
   const amount = readAmount();
 
-  document.querySelectorAll('.js-badge').forEach(function (b) {
-    b.hidden = !c;
-    if (c) b.textContent = c.pct + '%';
-  });
+  // 券面的打码金额跟著输入金额走
+  // 没勾券 → 显示 0（这笔不带券、不发奖）；勾了券才照输入金额算
+  const rr = currentRepeat();
+  if (rr) document.getElementById('rBets').textContent = (selected === 'repeat') ? amt(calcBets(amount, rr)) : '0';
 
   const belowMin = !!c && amount > 0 && amount < c.min;
+
+  // 角标：勾了券、而且金额达门槛才出现（照现有前台：₱10 低于门槛时不挂，₱100 达门槛才挂）
+  const showBadge = !!c && amount >= c.min;
+  document.querySelectorAll('.js-badge').forEach(function (b) {
+    b.hidden = !showBadge;
+    if (c) b.textContent = c.pct + '%';
+  });
   document.getElementById('amountErr').hidden = !belowMin;
   document.getElementById('amount').classList.toggle('is-error', belowMin);
   document.getElementById('btnSubmit').disabled = belowMin || amount <= 0;
@@ -1074,7 +1079,8 @@ function renderPayment() {
     const bonus = calcBonus(amount, c.pct, c.cap);
     const hitCap = amount * c.pct / 100 >= c.cap;   // 刚好等于上限也标 (capped)
     bar.className = 'extra-bar';
-    txt.innerHTML = 'You Will Receive An Extra ₱' + money(bonus)
+    // 金额前面是金币图示（照现有前台），数字不补 .00
+    txt.innerHTML = 'You Will Receive An Extra <span class="extra-bar__coin" aria-hidden="true">₱</span>' + amt(bonus)
       + (hitCap ? ' <span class="extra-bar__cap">(capped)</span>' : '');
   }
 }
@@ -1126,9 +1132,9 @@ function renderDailyList() {
 }
 
 /* --------------------------------------------------------------------------
-   首页顶部栏的 BONUS 吊牌挂饰
+   首页顶部栏的 BONUS 条
      规则只有一条：存款页现在有没有券「可勾」。
-     有任何一张可勾就挂，一张都没有（或全部灰掉）就整块不挂。
+     有任何一张可勾就显示，一张都没有（或全部灰掉）就整条不显示。
      这里直接数券列上的 data-usable，paintCoupon 已经把状态写在上面了，
      不另外维护一份判断，才不会两边说法不一致。
    -------------------------------------------------------------------------- */
@@ -1143,8 +1149,7 @@ function renderPromoHead() {
 function renderHeaderCharm() {
   const usable = document.querySelectorAll('.coupon-row[data-usable="yes"]').length;
 
-  // 吊牌是一块 SVG，SVG 不支援 el.hidden = true 这种捷径写法，
-  // 必须直接加／拿掉 hidden 属性，CSS 那条 .hdr__charm[hidden] 才会生效。
+  // BONUS 条：有券可勾才显示（规格 4.1）
   document.getElementById('hdrCharm').toggleAttribute('hidden', usable === 0);
 }
 
