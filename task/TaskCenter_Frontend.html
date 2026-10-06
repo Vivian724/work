@@ -144,16 +144,17 @@ img{max-width:100%;display:block;}
 .card__right .act{width:100%;padding:0;}
 
 .act,.chip-st{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 14px;border-radius:8px;font-size:.8rem;font-weight:700;color:#fff;white-space:nowrap;cursor:pointer;}   /* 按钮外观照线上既有 */
-/* 按钮颜色：照线上既有（去投注绿、去完成深蓝、处理中浅蓝）；线上截图未出现者沿用原型 */
-.act--claim,.chip-st--claim{background:linear-gradient(90deg,#ff9d3d,#ff7a1a);}              /* 领取 */
-.act--bet,.chip-st--bet{background:linear-gradient(90deg,#8bdc5a,#4cb944);}                  /* 去投注 */
-.act--go,.chip-st--go{background:#0b4fe3;}                                                   /* 去完成 */
-.act--deposit,.chip-st--deposit{background:linear-gradient(90deg,#d872cf,#b94fb0);}          /* 去充值 */
-.act--upload,.act--verify,.chip-st--upload,.chip-st--verify{background:linear-gradient(90deg,#2ed9c3,#12b3a3);}   /* 上传证明／去认证 */
+/* 按钮颜色：照既有任务列表按钮色票（日间）；额满为本期新增 */
+.act--claim,.chip-st--claim{background:linear-gradient(180deg,#f5b67b,#e97a52);}              /* 领取 */
+.act--bet,.chip-st--bet{background:linear-gradient(90deg,#ade97c,#78b55a);}                  /* 去投注 */
+.act--go,.chip-st--go{background:#2c5ce0;}                                                   /* 去完成 */
+.act--deposit,.chip-st--deposit{background:linear-gradient(90deg,#d97fd2,#a7559d);}          /* 去充值 */
+.act--upload,.act--verify,.chip-st--upload,.chip-st--verify{background:linear-gradient(90deg,#96e2e5,#66b1ae);}   /* 上传证明／去认证 */
 
-.act--reject,.chip-st--reject{background:var(--c-red);}                                     /* 未通过 */
-.act--proc,.chip-st--proc{background:#4fb3f6;cursor:default;}                                 /* 处理中 */
-.act--done,.act--full,.act--expired,.chip-st--done,.chip-st--lock,.chip-st--full{background:#b6c0da;color:#fff;cursor:default;}   /* 已完成／额满／已过期：照既有「Completed」灰蓝底白字 */
+.act--reject,.chip-st--reject{background:#e8534c;}                                     /* 未通过 */
+.act--proc,.chip-st--proc{background:#6dbcf6;cursor:default;}                                 /* 处理中 */
+.act--done,.act--expired,.chip-st--done,.chip-st--lock{background:#bfc6d8;color:#fff;cursor:default;}   /* 已完成／已过期：照既有灰蓝底白字 */
+.act--full,.chip-st--full{background:#e2b4b4;color:#fff;cursor:default;}   /* 额满（新增）：淡灰玫瑰色——和已完成一样是不能点的浅色，但带一点红，跟红字「已发送 y / y 人」呼应；夜间用 #8a6464 */
 .act:disabled{cursor:default;}
 
 /* 卡片下方需整行显示的内容（如「奖励名额已满」）*/
@@ -203,26 +204,14 @@ img{max-width:100%;display:block;}
 @keyframes msBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 .ms__st{font-size:.62rem;font-weight:700;color:var(--c-text-3);}
 .ms__st:empty{display:none;}
-/* 额外奖励可领取：宝箱晃动即代表可点礼物盒领取（不另加文案） */
-.is-can{cursor:pointer;}
 .ms__n{font-size:.6rem;color:var(--c-text-3);}
 .ms__amt{font-size:.76rem;font-weight:800;color:#e08a00;line-height:1.1;white-space:nowrap;}
 .ms__amt small{font-size:.56rem;font-weight:600;margin-left:2px;color:var(--c-text-2);}
 .grp-bonus__ic{font-size:.72rem;}
-.meta span.full{color:#e8383e;}          /* 未达成＝灰色「领取」不可点；英文文案较长，按钮宽度随字数 */
+.meta span.full{color:#e8383e;}
 
-/* 任务时间角标（新增：每周／限时／周限时）*/
+/* 任务组角标 */
 .card__badge--grp{background:#e6efff;color:#2f6bff;}
-.card__badge--week{background:#e3f5f2;color:#1f8a7d;}
-.card__badge--limit{background:#ffecec;color:#d9474c;}
-.card__badge--wlimit{background:#fff2df;color:#b06d10;}
-/* 新奖励类型（免费旋转／免费投注／优惠券／golden draw券）*/
-/* 已过期 */
-.pop__coin--fb{background:radial-gradient(circle at 40% 35%,#bff0d8,#26b86c);box-shadow:0 8px 20px rgba(38,184,108,.5);}
-.pop__coin--cp{background:radial-gradient(circle at 40% 35%,#bfe0ff,#2f6bff);box-shadow:0 8px 20px rgba(47,107,255,.5);}
-.pop__amt--fb{color:#26b86c;}
-.pop__coin--fs{background:radial-gradient(circle at 40% 35%,#ffd0e0,#e0457b);box-shadow:0 8px 20px rgba(224,69,123,.45);}
-.pop__amt--fs{color:#e0457b;}
 
 /* =========================================================
    Bottom nav
@@ -247,12 +236,10 @@ img{max-width:100%;display:block;}
 .pop__coin{width:70px;height:70px;margin:-52px auto 6px;border-radius:50%;
   background:radial-gradient(circle at 40% 35%,#bca7ff,#7a5bd6);display:grid;place-items:center;font-size:2rem;
   box-shadow:0 8px 20px rgba(122,91,214,.5);border:4px solid #fff;}
-.pop__coin--gold{background:radial-gradient(circle at 40% 35%,#ffe07a,#f0912a);box-shadow:0 8px 20px rgba(240,145,42,.5);}
 .pop__coin--fail{background:radial-gradient(circle at 40% 35%,#ffa3a3,#e0342f);box-shadow:0 8px 20px rgba(224,52,47,.5);}
 .pop__ic{display:block;width:84px;height:84px;object-fit:contain;margin:-60px auto 6px;filter:drop-shadow(0 6px 12px rgba(0,0,0,.18));}   /* 奖励图示同卡片（img/rw_*.png）*/
 .pop__title{font-size:1.05rem;font-weight:800;}
 .pop__amt{font-size:1.5rem;font-weight:800;color:#2f6bff;margin:8px 0 2px;}
-.pop__amt--gold{color:#f0912a;}
 .pop__desc{font-size:.84rem;color:#5b6a85;line-height:1.6;margin:6px 0 0;}
 .pop__btn{margin-top:16px;width:100%;background:var(--c-primary);color:#fff;font-weight:700;border-radius:12px;padding:12px;font-size:.95rem;}
 /* 领取成功弹窗（照既有前台：3D 图示压在上缘＋星光、浅橘渐层底、红字奖励、蓝色确定）；新增奖励类型沿用同版型，只换图示与文字 */
@@ -290,6 +277,8 @@ img{max-width:100%;display:block;}
 .rc-total{display:inline-flex;align-items:center;color:#e8383e;font-weight:700;margin-bottom:10px;}
 .rc-all{width:100%;background:#0b4fe3;color:#fff;font-size:1rem;border-radius:8px;padding:12px;}
 .rc-all:disabled{background:#b6c0da;cursor:default;}
+/* 未登录：有等级／标签限制的任务、奖励找回入口不显示 */
+.is-guest .task-list > article[data-limit],.is-guest #recallEntry{display:none!important;}
 /* demo controls */
 .demo-bar{max-width:360px;margin:0 auto 12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
 .demo-bar button{background:#fff;color:#2f6bff;border:1px solid #c9d8f2;border-radius:8px;padding:6px 10px;font-size:.74rem;}
@@ -311,6 +300,7 @@ img{max-width:100%;display:block;}
     <button onclick="showPop('intro')">任务介绍</button>
     <button onclick="openRecall()">奖励找回</button>
     <button onclick="toggleBlack(this)">黑名单用户</button>
+    <button onclick="toggleGuest(this)">未登录用户</button>
     <button onclick="cycle1024(this)">1024 状态：去充值</button>
     <button onclick="cycle951(this)">951 状态：上传证明</button>
   </div>
@@ -409,7 +399,7 @@ img{max-width:100%;display:block;}
         </article>
 
         <!-- 1042｜投注 ₱100（CQ9电子）｜积分 100｜名额 200/200 已满（每日）｜每日｜自动审核｜排序 3 -->
-        <article class="card" data-time="daily">
+        <article class="card" data-time="daily" data-cond="bet">
           <div class="card__main">
             <div class="card__title">每日游戏任务·CQ9电子</div>
             <div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:40%"></i></div><span class="prog__t">₱40 / ₱100</span></div>
@@ -428,8 +418,8 @@ img{max-width:100%;display:block;}
           <div class="card__right"><span class="card__cd">⏱ 13:05:11</span><button class="act act--bet" onclick="showRedirect('首页')">去投注</button></div>
         </article>
 
-        <!-- 1060｜任务组 · 限时｜子任务 2 个、每项上限 300｜额外奖励 1 个 彩金 200／2 个 彩金 500｜排序 5 -->
-        <article class="card card--quota grp" data-time="limit">
+        <!-- 1060｜任务组 · 限时｜子任务 2 个、每项上限 300｜额外奖励 1 个 彩金 200／2 个 彩金 500｜排序 5｜VIP2、VIP3（有等级限制：未登录不显示）-->
+        <article class="card card--quota grp" data-time="limit" data-limit="1">
           <span class="card__badge card__badge--grp">任务组</span>
           <span class="card__cd">⏱ 14d 13:05:11</span>
           <div class="grp__hd">
@@ -452,8 +442,8 @@ img{max-width:100%;display:block;}
           </div>
         </article>
 
-        <!-- 1030｜任务组 · 限时｜子任务 3 个、每项上限 500｜额外奖励 2 个 彩金 100／3 个 积分 500｜排序 6 -->
-        <article class="card card--quota grp" data-time="limit">
+        <!-- 1030｜任务组 · 限时｜子任务 3 个、每项上限 500｜额外奖励 1 个 积分 50／2 个 彩金 100／3 个 积分 500（配满 3 档）｜排序 6｜VIP1＋TH（有等级/标签限制：未登录不显示）-->
+        <article class="card card--quota grp" data-time="limit" data-limit="1">
           <span class="card__badge card__badge--grp">任务组</span>
           <span class="card__cd">⏱ 14d 13:05:11</span>
           <div class="grp__hd">
@@ -462,7 +452,7 @@ img{max-width:100%;display:block;}
           </div>
           <div class="grp-bonus">
             <div class="grp-bonus__hd"><span class="grp-bonus__ic">🎁</span><b>额外奖励</b></div>
-            <div class="ms" style="--k:2"><div class="ms__track"><i style="width:17%"></i></div><div class="ms__cols"><div class="ms__col is-lock"><span class="ms__box">🎁</span><span class="ms__n">2 个</span><span class="ms__amt" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">100</span><span class="ms__st"></span></div><div class="ms__col is-lock"><span class="ms__box">🎁</span><span class="ms__n">3 个</span><span class="ms__amt" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">500</span><span class="ms__st"></span></div></div></div>
+            <div class="ms" style="--k:3"><div class="ms__track"><i style="width:20%"></i></div><div class="ms__cols"><div class="ms__col is-done"><span class="ms__box">🎁</span><span class="ms__n">1 个</span><span class="ms__amt" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">50</span><span class="ms__st"></span></div><div class="ms__col is-lock"><span class="ms__box">🎁</span><span class="ms__n">2 个</span><span class="ms__amt" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">100</span><span class="ms__st"></span></div><div class="ms__col is-lock"><span class="ms__box">🎁</span><span class="ms__n">3 个</span><span class="ms__amt" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">500</span><span class="ms__st"></span></div></div></div>
           </div>
           <div class="grp__list">
             <div class="gr">
@@ -492,7 +482,7 @@ img{max-width:100%;display:block;}
         </article>
 
         <!-- 1025｜投注 ₱5,000｜彩金 222｜名额 200/200 已满（每期）｜周限时 星期一至星期五｜自动审核｜自动发放｜排序 8 -->
-        <article class="card" data-time="wlimit">
+        <article class="card" data-time="wlimit" data-limit="1"><!-- 1025：VIP3、VIP4＋TH、RH（未登录不显示）-->
           <div class="card__main">
             <div class="card__title">高价值用户 · 周限时投注</div>
             <div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:64%"></i></div><span class="prog__t">₱3,200 / ₱5,000</span></div>
@@ -508,11 +498,11 @@ img{max-width:100%;display:block;}
             <div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱100 / ₱100</span></div>
             <div class="meta"><span class="rwc" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">50</span><span>已发送 <b>356 / 1,000</b> 人</span></div>
           </div>
-          <div class="card__right"><span class="card__cd">⏱ 13:05:11</span><button class="act act--claim" onclick="showPop('cash')">领取</button></div>
+          <div class="card__right"><span class="card__cd">⏱ 13:05:11</span><button class="act act--claim" onclick="claimMain(this,'cash')">领取</button></div>
         </article>
 
         <!-- 1024｜充值 ₱50｜积分 100｜名额 790/1,000（每日）｜每日｜自动审核｜用户手动领取（预览按钮可切换状态）｜排序 10 -->
-        <article class="card card--quota" data-time="daily" id="card1024">
+        <article class="card card--quota" data-time="daily" id="card1024" data-limit="1"><!-- 1024：VIP0、VIP1＋TL、ML（未登录不显示）-->
           <div class="row1">
             <div class="card__main">
               <div class="card__title">小额用户 · 每日充值任务</div>
@@ -546,7 +536,7 @@ img{max-width:100%;display:block;}
           <div class="card__right"><button class="act act--go" onclick="showRedirect('个人中心–个人资讯页')">去完成</button></div>
         </article>
 
-        <!-- 任务组 · 手动领取：子任务奖励＝免费旋转／免费投注／优惠券；额外奖励分档各自领取（新增情境）｜后台无此笔，排最后 -->
+        <!-- 任务组 · 手动领取：子任务奖励＝免费旋转／免费投注／优惠券；额外奖励分档各自领取（新增情境）｜后台 1090｜每周｜排序 102 -->
         <article class="card card--quota grp" data-time="weekly">
           <span class="card__badge card__badge--grp">任务组</span>
           <span class="card__cd">⏱ 6d 13:05:11</span>
@@ -575,7 +565,7 @@ img{max-width:100%;display:block;}
           <button class="grp__more" onclick="toggleGroup(this)">查看全部（3） ⌄</button>
         </article>
 
-        <!-- 任务组 · 永久｜人工审核（子任务处理中／未通过示例：关注Facebook 上传证明未通过）｜信息完善＋其他类，子任务配满 10 个＝后台上限；前面子任务已完成的显示示例；永久不设名额，前台不显示名额（新增情境）｜后台无此笔，排最后 -->
+        <!-- 任务组 · 永久｜人工审核（子任务处理中／未通过示例：关注Facebook 上传证明未通过）｜信息完善＋其他类，子任务配满 10 个＝后台上限；前面子任务已完成的显示示例；永久不设名额，前台不显示名额（新增情境）｜后台 1095｜永久｜人工审核｜排序 103 -->
         <article class="card card--quota grp" data-time="perm">
           <span class="card__badge card__badge--grp">任务组</span>
           <div class="grp__hd">
@@ -616,12 +606,12 @@ img{max-width:100%;display:block;}
               <div class="gr__r"><span class="chip-st chip-st--go" onclick="showRedirect('个人中心–个人资讯页')">去完成</span></div>
             </div>
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">加电子钱包</div><div class="gr__num">进度 1 / 1</div><div class="meta"><span class="rwc" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">20</span></div></div>
+              <div class="gr__l"><div class="gr__name">2025新版访问</div><div class="gr__num">进度 1 / 1</div><div class="meta"><span class="rwc" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">20</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--done">已完成</span></div>
             </div>
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">加银行卡</div><div class="gr__num">进度 0 / 1</div><div class="meta"><span class="rwc" title="免费旋转"><img class="rwi" src="img/rw_freespin.png" alt="免费旋转">ON通用</span></div></div>
-              <div class="gr__r"><span class="chip-st chip-st--go" onclick="showRedirect('个人中心–个人资讯页')">去完成</span></div>
+              <div class="gr__l"><div class="gr__name">体验平台PWA</div><div class="gr__num">进度 0 / 1</div><div class="meta"><span class="rwc" title="免费旋转"><img class="rwi" src="img/rw_freespin.png" alt="免费旋转">ON通用</span></div></div>
+              <div class="gr__r"><span class="chip-st chip-st--go" onclick="showRedirect('任务跳转地址')">去完成</span></div>
             </div>
             <div class="gr">
               <div class="gr__l"><div class="gr__name">关注Facebook</div><div class="gr__num">进度 1 / 1</div><div class="meta"><span class="rwc" title="golden draw券"><img class="rwi" src="img/rw_golddraw.png" alt="golden draw券">×1</span></div></div>
@@ -631,7 +621,7 @@ img{max-width:100%;display:block;}
           <button class="grp__more" onclick="toggleGroup(this)">查看全部（10） ⌄</button>
         </article>
 
-        <!-- 任务组 · 每周｜自动审核（一般状态：领取／去充值／已完成；额外奖励领完打勾）；子任务皆为每周可用类型（充值／投注）；额外奖励配满 3 档（后台上限），n 不超过子任务数（新增情境）｜后台无此笔，排最后 -->
+        <!-- 任务组 · 每周｜自动审核（一般状态：领取／去充值／已完成；额外奖励领完打勾）；子任务皆为每周可用类型（充值／投注）；额外奖励配满 3 档（后台上限），n 不超过子任务数（新增情境）｜后台 1098｜每周｜排序 104 -->
         <article class="card card--quota grp" data-time="weekly">
           <span class="card__badge card__badge--grp">任务组</span>
           <span class="card__cd">⏱ 6d 13:05:11</span>
@@ -641,7 +631,7 @@ img{max-width:100%;display:block;}
           </div>
           <div class="grp-bonus">
             <div class="grp-bonus__hd"><span class="grp-bonus__ic">🎁</span><b>额外奖励</b></div>
-            <div class="ms" style="--k:3"><div class="ms__track"><i style="width:50%"></i></div><div class="ms__cols"><div class="ms__col is-done"><span class="ms__box">🎁</span><span class="ms__n">2 个</span><span class="ms__amt" title="免费投注"><img class="rwi" src="img/rw_freebet.png" alt="免费投注">ON色碟</span><span class="ms__st"></span></div><div class="ms__col is-can" onclick="claimTier(this,'优惠券 存送券')"><span class="ms__box">🎁</span><span class="ms__n">3 个</span><span class="ms__amt" title="优惠券"><img class="rwi" src="img/rw_coupon.png" alt="优惠券">存送券</span><span class="ms__st"></span></div><div class="ms__col is-lock"><span class="ms__box">🎁</span><span class="ms__n">4 个</span><span class="ms__amt" title="golden draw券"><img class="rwi" src="img/rw_golddraw.png" alt="golden draw券">×1</span><span class="ms__st"></span></div></div></div>
+            <div class="ms" style="--k:3"><div class="ms__track"><i style="width:60%"></i></div><div class="ms__cols"><div class="ms__col is-done"><span class="ms__box">🎁</span><span class="ms__n">2 个</span><span class="ms__amt" title="免费投注"><img class="rwi" src="img/rw_freebet.png" alt="免费投注">ON色碟</span><span class="ms__st"></span></div><div class="ms__col is-can" onclick="claimTier(this,'优惠券 存送券')"><span class="ms__box">🎁</span><span class="ms__n">3 个</span><span class="ms__amt" title="优惠券"><img class="rwi" src="img/rw_coupon.png" alt="优惠券">存送券</span><span class="ms__st"></span></div><div class="ms__col is-lock"><span class="ms__box">🎁</span><span class="ms__n">4 个</span><span class="ms__amt" title="golden draw券"><img class="rwi" src="img/rw_golddraw.png" alt="golden draw券">×1</span><span class="ms__st"></span></div></div></div>
           </div>
           <div class="grp__list">
             <div class="gr">
@@ -748,15 +738,15 @@ img{max-width:100%;display:block;}
         <div class="pop__amt">×1</div>
         <button class="pop__btn" onclick="hidePop()">确定</button>
       </div>
-      <!-- rule 任务规则（沿用既有写死的规则）-->
+      <!-- rule 任务规则（既有写死的规则，照线上 TASK RULES 4 条；运营：沿用既有，不随本期调整）-->
       <div class="pop" data-pop="rule" hidden style="max-width:320px">
         <button class="pop__x" onclick="hidePop()">✕</button>
         <div class="pop__rules">
           <h4>任务规则</h4>
-          1. 任务奖励采先到先得，名额有限，领完为止。<br>
-          2. 参与资格于任务开始前以历史数据快照判定。<br>
-          3. 每位用户每期仅可领取 1 次奖励（组任务的每个子任务、每档额外奖励各算 1 次）；名额于奖励发送时即占用（不论是否领取），以人数计、不计次数。<br>
-          4. 最终解释权归平台所有。
+          1. 任务依时间分为基础任务、每日任务及限时任务。<br><br>
+          2. 完成任务条件即可领取对应的任务奖励（因数据同步需要，部分任务奖励最多延迟 30 分钟发放，请耐心等候）。<br><br>
+          3. 每日任务奖励仅限当天领取，隔天任务刷新后将无法领取。<br><br>
+          4. 限时任务奖励仅限任务期间内领取，任务过期后将无法领取。
         </div>
         <button class="pop__btn" onclick="hidePop()">确定</button>
       </div>
@@ -853,6 +843,14 @@ function claimSub(el){
   setClaimed(el);
   el.onclick=null;
 }
+/* 主任务点「领取」：跳领取成功弹窗，按钮照既有流程图变化（不需审核＝已完成；需审核＝处理中） */
+function claimMain(btn,pop){
+  showPop(pop);
+  var review=btn.dataset.review==='1';
+  btn.className='act '+(review?'act--proc':'act--done'); btn.textContent=review?'处理中':'已完成';
+  btn.disabled=true; btn.onclick=null;
+  updateTabDots();
+}
 /* 点击领取后：需审核＝处理中，不需审核＝已完成（按钮显示逻辑第一层）*/
 function setClaimed(el){
   var review=el.dataset.review==='1';
@@ -906,7 +904,7 @@ function setTab(btn){
   var el=document.getElementById('tabTip'); el.textContent=tip||''; el.hidden=!tip;
 }
 function updateTabDots(){
-  var black=document.querySelector('.phone').classList.contains('is-black');
+  var ph=document.querySelector('.phone'), black=ph.classList.contains('is-black')||ph.classList.contains('is-guest');   /* 黑名单／未登录：没有可领的数字 */
   var cnt={all:0};
   document.querySelectorAll('.task-list > article').forEach(function(a){
     var n=black?0:a.querySelectorAll('.act--claim,.chip-st--claim,.ms__col.is-can').length;
@@ -918,6 +916,44 @@ function updateTabDots(){
   });
 }
 /* demo：切换黑名单用户 */
+/* demo：未登录用户——只显示没有任何参与对象限制的任务（全部VIP＋不限标签＋参与要求不限）；不显示奖励找回；全部(n) 只算看得到的。
+   按钮照既有：未登录跳过第一、二层，直接显示第三层条件按钮，点按钮先登录；进度一律 0、宝箱全灰、无红点；名额、倒数、额满照常；顺序照后台排序 */
+var guestSnap=null;
+function condBtn(name,el){
+  var c=el.dataset.cond||(/充值/.test(name)?'deposit':/投注/.test(name)?'bet':/KYC/.test(name)?'verify':/关注Facebook/.test(name)?'upload':'go');
+  return {deposit:['deposit','去充值'],bet:['bet','去投注'],verify:['verify','去认证'],upload:['upload','上传证明'],go:['go','去完成']}[c];
+}
+function toGuestBtn(b,name,holder){
+  if(b.classList.contains('act--full')||b.classList.contains('chip-st--full')) return;   /* 额满照常 */
+  var k=b.classList.contains('act')?'act':'chip-st', c=condBtn(name,holder);
+  b.className=k+' '+k+'--'+c[0]; b.textContent=c[1]; b.disabled=false;
+  b.removeAttribute('onclick'); b.onclick=function(){ showRedirect('登录页'); };
+}
+function byOrd(parent,sel){
+  [].slice.call(parent.querySelectorAll(sel)).sort(function(a,b){ return a.dataset.ord-b.dataset.ord; })
+    .forEach(function(e){ parent.insertBefore(e, parent.querySelector(':scope > div[style]')); });
+}
+function toggleGuest(btn){
+  var ph=document.querySelector('.phone'), on=ph.classList.toggle('is-guest'), list=document.querySelector('.task-list');
+  btn.textContent = on ? '恢复登录用户' : '未登录用户';
+  if(on){
+    guestSnap=list.innerHTML;
+    list.querySelectorAll('.pbar i,.ms__track i').forEach(function(i){ i.style.width='0%'; });
+    list.querySelectorAll('.prog__t').forEach(function(t){ t.textContent=t.textContent.replace(/^₱[\d,]+/,'₱0'); });
+    list.querySelectorAll('.gr__num,:scope > article:not(.grp) .card__progress').forEach(function(t){ t.textContent=t.textContent.replace(/\d+ \//,'0 /'); });
+    list.querySelectorAll('.grp .grp__ttl .card__progress b').forEach(function(t){ t.textContent=t.textContent.replace(/^\d+/,'0'); });
+    list.querySelectorAll('.ms__col').forEach(function(c){ c.className='ms__col is-lock'; c.removeAttribute('onclick'); c.onclick=null; });
+    list.querySelectorAll(':scope > article:not(.grp)').forEach(function(a){ toGuestBtn(a.querySelector('.card__right .act'),a.querySelector('.card__title').textContent,a); });
+    list.querySelectorAll('.gr').forEach(function(g){ toGuestBtn(g.querySelector('.chip-st'),g.querySelector('.gr__name').textContent,g); });
+    list.querySelectorAll('.grp__list').forEach(function(l){ byOrd(l,':scope > .gr'); });
+    byOrd(list,':scope > article');
+    layoutGroups();
+  } else {
+    list.innerHTML=guestSnap;
+  }
+  document.getElementById('allCnt').textContent=document.querySelectorAll('.task-list > article'+(on?':not([data-limit])':'')).length;
+  updateTabDots();
+}
 function toggleBlack(btn){
   var on=document.querySelector('.phone').classList.toggle('is-black');
   btn.textContent = on ? '恢复一般用户' : '黑名单用户';
@@ -957,6 +993,8 @@ function layoutCards(){
        .forEach(function(o){ list.insertBefore(o.a, list.querySelector(':scope > div[style]')); });
   document.getElementById('allCnt').textContent=cards.length;   /* 全部(n)＝任务总数 */
 }
+/* 记下后台排序／配置顺序（未登录预览用）*/
+document.querySelectorAll('.task-list > article, .grp__list > .gr').forEach(function(e,i){ e.dataset.ord=i; });
 layoutGroups();
 layoutCards();
 updateTabDots();
