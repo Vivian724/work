@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>任务中心迭代 — 规格书（原型 × 规格对照版）</title>
+<!--
+  任务中心迭代 规格书（原型 × 规格 对照版）
+  左栏：同文件夹的 TaskCenter_Backend.html／TaskCenter_Frontend.html（即时载入）
+  右栏：对应章节规格。点章节，左栏跳到对应画面并框出位置。
+  ⚠ 要和两份原型、img 文件夹放在同一个文件夹才看得到左栏。
+-->
+<style>
+/* ==========================================================================
+   Design Token
+   ========================================================================== */
+:root {
+  --c-primary:      #3b7cf6;
+  --c-primary-dark: #2f6ae0;
+  --c-primary-soft: #ecf3ff;
+  --c-bg:           #f2f4f7;
+  --c-surface:      #ffffff;
+  --c-border:       #dcdfe6;
+  --c-border-light: #ebeef5;
+  --c-text:         #303133;
+  --c-text-2:       #606266;
+  --c-text-3:       #909399;
+  --c-danger:       #d84b4b;
+  --c-warning:      #b3730c;
+  --c-warning-bg:   #fdf6ec;
+  --c-success:      #3e8e41;
+  --c-success-bg:   #f0f9eb;
+
+  --tag-new-bg:    #e7f6ec;  --tag-new-text:    #256b34;
+  --tag-change-bg: #fdf2e3;  --tag-change-text: #8a5a08;
+  --tag-same-bg:   #eef0f3;  --tag-same-text:   #5c6068;
+  --tag-diff-bg:   #eaf1fe;  --tag-diff-text:   #2f5bb7;
+  --tag-none-bg:   #f4eef0;  --tag-none-text:   #8a4a58;
+
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
+  --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+
+  --radius: 4px;  --radius-lg: 8px;
+
+  /* 以 root 18px 换算。这份文件会被长时间阅读，字不能小 */
+  --fs-xs:   0.722rem;   /* 13px —— 标签、补充说明，已高于规范的 12px 下限 */
+  --fs-sm:   0.833rem;   /* 15px —— 表格内文 */
+  --fs-base: 0.889rem;   /* 16px —— 正文 */
+  --fs-md:   1rem;       /* 18px —— 小节标题 */
+  --fs-lg:   1.167rem;   /* 21px */
+  --fs-xl:   1.389rem;   /* 25px —— 章标题 */
+}
+
+/* ==========================================================================
+   Reset & Base
+   ========================================================================== */
+html { font-size: 18px; height: 100%; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; height: 100%;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: var(--fs-base);
+  line-height: 1.7;
+  color: var(--c-text);
+  background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 600; }
+:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+code {
+  background: #eef1f5; padding: 1px 5px; border-radius: 3px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em;
+}
+pre {
+  background: #f6f8fa; padding: var(--sp-3); border-radius: var(--radius-lg);
+  overflow-x: auto; font-size: var(--fs-sm); margin: 0 0 var(--sp-4);
+}
+
+/* ==========================================================================
+   两栏版面
+   ========================================================================== */
+.wrap { display: flex; height: 100vh; overflow: hidden; }
+.pane { display: flex; flex-direction: column; min-width: 0; }
+.pane--proto { flex: 1 1 54%; border-right: 1px solid var(--c-border); background: var(--c-bg); }
+.pane--spec  { flex: 1 1 46%; background: var(--c-surface); }
+
+.pane-bar {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background: #2b2f38; color: #e8eaed;
+  font-size: var(--fs-sm);
+  flex: 0 0 auto;
+}
+.pane-bar__title { font-weight: 600; white-space: nowrap; }
+.pane-bar__hint { color: #a9aeb8; font-size: var(--fs-xs); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pane-bar__spacer { flex: 1 1 auto; }
+.pane-bar__btn {
+  padding: 2px var(--sp-3);
+  background: #3a3f4a; border: 1px solid transparent; border-radius: var(--radius);
+  color: #e8eaed; font: inherit; font-size: var(--fs-xs);
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+}
+.pane-bar__btn:hover { background: #474d5a; }
+.pane-bar__check { display: inline-flex; align-items: center; gap: var(--sp-1); font-size: var(--fs-xs); cursor: pointer; white-space: nowrap; }
+
+/* 后台／前台切换：两颗并排的小钮，选中的那颗填主色 */
+.side-switch { display: inline-flex; border: 1px solid #4a505c; border-radius: var(--radius); overflow: hidden; flex: none; }
+.side-switch__btn {
+  padding: 2px var(--sp-3); border: 0; background: #3a3f4a;
+  color: #c7ccd4; font: inherit; font-size: var(--fs-xs); cursor: pointer; white-space: nowrap;
+}
+.side-switch__btn + .side-switch__btn { border-left: 1px solid #4a505c; }
+.side-switch__btn:hover { background: #474d5a; }
+.side-switch__btn[aria-pressed="true"] { background: var(--c-primary); color: #fff; font-weight: 600; }
+.pane-bar__check input { margin: 0; accent-color: var(--c-primary); }
+
+.proto-box { position: relative; flex: 1 1 auto; min-height: 0; }
+.proto-box iframe { width: 100%; height: 100%; border: 0; display: block; background: var(--c-bg); }
+.proto-fallback {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-3);
+  padding: var(--sp-5); background: var(--c-surface); text-align: center;
+  color: var(--c-text-2); font-size: var(--fs-base);
+}
+.proto-fallback.hidden { display: none; }
+
+/* ==========================================================================
+   规格栏：导览 + 内文
+   ========================================================================== */
+.spec-inner { display: flex; flex: 1 1 auto; min-height: 0; }
+
+.spec-nav {
+  flex: 0 0 186px; overflow-y: auto;
+  padding: var(--sp-2) 0;
+  background: #fafbfc; border-right: 1px solid var(--c-border-light);
+}
+/* 目录编号规则只有一条：整数＝大章，小数＝章底下的小节，每一行都点得动。
+   .spec-nav__ch＝大章（粗体、齐左）；.spec-nav__item＝小节（缩排一层）。 */
+.spec-nav__ch,
+.spec-nav__item {
+  display: flex; align-items: baseline; gap: var(--sp-2);
+  width: 100%;
+  background: none; border: 0; border-left: 3px solid transparent;
+  font: inherit; font-size: var(--fs-sm);
+  text-align: left; cursor: pointer;
+}
+.spec-nav__ch {
+  padding: var(--sp-3) var(--sp-3) var(--sp-2);
+  margin-top: var(--sp-2);
+  border-top: 1px solid var(--c-border-light);
+  color: var(--c-text); font-weight: 600;
+}
+.spec-nav__ch:first-child { margin-top: 0; border-top: 0; }
+.spec-nav__item {
+  padding: var(--sp-2) var(--sp-3) var(--sp-2) var(--sp-5);   /* 缩排＝低一层 */
+  color: var(--c-text-2);
+}
+/* 编号自己一栏、等宽数字，2.1～2.7 的小数点上下对齐 */
+.spec-nav__n {
+  flex: 0 0 28px;
+  color: var(--c-text-3); font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.spec-nav__ch .spec-nav__n { color: var(--c-text-2); }
+.spec-nav__t { flex: 1 1 auto; }
+
+.spec-nav__ch:hover,
+.spec-nav__item:hover { background: var(--c-primary-soft); color: var(--c-primary); }
+.spec-nav__ch:hover .spec-nav__n,
+.spec-nav__item:hover .spec-nav__n { color: var(--c-primary); }
+
+/* 正在看的那一节：蓝底＋左边一条蓝线 */
+.spec-nav__item[aria-current="true"],
+.spec-nav__ch[aria-current="true"].is-leaf {
+  background: var(--c-primary-soft); border-left-color: var(--c-primary);
+  color: var(--c-primary); font-weight: 600;
+}
+.spec-nav__item[aria-current="true"] .spec-nav__n,
+.spec-nav__ch[aria-current="true"] .spec-nav__n { color: var(--c-primary); }
+/* 它所属的大章只转蓝字，不上底色——像面包屑，知道自己在第几章 */
+.spec-nav__ch[aria-current="true"] { color: var(--c-primary); }
+
+.spec-scroll {
+  flex: 1 1 auto; overflow-y: auto; padding: var(--sp-5); min-width: 0;
+}
+
+.panel { display: none; }
+.panel.is-on { display: block; }
+.panel__head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2);
+  padding-bottom: var(--sp-3); margin-bottom: var(--sp-4);
+  border-bottom: 2px solid var(--c-primary);
+}
+.panel__num { color: var(--c-primary); font-size: var(--fs-xl); font-weight: 700; }
+.panel__title { font-size: var(--fs-xl); }
+
+h3.sub { margin: var(--sp-5) 0 var(--sp-2); font-size: var(--fs-md); color: var(--c-text); }
+/* 每章开头一句话讲完这一区在干嘛 */
+.lede {
+  margin: calc(var(--sp-2) * -1) 0 var(--sp-4);
+  padding-left: var(--sp-3);
+  border-left: 3px solid var(--c-primary);
+  color: var(--c-text-2); line-height: 1.8;
+}
+/* 子章节底下再分一层（例如某一节里的「配置范例」），比 h3 小半级、灰一点 */
+h4.sub { margin: var(--sp-4) 0 var(--sp-2); font-size: var(--fs-base); color: var(--c-text-2); }
+h3.sub:first-of-type { margin-top: 0; }
+p { margin: 0 0 var(--sp-4); line-height: 1.85; }
+ul, ol { margin: 0 0 var(--sp-4); padding-left: 1.5em; line-height: 1.85; }
+li { margin-bottom: var(--sp-2); }
+
+/* ==========================================================================
+   表格
+   ========================================================================== */
+.tbl-scroll { overflow-x: auto; margin-bottom: var(--sp-4); }
+table.t { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); line-height: 1.75; }
+table.t th, table.t td {
+  padding: var(--sp-3);
+  border: 1px solid var(--c-border-light);
+  text-align: left; vertical-align: top;
+}
+/* 表头不再一律「不换行」——长标题被迫撑宽会把说明栏挤成一条 */
+table.t th { background: #fafbfc; color: var(--c-text-2); font-weight: 600; }
+table.t tbody tr:hover { background: #fafcff; }
+/* .nw 只给「真的很短」的标签用；内容一长就不该加，否则会挤爆隔壁栏 */
+table.t .nw { white-space: nowrap; }
+/* 说明栏（每张表的最后一栏）优先吃掉剩下的宽度 */
+table.t th:last-child, table.t td:last-child { width: auto; }
+
+/* ==========================================================================
+   标注
+   ========================================================================== */
+.tag {
+  display: inline-block; padding: 1px var(--sp-2); border-radius: 10px;
+  font-size: var(--fs-xs); font-weight: 600; line-height: 1.6; white-space: nowrap;
+}
+.tag--new    { background: var(--tag-new-bg);    color: var(--tag-new-text); }
+.tag--change { background: var(--tag-change-bg); color: var(--tag-change-text); }
+.tag--same   { background: var(--tag-same-bg);   color: var(--tag-same-text); }
+.tag--diff   { background: var(--tag-diff-bg);   color: var(--tag-diff-text); }
+.tag--none   { background: var(--tag-none-bg);   color: var(--tag-none-text); }
+.tag--del    { background: #fef0f0;              color: #b33; }
+.tag--tbd    { background: #f3effa;              color: #6b4fbb; }
+/* 核心规则＝强调用，不是「本次新增」，所以不会被摘要算进异动 */
+.tag--key    { background: var(--c-primary-soft); color: var(--c-primary); }
+
+/* ── 本次异动摘要（自动生成，资料来自各章标签）───────────── */
+.sum { border: 1px solid var(--c-border-light); border-radius: var(--radius-lg); padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-5); }
+.sum__h { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2); margin-bottom: var(--sp-2); }
+.sum__t { font-weight: 700; }
+.sum__note { color: var(--c-text-3); font-size: var(--fs-xs); }
+.sum__list { display: grid; gap: 2px; }
+.sum__row {
+  display: flex; align-items: baseline; gap: var(--sp-2); width: 100%;
+  padding: var(--sp-1) var(--sp-2); border: 0; border-radius: var(--radius);
+  background: none; font: inherit; font-size: var(--fs-sm); color: var(--c-text-2);
+  text-align: left; cursor: pointer;
+}
+.sum__row:hover { background: var(--c-primary-soft); color: var(--c-primary); }
+.sum__n { flex: 0 0 34px; font-weight: 600; color: var(--c-text-3); font-variant-numeric: tabular-nums; }
+.sum__row:hover .sum__n { color: var(--c-primary); }
+.sum__x { flex: 0 0 auto; }
+.sum__same { margin-top: var(--sp-2); padding-top: var(--sp-2); border-top: 1px dashed var(--c-border-light);
+             font-size: var(--fs-sm); color: var(--c-text-3); line-height: 1.7; }
+
+.box {
+  padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-lg);
+  margin-bottom: var(--sp-4); font-size: var(--fs-sm); line-height: 1.7;
+}
+.box--info  { background: #f4f4f5; border-left: 4px solid var(--c-text-3); }
+.box--warn  { background: var(--c-warning-bg); border-left: 4px solid var(--c-warning); color: var(--c-warning); }
+.box--ok    { background: var(--c-success-bg); border-left: 4px solid var(--c-success); color: var(--c-success); }
+.box--stop  { background: #fef0f0; border-left: 4px solid var(--c-danger); color: var(--c-danger); }
+.box__t { display: block; font-weight: 700; margin-bottom: var(--sp-1); }
+/* 总览最上方的重点提醒（按钮行为没有变更） */
+.box--key { background: var(--c-primary-soft); border-left: 4px solid var(--c-primary); color: var(--c-text); font-size: var(--fs-base); }
+.box--key .box__t { color: var(--c-primary); }
+
+/* 懒人包：第 1 章最上面的重点整理，一格一个主题 */
+.lazy { border: 1px solid var(--c-border-light); border-radius: var(--radius-lg); padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-5); }
+.lazy__h { font-weight: 700; margin-bottom: var(--sp-1); }
+.lazy__one { font-size: var(--fs-sm); color: var(--c-text-2); margin: 0 0 var(--sp-3); line-height: 1.7; }
+.lazy__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-3); }
+.lazy__card { background: #f7f8fa; border-radius: var(--radius); padding: var(--sp-2) var(--sp-3); font-size: var(--fs-sm); line-height: 1.7; }
+.lazy__card b.lazy__t { display: block; color: var(--c-text); margin-bottom: 2px; }
+.lazy__card--todo { background: #f3effa; }
+.lazy__card b.lazy__t { font-size: var(--fs-base); padding-bottom: var(--sp-2); margin-bottom: var(--sp-2); border-bottom: 1px solid var(--c-border-light); }
+.lazy__list { list-style: none; margin: 0; padding: 0; line-height: 1.6; }
+.lazy__list li { display: grid; grid-template-columns: 6.5em 1fr auto; gap: var(--sp-3); margin: 0; padding: 6px 0; border-top: 1px dashed var(--c-border-light); }
+.lazy__list li:first-child { border-top: 0; }
+.lazy__list li b { color: var(--c-text); }
+.lazy__sub { display: block; font-size: var(--fs-xs); font-weight: 700; color: var(--c-primary); margin: var(--sp-2) 0 2px; }
+.lazy__sub:first-of-type { margin-top: 0; }
+.lazy__ref { white-space: nowrap; font-size: var(--fs-xs); color: var(--c-text-3); }
+
+/* 本次修订表：放在懒人包下面 */
+.revlog { border: 1px solid var(--c-border-light); border-radius: var(--radius-lg); padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-5); }
+.revlog .tbl-scroll { margin-bottom: 0; }
+.revlog__note { font-weight: 400; font-size: var(--fs-xs); color: var(--c-text-3); margin-left: var(--sp-2); }
+
+/* 10/1 修订：红字只标这次变动的句子 */
+.rev { color: var(--c-danger); }
+.rev b, .rev code { color: inherit; }
+.sub.rev, [id^="p-f"] h4.sub.rev { color: var(--c-danger); }
+
+/* 表格底下的补充说明。灰字、比内文小一号，但仍在规范的 12px 底限之上。 */
+.hint {
+  margin: calc(var(--sp-2) * -1) 0 var(--sp-4);
+  font-size: var(--fs-sm); color: var(--c-text-2); line-height: 1.7;
+}
+
+/* ==========================================================================
+   第 4 章（前台规则）专用：放宽的阅读版面
+   --------------------------------------------------------------------------
+   这一章的「长什么样」看左栏的前台原型（daily_front.html）就好，
+   规格这一栏只放文字与表格，整栏宽度都留给内容。
+   ========================================================================== */
+/* 这一章只调间距，字级一律沿用全站 token，不要自己长一号 */
+[id^="p-f"] h3.sub { margin-top: var(--sp-6); }
+[id^="p-f"] h4.sub { color: var(--c-text); margin-top: var(--sp-5); }
+
+/* ==========================================================================
+   响应式：窄屏幕改成上下堆叠
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .wrap { flex-direction: column; height: auto; overflow: visible; }
+  .pane--proto { flex: none; height: 70vh; border-right: 0; border-bottom: 1px solid var(--c-border); }
+  .pane--spec  { flex: none; }
+  .spec-inner { flex-direction: column; }
+  .spec-nav { flex: none; border-right: 0; border-bottom: 1px solid var(--c-border-light); display: flex; flex-wrap: wrap; }
+  .spec-nav__ch { width: 100%; }
+  /* 窄画面时小节改成横排，编号不必再留固定栏宽 */
+  .spec-nav__item { width: auto; padding-left: var(--sp-3); }
+  .spec-nav__n { flex: 0 0 auto; }
+  .spec-nav__item { width: auto; border-left: 0; border-bottom: 3px solid transparent; }
+  .spec-nav__item[aria-current="true"] { border-left: 0; border-bottom-color: var(--c-primary); }
+  .spec-scroll { overflow: visible; }
+}
+@media (max-width: 768px) {
+  html { font-size: 17px; }
+  .spec-scroll { padding: var(--sp-4); }
+}
+
+/* ==========================================================================
+   本文件补充
+   ========================================================================== */
+/* 色卡小方块 */
+.sw { display: inline-block; width: 26px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: var(--sp-2); }
+/* 表格格子里的参考小字 */
+.pv { margin: calc(var(--sp-2) * -1) 0 var(--sp-4); font-size: var(--fs-sm); color: var(--c-text-3); }
+.pv__btn { margin-left: var(--sp-2); padding: 2px var(--sp-3); border: 1px solid var(--c-primary); border-radius: var(--radius); background: var(--c-surface); color: var(--c-primary); font: inherit; cursor: pointer; }
+.pv__btn:hover { background: var(--c-primary-soft); }
+.hint-in { display: inline-block; margin-top: var(--sp-1); font-size: var(--fs-xs); color: var(--c-text-3); line-height: 1.6; }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- 左栏：原型 -->
+  <section class="pane pane--proto" aria-label="原型画面">
+    <div class="pane-bar">
+      <span class="pane-bar__title">画面</span>
+      <div class="side-switch" role="group" aria-label="切换后台或前台画面">
+        <button type="button" class="side-switch__btn" data-side="admin" aria-pressed="true">后台</button>
+        <button type="button" class="side-switch__btn" data-side="front" aria-pressed="false">前台</button>
+      </div>
+      <span class="pane-bar__hint" id="protoMode">载入中…</span>
+      <span class="pane-bar__spacer"></span>
+      <label class="pane-bar__check"><input type="checkbox" id="linkToggle" checked>两边连动</label>
+      <a class="pane-bar__btn" id="btnOpenProto" href="TaskCenter_Backend.html" target="_blank" rel="noopener">另开分页 ↗</a>
+    </div>
+    <div class="proto-box">
+      <iframe id="protoFrame" title="后台原型"></iframe>
+      <div class="proto-fallback hidden" id="protoFallback">
+        <p>左栏原型载入不起来。<br>请把 spec.html、TaskCenter_Backend.html、TaskCenter_Frontend.html 和 img 文件夹放在同一个文件夹后再开启。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 右栏：规格 -->
+  <section class="pane pane--spec" aria-label="规格文件">
+    <div class="pane-bar">
+      <span class="pane-bar__title">规格书</span>
+      <span class="pane-bar__hint">任务中心迭代 · v1</span>
+      <span class="pane-bar__spacer"></span>
+      <button class="pane-bar__btn" id="btnGoto" hidden>◀ 左侧跳到这一节</button>
+    </div>
+    <div class="spec-inner">
+      <nav class="spec-nav" id="specNav" aria-label="规格章节"></nav>
+      <main class="spec-scroll" id="specScroll">
+
+        <!-- ============================================================
+             1 总览
+             ============================================================ -->
+        <article class="panel" id="p-overview">
+          <div class="panel__head"><span class="panel__num">1</span><h2 class="panel__title">总览</h2></div>
+          <div class="box box--key"><span class="box__t">按钮行为没有变更</span>前台按钮的显示判断、点击、引导跳转，全部照既有《任务按钮显示规则 v1.1》；只多一个「额满」（3.5）。</div>
+          <div class="lazy">
+            <div class="lazy__h">懒人包：一分钟看懂这次做什么</div>
+            <p class="lazy__one"><b>一句话：</b>后台新增「任务组＋额外奖励」、4 种券类奖励和「名额上限」；前台跟着显示任务组卡、额满、新奖励图示；按钮行为不变。</p>
+            <div class="lazy__grid">
+              <div class="lazy__card"><b class="lazy__t">后台 · 新增任务弹窗</b><ul class="lazy__list"><li><b>任务组</b>任务类别新增「任务组」：把多个子任务包成一个任务，最多 10 个；每个子任务有自己的名称<span class="lazy__ref">2.1、2.3</span></li><li><b>游戏页展示</b>原「任务标签」改名；任务组不适用<span class="lazy__ref">2.1</span></li><li><b>奖励类型</b>新增免费旋转、免费投注、优惠券、golden draw券<span class="lazy__ref">2.2</span></li><li><b>额外奖励</b>任意完成 n 个子任务再送，1～3 档<span class="lazy__ref">2.3</span></li><li><b>名额上限</b>一项奖励最多发几人，发完即额满<span class="lazy__ref">2.4</span></li><li><b>参与对象</b>按 VIP、标签、累计充值／投注指定，都不勾＝不限；标签多个＝全部都要有；新增「符合任一／完全符合」二选一<span class="lazy__ref">2.5</span></li><li><b>任务时间</b>条件不能搭配的选项自动反灰<span class="lazy__ref">2.6</span></li></ul></div>
+              <div class="lazy__card"><b class="lazy__t">后台 · 列表、记录、报表</b><ul class="lazy__list"><li><b>任务列表</b>新增「任务类别」「名额」两栏<span class="lazy__ref">2.7</span></li><li><b>完成记录</b>子任务、额外奖励各自一行；新增「名额已满」状态；任务ID 可搜母 ID（整组）或子任务 ID<span class="lazy__ref">2.8</span></li><li><b>报表</b>新增 4 个券类栏位、任务ID 搜索；任务组分汇总行与明细行<span class="lazy__ref">2.9</span></li></ul></div>
+              <div class="lazy__card"><b class="lazy__t">前台 · 会员看到的（以 H5 为准）</b><ul class="lazy__list"><li><b>页签</b>限时、周限时合并为「限时」；红点要算进子任务、额外奖励<span class="lazy__ref">3.1</span></li><li><b>任务卡</b>奖励标签、进度条、已发送人数<span class="lazy__ref">3.2</span></li><li><b>任务组卡</b>子任务列表＋额外奖励宝箱<span class="lazy__ref">3.3–3.4</span></li><li><b>额满</b>名额发完时的按钮状态<span class="lazy__ref">3.5</span></li><li><b>领取成功弹窗</b>支持新奖励类型<span class="lazy__ref">3.6</span></li><li><b>谁看得到</b>VIP、标签不符合＝看不到；参与要求没达成＝看得到，按钮引导去完成<span class="lazy__ref">3.7</span></li><li><b>奖励找回</b>不显示合计；一键领取用通用图示<span class="lazy__ref">3.8</span></li><li><b>底部弹窗</b>图示、奖励依类型显示；停留 3 秒<span class="lazy__ref">3.9</span></li></ul></div>
+              <div class="lazy__card"><b class="lazy__t">不变</b><span class="lazy__sub">后台</span><ul class="lazy__list"><li><b>累计充值／投注区间</b>计算方式照既有<span class="lazy__ref">2.5</span></li><li><b>任务时间</b>重置周期照既有<span class="lazy__ref">2.6</span></li><li><b>既有分页</b>资料审核、黑名单设置<span class="lazy__ref">2.7</span></li></ul><span class="lazy__sub">前台</span><ul class="lazy__list"><li><b>按钮</b>显示判断、点击、引导跳转<span class="lazy__ref">3.5、v1.1</span></li><li><b>奖励找回</b>补领规则照既有<span class="lazy__ref">3.8</span></li><li><b>底部弹窗</b>检查频率、出现页面、次数、点「领取」跳转<span class="lazy__ref">3.9</span></li><li><b>任务规则弹窗</b>照既有<span class="lazy__ref"></span></li></ul></div>
+            </div>
+          </div>
+
+          <h3 class="sub">需求目的</h3>
+          <ul>
+            <li><b>做越多拿越多</b>：任务组每完成一个领一份，完成到指定数量再送额外奖励。</li>
+            <li><b>奖励更多样</b>：新增免费旋转、免费投注、优惠券、golden draw券。</li>
+            <li><b>控制成本</b>：每项奖励可设人数名额。</li>
+            <li><b>精准投放</b>：按 VIP、标签、累计充值／投注指定谁能参加。</li>
+          </ul>
+
+          <h3 class="sub">名词</h3>
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th class="nw">名词</th><th>意思</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">基础任务</td><td>一个条件＋一份奖励；既有的任务都是基础任务。</td></tr>
+              <tr><td class="nw">任务组</td><td>多个子任务包成一个任务，完成一个领一个。</td></tr>
+              <tr><td class="nw">子任务</td><td>任务组里的一个小任务，各有条件、奖励、跳转。</td></tr>
+              <tr><td class="nw">额外奖励</td><td>任务组里完成到指定数量（任意 n 个）再送的奖励，最多 3 档。</td></tr>
+              <tr><td class="nw">一期</td><td>任务时间的一个周期：每日＝一天、每周＝周一到周日、周限时＝每周开放的那几天；永久、限时只有一期。</td></tr>
+            </tbody>
+          </table></div>
+        </article>
+
+        <!-- ============================================================
+             2 后台
+             ============================================================ -->
+        <article class="panel" id="p-b1">
+          <div class="panel__head"><span class="panel__num">2.1</span><h2 class="panel__title">后台 · 基本信息</h2></div>
+          <p class="lede">位置：任务设置 › 点「＋ 新增任务」或「编辑」打开弹窗。表单分 5 区：基本信息、任务内容、参与对象、时间与发放、其他。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>任务类别 *</b>：基础任务（预设）／任务组。选任务组，任务内容区改成子任务＋额外奖励（2.3）。</li>
+            <li><b>编辑时</b>：任务类别反灰不可改。</li>
+            <li><b>游戏页展示</b>（<b>改名</b>：原「任务标签」，选项、逻辑照既有）：选项「无、体育、电子、真人、小游戏、其他」，决定任务卡出现在前台哪个游戏分类页的「Task」区块。<b>任务组不适用</b>：选任务组时这一栏收起。</li>
+            <li><b>币种、任务名称</b>：照既有。任务名称在前台只显示一行，超出以「…」截断。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-b2">
+          <div class="panel__head"><span class="panel__num">2.2</span><h2 class="panel__title">后台 · 任务内容（基础任务）</h2></div>
+          <p class="lede">基础任务＝一个条件＋一个跳转地址＋一份奖励。</p>
+
+          <h3 class="sub">任务条件 *</h3>
+          <p>先选大类，再选条件：</p>
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th class="nw">大类</th><th>条件</th><th>目标值</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">信息完善</td><td>填写真实姓名、填写生日、填写手机号码、填写邮箱、KYC认证、Maya绑定、Glife绑定</td><td>不用填</td></tr>
+              <tr><td class="nw">资金</td><td>充值、投注、Maya充值、Maya提款、Glife充值、Glife提款</td><td>充值类：金额（0＝不限）<br>投注：金额＋限制游戏（不勾＝全部游戏）</td></tr>
+              <tr><td class="nw">其他</td><td>2025新版访问、关注Facebook、体验平台PWA、圣诞倒计时专属任务、Brand Daily Passcode</td><td>不用填</td></tr>
+            </tbody>
+          </table></div>
+
+          <ul>
+            <li>不含「首次充值」「首次充值(阶级)」。</li>
+            <li>Maya／Glife 相关保留选项，目前没有功能，<b>QA 不用验收</b>；原型「新手成长计划」里的 Maya／Glife 子任务只是为了示范 10 个子任务上限。</li>
+            <li>条件会限制能选的任务时间（2.6）。</li>
+          </ul>
+
+          <h3 class="sub">任务奖励 *</h3>
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th class="nw">奖励类型</th><th>要填什么</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">彩金</td><td>奖励值＋彩金流水倍数</td></tr>
+              <tr><td class="nw">积分</td><td>奖励值</td></tr>
+              <tr><td class="nw">免费旋转／免费投注／优惠券</td><td>下拉选一张券（沿用券管理后台已建立的券）</td></tr>
+              <tr><td class="nw">golden draw券</td><td>张数</td></tr>
+            </tbody>
+          </table></div>
+
+          <ul>
+            <li>子任务、额外奖励的奖励也是这 6 种。</li>
+          </ul>
+
+          <h3 class="sub">跳转地址 *</h3>
+          <ul>
+            <li>下拉选单，照既有清单。前台「去完成／去充值／去投注」点了跳到这里。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-b3">
+          <div class="panel__head"><span class="panel__num">2.3</span><h2 class="panel__title">后台 · 任务内容（任务组）</h2></div>
+          <p class="lede">一个任务组＝多个子任务，完成一个领一个；完成到指定数量，再送额外奖励。</p>
+
+          <h3 class="sub">子任务</h3>
+          <ul>
+            <li><b>数量</b>：预设 2 个，最少 1 个，最多 10 个。</li>
+            <li><b>内容</b>：每个子任务一个<b>名称</b>＋一个条件＋一份奖励＋一个跳转；条件、奖励、跳转规则同 2.2。</li>
+            <li><b>子任务名称 *</b>：子任务卡片里的「名称」，规则<b>同「任务名称」</b>（必填、国际化）；前台子任务行显示这个名称。任务组名称＝上方「任务名称」。</li>
+            <li><b>ID</b>：母ID-序号，显示在每个子任务标题旁。新增任务时删除会重排；编辑时序号不变，删掉的号码不再用，新加的接最大号。</li>
+            <li><b>任务时间</b>：整组共用，在 2.6 设定。</li>
+          </ul>
+
+          <h3 class="sub">额外奖励</h3>
+          <ul>
+            <li><b>写法</b>：「任意完成 n 个」＋奖励。不限哪几个、不分先后。</li>
+            <li><b>档数</b>：<b>必填，最少 1 档</b>，最多 3 档，且不超过子任务数；每档 n 不重复。</li>
+            <li><b>发放</b>：每档发 1 次，不受名额限制。</li>
+            <li><b>计算</b>：完成数按当期算，跟着任务时间重置。</li>
+          </ul>
+
+          <h3 class="sub">例子<span style="font-weight:400;font-size:.8em;color:var(--c-text-3,#888);margin-left:8px">左侧画面带入的就是这个例子</span></h3>
+          <p>子任务：① 充值 ₱100 → 积分 100　② 投注 ₱1,000 → 积分 150　③ 投注 ₱200 → 积分 200<br>额外奖励：完成 1 个 → 积分 50　2 个 → 彩金 100　3 个 → 积分 500</p>
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th class="nw">会员做了</th><th>完成数</th><th>拿到</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">② 投注 ₱1,000</td><td>1 / 3</td><td>积分 150 ＋ 积分 50</td></tr>
+              <tr><td class="nw">① 充值 ₱100</td><td>2 / 3</td><td>积分 100 ＋ 彩金 100</td></tr>
+              <tr><td class="nw">③ 投注 ₱200</td><td>3 / 3</td><td>积分 200 ＋ 积分 500</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li>子任务删到比某档 n 还少：该档 n 清空，由运营重选或删除。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-b4">
+          <div class="panel__head"><span class="panel__num">2.4</span><h2 class="panel__title">后台 · 名额上限</h2></div>
+          <p class="lede">名额上限＝一项奖励最多发给几个人，先到先得。在「任务内容」区最下方设定。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>怎么填</b>：正整数；留空或 0＝不限。任务时间选「永久」时反灰，显示「不限」。</li>
+            <li><b>基础任务</b>：这个任务的奖励最多发给 N 人。</li>
+            <li><b>任务组</b>：每个子任务<b>各自计算</b>，<b>共用同一个上限数字</b>。<br>例：填 1000 → 子任务1 最多 1000 人、子任务2 最多 1000 人……互不影响。额外奖励不受名额限制。</li>
+            <li><b>怎么算人数</b>：奖励发出就算 1 人；同一人一期只算一次，之后没领、超过领取时限也照算。每一期重新计算。</li>
+            <li><b>满了</b>：之后完成的人不发奖励，后台记录「名额已满」，前台按钮「额满」（3.5）。</li>
+          </ul>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li>人工审核：以「审核通过」那一刻算。</li>
+            <li>奖励找回补领：当期已算过，补领不再算。</li>
+            <li>当期改小名额：已发的不收回；已发人数 ≥ 新上限即额满。</li>
+          </ul>
+        </article>
+
+        <article class="panel" id="p-b5">
+          <div class="panel__head"><span class="panel__num">2.5</span><h2 class="panel__title">后台 · 参与对象</h2></div>
+          <p class="lede">决定谁能参加，前台照配置展示：<b>VIP、标签不符合＝看不到</b>；参与要求没达成＝看得到，按钮照 v1.1 第二层（去认证／去充值／去投注）；名额满＝「额满」。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>VIP 等级</b>：多选 VIP0～VIP4；都不勾＝不限。</li>
+            <li><b>用户标签</b>：多选，分一级、二级标签；都不勾＝不限。勾多个＝<b>全部都要有</b>（AND）。例：勾 TH、ML，会员要同时有 TH 和 ML 才能参加。</li>
+            <li><b>VIP 与标签</b>：要同时符合（VIP 在勾选范围内，且标签全部都有）。</li>
+            <li><b>任务参与要求</b>：选填，勾了才生效：完成KYC／完成KYC部分认证、累计充值区间、累计有效投注区间。<b>累计的算法照既有。</b></li>
+            <li><b>充值及有效投注资格（新增）</b>：两个区间都勾时，选一个：「符合任一条件」＝充值、投注其中一个在区间内就行；「完全符合」＝两个都要在区间内。预选完全符合。</li>
+          </ul>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li>区间没勾：最低、最高反灰。</li>
+            <li>最低留空＝从 0 起算；最高留空＝不设上限。</li>
+            <li>最高比最低小：最高清空重填。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-b6">
+          <div class="panel__head"><span class="panel__num">2.6</span><h2 class="panel__title">后台 · 时间与发放</h2></div>
+          <p class="lede">设定任务什么时候有效、怎么审核、奖励怎么发。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>任务时间 *</b>：永久／每日／每周／限时（起讫日期时间）／周限时（星期几 至 星期几）。周期照既有。</li>
+            <li><b>条件搭配</b>：条件不支持的任务时间反灰（下表）；任务组取所有子任务都支持的时间。</li>
+            <li><b>审核方式 *</b>：自动审核／人工审核；人工以「审核通过」为完成。</li>
+            <li><b>奖励发放方式 *</b>：自动发放／用户手动领取；子任务、额外奖励照同一设定。</li>
+            <li><b>奖励领取时限</b>：只在「用户手动领取」＋每日／限时出现，单位天；对应奖励找回（3.8），额外奖励不适用。</li>
+            <li><b>排序</b>：任务组和基础任务<b>一起排</b>，数字越小越前面（照既有）。</li>
+          </ul>
+
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th>条件</th><th class="nw">永久</th><th class="nw">每日</th><th class="nw">每周</th><th class="nw">限时</th><th class="nw">周限时</th></tr></thead>
+            <tbody>
+              <tr><td>信息完善、一次性标记（2025新版访问、体验平台PWA、关注Facebook）</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr><td>资金（充值、投注、Maya／Glife 充提）</td><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+              <tr><td>品牌活动（圣诞倒计时、Brand Daily Passcode）</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>—</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li>限时：结束早于开始不能选；开始改到结束之后，结束清空。</li>
+            <li>已选的任务时间变成不能用：自动改成第一个可选的。</li>
+            <li>任务组：子任务下拉里，跟其他子任务没有共同任务时间的条件反灰（例：已有「投注」，不能选「关注Facebook」）；新加的子任务自动带可以放一起的条件。</li>
+            <li>适用端口、任务状态：照既有。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-b7">
+          <div class="panel__head"><span class="panel__num">2.7</span><h2 class="panel__title">后台 · 任务设置列表</h2></div>
+          <p class="lede">位置：运营后台 › 任务中心管理 › 任务设置。列表一行一个任务。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>任务ID</b>：基础任务一个 ID；任务组显示母 ID，下方列出子任务 ID「母ID-序号」，例：1030-1。</li>
+            <li><b>任务类别</b>：基础任务／任务组。</li>
+            <li><b>任务条件、任务奖励</b>：条件显示「大类」＋下一行「条件 目标值」；任务组每个子任务一行，奖励栏最后一行列额外奖励。券类显示券名。</li>
+            <li><b>适用等级/层级</b>：显示勾选的 VIP＋标签；VIP 全选或都没勾显示「全部VIP」，标签没勾显示「不限标签」。</li>
+            <li><b>任务参与要求</b>：列出勾选的要求；两个区间都勾时，加显示「完全符合／符合任一」；没勾＝「不限」。</li>
+            <li><b>名额</b>：基础任务「已发送 / 上限」，满了加红字「已满」；任务组「每项上限 N」；没设或永久＝「不限」。</li>
+            <li><b>任务时间</b>：限时显示起讫时间；周限时显示「星期一 至 星期五」这类区间。</li>
+          </ul>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li>分页：任务设置、任务完成记录、任务报表统计有调整（画面标橘色「有调整」）；资料审核、黑名单设置不变。</li>
+            <li>任务名称（＋国际化）、适用端口、审核方式、排序、任务状态、操作：照既有。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-b8">
+          <div class="panel__head"><span class="panel__num">2.8</span><h2 class="panel__title">后台 · 任务完成记录</h2></div>
+          <p class="lede">一行＝一位会员的一笔奖励。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>子任务</b>：ID＝子任务 ID（1030-1）；名称「任务组名称 · 子任务名称」＋「子任务」标签。</li>
+            <li><b>额外奖励</b>：ID＝母 ID（1030）；名称「任务组名称 · 额外奖励 · 任意完成 n 个」＋「额外奖励」标签。</li>
+            <li><b>券类奖励</b>：奖励类型下方显示券名，奖励值显示张数。</li>
+            <li><b>名额已满</b>：完成时名额已满、不发奖励；状态红字，奖励值「—」。发放状态筛选多这个选项。</li>
+            <li><b>搜索任务ID</b>：母 ID（1030）＝整组（子任务＋额外奖励）；子任务 ID（1030-2）＝只列该子任务。</li>
+          </ul>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li>其他状态照既有：待审核、待领取、自动发放、已领取、审核未通过。<b>没有「已过期」状态</b>。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-b9">
+          <div class="panel__head"><span class="panel__num">2.9</span><h2 class="panel__title">后台 · 任务报表统计</h2></div>
+          <p class="lede">按任务汇总所选时间区间（UTC+8）的完成次数和发放量。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>券类栏位</b>：累计发放免费旋转、免费投注、优惠券、golden draw券，单位张；没有就显示「—」。</li>
+            <li><b>任务组</b>：一行汇总＋下方缩排明细。汇总行：完成次数＝子任务相加；发放＝子任务＋额外奖励。明细：子任务（显示名称）、额外奖励各档（不给 ID；完成次数＝达成该档的人次，不算进汇总）。</li>
+            <li><b>累计完成次数</b>：按完成时间计，含名额已满没发到的；人工审核以通过才算。</li>
+            <li><b>累计发放</b>：会员实际领到的（自动发放＋已领取＋找回补领），按领取时间计（自动发放＝完成时间）；待领取、待审核、审核未通过、名额已满不算。</li>
+            <li><b>小计／总计</b>：小计＝本页，总计＝全部查询结果；都只加基础任务行＋任务组汇总行，明细不重复加。</li>
+          </ul>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li>搜索：币别、时间区间、任务名关键字照既有；任务组用任务组名称比对，搜到整组列出。</li>
+            <li><b>任务ID 搜索（新增）</b>：同完成记录（2.8）：母 ID（1030）＝整组；子任务 ID（1030-2）＝只列该子任务。</li>
+            <li>分页：按任务算，任务组整组算 1 笔，明细不拆到下一页。</li>
+            <li>导出：内容同画面，含任务组明细行。</li>
+          </ul>
+
+        </article>
+
+        <!-- ============================================================
+             3 前台
+             ============================================================ -->
+        <article class="panel" id="p-f1">
+          <div class="panel__head"><span class="panel__num">3.1</span><h2 class="panel__title">前台 · 任务列表页签</h2></div>
+          <p class="lede">页签按后台「任务时间」分类。</p>
+
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th class="nw">页签</th><th>显示</th><th>下方红字</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">全部(n)</td><td>看得到的全部任务</td><td>不显示</td></tr>
+              <tr><td class="nw">基础任务</td><td>永久</td><td>*任务完成后不会重置</td></tr>
+              <tr><td class="nw">每日</td><td>每日</td><td>*任务将于每日12AM重置</td></tr>
+              <tr><td class="nw">每周</td><td>每周</td><td>*任务将于每周一12AM重置</td></tr>
+              <tr><td class="nw">限时</td><td>限时、周限时</td><td>*任务于活动期间内有效，结束后不会重置</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>页签分类</b>：只看任务时间，不看任务类别。例：永久的任务组在「基础任务」页签。</li>
+            <li><b>红点</b>：该页签所有可领取的数量，<b>基础任务、子任务、额外奖励都要算</b>（每个「领取」按钮、每个可领宝箱各算 1）；黑名单、未登录不显示；领取后立即减少。</li>
+            <li><b>卡片顺序</b>：由后端排好，前台照着显示：
+              <ul>
+                <li>后台排序<b>越小越前面</b>，任务组卡和基础任务卡一起排（2.6）。</li>
+                <li><b>已完成、额满</b>的排到最下方。任务组要子任务、宝箱全部完成或额满才算（因子任务额满而达不到的宝箱，当作完成）。</li>
+                <li>刚领取完不重排（不重打 API），卡片留在原位；下次进页面才到最下方。</li>
+              </ul></li>
+            <li><b>已完成、额满</b>：任务时间结束前仍留在列表上，倒数照常显示；任务组整组做完也一样。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-f2">
+          <div class="panel__head"><span class="panel__num">3.2</span><h2 class="panel__title">前台 · 基础任务卡</h2></div>
+          <p class="lede">左边任务资讯，右边倒数和一个按钮。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>标题</b>：一行，超出以「…」截断。</li>
+            <li><b>进度</b>：资金类＝进度条＋「₱已达成 / ₱目标」；其他条件＝「进度 0 / 1」。</li>
+            <li><b>奖励标签</b>：图示＋内容：彩金、积分显示数值；免费旋转、免费投注、优惠券显示券名；golden draw券显示「×张数」。</li>
+            <li><b>已发送人数</b>：「已发送 x / y 人」，有设名额才显示，满了变红字；永久任务不显示。</li>
+            <li><b>倒数</b>：按钮上方红字，例「⏱ 6d 13:05:11」；永久任务不显示。</li>
+            <li><b>按钮</b>：照既有逻辑；名额满显示「额满」（3.5）。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-f3">
+          <div class="panel__head"><span class="panel__num">3.3</span><h2 class="panel__title">前台 · 任务组卡</h2></div>
+          <p class="lede">一张卡＝一个任务组：上方标题、进度、额外奖励，下方子任务。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>角标、倒数</b>：左上「任务组」，右上倒数（永久不显示）。</li>
+            <li><b>进度</b>：「已完成子任务数 / 子任务总数」，达成就算（含还没领的）；人工审核的任务，审核通过才算。</li>
+            <li><b>子任务行</b>：标题＝后台配置的子任务名称（2.3），一行超出以「…」截断；其余同基础任务卡，每行一个按钮。</li>
+            <li><b>收合</b>：预设显示前 2 个，「查看全部（n） ⌄」展开、「收起 ⌃」收回；子任务 ≤ 2 个不显示。</li>
+            <li><b>子任务顺序</b>：领取 → 进行中（含处理中、未通过）→ 已完成／额满；同顺位照后台顺序。领取后下次进页面才重排。</li>
+          </ul>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li>游戏分类页的「Task」区块不显示任务组（任务组不适用「游戏页展示」，2.1）。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-f4">
+          <div class="panel__head"><span class="panel__num">3.4</span><h2 class="panel__title">前台 · 额外奖励</h2></div>
+          <p class="lede">任务组卡上方的浅黄区块，一档一个宝箱，最多 3 个。</p>
+
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th class="nw">宝箱</th><th>样子</th><th>点了</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">未达成</td><td>灰色宝箱</td><td>不能点</td></tr>
+              <tr><td class="nw">可领取</td><td>亮色＋橘框，上下跳动</td><td>领取 → 成功弹窗（3.6）→ 打勾</td></tr>
+              <tr><td class="nw">已领取</td><td>绿色打勾</td><td>不能点</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>宝箱下方</b>：「n 个」＋奖励内容；宝箱之间的进度条走到目前完成数。</li>
+            <li><b>发放方式</b>：自动发放＝达成直接打勾；用户手动领取＝宝箱跳动，点了才领。</li>
+            <li><b>限制</b>：不受名额限制；不进奖励找回，要在本期结束前领。</li>
+            <li><b>黑名单、未登录</b>：宝箱全部灰色、不可点。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-f5">
+          <div class="panel__head"><span class="panel__num">3.5</span><h2 class="panel__title">前台 · 按钮与额满</h2></div>
+          <p class="lede"><b>按钮的显示判断、点击行为、引导跳转全部照既有《任务按钮显示规则 v1.1》，没有变更。</b>只多一个「额满」。</p>
+
+          <h3 class="sub">额满</h3>
+          <ul>
+            <li><b>何时显示</b>：奖励名额已满，且这位会员本期还没拿到这项奖励；已拿到的照既有逻辑。</li>
+            <li><b>优先顺序</b>：额满只取代「还没完成」时的按钮；处理中、未通过照 v1.1 显示。人工审核通过时名额已满 → 改显示额满。</li>
+            <li><b>样式</b>：不可点；淡灰玫瑰底、白字（日间 <code>#e2b4b4</code>、夜间 <code>#8a6464</code>）。</li>
+            <li><b>同时</b>：「已发送 x / y 人」变红字。</li>
+            <li><b>适用</b>：基础任务、子任务；新的一期名额重算后恢复。</li>
+          </ul>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li><b>「领取任务」「已过期」</b>：v1.1 里有，但目前没有这两个状态，<b>前台不会出现，不用做</b>。</li>
+            <li><b>审核未通过</b>：显示「未通过」（照 v1.1）。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-f6">
+          <div class="panel__head"><span class="panel__num">3.6</span><h2 class="panel__title">前台 · 领取成功弹窗</h2></div>
+          <p class="lede">领奖成功后跳出，告诉会员拿到什么。版型照既有，不同奖励只换图示和红字。</p>
+
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th class="nw">奖励类型</th><th>红字</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">彩金</td><td>₱数值，例：₱100</td></tr>
+              <tr><td class="nw">积分</td><td>+数值，例：+100</td></tr>
+              <tr><td class="nw">免费旋转／免费投注／优惠券</td><td>券名，例：ON色碟</td></tr>
+              <tr><td class="nw">golden draw券</td><td>×张数，例：×1</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>关闭</b>：点「确定」或点遮罩。</li>
+            <li><b>适用</b>：基础任务、子任务、额外奖励宝箱；奖励找回的一键领取见 3.8。</li>
+            <li><b>领取失败</b>：照既有。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-f7">
+          <div class="panel__head"><span class="panel__num">3.7</span><h2 class="panel__title">前台 · 谁看得到</h2></div>
+          <p class="lede">任务显示给谁，由后台「参与对象」（2.5）决定。</p>
+          <p class="pv">左侧预览：<button type="button" class="pv__btn" data-pv="guest">未登录</button><button type="button" class="pv__btn" data-pv="black">黑名单</button></p>
+
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th class="nw">会员</th><th>任务</th><th>按钮</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">登录·符合</td><td>显示</td><td>照既有</td></tr>
+              <tr><td class="nw">登录·VIP／标签不符合</td><td>不显示</td><td>—</td></tr>
+              <tr><td class="nw">登录·参与要求没达成</td><td>显示</td><td>照 v1.1 第二层：去认证／去充值／去投注</td></tr>
+              <tr><td class="nw">登录·符合但名额满</td><td>显示</td><td>额满</td></tr>
+              <tr><td class="nw">黑名单（按帐户）</td><td>显示</td><td>反灰不可点</td></tr>
+              <tr><td class="nw">未登录</td><td>只显示没有任何参与限制的任务</td><td>照任务条件，点了先登录</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li><b>黑名单</b>：不显示红点；宝箱全灰。</li>
+            <li><b>未登录</b>：进度一律 0；宝箱全灰；不显示红点、奖励找回入口；已发送人数、倒数、额满照常；全部(n) 只算看得到的。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-f8">
+          <div class="panel__head"><span class="panel__num">3.8</span><h2 class="panel__title">前台 · 奖励找回</h2></div>
+          <p class="lede">任务重置或结束后，还在「奖励领取时限」内没领的奖励，在这一页补领。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>入口</b>：任务列表标题下方「奖励找回 ›」，红色数字＝可找回笔数。</li>
+            <li><b>清单</b>：一行一笔：任务名称、奖励、剩余可领时间。只有基础任务、子任务（名称「任务组名称 · 子任务名称」），没有额外奖励。</li>
+            <li><b>底部</b>：<b>不显示合计</b>（奖励类型可能混合），只放「一键领取」。</li>
+            <li><b>一键领取</b>：全部领取 → 弹窗：<b>通用奖励图示＋「奖励领取成功」</b>，不列奖励内容。之后清单清空、入口数字隐藏。</li>
+            <li><b>没有可找回</b>：显示「暂无可找回的奖励」，按钮反灰。</li>
+          </ul>
+
+          <h3 class="sub">补充</h3>
+          <ul>
+            <li>补领不占名额（2.4）；黑名单按钮反灰；未登录不显示入口。</li>
+          </ul>
+
+        </article>
+
+        <article class="panel" id="p-f9">
+          <div class="panel__head"><span class="panel__num">3.9</span><h2 class="panel__title">前台 · 底部弹窗</h2></div>
+          <p class="lede">会员完成任务时，底部跳出弹窗提醒。这是既有功能，只改两件事，其余照既有。</p>
+          <div class="box box--key"><span class="box__t">只改两件事</span>① <b>图示、奖励依类型显示</b>：原本只有积分、彩金有图示，免费投注显示「Free Bet」、借用积分图示；改为每种奖励用自己的图示。<br>② <b>停留 3 秒</b>：原本手动领取不自动关、自动发放 5 秒；改为两种都 3 秒自动关。</div>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>文案</b>：固定「奖励{a}，恭喜完成{b}任务！」。
+              <ul>
+                <li>{a}＝这笔奖励，写法同领取成功弹窗（3.6），例：₱50、+100、ON色碟、×1。</li>
+                <li>{b}＝任务名称；子任务、额外奖励一律用任务组名称。</li>
+              </ul></li>
+            <li><b>图示</b>：放最左边，依这笔奖励的类型显示，同任务卡（3.2）的奖励图示。</li>
+          </ul>
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th class="nw">任务</th><th class="nw">按钮</th><th>关闭</th></tr></thead>
+            <tbody>
+              <tr><td class="nw">手动领取</td><td class="nw">「领取」</td><td>3 秒自动关；可点 × 或「领取」提前关</td></tr>
+              <tr><td class="nw">自动发放</td><td class="nw">没有</td><td>3 秒自动关；可点 × 提前关</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 class="sub">照既有</h3>
+          <ul>
+            <li><b>检查</b>：登录进站约 2 秒后开始，每 10 秒检查一次新完成的任务；分页在背景时暂停。</li>
+            <li><b>页面</b>：任何页面都跳（含游戏页、活动页）；下载页、404、维护页、App 内嵌模式不跳。</li>
+            <li><b>不跳</b>：正在任务中心页面时（之后也不补跳）；账号任务功能被封锁（黑名单）。</li>
+            <li><b>次数</b>：同一任务只跳一次（任务组：每个子任务、每档额外奖励各一次）。记录存在浏览器，登出再登录会清掉，后端还回传就再跳。</li>
+            <li><b>多笔</b>：每 10 秒跳一个，不会同时跳出。</li>
+            <li><b>点「领取」</b>：直接跳转，不另跳确认弹窗；手机版到奖励中心（/reward-center），电脑版到任务中心（/user/task-center），弹窗关闭。</li>
+          </ul>
+
+        </article>
+
+        <!-- ============================================================
+             4 英文文案
+             ============================================================ -->
+        <article class="panel" id="p-en">
+          <div class="panel__head"><span class="panel__num">4</span><h2 class="panel__title">英文文案</h2></div>
+          <p class="lede">前台文案的英文由运营提供，照原样使用。</p>
+
+          <h3 class="sub">任务中心文案</h3>
+          <div class="tbl-scroll"><table class="t">
+            <thead><tr><th>中文（位置）</th><th>英文</th><th class="nw">状态</th></tr></thead>
+            <tbody>
+              <tr><td>*任务完成后不会重置<br><span class="hint-in">基础任务页签红字</span></td><td>* The task will not reset after completion.</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>*任务将于每日12AM重置<br><span class="hint-in">每日页签红字（线上既有）</span></td><td>*Tasks will be reset at 12AM everyday</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>*任务将于每周一12AM重置<br><span class="hint-in">每周页签红字</span></td><td>* The task resets every Monday at 12:00 AM.</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>*任务于活动期间内有效，结束后不会重置<br><span class="hint-in">限时页签红字（限时、周限时共用）</span></td><td>* The task is valid only during the campaign period and will not reset after the campaign ends.</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>任务组<br><span class="hint-in">任务组角标</span></td><td>Task Group</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>已发送 {x} / {y} 人<br><span class="hint-in">已发送人数</span></td><td>Rewarded: {x} / {y} Users</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>额满<br><span class="hint-in">按钮</span></td><td>full</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>额外奖励<br><span class="hint-in">额外奖励标题</span></td><td>Extra Rewards</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>{n} 个<br><span class="hint-in">宝箱下方</span></td><td>{n} Rewards</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>查看全部（{n}）<br><span class="hint-in">子任务展开</span></td><td>View All ({n})</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>收起<br><span class="hint-in">子任务收合</span></td><td>Hide</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
+              <tr><td>奖励{a}，恭喜完成{b}任务！<br><span class="hint-in">底部弹窗</span></td><td>Reward {a}, congratulations on completing the {b} task!</td><td class="nw"><span class="tag tag--new">线上既有</span></td></tr>
+              <tr><td>领取<br><span class="hint-in">底部弹窗按钮</span></td><td>Receive</td><td class="nw"><span class="tag tag--new">线上既有</span></td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 class="sub">子任务名称</h3>
+          <p>子任务名称由运营在后台配置（2.3），英文填在该名称的国际化，跟任务名称一样，不需要另外提供。</p>
+
+        </article>
+
+      </main>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ==========================================================================
+   对照版的控制程序
+     1. 左栏 iframe 载入同文件夹的 TaskCenter_Backend.html／TaskCenter_Frontend.html
+        （即时载入：原型改版，规格书左栏自动跟着变）。
+     2. 产生右栏章节导览。
+     3. 右栏点章节 → 叫左栏原型跳到对应画面并框出该区块。
+     4. 左栏后台切换分页 → 右栏自动跳到对应章节。
+   两份原型尾端都有一段「桥接程序」，单独开启原型时不作用。⚠ 不要删。
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var CHAPTERS = [
+    { num: '1', title: '总览' },
+    { num: '2', title: '后台：怎么配' },
+    { num: '3', title: '前台：会看到什么' },
+    { num: '4', title: '英文文案' }
+  ];
+
+  /* view：后台分页（setting / record / report）或 form（新增任务表单）
+     section：表单第几个区块；anchor：表单里要框出的栏位；group：表单切成任务组
+     screen：前台要框出的位置；tab：前台页签；pop：打开哪个弹窗；guest：未登录预览 */
+  var PANELS = [
+    { id: 'p-overview', chap: '1', nav: '总览' },
+
+    { id: 'p-b1', chap: '2', num: '2.1', nav: '基本信息',     side: 'admin', view: 'form', section: 1 },
+    { id: 'p-b2', chap: '2', num: '2.2', nav: '基础任务内容', side: 'admin', view: 'form', section: 2 },
+    { id: 'p-b3', chap: '2', num: '2.3', nav: '任务组内容', side: 'admin', view: 'form', group: true, section: 2 },
+    { id: 'p-b4', chap: '2', num: '2.4', nav: '名额上限',     side: 'admin', view: 'form', group: true, anchor: 'quotaRow' },
+    { id: 'p-b5', chap: '2', num: '2.5', nav: '参与对象',     side: 'admin', view: 'form', section: 3 },
+    { id: 'p-b6', chap: '2', num: '2.6', nav: '时间与发放',   side: 'admin', view: 'form', section: 4, group: true, manual: true },
+    { id: 'p-b7', chap: '2', num: '2.7', nav: '任务设置列表', side: 'admin', view: 'setting' },
+    { id: 'p-b8', chap: '2', num: '2.8', nav: '任务完成记录', side: 'admin', view: 'record', anchor: '#recSub' },
+    { id: 'p-b9', chap: '2', num: '2.9', nav: '任务报表统计', side: 'admin', view: 'report' },
+
+    { id: 'p-f1', chap: '3', num: '3.1', nav: '任务列表页签', side: 'front', screen: 'tabs', tab: 'limit' },
+    { id: 'p-f2', chap: '3', num: '3.2', nav: '基础任务卡',   side: 'front', screen: 'basic' },
+    { id: 'p-f3', chap: '3', num: '3.3', nav: '任务组卡',     side: 'front', screen: 'group' },
+    { id: 'p-f4', chap: '3', num: '3.4', nav: '额外奖励',     side: 'front', screen: 'bonus' },
+    { id: 'p-f5', chap: '3', num: '3.5', nav: '按钮与额满',   side: 'front', screen: 'full' },
+    { id: 'p-f6', chap: '3', num: '3.6', nav: '领取成功弹窗', side: 'front', screen: 'bonus', pop: 'tier' },
+    { id: 'p-f7', chap: '3', num: '3.7', nav: '谁看得到',     side: 'front', screen: 'tabs', guest: true },
+    { id: 'p-f8', chap: '3', num: '3.8', nav: '奖励找回',     side: 'front', screen: 'recall' },
+    { id: 'p-f9', chap: '3', num: '3.9', nav: '底部弹窗',     side: 'front', screen: 'ntf' },
+
+    { id: 'p-en', chap: '4', nav: '英文文案' }
+  ];
+
+  var SIDES = {
+    admin: { file: 'TaskCenter_Backend.html',  label: '后台原型' },
+    front: { file: 'TaskCenter_Frontend.html', label: '前台原型' }
+  };
+  var side = 'admin';
+  var lastPanel = { admin: 'p-b1', front: 'p-f1' };
+
+  var byId = {};
+  PANELS.forEach(function (p) { byId[p.id] = p; });
+
+  var frame      = document.getElementById('protoFrame');
+  var fallback   = document.getElementById('protoFallback');
+  var modeLabel  = document.getElementById('protoMode');
+  var linkToggle = document.getElementById('linkToggle');
+  var nav        = document.getElementById('specNav');
+  var specScroll = document.getElementById('specScroll');
+  var btnGoto    = document.getElementById('btnGoto');
+  var openLink   = document.getElementById('btnOpenProto');
+  var current    = PANELS[0].id;
+  var pending    = null;
+  var protoReady = false;
+  var giveUpTimer;
+
+  function hasProto(p) { return !!(p && (p.view || p.screen)); }
+
+  /* ── 左栏换边 ─────────────────────────────────────────────── */
+  function setSide(next) {
+    if (next === side || !SIDES[next]) return;
+    side = next;
+    document.querySelectorAll('.side-switch__btn').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.side === side));
+    });
+    load();
+  }
+
+  function switchSide(next) {
+    if (!SIDES[next]) return;
+    var linked = linkToggle.checked;
+    setSide(next);
+    if (!linked) return;
+    var target = lastPanel[next];
+    showPanel(target, true);
+    if (hasProto(byId[target])) pending = byId[target];
+  }
+
+  document.querySelectorAll('.side-switch__btn').forEach(function (b) {
+    b.addEventListener('click', function () { switchSide(b.dataset.side); });
+  });
+
+  /* ── 导览 ─────────────────────────────────────────────────── */
+  function navRow(cls, num, text, targetId, extra) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = cls + (extra ? ' ' + extra : '');
+    b.innerHTML = '<span class="spec-nav__n"></span><span class="spec-nav__t"></span>';
+    b.firstChild.textContent = num;
+    b.lastChild.textContent = text;
+    b.dataset.target = targetId;
+    b.addEventListener('click', function () { showPanel(targetId, false); });
+    nav.appendChild(b);
+    return b;
+  }
+
+  CHAPTERS.forEach(function (c) {
+    var kids = PANELS.filter(function (p) { return p.chap === c.num; });
+    var subs = kids.filter(function (p) { return p.num; });
+    var row = navRow('spec-nav__ch', c.num, c.title, kids[0].id, subs.length ? '' : 'is-leaf');
+    row.dataset.chap = c.num;
+    subs.forEach(function (p) { navRow('spec-nav__item', p.num, p.nav, p.id); });
+  });
+
+  /* ── 切换章节 ─────────────────────────────────────────────── */
+  function showPanel(id, fromProto) {
+    var p = byId[id];
+    if (!p) return;
+    current = id;
+    document.querySelectorAll('.panel').forEach(function (el) { el.classList.toggle('is-on', el.id === id); });
+    nav.querySelectorAll('.spec-nav__item').forEach(function (b) { b.setAttribute('aria-current', String(b.dataset.target === id)); });
+    nav.querySelectorAll('.spec-nav__ch').forEach(function (b) { b.setAttribute('aria-current', String(b.dataset.chap === p.chap)); });
+    if (p.side) lastPanel[p.side] = id;
+    btnGoto.hidden = !hasProto(p);
+    specScroll.scrollTop = 0;
+    if (fromProto || !linkToggle.checked || !hasProto(p)) return;
+    if (p.side !== side) { pending = p; setSide(p.side); return; }
+    gotoProto(p);
+  }
+
+  function gotoProto(p) {
+    if (!frame.contentWindow || !p) return;
+    frame.contentWindow.postMessage({
+      src: 'spec', view: p.view, section: p.section, anchor: p.anchor, group: !!p.group, manual: !!p.manual,
+      screen: p.screen, tab: p.tab, pop: p.pop, guest: !!p.guest, black: !!p.black
+    }, '*');
+  }
+
+  btnGoto.addEventListener('click', function () { gotoProto(byId[current]); });
+
+  /* 3.7 左侧预览：未登录／黑名单切换 */
+  document.querySelectorAll('.pv__btn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var p = byId['p-f7'], q = {};
+      for (var k in p) q[k] = p[k];
+      q.guest = b.dataset.pv === 'guest'; q.black = b.dataset.pv === 'black';
+      if (side !== 'front') { pending = q; setSide('front'); } else gotoProto(q);
+    });
+  });
+
+  /* ── 听左栏原型的回报 ─────────────────────────────────────── */
+  var VIEW_PANEL = { setting: 'p-b7', record: 'p-b8', report: 'p-b9' };
+  window.addEventListener('message', function (e) {
+    var d = e.data || {};
+    if (d.src !== 'proto') return;
+    if (d.type === 'ready') {
+      protoReady = true;
+      clearTimeout(giveUpTimer);
+      fallback.classList.add('hidden');
+      modeLabel.textContent = '即时载入 ' + SIDES[side].file + ' · 原型改版会自动同步';
+      if (pending) { var q = pending; pending = null; gotoProto(q); }
+      return;
+    }
+    if (d.type === 'view' && linkToggle.checked && VIEW_PANEL[d.view]) showPanel(VIEW_PANEL[d.view], true);
+  });
+
+  /* ── 载入原型：4 秒没回报就显示备援说明 ───────────────────── */
+  function load() {
+    protoReady = false;
+    fallback.classList.add('hidden');
+    modeLabel.textContent = '载入中…';
+    openLink.href = SIDES[side].file;
+    frame.title = SIDES[side].label;
+    frame.src = SIDES[side].file;
+    clearTimeout(giveUpTimer);
+    giveUpTimer = setTimeout(function () {
+      if (!protoReady) { fallback.classList.remove('hidden'); modeLabel.textContent = '原型载入失败'; }
+    }, 4000);
+  }
+
+  load();
+  showPanel(PANELS[0].id, true);
+})();
+</script>
+
+</body>
+</html>
