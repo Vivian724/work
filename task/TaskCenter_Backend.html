@@ -247,6 +247,11 @@ th.op,td.op{white-space:nowrap;}
 .radio-grp{display:flex;flex-wrap:wrap;gap:18px;align-items:center;}
 .radio-grp label{display:inline-flex;align-items:center;gap:6px;font-size:.86rem;color:var(--c-text-2);}
 .radio-grp input{accent-color:var(--c-primary);width:16px;height:16px;}
+.form__control>.radio-grp{min-height:34px;}   /* 单选列和左边标签对齐 */
+.stepper{display:inline-flex;height:34px;border:1px solid var(--c-border);border-radius:var(--radius-s);overflow:hidden;background:var(--c-white);}
+.stepper button{width:34px;border:0;background:#f5f7fa;color:var(--c-text-2);font-size:1rem;cursor:pointer;}
+.form__control .stepper .input{width:80px;min-width:0;height:32px;border:0;border-left:1px solid var(--c-border);border-right:1px solid var(--c-border);border-radius:0;text-align:center;}
+.form__control textarea.input{height:auto;min-height:96px;padding:8px 10px;line-height:1.6;resize:vertical;font-family:inherit;}
 
 .fieldset-new{
   border:1px dashed #b7e6cd;background:#f4fbf7;border-radius:var(--radius);
@@ -571,9 +576,9 @@ th.cell-id,td.cell-id{white-space:nowrap;}
           · 统计时间归属：累计完成次数按「完成时间」落在查询区间内计；累计发放按「领取时间」（自动发放＝完成时间）计——补领落在领取当天。
           · 彩金、积分为金额；免费旋转／免费投注／优惠券／golden draw券为张数；该任务没有此奖励显示「—」。
           · 组任务：先一行「汇总」（与基础任务同一层级）——累计完成次数＝各子任务完成次数合计（额外奖励不是任务，不算完成次数）；累计发放＝子任务＋额外奖励的发放合计。
-            汇总行下方缩排列明细：子任务（ID＝母ID-序号，显示子任务名称）、额外奖励每一档（不另给 ID，名称标「任意完成 n 个」，完成次数＝达成该档的次数）。
+            汇总行下方缩排列明细：子任务（ID＝母ID-序号，显示子任务名称）、额外奖励每一档（ID＝母 ID，同任务完成记录；名称标「任意完成 n 个」，完成次数＝达成该档的次数）。明细一律展开显示，不做收合。
           · 小计＝本页、总计＝全部查询结果；都只加「基础任务行＋组任务汇总行」，明细行不重复加总。
-          · 任务ID 搜索同「任务完成记录」：母ID＝整组（汇总＋明细）；子任务ID＝只列该子任务。
+          · 任务ID 搜索同「任务完成记录」：母ID＝整组（汇总＋明细）；子任务ID＝只列该子任务一行，小计／总计＝这一行；比对要完全相同。
           · 分页按任务算：任务组整组算 1 笔，明细跟着汇总行，不拆到下一页。
           · 每个用户的完成明细看「任务完成记录」，本页不重复列。
         -->
@@ -599,21 +604,21 @@ th.cell-id,td.cell-id{white-space:nowrap;}
                 <tr class="rp-sub"><td class="cell-id">1050-1</td><td class="cell-name">└ 充值满 ₱50</td><td>2,180</td><td>218,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-sub"><td class="cell-id">1050-2</td><td class="cell-name">└ 投注满 ₱200</td><td>1,820</td><td>273,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-sub"><td class="cell-id">1050-3</td><td class="cell-name">└ 投注满 ₱300</td><td>1,410</td><td>282,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
-                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>1,650</td><td><span class="note">—</span></td><td>165,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
-                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 3 个</td><td>1,120</td><td>336,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1050</td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>1,650</td><td><span class="note">—</span></td><td>165,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1050</td><td class="cell-name">└ 额外奖励 · 任意完成 3 个</td><td>1,120</td><td>336,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr><td class="cell-id">1025</td><td class="cell-name">高价值用户 · 周限时投注</td><td>860</td><td><span class="note">—</span></td><td>177,600</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-grp"><td class="cell-id">1030</td><td class="cell-name">Small Stake Club · 组任务 <span class="tag tag--new">任务组</span></td><td>1,260</td><td>310,800</td><td>27,500</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-sub"><td class="cell-id">1030-1</td><td class="cell-name">└ 充值满 ₱100</td><td>430</td><td>41,800</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-sub"><td class="cell-id">1030-2</td><td class="cell-name">└ 投注满 ₱1,000</td><td>310</td><td>45,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-sub"><td class="cell-id">1030-3</td><td class="cell-name">└ 投注满 ₱200</td><td>520</td><td>100,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
-                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 1 个</td><td>790</td><td>38,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
-                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>290</td><td><span class="note">—</span></td><td>27,500</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
-                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 3 个</td><td>180</td><td>86,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1030</td><td class="cell-name">└ 额外奖励 · 任意完成 1 个</td><td>790</td><td>38,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1030</td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>290</td><td><span class="note">—</span></td><td>27,500</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1030</td><td class="cell-name">└ 额外奖励 · 任意完成 3 个</td><td>180</td><td>86,000</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-grp"><td class="cell-id">1060</td><td class="cell-name">充值投注挑战 · 组任务 <span class="tag tag--new">任务组</span></td><td>400</td><td><span class="note">—</span></td><td>182,100</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-sub"><td class="cell-id">1060-1</td><td class="cell-name">└ 充值满 ₱500</td><td>260</td><td><span class="note">—</span></td><td>24,800</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-sub"><td class="cell-id">1060-2</td><td class="cell-name">└ 投注满 ₱5,000</td><td>140</td><td><span class="note">—</span></td><td>41,400</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
-                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 1 个</td><td>270</td><td><span class="note">—</span></td><td>52,400</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
-                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>130</td><td><span class="note">—</span></td><td>63,500</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1060</td><td class="cell-name">└ 额外奖励 · 任意完成 1 个</td><td>270</td><td><span class="note">—</span></td><td>52,400</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1060</td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>130</td><td><span class="note">—</span></td><td>63,500</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr><td class="cell-id">1070</td><td class="cell-name">每周投注送免费旋转</td><td>1,640</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td>1,640</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr><td class="cell-id">951</td><td class="cell-name">关注Facebook</td><td>310</td><td>6,200</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr><td class="cell-id">949</td><td class="cell-name">KYC认证-不要删除</td><td>820</td><td><span class="note">—</span></td><td>16,400</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
@@ -621,8 +626,8 @@ th.cell-id,td.cell-id{white-space:nowrap;}
                 <tr class="rp-sub"><td class="cell-id">1090-1</td><td class="cell-name">└ 充值满 ₱50</td><td>520</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td>510</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-sub"><td class="cell-id">1090-2</td><td class="cell-name">└ 投注满 ₱200</td><td>380</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td>370</td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-sub"><td class="cell-id">1090-3</td><td class="cell-name">└ 投注满 ₱1,000</td><td>260</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td>250</td><td><span class="note">—</span></td></tr>
-                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>300</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td>290</td></tr>
-                <tr class="rp-sub"><td class="cell-id"></td><td class="cell-name">└ 额外奖励 · 任意完成 3 个</td><td>150</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td>145</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
+                <tr class="rp-sub"><td class="cell-id">1090</td><td class="cell-name">└ 额外奖励 · 任意完成 2 个</td><td>300</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td><td>290</td></tr>
+                <tr class="rp-sub"><td class="cell-id">1090</td><td class="cell-name">└ 额外奖励 · 任意完成 3 个</td><td>150</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td>145</td><td><span class="note">—</span></td><td><span class="note">—</span></td><td><span class="note">—</span></td></tr>
                 <tr class="rp-total"><td></td><td class="cell-name">小计</td><td>61,040</td><td>5,088,600</td><td>1,034,100</td><td>2,295</td><td>370</td><td>250</td><td>290</td></tr>
                 <tr class="rp-total"><td></td><td class="cell-name">总计</td><td>64,640</td><td>5,118,600</td><td>1,052,100</td><td>3,315</td><td>1,450</td><td>1,130</td><td>1,880</td></tr>
               </tbody>
@@ -889,7 +894,15 @@ th.cell-id,td.cell-id{white-space:nowrap;}
       <div class="fs-hd"><span class="fs-hd__ic">!</span>其他</div>
       <div class="form__row">
         <label class="form__label">排序：</label>
-        <div class="form__control"><input class="input" value="0" style="max-width:120px"/></div>
+        <div class="form__control"><div class="stepper"><button type="button" onclick="var i=this.nextElementSibling;i.value=Math.max(0,(+i.value||0)-1)">−</button><input class="input" value="0"/><button type="button" onclick="var i=this.previousElementSibling;i.value=(+i.value||0)+1">+</button></div></div>
+      </div>
+      <div class="form__row">
+        <label class="form__label">是否显示任务简介：</label>
+        <div class="form__control"><div class="radio-grp"><label><input type="radio" name="intro"/> 是</label><label><input type="radio" name="intro" checked/> 否</label></div></div>
+      </div>
+      <div class="form__row">
+        <label class="form__label">任务简介：</label>
+        <div class="form__control"><textarea class="input" placeholder="任务简介"></textarea></div>
       </div>
       <div class="form__row">
         <label class="form__label"><span class="req">*</span>任务状态：</label>

@@ -403,7 +403,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <div class="lazy__card"><b class="lazy__t">后台 · 新增任务弹窗</b><ul class="lazy__list"><li><b>任务组</b>任务类别新增「任务组」：把多个子任务包成一个任务，最多 10 个；每个子任务有自己的名称<span class="lazy__ref">2.1、2.3</span></li><li><b>游戏页展示</b>原「任务标签」改名；任务组不适用<span class="lazy__ref">2.1</span></li><li><b>奖励类型</b>新增免费旋转、免费投注、优惠券、golden draw券<span class="lazy__ref">2.2</span></li><li><b>额外奖励</b>任意完成 n 个子任务再送，1～3 档<span class="lazy__ref">2.3</span></li><li><b>名额上限</b>一项奖励最多发几人，发完即额满<span class="lazy__ref">2.4</span></li><li><b>参与对象</b>按 VIP、标签、累计充值／投注指定，都不勾＝不限；标签多个＝全部都要有；新增「符合任一／完全符合」二选一<span class="lazy__ref">2.5</span></li><li><b>任务时间</b>条件不能搭配的选项自动反灰<span class="lazy__ref">2.6</span></li></ul></div>
               <div class="lazy__card"><b class="lazy__t">后台 · 列表、记录、报表</b><ul class="lazy__list"><li><b>任务列表</b>新增「任务类别」「名额」两栏<span class="lazy__ref">2.7</span></li><li><b>完成记录</b>子任务、额外奖励各自一行；新增「名额已满」状态；任务ID 可搜母 ID（整组）或子任务 ID<span class="lazy__ref">2.8</span></li><li><b>报表</b>新增 4 个券类栏位、任务ID 搜索；任务组分汇总行与明细行<span class="lazy__ref">2.9</span></li></ul></div>
               <div class="lazy__card"><b class="lazy__t">前台 · 会员看到的（以 H5 为准）</b><ul class="lazy__list"><li><b>页签</b>限时、周限时合并为「限时」；红点要算进子任务、额外奖励<span class="lazy__ref">3.1</span></li><li><b>任务卡</b>奖励标签、进度条、已发送人数<span class="lazy__ref">3.2</span></li><li><b>任务组卡</b>子任务列表＋额外奖励宝箱<span class="lazy__ref">3.3–3.4</span></li><li><b>额满</b>名额发完时的按钮状态<span class="lazy__ref">3.5</span></li><li><b>领取成功弹窗</b>支持新奖励类型<span class="lazy__ref">3.6</span></li><li><b>谁看得到</b>VIP、标签不符合＝看不到；参与要求没达成＝看得到，按钮引导去完成<span class="lazy__ref">3.7</span></li><li><b>奖励找回</b>不显示合计；一键领取用通用图示<span class="lazy__ref">3.8</span></li><li><b>底部弹窗</b>图示、奖励依类型显示；停留 3 秒<span class="lazy__ref">3.9</span></li></ul></div>
-              <div class="lazy__card"><b class="lazy__t">不变</b><span class="lazy__sub">后台</span><ul class="lazy__list"><li><b>累计充值／投注区间</b>计算方式照既有<span class="lazy__ref">2.5</span></li><li><b>任务时间</b>重置周期照既有<span class="lazy__ref">2.6</span></li><li><b>既有分页</b>资料审核、黑名单设置<span class="lazy__ref">2.7</span></li></ul><span class="lazy__sub">前台</span><ul class="lazy__list"><li><b>按钮</b>显示判断、点击、引导跳转<span class="lazy__ref">3.5、v1.1</span></li><li><b>奖励找回</b>补领规则照既有<span class="lazy__ref">3.8</span></li><li><b>底部弹窗</b>检查频率、出现页面、次数、点「领取」跳转<span class="lazy__ref">3.9</span></li><li><b>任务规则弹窗</b>照既有<span class="lazy__ref"></span></li></ul></div>
+              <div class="lazy__card"><b class="lazy__t">不变</b><span class="lazy__sub">后台</span><ul class="lazy__list"><li><b>累计充值／投注区间</b>计算方式照既有<span class="lazy__ref">2.5</span></li><li><b>任务时间</b>重置周期照既有<span class="lazy__ref">2.6</span></li><li><b>既有分页</b>资料审核、黑名单设置<span class="lazy__ref">2.7</span></li></ul><span class="lazy__sub">前台</span><ul class="lazy__list"><li><b>按钮</b>显示判断、点击、引导跳转<span class="lazy__ref">3.5、v1.1</span></li><li><b>奖励找回</b>补领规则照既有<span class="lazy__ref">3.8</span></li><li><b>底部弹窗</b>检查频率、出现页面、次数、点「领取」跳转<span class="lazy__ref">3.9</span></li><li><b>任务简介</b>标题后 ⓘ、点了跳弹窗<span class="lazy__ref">3.10</span></li><li><b>任务规则弹窗</b>照既有<span class="lazy__ref"></span></li></ul></div>
             </div>
           </div>
 
@@ -598,7 +598,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <li>限时：结束早于开始不能选；开始改到结束之后，结束清空。</li>
             <li>已选的任务时间变成不能用：自动改成第一个可选的。</li>
             <li>任务组：子任务下拉里，跟其他子任务没有共同任务时间的条件反灰（例：已有「投注」，不能选「关注Facebook」）；新加的子任务自动带可以放一起的条件。</li>
-            <li>适用端口、任务状态：照既有。</li>
+            <li>适用端口、是否显示任务简介、任务简介、任务状态：照既有；任务简介在前台的显示见 3.10。</li>
           </ul>
 
         </article>
@@ -636,7 +636,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <li><b>额外奖励</b>：ID＝母 ID（1030）；名称「任务组名称 · 额外奖励 · 任意完成 n 个」＋「额外奖励」标签。</li>
             <li><b>券类奖励</b>：奖励类型下方显示券名，奖励值显示张数。</li>
             <li><b>名额已满</b>：完成时名额已满、不发奖励；状态红字，奖励值「—」。发放状态筛选多这个选项。</li>
-            <li><b>搜索任务ID</b>：母 ID（1030）＝整组（子任务＋额外奖励）；子任务 ID（1030-2）＝只列该子任务。</li>
+            <li><b>搜索任务ID</b>：母 ID（1030）＝整组（子任务＋额外奖励）；子任务 ID（1030-2）＝只列该子任务；比对要完全相同（搜 103 不会出现 1030）。</li>
           </ul>
 
           <h3 class="sub">补充</h3>
@@ -653,7 +653,12 @@ table.t th:last-child, table.t td:last-child { width: auto; }
           <h3 class="sub">规则</h3>
           <ul>
             <li><b>券类栏位</b>：累计发放免费旋转、免费投注、优惠券、golden draw券，单位张；没有就显示「—」。</li>
-            <li><b>任务组</b>：一行汇总＋下方缩排明细。汇总行：完成次数＝子任务相加；发放＝子任务＋额外奖励。明细：子任务（显示名称）、额外奖励各档（不给 ID；完成次数＝达成该档的人次，不算进汇总）。</li>
+            <li><b>任务组</b>：一行汇总＋下方明细，明细一律展开显示，不做收合。
+              <ul>
+                <li>汇总行：ID＝母 ID（1030）；完成次数＝子任务相加；发放＝子任务＋额外奖励。</li>
+                <li>子任务行：ID＝子任务 ID（1030-1），名称＝子任务名称。</li>
+                <li>额外奖励行：每档一行，ID＝母 ID（同 2.8），名称「额外奖励 · 任意完成 n 个」；完成次数＝达成该档的人次，不算进汇总。</li>
+              </ul></li>
             <li><b>累计完成次数</b>：按完成时间计，含名额已满没发到的；人工审核以通过才算。</li>
             <li><b>累计发放</b>：会员实际领到的（自动发放＋已领取＋找回补领），按领取时间计（自动发放＝完成时间）；待领取、待审核、审核未通过、名额已满不算。</li>
             <li><b>小计／总计</b>：小计＝本页，总计＝全部查询结果；都只加基础任务行＋任务组汇总行，明细不重复加。</li>
@@ -662,7 +667,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
           <h3 class="sub">补充</h3>
           <ul>
             <li>搜索：币别、时间区间、任务名关键字照既有；任务组用任务组名称比对，搜到整组列出。</li>
-            <li><b>任务ID 搜索（新增）</b>：同完成记录（2.8）：母 ID（1030）＝整组；子任务 ID（1030-2）＝只列该子任务。</li>
+            <li><b>任务ID 搜索（新增）</b>：同完成记录（2.8）。母 ID（1030）＝汇总行＋全部明细；子任务 ID（1030-2）＝只列该子任务一行，小计、总计就是这一行。</li>
             <li>分页：按任务算，任务组整组算 1 笔，明细不拆到下一页。</li>
             <li>导出：内容同画面，含任务组明细行。</li>
           </ul>
@@ -714,6 +719,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <li><b>已发送人数</b>：「已发送 x / y 人」，有设名额才显示，满了变红字；永久任务不显示。</li>
             <li><b>倒数</b>：按钮上方红字，例「⏱ 6d 13:05:11」；永久任务不显示。</li>
             <li><b>按钮</b>：照既有逻辑；名额满显示「额满」（3.5）。</li>
+            <li><b>任务简介</b>：标题后面的 ⓘ，照既有（3.10）。</li>
           </ul>
 
         </article>
@@ -725,6 +731,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
           <h3 class="sub">规则</h3>
           <ul>
             <li><b>角标、倒数</b>：左上「任务组」，右上倒数（永久不显示）。</li>
+            <li><b>任务简介</b>：ⓘ 放在任务组标题后面，子任务没有，照既有（3.10）。</li>
             <li><b>进度</b>：「已完成子任务数 / 子任务总数」，达成就算（含还没领的）；人工审核的任务，审核通过才算。</li>
             <li><b>子任务行</b>：标题＝后台配置的子任务名称（2.3），一行超出以「…」截断；其余同基础任务卡，每行一个按钮。</li>
             <li><b>收合</b>：预设显示前 2 个，「查看全部（n） ⌄」展开、「收起 ⌃」收回；子任务 ≤ 2 个不显示。</li>
@@ -884,6 +891,19 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 
         </article>
 
+        <article class="panel" id="p-f10">
+          <div class="panel__head"><span class="panel__num">3.10</span><h2 class="panel__title">前台 · 任务简介</h2></div>
+          <p class="lede">任务标题后面的 ⓘ，点了看任务简介。这是既有功能，本期不改。</p>
+
+          <h3 class="sub">规则（照既有）</h3>
+          <ul>
+            <li><b>显示</b>：后台「是否显示任务简介」选「是」才显示 ⓘ；选「否」不显示（2.6）。</li>
+            <li><b>位置</b>：基础任务在标题后面；任务组在任务组标题后面，子任务没有。</li>
+            <li><b>弹窗</b>：点 ⓘ 跳「任务介绍」弹窗，内容＝后台「任务简介」；点「确定」或 × 关闭。</li>
+          </ul>
+
+        </article>
+
         <!-- ============================================================
              4 多语言文案
              ============================================================ -->
@@ -974,6 +994,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
     { id: 'p-f7', chap: '3', num: '3.7', nav: '谁看得到',     side: 'front', screen: 'tabs', guest: true },
     { id: 'p-f8', chap: '3', num: '3.8', nav: '奖励找回',     side: 'front', screen: 'recall' },
     { id: 'p-f9', chap: '3', num: '3.9', nav: '底部弹窗',     side: 'front', screen: 'ntf' },
+    { id: 'p-f10', chap: '3', num: '3.10', nav: '任务简介',   side: 'front', screen: 'basic', pop: 'intro' },
 
     { id: 'p-en', chap: '4', nav: '多语言文案' }
   ];

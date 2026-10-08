@@ -123,6 +123,10 @@ img{max-width:100%;display:block;}
 .card__badge{position:absolute;left:0;top:0;background:#efeaff;color:#6a4fd0;font-size:.66rem;font-weight:700;padding:2px 8px;border-bottom-right-radius:8px;}
 .card__main{flex:1;min-width:0;padding-top:6px;}
 .card__title{font-size:.95rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* 任务简介（既有）：后台「是否显示任务简介」＝是 → 标题后面加 ⓘ，点了跳「任务介绍」弹窗，内容＝后台「任务简介」 */
+.card__title.has-intro{display:flex;align-items:center;gap:4px;}
+.card__title.has-intro .tt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.intro-i{flex:none;width:14px;height:14px;border:1.2px solid #9aa3b2;border-radius:50%;color:#9aa3b2;font:600 10px/12px Arial,sans-serif;font-style:normal;text-align:center;cursor:pointer;}
 .card__progress{font-size:.76rem;color:var(--c-text-3);margin-top:3px;}
 /* 充值／投注类任务：进度条＋金额同一行（只用于金额进度；名额不用进度条） */
 .prog{display:flex;align-items:center;gap:8px;margin:4px 0 2px;}
@@ -390,7 +394,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
     <button onclick="showPop('gdticket')">领取成功·golden draw券</button>
     <button onclick="showPop('fail')">领取失败</button>
     <button onclick="showPop('rule')">任务规则</button>
-    <button onclick="showPop('intro')">任务介绍</button>
+    <button onclick="showIntro('当日有效投注满 ₱100 即可领取彩金 50。')">任务介绍</button>
     <button onclick="openRecall()">奖励找回</button>
     <button onclick="showNtf(0)">底部弹窗</button>
     <button onclick="toggleBlack(this)">黑名单用户</button>
@@ -461,13 +465,13 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
         <span class="promo__mascot">🏆</span>
         <div class="promo__time">活动时间：2026/07/01 – 2028/08/30</div>
         <div class="promo__name">Game Challenge</div>
-        <button class="promo__more" onclick="showPop('intro')">阅读更多 ›</button>
+        <button class="promo__more" onclick="showIntro('完成指定充值与投注即可领取奖励，名额有限先到先得。')">阅读更多 ›</button>
       </div>
       <div class="promo promo--2">
         <span class="promo__mascot">🌈</span>
         <div class="promo__time">活动时间：2026/08/01 – 2028/08/31</div>
         <div class="promo__name">负盈利活动–角标</div>
-        <button class="promo__more" onclick="showPop('intro')">阅读更多 ›</button>
+        <button class="promo__more" onclick="showIntro('完成指定充值与投注即可领取奖励，名额有限先到先得。')">阅读更多 ›</button>
       </div>
       <button class="expand-btn">Expand ⌄</button>
 
@@ -486,12 +490,12 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
 
       <div class="task-list">
         <!-- 卡片顺序（后端排好）：照后台「排序」栏位，数字越小越前面，任务组和基础任务一起排；已完成、额满的排到最下方；各页签筛选后沿用同一顺序 -->
-        <!-- 1050｜任务组 · 每日｜子任务 3 个、每项上限 1,000｜额外奖励 2 个 彩金 100／3 个 积分 300｜排序 2 -->
+        <!-- 1050｜任务组 · 每日｜子任务 3 个、每项上限 1,000｜额外奖励 2 个 彩金 100／3 个 积分 300｜排序 2｜显示任务简介＝是 -->
         <article class="card card--quota grp has-cd" data-time="daily">
           <span class="card__badge card__badge--grp">任务组</span>
           <span class="card__cd">⏱ 13:05:11</span>
           <div class="grp__hd">
-            <div class="grp__ttl"><div class="card__title">每日三连·组任务</div>
+            <div class="grp__ttl"><div class="card__title has-intro"><span class="tt">每日三连·组任务</span><i class="intro-i" onclick="showIntro('每天完成任意 2 个子任务可多领彩金，完成 3 个再送积分。')">i</i></div>
               <div class="card__progress">进度 <b style="color:#2f6bff">2 / 3</b></div></div>
           </div>
           <div class="grp-bonus">
@@ -608,10 +612,10 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           <div class="card__right"><span class="card__cd">⏱ 4d 13:05:11</span><button class="act act--full" disabled>额满</button></div>
         </article>
 
-        <!-- 1080｜投注 ₱100｜彩金 50｜名额 356/1,000（每日）｜每日｜自动审核｜用户手动领取｜排序 9 -->
+        <!-- 1080｜投注 ₱100｜彩金 50｜名额 356/1,000（每日）｜每日｜自动审核｜用户手动领取｜排序 9｜显示任务简介＝是 -->
         <article class="card" data-time="daily">
           <div class="card__main">
-            <div class="card__title">每日投注任务</div>
+            <div class="card__title has-intro"><span class="tt">每日投注任务</span><i class="intro-i" onclick="showIntro('当日有效投注满 ₱100 即可领取彩金 50。')">i</i></div>
             <div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱100 / ₱100</span></div>
             <div class="meta"><span class="rwc" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">50</span><span>已发送 <b>356 / 1,000</b> 人</span></div>
           </div>
@@ -930,7 +934,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
       <div class="pop" data-pop="intro" hidden>
         <button class="pop__x" onclick="hidePop()">✕</button>
         <div class="pop__title" style="margin-top:6px">任务介绍</div>
-        <div class="pop__desc">完成指定充值与投注即可领取奖励，名额有限先到先得。</div>
+        <div class="pop__desc" id="introTxt">完成指定充值与投注即可领取奖励，名额有限先到先得。</div>
         <button class="pop__btn" onclick="hidePop()">确定</button>
       </div>
     </div>
@@ -1082,7 +1086,7 @@ function toggleGuest(btn){
     list.querySelectorAll('.gr__num,:scope > article:not(.grp) .card__progress').forEach(function(t){ t.textContent=t.textContent.replace(/\d+ \//,'0 /'); });
     list.querySelectorAll('.grp .grp__ttl .card__progress b').forEach(function(t){ t.textContent=t.textContent.replace(/^\d+/,'0'); });
     list.querySelectorAll('.ms__col').forEach(function(c){ c.className='ms__col is-lock'; c.removeAttribute('onclick'); c.onclick=null; });
-    list.querySelectorAll(':scope > article:not(.grp)').forEach(function(a){ toGuestBtn(a.querySelector('.card__right .act'),a.querySelector('.card__title').textContent,a); });
+    list.querySelectorAll(':scope > article:not(.grp)').forEach(function(a){ toGuestBtn(a.querySelector('.card__right .act'),(a.querySelector('.card__title .tt')||a.querySelector('.card__title')).textContent,a); });
     list.querySelectorAll('.gr').forEach(function(g){ toGuestBtn(g.querySelector('.chip-st'),g.querySelector('.gr__name').textContent,g); });
     list.querySelectorAll('.grp__list').forEach(function(l){ byOrd(l,':scope > .gr'); });
     byOrd(list,':scope > article'); layoutCards();   /* 已完成、额满一样排到最下方 */
@@ -1147,6 +1151,8 @@ function claimNtf(){
   var sc=document.querySelector('.scroll'), tl=document.getElementById('taskTabs');
   if(sc && tl) sc.scrollTop += tl.getBoundingClientRect().top - sc.getBoundingClientRect().top - 120;
 }
+/* 任务简介弹窗：标题 ⓘ 点了显示该任务的「任务简介」 */
+function showIntro(t){ document.getElementById('introTxt').textContent=t; showPop('intro'); }
 function hidePop(){ document.getElementById('pop').classList.remove('open'); }
 document.getElementById('pop').addEventListener('click',function(e){ if(e.target===this) hidePop(); });
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') hidePop(); });
@@ -1206,7 +1212,7 @@ updateTabDots();
   function demoBtn(fn){ return document.querySelector('.demo-bar button[onclick^="'+fn+'"]'); }
   function card(title){
     return [].filter.call(document.querySelectorAll('.task-list > article'),function(a){
-      return a.querySelector('.card__title').textContent.trim()===title; })[0];
+      return (a.querySelector('.card__title .tt')||a.querySelector('.card__title')).textContent.trim()===title; })[0];
   }
   /* 奖励找回清单先存一份，切到 3.8 时还原（避免之前按过一键领取变空） */
   var rcSnap=document.getElementById('rcList').innerHTML;
@@ -1262,6 +1268,8 @@ updateTabDots();
       var can=d.pop==='tier' && el && el.querySelector('.ms__col.is-can');
       if(can){ var lb=(can.getAttribute('onclick').match(/'([^']+)'/)||[])[1];
         document.getElementById('extraAmt').textContent=popAmt(lb); document.getElementById('extraIc').src=rwIcon(lb); showPop('extra'); }
+      /* pop='intro'：点目标卡标题后的 ⓘ，弹出该任务的简介 */
+      else if(d.pop==='intro'){ var ic=el && el.querySelector('.intro-i'); if(ic) ic.click(); else showPop('intro'); }
       else if(d.pop && d.pop!=='tier') showPop(d.pop);
     },60);
   });
