@@ -885,34 +885,41 @@ table.t th:last-child, table.t td:last-child { width: auto; }
         </article>
 
         <!-- ============================================================
-             4 英文文案
+             4 多语言文案
              ============================================================ -->
         <article class="panel" id="p-en">
-          <div class="panel__head"><span class="panel__num">4</span><h2 class="panel__title">英文文案</h2></div>
-          <p class="lede">前台文案的英文由运营提供，照原样使用。</p>
+          <div class="panel__head"><span class="panel__num">4</span><h2 class="panel__title">多语言文案</h2></div>
+          <p class="lede">任务中心前台文案共 5 种语言：中文（zh）、英文（en）、菲律宾语（ph）、越南语（vi）、宿雾语（ceb）。</p>
+
+          <h3 class="sub">规则</h3>
+          <ul>
+            <li><b>线上既有</b>：标「线上既有」的 3 条，线上已经有各语言版本的，以线上为准。</li>
+            <li><b>key</b>：待补。</li>
+            <li><b>{x}、{y}、{n}、{a}、{b}</b>：变量，照原样保留，不翻译。</li>
+          </ul>
 
           <h3 class="sub">任务中心文案</h3>
-          <div class="tbl-scroll"><table class="t">
-            <thead><tr><th>中文（位置）</th><th>英文</th><th class="nw">状态</th></tr></thead>
+          <div class="tbl-scroll"><table class="t" style="min-width:1100px">
+            <thead><tr><th class="nw">key</th><th>zh（位置）</th><th>en</th><th>ph</th><th>vi</th><th>ceb</th></tr></thead>
             <tbody>
-              <tr><td>*任务完成后不会重置<br><span class="hint-in">基础任务页签红字</span></td><td>* The task will not reset after completion.</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>*任务将于每日12AM重置<br><span class="hint-in">每日页签红字（线上既有）</span></td><td>*Tasks will be reset at 12AM everyday</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>*任务将于每周一12AM重置<br><span class="hint-in">每周页签红字</span></td><td>* The task resets every Monday at 12:00 AM.</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>*任务于活动期间内有效，结束后不会重置<br><span class="hint-in">限时页签红字（限时、周限时共用）</span></td><td>* The task is valid only during the campaign period and will not reset after the campaign ends.</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>任务组<br><span class="hint-in">任务组角标</span></td><td>Task Group</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>已发送 {x} / {y} 人<br><span class="hint-in">已发送人数</span></td><td>Rewarded: {x} / {y} Users</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>额满<br><span class="hint-in">按钮</span></td><td>full</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>额外奖励<br><span class="hint-in">额外奖励标题</span></td><td>Extra Rewards</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>{n} 个<br><span class="hint-in">宝箱下方</span></td><td>{n} Rewards</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>查看全部（{n}）<br><span class="hint-in">子任务展开</span></td><td>View All ({n})</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>收起<br><span class="hint-in">子任务收合</span></td><td>Hide</td><td class="nw"><span class="tag tag--new">已提供</span></td></tr>
-              <tr><td>奖励{a}，恭喜完成{b}任务！<br><span class="hint-in">底部弹窗</span></td><td>Reward {a}, congratulations on completing the {b} task!</td><td class="nw"><span class="tag tag--new">线上既有</span></td></tr>
-              <tr><td>领取<br><span class="hint-in">底部弹窗按钮</span></td><td>Receive</td><td class="nw"><span class="tag tag--new">线上既有</span></td></tr>
+              <tr><td></td><td>*任务完成后不会重置<br><span class="hint-in">基础任务页签红字</span></td><td>* The task will not reset after completion.</td><td>* Hindi magre-reset ang task pagkatapos makumpleto.</td><td>* Nhiệm vụ không đặt lại sau khi hoàn thành.</td><td>* Dili ma-reset ang task human makompleto.</td></tr>
+              <tr><td></td><td>*任务将于每日12AM重置<br><span class="hint-in">每日页签红字（线上既有）</span></td><td>*Tasks will be reset at 12AM everyday</td><td>*Magre-reset ang task araw-araw nang 12AM</td><td>*Nhiệm vụ đặt lại lúc 12AM mỗi ngày</td><td>*Ma-reset ang task matag adlaw sa 12AM</td></tr>
+              <tr><td></td><td>*任务将于每周一12AM重置<br><span class="hint-in">每周页签红字</span></td><td>* The task resets every Monday at 12:00 AM.</td><td>* Magre-reset ang task tuwing Lunes nang 12AM.</td><td>* Nhiệm vụ đặt lại lúc 12AM mỗi thứ Hai.</td><td>* Ma-reset ang task matag Lunes sa 12AM.</td></tr>
+              <tr><td></td><td>*任务于活动期间内有效，结束后不会重置<br><span class="hint-in">限时页签红字（限时、周限时共用）</span></td><td>* The task is valid only during the campaign period and will not reset after the campaign ends.</td><td>* Valid lang habang may event; hindi magre-reset pagkatapos.</td><td>* Chỉ có hiệu lực trong sự kiện; không đặt lại sau khi kết thúc.</td><td>* Balido lang samtang naay event; dili ma-reset human matapos.</td></tr>
+              <tr><td></td><td>任务组<br><span class="hint-in">任务组角标</span></td><td>Task Group</td><td>Grupo ng Task</td><td>Nhóm nhiệm vụ</td><td>Grupo sa Task</td></tr>
+              <tr><td></td><td>已发送 {x} / {y} 人<br><span class="hint-in">已发送人数</span></td><td>Rewarded: {x} / {y} Users</td><td>Nabigyan: {x} / {y} User</td><td>Đã phát: {x} / {y} người</td><td>Nahatagan: {x} / {y} ka User</td></tr>
+              <tr><td></td><td>额满<br><span class="hint-in">按钮</span></td><td>full</td><td>Puno na</td><td>Hết suất</td><td>Puno na</td></tr>
+              <tr><td></td><td>额外奖励<br><span class="hint-in">额外奖励标题</span></td><td>Extra Rewards</td><td>Dagdag na Reward</td><td>Phần thưởng thêm</td><td>Dugang nga Reward</td></tr>
+              <tr><td></td><td>{n} 个<br><span class="hint-in">宝箱下方</span></td><td>{n} Rewards</td><td>{n} task</td><td>{n} nhiệm vụ</td><td>{n} ka task</td></tr>
+              <tr><td></td><td>查看全部（{n}）<br><span class="hint-in">子任务展开</span></td><td>View All ({n})</td><td>Tingnan Lahat ({n})</td><td>Xem tất cả ({n})</td><td>Tan-awa Tanan ({n})</td></tr>
+              <tr><td></td><td>收起<br><span class="hint-in">子任务收合</span></td><td>Hide</td><td>Itago</td><td>Thu gọn</td><td>Itago</td></tr>
+              <tr><td></td><td>奖励{a}，恭喜完成{b}任务！<br><span class="hint-in">底部弹窗（线上既有）</span></td><td>Reward {a}, congratulations on completing the {b} task!</td><td>Reward {a}, congrats sa pagtapos ng {b} task!</td><td>Thưởng {a}, chúc mừng hoàn thành nhiệm vụ {b}!</td><td>Reward {a}, congrats sa pagkompleto sa {b} task!</td></tr>
+              <tr><td></td><td>领取<br><span class="hint-in">底部弹窗按钮（线上既有）</span></td><td>Receive</td><td>Kunin</td><td>Nhận</td><td>Kuhaa</td></tr>
             </tbody>
           </table></div>
 
           <h3 class="sub">子任务名称</h3>
-          <p>子任务名称由运营在后台配置（2.3），英文填在该名称的国际化，跟任务名称一样，不需要另外提供。</p>
+          <p>子任务名称由运营在后台配置（2.3），各语言填在该名称的国际化，跟任务名称一样，不需要另外提供。</p>
 
         </article>
 
@@ -939,7 +946,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
     { num: '1', title: '总览' },
     { num: '2', title: '后台：怎么配' },
     { num: '3', title: '前台：会看到什么' },
-    { num: '4', title: '英文文案' }
+    { num: '4', title: '多语言文案' }
   ];
 
   /* view：后台分页（setting / record / report）或 form（新增任务表单）
@@ -968,7 +975,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
     { id: 'p-f8', chap: '3', num: '3.8', nav: '奖励找回',     side: 'front', screen: 'recall' },
     { id: 'p-f9', chap: '3', num: '3.9', nav: '底部弹窗',     side: 'front', screen: 'ntf' },
 
-    { id: 'p-en', chap: '4', nav: '英文文案' }
+    { id: 'p-en', chap: '4', nav: '多语言文案' }
   ];
 
   var SIDES = {
