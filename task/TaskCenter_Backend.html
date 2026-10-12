@@ -385,7 +385,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
                 <tr>
                   <td class="cell-id">1024</td><td>基础任务</td><td class="cell-name">小额用户 · 每日充值任务 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>资金<br><span class="note">充值 ₱50</span></td><td>积分 100</td>
                   <td><span class="stack-chip"><span class="tag tag--info">VIP0</span><span class="tag tag--info">VIP1</span><span class="tag tag--gray">ML</span></span></td>
-                  <td><span class="stack-chip"><span class="tag tag--info">累计充值 ₱50~₱5,000</span><span class="pill">完全符合</span><span class="tag tag--info">累计有效投注 ₱200~₱10,000</span></span></td>
+                  <td><span class="stack-chip"><span class="tag tag--info">累计充值 ≥ ₱50</span><span class="pill">完全符合</span><span class="tag tag--info">累计有效投注 ≥ ₱200</span></span></td>
                   <td>790 / 1,000</td>
                   <td>H5,APP</td><td>每日</td><td>自动审核</td><td>10</td>
                   <td>开启</td>
@@ -430,7 +430,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
                 <tr>
                   <td class="cell-id">1025</td><td>基础任务</td><td class="cell-name">高价值用户 · 周限时投注 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td>资金<br><span class="note">投注 ₱5,000</span></td><td>彩金 222</td>
                   <td><span class="stack-chip"><span class="tag tag--info">全部VIP</span><span class="tag tag--gray">TH</span></span></td>
-                  <td><span class="stack-chip"><span class="tag tag--info">累计有效投注 ₱5,000~₱500,000</span></span></td>
+                  <td><span class="stack-chip"><span class="tag tag--info">累计有效投注 ≥ ₱5,000</span></span></td>
                   <td><span class="danger-txt" style="white-space:nowrap">200 / 200 已满</span></td>
                   <td>PC,H5,APP</td><td>周限时<br><span class="note">星期一 至 星期五</span></td><td>自动审核</td><td>8</td>
                   <td>开启</td>
@@ -439,7 +439,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
                 <tr>
                   <td class="cell-id"><div class="tid">1030<span class="tid__subs"><span class="tid__sub">1030-1</span><span class="tid__sub">1030-2</span><span class="tid__sub">1030-3</span></span></div></td><td><span class="tag tag--new">任务组</span></td><td class="cell-name">Small Stake Club · 组任务 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td><td><span class="note">1030-1 充值 ₱100<br>1030-2 投注 ₱1,000<br>1030-3 投注 ₱200</span></td><td><span class="note">1030-1 积分 100<br>1030-2 积分 150<br>1030-3 积分 200<br>额外奖励：任意完成 1 个 积分 50；2 个 彩金 100；3 个 积分 500</span></td>
                   <td><span class="stack-chip"><span class="tag tag--info">VIP1</span><span class="tag tag--gray">TH</span></span></td>
-                  <td><span class="stack-chip"><span class="tag tag--info">累计充值 ₱100~₱5,000</span><span class="pill">符合任一</span><span class="tag tag--info">累计有效投注 ₱1,000~₱20,000</span></span></td>
+                  <td><span class="stack-chip"><span class="tag tag--info">累计充值 ≥ ₱100</span><span class="pill">符合任一</span><span class="tag tag--info">累计有效投注 ≥ ₱1,000</span></span></td>
                   <td>每项上限 500</td>
                   <td>H5,APP</td><td>限时<br><span class="note">2026-08-01 00:00~2026-08-31 23:59</span></td><td>自动审核</td><td>6</td>
                   <td>开启</td>
@@ -673,11 +673,11 @@ th.cell-id,td.cell-id{white-space:nowrap;}
       <!-- 说明文字已移出画面，之后写进规格书：
         · 【显示规则】「参与对象」（VIP 等级、用户标签、任务参与要求）决定会员能不能参加此任务：
             VIP／标签不符合 → 前台不显示此任务；任务参与要求没达成 → 照常显示，按钮走 v1.1 第二层（去认证／去充值／去投注）；名额已满 → 照常显示，按钮「额满」（不隐藏）。
-            VIP 与所勾选标签需「完全符合」：勾多个标签＝全部都要有（AND）。累计区间的计算方式沿用既有，不变。
+            VIP 与所勾选标签需「完全符合」：勾多个标签＝全部都要有（AND）。「累计充值／累计有效投注大于等于」为既有配置，计算方式沿用既有，不变。
             黑名单（按帐户）：照既有——任务照常显示（文字照判断），按钮一律反灰不可点；不适用上面的「不显示」。
             未登录：只显示没有任何参与对象限制的任务（全部VIP＋不限标签＋参与要求不限）；点按钮照既有逻辑先触发登录。
             P0「排除包」本期沿用既有黑名单（只按帐户），不做按标签排除。
-        · 「完成KYC／完成KYC部分认证」为选填条件：勾选后才生效——用户须符合所勾选项目才能触发/领取此任务；未勾选则不限制。「符合任一条件／完全符合」为单选，需同时勾选「累计充值区间」与「累计有效投注区间」后才可选，勾齐时预选「完全符合」。区间没勾＝最低／最高反灰不能填；最高低于最低时最高清空重填；最低留空＝0 起算（可设「累计充值 ≤ 某数值」），最高留空＝不设上限。任务条件的进度则在「任务时间」区间内计算，达标即给予奖励。
+        · 「完成KYC／完成KYC部分认证」为选填条件：勾选后才生效——用户须符合所勾选项目才能触发/领取此任务；未勾选则不限制。「符合任一条件／完全符合」为单选，需同时勾选「累计充值大于等于」与「累计有效投注大于等于」后才可选，勾齐时预选「完全符合」。没勾＝输入框反灰不能填。任务条件的进度则在「任务时间」区间内计算，达标即给予奖励。
         · 奖励领取时限／前台「奖励找回」为既有功能，本期逻辑不改（以下照既有说明整理；前台为示意）。
         · 用户手动领取＋奖励领取时限（单位：天）：任务完成未领取，在本期任务重置／结束后 N 天内可于前台「奖励找回」补领；超过 N 天未领视为放弃（不补发；名额已在发送时占用，不释放）。期间发放状态维持「待领取」。
           奖励在完成当期发送时已占该期名额，补领不再占名额、也不会额满（找回列表只会出现可领的奖励）。自动发放不需此设定（栏位隐藏）。
@@ -825,16 +825,12 @@ th.cell-id,td.cell-id{white-space:nowrap;}
           <label class="check-row"><input type="checkbox"/> 完成KYC部分认证</label>
           <div style="display:flex;flex-direction:column;gap:12px;margin-top:6px">
             <div class="range-inline">
-              <label class="check-row" style="margin:0;min-width:170px"><input type="checkbox" id="chkDep" onchange="onQualDep()"/> 累计充值区间</label>
-              <input class="input qMin" type="number" min="0" placeholder="最低" style="max-width:130px" onchange="onQualRange(this)"/>
-              <span>~</span>
-              <input class="input qMax" type="number" min="0" placeholder="最高" style="max-width:130px" onchange="onQualRange(this)"/>
+              <label class="check-row" style="margin:0;min-width:170px"><input type="checkbox" id="chkDep" onchange="onQualDep()"/> 累计充值大于等于</label>
+              <input class="input qMin" type="number" min="0" style="flex:1"/>
             </div>
             <div class="range-inline">
-              <label class="check-row" style="margin:0;min-width:170px"><input type="checkbox" id="chkBet" onchange="onQualDep()"/> 累计有效投注区间</label>
-              <input class="input qMin" type="number" min="0" placeholder="最低" style="max-width:130px" onchange="onQualRange(this)"/>
-              <span>~</span>
-              <input class="input qMax" type="number" min="0" placeholder="最高" style="max-width:130px" onchange="onQualRange(this)"/>
+              <label class="check-row" style="margin:0;min-width:170px"><input type="checkbox" id="chkBet" onchange="onQualDep()"/> 累计有效投注大于等于</label>
+              <input class="input qMin" type="number" min="0" style="flex:1"/>
             </div>
             <div class="range-inline" id="qualBox" style="opacity:.5">
               <span style="min-width:170px">充值及有效投注资格</span>
@@ -1351,7 +1347,7 @@ function onTaskCat(){
   checkGroupTime();
 }
 
-/* ===== 充值/投注区间资格联动 ===== */
+/* ===== 累计充值/投注资格联动 ===== */
 /* 奖励领取时限（既有，本期不改；对应前台「奖励找回」）：仅「用户手动领取」＋任务时间为每日／限时才出现；
    永久、每周、周限时不显示 */
 var CLAIM_LIMIT_TIMES=['每日','限时'];
@@ -1362,22 +1358,17 @@ function onGrant(){
   row.classList.toggle('hidden',!(manual && CLAIM_LIMIT_TIMES.indexOf(t)>-1));
 }
 function onQualDep(){
-  /* 没勾的区间：最低／最高反灰不能填（并清空），避免填了数字却没生效 */
+  /* 没勾的项目：输入框反灰不能填（并清空），避免填了数字却没生效 */
   ['chkDep','chkBet'].forEach(function(id){
     var chk=document.getElementById(id), row=chk.closest('.range-inline');
-    row.querySelectorAll('.qMin,.qMax').forEach(function(i){ i.disabled=!chk.checked; if(!chk.checked) i.value=''; i.style.opacity=chk.checked?'':'.5'; });
+    row.querySelectorAll('.qMin').forEach(function(i){ i.disabled=!chk.checked; if(!chk.checked) i.value=''; i.style.opacity=chk.checked?'':'.5'; });
   });
   var both=document.getElementById('chkDep').checked && document.getElementById('chkBet').checked;
   document.getElementById('qualBox').style.opacity = both?'1':'.5';
   var rs=document.querySelectorAll('.qualRadio');
   rs.forEach(function(r){ r.disabled=!both; if(!both) r.checked=false; });
-  /* 两个区间都勾了：预选「完全符合」，运营可再改 */
+  /* 两个都勾了：预选「完全符合」，运营可再改 */
   if(both && ![].some.call(rs,function(r){ return r.checked; })) rs[1].checked=true;
-}
-/* 区间：最高不可低于最低——填完若最高 < 最低，最高清空重填（最低留空＝0 起算；最高留空＝不设上限）*/
-function onQualRange(inp){
-  var row=inp.closest('.range-inline'), mn=row.querySelector('.qMin'), mx=row.querySelector('.qMax');
-  if(mn.value!=='' && mx.value!=='' && +mx.value < +mn.value) mx.value='';
 }
 
 /* 任务时间：限时＝日期时间区间；周限时＝星期区间；永久／每日／每周（沿用后台既有周期计算）不需额外设定 */

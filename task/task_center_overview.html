@@ -222,17 +222,17 @@
       <tr><td>③ 用户标签</td><td>后台给会员贴的分类（例：TL 小额、TH 高额），<b>会员自己看不到</b>。</td></tr>
       <tr><td>④ 参与资格</td><td>全部是选填，不勾就不限制：<br>
         · 要完成 KYC（或完成部分 KYC）<br>
-        · 过去累计充值在某个范围内<br>
-        · 过去累计有效投注在某个范围内<br>
-        两个范围都勾时，运营选「符合一个就行」或「两个都要符合」。</td></tr>
+        · 过去累计充值大于等于某金额（既有）<br>
+        · 过去累计有效投注大于等于某金额（既有）<br>
+        两个都勾时，运营选「符合任一条件」或「完全符合」（新增）。</td></tr>
     </table></div>
 
     <div class="ex">
-      <div class="ex__hd">例子：任务设定「VIP1 ＋ 标签 TL ＋ 累计充值 ₱1,000～₱10,000」，3 个会员来检查</div>
+      <div class="ex__hd">例子：任务设定「VIP1 ＋ 标签 TL ＋ 累计充值大于等于 ₱1,000」，3 个会员来检查</div>
       <div class="tbl-wrap"><table>
         <tr><th>会员</th><th>情况</th><th>结果</th></tr>
         <tr><td>阿华</td><td>VIP1、有 TL 标签、累计充值 ₱3,000</td><td class="ok">4 关都过，可以参加</td></tr>
-        <tr><td>小林</td><td>VIP1、有 TL 标签、累计充值 ₱50,000</td><td class="no">第 ④ 关没过（充值超出范围）</td></tr>
+        <tr><td>小林</td><td>VIP1、有 TL 标签、累计充值 ₱500</td><td class="no">第 ④ 关没过（充值没达到 ₱1,000）</td></tr>
         <tr><td>阿杰</td><td>VIP1、有 TL 标签，但在黑名单</td><td class="no">第 ① 关就出局，前台看不到这个任务</td></tr>
       </table></div>
     </div>
@@ -353,7 +353,7 @@
     <ol class="form">
       <li>币种</li>
       <li>目标用户：VIP 等级、用户标签 <span class="tag">新增</span></li>
-      <li>参与要求：KYC、累计充值区间、累计投注区间 <span class="tag" style="background:var(--c-orange-l);color:var(--c-orange)">改动</span></li>
+      <li>参与要求：KYC、累计充值大于等于、累计有效投注大于等于（既有）；两个都勾时选「符合任一条件／完全符合」 <span class="tag">新增</span></li>
       <li>资格判定时间 <span class="tag">新增</span></li>
       <li>任务类别：基础任务／任务组 <span class="tag">新增任务组</span></li>
       <li>任务名称</li>
@@ -535,7 +535,7 @@
       <div class="q__bd">
         <div class="row"><span class="row__k">参与要求</span><span>说明写：累计口径＝「注册至任务开始前一秒，不含活动当天」，也就是<b>从注册那天开始算</b>，起点固定。</span></div>
         <div class="row"><span class="row__k">判定时间</span><span>「任务开始前时间」旁边有两个日期栏，说明写「可指定日期区间」，也就是<b>运营可以自己选起讫日</b>。</span></div>
-        <div class="row"><span class="row__k">矛盾点</span><span>两种算法挑出来的人不一样。例：门槛「累计充值 ₱1,000～₱10,000」，某会员去年充了 ₱50,000、8 月只充 ₱3,000 —— 从注册算他<b>不符合</b>，只算 8 月他<b>符合</b>。</span></div>
+        <div class="row"><span class="row__k">矛盾点</span><span>两种算法挑出来的人不一样。例：门槛「累计充值大于等于 ₱10,000」，某会员去年充了 ₱50,000、8 月只充 ₱3,000 —— 从注册算他<b>符合</b>，只算 8 月他<b>不符合</b>。</span></div>
         <div class="ask"><b>请确认：</b>
           <ol>
             <li>照判定时间：用运营选的日期区间来算，没选就从注册算起；</li>
