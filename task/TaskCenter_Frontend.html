@@ -201,7 +201,7 @@ img{max-width:100%;display:block;}
 .ms__box{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:.9rem;background:#fff;border:2px solid #f3d69c;box-sizing:border-box;filter:grayscale(1);opacity:.55;}
 .is-can{cursor:pointer;}
 .is-can .ms__box{filter:none;opacity:1;border-color:#ff8a1f;box-shadow:0 0 0 3px rgba(255,138,31,.18);animation:msBounce 1.2s ease-in-out infinite;}
-.is-done .ms__box,.is-proc .ms__box{filter:none;opacity:1;border-color:#ffc173;}
+.is-done .ms__box{filter:none;opacity:1;border-color:#ffc173;}
 /* 额外奖励已领取：宝箱换成打勾 */
 .is-done .ms__box{font-size:0;background:#22b07d;border-color:#22b07d;}
 .is-done .ms__box::after{content:"✓";font-size:.95rem;font-weight:900;color:#fff;line-height:1;}
@@ -686,7 +686,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           <button class="grp__more" onclick="toggleGroup(this)">查看全部（3） ⌄</button>
         </article>
 
-        <!-- 任务组 · 永久｜人工审核（子任务处理中／未通过示例：关注Facebook 上传证明未通过）｜信息完善＋其他类，子任务配满 10 个＝后台上限；前面子任务已完成的显示示例；永久不设名额，前台不显示名额（新增情境）｜后台 1095｜永久｜人工审核｜排序 103 -->
+        <!-- 任务组 · 永久｜人工审核（只审子任务，额外奖励不用审核；子任务处理中／未通过示例：关注Facebook 上传证明未通过）｜信息完善＋其他类，子任务配满 10 个＝后台上限；前面子任务已完成的显示示例；永久不设名额，前台不显示名额（新增情境）｜后台 1095｜永久｜人工审核｜排序 103 -->
         <article class="card card--quota grp" data-time="perm">
           <span class="card__badge card__badge--grp">任务组</span>
           <div class="grp__hd">
@@ -1003,7 +1003,7 @@ function setClaimed(el){
   el.classList.add(review ? 'chip-st--proc' : 'chip-st--done');
   updateTabDots();
 }
-/* 额外奖励宝箱：可领取时点宝箱即领取；领完一律打勾（不分是否需审核）*/
+/* 额外奖励宝箱：不用审核（宝箱不会出现处理中／未通过）；领取照后台「奖励发放方式」：自动发放＝达成直接入帐、宝箱直接打勾；用户手动领取＝宝箱跳动，点了才领，领完打勾 */
 function claimTier(col,label){
   if(!col.classList.contains('is-can')) return;
   document.getElementById('extraAmt').textContent = popAmt(label);
