@@ -409,7 +409,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <div class="lazy__grid">
               <div class="lazy__card"><b class="lazy__t">玩家怎么玩</b>
                 ① 首页 Deposit 有 BONUS 条 → 进存款页<br>
-                ② 勾复存券、输入金额（达门槛），券面显示要打多少码<br>
+                ② 勾复存券、输入金额（达门槛）<span class="rev">；券面打码金额只看金额，达门槛就显示</span><br>
                 ③ 送出＝用掉一次；钱入账才发奖<br>
                 ④ 券换下一笔；当天用完或不发奖日券不出现；00:00 重置</div>
               <div class="lazy__card"><b class="lazy__t">后台要配（第 2 章）</b>
@@ -439,12 +439,15 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td class="nw">10/1</td><td class="nw">新增</td><td>星期可设成不发奖（例如只发一三五或二四六）</td><td class="nw">2.3.9、4.3.4</td></tr>
                 <tr><td class="nw">10/2</td><td class="nw">异动</td><td>券面改成直接显示打码金额</td><td class="nw">4.2.5</td></tr>
                 <tr><td class="nw">10/6</td><td class="nw">调整</td><td>打码金额的充值流水加乘 VIP 稽核比例</td><td class="nw">4.2.5</td></tr>
-                <tr><td class="nw">10/6</td><td class="nw">调整</td><td>没勾券时，券面打码金额显示 ₱0</td><td class="nw">4.2.5、4.2.6</td></tr>
                 <tr><td class="nw">10/6</td><td class="nw">调整</td><td>优惠券排序：彩金 → 积分 → 券类型，同类型比 %</td><td class="nw">4.2.2</td></tr>
                 <tr><td class="nw">10/6</td><td class="nw">调整</td><td>首页 Deposit 按钮改成上方黄色 BONUS 条</td><td class="nw">4.1</td></tr>
                 <tr><td class="nw">10/6</td><td class="nw">新增</td><td>进行中的活动改关闭，先跳确认弹窗；已勾券送出的照发</td><td class="nw">2.2.5</td></tr>
                 <tr><td class="nw">10/6</td><td class="nw">调整</td><td>奖金所需流水留空 → 只算充值流水</td><td class="nw">2.4、4.2.5</td></tr>
                 <tr><td class="nw">10/6</td><td class="nw">调整</td><td>后台中途改配置：已送出的照旧</td><td class="nw">3.3</td></tr>
+                <tr><td class="nw">10/12</td><td class="nw">更正</td><td>券名照现有前台：<code>Top-Up Coupon</code></td><td class="nw">4.2.2、4.2.5</td></tr>
+                <tr><td class="nw">10/12</td><td class="nw">更正</td><td>原型券面样式照现有前台（白→淡蓝渐层、上下半圆缺口、打码金额橘字）</td><td class="nw">4.2.2</td></tr>
+                <tr><td class="nw">10/12</td><td class="nw">更正</td><td>试算条照现有前台：只有 <code>You Will Receive An Extra</code> ＋ 金币 ＋ 金额；没勾券或没达门槛就不显示</td><td class="nw">4.2.4、4.2.6</td></tr>
+                <tr><td class="nw">10/12</td><td class="nw">调整</td><td>券面打码金额只看输入金额和门槛，<b>不看有没有勾券</b></td><td class="nw">4.2.4、4.2.5、4.2.6</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1254,9 +1257,9 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             </table>
           </div>
 
-          <h3 class="sub rev">4.2.2 （10/6 调整）Promotions 优惠券区 <span class="tag tag--change">需支援逐笔数值</span></h3>
+          <h3 class="sub rev">4.2.2 （10/6 调整、10/12 更正）Promotions 优惠券区 <span class="tag tag--change">需支援逐笔数值</span></h3>
           <p>这一区<b>全部照现况</b>（排序、一次只能勾一张、没券就整区收起）。<br>
-             本活动只多一张 <code>Re-deposit Coupon</code>：<b>最多一张</b>，算<b>彩金类</b>，<span class="rev">位置照下面的排序。</span></p>
+             本活动只多一张<b>复存券</b>（<span class="rev">券名 <code>Top-Up Coupon</code>，照现有</span>）：<b>最多一张</b>，算<b>彩金类</b>，<span class="rev">位置照下面的排序。</span></p>
           <div class="tbl-scroll">
             <table class="t">
               <thead><tr><th class="nw">券怎么排</th><th>规则</th></tr></thead>
@@ -1303,14 +1306,14 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             </table>
           </div>
 
-          <h3 class="sub">4.2.4 券 · 怎样才算参加</h3>
+          <h3 class="sub rev">4.2.4 （10/12 更正、调整）券 · 怎样才算参加</h3>
           <div class="tbl-scroll">
             <table class="t">
               <tbody>
                 <tr><th class="nw">计次与发奖</th>
                     <td><b>勾券 ＋ 送出</b> → 算用掉一次。<br>
                         <b>钱入账成功</b> → 才发奖。细节见 3.1。</td></tr>
-                <tr><th class="nw">没勾券</th><td><b>不计次、不发奖</b>。详情页高亮不动，券面数字不变。</td></tr>
+                <tr><th class="nw">没勾券</th><td><b>不计次、不发奖</b>。详情页高亮不动，<span class="rev">券面不换下一笔（打码金额照样跟著输入金额算，见 4.2.5）</span>。</td></tr>
                 <tr><th class="nw">券绑订单</th>
                     <td>一送出，券就<b>绑在这笔订单上、算用掉</b>。<br>
                         同一笔订单<b>只发一次奖</b>；券<b>不退回</b>。</td></tr>
@@ -1320,14 +1323,14 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><th class="nw">停留跨日 <span class="tag tag--same">同每日首充</span></th>
                     <td>停在存款页时过了 00:00（GMT+8）→ <b>挡下当下操作，自动刷新</b>。<br>
                         刷新后：券面和试算换成<b>新一天那个星期的第 1 笔</b>。<br>
-                        例：周一晚上停著，跨到周二 → 显示<b>周二的第 1 笔</b>。<span class="rev"><br>新的一天<b>不发奖</b> → 刷新后券不出现，试算条回到 <code>Select a coupon to see your bonus</code>。</span></td></tr>
+                        例：周一晚上停著，跨到周二 → 显示<b>周二的第 1 笔</b>。<span class="rev"><br>新的一天<b>不发奖</b> → 刷新后券不出现。</span><span class="rev">试算条也不显示。</span></td></tr>
                 <tr><th class="nw">勾选行为 <span class="tag tag--same">同现况</span></th>
                     <td>只能勾一张（勾别张会自动取消前一张）。取消勾选，<b>金额保留</b>。</td></tr>
               </tbody>
             </table>
           </div>
 
-          <h3 class="sub rev">4.2.5 （10/2 异动、10/6 调整）券 · 数字从哪来 <span class="tag tag--change">券面改显示打码金额</span></h3>
+          <h3 class="sub rev">4.2.5 （10/2 异动、10/6 调整、10/12 调整）券 · 数字从哪来 <span class="tag tag--change">券面改显示打码金额</span></h3>
           <p>券面显示的是这位玩家<b>下一笔</b>的数字，取后台这一格：<br>
              <b>今天星期几 × VIP 等级 × 渠道 × 第（今天已用次数 ＋ 1）笔</b><br>
              VIP 等级取现在生效的那一级（见 3.3）。</p>
@@ -1340,7 +1343,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td class="nw"><code>Capped At</code></td><td><b>上限金额</b>（一样取所属渠道那一栏）</td></tr>
                 <tr><td class="nw"><code>Min Deposit</code></td><td><b>最低存款金额</b>（三个渠道共用）；也是金额区「低于下限」的门槛（见 4.2.6）</td></tr>
                 <tr class="rev"><td class="nw"><code>Conditions:</code><br><code>Complete ₱X Bets To Withdraw</code></td><td>直接显示<b>系统算好的打码金额</b>（算法见下表），取代原本的 <code>Turnover: 3x turnover of deposited and bonus</code>。文案照设计稿。</td></tr>
-                <tr><td class="nw"><code>Re-deposit Coupon</code>、<code>TOU</code></td><td><b>后台不配</b>：券名前台写死；TOU 是现有共用元件。</td></tr>
+                <tr><td class="nw"><span class="rev"><code>Top-Up Coupon</code></span>、<code>TOU</code></td><td><b>后台不配</b>：券名前台写死；TOU 是现有共用元件。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1362,10 +1365,10 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                         · 本金＝充值金额；奖金＝这笔充值算出的奖金（见 3.2，有上限）。</td></tr>
                 <tr><th class="nw">充值金额用哪个</th>
                     <td>用 Payment Amount <b>现在输入的金额</b>，即时算，不用按 Submit。<br>
-                        <span class="rev">· <b>没勾券 → 显示 <code>₱0</code></b>（这笔不带券、不发奖，不用打活动的码）（10/6 调整）</span><br>
                         · 还没输入 → 显示 <code>₱0</code><br>
                         · 低于这一笔的 <code>Min Deposit</code> → 显示 <code>₱0</code><br>
-                        · 达到门槛 → 开始算</td></tr>
+                        · 达到门槛 → 开始算<br>
+                        <span class="rev"><b>只看金额，不看有没有勾券</b>：没勾券也照金额算。勾券只决定送出时带不带券（计次、发奖）。</span></td></tr>
                 <tr><th class="nw">换下一笔时</th>
                     <td>百分比、上限、门槛变了，<b>X 跟著重算</b>。</td></tr>
                 <tr><th class="nw">金额格式</th>
@@ -1388,9 +1391,9 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               </tbody>
             </table>
           </div>
-          <p class="hint rev">其他情况：没勾券、没输入、或低于门槛 500 → <b>₱0</b>；VIP 流水不计算 → ① 改成 1,000 × 80% ＝ 800 → <b>₱4,400</b>。<span class="rev">奖金所需流水留空 → 只算 ① ＝ <b>₱400</b>。</span></p>
+          <p class="hint rev">其他情况：没输入、或低于门槛 500 → <b>₱0</b>；VIP 流水不计算 → ① 改成 1,000 × 80% ＝ 800 → <b>₱4,400</b>。<span class="rev">奖金所需流水留空 → 只算 ① ＝ <b>₱400</b>。</span></p>
 
-          <h3 class="sub rev">4.2.6 （10/2 异动、10/6 调整）优惠券 ＋ Payment Amount 交互 <span class="tag tag--change">需支援逐笔数值</span></h3>
+          <h3 class="sub rev">4.2.6 （10/2 异动、10/6 调整、10/12 调整）优惠券 ＋ Payment Amount 交互 <span class="tag tag--change">需支援逐笔数值</span></h3>
           <p>这一区<b>照现有逻辑</b>：角标、试算条、「低于下限」红字、快捷金额都是现有元件。<br>
              本活动只是<b>数字全取这张券的</b>（见 4.2.5）；券面换笔，这一区跟著换。</p>
           <p>玩家从进页到送出，会依序看到下面几种状态（例：券 5%／上限 50／门槛 100）：</p>
@@ -1401,18 +1404,18 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td>1</td><td class="nw">刚进来<br>没勾券、没输入</td>
                     <td><span class="rev">打码金额：<code>₱0</code></span><br>
                         角标：不显示<br>
-                        试算条：<code>Select a coupon to see your bonus</code><br>
+                        <span class="rev">试算条：不显示</span><br>
                         Submit：不能按</td></tr>
                 <tr><td>2</td><td class="nw">勾券<br>没输入</td>
                     <td><span class="rev">打码金额：<code>₱0</code></span><br>
                         角标：不显示<br>
-                        试算条：<code>Min Deposit 100.00 to get 5% bonus</code><br>
+                        <span class="rev">试算条：不显示</span><br>
                         Submit：不能按</td></tr>
                 <tr><td>3</td><td class="nw">勾券<br>输入 ₱10<br>（低于门槛）</td>
                     <td><span class="rev">打码金额：<code>₱0</code></span><br>
                         角标：<b>不显示</b><br>
                         输入框下方：红字 <code>Deposit amount less than min limit.</code><br>
-                        试算条：同第 2 列<br>
+                        <span class="rev">试算条：不显示</span><br>
                         Submit：不能按</td></tr>
                 <tr><td>4</td><td class="nw">勾券<br>输入 ₱100<br>（达门槛）</td>
                     <td><span class="rev">打码金额：照金额算（见 4.2.5）</span><br>
@@ -1422,17 +1425,17 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td>5</td><td class="nw">勾券<br>输入 ₱20,000<br>（超过上限）</td>
                     <td><span class="rev">打码金额：照金额算</span><br>
                         角标：每一颗都标<br>
-                        试算条：显示上限 <code>50</code>，后面加 <code>(capped)</code>；刚好等于上限也加<br>
+                        <span class="rev">试算条：金额显示上限 <code>50</code></span><br>
                         Submit：能按</td></tr>
                 <tr><td>6</td><td class="nw">没勾券<br>输入 ₱100</td>
-                    <td><span class="rev">打码金额：<code>₱0</code>（10/6 调整）</span><br>
+                    <td><span class="rev">打码金额：照金额算（见 4.2.5）</span><br>
                         角标：不显示<br>
-                        试算条：<code>Select a coupon to see your bonus</code><br>
+                        <span class="rev">试算条：不显示</span><br>
                         Submit：能按（不带券：不计次、不发奖）</td></tr>
                 <tr><td>7</td><td class="nw">取消勾选</td>
-                    <td><span class="rev">打码金额：变回 <code>₱0</code>（10/6 调整）</span><br>
+                    <td><span class="rev">打码金额：不变，照金额算（见 4.2.5）</span><br>
                         角标、红字：收起<br>
-                        试算条：回到 <code>Select a coupon to see your bonus</code>；<b>输入的金额保留</b><br>
+                        <span class="rev">试算条：收起</span>；<b>输入的金额保留</b><br>
                         Submit：同第 6 列</td></tr>
                 <tr><td>8</td><td class="nw">勾券<br>按 Submit</td>
                     <td>＝<b>用掉一次</b>（见 3.1），之后流程照现况。<br>
@@ -1447,7 +1450,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><th class="nw">快捷金额</th>
                     <td><code>+10</code> <code>+50</code> <code>+100</code> <code>+500</code> <code>+1000</code> <code>+10000</code> <code>+20000</code>：点一下<b>加</b>到输入框（照现况），加完照上表重新判断。</td></tr>
                 <tr><th class="nw">试算金额</th>
-                    <td>算法同 3.2；显示照现况：金币图示＋数字，整数不补 <code>.00</code>。</td></tr>
+                    <td>算法同 3.2；显示照现况：<span class="rev">橘红底 <code>You Will Receive An Extra</code> ＋ 金币图示 ＋ 金额</span>，整数不补 <code>.00</code>。<br><span class="rev">勾券且达门槛才出现，其他情况不显示。</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -4494,8 +4497,6 @@ refreshWeekPeriod();    // 依活动时间算出七天各轮到几次
   --c-primary:      #2f4fd8;
   --c-primary-dark: #2440b8;
   --c-link:         #2f6fe0;
-  --c-coupon-a:     #dcebfb;   /* 券左半淡蓝 */
-  --c-coupon-b:     #cfe3fa;   /* 券右半蓝 */
   --c-coupon-line:  #9dbde8;
   --c-accent:       #ef4136;   /* 金额红字、TOU、角标 */
   --c-accent-2:     #f5871f;   /* 试算条左侧橘 */
@@ -4822,32 +4823,43 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 }
 .coupon-check[aria-disabled="true"] { border-color: #ccd0d6; background: var(--c-mute-bg); cursor: not-allowed; }
 
+/* 券面照现有前台：白→淡蓝渐层、上下半圆缺口、虚线分隔 */
 .coupon {
   flex: 1 1 auto; min-width: 0; position: relative;
   display: flex; align-items: stretch;
-  background: linear-gradient(90deg, var(--c-coupon-a) 0%, var(--c-coupon-a) 28%, var(--c-coupon-b) 28%, var(--c-coupon-b) 100%);
-  border: 1px solid #a9c6ea;
+  background: linear-gradient(90deg, #f2f7fe 0%, #dbe9fb 100%);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
 .coupon__left {
-  flex: 0 0 104px;
+  flex: 0 0 96px; position: relative;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: var(--sp-3) var(--sp-2);
   border-right: 1px dashed var(--c-coupon-line);
   text-align: center;
 }
-.coupon__pct  { color: var(--c-primary); font-size: var(--fs-xl); font-weight: 700; line-height: 1.2; }
-.coupon__kind { color: var(--c-primary); font-size: var(--fs-sm); line-height: 1.35; }
+/* 虚线上下两端的半圆缺口（颜色＝页面底色） */
+.coupon__left::before,
+.coupon__left::after {
+  content: ""; position: absolute; right: -8px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--c-surface);
+}
+.coupon__left::before { top: -8px; }
+.coupon__left::after  { bottom: -8px; }
+.coupon__pct  { color: var(--c-primary); font-size: 1.333rem; font-weight: 700; line-height: 1.2; }
+.coupon__kind { color: var(--c-primary); font-size: var(--fs-base); line-height: 1.3; }
 .coupon__right { flex: 1 1 auto; min-width: 0; padding: var(--sp-3) var(--sp-3) var(--sp-3) var(--sp-4); }
-.coupon__cap { margin: 0; font-size: var(--fs-md); font-weight: 700; }
-.coupon__cap b { color: var(--c-accent); font-weight: 700; }
-.coupon__meta { margin: 0; color: var(--c-text-2); font-size: var(--fs-xs); line-height: 1.65; }
+.coupon__cap { margin: 0 0 2px; padding-right: 44px; color: var(--c-text); font-size: var(--fs-md); font-weight: 700; }
+.coupon__cap b { color: var(--c-accent); font-size: 1.111rem; font-weight: 700; }
+.coupon__meta { margin: 0; color: #7a8394; font-size: var(--fs-sm); line-height: 1.5; }
+.coupon__bets { color: #f0962e; }
 .coupon__tou {
-  position: absolute; top: 10px; right: 10px;
-  padding: 2px var(--sp-2);
+  position: absolute; top: 12px; right: 12px;
+  padding: 2px 10px;
   background: var(--c-accent); color: #fff;
-  border-radius: 11px; font-size: var(--fs-xs); font-weight: 700;
+  border-radius: 12px; font-size: var(--fs-sm); font-weight: 400;
+  box-shadow: 0 3px 6px rgba(239, 65, 54, .3);
 }
 /* 今日领满时这张券整列不显示，所以没有「转灰」这个状态 */
 .coupon-row[hidden] { display: none; }
@@ -4891,7 +4903,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 .amount-err { margin: var(--sp-2) 0 0; color: var(--c-accent); font-size: var(--fs-base); }
 .amount-err[hidden] { display: none; }
 
-/* 橘红渐层的试算条 */
+/* 橘红渐层的试算条：只有勾券且达门槛才出现 */
 .extra-bar {
   display: flex; align-items: center; justify-content: center; gap: var(--sp-2);
   margin: var(--sp-4) calc(var(--sp-4) * -1) 0;
@@ -4900,13 +4912,12 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
   color: #fff; font-size: var(--fs-md); font-weight: 700;
   text-align: center;
 }
-.extra-bar--none { background: #d9dce1; color: #6d727a; }
+.extra-bar[hidden] { display: none; }
 .extra-bar__coin {
   display: inline-flex; align-items: center; justify-content: center;
   width: 18px; height: 18px; border-radius: 50%;
   background: #f6b73c; color: #fff; font-size: var(--fs-xs); font-weight: 700;
 }
-.extra-bar__cap { font-size: var(--fs-xs); font-weight: 600; opacity: .95; }
 
 .btn-submit {
   display: block; width: 100%; margin-top: var(--sp-4);
@@ -5214,19 +5225,19 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 
         <!-- 复存券（新增） -->
         <div class="coupon-row" id="rowRepeat" data-usable="no">
-          <span class="coupon-check" id="chkRepeat" role="checkbox" aria-checked="false" aria-disabled="true" tabindex="0" aria-label="Re-deposit Coupon"></span>
+          <span class="coupon-check" id="chkRepeat" role="checkbox" aria-checked="false" aria-disabled="true" tabindex="0" aria-label="Top-Up Coupon"></span>
           <article class="coupon">
             <span class="coupon__tou">TOU</span>
             <div class="coupon__left">
               <span class="coupon__pct" id="rPct">20%</span>
-              <span class="coupon__kind">Re-deposit<br>Coupon</span>
+              <span class="coupon__kind">Top-Up<br>Coupon</span>
             </div>
             <div class="coupon__right">
-              <p class="coupon__cap">Capped At <b id="rCap">₱2,000</b></p>
+              <p class="coupon__cap">Capped At <b>₱ <span id="rCap">2,000</span></b></p>
               <!-- 打码金额直接算好给玩家看（规格 4.2.5）：跟著 Payment Amount 输入的金额即时变 -->
               <p class="coupon__meta">
                 Conditions:<br>
-                Complete ₱<span id="rBets">0</span> Bets To Withdraw<br>
+                Complete <span class="coupon__bets">₱<span id="rBets">0</span></span> Bets To Withdraw<br>
                 Min Deposit <span id="rMin">500.00</span>
               </p>
             </div>
@@ -5252,8 +5263,8 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
         <input class="amount-box" id="amount" type="text" inputmode="decimal" value="₱ 0" aria-label="Deposit amount">
         <p class="amount-err" id="amountErr" hidden>Deposit amount less than min limit.</p>
 
-        <p class="extra-bar extra-bar--none" id="extraBar" style="margin-bottom:0">
-          <span id="extraText">Select a coupon to see your bonus</span>
+        <p class="extra-bar" id="extraBar" style="margin-bottom:0" hidden>
+          You Will Receive An Extra <span class="extra-bar__coin" aria-hidden="true">₱</span><span id="extraAmt">0</span>
         </p>
 
         <button type="button" class="btn-submit" id="btnSubmit">Submit</button>
@@ -5336,10 +5347,9 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 <script>
 /* ==========================================================================
    原型的 JavaScript
-   做三件事：
+   做两件事：
      1. 依「玩家今天存到第几笔」切换券的可用状态
-     2. 勾选券时，角标、试算条、最低金额门槛跟著换
-     3. 金额输入时即时试算奖励，示范上限与舍去规则
+     2. 勾选券时，角标、试算条、最低金额门槛跟著换；券面打码金额只跟输入金额走，勾不勾都一样
    没有连后端，资料都是假的。
    ========================================================================== */
 
@@ -5490,9 +5500,9 @@ function renderPayment() {
   const amount = readAmount();
 
   // 券面的打码金额跟著输入金额走
-  // 没勾券 → 显示 0（这笔不带券、不发奖）；勾了券才照输入金额算
+  // 只看输入金额：没输入或低于门槛 → 0，达门槛就照金额算；勾不勾券都一样
   const rr = currentRepeat();
-  if (rr) document.getElementById('rBets').textContent = (selected === 'repeat') ? amt(calcBets(amount, rr)) : '0';
+  if (rr) document.getElementById('rBets').textContent = amt(calcBets(amount, rr));
 
   const belowMin = !!c && amount > 0 && amount < c.min;
 
@@ -5506,23 +5516,9 @@ function renderPayment() {
   document.getElementById('amount').classList.toggle('is-error', belowMin);
   document.getElementById('btnSubmit').disabled = belowMin || amount <= 0;
 
-  const bar = document.getElementById('extraBar');
-  const txt = document.getElementById('extraText');
-
-  if (!c) {
-    bar.className = 'extra-bar extra-bar--none';
-    txt.textContent = 'Select a coupon to see your bonus';
-  } else if (belowMin || amount <= 0) {
-    bar.className = 'extra-bar extra-bar--none';
-    txt.textContent = 'Min Deposit ' + money(c.min) + ' to get ' + c.pct + '% bonus';
-  } else {
-    const bonus = calcBonus(amount, c.pct, c.cap);
-    const hitCap = amount * c.pct / 100 >= c.cap;   // 刚好等于上限也标 (capped)
-    bar.className = 'extra-bar';
-    // 金额前面是金币图示（照现有前台），数字不补 .00
-    txt.innerHTML = 'You Will Receive An Extra <span class="extra-bar__coin" aria-hidden="true">₱</span>' + amt(bonus)
-      + (hitCap ? ' <span class="extra-bar__cap">(capped)</span>' : '');
-  }
+  // 试算条：勾了券、金额达门槛才出现；超过上限就显示上限（数字不补 .00）
+  document.getElementById('extraBar').hidden = !showBadge;
+  if (showBadge) document.getElementById('extraAmt').textContent = amt(calcBonus(amount, c.pct, c.cap));
 }
 
 /* --------------------------------------------------------------------------
@@ -5609,7 +5605,7 @@ function render() {
   // 券面的百分比、上限、最低金额，都跟著「下一笔是第几笔」变
   if (r) {
     document.getElementById('rPct').textContent = r.pct + '%';
-    document.getElementById('rCap').textContent = '₱' + amt(r.cap);
+    document.getElementById('rCap').textContent = amt(r.cap);
     document.getElementById('rMin').textContent = money(r.min);
   }
 

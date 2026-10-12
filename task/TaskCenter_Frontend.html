@@ -1043,7 +1043,7 @@ function setTab(btn){
   document.querySelectorAll('#taskTabs .pill').forEach(function(p){ p.classList.toggle('pill--on',p===btn); });
   var t=btn.dataset.tab;
   document.querySelectorAll('.task-list > article').forEach(function(a){ a.hidden = !(t==='all' || tabOf(a)===t); });
-  var tip={perm:'*任务完成后不会重置',daily:'*任务将于每日12AM重置',weekly:'*任务将于每周一12AM重置',limit:'*任务于活动期间内有效，结束后不会重置'}[t];
+  var tip={perm:'*任务完成后不会重置',daily:'*任务将于每日12:00 AM重置',weekly:'*任务将于每周一12:00 AM重置',limit:'*任务于活动期间内有效，结束后不会重置'}[t];
   var el=document.getElementById('tabTip'); el.textContent=tip||''; el.hidden=!tip;
 }
 function updateTabDots(){
