@@ -617,7 +617,7 @@ VIP 等级取现在生效的那一级（见 3.3）。
 | 百分比 | 奖励配置 → 玩家**所属渠道**那一栏（平台／glife／maya）的「每日复存奖励」。 |
 | `Capped At` | **上限金额**（一样取所属渠道那一栏） |
 | `Min Deposit` | **最低存款金额**（三个渠道共用）；也是金额区「低于下限」的门槛（见 4.2.6） |
-| ▲ `Conditions:`<br>`Complete ₱X Bets To Withdraw` | 直接显示**系统算好的打码金额**（算法见下表），取代原本的 `Turnover: 3x turnover of deposited and bonus`。文案照设计稿。 |
+| ▲ `Conditions:`<br>`Complete ₱{{a}} Bets To Withdraw` | 直接显示**系统算好的打码金额**（算法见下表），取代原本的 `Turnover: 3x turnover of deposited and bonus`。文案照设计稿。{{a}}＝打码金额 X。 |
 | ▲ `Top-Up Coupon`、`TOU` | **后台不配**：券名前台写死；TOU 是现有共用元件。 |
 
 券面文案太长用「…」截断；**百分比和 `Capped At` 不能被挤掉**。
@@ -739,7 +739,7 @@ VIP 等级取现在生效的那一级（见 3.3）。
 | A135 | 立即存款领取奖金！<br>（存款页 banner · 4.2.1） | Deposit & Claim Your Bonus Now! | Mag-deposit at Kunin ang Bonus Mo Ngayon! | Nạp tiền và nhận thưởng ngay! | Pag-deposit ug Kuhaa ang Imong Bonus Karon! |
 | A136 | 查看<br>（存款页 banner 按钮 · 4.2.1） | View | Tingnan | Xem | Tan-awa |
 | A137 | 条件：<br>（存款页券面 · 4.2.5） | Conditions: | Mga Kondisyon: | Điều kiện: | Mga Kondisyon: |
-| A138 | 完成 ₱X 投注即可提款<br>（存款页券面 · 4.2.5；₱X＝打码金额） | Complete ₱X Bets To Withdraw | Tapusin ang ₱X na Taya Para Mag-withdraw | Hoàn thành cược ₱X để rút tiền | Kompletoha ang ₱X nga Pusta Aron Maka-withdraw |
+| A138 | 完成 ₱{{a}} 投注即可提款<br>（存款页券面 · 4.2.5；₱{{a}}＝打码金额） | Complete ₱{{a}} Bets To Withdraw | Tapusin ang ₱{{a}} na Taya Para Mag-withdraw | Hoàn thành cược ₱{{a}} để rút tiền | Kompletoha ang ₱{{a}} nga Pusta Aron Maka-withdraw |
 | A139 | 奖金 %<br>（详情页统计格、清单栏名 · 4.3） | Bonus % | Bonus % | Thưởng % | Bonus % |
 | A140 | 最高奖金<br>（详情页统计格、清单栏名 · 4.3） | Max Bonus | Max na Bonus | Thưởng tối đa | Max nga Bonus |
 | A141 | 存款笔次<br>（详情页清单栏名 · 4.3） | Deposit No. | Blg. ng Deposit | Lần nạp | Numero sa Deposit |
