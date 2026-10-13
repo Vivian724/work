@@ -310,6 +310,12 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 .rev b, .rev code { color: inherit; }
 .sub.rev, [id^="p-f"] h4.sub.rev { color: var(--c-danger); }
 
+/* 翻译表：固定栏宽，放不下就左右滑，不挤成直排 */
+.t--i18n { min-width: 820px; table-layout: fixed; }
+.t--i18n th:nth-child(1) { width: 56px; }
+.t--i18n th:nth-child(2) { width: 150px; }
+.i18n-pos { display: block; margin-top: 2px; color: var(--c-text-3); font-size: var(--fs-xs); }
+
 /* 表格底下的补充说明。灰字、比内文小一号，但仍在规范的 12px 底限之上。 */
 .hint {
   margin: calc(var(--sp-2) * -1) 0 var(--sp-4);
@@ -448,6 +454,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td class="nw">10/12</td><td class="nw">更正</td><td>原型券面样式照现有前台（白→淡蓝渐层、上下半圆缺口、打码金额橘字）</td><td class="nw">4.2.2</td></tr>
                 <tr><td class="nw">10/12</td><td class="nw">更正</td><td>试算条照现有前台：只有 <code>You Will Receive An Extra</code> ＋ 金币 ＋ 金额；没勾券或没达门槛就不显示</td><td class="nw">4.2.4、4.2.6</td></tr>
                 <tr><td class="nw">10/12</td><td class="nw">调整</td><td>券面打码金额只看输入金额和门槛，<b>不看有没有勾券</b></td><td class="nw">4.2.4、4.2.5、4.2.6</td></tr>
+                <tr><td class="nw">10/12</td><td class="nw">新增</td><td>翻译：存款页 banner、券面、详情页的新文案（中／英／菲／越／宿雾）</td><td class="nw">4.4</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1562,6 +1569,30 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td class="nw">页尾活动说明</td><td><b>照常显示</b>（同 4.3.1）。</td></tr>
                 <tr><td class="nw">未登入</td><td><b>一样</b>，只剩上面这几样。</td></tr>
                 <tr><td class="nw">PC 弹窗</td><td><b>一样</b>，少了两格和清单，其他不变。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <!-- ============================================================
+             4.4 翻译
+             ============================================================ -->
+        <article class="panel" id="p-i18n">
+          <div class="panel__head"><span class="panel__num">4.4</span><h2 class="panel__title rev">前台 · 翻译（10/12 新增）</h2><span class="tag tag--new">新增</span></div>
+          <p class="lede">本活动新增的前台文案，跟著玩家选的语系显示。<b>英文照现有，一字不改</b>；其他语系照下表。</p>
+          <div class="tbl-scroll">
+            <table class="t t--i18n">
+              <thead><tr><th class="nw">key</th><th>zh（位置）</th><th>en</th><th>ph</th><th>vi</th><th>ceb</th></tr></thead>
+              <tbody>
+                <tr><td class="nw">A135</td><td>立即存款领取奖金！<span class="i18n-pos">存款页 banner · 4.2.1</span></td><td>Deposit &amp; Claim Your Bonus Now!</td><td>Mag-deposit at Kunin ang Bonus Mo Ngayon!</td><td>Nạp tiền và nhận thưởng ngay!</td><td>Pag-deposit ug Kuhaa ang Imong Bonus Karon!</td></tr>
+                <tr><td class="nw">A136</td><td>查看<span class="i18n-pos">存款页 banner 按钮 · 4.2.1</span></td><td>View</td><td>Tingnan</td><td>Xem</td><td>Tan-awa</td></tr>
+                <tr><td class="nw">A137</td><td>条件：<span class="i18n-pos">存款页券面 · 4.2.5</span></td><td>Conditions:</td><td>Mga Kondisyon:</td><td>Điều kiện:</td><td>Mga Kondisyon:</td></tr>
+                <tr><td class="nw">A138</td><td>完成 ₱X 投注即可提款<span class="i18n-pos">存款页券面 · 4.2.5<br>₱X＝打码金额</span></td><td>Complete ₱X Bets To Withdraw</td><td>Tapusin ang ₱X na Taya Para Mag-withdraw</td><td>Hoàn thành cược ₱X để rút tiền</td><td>Kompletoha ang ₱X nga Pusta Aron Maka-withdraw</td></tr>
+                <tr><td class="nw">A139</td><td>奖金 %<span class="i18n-pos">详情页统计格、清单栏名 · 4.3</span></td><td>Bonus %</td><td>Bonus %</td><td>Thưởng %</td><td>Bonus %</td></tr>
+                <tr><td class="nw">A140</td><td>最高奖金<span class="i18n-pos">详情页统计格、清单栏名 · 4.3</span></td><td>Max Bonus</td><td>Max na Bonus</td><td>Thưởng tối đa</td><td>Max nga Bonus</td></tr>
+                <tr><td class="nw">A141</td><td>存款笔次<span class="i18n-pos">详情页清单栏名 · 4.3</span></td><td>Deposit No.</td><td>Blg. ng Deposit</td><td>Lần nạp</td><td>Numero sa Deposit</td></tr>
+                <tr><td class="nw">A142</td><td>合格存款<span class="i18n-pos">详情页清单栏名 · 4.3</span></td><td>Eligible Deposit</td><td>Kwalipikadong Deposit</td><td>Khoản nạp hợp lệ</td><td>Kwalipikado nga Deposit</td></tr>
+                <tr><td class="nw">A143</td><td>恭喜完成今日任务！<span class="i18n-pos">详情页完成提示 · 4.3</span></td><td>Congrats on completing today's tasks!</td><td>Binabati kita sa pagtapos ng mga gawain ngayong araw!</td><td>Chúc mừng hoàn thành nhiệm vụ hôm nay!</td><td>Pahalipay sa pagkompleto sa mga buluhaton karong adlawa!</td></tr>
               </tbody>
             </table>
           </div>
@@ -4850,7 +4881,7 @@ code { background: #eef1f5; padding: 0 4px; border-radius: 3px; font-size: .92em
 .coupon__pct  { color: var(--c-primary); font-size: 1.333rem; font-weight: 700; line-height: 1.2; }
 .coupon__kind { color: var(--c-primary); font-size: var(--fs-base); line-height: 1.3; }
 .coupon__right { flex: 1 1 auto; min-width: 0; padding: var(--sp-3) var(--sp-3) var(--sp-3) var(--sp-4); }
-.coupon__cap { margin: 0 0 2px; padding-right: 44px; color: var(--c-text); font-size: var(--fs-md); font-weight: 700; }
+.coupon__cap { margin: 0 0 2px; padding-right: 60px; color: var(--c-text); font-size: var(--fs-md); font-weight: 700; }
 .coupon__cap b { color: var(--c-accent); font-size: 1.111rem; font-weight: 700; }
 .coupon__meta { margin: 0; color: #7a8394; font-size: var(--fs-sm); line-height: 1.5; }
 .coupon__bets { color: #f0962e; }
@@ -5816,7 +5847,8 @@ setDone(0);
 
     { id: 'p-f1', chap: '4', num: '4.1', nav: '首页存款按钮', side: 'front', screen: 'a' },
     { id: 'p-f2', chap: '4', num: '4.2', nav: '存款页',       side: 'front', screen: 'b' },
-    { id: 'p-f3', chap: '4', num: '4.3', nav: '活动详情页',   side: 'front', screen: 'c' }
+    { id: 'p-f3', chap: '4', num: '4.3', nav: '活动详情页',   side: 'front', screen: 'c' },
+    { id: 'p-i18n', chap: '4', num: '4.4', nav: '翻译',         side: 'front' }
   ];
 
   /* 两份原型。两边都有桥接程式，点章节都会叫原型跳到对应画面。 */

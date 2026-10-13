@@ -51,6 +51,7 @@
 | 10/12 | 更正 | 原型券面样式照现有前台（白→淡蓝渐层、上下半圆缺口、打码金额橘字） | 4.2.2 |
 | 10/12 | 更正 | 试算条照现有前台：只有 `You Will Receive An Extra` ＋ 金币 ＋ 金额；没勾券或没达门槛就不显示 | 4.2.4、4.2.6 |
 | 10/12 | 调整 | 券面打码金额只看输入金额和门槛，**不看有没有勾券** | 4.2.4、4.2.5、4.2.6 |
+| 10/12 | 新增 | 翻译：存款页 banner、券面、详情页的新文案（中／英／菲／越／宿雾） | 4.4 |
 
 ### 这是一档独立的新活动
 
@@ -728,3 +729,19 @@ VIP 等级取现在生效的那一级（见 3.3）。
 | 页尾活动说明 | **照常显示**（同 4.3.1）。 |
 | 未登入 | **一样**，只剩上面这几样。 |
 | PC 弹窗 | **一样**，少了两格和清单，其他不变。 |
+
+## ▲ 4.4 前台 · 翻译（10/12 新增） 【新增】
+
+本活动新增的前台文案，跟著玩家选的语系显示。**英文照现有，一字不改**；其他语系照下表。
+
+| key | zh（位置） | en | ph | vi | ceb |
+|---|---|---|---|---|---|
+| A135 | 立即存款领取奖金！<br>（存款页 banner · 4.2.1） | Deposit & Claim Your Bonus Now! | Mag-deposit at Kunin ang Bonus Mo Ngayon! | Nạp tiền và nhận thưởng ngay! | Pag-deposit ug Kuhaa ang Imong Bonus Karon! |
+| A136 | 查看<br>（存款页 banner 按钮 · 4.2.1） | View | Tingnan | Xem | Tan-awa |
+| A137 | 条件：<br>（存款页券面 · 4.2.5） | Conditions: | Mga Kondisyon: | Điều kiện: | Mga Kondisyon: |
+| A138 | 完成 ₱X 投注即可提款<br>（存款页券面 · 4.2.5；₱X＝打码金额） | Complete ₱X Bets To Withdraw | Tapusin ang ₱X na Taya Para Mag-withdraw | Hoàn thành cược ₱X để rút tiền | Kompletoha ang ₱X nga Pusta Aron Maka-withdraw |
+| A139 | 奖金 %<br>（详情页统计格、清单栏名 · 4.3） | Bonus % | Bonus % | Thưởng % | Bonus % |
+| A140 | 最高奖金<br>（详情页统计格、清单栏名 · 4.3） | Max Bonus | Max na Bonus | Thưởng tối đa | Max nga Bonus |
+| A141 | 存款笔次<br>（详情页清单栏名 · 4.3） | Deposit No. | Blg. ng Deposit | Lần nạp | Numero sa Deposit |
+| A142 | 合格存款<br>（详情页清单栏名 · 4.3） | Eligible Deposit | Kwalipikadong Deposit | Khoản nạp hợp lệ | Kwalipikado nga Deposit |
+| A143 | 恭喜完成今日任务！<br>（详情页完成提示 · 4.3） | Congrats on completing today's tasks! | Binabati kita sa pagtapos ng mga gawain ngayong araw! | Chúc mừng hoàn thành nhiệm vụ hôm nay! | Pahalipay sa pagkompleto sa mga buluhaton karong adlawa! |

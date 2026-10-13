@@ -661,7 +661,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
             黑名单（按帐户）：照既有——任务照常显示（文字照判断），按钮一律反灰不可点；不适用上面的「不显示」。
             未登录：只显示没有任何参与对象限制的任务（全部VIP＋不限标签＋参与要求不限）；点按钮照既有逻辑先触发登录。
             P0「排除包」本期沿用既有黑名单（只按帐户），不做按标签排除。
-        · 「完成KYC／完成KYC部分认证」为选填条件：勾选后才生效——用户须符合所勾选项目才能触发/领取此任务；未勾选则不限制。「符合任一条件／完全符合」为单选，需同时勾选「累计充值大于等于」与「累计有效投注大于等于」后才可选，勾齐时预选「完全符合」。没勾＝输入框反灰不能填。任务条件的进度则在「任务时间」区间内计算，达标即给予奖励。
+        · 「完成KYC／完成KYC部分认证」为选填条件：勾选后才生效——用户须符合所勾选项目才能触发/领取此任务；未勾选则不限制。没勾＝输入框反灰不能填。任务条件的进度则在「任务时间」区间内计算，达标即给予奖励。
         · 奖励领取时限／前台「奖励找回」为既有功能，本期逻辑不改（以下照既有说明整理；前台为示意）。
         · 用户手动领取＋奖励领取时限（单位：天）：任务完成未领取，在本期任务重置／结束后 N 天内可于前台「奖励找回」补领；超过 N 天未领视为放弃（不补发；名额已在发送时占用，不释放）。期间发放状态维持「待领取」。
           奖励在完成当期发送时已占该期名额，补领不再占名额、也不会额满（找回列表只会出现可领的奖励）。自动发放不需此设定（栏位隐藏）。
@@ -815,11 +815,6 @@ th.cell-id,td.cell-id{white-space:nowrap;}
             <div class="range-inline">
               <label class="check-row" style="margin:0;min-width:170px"><input type="checkbox" id="chkBet" onchange="onQualDep()"/> 累计有效投注大于等于</label>
               <input class="input qMin" type="number" min="0" style="flex:1"/>
-            </div>
-            <div class="range-inline" id="qualBox" style="opacity:.5">
-              <span style="min-width:170px">充值及有效投注资格</span>
-              <label class="radio-grp" style="margin:0"><label><input type="radio" name="qual" class="qualRadio" disabled/> 符合任一条件</label></label>
-              <label class="radio-grp" style="margin:0"><label><input type="radio" name="qual" class="qualRadio" disabled/> 完全符合</label></label>
             </div>
           </div>
         </div>
@@ -1347,12 +1342,6 @@ function onQualDep(){
     var chk=document.getElementById(id), row=chk.closest('.range-inline');
     row.querySelectorAll('.qMin').forEach(function(i){ i.disabled=!chk.checked; if(!chk.checked) i.value=''; i.style.opacity=chk.checked?'':'.5'; });
   });
-  var both=document.getElementById('chkDep').checked && document.getElementById('chkBet').checked;
-  document.getElementById('qualBox').style.opacity = both?'1':'.5';
-  var rs=document.querySelectorAll('.qualRadio');
-  rs.forEach(function(r){ r.disabled=!both; if(!both) r.checked=false; });
-  /* 两个都勾了：预选「完全符合」，运营可再改 */
-  if(both && ![].some.call(rs,function(r){ return r.checked; })) rs[1].checked=true;
 }
 
 /* 任务时间：限时＝日期时间区间；周限时＝星期区间；永久／每日／每周（沿用后台既有周期计算）不需额外设定 */
