@@ -367,7 +367,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
                 <tr>
                   <th class="cell-id">任务ID</th><th>任务类别</th><th class="cell-name">任务名称</th>
                   <th>适用等级/层级</th>
-                  <th>名额<br><span class="note" style="font-weight:400">已发送 / 上限</span></th>
+                  <th>名额</th>
                   <th>适用端口</th><th>任务时间</th><th>审核方式</th><th>排序</th><th>任务状态</th><th>操作</th>
                 </tr>
               </thead>
@@ -391,7 +391,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
                 <tr>
                   <td class="cell-id">1080</td><td>基础任务</td><td class="cell-name">每日投注任务 <a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></td>
                   <td><span class="stack-chip"><span class="tag tag--info">全部VIP</span><span class="tag tag--gray">不限标签</span></span></td>
-                  <td>356 / 1,000</td>
+                  <td class="note">不限</td>
                   <td>PC,H5,APP</td><td>每日</td><td>自动审核</td><td>9</td>
                   <td>开启</td>
                   <td class="op"><a>关闭</a><a>删除</a><a onclick="openModal('edit')">编辑</a></td>
@@ -554,9 +554,9 @@ th.cell-id,td.cell-id{white-space:nowrap;}
         <!-- ============ TAB: 任务报表统计（既有格式；本次补券类栏位、任务ID 搜索、任务组汇总＋明细）============
           说明（之后写进规格书，画面不放）：
           · 按「任务」汇总所选时间区间（UTC+8）的数据，所有任务时间类型都统计；看单日＝时间区间选同一天。
-          · 累计完成次数＝区间内完成任务的次数（每日／每周任务同一人每期可各算一次；含完成但遇名额已满、没发到奖励的）；人工审核的任务以「审核通过」才算完成。
+          · 累计完成次数＝区间内完成任务的次数（每日／每周任务同一人每期可各算一次；含完成但遇名额已满、没领到奖励的）；人工审核的任务以「审核通过」才算完成。
           · 累计发放＝会员实际领到的部分（自动发放＋已领取，含从「奖励找回」补领的）；待领取／待审核／审核未通过／名额已满不计。
-            （与「名额」口径不同：名额在奖励发送时就占用，不论领不领；报表只算真正领到的，用来看实际发出的成本。）
+            （与「名额」口径相同：名额也是领到才算。）
           · 统计时间归属：累计完成次数按「完成时间」落在查询区间内计；累计发放按「领取时间」（自动发放＝完成时间）计——补领落在领取当天。
           · 彩金、积分为金额；免费旋转／免费投注／优惠券／golden draw券为张数；该任务没有此奖励显示「—」。
           · 组任务：先一行「汇总」（与基础任务同一层级）——累计完成次数＝各子任务完成次数合计（额外奖励不是任务，不算完成次数）；累计发放＝子任务＋额外奖励的发放合计。
@@ -661,16 +661,16 @@ th.cell-id,td.cell-id{white-space:nowrap;}
             黑名单（按帐户）：照既有——任务照常显示（文字照判断），按钮一律反灰不可点；不适用上面的「不显示」。
             未登录：只显示没有任何参与对象限制的任务（全部VIP＋不限标签＋参与要求不限）；点按钮照既有逻辑先触发登录。
             P0「排除包」本期沿用既有黑名单（只按帐户），不做按标签排除。
-        · 「完成KYC／完成KYC部分认证」为选填条件：勾选后才生效——用户须符合所勾选项目才能触发/领取此任务；未勾选则不限制。没勾＝输入框反灰不能填。任务条件的进度则在「任务时间」区间内计算，达标即给予奖励。
+        · 「完成KYC／完成KYC部分认证」为选填条件：勾选后才生效——用户须符合所勾选项目才能触发/领取此任务；未勾选则不限制。累计充值／累计有效投注没勾＝输入框反灰不能填。任务条件的进度则在「任务时间」区间内计算，达标即给予奖励。
         · 奖励领取时限／前台「奖励找回」为既有功能，本期逻辑不改（以下照既有说明整理；前台为示意）。
-        · 用户手动领取＋奖励领取时限（单位：天）：任务完成未领取，在本期任务重置／结束后 N 天内可于前台「奖励找回」补领；超过 N 天未领视为放弃（不补发；名额已在发送时占用，不释放）。期间发放状态维持「待领取」。
-          奖励在完成当期发送时已占该期名额，补领不再占名额、也不会额满（找回列表只会出现可领的奖励）。自动发放不需此设定（栏位隐藏）。
+        · 用户手动领取＋奖励领取时限（单位：天）：任务完成未领取，在本期任务重置／结束后 N 天内可于前台「奖励找回」补领；超过 N 天未领视为放弃（不补发；没领到不占名额）。期间发放状态维持「待领取」。
+          有设名额上限（大于 0）的任务不能设此栏位（反灰、清空）：不进奖励找回，当期没领就领不到。自动发放不需此设定（栏位隐藏）。
           仅适用任务时间：每日（重置后起算）、限时（结束后起算）。永久、每周、周限时不显示此栏位——手动领取须在本期结束前领取，逾期不能领（永久不会结束，随时可领）。
         · 最多可配置 10 个子任务，每个子任务各自设奖励，完成一个领一个；须设「额外奖励」1～3 档。每个子任务只设一个条件，达标即完成。
         · 组任务的「任务时间」统一由下方「任务时间」设定、套用至所有子任务，子任务不单独配置任务时间。依「任务系统各时间类型支援对照」：信息完善／绑定／一次性标记仅永久；充值提款／投注为每日、每周、限时、周限时；品牌活动仅限时——子任务的可选任务时间取交集，没有交集的条件不能放同一组。
         · 任务条件下拉照既有后台（首次充值／首次充值(階級) 已移除）。Maya／Glife 相关（Maya绑定、Glife绑定、Maya充值、Maya提款、Glife充值、Glife提款，及跳转地址 Maya／Glife）保留选项，但目前无功能，QA 不需测试。
         · 「任意完成 n 个子任务」各自对应一笔奖励，最多可配置 3 笔；不限定完成哪几个子任务、亦无先后顺序，n 不可超过子任务总数；「完成数」按当期计算，随任务时间一起重置（例：每日任务组＝每天从 0 重新累计）。额外奖励不用审核：完成数达到 n 奖励就成立；任务组选人工审核时只审子任务（子任务审核通过才算完成），额外奖励本身不再审，状态只会是自动发放／待领取／已领取。领取照「奖励发放方式」：自动发放＝直接入帐；用户手动领取＝会员在前台点宝箱领。交互限制：子任务满 10 个「添加子任务」反灰；额外奖励满 3 笔或已等于子任务数时「添加额外奖励」反灰；n 为下拉（1~子任务数），别档已选的数字反灰；子任务删除不挡；删到比某档 n 少时，该档「数量」清空，由运营重选或删除该档。奖励为彩金时须额外配置彩金流水倍数。例：任意完成 2 个 → 100 彩金；任意完成 3 个 → 500 积分。
-        · 每位用户每期仅可领取 1 次 奖励（期＝任务时间的一个周期：每日＝过 00:00:00 即为新的一期；每周＝每周一 00:00 重启；周限时＝每周到「开始日」重新开始；永久、限时只有一期），名额只计人数、不计次数——名额在「奖励发送」时即占用（任务完成、奖励发出那一刻；不论会员是否领取、之后是否过期），名额＝当期去重获发奖励人数（以发送时间为准）；名额已满后才完成的用户不发送奖励（发放状态＝名额已满）。人工审核的任务以「审核通过」为完成、发送并占名额的时间点（提交待审核时不占）。新的一期名额重新计算（任务时间重启，名额也跟着重启）。永久任务不适用名额限制（栏位反灰不可填，列表显示「不限」）。此名额限制为单一配置，套用于本任务的每一项奖励：组任务的每个子任务奖励各自独立计算名额（各自以此上限为准，互不共用）。额外奖励不受名额限制，每一档各发 1 次。满额后前台该项奖励按钮显示「额满」；名额挂「奖励」级（每项奖励各自计算）。金额预算上限本轮不做。
+        · 每位用户每期仅可领取 1 次 奖励（期＝任务时间的一个周期：每日＝过 00:00:00 即为新的一期；每周＝每周一 00:00 重启；周限时＝每周到「开始日」重新开始；永久、限时只有一期），名额只计人数、不计次数——<b>领到奖励才占名额</b>（任务中心点「领取」、自动发放都算；完成了还没领的不算），名额＝当期去重领到奖励人数。例：填 1000＝这项奖励每期最多 1000 人领到。名额满了之后，还没领到的用户都不能再领（含已完成待领取的；发放状态＝名额已满）。有设名额就不能设奖励领取时限，不进奖励找回。人工审核的任务：审核通过后领到奖励才占名额（提交待审核时不占）。新的一期名额重新计算（任务时间重启，名额也跟着重启）。永久任务不适用名额限制（栏位反灰不可填，列表显示「不限」）。此名额限制为单一配置，套用于本任务的每一项奖励：组任务的每个子任务奖励各自独立计算名额（各自以此上限为准，互不共用）。额外奖励不受名额限制，每一档各发 1 次；子任务完成就算进「任意完成 n 个」，额满没领到也算。满额后前台该项奖励按钮显示「额满」；名额挂「奖励」级（每项奖励各自计算）。金额预算上限本轮不做。
       -->
       <div class="fs-hd"><span class="fs-hd__ic">!</span>基本信息</div>
       <div class="form__row">
@@ -747,6 +747,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
           <select class="select" id="rewardType" onchange="onReward()" style="max-width:150px"><option value="c">彩金</option><option value="p">积分</option><option value="fs">免费旋转</option><option value="fb">免费投注</option><option value="cp">优惠券</option><option value="gd">golden draw券</option></select>
           <input class="input" value="0" style="max-width:120px" id="rewardVal"/>
           <span id="rewardVoucher" style="display:none"><select class="select" id="rewardList" style="max-width:170px"></select></span>
+          <span id="rewardWorth" class="note inl" style="display:none">价值 <input class="input" value="0" style="max-width:100px"/></span>
           <span id="rowChip" class="note inl" style="display:none">彩金流水倍数 <input class="input" value="0" style="max-width:70px"/></span>
         </div>
       </div>
@@ -759,7 +760,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
       </div>
       <div class="form__row" id="quotaRow">
         <label class="form__label">名额上限：</label>
-        <div class="form__control"><input class="input" id="quotaInput" value="" placeholder="留空或 0＝不限" style="max-width:200px"/></div>
+        <div class="form__control"><input class="input" id="quotaInput" value="" placeholder="留空或 0＝不限" style="max-width:200px" oninput="onGrant()"/></div>
       </div>
       <div class="fs-hd"><span class="fs-hd__ic">!</span>参与对象</div>
       <div class="form__row" style="margin-top:12px">
@@ -1001,16 +1002,29 @@ function openModal(mode,kind){
   /* 防呆：编辑时「任务类别」反灰不可改（基础任务↔任务组切换会让任务ID、完成记录对不上）*/
   var cat=document.getElementById('taskCat'); cat.disabled=(mode==='edit');
   var w=cat.closest('.dropdown'); if(w){ var bt=w.querySelector('button.select'); bt.disabled=cat.disabled; bt.style.opacity=cat.disabled?'.5':''; bt.style.cursor=cat.disabled?'not-allowed':''; }
-  /* 示例：编辑＝带入一笔「资金·充值／每日／用户手动领取」的任务，一打开就看得到「奖励领取时限」*/
+  /* 示例：编辑＝照列表那一行带入任务时间、名额（其余内容为示例）；发放方式带「用户手动领取」，看得到奖励领取时限的连动 */
+  var tr=(window.event && window.event.target && window.event.target.closest) ? window.event.target.closest('tr') : null;
+  var rowTime='', rowQuota='';
+  if(mode==='edit' && tr && tr.cells.length>6){
+    var tt=tr.cells[6].textContent.trim(), qt=tr.cells[4].textContent;
+    rowTime = tt==='永久'?'永久' : tt==='每日'?'每日' : tt==='每周'?'每周' : tt.indexOf('星期')>-1?'周限时' : '限时';
+    var m=qt.match(/\/\s*([\d,]+)/)||qt.match(/上限\s*([\d,]+)/); rowQuota=m?m[1].replace(/,/g,''):'';
+  }
+  function seedRow(){
+    var td=document.querySelector('input[name="ttime"][value="'+(rowTime||'每日')+'"]'); if(td && !td.disabled){ td.checked=true; onTaskTime(); }
+    document.getElementById('quotaInput').value=(rowTime==='永久'?'':rowQuota);
+    var cl=document.querySelector('#claimLimitRow input'); if(cl && !rowQuota && !cl.value) cl.value='1';
+    document.querySelector('input[name="grant"][value="manual"]').checked=true; onGrant();
+  }
   if(mode==='edit' && kind==='group'){
     /* 示例：编辑任务组＝带入任务组表单（类别反灰），子任务编号固定 1030-1、1030-2…；删掉的号码不再用 */
     if(cat.value!=='group'){ cat.value='group'; onTaskCat(); syncDd(cat); }
     seedTiers(); seedSubNames(); renumberSubs(); SUB_EDIT=true;
+    seedRow();
   } else if(mode==='edit'){
     if(cat.value!=='basic'){ cat.value='basic'; onTaskCat(); syncDd(cat); }
-    var cc=document.getElementById('condCat'); cc.value='fund'; onCond(); syncDd(cc);
-    var td=document.querySelector('input[name="ttime"][value="每日"]'); if(!td.disabled){ td.checked=true; onTaskTime(); }
-    document.querySelector('input[name="grant"][value="manual"]').checked=true; onGrant();
+    var cc=document.getElementById('condCat'); cc.value=(rowTime==='永久'?'info':'fund'); onCond(); syncDd(cc);
+    seedRow();
   }
   document.getElementById('taskModal').classList.add('open');
 }
@@ -1086,12 +1100,13 @@ function voucherOptsHTML(v){
   return '<option value="" selected disabled hidden>'+(VOUCHER_PH[v]||'请选择')+'</option>'
     +(VOUCHER_LIST[v]||[]).map(function(o){return '<option>'+o+'</option>';}).join('');
 }
-var REWARD_HINT={c:'奖励值',p:'奖励值',gd:'数量'};
+var REWARD_HINT={c:'奖励值',p:'奖励值',gd:'张数'};
 function rewardOptsHTML(type){ return type ? REWARD_OPTS.replace('value="'+type+'"','value="'+type+'" selected') : REWARD_OPTS; }
-/* 子任务／额外奖励的奖励栏：类型＋奖励值；免费旋转／免费投注／优惠券改下拉选券；彩金加流水倍数 */
+/* 子任务／额外奖励的奖励栏：类型＋奖励值；免费旋转／免费投注／优惠券改下拉选券＋价值；彩金加流水倍数 */
 function subRewardFieldsHTML(val){
   return '<input class="input subVal" placeholder="奖励值" value="'+(val||'')+'" style="max-width:120px"/>'
     +'<span class="subCoupon" style="display:none"><select class="select subVoucher" style="max-width:170px">'+voucherOptsHTML('cp')+'</select></span>'
+    +'<span class="subWorth note" style="display:none;align-items:center;gap:6px;white-space:nowrap">价值 <input class="input" value="0" style="max-width:90px"/></span>'
     +'<span class="subChip note" style="display:none;align-items:center;gap:6px;white-space:nowrap">彩金流水倍数 <input class="input" value="0" style="max-width:70px"/></span>';
 }
 function onReward(){
@@ -1099,9 +1114,10 @@ function onReward(){
   document.getElementById('rowChip').style.display = (v==='c'?'inline-flex':'none');
   var isVoucher=!!VOUCHER_LIST[v];
   var valInput=document.getElementById('rewardVal'), box=document.getElementById('rewardVoucher');
-  /* 免费旋转／免费投注／优惠券：右边下拉选券；彩金、积分、golden draw券：填数值 */
+  /* 免费旋转／免费投注／优惠券：右边下拉选券＋价值；彩金、积分、golden draw券：填数值 */
   if(isVoucher) document.getElementById('rewardList').innerHTML=voucherOptsHTML(v);
   box.style.display = isVoucher?'':'none';
+  document.getElementById('rewardWorth').style.display = (isVoucher?'inline-flex':'none');   /* 券类：选券后面填价值（预设 0） */
   valInput.style.display = isVoucher?'none':'';
   valInput.placeholder = REWARD_HINT[v]||'奖励值';
 }
@@ -1203,6 +1219,17 @@ function checkGroupTime(){
   });
   if(curBad && firstOk){ firstOk.checked=true; onTaskTime(); }
 }
+/* 防呆：彩金、积分的奖励值，以及券类的价值，一律只能填整数（小数点、非数字打不进去）
+   位数：只有额外奖励（#tierRewards）最多 6 位数（前台宝箱下方显示上限 999,999）；基础任务、子任务不限位数 */
+document.addEventListener('input',function(e){
+  var el=e.target, t=null;
+  if(!el.closest) return;
+  var isTier=!!el.closest('#tierRewards');
+  if(el.id==='rewardVal') t=document.getElementById('rewardType').value;
+  else if(el.classList.contains('subVal')){ var sel=el.closest('.range-inline').querySelector('select[onchange*="onSubReward"]'); t=sel&&sel.value; }
+  if(el.closest('#rewardWorth,.subWorth')) t='c';   /* 券类价值：同彩金规则 */
+  if(t==='c'||t==='p'){ var v=el.value.replace(/\D/g,''); if(isTier) v=v.slice(0,6); if(v!==el.value) el.value=v; }
+});
 /* 子任务／额外奖励：彩金→流水倍数；优惠券→选券（不填奖励值） */
 function onSubReward(sel){
   var row=sel.closest('.range-inline'), v=sel.value;
@@ -1210,9 +1237,11 @@ function onSubReward(sel){
   var isVoucher=!!VOUCHER_LIST[v];
   if(isVoucher) row.querySelector('.subVoucher').innerHTML=voucherOptsHTML(v);
   row.querySelector('.subCoupon').style.display = (isVoucher?'inline-flex':'none');
+  row.querySelector('.subWorth').style.display = (isVoucher?'inline-flex':'none');
   var val=row.querySelector('.subVal');
   val.style.display = (isVoucher?'none':'');
   val.placeholder = REWARD_HINT[v]||'奖励值';
+  if(row.closest('#tierRewards') && (v==='c'||v==='p')) val.maxLength=6; else val.removeAttribute('maxlength');   /* 只有额外奖励：彩金、积分最多 6 位数 */
 }
 /* 子任务编号：新增任务时，删除后重排；编辑任务时，编号不变、删掉的号码不再用（新加的接最大号）*/
 var SUB_EDIT=false, SUB_NEXT=0;
@@ -1335,6 +1364,13 @@ function onGrant(){
   var t=(document.querySelector('input[name="ttime"]:checked')||{}).value;
   var row=document.getElementById('claimLimitRow'); if(!row) return;
   row.classList.toggle('hidden',!(manual && CLAIM_LIMIT_TIMES.indexOf(t)>-1));
+  /* 有设名额上限（大于 0）：奖励领取时限反灰、清空——有名额的任务不进奖励找回 */
+  var q=+(document.getElementById('quotaInput')||{}).value||0, ci=row.querySelector('input');
+  if(ci){
+    if(q>0) ci.value='';   /* 名额改回留空或 0：恢复可填，要重新填 */
+    ci.disabled=(q>0);
+  }
+  row.style.opacity=(q>0?'.5':'1');
 }
 function onQualDep(){
   /* 没勾的项目：输入框反灰不能填（并清空），避免填了数字却没生效 */
@@ -1354,7 +1390,7 @@ function onTaskTime(){
   /* 永久：不适用名额限制，反灰不可填 */
   var qi=document.getElementById('quotaInput'), qr=document.getElementById('quotaRow');
   if(qi){
-    if(v==='永久'){ if(qi.value) qi.dataset.keep=qi.value; qi.value=''; qi.placeholder='不限'; }
+    if(v==='永久'){ if(qi.value) qi.dataset.keep=qi.value; qi.value=''; qi.placeholder=''; }
     else { if(!qi.value && qi.dataset.keep) qi.value=qi.dataset.keep; qi.placeholder='留空或 0＝不限'; }
     qi.disabled=(v==='永久');
   }
@@ -1483,18 +1519,28 @@ ddInitAll(document.getElementById('taskModal'));
   }
   window.addEventListener('message',function(e){
     var d=e.data||{}; if(d.src!=='spec') return;
+    var wasOpen=d.view==='form' && document.getElementById('taskModal').classList.contains('open');
     closeAll();
     /* 蓝框一直留着，换到别的章节才清掉 */
     document.querySelectorAll('.spec-hl').forEach(function(x){ x.classList.remove('spec-hl'); });
     if(d.view==='form'){
-      tab('setting'); openModal('new');
+      /* 表单已打开：只切任务类别、换框，不重设——在左栏改过的内容（名额、任务时间、发放方式…）都留着，前后连贯 */
+      var fresh=!wasOpen;
+      if(fresh){ tab('setting'); openModal('new'); }
+      document.getElementById('taskModal').classList.add('open');
       var cat=document.getElementById('taskCat'), want=d.group?'group':'basic';
       if(cat.value!==want){ cat.value=want; onTaskCat(); syncDd(cat); }
-      /* 示意用：任务组带两档额外奖励；名额那一节填 1000 当例子 */
+      /* 示意用：任务组带子任务、额外奖励示例 */
       if(d.group){ seedTiers(); seedSubNames(); }
-      if(d.anchor==='quotaRow'){ var q=document.getElementById('quotaInput'); if(!q.value) q.value='1000'; }
-      if(d.manual){ var g=document.querySelector('input[name="grant"][value="manual"]'), t=document.querySelector('input[name="ttime"][value="每日"]');
-        if(t && !t.disabled){ t.checked=true; onTaskTime(); } if(g){ g.checked=true; onGrant(); } }
+      /* 第一次打开：统一带「资金·充值＋每日＋用户手动领取、名额留空、领取时限 1 天」，
+         每一节都看得到奖励领取时限；在名额填数字它就反灰，清空又能填 */
+      if(fresh){
+        var cc=document.getElementById('condCat'); cc.value='fund'; onCond(); syncDd(cc);
+        var t=document.querySelector('input[name="ttime"][value="每日"]'); if(t && !t.disabled){ t.checked=true; onTaskTime(); }
+        document.getElementById('quotaInput').value='';
+        var cl=document.querySelector('#claimLimitRow input'); if(cl) cl.value='1';
+        document.querySelector('input[name="grant"][value="manual"]').checked=true; onGrant();
+      }
       var el=d.anchor ? document.getElementById(d.anchor) : document.querySelectorAll('#taskModal .fs-hd')[(d.section||1)-1];
       setTimeout(function(){ flash(el); },60);
     } else if(d.view){

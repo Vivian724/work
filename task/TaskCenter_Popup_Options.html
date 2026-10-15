@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>领取成功弹窗 · 券类写法比较</title>
+<style>
+/* 弹窗样式照 TaskCenter_Frontend.html 的 .pop--rw */
+body{margin:0;background:#dfe6f1;font-family:"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;color:#1b2a44;padding:24px 16px 48px;}
+h1{font-size:1.15rem;margin:0 0 4px;text-align:center;}
+.sub{font-size:.85rem;color:#5b6a85;text-align:center;margin:0 0 28px;}
+.grid{display:flex;flex-wrap:wrap;gap:28px 20px;justify-content:center;}
+.opt{width:300px;display:flex;flex-direction:column;align-items:center;}
+.opt__hd{font-weight:700;font-size:.95rem;margin-bottom:6px;}
+.opt__hd .tag{display:inline-block;font-size:.7rem;font-weight:700;padding:1px 8px;border-radius:9px;margin-left:6px;vertical-align:1px;}
+.tag--rec{background:#1fb36a;color:#fff;}
+.tag--bad{background:#f0484e;color:#fff;}
+.opt__note{font-size:.78rem;color:#5b6a85;line-height:1.6;margin:0 0 72px;min-height:2.6em;text-align:center;}
+.stage{background:rgba(27,42,68,.45);border-radius:16px;padding:76px 20px 22px;width:100%;box-sizing:border-box;}
+
+.pop{background:linear-gradient(150deg,#ffeee2 0%,#fff 42%);color:#1b2a44;border-radius:18px;width:100%;padding:64px 20px 20px;text-align:center;position:relative;box-sizing:border-box;}
+.pop__ic{position:absolute;left:50%;top:-58px;transform:translateX(-50%);width:112px;height:112px;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,.18));}
+.pop__title{font-size:1rem;font-weight:500;}
+.pop__amt{font-size:.95rem;font-weight:700;color:#e8383e;margin:10px 0 0;}
+/* 方案 B：券名灰色小字，最多 2 行，超出「…」 */
+.pop__name{font-size:.78rem;color:#8a97ad;line-height:1.45;margin:4px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.pop__btn{margin-top:22px;width:100%;background:#0b4fe3;color:#fff;border:0;border-radius:8px;padding:12px;font-size:.95rem;font-weight:500;font-family:inherit;}
+.sec{max-width:1300px;margin:0 auto 64px;}
+.sec h2{font-size:1.05rem;margin:0 0 4px;text-align:center;}
+.tag--cur{background:#2f6bff;color:#fff;}
+/* 提示弹窗：样式照前台原型 .ntf */
+.phone{background:linear-gradient(180deg,#eaf2ff,#f6f8fc);border-radius:16px;padding:36px 10px 70px;width:100%;box-sizing:border-box;position:relative;}
+.ntf{display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:14px 12px 14px 22px;box-shadow:0 8px 24px rgba(27,42,68,.18);position:relative;text-align:left;}
+.ntf__x{position:absolute;left:6px;top:6px;width:18px;height:18px;border-radius:50%;background:#a7b0c9;color:#fff;font-size:.62rem;font-weight:700;line-height:18px;text-align:center;}
+.ntf__ic{width:40px;height:40px;object-fit:contain;flex:0 0 auto;}
+.ntf__txt{flex:1;font-size:.8rem;font-weight:600;line-height:1.45;}
+.ntf__btn{flex:0 0 auto;background:#2f6bff;color:#fff;font-size:.84rem;border-radius:8px;padding:8px 14px;white-space:nowrap;}
+.nav{position:absolute;left:0;right:0;bottom:0;height:56px;background:#fff;border-top:1px solid #e3e9f3;border-radius:0 0 16px 16px;}
+</style>
+</head>
+<body>
+<h1>免费旋转／免费投注／优惠券：弹窗怎么写</h1>
+<p class="sub">样式照前台原型；只比较文字写法</p>
+
+<div class="sec">
+<h2>一、领取成功弹窗</h2>
+<p class="sub">点「领取」成功后跳出</p>
+
+<div class="grid">
+  <div class="opt">
+    <div class="opt__hd">方案 C：券名＋价值</div>
+    <p class="opt__note">券名＝免费旋转／免费投注／优惠券（固定短字），后面接 ₱价值；一行放得下。</p>
+    <div class="stage"><div class="pop">
+      <img class="pop__ic" src="img/rw_freespin.png" alt="免费旋转">
+      <div class="pop__title">奖励领取成功</div>
+      <div class="pop__amt">免费旋转 ₱20</div>
+      <button class="pop__btn">确定</button>
+    </div></div>
+  </div>
+  <div class="opt">
+    <div class="opt__hd">方案 A：只显示价值</div>
+    <p class="opt__note">跟卡片标签一样都是 ₱20；长度固定，不用截断。</p>
+    <div class="stage"><div class="pop">
+      <img class="pop__ic" src="img/rw_freespin.png" alt="免费旋转">
+      <div class="pop__title">奖励领取成功</div>
+      <div class="pop__amt">₱20</div>
+      <button class="pop__btn">确定</button>
+    </div></div>
+  </div>
+
+  <div class="opt">
+    <div class="opt__hd">方案 B：价值＋券名（券名短）<span class="tag tag--cur">定案</span></div>
+    <p class="opt__note">红字放价值，下面加一行灰色小字放券名。</p>
+    <div class="stage"><div class="pop">
+      <img class="pop__ic" src="img/rw_freespin.png" alt="免费旋转">
+      <div class="pop__title">奖励领取成功</div>
+      <div class="pop__amt">₱20</div>
+      <div class="pop__name">ON色碟</div>
+      <button class="pop__btn">确定</button>
+    </div></div>
+  </div>
+
+  <div class="opt">
+    <div class="opt__hd">方案 B：价值＋券名（券名长）<span class="tag tag--cur">定案</span></div>
+    <p class="opt__note">券名最多 2 行，超出用「…」截断，会员看不到完整券名。</p>
+    <div class="stage"><div class="pop">
+      <img class="pop__ic" src="img/rw_coupon.png" alt="优惠券">
+      <div class="pop__title">奖励领取成功</div>
+      <div class="pop__amt">₱50</div>
+      <div class="pop__name">【限时】十月周末真人视讯专属输返券 · 适用 Evolution／SA 真人百家乐 · 有效期 7 天</div>
+      <button class="pop__btn">确定</button>
+    </div></div>
+  </div>
+
+  <div class="opt">
+    <div class="opt__hd">反例：只显示券名<span class="tag tag--bad">不建议</span></div>
+    <p class="opt__note">券名放在红字大字的位置，一长就挤成好几行。</p>
+    <div class="stage"><div class="pop">
+      <img class="pop__ic" src="img/rw_coupon.png" alt="优惠券">
+      <div class="pop__title">奖励领取成功</div>
+      <div class="pop__amt">【限时】十月周末真人视讯专属输返券 · 适用 Evolution／SA 真人百家乐 · 有效期 7 天</div>
+      <button class="pop__btn">确定</button>
+    </div></div>
+  </div>
+</div>
+
+<div class="sec" style="margin-top:72px;padding-top:28px;border-top:1px dashed #b9c4d6">
+<h2>二、提示弹窗</h2>
+<p class="sub">任务完成时从底部跳出；手动领取有「领取」，自动发放没有按钮</p>
+<div class="grid">
+  <div class="opt">
+    <div class="opt__hd">方案 C：券名＋价值</div>
+    <p class="opt__note" style="margin-bottom:12px">跟领取成功弹窗写法一样。</p>
+    <div class="phone"><div class="ntf"><span class="ntf__x">✕</span><img class="ntf__ic" src="img/rw_freespin.png" alt="免费旋转"><div class="ntf__txt">奖励免费旋转 ₱20，恭喜完成每周投注送免费旋转任务！</div><span class="ntf__btn">领取</span></div><div class="nav"></div></div>
+  </div>
+  <div class="opt">
+    <div class="opt__hd">方案 C：自动发放（没有按钮）</div>
+    <p class="opt__note" style="margin-bottom:12px">自动发放：一样的字，右边没有「领取」。</p>
+    <div class="phone"><div class="ntf"><span class="ntf__x">✕</span><img class="ntf__ic" src="img/rw_coupon.png" alt="优惠券"><div class="ntf__txt">奖励优惠券 ₱50，恭喜完成每周活跃挑战 · 组任务！</div></div><div class="nav"></div></div>
+  </div>
+  <div class="opt">
+    <div class="opt__hd">方案 A：只显示价值<span class="tag tag--cur">定案</span></div>
+    <p class="opt__note" style="margin-bottom:12px">只看 ₱20，要靠图示分辨是哪种券。</p>
+    <div class="phone"><div class="ntf"><span class="ntf__x">✕</span><img class="ntf__ic" src="img/rw_freebet.png" alt="免费投注"><div class="ntf__txt">奖励₱30，恭喜完成连续任务挑战 · 组任务！</div><span class="ntf__btn">领取</span></div><div class="nav"></div></div>
+  </div>
+  <div class="opt">
+    <div class="opt__hd">反例：后台券名称<span class="tag tag--bad">不建议</span></div>
+    <p class="opt__note" style="margin-bottom:12px">券名称一长，整段挤成 4、5 行。</p>
+    <div class="phone"><div class="ntf"><span class="ntf__x">✕</span><img class="ntf__ic" src="img/rw_coupon.png" alt="优惠券"><div class="ntf__txt">奖励【限时】十月周末真人视讯专属输返券 · 适用 Evolution／SA 真人百家乐 · 有效期 7 天，恭喜完成每周活跃挑战 · 组任务！</div><span class="ntf__btn">领取</span></div><div class="nav"></div></div>
+  </div>
+</div>
+</div>
+</body>
+</html>
