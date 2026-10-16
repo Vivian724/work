@@ -157,7 +157,7 @@ img{max-width:100%;display:block;}
 .act--reject,.chip-st--reject{background:#e8534c;}                                     /* 未通过 */
 .act--proc,.chip-st--proc{background:#6dbcf6;cursor:default;}                                 /* 处理中 */
 .act--done,.chip-st--done,.chip-st--lock{background:#bfc6d8;color:#fff;cursor:default;}   /* 已完成：照既有灰蓝底白字 */
-.act--full,.chip-st--full{background:#e2b4b4;color:#fff;cursor:default;}   /* 额满（新增）：淡灰玫瑰色——和已完成一样是不能点的浅色，但带一点红，跟红字「已领取 x / y 人」呼应；夜间用 #8a6464 */
+.act--full,.chip-st--full{background:#e2b4b4;color:#fff;cursor:default;}   /* 额满（新增）：淡灰玫瑰色——和已完成一样是不能点的浅色，但带一点红，跟红字「已发送 x/y 人」呼应；夜间用 #8a6464 */
 .act:disabled{cursor:default;}
 
 /* 卡片下方需整行显示的内容 */
@@ -196,14 +196,17 @@ img{max-width:100%;display:block;}
 .ms__track i{display:block;height:100%;border-radius:3px;background:#ed8e38;}
 .ms__cols{position:relative;display:grid;grid-template-columns:repeat(var(--k),1fr);}
 .ms__col{display:flex;flex-direction:column;align-items:center;gap:1px;text-align:center;}
-/* 宝箱（照设计稿）：灰蓝圆＋银宝箱＝未达成；橘圆＋红宝箱＋发光＋跳动＝可领取（点宝箱即领取，不另放文字）；绿圆打勾＝已领取／自动发放 */
+/* 宝箱（照设计稿）：灰蓝圆＋银宝箱＝未达成；橘圆＋红宝箱＋发光＋开合＝可领取（点宝箱即领取，不另放文字）；绿圆打勾＝已领取／自动发放 */
 .ms__box{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:0;background:url(img/chest_lock.png) center/cover no-repeat;box-sizing:border-box;}
 .is-can{cursor:pointer;}
-.is-can .ms__box{background-image:url(img/chest_can.png);box-shadow:0 2px 8px rgba(237,142,56,.45);animation:msBounce 1.2s ease-in-out infinite;}
+.is-can .ms__box{background-image:url(img/chest_can.png);box-shadow:0 2px 8px rgba(237,142,56,.45);position:relative;}
+/* 可领取：宝箱开合（盖子掀开露出金光，再盖回） */
+.is-can .ms__box::before{content:"";position:absolute;left:18%;top:24%;width:61%;height:26%;border-radius:45% 45% 8% 8%;background:radial-gradient(ellipse at 50% 85%,#fffbd0 0%,#ffd23f 40%,#b8501c 75%,#5a1a0c 100%);}
+.is-can .ms__box::after{content:"";position:absolute;inset:0;background:url(img/chest_can.png) center/cover no-repeat;clip-path:inset(21% 20% 49% 16% round 45% 45% 0 0);transform-origin:50% 22%;animation:msLid 1.4s ease-in-out infinite;}
+@keyframes msLid{0%,40%,100%{transform:translateY(0) scaleY(1)}60%,80%{transform:translateY(-16%) scaleY(.75)}}
 /* 额外奖励已领取：宝箱换成打勾 */
 .is-done .ms__box{background:#63c378;}
 .is-done .ms__box::after{content:"✓";font-size:.95rem;font-weight:900;color:#fff;line-height:1;}
-@keyframes msBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 .ms__st{font-size:.62rem;font-weight:700;color:var(--c-text-3);}
 .ms__st:empty{display:none;}
 .ms__n{font-size:.6rem;color:var(--c-text-3);}
@@ -211,7 +214,7 @@ img{max-width:100%;display:block;}
 .ms__amt small{font-size:.56rem;font-weight:600;margin-left:2px;color:var(--c-text-2);}
 .grp-bonus__ic{font-size:.72rem;}
 .meta span.full{color:#e8383e;}
-.meta span:has(> b.full){color:#e8383e;}   /* 名额满：「已领取 x / y 人」整串红字（规格 3.2） */
+.meta span:has(> b.full){color:#e8383e;}   /* 名额满：「已发送 x/y 人」整串红字（规格 3.2） */
 
 /* =========================================================
    Bottom nav
@@ -260,6 +263,7 @@ img{max-width:100%;display:block;}
 /* 黑名单：文字依原判断显示，按钮反灰且不可点击 */
 .is-black .ms__col{pointer-events:none;}
 .is-black .ms__col .ms__box{background:url(img/chest_lock.png) center/cover no-repeat!important;box-shadow:none!important;animation:none!important;}
+.is-black .ms__col .ms__box::before,.is-black .ms__col .ms__box::after{display:none!important;}
 .is-black .act,.is-black .chip-st,.is-black .rc-all{background:#eef1f6!important;color:var(--c-text-3)!important;border:0!important;pointer-events:none;}
 /* 奖励找回：入口蓝字＋红色数字；点开为整页（返回键、红字说明、清单、底部一键领取）。清单含基础任务、子任务，不含额外奖励；不显示合计 */
 .recall{color:#2f6bff;cursor:pointer;}
@@ -503,19 +507,19 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           </div>
           <div class="grp__list">
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">充值满 ₱50</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱50 / ₱50</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">100</span><span>已领取 <b>850 / 1,000</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">充值满 ₱50</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱50 / ₱50</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">100</span><span>已发送 <b>850/1,000</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--claim" data-amt="积分 100" onclick="claimSub(this)">领取</span></div>
             </div>
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">投注满 ₱200</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱200 / ₱200</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">150</span><span>已领取 <b>868 / 1,000</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">投注满 ₱200</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱200 / ₱200</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">150</span><span>已发送 <b>868/1,000</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--done">已完成</span></div>
             </div>
             <div class="gr gr--more">
-              <div class="gr__l"><div class="gr__name">投注满 ₱300</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:40%"></i></div><span class="prog__t">₱120 / ₱300</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">200</span><span>已领取 <b>790 / 1,000</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">投注满 ₱300</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:40%"></i></div><span class="prog__t">₱120 / ₱300</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">200</span><span>已发送 <b>790/1,000</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--bet" onclick="showRedirect('首页')">去投注</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部（3） ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部 3 ⌄</button>
         </article>
 
         <!-- 1042｜投注 ₱100（CQ9电子）｜积分 100｜名额 200/200 已满（每日）｜每日｜自动审核｜排序 3 -->
@@ -523,7 +527,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           <div class="card__main">
             <div class="card__title">每日游戏任务·CQ9电子</div>
             <div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:40%"></i></div><span class="prog__t">₱40 / ₱100</span></div>
-            <div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">100</span><span>已领取 <b class="full">200 / 200</b> 人</span></div>
+            <div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">100</span><span>已发送 <b class="full">200/200</b> 人</span></div>
           </div>
           <div class="card__right"><span class="card__cd">⏱ 13:05:11</span><button class="act act--full" disabled>额满</button></div>
         </article>
@@ -533,7 +537,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           <div class="card__main">
             <div class="card__title">中额·每日投注任务</div>
             <div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:40%"></i></div><span class="prog__t">₱80 / ₱200</span></div>
-            <div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">100</span><span>已领取 <b>512 / 1,000</b> 人</span></div>
+            <div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">100</span><span>已发送 <b>512/1,000</b> 人</span></div>
           </div>
           <div class="card__right"><span class="card__cd">⏱ 13:05:11</span><button class="act act--bet" onclick="showRedirect('首页')">去投注</button></div>
         </article>
@@ -551,15 +555,15 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           </div>
           <div class="grp__list">
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">充值满 ₱500</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱500 / ₱500</span></div><div class="meta"><span class="rwc" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">100</span><span>已领取 <b>240 / 300</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">充值满 ₱500</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱500 / ₱500</span></div><div class="meta"><span class="rwc" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">100</span><span>已发送 <b>240/300</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--done">已完成</span></div>
             </div>
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">投注满 ₱5,000</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:64%"></i></div><span class="prog__t">₱3,200 / ₱5,000</span></div><div class="meta"><span class="rwc" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">300</span><span>已领取 <b>120 / 300</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">投注满 ₱5,000</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:64%"></i></div><span class="prog__t">₱3,200 / ₱5,000</span></div><div class="meta"><span class="rwc" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">300</span><span>已发送 <b>120/300</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--bet" onclick="showRedirect('首页')">去投注</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部（2） ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部 2 ⌄</button>
         </article>
 
         <!-- 1030｜任务组 · 限时｜子任务 3 个、每项上限 500｜额外奖励 1 个 积分 50／2 个 彩金 100／3 个 积分 500（配满 3 档）｜排序 6｜VIP1＋TH（有等级/标签限制：未登录不显示）-->
@@ -575,19 +579,19 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           </div>
           <div class="grp__list">
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">充值满 ₱100</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱100 / ₱100</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">100</span><span>已领取 <b>380 / 500</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">充值满 ₱100</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱100 / ₱100</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">100</span><span>已发送 <b>380/500</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--done">已完成</span></div>
             </div>
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">投注满 ₱1,000</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:60%"></i></div><span class="prog__t">₱600 / ₱1,000</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">150</span><span>已领取 <b>280 / 500</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">投注满 ₱1,000</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:60%"></i></div><span class="prog__t">₱600 / ₱1,000</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">150</span><span>已发送 <b>280/500</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--bet" onclick="showRedirect('首页')">去投注</span></div>
             </div>
             <div class="gr gr--more">
-              <div class="gr__l"><div class="gr__name">投注满 ₱200</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:0%"></i></div><span class="prog__t">₱0 / ₱200</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">200</span><span>已领取 <b class="full">500 / 500</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">投注满 ₱200</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:0%"></i></div><span class="prog__t">₱0 / ₱200</span></div><div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">200</span><span>已发送 <b class="full">500/500</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--full">额满</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部（3） ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部 3 ⌄</button>
         </article>
 
         <!-- 1070｜投注 ₱1,000｜免费旋转（₱20）｜名额 86/500（每周）｜每周｜自动审核｜自动发放｜排序 7 -->
@@ -595,7 +599,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           <div class="card__main">
             <div class="card__title">每周投注送免费旋转</div>
             <div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱1,000 / ₱1,000</span></div>
-            <div class="meta"><span class="rwc" title="免费旋转"><img class="rwi" src="img/rw_freespin.png" alt="免费旋转">₱20</span><span>已领取 <b>86 / 500</b> 人</span></div>
+            <div class="meta"><span class="rwc" title="免费旋转"><img class="rwi" src="img/rw_freespin.png" alt="免费旋转">₱20</span><span>已发送 <b>86/500</b> 人</span></div>
           </div>
           <div class="card__right"><span class="card__cd">⏱ 6d 13:05:11</span><button class="act act--done" disabled>已完成</button></div>
         </article>
@@ -605,7 +609,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           <div class="card__main">
             <div class="card__title">高价值用户 · 周限时投注</div>
             <div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:64%"></i></div><span class="prog__t">₱3,200 / ₱5,000</span></div>
-            <div class="meta"><span class="rwc" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">222</span><span>已领取 <b class="full">200 / 200</b> 人</span></div>
+            <div class="meta"><span class="rwc" title="彩金"><img class="rwi" src="img/rw_cash.png" alt="彩金">222</span><span>已发送 <b class="full">200/200</b> 人</span></div>
           </div>
           <div class="card__right"><span class="card__cd">⏱ 4d 13:05:11</span><button class="act act--full" disabled>额满</button></div>
         </article>
@@ -626,7 +630,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
             <div class="card__main">
               <div class="card__title">小额用户 · 每日充值任务</div>
               <div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:0%"></i></div><span class="prog__t">₱0 / ₱50</span></div>
-              <div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">100</span><span>已领取 <b>790 / 1,000</b> 人</span></div>
+              <div class="meta"><span class="rwc" title="积分"><img class="rwi" src="img/rw_point.png" alt="积分">100</span><span>已发送 <b>790/1,000</b> 人</span></div>
             </div>
             <div class="card__right">
               <span class="card__cd">⏱ 13:05:11</span>
@@ -668,19 +672,19 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           </div>
           <div class="grp__list">
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">充值满 ₱50</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱50 / ₱50</span></div><div class="meta"><span class="rwc" title="免费旋转"><img class="rwi" src="img/rw_freespin.png" alt="免费旋转">₱20</span><span>已领取 <b>690 / 1,000</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">充值满 ₱50</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱50 / ₱50</span></div><div class="meta"><span class="rwc" title="免费旋转"><img class="rwi" src="img/rw_freespin.png" alt="免费旋转">₱20</span><span>已发送 <b>690/1,000</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--done">已完成</span></div>
             </div>
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">投注满 ₱200</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱200 / ₱200</span></div><div class="meta"><span class="rwc" title="免费投注"><img class="rwi" src="img/rw_freebet.png" alt="免费投注">₱30</span><span>已领取 <b>715 / 1,000</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">投注满 ₱200</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱200 / ₱200</span></div><div class="meta"><span class="rwc" title="免费投注"><img class="rwi" src="img/rw_freebet.png" alt="免费投注">₱30</span><span>已发送 <b>715/1,000</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--claim" data-amt="免费投注 ₱30" onclick="claimSub(this)">领取</span></div>
             </div>
             <div class="gr gr--more">
-              <div class="gr__l"><div class="gr__name">投注满 ₱1,000</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱1,000 / ₱1,000</span></div><div class="meta"><span class="rwc" title="优惠券"><img class="rwi" src="img/rw_coupon.png" alt="优惠券">₱50</span><span>已领取 <b>598 / 1,000</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">投注满 ₱1,000</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱1,000 / ₱1,000</span></div><div class="meta"><span class="rwc" title="优惠券"><img class="rwi" src="img/rw_coupon.png" alt="优惠券">₱50</span><span>已发送 <b>598/1,000</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--claim" data-amt="优惠券 ₱50" onclick="claimSub(this)">领取</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部（3） ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部 3 ⌄</button>
         </article>
 
         <!-- 任务组 · 永久｜人工审核（只审子任务，额外奖励不用审核；子任务处理中／未通过示例：关注Facebook 上传证明未通过）｜信息完善＋其他类，子任务配满 10 个＝后台上限；前面子任务已完成的显示示例；永久不设名额，前台不显示名额（新增情境）｜后台 1095｜永久｜人工审核｜排序 103 -->
@@ -735,7 +739,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
               <div class="gr__r"><span class="chip-st chip-st--reject" onclick="showPop('reject')">未通过</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部（10） ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部 10 ⌄</button>
         </article>
 
         <!-- 任务组 · 每周｜自动审核（一般状态：领取／去充值／已完成；额外奖励领完打勾）；子任务皆为每周可用类型（充值／投注）；额外奖励配满 3 档（后台上限），n 不超过子任务数（新增情境）｜后台 1098｜每周｜排序 104 -->
@@ -751,23 +755,23 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
           </div>
           <div class="grp__list">
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">投注满 ₱300</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱300 / ₱300</span></div><div class="meta"><span class="rwc" title="golden draw券"><img class="rwi" src="img/rw_golddraw.png" alt="golden draw券">×1</span><span>已领取 <b>580 / 1,000</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">投注满 ₱300</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱300 / ₱300</span></div><div class="meta"><span class="rwc" title="golden draw券"><img class="rwi" src="img/rw_golddraw.png" alt="golden draw券">×1</span><span>已发送 <b>580/1,000</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--done">已完成</span></div>
             </div>
             <div class="gr">
-              <div class="gr__l"><div class="gr__name">充值满 ₱100</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱100 / ₱100</span></div><div class="meta"><span class="rwc" title="免费旋转"><img class="rwi" src="img/rw_freespin.png" alt="免费旋转">₱20</span><span>已领取 <b>612 / 1,000</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">充值满 ₱100</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱100 / ₱100</span></div><div class="meta"><span class="rwc" title="免费旋转"><img class="rwi" src="img/rw_freespin.png" alt="免费旋转">₱20</span><span>已发送 <b>612/1,000</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--done">已完成</span></div>
             </div>
             <div class="gr gr--more">
-              <div class="gr__l"><div class="gr__name">投注满 ₱500</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱500 / ₱500</span></div><div class="meta"><span class="rwc" title="免费投注"><img class="rwi" src="img/rw_freebet.png" alt="免费投注">₱30</span><span>已领取 <b>430 / 1,000</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">投注满 ₱500</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:100%"></i></div><span class="prog__t">₱500 / ₱500</span></div><div class="meta"><span class="rwc" title="免费投注"><img class="rwi" src="img/rw_freebet.png" alt="免费投注">₱30</span><span>已发送 <b>430/1,000</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--claim" data-amt="免费投注 ₱30" onclick="claimSub(this)">领取</span></div>
             </div>
             <div class="gr gr--more">
-              <div class="gr__l"><div class="gr__name">充值满 ₱300</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:40%"></i></div><span class="prog__t">₱120 / ₱300</span></div><div class="meta"><span class="rwc" title="优惠券"><img class="rwi" src="img/rw_coupon.png" alt="优惠券">₱50</span><span>已领取 <b>377 / 1,000</b> 人</span></div></div>
+              <div class="gr__l"><div class="gr__name">充值满 ₱300</div><div class="prog"><span class="prog__lb">进度</span><div class="pbar"><i style="width:40%"></i></div><span class="prog__t">₱120 / ₱300</span></div><div class="meta"><span class="rwc" title="优惠券"><img class="rwi" src="img/rw_coupon.png" alt="优惠券">₱50</span><span>已发送 <b>377/1,000</b> 人</span></div></div>
               <div class="gr__r"><span class="chip-st chip-st--deposit" onclick="showRedirect('充值页')">去充值</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部（4） ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部 4 ⌄</button>
         </article>
 
         <!-- 949｜信息完善-KYC认证｜彩金 20｜永久｜参与要求：完成KYC部分认证（没达成＝照 v1.1 第二层「去认证」）｜排序 105 -->
@@ -794,11 +798,11 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
       <div class="tabbar__item"><span class="ic">👤</span>我的</div>
     </nav>
 
-    <!-- ===== 提示弹窗：文案固定「奖励{()}，恭喜完成{()}任务！」，第一个 {()}＝依奖励类型、第二个 {()}＝任务名称（子任务、额外奖励用任务组名称）；手动领取有「领取」钮（点了直接跳：手机版到奖励中心、电脑版到任务中心），自动发放无按钮；停留 3 秒；每 10 秒跳一个 ===== -->
+    <!-- ===== 提示弹窗：文案固定「奖励 {{a}}，恭喜完成 {{b}} 任务！」（A134），{{a}}＝依奖励类型、{{b}}＝任务名称（子任务、额外奖励用任务组名称）；手动领取有「领取」钮（点了直接跳：手机版到奖励中心、电脑版到任务中心），自动发放无按钮；停留 3 秒；每 10 秒跳一个 ===== -->
     <div class="ntf" id="ntf" hidden>
       <button class="ntf__x" onclick="closeNtf()" aria-label="关闭">✕</button>
       <img class="ntf__ic" id="ntfIc" src="img/rw_cash.png" alt="彩金">
-      <div class="ntf__txt">奖励<span id="ntfA">100</span>，恭喜完成<span id="ntfB">每日三连·组任务</span><span id="ntfT">任务</span>！</div>
+      <div class="ntf__txt">奖励 <span id="ntfA">100</span>，恭喜完成 <span id="ntfB">每日三连·组任务</span><span id="ntfT"> 任务</span>！</div>
       <button class="ntf__btn" id="ntfBtn" onclick="claimNtf()">领取</button>
     </div>
 
@@ -963,13 +967,13 @@ function layoutGroups(){
         .sort(function(a,b){ return a.rk-b.rk || (a.rk===1 ? b.p-a.p : 0) || a.i-b.i; })
         .forEach(function(o,i){ list.appendChild(o.r); o.r.classList.toggle('gr--more', i>=GR_SHOW); });
     var btn=card.querySelector('.grp__more');
-    if(btn){ btn.hidden = rows.length<=GR_SHOW; btn.textContent='查看全部（'+rows.length+'） ⌄'; }
+    if(btn){ btn.hidden = rows.length<=GR_SHOW; btn.textContent='查看全部 '+rows.length+' ⌄'; }
   });
 }
 function toggleGroup(btn){
   var card=btn.closest('.grp'), n=card.querySelectorAll('.gr').length;
   var open=card.classList.toggle('open');
-  btn.textContent = open ? '收起 ⌃' : '查看全部（'+n+'） ⌄';
+  btn.textContent = open ? '收起 ⌃' : '查看全部 '+n+' ⌄';
 }
 /* 依奖励文字找对应图示 */
 function rwIcon(label){
@@ -1014,7 +1018,7 @@ function setClaimed(el){
   el.classList.add(review ? 'chip-st--proc' : 'chip-st--done');
   updateTabDots();
 }
-/* 额外奖励宝箱：不用审核（宝箱不会出现处理中／未通过）；领取照后台「奖励发放方式」：自动发放＝达成直接入帐、宝箱直接打勾；用户手动领取＝宝箱跳动，点了才领，领完打勾 */
+/* 额外奖励宝箱：不用审核（宝箱不会出现处理中／未通过）；领取照后台「奖励发放方式」：自动发放＝达成直接入帐、宝箱直接打勾；用户手动领取＝宝箱开合，点了才领，领完打勾 */
 function claimTier(col,label){
   if(!col.classList.contains('is-can')) return;
   document.getElementById('extraAmt').textContent = popAmt(label); setPopName('extraName',label);

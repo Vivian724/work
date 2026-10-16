@@ -50,7 +50,7 @@ code{background:#eef1f7;padding:0 5px;border-radius:4px;font-size:18px}
 <table>
 <tr><th style="width:44px">#</th><th style="width:190px">项目</th><th style="width:80px">类型</th><th>要出什么</th></tr>
 <tr><td>A1</td><td>任务列表页签</td><td><span class="tag mod">修改</span></td><td>5 个页签（全部／基础任务／每日／每周／限时），右上角红点数字；切到页签后，下方多一行红字说明</td></tr>
-<tr><td>A2</td><td>基础任务卡</td><td><span class="tag mod">修改</span></td><td>卡片上的奖励标签（6 种奖励）、进度条、「已领取 x / y 人」（满额变红）、倒数</td></tr>
+<tr><td>A2</td><td>基础任务卡</td><td><span class="tag mod">修改</span></td><td>卡片上的奖励标签（6 种奖励）、进度条、「已发送 x/y 人」（满额变红）、倒数</td></tr>
 <tr><td>A3</td><td>任务组卡</td><td><span class="tag new">新增</span></td><td>一张卡里放多个子任务：标题＋进度、子任务列表、「查看全部／收起」</td></tr>
 <tr><td>A4</td><td>额外奖励（宝箱）</td><td><span class="tag new">新增</span></td><td>任务组卡里的宝箱：未达成（灰）、可领取（亮）、已领取（打勾）3 种状态；1～3 个宝箱的排法</td></tr>
 <tr><td>A5</td><td>「额满」按钮</td><td><span class="tag new">新增</span></td><td>名额发完时显示的按钮；日间色照原型，夜间色请设计出</td></tr>
@@ -82,7 +82,7 @@ code{background:#eef1f7;padding:0 5px;border-radius:4px;font-size:18px}
 <li><b>不放「任务组」角标</b>。<b>右上</b>：倒数，永久任务不显示。</li>
 <li><b>标题</b>：后面可能有 ⓘ（同 A2）。<b>标题下方</b>：「进度 2 / 3」＝已完成子任务数 / 子任务总数，数字蓝色。</li>
 <li><b>子任务行</b>：内容同基础任务卡（名称、进度条、奖励、已领取人数、按钮），一行一个。</li>
-<li><b>收合</b>：默认只显示额外奖励＋1 个子任务（可领取优先，其次进度最高），底部「查看全部（n） ⌄」，展开后变「收起 ⌃」；子任务只有 1 个时不显示这个按钮。子任务最多 10 个。</li>
+<li><b>收合</b>：默认只显示额外奖励＋1 个子任务（可领取优先，其次进度最快，已完成放最后），底部「查看全部 n ⌄」，展开后变「收起 ⌃」；子任务只有 1 个时不显示这个按钮。子任务最多 10 个。</li>
 <li>任务名称、子任务名称都只显示<b>一行</b>，超出以「…」截断。</li>
 </ul>
 </div>
@@ -99,7 +99,7 @@ code{background:#eef1f7;padding:0 5px;border-radius:4px;font-size:18px}
   <ul><li>彩金、积分：数值，例如 <code>100</code>；最多 6 位数（<code>999,999</code>），请以此长度确认版面放得下</li><li>免费旋转、免费投注、优惠券：₱价值，例如 <code>₱20</code></li><li>golden draw券：张数，例如 <code>×1</code></li></ul>
   标签宽度要能跟着内容伸缩。</li>
 <li><b>进度条</b>：资金类任务（充值、投注）显示「进度 ▬▬▬ ₱80 / ₱200」。其他任务只显示文字「进度 0 / 1」，不显示进度条。</li>
-<li><b>已领取人数</b>：「已领取 x / y 人」。原型 H5 放在奖励标签<b>下一行</b>，PC 放在奖励标签<b>同一行</b>。<b>满额时变红字</b>。有设名额才显示，永久任务不显示。</li>
+<li><b>已发送人数</b>：「已发送 x/y 人」。原型 H5 放在奖励标签<b>下一行</b>，PC 放在奖励标签<b>同一行</b>。<b>满额时变红字</b>。有设名额才显示，永久任务不显示。</li>
 <li><b>倒数</b>：红字「⏱ 6d 13:05:11」，放在按钮上方。永久任务不显示。</li>
 <li><b>标题后的 ⓘ</b>（照既有）：后台设了「显示任务简介」才出现，灰色圆圈 14px <code>#9aa3b2</code>，点了跳「任务介绍」弹窗。有 ⓘ 时标题一样只显示一行，超出以「…」截断，ⓘ 不被截掉。基础任务卡、任务组卡都有。</li>
 <li><b>按钮</b>：H5 高 32px、按钮区宽 84px，圆角 8px；PC 见 A7。</li>
@@ -109,7 +109,7 @@ code{background:#eef1f7;padding:0 5px;border-radius:4px;font-size:18px}
 <ul>
 <li>名额发完、而且会员还没拿到这项奖励时显示。按钮不能点。</li>
 <li>用色：日间 <span class="sw" style="background:#e2b4b4"></span><code>#e2b4b4</code>，白字（照原型）。夜间参考 <span class="sw" style="background:#8a6464"></span><code>#8a6464</code>（原型没有夜间版）。</li>
-<li>设计用意：跟「已完成」一样是不能点的浅色，但带一点红，呼应红字的「已领取 x / y 人」。</li>
+<li>设计用意：跟「已完成」一样是不能点的浅色，但带一点红，呼应红字的「已发送 x/y 人」。</li>
 </ul>
 <p style="margin:10px 0 4px;font-size:19px;color:var(--sub)">既有按钮色票（照既有，不用改，给你对照用）：</p>
 <div style="font-size:19px;line-height:2">
@@ -140,7 +140,7 @@ code{background:#eef1f7;padding:0 5px;border-radius:4px;font-size:18px}
 <table style="margin-top:8px">
 <tr><th>状态</th><th>样子</th><th>需要的图</th></tr>
 <tr><td>未达成</td><td>灰蓝圆底＋银色宝箱，不能点</td><td>银宝箱（灰蓝圆底）</td></tr>
-<tr><td>可领取</td><td>橘色圆底＋红色宝箱＋发光，上下跳动；点宝箱就能领取</td><td>红宝箱（橘色圆底）</td></tr>
+<tr><td>可领取</td><td>橘色圆底＋红色宝箱＋发光，宝箱开合；点宝箱就能领取</td><td>红宝箱（橘色圆底）</td></tr>
 <tr><td>已领取</td><td>绿色圆底＋白色打勾，不能点</td><td>—（原型用 CSS）</td></tr>
 </table>
 <p class="note" style="margin-top:10px">宝箱样式已照设计稿；原型的 <code>img/chest_lock.png</code>、<code>img/chest_can.png</code> 是从设计稿裁的，请提供原图替换。进度条：已达成橘色、未达成灰色；宝箱下方奖励红字。黑名单和未登录用户的宝箱一律显示灰蓝银宝箱。</p>
@@ -223,7 +223,7 @@ code{background:#eef1f7;padding:0 5px;border-radius:4px;font-size:18px}
 <ul>
 <li>任务可以领取、或奖励已经自动发放时，在底部跳出提醒，这是既有功能。</li>
 <li><b>本期改的地方</b>：最左边的图示改成<b>依奖励类型显示</b>（A6），原本只有彩金、积分有图示。</li>
-<li>文案固定：「奖励{()}，恭喜完成{()}任务！」。第一个 {()}：彩金／积分＝数值，券类＝₱价值（不放券名称），golden draw券＝×张数；第二个 {()} 是任务名称，子任务和额外奖励都用任务组名称。任务名称结尾已是「任务」就不再接「任务」（例：恭喜完成每周活跃挑战 · 组任务！）。</li>
+<li>文案固定：「奖励 {{a}}，恭喜完成 {{b}} 任务！」。{{a}}：彩金／积分＝数值，券类＝₱价值（不放券名称），golden draw券＝×张数；{{b}} 是任务名称，子任务和额外奖励都用任务组名称。任务名称结尾已是「任务」就不再接「任务」（例：恭喜完成每周活跃挑战 · 组任务！）。</li>
 <li>手动领取的任务：右边有蓝色「领取」按钮。自动发放的任务：<b>没有按钮</b>，两种都要出图。</li>
 <li>左上角关闭钮：灰蓝实心圆（#a7b0c9）＋白色 ✕，点了关闭。</li>
 <li>位置：H5 在底部导航列上方，<b>PC 在内容区右下角</b>。</li>

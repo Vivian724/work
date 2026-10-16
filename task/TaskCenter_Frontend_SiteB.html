@@ -126,13 +126,17 @@ img{display:block;max-width:100%;}
 .ms__track i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#ffb54d,#ff7a1a);}
 .ms__cols{position:relative;display:grid;grid-template-columns:repeat(var(--k),1fr);}
 .ms__col{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;}
-/* 宝箱：灰＝未达成；亮＋发光＋跳动＝可领取（点宝箱即领取，不另放文字）；绿色打勾＝已领取 */
+/* 宝箱：灰＝未达成；亮＋发光＋开合＝可领取（点宝箱即领取，不另放文字）；绿色打勾＝已领取 */
 .ms__box{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:1.15rem;background:#fff;border:2px solid #f3d69c;box-sizing:border-box;filter:grayscale(1);opacity:.55;}
 .ms__col.is-can{cursor:pointer;}
-.is-can .ms__box{filter:none;opacity:1;border-color:#ff8a1f;box-shadow:0 0 0 3px rgba(255,138,31,.18);animation:msBounce 1.2s ease-in-out infinite;}
+.is-can .ms__box{filter:none;opacity:1;border-color:#ff8a1f;box-shadow:0 0 0 3px rgba(255,138,31,.18);position:relative;font-size:0;background:radial-gradient(ellipse 24% 9% at 50% 39%,#ffe866 0,#ffc93c 60%,transparent 100%) #fff;}
+/* 可领取：礼盒开合（盒身不动，盒盖掀开露出金光，再盖回） */
+.is-can .ms__box::before,.is-can .ms__box::after{content:"🎁";position:absolute;inset:0;display:grid;place-items:center;font-size:1.15rem;line-height:1;}
+.is-can .ms__box::before{clip-path:inset(40% 0 0 0);}
+.is-can .ms__box::after{clip-path:inset(0 0 60% 0);transform-origin:50% 40%;animation:msLid 1.4s ease-in-out infinite;}
+@keyframes msLid{0%,40%,100%{transform:translateY(0) rotate(0)}60%,80%{transform:translateY(-5px) rotate(-12deg)}}
 .is-done .ms__box{filter:none;opacity:1;font-size:0;background:#22b07d;border-color:#22b07d;}
 .is-done .ms__box::after{content:"✓";font-size:1.2rem;font-weight:900;color:#fff;line-height:1;}
-@keyframes msBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 .ms__n{font-size:.84rem;color:var(--text-2);margin-top:3px;}
 .ms__amt{display:inline-flex;align-items:center;gap:4px;font-size:1.02rem;font-weight:800;color:#e08a00;line-height:1.25;white-space:nowrap;}
 .ms__amt img{width:20px;height:20px;}
@@ -169,7 +173,7 @@ img{display:block;max-width:100%;}
    · 外框照线上 PC 截图：顶部导览＋左侧选单（Rewards 反蓝），右边内容区＝banner → 页签 → 任务列表
    · Task：照线上 PC——两栏卡片，卡内同 H5（角标 → 标题 → 进度条 → 进度文字 → 奖励｜倒数＋按钮），整体缩小
    · Task Group：一个任务组占满一整行；标题＋完成进度｜右上倒数 → 额外奖励横条（左标题、右宝箱进度轴）
-     → 子任务两栏小卡（浅灰底，同 Task 卡），预设显示第一排 2 个，View All 展开
+     → 子任务两栏小卡（浅灰底，同 Task 卡），预设显示 2 个（第一排），View All 展开
    ========================================================= */
 .pc-nav,.pc-side{display:none;}
 html:has(body.is-pc){font-size:16px;}  /* PC 整页字体基准（放大） */
@@ -300,21 +304,21 @@ body.is-pc{flex-wrap:nowrap;}
           <div class="sub__name">充值满 ₱50</div>
           <div class="bar"><i style="width:100%"></i></div>
           <div class="pt"><span>₱50 /₱50 <em>(100%)</em></span></div>
-          <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZmI0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjViZTAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2Zjk4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzYTY2ZWUiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTIwIDExLjVsMi42IDUuNCA1LjkuOC00LjMgNC4xIDEgNS44TDIwIDI0LjhsLTUuMiAyLjggMS01LjgtNC4zLTQuMSA1LjktLjh6IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>100</span></div><div class="quota">Rewarded: <b>850 / 1,000</b> Users</div></div><button class="btn btn--claim" data-ic="point" data-amt="100" onclick="claimBtn(this)">Receive</button></div>
+          <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZmI0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjViZTAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2Zjk4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzYTY2ZWUiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTIwIDExLjVsMi42IDUuNCA1LjkuOC00LjMgNC4xIDEgNS44TDIwIDI0LjhsLTUuMiAyLjggMS01LjgtNC4zLTQuMSA1LjktLjh6IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>100</span></div><div class="quota">Rewarded <b>850/1,000</b> Users</div></div><button class="btn btn--claim" data-ic="point" data-amt="100" onclick="claimBtn(this)">Receive</button></div>
         </div>
         <div class="sub">
           <div class="sub__name">投注满 ₱200</div>
           <div class="bar"><i style="width:100%"></i></div>
           <div class="pt"><span>₱200 /₱200 <em>(100%)</em></span></div>
-          <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZmI0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjViZTAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2Zjk4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzYTY2ZWUiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTIwIDExLjVsMi42IDUuNCA1LjkuOC00LjMgNC4xIDEgNS44TDIwIDI0LjhsLTUuMiAyLjggMS01LjgtNC4zLTQuMSA1LjktLjh6IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>150</span></div><div class="quota">Rewarded: <b>868 / 1,000</b> Users</div></div><button class="btn btn--done" disabled>Completed</button></div>
+          <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZmI0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjViZTAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2Zjk4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzYTY2ZWUiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTIwIDExLjVsMi42IDUuNCA1LjkuOC00LjMgNC4xIDEgNS44TDIwIDI0LjhsLTUuMiAyLjggMS01LjgtNC4zLTQuMSA1LjktLjh6IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>150</span></div><div class="quota">Rewarded <b>868/1,000</b> Users</div></div><button class="btn btn--done" disabled>Completed</button></div>
         </div>
         <div class="sub" data-more hidden>
           <div class="sub__name">投注满 ₱300</div>
           <div class="bar"><i style="width:40%"></i></div>
           <div class="pt"><span>₱120 /₱300 <em>(40%)</em></span></div>
-          <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZmI0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjViZTAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2Zjk4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzYTY2ZWUiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTIwIDExLjVsMi42IDUuNCA1LjkuOC00LjMgNC4xIDEgNS44TDIwIDI0LjhsLTUuMiAyLjggMS01LjgtNC4zLTQuMSA1LjktLjh6IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>200</span></div><div class="quota">Rewarded: <b>790 / 1,000</b> Users</div></div><button class="btn btn--bet">Bet Now</button></div>
+          <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZmI0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjViZTAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2Zjk4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzYTY2ZWUiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTIwIDExLjVsMi42IDUuNCA1LjkuOC00LjMgNC4xIDEgNS44TDIwIDI0LjhsLTUuMiAyLjggMS01LjgtNC4zLTQuMSA1LjktLjh6IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>200</span></div><div class="quota">Rewarded <b>790/1,000</b> Users</div></div><button class="btn btn--bet">Bet Now</button></div>
         </div>
-        <button class="more" onclick="toggleMore(this,3)">View All (3) ⌄</button>
+        <button class="more" onclick="toggleMore(this,3)">View All 3 ⌄</button>
       </article>
 
       <!-- 每日｜投注 ₱100｜彩金 50｜手动领取 -->
@@ -332,7 +336,7 @@ body.is-pc{flex-wrap:nowrap;}
         <div class="ttl"><span class="tt">小额用户 · 每日充值任务</span></div>
         <div class="bar"><i style="width:0%"></i></div>
         <div class="pt"><span>₱0 /₱50 <em>(0%)</em></span></div>
-        <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZmI0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjViZTAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2Zjk4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzYTY2ZWUiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTIwIDExLjVsMi42IDUuNCA1LjkuOC00LjMgNC4xIDEgNS44TDIwIDI0LjhsLTUuMiAyLjggMS01LjgtNC4zLTQuMSA1LjktLjh6IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>100</span></div><div class="quota">Rewarded: <b>790 / 1,000</b> Users</div></div><span class="cd">13:05:11</span><button class="btn btn--topup">Top Up</button></div>
+        <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZmI0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjViZTAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2Zjk4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzYTY2ZWUiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTIwIDExLjVsMi42IDUuNCA1LjkuOC00LjMgNC4xIDEgNS44TDIwIDI0LjhsLTUuMiAyLjggMS01LjgtNC4zLTQuMSA1LjktLjh6IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>100</span></div><div class="quota">Rewarded <b>790/1,000</b> Users</div></div><span class="cd">13:05:11</span><button class="btn btn--topup">Top Up</button></div>
       </article>
 
       <!-- 任务组 · 每周｜子任务 4 个｜额外奖励 3 档：2 个 免费投注（已领）／3 个 优惠券（可领）／4 个 彩金 200 -->
@@ -347,27 +351,27 @@ body.is-pc{flex-wrap:nowrap;}
           <div class="sub__name">投注满 ₱300</div>
           <div class="bar"><i style="width:100%"></i></div>
           <div class="pt"><span>₱300 /₱300 <em>(100%)</em></span></div>
-          <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmQyNWEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNlOTg2MWEiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmM5NGEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmMzlhMWYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTExLjUgMTQgMTUuMyAyNi41IDIwIDE4LjUgMjQuNyAyNi41IDI4LjUgMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZjZjZiIgc3Ryb2tlLXdpZHRoPSIzLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>50</span></div><div class="quota">Rewarded: <b>580 / 1,000</b> Users</div></div><button class="btn btn--done" disabled>Completed</button></div>
+          <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmQyNWEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNlOTg2MWEiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmM5NGEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmMzlhMWYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTExLjUgMTQgMTUuMyAyNi41IDIwIDE4LjUgMjQuNyAyNi41IDI4LjUgMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZjZjZiIgc3Ryb2tlLXdpZHRoPSIzLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>50</span></div><div class="quota">Rewarded <b>580/1,000</b> Users</div></div><button class="btn btn--done" disabled>Completed</button></div>
         </div>
         <div class="sub">
           <div class="sub__name">投注满 ₱500</div>
           <div class="bar"><i style="width:100%"></i></div>
           <div class="pt"><span>₱500 /₱500 <em>(100%)</em></span></div>
-          <div class="foot"><div class="rw-col"><div class="rw rw--txt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZWU2N2MiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyYzlhM2EiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2ZmQ0NjgiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzN2E4NDMiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iOC4yIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWRhc2hhcnJheT0iNC4zIDIuMTQiLz48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIzLjYiIGZpbGw9IiNmZmYiLz4KPC9zdmc+Cg==" alt=""><span>₱30</span></div><div class="quota">Rewarded: <b>430 / 1,000</b> Users</div></div><button class="btn btn--claim" data-ic="freebet" data-amt="₱30" onclick="claimBtn(this)">Receive</button></div>
+          <div class="foot"><div class="rw-col"><div class="rw rw--txt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZWU2N2MiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyYzlhM2EiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2ZmQ0NjgiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzN2E4NDMiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iOC4yIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWRhc2hhcnJheT0iNC4zIDIuMTQiLz48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIzLjYiIGZpbGw9IiNmZmYiLz4KPC9zdmc+Cg==" alt=""><span>₱30</span></div><div class="quota">Rewarded <b>430/1,000</b> Users</div></div><button class="btn btn--claim" data-ic="freebet" data-amt="₱30" onclick="claimBtn(this)">Receive</button></div>
         </div>
         <div class="sub" data-more hidden>
           <div class="sub__name">充值满 ₱100</div>
           <div class="bar"><i style="width:100%"></i></div>
           <div class="pt"><span>₱100 /₱100 <em>(100%)</em></span></div>
-          <div class="foot"><div class="rw-col"><div class="rw rw--txt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjhmZDgiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjMDFmODAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjZmYzYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNkMDMyOGYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTI3LjUgMjBhNy41IDcuNSAwIDEgMS0yLjItNS4zIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTI3LjYgMTEuMnY1LjRoLTUuNHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==" alt=""><span>₱20</span></div><div class="quota">Rewarded: <b>612 / 1,000</b> Users</div></div><button class="btn btn--done" disabled>Completed</button></div>
+          <div class="foot"><div class="rw-col"><div class="rw rw--txt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjhmZDgiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjMDFmODAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjZmYzYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNkMDMyOGYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTI3LjUgMjBhNy41IDcuNSAwIDEgMS0yLjItNS4zIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTI3LjYgMTEuMnY1LjRoLTUuNHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==" alt=""><span>₱20</span></div><div class="quota">Rewarded <b>612/1,000</b> Users</div></div><button class="btn btn--done" disabled>Completed</button></div>
         </div>
         <div class="sub" data-more hidden>
           <div class="sub__name">充值满 ₱300</div>
           <div class="bar"><i style="width:40%"></i></div>
           <div class="pt"><span>₱120 /₱300 <em>(40%)</em></span></div>
-          <div class="foot"><div class="rw-col"><div class="rw rw--txt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4NmYzZWUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNTljOWUiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1ZmUwZGMiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxZmIwYjAiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTExIDE1aDE4djNhMiAyIDAgMCAwIDAgNHYzSDExdi0zYTIgMiAwIDAgMCAwLTR6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTE3LjMgMjMuMmw1LjQtNi40IiBzdHJva2U9IiMxZmIwYjAiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48Y2lyY2xlIGN4PSIxNy4zIiBjeT0iMTcuNCIgcj0iMS4zIiBmaWxsPSIjMWZiMGIwIi8+PGNpcmNsZSBjeD0iMjIuNyIgY3k9IjIyLjYiIHI9IjEuMyIgZmlsbD0iIzFmYjBiMCIvPgo8L3N2Zz4K" alt=""><span>₱50</span></div><div class="quota">Rewarded: <b>377 / 1,000</b> Users</div></div><button class="btn btn--topup">Top Up</button></div>
+          <div class="foot"><div class="rw-col"><div class="rw rw--txt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4NmYzZWUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNTljOWUiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1ZmUwZGMiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxZmIwYjAiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTExIDE1aDE4djNhMiAyIDAgMCAwIDAgNHYzSDExdi0zYTIgMiAwIDAgMCAwLTR6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTE3LjMgMjMuMmw1LjQtNi40IiBzdHJva2U9IiMxZmIwYjAiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48Y2lyY2xlIGN4PSIxNy4zIiBjeT0iMTcuNCIgcj0iMS4zIiBmaWxsPSIjMWZiMGIwIi8+PGNpcmNsZSBjeD0iMjIuNyIgY3k9IjIyLjYiIHI9IjEuMyIgZmlsbD0iIzFmYjBiMCIvPgo8L3N2Zz4K" alt=""><span>₱50</span></div><div class="quota">Rewarded <b>377/1,000</b> Users</div></div><button class="btn btn--topup">Top Up</button></div>
         </div>
-        <button class="more" onclick="toggleMore(this,4)">View All (4) ⌄</button>
+        <button class="more" onclick="toggleMore(this,4)">View All 4 ⌄</button>
       </article>
 
       <!-- 任务组 · 永久｜信息完善＋其他类，子任务 10 个（后台上限）｜额外奖励 3 个 ₱20（已领）／6 个 ₱100／10 个 彩金 100｜永久：不放左上角标、没有倒数、不显示名额｜照原网站后台 1095 -->
@@ -437,7 +441,7 @@ body.is-pc{flex-wrap:nowrap;}
           <div class="pt"><span>0 /1</span></div>
           <div class="foot"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4ZmI0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZjViZTAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2Zjk4ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMzYTY2ZWUiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTIwIDExLjVsMi42IDUuNCA1LjkuOC00LjMgNC4xIDEgNS44TDIwIDI0LjhsLTUuMiAyLjggMS01LjgtNC4zLTQuMSA1LjktLjh6IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>20</span></div><button class="btn btn--upload">Upload</button></div>
         </div>
-        <button class="more" onclick="toggleMore(this,10)">View All (10) ⌄</button>
+        <button class="more" onclick="toggleMore(this,10)">View All 10 ⌄</button>
       </article>
 
       <!-- 限时（周限时）｜投注 ₱5,000｜彩金 222｜名额已满 -->
@@ -445,7 +449,7 @@ body.is-pc{flex-wrap:nowrap;}
         <div class="ttl"><span class="tt">高价值用户 · 周限时投注</span></div>
         <div class="bar"><i style="width:64%"></i></div>
         <div class="pt"><span>₱3,200 /₱5,000 <em>(64%)</em></span></div>
-        <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmQyNWEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNlOTg2MWEiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmM5NGEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmMzlhMWYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTExLjUgMTQgMTUuMyAyNi41IDIwIDE4LjUgMjQuNyAyNi41IDI4LjUgMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZjZjZiIgc3Ryb2tlLXdpZHRoPSIzLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>222</span></div><div class="quota">Rewarded: <b class="full">200 / 200</b> Users</div></div><span class="cd">4d 13:05:11</span><button class="btn btn--full" disabled>full</button></div>
+        <div class="foot"><div class="rw-col"><div class="rw"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmQyNWEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNlOTg2MWEiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmM5NGEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmMzlhMWYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTExLjUgMTQgMTUuMyAyNi41IDIwIDE4LjUgMjQuNyAyNi41IDI4LjUgMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZjZjZiIgc3Ryb2tlLXdpZHRoPSIzLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K" alt=""><span>222</span></div><div class="quota">Rewarded <b class="full">200/200</b> Users</div></div><span class="cd">4d 13:05:11</span><button class="btn btn--full" disabled>full</button></div>
       </article>
 
       <!-- 永久｜关注Facebook｜积分 20｜人工审核 -->
@@ -478,7 +482,7 @@ body.is-pc{flex-wrap:nowrap;}
         <div class="ttl"><span class="tt">每周投注送免费旋转</span></div>
         <div class="bar"><i style="width:100%"></i></div>
         <div class="pt"><span>₱1,000 /₱1,000 <em>(100%)</em></span></div>
-        <div class="foot"><div class="rw-col"><div class="rw rw--txt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjhmZDgiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjMDFmODAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjZmYzYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNkMDMyOGYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTI3LjUgMjBhNy41IDcuNSAwIDEgMS0yLjItNS4zIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTI3LjYgMTEuMnY1LjRoLTUuNHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==" alt=""><span>₱20</span></div><div class="quota">Rewarded: <b>86 / 500</b> Users</div></div><span class="cd">6d 13:05:11</span><button class="btn btn--done" disabled>Completed</button></div>
+        <div class="foot"><div class="rw-col"><div class="rw rw--txt"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im8iIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjhmZDgiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjMDFmODAiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZjZmYzYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNkMDMyOGYiLz48L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE5IiBmaWxsPSJ1cmwoI28pIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE0LjUiIGZpbGw9InVybCgjaSkiLz4KPGVsbGlwc2UgY3g9IjE1IiBjeT0iMTEiIHJ4PSI2IiByeT0iMi42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMzUiLz4KPHBhdGggZD0iTTI3LjUgMjBhNy41IDcuNSAwIDEgMS0yLjItNS4zIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTI3LjYgMTEuMnY1LjRoLTUuNHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==" alt=""><span>₱20</span></div><div class="quota">Rewarded <b>86/500</b> Users</div></div><span class="cd">6d 13:05:11</span><button class="btn btn--done" disabled>Completed</button></div>
       </article>
 
     </div>
@@ -528,6 +532,7 @@ setTab(document.querySelector('.pill--on'));   // 预设停在 Task
 function togglePC(btn){
   const on = document.body.classList.toggle('is-pc');
   btn.textContent = on ? '切换 H5 版' : '切换 PC 版';
+  document.querySelectorAll('#list .card[data-kind="grp"]').forEach(fold);   /* H5 预设 1 个、PC 预设 2 个，切换时重收合（不重排） */
 }
 
 /* 子任务展开／收起 */
@@ -535,7 +540,7 @@ function toggleMore(btn, n){
   const extra = btn.closest('.card').querySelectorAll('[data-more]');
   const open = extra[0].hidden;
   extra.forEach(e => e.hidden = !open);
-  btn.textContent = open ? 'Hide ⌃' : `View All (${n}) ⌄`;
+  btn.textContent = open ? 'Hide ⌃' : `View All ${n} ⌄`;
 }
 
 /* 领取成功弹窗：换成对应奖励的图示和数值 */
@@ -568,9 +573,10 @@ function claimTier(el){
   updateDots();
 }
 
-/* 排序（同 A 站规格 3.1、3.3，进页面时排一次；领取后不马上重排）：
-   子任务＝领取 → 进行中（含处理中、未通过，进度越高越前）→ 已完成／额满，同顺位、同进度照后台顺序；收起时只露 1 个（额外奖励＋1 个子任务）
-   卡片＝已完成、额满的排到最下方（任务组要子任务、宝箱全部完成或额满） */
+/* 子任务排序（进页面时排一次；领取后下次进页面才重排）：
+   ① 可领取 → 最前　② 进行中 → 进度越快越前（都还没开始＝照后台顺序，第一个就是子任务一）　③ 已完成、额满 → 最后
+   同进度照后台顺序。排第一的就是预设显示的那张：H5 预设 1 个，PC 预设 2 个，其余点 View All 展开
+   卡片：已完成、额满的排到最下方（任务组要子任务、宝箱全部完成或额满） */
 function subRank(sub){
   if(sub.querySelector('.btn--claim')) return 0;
   if(sub.querySelector('.btn--done,.btn--full')) return 2;
@@ -582,15 +588,19 @@ function isDoneCard(c){
 }
 /* 子任务进度（0～1）：看进度条宽度 */
 function subProg(sub){ const b = sub.querySelector('.bar i'); return b ? (parseFloat(b.style.width) || 0) / 100 : 0; }
+/* 收合：照目前顺序露出前 N 个（H5＝1、PC＝2），其余收起；子任务不超过 N 个就不显示 View All */
+function fold(c){
+  const subs = [...c.querySelectorAll('.sub')], more = c.querySelector('.more'), n = document.body.classList.contains('is-pc') ? 2 : 1;
+  subs.forEach((sub, k) => { if(k < n){ sub.removeAttribute('data-more'); sub.hidden = false; } else { sub.setAttribute('data-more', ''); sub.hidden = true; } });
+  if(more){ more.hidden = subs.length <= n; const b = more.querySelector('button,a,span') || more; if(/Hide/.test(b.textContent)) b.textContent = `View All ${subs.length} ⌄`; }
+}
 function layout(){
   document.querySelectorAll('#list .card[data-kind="grp"]').forEach(c => {
     const subs = [...c.querySelectorAll('.sub')], more = c.querySelector('.more');
     subs.map((s, i) => ({s, i, r: subRank(s), p: subProg(s)})).sort((a, b) => a.r - b.r || (a.r === 1 ? b.p - a.p : 0) || a.i - b.i).forEach((o, k) => {
-      if(k < 1){ o.s.removeAttribute('data-more'); o.s.hidden = false; }
-      else { o.s.setAttribute('data-more', ''); o.s.hidden = true; }
       c.insertBefore(o.s, more);
     });
-    if(more) more.hidden = subs.length <= 1;   /* 只有 1 个子任务：不显示 View All */
+    fold(c);
   });
   const list = document.getElementById('list');
   cards.filter(isDoneCard).forEach(c => list.appendChild(c));
