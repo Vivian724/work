@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewards 页改版 · 原型（后台＋前台 H5）</title>
+<!-- 线上后台＝Vue 2＋Element UI 预设主题；直接载入同一套样式，元件长相跟线上一样 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/theme-chalk/index.css">
+<style>
+/* ==========================================================================
+   只放版面骨架与少数自订；元件（按钮、输入框、下拉、表格、开关、页签、弹窗、标签）
+   一律用 Element UI 原生 class
+   ========================================================================== */
+:root{
+  --c-primary:#409EFF; --c-danger:#F56C6C; --c-warning:#E6A23C; --c-text:#303133; --c-text-2:#606266; --c-text-3:#909399;
+  --c-border:#DCDFE6; --c-border-light:#EBEEF5; --c-bg:#F0F2F5; --c-warning-bg:#FDF6EC;
+  --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;font-size:14px;color:var(--c-text-2);background:var(--c-bg);min-width:1280px;}
+.hidden{display:none!important;}
+
+/* ===== 本次「新增」标示：红框＋左上「新增」 ===== */
+.is-new{position:relative;border:2px solid var(--c-danger);border-radius:4px;padding:18px 16px 4px;margin:6px 0 16px;}
+.is-new::before{content:"新增";position:absolute;top:-1px;left:-1px;background:var(--c-danger);color:#fff;font-size:12px;line-height:18px;padding:0 6px;border-radius:3px 0 3px 0;}
+.is-new[data-mark]::before{content:attr(data-mark);}
+.is-new--inline{display:inline-block;padding:14px 10px 2px;margin:0;}
+/* 工具列按钮用：细红框贴着按钮，「新增」小标浮在左上，不撑高、跟旁边按钮同高对齐 */
+.is-new--btn{position:relative;display:inline-flex;border:1.5px solid var(--c-danger);border-radius:5px;padding:2px;}
+.is-new--btn::before{content:"新增";position:absolute;top:-9px;left:8px;background:var(--c-danger);color:#fff;font-size:11px;line-height:15px;padding:0 5px;border-radius:2px;}
+/* 表格里的新增栏：整栏红框 */
+.el-table th.col-new,.el-table td.col-new{box-shadow:inset 2px 0 0 var(--c-danger),inset -2px 0 0 var(--c-danger);}
+.el-table th.col-new{box-shadow:inset 2px 0 0 var(--c-danger),inset -2px 0 0 var(--c-danger),inset 0 2px 0 var(--c-danger);}
+.el-table tr:last-child td.col-new{box-shadow:inset 2px 0 0 var(--c-danger),inset -2px 0 0 var(--c-danger),inset 0 -2px 0 var(--c-danger);}
+.th-new{display:inline-block;margin-left:4px;background:var(--c-danger);color:#fff;font-size:11px;line-height:16px;padding:0 4px;border-radius:2px;font-weight:400;vertical-align:1px;}
+/* ===== 本次「修改」既有栏位：橘框＋左上「修改」 ===== */
+.is-mod{position:relative;border:2px solid var(--c-warning);border-radius:4px;padding:18px 16px 4px;margin:6px 0 16px;}
+.is-mod::before{content:"修改";position:absolute;top:-1px;left:-1px;background:var(--c-warning);color:#fff;font-size:12px;line-height:18px;padding:0 6px;border-radius:3px 0 3px 0;}
+.el-table th.col-mod,.el-table td.col-mod{box-shadow:inset 2px 0 0 var(--c-warning),inset -2px 0 0 var(--c-warning);}
+.el-table th.col-mod{box-shadow:inset 2px 0 0 var(--c-warning),inset -2px 0 0 var(--c-warning),inset 0 2px 0 var(--c-warning);}
+.el-table tr:last-child td.col-mod{box-shadow:inset 2px 0 0 var(--c-warning),inset -2px 0 0 var(--c-warning),inset 0 -2px 0 var(--c-warning);}
+.th-mod{display:inline-block;margin-left:4px;background:var(--c-warning);color:#fff;font-size:11px;line-height:16px;padding:0 4px;border-radius:2px;font-weight:400;vertical-align:1px;}
+
+/* ===== 外框：左侧选单＋右侧主区（照线上） ===== */
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:210px;flex-shrink:0;background:#fff;border-right:1px solid #e6e6e6;}
+.sidebar .el-menu{border-right:none;}
+.sidebar .el-menu-item,.sidebar .el-submenu__title{height:40px;line-height:40px;}
+.sidebar .el-menu-item.is-active{color:#31373D;background:#E6EFFD;}
+.right{flex:1;min-width:0;display:flex;flex-direction:column;}
+.navbar{height:56px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-5);box-shadow:0 1px 4px rgba(0,21,41,.08);}
+.navbar__user{display:flex;align-items:center;gap:var(--space-2);color:var(--c-text);}
+.navbar__avatar{width:32px;height:32px;border-radius:50%;background:#C0C4CC;}
+.main{flex:1;padding:var(--space-4) var(--space-5);}
+.page{background:#fff;border-radius:4px;padding:var(--space-4) var(--space-5) var(--space-5);}
+.page .el-breadcrumb{margin-bottom:var(--space-4);}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:var(--space-3);}
+.tags__item{display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 8px;border:1px solid #d8dce5;font-size:13px;color:#495060;background:#fff;cursor:pointer;}
+.tags__item--active{background:var(--c-primary);border-color:var(--c-primary);color:#fff;}
+
+/* ===== 通用区块 ===== */
+.box{border:1px solid var(--c-border-light);border-radius:4px;padding:var(--space-4);margin-bottom:var(--space-3);}
+.filter{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;}
+.filter .el-form-item{margin:0;}
+.filter .el-select{width:170px;}
+.toolbar{display:flex;justify-content:flex-end;gap:var(--space-3);margin-bottom:var(--space-3);}
+.box__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);}
+.box__title{font-size:16px;color:var(--c-text);}
+
+/* ===== 表格 ===== */
+.el-table{width:100%;overflow-x:auto;}   /* 栏位多，窄萤幕时整张表横向卷动（表头、表身一起），不挤栏 */
+.el-table__header,.el-table__body{min-width:1080px;}
+.el-table .cell{white-space:normal;word-break:break-all;text-overflow:clip;}
+.el-table__row.is-feat td.el-table__cell{background:var(--c-warning-bg);}
+.thumb{display:inline-block;width:44px;height:26px;border-radius:2px;background:linear-gradient(135deg,#c6e2ff,#ecf5ff);vertical-align:middle;}
+.thumb--wide{width:72px;}
+.sort-input{width:76px;}
+.sort-input .el-input__inner{text-align:center;padding:0 6px;}
+
+/* ===== 下拉浮层定位、提示 ===== */
+.el-select{position:relative;}
+.el-select .el-select-dropdown{position:absolute;top:100%;left:0;margin-top:6px;min-width:100%;}
+.el-select.is-multiple .el-select__tags{z-index:2;position:absolute;top:50%;transform:translateY(-50%);left:0;right:30px;display:flex;flex-wrap:wrap;align-items:center;}
+.el-select.is-multiple .el-select__tags .el-tag{margin:2px 0 2px 6px;padding:0 4px 0 8px;height:24px;line-height:22px;display:inline-flex;align-items:center;gap:2px;background:#f4f4f5;border:1px solid #e9e9eb;color:#909399;border-radius:4px;}
+.el-select.is-multiple .el-select__tags .el-tag__close{position:static;transform:scale(.8);}
+.el-select__placeholder{color:#C0C4CC;font-size:13px;padding-left:11px;}
+.el-message{top:20px;}
+
+/* ===== 表单（弹窗、配置页） ===== */
+.el-form-item__tip{font-size:12px;color:var(--c-text-2);line-height:1.6;margin-top:4px;}
+.el-form-item__tip--red{color:var(--c-danger);}
+.upload-row{display:flex;align-items:center;gap:var(--space-3);}
+.upload-row__path{flex:1;max-width:420px;height:32px;background:#F5F7FA;border-radius:4px;display:flex;align-items:center;padding:0 8px;}
+.upload-pair{display:flex;gap:28px;flex-wrap:wrap;}
+.upload-pair__item{display:flex;align-items:center;gap:6px;}
+.check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));max-width:760px;}
+.check-grid .el-checkbox{margin-right:0;line-height:32px;}
+.el-radio{margin-right:24px;}
+
+/* 编辑活动（照线上：左侧步骤、区块标题左 4px 蓝条、上传卡） */
+.wizard{display:flex;gap:12px;align-items:flex-start;}
+.steps{width:170px;flex-shrink:0;border:1px solid var(--c-border-light);border-radius:4px;padding:8px 0;margin:0;list-style:none;}
+.steps__item{display:flex;align-items:center;gap:10px;padding:10px 16px;}
+.steps__item--active{background:#ECF5FF;color:var(--c-primary);}
+.steps__num{width:22px;height:22px;border-radius:50%;border:1px solid var(--c-border);display:flex;align-items:center;justify-content:center;font-size:12px;}
+.steps__item--active .steps__num{background:var(--c-primary);border-color:var(--c-primary);color:#fff;}
+.wizard__main{flex:1;min-width:0;}
+.wizard__bar{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--c-border-light);border-radius:4px;padding:10px 16px;margin-bottom:12px;}
+.wizard__bar-title{color:var(--c-primary);font-weight:500;}
+.wizard__body{border:1px solid var(--c-border-light);border-radius:4px;padding:20px 24px;}
+.section{margin-bottom:24px;}
+.section-title{font-size:16px;font-weight:600;color:var(--c-text);border-left:4px solid var(--c-primary);padding-left:10px;margin:4px 0 16px;line-height:1.2;}
+.section-title--plain{font-size:14px;font-weight:700;border-left:none;padding-left:0;margin:10px 0;}
+.req{color:var(--c-danger);margin-right:2px;}
+.section-hint{font-size:12px;color:var(--c-text-3);margin:8px 0 14px;}
+.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;}
+.upload-card{border:1px solid var(--c-border-light);border-radius:4px;}
+.upload-card-header{background:#F5F7FA;padding:8px 14px;border-bottom:1px solid var(--c-border-light);color:var(--c-text);}
+.upload-card-body{padding:12px 14px;}
+.img-uploader{height:100px;border:1px dashed #d9d9d9;border-radius:6px;background:#fafafa;display:flex;align-items:center;justify-content:center;color:#C0C4CC;font-size:13px;}
+.upload-actions{text-align:right;margin-top:6px;}
+.list-form .el-form-item{margin-bottom:14px;}
+.list-form .el-form-item__label{width:96px;text-align:left;padding-right:8px;}
+.list-form .el-form-item__content{margin-left:96px;}
+
+/* ==========================================================================
+   原型顶部页签：后台 ／ 前台 H5
+   ========================================================================== */
+.proto-tabs{position:sticky;top:0;z-index:3000;display:flex;gap:4px;padding:6px 16px;background:#1f2329;}
+.proto-tabs span{color:#c9ced6;font-size:13px;padding:5px 14px;border-radius:4px;cursor:pointer;}
+.proto-tabs span.is-on{background:#fff;color:#1f2329;font-weight:600;}
+
+/* ==========================================================================
+   前台 H5（照改版书 2.1～2.3 版面；主色 #025BE8、主文字 #0D2245）
+   手机框 375 宽，内容自己卷动
+   ========================================================================== */
+.front{min-height:100vh;background:#5b6270;display:flex;justify-content:center;padding:52px 0 48px;}
+.phone{width:375px;height:780px;background:#fff;border-radius:28px;overflow:hidden;position:relative;box-shadow:0 12px 40px rgba(0,0,0,.35);
+  font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif;color:#0D2245;font-size:14px;line-height:1.4;}
+.h5{height:100%;overflow-y:auto;background:linear-gradient(180deg,#E3EEFF 0%,#F2F6FD 220px,#F5F7FB 100%);padding-bottom:70px;}
+.h5 *{box-sizing:border-box;}
+/* 顶部个人栏（搬首页的） */
+.h5-top{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;}
+.h5-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#9CC3FF,#025BE8);border:2px solid #fff;box-shadow:0 0 0 2px #B7D2FF;flex-shrink:0;}
+.h5-wallet{flex:1;min-width:0;font-size:13px;font-weight:600;}
+.h5-wallet div{display:flex;align-items:center;gap:5px;line-height:18px;}
+.h5-coin{width:14px;height:14px;border-radius:50%;display:inline-block;}
+.h5-coin--p{background:#F5A623;} .h5-coin--pt{background:#E8453C;}
+.h5-refresh{color:#8A97B0;font-size:11px;}
+.h5-deposit{background:#025BE8;color:#fff;border:0;border-radius:18px;height:34px;padding:0 16px;font-size:14px;font-weight:600;}
+.h5-search{width:22px;height:22px;border:2px solid #0D2245;border-radius:50%;position:relative;margin-left:4px;}
+.h5-login{background:#fff;color:#025BE8;border:1.5px solid #025BE8;border-radius:18px;height:34px;padding:0 16px;font-size:14px;font-weight:600;}
+.h5-guest{flex:1;font-size:13px;color:#5B6B85;}
+/* 原型用：切换登入／未登入 */
+.front__bar{position:absolute;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:4px;background:#2b3038;border-radius:6px;padding:3px;}
+.front__bar span{color:#c9ced6;font-size:12px;padding:3px 10px;border-radius:4px;cursor:pointer;}
+.front__bar span.is-on{background:#fff;color:#1f2329;font-weight:600;}
+.front{position:relative;}
+.h5-search::after{content:"";position:absolute;width:2px;height:8px;background:#0D2245;right:-4px;bottom:-6px;transform:rotate(-45deg);}
+/* 区块标题 */
+.h5-sec{padding:6px 16px 8px;font-size:16px;font-weight:700;}
+/* 精选轮播 */
+.h5-feat{margin:0 16px;position:relative;}
+.h5-hero{position:relative;height:172px;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#1B3A8A,#025BE8 55%,#7FB0FF);box-shadow:0 6px 18px rgba(2,91,232,.25);}
+.h5-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 75% 30%,rgba(255,255,255,.35),transparent 45%);}
+.h5-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:64px;background:linear-gradient(180deg,transparent,rgba(13,34,69,.55));}
+.h5-hero__name,.h5-hero .h5-badge{z-index:1;}
+.h5-hero.is-anim{animation:h5fade .35s ease;}
+@keyframes h5fade{from{opacity:.4}to{opacity:1}}
+.h5-hero__name{position:absolute;left:12px;bottom:10px;color:#fff;font-weight:700;font-size:15px;text-shadow:0 1px 2px rgba(0,0,0,.4);max-width:60%;}
+.h5-dots{display:flex;justify-content:center;gap:5px;margin-top:8px;}
+.h5-dots i{width:6px;height:6px;border-radius:3px;background:#C5D3EE;cursor:pointer;transition:width .2s;}
+.h5-dots i.is-on{width:16px;background:#025BE8;}
+/* 领取方式小标：图片左上角，只有自动发放才挂（Auto Claimed）；手动领取不挂，靠右上角红色数字提醒 */
+.h5-pill{position:absolute;top:5px;left:5px;z-index:1;background:#1C9A5B;color:#fff;font-size:10px;font-weight:600;line-height:16px;padding:0 7px;border-radius:8px;white-space:nowrap;}
+.h5-hero .h5-pill{top:10px;left:12px;font-size:11px;line-height:18px;padding:0 8px;}
+/* 时间角标（前台自动判断）：图片底部色带，只剩 ≤24h 才出现，跟领取方式小标位置不冲突 */
+.h5-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(13,34,69,.85);color:#fff;font-size:11px;font-weight:600;border-radius:10px;padding:2px 8px;white-space:nowrap;}
+.h5-badge--hot{background:#D6246E;}
+.h5-hero .h5-badge{position:absolute;right:10px;bottom:12px;}
+.h5-clock{width:11px;height:11px;border:1.5px solid #fff;border-radius:50%;position:relative;display:inline-block;flex-shrink:0;}
+.h5-clock::after{content:"";position:absolute;left:3.5px;top:1.5px;width:1.5px;height:3.5px;background:#fff;box-shadow:1.5px 2px 0 -0.5px #fff;}
+/* 快捷入口（活动类别） */
+.h5-cats{display:flex;gap:10px;padding:2px 16px 10px;overflow-x:auto;scrollbar-width:none;}
+.h5-cats::-webkit-scrollbar{display:none;}
+.h5-cat{flex:0 0 auto;min-width:64px;border-radius:12px;padding:9px 12px;text-align:center;font-size:12px;font-weight:500;color:#0D2245;border:1.5px solid transparent;cursor:pointer;}
+.h5-cat--0{background:#EDE7FF;} .h5-cat--1{background:#E3F0FF;} .h5-cat--2{background:#FFF3D6;} .h5-cat--3{background:#DFF5E8;} .h5-cat--4{background:#FFE8E8;} .h5-cat--5{background:#E6F7FA;}
+.h5-cat.is-on{border-color:#025BE8;color:#025BE8;font-weight:600;box-shadow:0 0 0 2px #fff inset;}
+.h5-cat__name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* 活动小卡 */
+.h5-list{padding:0 16px;display:flex;flex-direction:column;gap:10px;}
+.h5-card{display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:8px;box-shadow:0 2px 8px rgba(13,34,69,.06);cursor:pointer;}
+.h5-thumb{width:112px;height:88px;border-radius:8px;flex-shrink:0;position:relative;overflow:hidden;background:linear-gradient(135deg,#CFE1FF,#9CC3FF);}
+.h5-thumb .h5-badge{position:absolute;left:0;right:0;bottom:0;border-radius:0;justify-content:center;padding:4px 6px;}
+.h5-body{flex:1;min-width:0;}
+.h5-title{font-size:14px;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.h5-time{font-size:11px;color:#7A869C;margin-top:3px;line-height:1.35;white-space:nowrap;letter-spacing:-.2px;overflow:hidden;text-overflow:ellipsis;}
+/* 卡片第三行小标签＝运营在后台选的标签；没选就空着 */
+.h5-tags{display:flex;gap:4px;flex-wrap:nowrap;overflow:hidden;}
+.h5-tag{display:inline-block;flex-shrink:0;margin-top:4px;background:#566C84;color:#fff;font-size:10px;line-height:16px;padding:0 6px;border-radius:3px;white-space:nowrap;}   /* 标签不缩、整排在右缘裁掉：前两个读得到，比三个都变「Tur…」好 */
+.h5-btn{flex-shrink:0;height:32px;min-width:64px;padding:0 12px;border-radius:16px;font-size:13px;font-weight:600;border:1.5px solid #025BE8;background:#fff;color:#025BE8;}
+.h5-card{position:relative;}
+/* 待领红点：照线上，挂在卡片右上角（数字＝该活动可领笔数，既有 pendingClaimCount） */
+.h5-card__dot{position:absolute;top:-5px;right:-3px;min-width:18px;height:18px;line-height:14px;padding:0 5px;border-radius:9px;background:#E8453C;color:#fff;font-size:11px;font-weight:700;text-align:center;border:2px solid #fff;}
+.h5-empty{text-align:center;color:#8A97B0;font-size:13px;padding:30px 0;}
+/* 底部导航（照线上） */
+.h5-nav{position:absolute;z-index:2;left:0;right:0;bottom:0;height:60px;background:#fff;border-top:1px solid #E6ECF5;display:flex;justify-content:space-around;align-items:center;font-size:10px;color:#8A97B0;border-radius:0 0 28px 28px;}
+.h5-nav div{text-align:center;}
+.h5-nav i{display:block;width:22px;height:22px;border-radius:6px;background:#C9D3E6;margin:0 auto 3px;}
+.h5-nav div.is-on{color:#025BE8;} .h5-nav div.is-on i{background:#025BE8;}
+</style>
+</head>
+<body>
+<div class="proto-tabs"><span class="is-on" data-proto="admin">后台</span><span data-proto="h5">前台 H5</span></div>
+
+<!-- ===== 前台 H5（改版后 Rewards 页）：读的是下面后台同一组资料 ===== -->
+<div class="front hidden" id="protoFront">
+  <div class="front__bar"><span class="is-on" data-front-login="1">已登入</span><span data-front-login="0">未登入</span></div>
+  <div class="phone"><div class="h5" id="h5"></div></div>
+</div>
+
+<div class="layout" id="protoAdmin">
+
+  <!-- ===== 左侧选单（照线上） ===== -->
+  <aside class="sidebar">
+    <ul class="el-menu" role="menubar">
+      <li class="el-submenu is-opened" role="menuitem">
+        <div class="el-submenu__title" style="padding-left:20px"><i class="el-icon-s-promotion"></i><span>活动配置</span><i class="el-submenu__icon-arrow el-icon-arrow-down"></i></div>
+        <ul class="el-menu el-menu--inline" role="menu">
+          <li class="el-menu-item" style="padding-left:40px" data-go="cat" data-menu="cat" role="menuitem">活动类别管理</li>
+          <li class="el-menu-item is-active" style="padding-left:40px" data-go="mat" data-menu="mat" role="menuitem">活动图素材管理</li>
+        </ul>
+      </li>
+      <li class="el-submenu is-opened" role="menuitem">
+        <div class="el-submenu__title" style="padding-left:20px"><i class="el-icon-s-promotion"></i><span>专项活动</span><i class="el-submenu__icon-arrow el-icon-arrow-down"></i></div>
+        <ul class="el-menu el-menu--inline" role="menu">
+          <li class="el-menu-item" style="padding-left:40px" data-go="rech" data-menu="rech" role="menuitem">充值活动</li>
+          <li class="el-menu-item" style="padding-left:40px" data-go="cons" data-menu="cons" role="menuitem">消费活动</li>
+          <li class="el-menu-item" style="padding-left:40px" data-go="lose" data-menu="lose" role="menuitem">盈利活动</li>
+          <li class="el-menu-item" style="padding-left:40px" data-go="drech" data-menu="drech" role="menuitem">每日首充活动</li>
+          <li class="el-menu-item" style="padding-left:40px" data-go="ddep" data-menu="ddep" role="menuitem">每日存款活动</li>
+          <li class="el-menu-item" style="padding-left:40px" data-go="newbie" data-menu="newbie" role="menuitem">新用户首充活动</li>
+          <li class="el-menu-item" style="padding-left:40px" data-go="gc" data-menu="gc" role="menuitem">游戏挑战赛</li>
+        </ul>
+      </li>
+      <li class="el-submenu is-opened" role="menuitem">
+        <div class="el-submenu__title" style="padding-left:20px"><i class="el-icon-s-promotion"></i><span>活动配置（新）</span><i class="el-submenu__icon-arrow el-icon-arrow-down"></i></div>
+        <ul class="el-menu el-menu--inline" role="menu">
+          <li class="el-menu-item" style="padding-left:40px" data-go="v2" data-menu="v2" role="menuitem">活动列表</li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+
+  <div class="right">
+    <header class="navbar">
+      <span>当前时间：2026/10/19 15:38:34 +08:00</span>
+      <span class="navbar__user"><span class="navbar__avatar"></span>vivianadmin <i class="el-icon-caret-bottom"></i></span>
+    </header>
+
+    <main class="main">
+      <div class="page">
+        <div class="el-breadcrumb" role="navigation">
+          <span class="el-breadcrumb__item"><span class="el-breadcrumb__inner">位置</span><i class="el-breadcrumb__separator el-icon-arrow-right"></i></span>
+          <span class="el-breadcrumb__item"><span class="el-breadcrumb__inner" id="bcCur">活动图素材管理</span></span>
+        </div>
+        <div class="tags">
+          <span class="tags__item" data-go="mat" data-tag="mat">活动图素材管理 <i class="el-icon-close"></i></span>
+          <span class="tags__item" data-go="cat" data-tag="cat">活动类别管理 <i class="el-icon-close"></i></span>
+          <span class="tags__item" data-go="gc" data-tag="gc">游戏挑战赛 <i class="el-icon-close"></i></span>
+          <span class="tags__item" data-go="v2" data-tag="v2">编辑活动 <i class="el-icon-close"></i></span>
+          <span class="tags__item" data-go="rech" data-tag="rech">充值活动 <i class="el-icon-close"></i></span>
+          <span class="tags__item" data-go="drech" data-tag="drech">每日首充活动 <i class="el-icon-close"></i></span>
+          <span class="tags__item" data-go="ddep" data-tag="ddep">每日存款活动 <i class="el-icon-close"></i></span>
+          <span class="tags__item" data-go="newbie" data-tag="newbie">新用户首充活动 <i class="el-icon-close"></i></span>
+          <span class="tags__item" data-go="cons" data-tag="cons">消费活动 <i class="el-icon-close"></i></span>
+          <span class="tags__item" data-go="lose" data-tag="lose">盈利活动 <i class="el-icon-close"></i></span>
+        </div>
+
+        <!-- ================================================================
+             画面一：活动图素材管理 › 优惠活动（汇总页）
+             前台 Promotion 全部卡片都列在这里（9 种来源）
+             本页只管跨活动的两件事：奖励页排序、精选；其余回各活动自己的配置页改
+             ================================================================ -->
+        <section id="viewMat">
+          <div class="el-tabs el-tabs--top el-tabs--border-card">
+            <div class="el-tabs__header is-top"><div class="el-tabs__nav-wrap is-top"><div class="el-tabs__nav-scroll"><div class="el-tabs__nav is-top" role="tablist">
+              <div class="el-tabs__item is-top is-active" role="tab" aria-selected="true">优惠活动</div>
+              <div class="el-tabs__item is-top" role="tab">弹窗活动</div><div class="el-tabs__item is-top" role="tab">启动页</div>
+              <div class="el-tabs__item is-top" role="tab">启动图</div><div class="el-tabs__item is-top" role="tab">注册登录页</div><div class="el-tabs__item is-top" role="tab">广告位</div>
+            </div></div></div></div>
+            <div class="el-tabs__content"><div class="el-tab-pane" role="tabpanel">
+              <form class="box el-form el-form--inline filter" onsubmit="return false">
+                <div class="el-form-item el-form-item--small"><label class="el-form-item__label">币种:</label><div class="el-form-item__content" data-select="fCur"></div></div>
+                <div class="el-form-item el-form-item--small"><label class="el-form-item__label">状态:</label><div class="el-form-item__content" data-select="fSt"></div></div>
+                <div class="is-new is-new--inline">
+                  <div class="el-form-item el-form-item--small" style="display:inline-block;margin-right:16px"><label class="el-form-item__label">来源:</label><div class="el-form-item__content" style="display:inline-block" data-select="fSrc"></div></div>
+                  <div class="el-form-item el-form-item--small" style="display:inline-block"><label class="el-form-item__label">精选:</label><div class="el-form-item__content" style="display:inline-block" data-select="fFeat"></div></div>
+                </div>
+                <div class="el-form-item el-form-item--small"><div class="el-form-item__content"><button type="button" class="el-button el-button--primary el-button--small" data-act="search"><span>搜索</span></button></div></div>
+              </form>
+              <div class="toolbar" style="align-items:center;margin-top:18px">
+                <span class="is-new--btn"><button type="button" class="el-button el-button--default el-button--small" data-tag="open"><i class="el-icon-collection-tag"></i><span>标签管理</span></button></span>
+                <button type="button" class="el-button el-button--primary el-button--small" data-mat-new="PC"><span>新增PC活动优惠素材图</span></button>
+                <button type="button" class="el-button el-button--primary el-button--small" data-mat-new="H5"><span>新增H5活动优惠素材图</span></button>
+              </div>
+              <div class="box">
+                <div class="box__head"><span class="box__title">PC版活动素材</span></div>
+                <div class="js-table"></div>
+              </div>
+              <div class="box">
+                <div class="box__head"><span class="box__title">H5版活动素材</span></div>
+                <div class="js-table"></div>
+              </div>
+            </div></div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             画面二：活动类别管理（照线上，不改）
+             前台快捷入口＝这里「是否开启」的类别（既有开关，10/20 她指正：不另加总开关）；全部关掉整排就不显示
+             类别不上图示（10/20 她定：上图很麻烦），前台方块只显示类别名称
+             ================================================================ -->
+        <section id="viewCat" class="hidden">
+          <div class="toolbar" style="justify-content:flex-start">
+            <button type="button" class="el-button el-button--primary el-button--small" data-cat="new"><span>新增活动类型</span></button>
+          </div>
+          <div id="catTable"></div>
+        </section>
+
+        <!-- ================================================================
+             画面三：活动配置（新）› 编辑活动 › 步骤 2（照线上）
+             X-BOMB、预约活动在这里配置；「活动列表设置」下新增奖励页栏位
+             ================================================================ -->
+        <section id="viewV2" class="hidden">
+          <div class="wizard">
+            <ol class="steps">
+              <li class="steps__item"><span class="steps__num">1</span>活动模板设置</li>
+              <li class="steps__item steps__item--active"><span class="steps__num">2</span>活动图片</li>
+              <li class="steps__item"><span class="steps__num">3</span>参与对象与名单</li>
+              <li class="steps__item"><span class="steps__num">4</span>活动条件</li>
+              <li class="steps__item"><span class="steps__num">5</span>风控条件</li>
+              <li class="steps__item"><span class="steps__num">6</span>提交预览</li>
+            </ol>
+            <div class="wizard__main">
+              <div class="wizard__bar"><span class="wizard__bar-title">活动配置步骤</span>
+                <span><button type="button" class="el-button el-button--default el-button--small is-round"><span>上一步</span></button>
+                <button type="button" class="el-button el-button--primary el-button--small is-round"><span>下一步</span></button>
+                <button type="button" class="el-button el-button--danger el-button--small is-plain is-round"><span>退出编辑</span></button></span></div>
+              <div class="wizard__body">
+                <p class="section-hint" style="margin-top:0">设置首页浮窗图片、活动列表图片及活动备注。</p>
+                <div class="section">
+                  <div class="section-title">首页浮窗设置</div>
+                  <div data-radios="v2Float" style="margin-bottom:14px"></div>
+                  <div class="img-grid" data-uploads="PC 图片|H5 图片"></div>
+                  <p class="section-hint">图片格式:png、bmp、jpg、gif、webp;大小限制 5MB 内</p>
+                  <form class="el-form list-form" onsubmit="return false"><div class="el-form-item el-form-item--small"><label class="el-form-item__label">排序:</label><div class="el-form-item__content"><div class="el-input el-input--small" style="width:200px"><input class="el-input__inner" value="6011"></div></div></div></form>
+                </div>
+                <div class="section">
+                  <div class="section-title">活动列表设置</div>
+                  <div data-radios="v2List" style="margin-bottom:14px"></div>
+                  <div class="is-new" data-mark="改名称：原「PC 图片／H5 图片」"><div class="img-grid" data-uploads="PC 奖励列表图|APP 奖励列表图"></div>
+                  <p class="section-hint">图片格式:png、bmp、jpg、gif、webp;大小限制 5MB 内</p>
+                  <div class="el-form-item__tip el-form-item__tip--red" style="margin-bottom:12px">尺寸 112×88</div></div>
+                  <div class="is-new"><div class="img-grid" data-uploads="PC 奖励精选图|APP 奖励精选图"></div></div>
+                  <form class="el-form list-form" onsubmit="return false">
+                    <div class="is-new" data-reward="v2"></div>
+                    <div class="is-mod"><div class="el-form-item el-form-item--small"><label class="el-form-item__label">排序:</label><div class="el-form-item__content"><div class="el-input el-input--small" style="width:200px"><input class="el-input__inner" value="0" id="v2Sort"></div></div></div></div>
+                  </form>
+                </div>
+                <div class="section" style="margin-bottom:0">
+                  <div class="section-title">备注</div>
+                  <div class="el-textarea"><textarea class="el-textarea__inner" rows="3" placeholder="请输入备注"></textarea></div>
+                  <p class="section-hint">此备注仅供内部参考,不会显示给用户</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             画面四：游戏挑战赛 › 活动配置（照线上；「基本信息」下新增奖励页栏位）
+             ================================================================ -->
+        <section id="viewGc" class="hidden">
+          <div class="el-tabs el-tabs--top el-tabs--border-card">
+            <div class="el-tabs__header is-top"><div class="el-tabs__nav-wrap is-top"><div class="el-tabs__nav-scroll"><div class="el-tabs__nav is-top" role="tablist">
+              <div class="el-tabs__item is-top is-active" role="tab" aria-selected="true">活动配置</div>
+              <div class="el-tabs__item is-top" role="tab">活动列表</div><div class="el-tabs__item is-top" role="tab">领取记录</div>
+            </div></div></div></div>
+            <div class="el-tabs__content"><div class="el-tab-pane" role="tabpanel">
+              <form class="el-form el-form--label-right" onsubmit="return false" id="gcForm"></form>
+            </div></div>
+          </div>
+        </section>
+        <!-- ================================================================
+             画面五～十：专项活动底下的既有配置页（照线上栏位顺序；消费活动、盈利活动是两个独立选单页，表单同一套）
+             这几种原本就有「活动类型」，栏位区不新增；只在图片页签新增「奖励精选图」、改名「奖励列表图」（标签统一在汇总页配置）
+             ================================================================ -->
+        <section id="viewSrc" class="hidden"><div id="srcPage"></div></section>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- 素材新增／编辑弹窗（照线上栏位与顺序；新增「奖励精选图」、改名「奖励列表图」；标签统一在汇总页配置） -->
+<div class="el-dialog__wrapper hidden" id="matModal" style="z-index:2001;overflow:auto">
+  <div class="v-modal" style="z-index:2000;position:fixed"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="matModalTitle" class="el-dialog" style="margin:4vh auto;width:860px;z-index:2001;position:relative">
+    <div class="el-dialog__header"><span class="el-dialog__title" id="matModalTitle"></span>
+      <button type="button" class="el-dialog__headerbtn" aria-label="Close" data-mat="close"><i class="el-dialog__close el-icon el-icon-close"></i></button></div>
+    <div class="el-dialog__body" id="matModalBody"></div>
+    <div class="el-dialog__footer" style="text-align:center">
+      <button type="button" class="el-button el-button--primary el-button--small" data-mat="save"><span>确 定</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- 标签管理弹窗（新增）：优惠活动工具列「标签管理」钮；清单的新增／编辑／删除都在这里（技术定 10/20）
+     z-index 比「设定标签」高，运营选标签时发现没有，可直接叠开 -->
+<div class="el-dialog__wrapper hidden" id="tagModal" style="z-index:2006;overflow:auto">
+  <div class="v-modal" style="z-index:2005;position:fixed"></div>
+  <div role="dialog" aria-modal="true" class="el-dialog" style="margin:6vh auto;width:720px;z-index:2006;position:relative">
+    <div class="el-dialog__header"><span class="el-dialog__title">标签管理</span>
+      <button type="button" class="el-dialog__headerbtn" aria-label="Close" data-tag="close"><i class="el-dialog__close el-icon el-icon-close"></i></button></div>
+    <div class="el-dialog__body" id="tagModalBody" style="padding-top:10px"></div>
+    <div class="el-dialog__footer"><button type="button" class="el-button el-button--default el-button--small" data-tag="close"><span>关 闭</span></button></div>
+  </div>
+</div>
+
+<!-- 标签新增／编辑小弹窗（新增）：从标签管理弹窗开，叠在上面；做法跟「编辑活动类型」弹窗一样 -->
+<div class="el-dialog__wrapper hidden" id="tagEditModal" style="z-index:2008">
+  <div class="v-modal" style="z-index:2007;position:fixed"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="tagEditTitle" class="el-dialog" style="margin-top:15vh;width:520px;z-index:2008;position:relative">
+    <div class="el-dialog__header"><span class="el-dialog__title" id="tagEditTitle">新增标签</span>
+      <button type="button" class="el-dialog__headerbtn" aria-label="Close" data-tagedit="close"><i class="el-dialog__close el-icon el-icon-close"></i></button></div>
+    <div class="el-dialog__body" id="tagEditBody"></div>
+    <div class="el-dialog__footer">
+      <button type="button" class="el-button el-button--default el-button--small" data-tagedit="close"><span>取 消</span></button>
+      <button type="button" class="el-button el-button--primary el-button--small" data-tagedit="save"><span>确 定</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- 设定标签弹窗（新增）：汇总页列表每一笔的「标签」钮；各活动的标签只在这里选 -->
+<div class="el-dialog__wrapper hidden" id="tagSetModal" style="z-index:2001;overflow:auto">
+  <div class="v-modal" style="z-index:2000;position:fixed"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="tagSetTitle" class="el-dialog" style="margin:12vh auto;width:560px;z-index:2001;position:relative">
+    <div class="el-dialog__header"><span class="el-dialog__title" id="tagSetTitle">设定标签</span>
+      <button type="button" class="el-dialog__headerbtn" aria-label="Close" data-tagset="close"><i class="el-dialog__close el-icon el-icon-close"></i></button></div>
+    <div class="el-dialog__body" id="tagSetBody" style="min-height:150px"></div>
+    <div class="el-dialog__footer">
+      <button type="button" class="el-button el-button--default el-button--small" data-tagset="close"><span>取 消</span></button>
+      <button type="button" class="el-button el-button--primary el-button--small" data-tagset="save"><span>确 定</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- 活动类别编辑弹窗：照既有栏位，不改 -->
+<div class="el-dialog__wrapper hidden" id="catModal" style="z-index:2001">
+  <div class="v-modal" style="z-index:2000;position:fixed"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="catModalTitle" class="el-dialog" style="margin-top:15vh;width:600px;z-index:2001;position:relative">
+    <div class="el-dialog__header"><span class="el-dialog__title" id="catModalTitle">编辑活动类型</span>
+      <button type="button" class="el-dialog__headerbtn" aria-label="Close" data-cat="close"><i class="el-dialog__close el-icon el-icon-close"></i></button></div>
+    <div class="el-dialog__body" id="catModalBody"></div>
+    <div class="el-dialog__footer">
+      <button type="button" class="el-button el-button--default el-button--small" data-cat="close"><span>取 消</span></button>
+      <button type="button" class="el-button el-button--primary el-button--small" data-cat="save"><span>确 定</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- 删除确认（Element MessageBox） -->
+<div class="el-message-box__wrapper hidden" id="delBox" style="z-index:2010;background:rgba(0,0,0,.5)">
+  <div role="dialog" aria-modal="true" class="el-message-box" style="position:relative;z-index:2010">
+    <div class="el-message-box__header"><div class="el-message-box__title"><span>提示</span></div>
+      <button type="button" class="el-message-box__headerbtn" aria-label="Close" data-del="no"><i class="el-message-box__close el-icon-close"></i></button></div>
+    <div class="el-message-box__content"><div class="el-message-box__container"><div class="el-message-box__status el-icon-warning"></div>
+      <div class="el-message-box__message"><p id="delText"></p></div></div></div>
+    <div class="el-message-box__btns">
+      <button type="button" class="el-button el-button--default el-button--small" data-del="no"><span>取消</span></button>
+      <button type="button" class="el-button el-button--primary el-button--small" data-del="yes"><span>确定</span></button>
+    </div>
+  </div>
+</div>
+
+<div id="msg"></div>
+
+<script>
+/* ==========================================================================
+   假资料：前台 Promotion 现有卡片（名称取自线上测试站；来源＝后端盘点的 9 种）
+   end／showEnd＝结束时间／显示结束时间（各来源有什么带什么，没有的 --）
+   on＝状态（素材以外的来源只显示，回原配置页改）
+   sort＝奖励页排序（数字越大越前面；PC、H5 共用）
+   auto＝发放方式是自动发放（前台左上小标 Auto Claimed；只有专项活动 6 种有「发放方式」，素材／X-BOMB／预约／挑战赛没有这栏位＝不挂）
+   pending＝这个用户有可领奖励（前台右上红色数字、排最前；后端只有素材(挂返水)／负盈利／消费(手动领)／挑战赛／X-BOMB／预约算得出，自动派发的永远没有）
+   feat＝精选（开了放前台上方 Featured 轮播，最多 3 个）
+   dev＝素材才有：线上 PC 版／H5 版素材是两笔独立资料，各自有排序／精选／标签；其他来源一笔、PC 与 H5 两表共用同一个值
+   ========================================================================== */
+var items = [
+  {id:1,  src:'素材', dev:'H5', lang:'英语', def:'是', title:'wins排行版',           sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:10000, feat:true},
+  {id:2,  src:'素材', dev:'H5', lang:'英语', def:'否', title:'每日返水加码活动',     sub:'Daily Rebate',            end:'--',                  showEnd:'--',                  on:true,  sort:9999,  feat:false},
+  {id:3,  src:'素材', dev:'H5', lang:'英语', def:'是', title:'每日特别返水',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-07-28 23:59:00', showEnd:'2027-05-31 00:00:00', on:true,  sort:9998,  feat:false, pending:true, pendingN:2},
+  {id:15, src:'素材', dev:'PC', lang:'英语', def:'是', title:'wins排行版',           sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:10000, feat:true},
+  {id:16, src:'素材', dev:'PC', lang:'英语', def:'否', title:'每日返水加码活动',     sub:'Daily Rebate',            end:'--',                  showEnd:'--',                  on:true,  sort:9999,  feat:false},
+  {id:17, src:'素材', dev:'PC', lang:'英语', def:'是', title:'每日特别返水',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-07-28 23:59:00', showEnd:'2027-05-31 00:00:00', on:true,  sort:9998,  feat:false, pending:true, pendingN:2},
+  {id:18, src:'素材', dev:'PC', lang:'英语', def:'否', title:'vip返水加码',          sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:88,    feat:false},
+  {id:4,  src:'游戏挑战赛', lang:'—',    def:'—',  title:'Game Challenge',       sub:'',                        start:'2026-09-01 00:00:00', end:'2026-10-31 00:00:00', showEnd:'2026-10-31 00:00:00', on:true,  sort:999,   feat:true},
+  {id:5,  src:'素材', dev:'H5', lang:'英语', def:'否', title:'vip返水加码',          sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:88,    feat:false},
+  {id:6,  src:'充值活动',   lang:'—',    def:'—',  title:'Deposit Activity',     sub:'',                        start:'2025-10-17 00:00:00', end:'2028-01-01 00:00:00', showEnd:'--',                  on:true,  sort:8,     feat:false, auto:true},
+  {id:7,  src:'负盈利活动', lang:'—',    def:'—',  title:'负盈利-手动领-自动到', sub:'负盈利活动-内容标题文字', start:'2026-10-01 00:00:00', end:'2027-10-30 23:59:59', showEnd:'--',                  on:true,  sort:1,     feat:false, pending:true},
+  {id:8,  src:'每日存款',   lang:'—',    def:'—',  title:'will存款活动Test',     sub:'',                        start:'2026-10-01 00:00:00', end:'2026-11-30 00:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false},
+  {id:9,  src:'X-BOMB',     lang:'—',    def:'—',  title:'AA_XBOMB_ALEX_0908',   sub:'',                        start:'2026-09-08 00:00:00', end:'2026-10-20 09:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false},
+  {id:10, src:'预约活动',   lang:'—',    def:'—',  title:'預約活動2',            sub:'',                        start:'2026-09-01 00:00:00', end:'2026-09-21 00:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false},
+  {id:11, src:'消费活动',   lang:'—',    def:'—',  title:'消费活动-日返',        sub:'',                        start:'2026-07-01 00:00:00', end:'2027-06-30 23:59:59', showEnd:'--',                  on:true,  sort:0,     feat:false},
+  {id:12, src:'每日首充',   lang:'—',    def:'—',  title:'每日首充活动',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-10-20 08:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false, auto:true},
+  {id:13, src:'新用户首充', lang:'—',    def:'—',  title:'新用户首充',           sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:0,     feat:false},
+  {id:14, src:'负盈利活动', lang:'—',    def:'—',  title:'JustinTest活動',       sub:'',                        start:'2026-10-01 00:00:00', end:'2026-10-31 00:00:00', showEnd:'--',                  on:false, sort:0,     feat:false}
+];
+var FEAT_MAX = 3;
+
+/* 奖励页排序＝各来源既有「排序」栏位同一个值，两边同步（10/20 她定，全部来源都同步、不另存）
+   X-BOMB／预约＝活动配置(新)「活动列表设置·排序」 */
+var SORT_FIELD = {'素材':'排序', 'X-BOMB':'活动列表设置·排序', '预约活动':'活动列表设置·排序', '游戏挑战赛':'排序', '新用户首充':'排序', '每日存款':'排序',
+                  '充值活动':'排序', '每日首充':'排序', '负盈利活动':'排序', '消费活动':'排序'};
+
+/* 活动类别：照线上现有 6 笔（10/20 线上截图全开）；不加图示 */
+var cats = [
+  {name:'正盈利活动', sort:200, created:'2024-05-07 00:14', on:true},
+  {name:'负盈利活动', sort:180, created:'2024-05-07 00:15', on:true},
+  {name:'消费活动',   sort:160, created:'2024-05-07 00:14', on:true},
+  {name:'新用户首充', sort:140, created:'2025-12-19 09:38', on:true},
+  {name:'每日首充',   sort:120, created:'2025-12-19 09:39', on:true},
+  {name:'充值活动',   sort:1,   created:'2024-05-07 00:08', on:true}
+];
+
+/* 标签（10/20 她定；各活动自己的设定页不放标签）
+   - 清单：「活动图素材管理 › 优惠活动」工具列「标签管理」弹窗新增／编辑／删除（10/20 技术定：新增、编辑、配置都在这一页）；使用中的不能删（照活动类别既有规则）
+     预设 25 个＝企划书 2.3.3 Excel；颜色一律灰
+   - 每个活动选哪些：「活动图素材管理 › 优惠活动」列表「标签」栏＋操作「标签」钮，小弹窗里从清单挑，最多 3 个；存在 items[].tags */
+var TAGS = ['Cashback','Points','Extra','Spin','No Deposit','Free Entry','No Wagering','Instant Credit','Turnover Require',
+            'New Players','VIP','Invite Only','Resigned Only','All Games','Selected Games','Sports Only',
+            'Daily','Weekends','New','Special','Popular','Rebate','Loss Rebate','Leaderboard','Deposit']
+  .map(function(n, i){ return {name:n, created:'2026-10-19 '+(10+Math.floor(i/6))+':'+(10+i%6*8)+':00'}; });
+var TAG_MAX = 3;
+var ITEM_TAGS = {1:['Leaderboard'], 3:['Rebate','Daily'], 15:['Leaderboard'], 17:['Rebate','Daily'], 4:['Leaderboard','Popular'], 6:['Deposit'], 7:['Loss Rebate']};
+/* 某张表（PC／H5）列哪些：该端的素材＋全部其他来源 */
+function onDev(it, dev){ return it.src !== '素材' || it.dev === dev; }
+items.forEach(function(it){ it.tags = ITEM_TAGS[it.id] || []; });
+
+/* 每笔活动自己勾的类别（素材、专项活动＝既有「活动类型」；X-BOMB／预约／挑战赛＝新增「活动类别」）
+   前台快捷入口照这个筛选；没勾任何类别＝只在 All 出现（10/19 她定） */
+var DEFAULT_CATS = {'素材':['负盈利活动'], '充值活动':['充值活动'], '每日存款':['充值活动'], '每日首充':['每日首充'], '新用户首充':['新用户首充'],
+                    '负盈利活动':['负盈利活动'], '消费活动':['消费活动'], '游戏挑战赛':['正盈利活动'], 'X-BOMB':[], '预约活动':[]};
+items.forEach(function(it){ it.cats = (DEFAULT_CATS[it.src] || []).slice(); });
+var matNew = {cats:[]};   // 新增素材弹窗里暂存的勾选（按确定才变成一笔）
+/* 其他来源的配置页：tabs＝页签；fields＝照线上顺序的栏位；imgTabs＝图片设置分 PC／手机端页签 */
+var SRC_PAGES = {
+  rech:  {title:'充值活动', tabs:['活动配置','活动统计'], imgTabs:true,
+          fields:['排序','是否显示首页','活动名称','活动时间','显示时间','领取方式','发放方式','活动状态','活动类型','奖金所需流水','奖励发放方式'],
+          imgs:['首页推荐展示图','弹窗图片','奖励精选图','奖励列表图','内容图片'], tail:['活动内容','内容标题文字']},
+  drech: {title:'每日首充活动', tabs:['活动列表','活动记录'], imgTabs:true,
+          fields:['排序','是否显示首页','活动名称','活动时间','显示时间','领取方式','发放方式','活动状态','活动类型','天数区间结束(天)','奖金所需流水'],
+          imgs:['首页推荐展示图','弹窗图片','奖励精选图','奖励列表图','内容图片'], tail:['活动内容','内容标题文字']},
+  ddep:  {title:'每日存款活动', tabs:['活动列表','活动记录'], imgTabs:true,
+          fields:['活动名称','活动时间','排序','领取方式','发放方式','活动状态','活动类型','奖金所需流水','可以参与活动代理线'],
+          imgs:['奖励精选图','奖励列表图','内容图片'], tail:['活动标题','活动内容']},
+  newbie:{title:'新用户首充活动', tabs:['活动配置','活动统计'], imgTabs:true,
+          fields:['活动类型','排序','是否显示首页','活动名称','活动时间','显示时间','领取方式','发放方式','活动状态'],
+          imgs:['首页推荐展示图','弹窗图片','奖励精选图','奖励列表图','内容图片'], tail:['活动内容','活动内容(App)','内容标题文字','首页展示排序']},
+  cons:  {title:'消费活动', tabs:['活动列表','活动统计'], imgTabs:true,
+          fields:['排序','是否显示首页','活动名称','活动时间','显示时间','领取方式','发放方式','发放周期','活动状态','活动类型','奖金所需流水'],
+          imgs:['首页推荐展示图','弹窗图片','奖励精选图','奖励列表图','内容图片'], tail:['活动内容','活动内容(App)','内容标题文字']},
+  lose:  {title:'盈利活动', tabs:['活动列表','活动统计'], imgTabs:true,
+          fields:['排序','是否显示首页','活动名称','活动时间','显示时间','领取方式','发放方式','发放周期','活动状态','活动类型','奖金所需流水'],
+          imgs:['首页推荐展示图','弹窗图片','奖励精选图','奖励列表图','内容图片'], tail:['活动内容','活动内容(App)','内容标题文字']}
+};
+var srcView = 'rech', imgDevice = 'PC';   // 目前开着哪一页、图片页签在 PC 还是手机端
+var SRC_OF = {rech:'充值活动', drech:'每日首充', ddep:'每日存款', newbie:'新用户首充', cons:'消费活动', lose:'负盈利活动', gc:'游戏挑战赛'};
+var srcItem = null;   // 设定页正在编辑的活动（从汇总页「前往设定」带过来；直接从选单进来就拿该来源第一笔）
+function pickItem(key, id){ srcItem = id ? byId(id) : items.find(function(x){ return x.src === SRC_OF[key]; }) || null; }
+var v2Item = null;    // 编辑活动（X-BOMB／预约）正在编辑的活动
+var open = {select:null, multi:null};   // 目前展开的下拉（multi＝标签多选）
+
+/* 筛选下拉 */
+var selects = {
+  fCur:{val:'PHP', opts:[['PHP','菲律宾比索']]},
+  fSt:{val:'', opts:[['','全部'],['1','开启'],['0','关闭']]},
+  fSrc:{val:'', opts:[['','全部']].concat(items.map(function(x){ return x.src; }).filter(function(v,i,a){ return a.indexOf(v) === i; }).map(function(s){ return [s,s]; }))},
+  fFeat:{val:'', opts:[['','全部'],['1','是'],['0','否']]}
+};
+
+/* ==========================================================================
+   Element 元件 HTML（只产生结构，样式由 Element 提供）
+   ========================================================================== */
+function elSelect(key, width){
+  var s = selects[key], cur = s.opts.find(function(o){ return o[0] === s.val; }), isOpen = open.select === key;
+  return '<div class="el-select el-select--small" data-sel="'+key+'"'+(width?' style="width:'+width+'"':'')+'>'+
+    '<div class="el-input el-input--small el-input--suffix'+(isOpen?' is-focus':'')+'"><input type="text" readonly class="el-input__inner" value="'+cur[1]+'">'+
+    '<span class="el-input__suffix"><span class="el-input__suffix-inner"><i class="el-select__caret el-input__icon el-icon-arrow-up'+(isOpen?' is-reverse':'')+'"></i></span></span></div>'+
+    (isOpen ? '<div class="el-select-dropdown el-popper"><div class="el-scrollbar"><div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin:0"><ul class="el-scrollbar__view el-select-dropdown__list">'+
+      s.opts.map(function(o){ return '<li class="el-select-dropdown__item'+(o[0]===s.val?' selected':'')+'" data-opt="'+key+'|'+o[0]+'"><span>'+o[1]+'</span></li>'; }).join('')+
+      '</ul></div></div></div>' : '')+'</div>';
+}
+function elMulti(key, chosen){
+  var isOpen = open.multi === key, full = chosen.length >= TAG_MAX;
+  var tags = chosen.map(function(t){ return '<span class="el-tag el-tag--info el-tag--small el-tag--light"><span>'+t+'</span><i class="el-tag__close el-icon-close" data-mrm="'+key+'|'+t+'"></i></span>'; }).join('');
+  var drop = isOpen ? '<div class="el-select-dropdown el-popper is-multiple"><div class="el-scrollbar"><div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin:0;max-height:240px"><ul class="el-scrollbar__view el-select-dropdown__list">'+
+    TAGS.map(function(tg){
+      var t = tg.name, on = chosen.indexOf(t) > -1, off = !on && full;
+      return '<li class="el-select-dropdown__item'+(on?' selected':'')+(off?' is-disabled':'')+'" data-mopt="'+key+'|'+t+'"><span>'+t+'</span></li>';
+    }).join('')+(TAGS.length ? '' : '<li class="el-select-dropdown__item is-disabled"><span>尚无标签，请先到「标签管理」新增</span></li>')+'</ul></div></div></div>' : '';
+  return '<div class="el-select el-select--small is-multiple" data-multi="'+key+'" style="width:100%">'+
+    '<div class="el-select__tags">'+(tags || '<span class="el-select__placeholder">请选择标签（最多 3 个）</span>')+'</div>'+
+    '<div class="el-input el-input--small el-input--suffix'+(isOpen?' is-focus':'')+'"><input type="text" readonly class="el-input__inner">'+
+    '<span class="el-input__suffix"><span class="el-input__suffix-inner"><i class="el-select__caret el-input__icon el-icon-arrow-up'+(isOpen?' is-reverse':'')+'"></i></span></span></div>'+drop+'</div>';
+}
+function elSwitch(on, attrs, disabled){
+  return '<div class="el-switch'+(on?' is-checked':'')+(disabled?' is-disabled':'')+'" role="switch" aria-checked="'+on+'" '+attrs+'><input type="checkbox" class="el-switch__input"><span class="el-switch__core" style="width:40px"></span></div>';
+}
+function elRadios(key, opts, val){
+  return '<div class="el-radio-group">'+opts.map(function(o){
+    var on = o[0] === val;
+    return '<label class="el-radio'+(on?' is-checked':'')+'" data-radio="'+key+'|'+o[0]+'"><span class="el-radio__input'+(on?' is-checked':'')+'"><span class="el-radio__inner"></span><input type="radio" class="el-radio__original"></span><span class="el-radio__label">'+o[1]+'</span></label>';
+  }).join('')+'</div>';
+}
+function elChecks(key, chosen){
+  return '<div class="check-grid">'+cats.map(function(c){
+    var on = chosen.indexOf(c.name) > -1;
+    return '<label class="el-checkbox'+(on?' is-checked':'')+'" data-check="'+key+'|'+c.name+'"><span class="el-checkbox__input'+(on?' is-checked':'')+'"><span class="el-checkbox__inner"></span><input type="checkbox" class="el-checkbox__original"></span><span class="el-checkbox__label">'+c.name+'</span></label>';
+  }).join('')+'</div>';
+}
+function elTextBtn(text, attrs, disabled){ return '<button type="button" class="el-button el-button--text el-button--small'+(disabled?' is-disabled':'')+'" '+(disabled?'disabled ':'')+(attrs||'')+'><span>'+text+'</span></button>'; }
+function elTag(text, type){ return '<span class="el-tag el-tag--'+type+' el-tag--small el-tag--light">'+text+'</span>'; }
+function fileBtn(attrs){ return '<button type="button" class="el-button el-button--primary el-button--small" '+(attrs||'')+'><i class="el-icon-document"></i><span>选择文件</span></button>'; }
+function formItem(label, req, ctrl, width){
+  width = width || 120;
+  return '<div class="el-form-item el-form-item--small'+(req?' is-required':'')+'"><label class="el-form-item__label" style="width:'+width+'px">'+label+'</label>'+
+         '<div class="el-form-item__content" style="margin-left:'+width+'px">'+ctrl+'</div></div>';
+}
+function elTable(cols, rows, rowCls){
+  var colgroup = '<colgroup>'+cols.map(function(c){ return '<col'+(c.w?' width="'+c.w+'"':'')+'>'; }).join('')+'</colgroup>';
+  var th = cols.map(function(c){ return '<th class="el-table__cell is-leaf is-center'+(c.isNew?' col-new':'')+(c.isMod?' col-mod':'')+'"><div class="cell">'+c.t+(c.isNew?'<span class="th-new">'+(c.was?'改名称':'新增')+'</span>'+(c.was?'<div style="font-size:11px;color:var(--c-danger);font-weight:400">原：'+c.was+'</div>':''):'')+(c.isMod?'<span class="th-mod">修改</span>':'')+'</div></th>'; }).join('');
+  var body = rows.map(function(r, i){
+    return '<tr class="el-table__row'+(rowCls?' '+rowCls(i):'')+'">'+r.map(function(td, j){ return '<td class="el-table__cell is-center'+(cols[j].isNew?' col-new':'')+(cols[j].isMod?' col-mod':'')+'"><div class="cell">'+td+'</div></td>'; }).join('')+'</tr>';
+  }).join('');
+  return '<div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--small">'+
+    '<div class="el-table__header-wrapper"><table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width:100%">'+colgroup+'<thead><tr>'+th+'</tr></thead></table></div>'+
+    '<div class="el-table__body-wrapper"><table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="width:100%">'+colgroup+'<tbody>'+body+'</tbody></table>'+
+    (rows.length?'':'<div class="el-table__empty-block"><span class="el-table__empty-text">No Data</span></div>')+'</div></div>';
+}
+
+/* ==========================================================================
+   新增的「活动类别」：只有 X-BOMB／预约（v2）、游戏挑战赛（gc）要加
+   其他来源原本就有「活动类型」，不重复；标签不在这里（统一在汇总页配置）
+   ========================================================================== */
+function rewardFields(key, opt, arr){
+  return formItem('活动类别'+opt.colon, false, elChecks(key, arr || []), opt.labelWidth);
+}
+/* 某个勾选群组对应哪笔活动的 cats（matCats＝素材弹窗；srcCats_x＝专项活动页；v2／gc＝编辑活动／挑战赛） */
+function catsOfKey(key){
+  if (key === 'matCats') return matEditing ? matEditing.cats : matNew.cats;
+  if (key.indexOf('srcCats_') === 0) return srcItem ? srcItem.cats : [];
+  if (key === 'v2') return v2Item ? v2Item.cats : [];
+  if (key === 'gc') { var g = items.find(function(x){ return x.src === '游戏挑战赛'; }); return g ? g.cats : []; }
+  return [];
+}
+
+/* ==========================================================================
+   画面一：汇总页
+   ========================================================================== */
+var MAT_COLS = [
+  {t:'来源',w:100,isNew:true},{t:'语系',w:50},{t:'默认显示',w:60},{t:'奖励页排序',w:92,isNew:true},{t:'精选',w:60,isNew:true},{t:'标签',w:130,isNew:true},
+  {t:'标题文字'},{t:'奖励列表图',w:96,isNew:true,was:'标题图片'},{t:'结束时间',w:90},{t:'显示结束时间',w:90},{t:'状态',w:60,isMod:true},{t:'操作',w:118,isMod:true}
+];
+function tagChips(tags){ return tags.length ? '<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center">'+tags.map(function(t){ return elTag(esc(t),'info'); }).join('')+'</div>' : '--'; }
+function renderFilter(){ document.querySelectorAll('[data-select]').forEach(function(el){ el.innerHTML = elSelect(el.dataset.select); }); }
+function renderMat(){
+  document.querySelectorAll('.js-table').forEach(function(el){ el.innerHTML = matTable(el.closest('.box').querySelector('.box__title').textContent.indexOf('PC') > -1 ? 'PC' : 'H5'); });
+  renderFront();
+}
+function matTable(dev){
+  var st = selects.fSt.val, src = selects.fSrc.val, ft = selects.fFeat.val;
+  var featCount = items.filter(function(x){ return x.feat && onDev(x, dev); }).length;   // 精选名额：PC、H5 各 3 个
+  var other = dev === 'PC' ? 'H5' : 'PC', otherFull = items.filter(function(x){ return x.feat && onDev(x, other); }).length >= FEAT_MAX;
+  // 其他来源是两表共用的：要两边都有名额才能开（不然另一张表会变 4 个）
+  var featLocked = function(it){ return !it.feat && (featCount >= FEAT_MAX || (it.src !== '素材' && otherFull)); };
+  // 顺序照前台：排序数字大的在前
+  var list = items.filter(function(it){
+    return onDev(it, dev) && (st === '' || String(+it.on) === st) && (!src || it.src === src) && (ft === '' || String(+it.feat) === ft);
+  }).sort(function(a,b){ return b.sort - a.sort; });
+  var rows = list.map(function(it){
+    var mine = it.src === '素材';
+    return [
+      mine ? elTag('素材','') : elTag(it.src,'info'),
+      it.lang, it.def,
+      '<div class="el-input el-input--mini sort-input"><input type="number" min="0" class="el-input__inner" value="'+it.sort+'" data-sort="'+it.id+'" title="'+(SORT_FIELD[it.src] ? '与「'+it.src+'」的「'+SORT_FIELD[it.src]+'」同步' : '仅奖励页使用')+'"></div>',
+      elSwitch(it.feat, 'data-feat="'+it.id+'"', featLocked(it)),   // 精选满 3 个：没开的反灰（共用来源看两张表）
+      tagChips(it.tags),
+      esc(it.title)+(it.sub ? '<div style="color:var(--c-text-3)">'+esc(it.sub)+'</div>' : ''),
+      '<span class="thumb thumb--wide"></span>',
+      fmtTime(it.end), fmtTime(it.showEnd),
+      elSwitch(it.on, mine ? 'data-on="'+it.id+'"' : '', !mine),
+      (mine ? elTextBtn('编辑','data-mat-edit="'+it.id+'"')+elTextBtn('删除','data-mat-del="'+it.id+'"') : elTextBtn('前往设定','data-goto="'+it.id+'"'))+elTextBtn('标签','data-item-tag="'+it.id+'"')
+    ];
+  });
+  return elTable(MAT_COLS, rows, function(i){ return list[i].feat ? 'is-feat' : ''; });
+}
+function fmtTime(v){ return !v || v === '--' ? '--' : v.replace(' ', '<br>'); }   // 没设时间（空／undefined）一律显示 --
+
+/* 素材弹窗：照线上栏位顺序；新增／改名只在图片栏位
+   新增＝空白表单；编辑＝带入该笔资料。PC／H5 两个按钮栏位相同，只差标题 */
+var matDevice = 'H5', matEditing = null;   // matEditing＝正在编辑的素材（新增时为 null）
+function openMat(device, it){
+  matDevice = device; matEditing = it || null; open.select = open.multi = null;
+  // 单选目前值：新增照线上预设；编辑带入假资料
+  ['mFloat','mPend','mHome','mSt','mDef','mJump','mText','mImg','mImgJump','mDaily'].forEach(function(k){ delete radioVals[k]; });
+  matNew = {cats:[]};   // 新增＝空白；编辑直接用该笔的 cats
+  if (it) { radioVals.mSt = it.on ? '1' : '0'; radioVals.mDef = it.def === '是' ? '1' : '0'; radioVals.mPend = it.title.indexOf('返水') > -1 ? '2' : '0'; }
+  document.getElementById('matModalTitle').textContent = (it ? '修改' : '新增')+device+'活动优惠素材图';
+  renderMatModal();
+  document.getElementById('matModal').classList.remove('hidden');
+}
+function radioOf(key, def){ return radioVals[key] || def; }
+/* 跳转方式：三种，各自带出不同栏位（照线上）
+   文本/图片 → 再选 文本（内容标题文字＋内容文字）或 图片（内容图片）
+   跳转链接 → 跳转链接
+   图片     → 再选 单跳转（顶部图片＋跳转：无／游戏／厂商）或 多跳转（顶部图片＋游戏背景图片＋选择游戏） */
+function jumpFields(lw, up, inp){
+  var sel = function(ph){ return '<div class="el-select el-select--small" style="width:220px"><div class="el-input el-input--small el-input--suffix"><input readonly class="el-input__inner" placeholder="'+ph+'"><span class="el-input__suffix"><span class="el-input__suffix-inner"><i class="el-select__caret el-input__icon el-icon-arrow-up"></i></span></span></div></div>'; };
+  var j = radioOf('mJump','1'), html = formItem('跳转方式:', false, elRadios('mJump', [['1','文本/图片'],['2','跳转链接'],['3','图片']], j), lw);
+  if (j === '1') {
+    html += formItem('', false, elRadios('mText', [['1','文本'],['2','图片']], radioOf('mText','1')), lw);
+    html += radioOf('mText','1') === '1'
+      ? formItem('内容标题文字:', false, inp(''), lw)+formItem('内容文字:', false, '<div class="el-textarea"><textarea class="el-textarea__inner" rows="4"></textarea></div>', lw)
+      : formItem('内容图片:', false, up, lw);
+  } else if (j === '2') {
+    html += formItem('跳转链接:', false, inp(''), lw);
+  } else {
+    var m = radioOf('mImg','1');
+    html += formItem('', false, elRadios('mImg', [['1','单跳转'],['2','多跳转']], m), lw)+formItem('顶部图片:', true, up, lw);
+    if (m === '1') {
+      var g = radioOf('mImgJump','0');
+      html += formItem('跳转:', false, elRadios('mImgJump', [['0','无跳转'],['1','游戏'],['2','厂商']], g), lw);
+      if (g !== '0') html += formItem('选择厂商:', false, sel('请选择'), lw);
+      if (g === '1') html += formItem('选择游戏:', false, sel('请选择'), lw);
+    } else {
+      html += formItem('游戏背景图片:', true, up, lw)+formItem('选择游戏:', false, '<button type="button" class="el-button el-button--primary el-button--small"><span>选择游戏</span></button>', lw);
+    }
+  }
+  return html;
+}
+function renderMatModal(){
+  var it = matEditing || {}, lw = 140, up = '<div class="upload-row">'+fileBtn()+'<span class="upload-row__path"></span></div><div class="el-form-item__tip">只能上传jpg/png/gif/webp文件，且不超过2MB</div>';
+  var inp = function(v,w){ return '<div class="el-input el-input--small"'+(w?' style="width:'+w+'"':'')+'><input class="el-input__inner" value="'+esc(v)+'"></div>'; };
+  var daily = radioOf('mDaily','0') === '1';
+  document.getElementById('matModalBody').innerHTML = '<form class="el-form el-form--label-right" onsubmit="return false">'+
+    '<div class="is-mod">'+formItem('排序:', true, inp(it.id ? it.sort : '', undefined).replace('<input ', '<input id="mSort" '), lw-16)+'</div>'+   // 既有栏位、行为变了：同时就是奖励页排序
+    formItem('标题:', true, '<div style="display:flex;gap:16px;align-items:center">'+inp(it.title).replace('<input ', '<input id="mTitle" ')+'<label class="el-checkbox'+(daily?' is-checked':'')+'" data-radio="mDaily|'+(daily?'0':'1')+'"><span class="el-checkbox__input'+(daily?' is-checked':'')+'"><span class="el-checkbox__inner"></span></span><span class="el-checkbox__label">每日返水</span></label></div>', lw)+
+    '<div class="is-new" data-mark="改名称：原「标题图片」">'+formItem('奖励列表图:', true, up+'<div class="el-form-item__tip el-form-item__tip--red">尺寸 112×88</div>', lw-16)+'</div>'+
+    formItem('弹窗图片:', false, up+'<div class="el-form-item__tip el-form-item__tip--red">PC: 800*600 H5: 640*118</div>', lw)+
+    formItem('首页图片(移动端用):', false, up, lw)+
+    '<div class="is-new">'+formItem('奖励精选图:', false, up, lw-16)+'</div>'+
+    formItem('首页浮窗设置', false, elRadios('mFloat', [['1','开启'],['0','关闭']], radioOf('mFloat','0')), lw)+
+    formItem('浮窗图片:', false, up, lw)+
+    formItem('首页浮窗排序:', true, inp('999'), lw)+
+    formItem('活动类型:', false, elChecks('matCats', catsOfKey('matCats')), lw)+
+    formItem('待领取提示关联:', false, elRadios('mPend', [['0','无'],['1','每日特别返水'],['2','每日返水加码']], radioOf('mPend','0')), lw)+
+    formItem('推荐游戏:', false, '<button type="button" class="el-button el-button--primary el-button--small"><span>选择游戏</span></button>', lw)+
+    formItem('是否显示首页:', false, elRadios('mHome', [['1','是'],['0','否']], radioOf('mHome','1')), lw)+
+    formItem('状态:', false, elRadios('mSt', [['1','开启'],['0','关闭']], radioOf('mSt','1')), lw)+
+    jumpFields(lw, up, inp)+
+    formItem('开始时间:', false, inp('','220px'), lw)+formItem('结束时间:', false, inp(it.end && it.end !== '--' ? it.end : '','220px'), lw)+
+    formItem('显示开始日期:', false, inp('','220px'), lw)+formItem('显示结束日期:', false, inp(it.showEnd && it.showEnd !== '--' ? it.showEnd : '','220px'), lw)+
+    formItem('币种:', true, inp(it.id ? '菲律宾比索' : '','220px'), lw)+formItem('语系:', true, inp(it.lang && it.lang !== '—' ? it.lang : '','220px'), lw)+
+    formItem('默认显示:', false, elRadios('mDef', [['1','是'],['0','否']], radioOf('mDef','0'))+'<div class="el-form-item__tip">一个币别只能有一个默认显示</div>', lw)+
+  '</form>';
+}
+
+/* ==========================================================================
+   标签管理弹窗（优惠活动 › 工具列「标签管理」钮）：新增／编辑／删除；使用中的不能删（照活动类别）
+   ========================================================================== */
+var tagEditing = -1;   // 正在编辑第几个标签（-1＝新增）
+function tagUsage(t){ return items.filter(function(it){ return it.tags.indexOf(t) > -1; }).length; }
+function renderTagModal(){
+  var cols = [{t:'标签'},{t:'使用中',w:110},{t:'创建时间',w:160},{t:'操作',w:110}];
+  var rows = TAGS.map(function(tg, i){
+    var n = tagUsage(tg.name);
+    return [esc(tg.name), n ? n+' 个活动' : '--', tg.created, elTextBtn('编辑','data-tag-edit="'+i+'"')+elTextBtn('删除','data-tag-del="'+i+'"', n > 0)];
+  });
+  document.getElementById('tagModalBody').innerHTML =
+    '<div class="toolbar" style="justify-content:space-between;align-items:center"><button type="button" class="el-button el-button--primary el-button--small" data-tag-new><span>新增标签</span></button>'+
+    '<span class="el-form-item__tip" style="margin:0">每个活动最多选 3 个；使用中的标签不能删除</span></div>'+
+    '<div style="max-height:52vh;overflow:auto">'+elTable(cols, rows)+'</div>';
+}
+function openTagEdit(i){
+  tagEditing = i;
+  document.getElementById('tagEditTitle').textContent = i > -1 ? '编辑标签' : '新增标签';
+  document.getElementById('tagEditBody').innerHTML = '<form class="el-form el-form--label-right" onsubmit="return false">'+
+    formItem('标签名称:', true, '<div class="el-input el-input--small"><input class="el-input__inner" id="tagName" value="'+(i > -1 ? esc(TAGS[i].name) : '')+'" placeholder="请输入（英文，前台照显示）" maxlength="20"></div>', 100)+
+  '</form>';
+  document.getElementById('tagEditModal').classList.remove('hidden');
+  document.getElementById('tagName').focus();
+}
+function saveTagEdit(){
+  var name = document.getElementById('tagName').value.trim();
+  if (!name) { message('请输入标签名称', 'error'); return; }
+  if (TAGS.some(function(x, j){ return j !== tagEditing && x.name.toLowerCase() === name.toLowerCase(); })) { message('标签已存在', 'error'); return; }
+  if (tagEditing > -1) {
+    var oldName = TAGS[tagEditing].name; TAGS[tagEditing].name = name;
+    items.forEach(function(it){ it.tags = it.tags.map(function(x){ return x === oldName ? name : x; }); });   // 改名：用到的活动跟着改
+  } else TAGS.push({name:name, created:'2026-10-19 15:40:00'});
+  document.getElementById('tagEditModal').classList.add('hidden'); renderTagModal(); renderMat(); redrawAll(); message('保存成功');
+}
+
+/* 设定标签（汇总页 › 列表操作「标签」钮）：每个活动从 TAGS 挑，最多 3 个；按确定才存回 items[].tags */
+var tagSet = null;   // {id, tags}＝正在编辑的活动与工作副本
+function openTagSet(id){
+  var it = byId(id); tagSet = {id:id, tags:it.tags.slice()}; open.select = open.multi = null;
+  renderTagSet(); document.getElementById('tagSetModal').classList.remove('hidden');
+}
+function renderTagSet(){
+  var it = byId(tagSet.id);
+  document.getElementById('tagSetTitle').textContent = '设定标签';
+  document.getElementById('tagSetBody').innerHTML = '<form class="el-form el-form--label-right" onsubmit="return false">'+
+    formItem('活动:', false, '<div style="line-height:32px">'+(it.src === '素材' ? elTag('素材','') : elTag(it.src,'info'))+' <span style="color:var(--c-text)">'+esc(it.title)+'</span></div>', 80)+
+    formItem('标签:', false, elMulti('item', tagSet.tags)+'<div class="el-form-item__tip">最多 3 个；清单里没有要的标签？<button type="button" class="el-button el-button--text el-button--mini" data-tag="open" style="padding:0"><span>管理标签</span></button></div>', 80)+
+  '</form>';
+}
+
+/* ==========================================================================
+   画面二：活动类别管理
+   ========================================================================== */
+var catEditing = null;
+function catUsed(name){ return items.some(function(it){ return it.cats.indexOf(name) > -1; }); }
+function renderCats(){
+  var cols = [{t:'活动类型名称'},{t:'排序',w:120},{t:'创建时间',w:200},{t:'是否开启',w:120},{t:'操作',w:140}];
+  var rows = cats.map(function(c, i){
+    return [esc(c.name), c.sort, c.created,
+            elSwitch(c.on, 'data-cat-on="'+i+'"', false), elTextBtn('编辑','data-cat-edit="'+i+'"')+elTextBtn('删除','data-cat-del="'+i+'"', catUsed(c.name))];   // 照线上：使用中的类别删除反灰
+  });
+  document.getElementById('catTable').innerHTML = elTable(cols, rows);
+  renderFront();
+}
+function openCat(i){
+  catEditing = i;
+  var c = i > -1 ? cats[i] : {name:'', sort:''};
+  document.getElementById('catModalTitle').textContent = i > -1 ? '编辑活动类型' : '新增活动类型';
+  document.getElementById('catModalBody').innerHTML = '<form class="el-form el-form--label-right" onsubmit="return false">'+
+    formItem('活动类型名称:', true, '<div class="el-input el-input--small"><input class="el-input__inner" id="catName" value="'+esc(c.name)+'" placeholder="请输入"></div>')+
+    formItem('排序:', true, '<div class="el-input el-input--small"><input class="el-input__inner" id="catSort" type="number" value="'+c.sort+'" placeholder="请输入"></div>')+
+  '</form>';
+  document.getElementById('catModal').classList.remove('hidden');
+}
+
+/* ==========================================================================
+   画面三／四：编辑活动步骤 2、游戏挑战赛
+   ========================================================================== */
+var radioVals = {v2Float:'1', v2List:'1', gcStatus:'1', gcFloat:'0'};
+function renderV2(){
+  document.querySelectorAll('[data-radios]').forEach(function(el){ el.innerHTML = elRadios('page_'+el.dataset.radios, [['1','开启'],['0','关闭']], radioVals[el.dataset.radios]); });
+  document.querySelectorAll('[data-uploads]').forEach(function(el){
+    el.innerHTML = el.dataset.uploads.split('|').map(function(t){
+      return '<div class="upload-card"><div class="upload-card-header">'+(t.indexOf('奖励精选图') > -1 ? '' : '<span class="req">*</span>')+t+'</div><div class="upload-card-body"><div class="img-uploader">点击上传图片</div>'+
+             '<div class="upload-actions"><button type="button" class="el-button el-button--text el-button--mini" data-card-del><i class="el-icon-delete"></i><span>删除</span></button></div></div></div>';
+    }).join('');
+  });
+  if (!v2Item) v2Item = items.find(function(x){ return x.src === 'X-BOMB'; }) || null;
+  document.querySelector('[data-reward="v2"]').innerHTML = rewardFields('v2', {labelWidth:132, colon:':'}, catsOfKey('v2'));
+  document.getElementById('v2Sort').value = v2Item ? v2Item.sort : 0;
+  document.querySelector('.wizard__bar-title').textContent = '活动配置步骤'+(v2Item ? '：'+v2Item.title : '');
+}
+function renderGc(){
+  var lw = 140, it = items.find(function(x){ return x.src === '游戏挑战赛'; }) || {};
+  var inp = function(v,w,attr){ return '<div class="el-input el-input--small" style="width:'+(w||'320px')+'"><input class="el-input__inner" value="'+esc(v)+'" '+(attr||'')+'></div>'; };
+  var rng = function(a,b,ida,idb){ return '<div class="el-date-editor el-range-editor el-input__inner el-range-editor--small" style="width:400px"><i class="el-input__icon el-range__icon el-icon-time"></i><input class="el-range-input" value="'+a+'" id="'+ida+'"><span class="el-range-separator">~</span><input class="el-range-input" value="'+b+'" id="'+idb+'"></div>'; };
+  document.getElementById('gcForm').innerHTML =
+    '<div class="section-title section-title--plain"><span class="req">*</span>基本信息</div>'+
+    '<div class="is-mod">'+formItem('排序', true, inp(it.sort,'160px','id="gcSort"'), lw-16)+'</div>'+formItem('活动名称', true, inp(it.title,undefined,'id="gcTitle"'), lw)+
+    formItem('活动时间', true, rng(it.start||'',it.end||'','gcStart','gcEnd'), lw)+formItem('展示时间', true, rng(it.start||'',it.showEnd||'','gcShowStart','gcShowEnd'), lw)+
+    formItem('活动状态', true, elRadios('page_gcStatus', [['1','开启'],['0','关闭']], it.on === false ? '0' : '1'), lw)+
+    '<div class="is-new">'+rewardFields('gc', {labelWidth:lw-16, colon:''}, catsOfKey('gc'))+'</div>'+
+    '<div class="section-title section-title--plain"><span class="req">*</span>活动素材配置</div>'+
+    '<div class="is-new">'+formItem('奖励精选图：', false, '<div class="upload-pair"><span class="upload-pair__item">PC：'+fileBtn()+'</span><span class="upload-pair__item">APP：'+fileBtn()+'</span></div>', lw-16)+'</div>'+
+    '<div class="is-new" data-mark="改名称：原「列表页图」">'+formItem('奖励列表图：', true, '<div class="upload-pair"><span class="upload-pair__item">PC：'+fileBtn()+'</span><span class="upload-pair__item">APP：'+fileBtn()+'</span></div><div class="el-form-item__tip">仅支持图片文件：.PNG .JPG .WEBP 图片大小不超过2MB</div><div class="el-form-item__tip el-form-item__tip--red">尺寸 112×88</div>', lw-16)+'</div>'+
+    formItem('浮窗开关', true, elRadios('page_gcFloat', [['1','开启'],['0','关闭']], radioVals.gcFloat), lw)+
+    formItem('PC端图片', true, fileBtn(), lw)+formItem('H5端图片', true, fileBtn(), lw)+
+    formItem('首页展示排序', true, inp('0','160px')+'<div class="el-form-item__tip">建议上传 png/jpg/gif 格式图片，大小不超过 5MB</div>', lw)+
+    formItem('', false, '<button type="button" class="el-button el-button--primary el-button--small" data-act="gcSave"><span>保存</span></button>', lw);
+}
+
+/* ==========================================================================
+   画面五～九：其他来源的配置页（栏位照线上；元件依栏位名称挑）
+   ========================================================================== */
+var SRC_RADIOS = {'是否显示首页':[['1','是'],['0','否']], '领取方式':[['1','自动领取'],['2','手动领取']], '发放方式':[['1','自动发放'],['2','人工审核']],
+                  '活动状态':[['1','开启'],['0','关闭']], '发放周期':[['1','日'],['2','周'],['3','月']]};
+function srcField(label){
+  var it = srcItem || {}, lw = 140, inp = function(w, v, attr){ return '<div class="el-input el-input--small" style="width:'+(w||'320px')+'"><input class="el-input__inner" value="'+esc(v === undefined ? '' : v)+'" '+(attr||'')+'></div>'; };
+  var tv = function(v){ return v && v !== '--' ? v : ''; };
+  if (label === '活动类型') return formItem(label+':', false, elChecks('srcCats_'+srcView, catsOfKey('srcCats_'+srcView)), lw);
+  if (SRC_RADIOS[label]) {   // 活动状态／发放方式带入该活动目前值（跟汇总页同一笔）
+    var def = label === '活动状态' ? (it.on === false ? '0' : '1') : label === '发放方式' ? (it.auto ? '1' : '2') : SRC_RADIOS[label][0][0];
+    return formItem(label+':', false, elRadios('src_'+label, SRC_RADIOS[label], radioOf('src_'+label, def)), lw);
+  }
+  if (/时间$/.test(label)) { var isAct = /活动时间/.test(label); return formItem(label+':', isAct, '<div class="el-date-editor el-range-editor el-input__inner el-range-editor--small" style="width:400px"><i class="el-input__icon el-range__icon el-icon-time"></i><input class="el-range-input" placeholder="开始时间" value="'+(isAct ? tv(it.start) : tv(it.showStart))+'" '+(isAct ? 'data-src-start' : 'data-src-show-start')+'><span class="el-range-separator">~</span><input class="el-range-input" placeholder="结束时间" value="'+(isAct ? tv(it.end) : tv(it.showEnd))+'" '+(isAct ? 'data-src-end' : 'data-src-show-end')+'></div>', lw); }
+  if (/^活动内容/.test(label)) return formItem(label+':', false, '<div class="el-textarea"><textarea class="el-textarea__inner" rows="3"></textarea></div>', lw);
+  if (label === '排序') return '<div class="is-mod">'+formItem(label+':', true, inp('200px', it.sort, 'data-src-sort'), lw-16)+'</div>';   // 既有栏位、行为变了：同时就是奖励页排序
+  if (/流水|天/.test(label)) return formItem(label+':', false, inp('200px'), lw);
+  if (label === '活动名称') return formItem(label+':', true, inp(undefined, it.title, 'data-src-title'), lw);
+  if (label === '奖励发放方式' || label === '可以参与活动代理线') return formItem(label+':', false, '<div class="el-select el-select--small" style="width:320px"><div class="el-input el-input--small el-input--suffix"><input readonly class="el-input__inner" placeholder="请选择"><span class="el-input__suffix"><span class="el-input__suffix-inner"><i class="el-select__caret el-input__icon el-icon-arrow-up"></i></span></span></div></div>', lw);
+  return formItem(label+':', label === '活动名称', inp(), lw);
+}
+function renderSrc(){
+  var pg = SRC_PAGES[srcView], lw = 140, html = '';
+  pg.fields.forEach(function(f){ html += srcField(f); });   // 这些来源原本就有「活动类型」，栏位区不新增（标签统一在汇总页配置）
+  var dev = imgDevice === 'PC' ? 'PC' : '手机端';
+  var imgTabs = '<div class="el-tabs el-tabs--top el-tabs--card" style="margin:8px 0 16px"><div class="el-tabs__header is-top"><div class="el-tabs__nav-wrap is-top"><div class="el-tabs__nav-scroll"><div class="el-tabs__nav is-top">'+
+    ['PC','手机端'].map(function(d){ return '<div class="el-tabs__item is-top'+(imgDevice===d?' is-active':'')+'" data-imgtab="'+d+'">'+d+'图片设置</div>'; }).join('')+'</div></div></div></div></div>';
+  var imgs = pg.imgs.map(function(t){
+    var isNew = ['奖励精选图','奖励列表图'].indexOf(t) > -1;
+    var box = isNew ? 'is-new' : '';
+    var mark = t === '奖励列表图' ? ' data-mark="改名称：原「'+(srcView === 'ddep' ? '奖励列表' : '列表页图')+'」"' : '';
+    return (box ? '<div class="'+box+'"'+mark+'>' : '')+formItem((['奖励精选图','奖励列表图'].indexOf(t) > -1 ? '' : (imgDevice==='PC'?'PC':'手机端'))+t+':', false, '<div class="upload-row">'+fileBtn()+'<span class="upload-row__path"></span></div><div class="el-form-item__tip">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</div>'+(t === '奖励列表图' ? '<div class="el-form-item__tip el-form-item__tip--red">尺寸 112×88</div>' : '')+(t === '奖励精选图' ? '' : ''), box ? lw-16 : lw)+(box ? '</div>' : '');
+  }).join('');
+  var tail = pg.tail.map(srcField).join('');
+  document.getElementById('srcPage').innerHTML =
+    '<div class="el-tabs el-tabs--top el-tabs--border-card"><div class="el-tabs__header is-top"><div class="el-tabs__nav-wrap is-top"><div class="el-tabs__nav-scroll"><div class="el-tabs__nav is-top">'+
+      pg.tabs.map(function(t,i){ return '<div class="el-tabs__item is-top'+(i===0?' is-active':'')+'">'+t+'</div>'; }).join('')+
+    '</div></div></div></div><div class="el-tabs__content"><div class="el-tab-pane">'+
+      '<form class="el-form el-form--label-right" onsubmit="return false">'+html+imgTabs+imgs+tail+
+      formItem('', false, '<button type="button" class="el-button el-button--default el-button--small" data-go="mat"><span>取 消</span></button><button type="button" class="el-button el-button--primary el-button--small" data-act="srcSave"><span>保 存</span></button>', lw)+
+      '</form></div></div></div>';
+}
+
+
+/* ==========================================================================
+   前台 H5：改版后 Rewards 页（读后台同一组资料；只读 H5 表＝H5 素材＋其他来源）
+   - 卡片顺序照既有：有可领的排最前，其余照奖励页排序大→小
+   - 精选区：匯总页开「精选」的（≤3）轮播，用奖励精选图（没上传就用该活动的奖励列表图顶上，不校验，10/20 她定）；
+     精选开着但活动被关掉／已结束的，前台不显示、名额照占（10/20 她定）；精选过的在下方列表照样出现（跟现行一样）
+   - 快捷入口：活动类别管理里「是否开启」的类别（既有开关）；全部关掉整排就不显示
+   - 角标分两个维度、两个位置（10/20 她点出倒数／自动／手动是不同标签）：图片底部色带＝时间（剩 ≤24h 玫红倒数，照活动结束时间）；
+     图片左上角小标＝领取方式（自动发放→绿色 Auto Claimed；手动领取不挂）；两者可同时出现。卡片第二行＝现行 Event time 起–迄／Permanent event／Expired
+   - 按钮一律 View（打开现行 Event Details 弹窗，领取在弹窗里）；有可领的（既有 pendingClaimCount>0）照线上在卡片右上角挂红色数字＋排最前
+   ========================================================================== */
+var NOW0 = new Date('2026-10-19T15:38:34'), T0 = Date.now();   // 原型的「现在」＝后台抬头时间，之后照真实时间往前走
+function nowMs(){ return NOW0.getTime() + (Date.now() - T0); }
+function tms(v){ return v && v !== '--' ? new Date(v.replace(' ', 'T')).getTime() : null; }
+var frontCat = '';   // 目前点选的快捷入口（空＝全部）
+var featIdx = 0;     // 精选轮播目前第几张
+var frontLogin = true;   // 原型切换：登入／未登入（未登入没有红点、没有可领）
+
+/* 卡片在奖励页看不看得到：照既有 showActivityByDate（后端盘点 2.3）
+   - 显示开始／结束任一有设：只看显示时间，完全不看活动时间
+   - 都没设：看活动时间 [开始, 结束]，没设的一端不限
+   - 四个都空：永远显示 */
+function visibleNow(it){
+  if (!it.on) return false;
+  var n = nowMs(), ss = tms(it.showStart), se = tms(it.showEnd), st = tms(it.start), e = tms(it.end);
+  if (ss || se) return (!ss || ss <= n) && (!se || n <= se);
+  return (!st || st <= n) && (!e || n <= e);
+}
+function pad(x){ return (x < 10 ? '0' : '') + x; }
+/* 时间角标＝只管时间：剩 ≤24h 才挂玫红倒数；已结束／永久／还有一天以上都不挂 */
+function badgeOf(it){
+  var e = tms(it.end), n = nowMs();
+  if (!e || e <= n) return null;   // 永久活动不倒数；已结束、还在显示期间：不挂角标（10/20 她定，拿掉 Activity End）
+  var left = e - n;
+  if (left <= 24*3600*1000) { var s = Math.floor(left/1000); return {cls:'h5-badge--hot', clock:true, cd:true, text:'Ends in '+pad(Math.floor(s/3600))+':'+pad(Math.floor(s%3600/60))+':'+pad(s%60)}; }
+  return null;   // 还有一天以上：不挂角标，日期写在卡片第二行（现行 Event time）
+}
+function badgeHtml(b){ return b ? '<span class="h5-badge '+b.cls+'"'+(b.cd?' data-cd':'')+'>'+(b.clock?'<i class="h5-clock"></i>':'')+b.text+'</span>' : ''; }
+/* 领取方式小标＝只管领取方式：发放方式＝自动发放 → Auto Claimed；手动领取不挂（预设状态，有可领的靠红色数字） */
+function pillHtml(it){ var e = tms(it.end); return it.auto && !(e && e <= nowMs()) ? '<span class="h5-pill">Auto Claimed</span>' : ''; }
+/* 卡片第二行＝现行的活动时间文字：Event time 起 – 迄；没设时间＝Permanent event（都是现行文案） */
+function dmy(ms){ var d = new Date(ms); return d.getFullYear()+'/'+pad(d.getMonth()+1)+'/'+pad(d.getDate()); }
+function timeText(it){
+  var e = tms(it.end), st = tms(it.start);
+  if (!e) return 'Permanent event';
+  if (e <= nowMs()) return 'Expired';          // 活动已结束、还在显示期：照现行前台显示 Expired
+  return (st ? dmy(st) : '')+'–'+dmy(e);   // 一行放得下才能维持三行高度，所以不带「Event time:」字样
+}
+/* 卡片属于哪些类别＝该笔活动在后台勾的「活动类型」（既有）或「活动类别」（X-BOMB／预约／挑战赛新增）；后台改勾选前台即时跟着变 */
+function itemCats(it){ return it.cats || []; }
+function cardTags(it){
+  var tags = it.tags || [];   // 汇总页「标签」钮选的；没选就空着，不退回活动类别（10/20 她定）
+  return tags.length ? '<div class="h5-tags">'+tags.map(function(t){ return '<span class="h5-tag">'+esc(t)+'</span>'; }).join('')+'</div>' : '';
+}
+function renderFront(){
+  var box = document.getElementById('h5'); if (!box) return;
+  var vis = items.filter(function(x){ return onDev(x, 'H5'); }).filter(visibleNow).sort(function(a,b){ return ((frontLogin&&b.pending)?1:0) - ((frontLogin&&a.pending)?1:0) || b.sort - a.sort; });
+  var feats = vis.filter(function(x){ return x.feat; }).slice(0, FEAT_MAX);
+  var catsOn = cats.filter(function(c){ return c.on; }).sort(function(a,b){ return b.sort - a.sort; });   // 快捷入口＝「是否开启」的类别；全关就整排不显示
+  var isPending = function(x){ return frontLogin && x.pending; };
+  var list = vis.filter(function(x){ return !frontCat || itemCats(x).indexOf(frontCat) > -1; });
+  // 顶部个人栏：登入＝头像＋余额／积分＋Deposit；未登入照线上＝Login
+  var h = frontLogin
+    ? '<div class="h5-top"><div class="h5-avatar"></div><div class="h5-wallet">'+
+      '<div><i class="h5-coin h5-coin--p"></i>60 <span class="h5-refresh">⟳</span></div><div><i class="h5-coin h5-coin--pt"></i>2,150 <span class="h5-refresh">⟳</span></div></div>'+
+      '<button type="button" class="h5-deposit">Deposit</button><i class="h5-search"></i></div>'
+    : '<div class="h5-top"><div class="h5-avatar" style="background:#C9D3E6"></div><div class="h5-guest">Welcome to OKBet!</div><button type="button" class="h5-login">Login</button><i class="h5-search"></i></div>';
+  if (feats.length) {
+    if (featIdx >= feats.length) featIdx = 0;
+    var f = feats[featIdx];
+    h += '<div class="h5-sec">Featured</div><div class="h5-feat"><div class="h5-hero is-anim" data-front-open="'+f.id+'">'+
+         pillHtml(f)+'<div class="h5-hero__name">'+esc(f.title)+'</div>'+badgeHtml(badgeOf(f))+'</div>'+
+         (feats.length > 1 ? '<div class="h5-dots">'+feats.map(function(_,i){ return '<i class="'+(i===featIdx?'is-on':'')+'" data-front-dot="'+i+'"></i>'; }).join('')+'</div>' : '')+'</div>';
+  }
+  h += '<div class="h5-sec">More promotions</div>';
+  // 快捷入口：彩色方块照企划书 2.3.1 的位置，只放类别名称（类别不上图示，10/20 她定）
+  if (catsOn.length) h += '<div class="h5-cats"><div class="h5-cat h5-cat--1'+(!frontCat?' is-on':'')+'" data-front-cat=""><div class="h5-cat__name">All</div></div>'+catsOn.map(function(c, i){ return '<div class="h5-cat h5-cat--'+(i%6)+(frontCat===c.name?' is-on':'')+'" data-front-cat="'+esc(c.name)+'"><div class="h5-cat__name">'+esc(c.name)+'</div></div>'; }).join('')+'</div>';
+  h += '<div class="h5-list">'+(list.length ? list.map(function(it){
+    var tt = timeText(it);
+    return '<div class="h5-card" data-front-open="'+it.id+'">'+(isPending(it)?'<span class="h5-card__dot">'+(it.pendingN||1)+'</span>':'')+'<div class="h5-thumb">'+pillHtml(it)+badgeHtml(badgeOf(it))+'</div>'+
+      '<div class="h5-body"><div class="h5-title">'+esc(it.title)+'</div>'+(tt ? '<div class="h5-time">'+tt+'</div>' : '')+cardTags(it)+'</div>'+
+      '<button type="button" class="h5-btn" data-front-btn="'+it.id+'">View</button></div>';
+  }).join('') : '<div class="h5-empty">No promotions</div>')+'</div>';
+  h += '<div class="h5-nav"><div><i></i>Home</div><div class="is-on"><i></i>Rewards</div><div><i></i>Points Mall</div><div><i></i>Tourney</div><div><i></i>My</div></div>';
+  box.innerHTML = h;
+  // 标签放不下的整颗藏掉（不切半颗）：文字区约 130px，三个长标签放不下时只显示放得下的
+  box.querySelectorAll('.h5-tags').forEach(function(row){ var r = row.getBoundingClientRect(); if (!r.width) return; var cut = false; row.querySelectorAll('.h5-tag').forEach(function(t){ if (cut || t.getBoundingClientRect().right > r.right + 0.5) { cut = true; t.style.display = 'none'; } }); });
+}
+/* 精选轮播：4 秒换一张，前台开着才动 */
+setInterval(function(){
+  if (document.getElementById('protoFront').classList.contains('hidden')) return;
+  var n = items.filter(function(x){ return onDev(x, 'H5'); }).filter(visibleNow).filter(function(x){ return x.feat; }).length;
+  if (n > 1) { featIdx = (featIdx + 1) % Math.min(n, FEAT_MAX); renderFront(); }
+}, 4000);
+/* 倒数每秒跳：只改有倒数的角标，不重画整页 */
+setInterval(function(){
+  document.querySelectorAll('[data-cd]').forEach(function(el){
+    var card = el.closest('[data-front-open]'), it = card && byId(card.dataset.frontOpen), b = it && badgeOf(it);
+    if (b) { el.className = 'h5-badge '+b.cls; el.innerHTML = (b.clock?'<i class="h5-clock"></i>':'')+b.text; }
+  });
+}, 1000);
+
+/* ==========================================================================
+   画面切换、提示、小工具
+   ========================================================================== */
+var VIEWS = {mat:['viewMat','活动图素材管理'], cat:['viewCat','活动类别管理'], gc:['viewGc','游戏挑战赛'], v2:['viewV2','编辑活动']};
+function show(view){
+  var isSrc = !!SRC_PAGES[view];
+  if (isSrc) {
+    srcView = view; imgDevice = 'PC';
+    Object.keys(radioVals).forEach(function(k){ if (k.indexOf('src_') === 0) delete radioVals[k]; });
+    if (!srcItem || srcItem.src !== SRC_OF[view]) pickItem(view);
+    renderSrc();
+  }
+  Object.keys(VIEWS).forEach(function(k){ document.getElementById(VIEWS[k][0]).classList.toggle('hidden', k !== view); });
+  document.getElementById('viewSrc').classList.toggle('hidden', !isSrc);
+  document.getElementById('bcCur').textContent = isSrc ? SRC_PAGES[view].title : VIEWS[view][1];
+  document.querySelectorAll('[data-menu]').forEach(function(m){ m.classList.toggle('is-active', m.dataset.menu === view); });
+  document.querySelectorAll('[data-tag]').forEach(function(t){ t.classList.toggle('tags__item--active', t.dataset.tag === view); });
+}
+function redrawAll(){
+  renderFilter(); renderFront();
+  if (!document.getElementById('matModal').classList.contains('hidden')) renderMatModal();
+  if (!document.getElementById('tagSetModal').classList.contains('hidden')) renderTagSet();
+  renderV2(); renderGc();
+  if (!document.getElementById('viewSrc').classList.contains('hidden')) renderSrc();
+}
+function message(text, type){
+  type = type || 'success';
+  var box = document.getElementById('msg');
+  box.innerHTML = '<div role="alert" class="el-message el-message--'+type+'" style="z-index:3000"><i class="el-message__icon el-icon-'+type+'"></i><p class="el-message__content">'+text+'</p></div>';
+  clearTimeout(message._t); message._t = setTimeout(function(){ box.innerHTML = ''; }, 1800);
+}
+var delThen = null;   // 删除确认按「确定」后要做的事
+function askDel(text, then){ delThen = then; document.getElementById('delText').textContent = text; document.getElementById('delBox').classList.remove('hidden'); }
+function esc(s){ return String(s||'').replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function byId(id){ return items.find(function(x){ return x.id === Number(id); }); }
+
+/* ==========================================================================
+   事件：全部集中在这里绑（事件委派）
+   ========================================================================== */
+document.addEventListener('click', function(e){
+  var t = e.target, q;
+
+  // 下拉（单选）
+  if ((q = t.closest('[data-opt]'))) { var p = q.dataset.opt.split('|'); selects[p[0]].val = p[1]; open.select = null; redrawAll(); return; }
+  if ((q = t.closest('[data-sel]'))) { open.select = open.select === q.dataset.sel ? null : q.dataset.sel; open.multi = null; redrawAll(); return; }
+  // 标签多选（设定标签弹窗；选满 3 个，其余反灰点不动）
+  if ((q = t.closest('[data-mrm]'))) { var mr = q.dataset.mrm.split('|'); tagSet.tags = tagSet.tags.filter(function(x){ return x !== mr[1]; }); redrawAll(); return; }
+  if ((q = t.closest('[data-mopt]'))) {
+    if (q.classList.contains('is-disabled')) return;
+    var mo = q.dataset.mopt.split('|'), arr = tagSet.tags, ix = arr.indexOf(mo[1]);
+    if (ix > -1) arr.splice(ix, 1); else arr.push(mo[1]);
+    redrawAll(); return;
+  }
+  if ((q = t.closest('[data-multi]'))) { open.multi = open.multi === q.dataset.multi ? null : q.dataset.multi; open.select = null; redrawAll(); return; }
+  if (open.select || open.multi) { open.select = open.multi = null; redrawAll(); }
+
+  // 单选、勾选、上传（示范：点了就当已上传）
+  if ((q = t.closest('[data-radio]'))) {
+    e.preventDefault(); var rv = q.dataset.radio.split('|');
+    if (rv[0].indexOf('page_') === 0) radioVals[rv[0].slice(5)] = rv[1];
+    else radioVals[rv[0]] = rv[1];   // 素材弹窗的单选（含跳转方式切换）
+    if (rv[0].indexOf('src_') === 0) {   // 专项活动设定页：只切这组单选，不重画整张表单（不然打到一半的字会被清掉）
+      q.closest('.el-radio-group').querySelectorAll('.el-radio').forEach(function(r){ var on = r.dataset.radio === q.dataset.radio; r.classList.toggle('is-checked', on); r.querySelector('.el-radio__input').classList.toggle('is-checked', on); });
+      return;
+    }
+    redrawAll(); return;
+  }
+  if ((q = t.closest('[data-check]'))) {
+    e.preventDefault(); var cv = q.dataset.check.split('|'), list = catsOfKey(cv[0]), ci = list.indexOf(cv[1]);
+    if (ci > -1) list.splice(ci, 1); else list.push(cv[1]);
+    var on = ci === -1; q.classList.toggle('is-checked', on); q.querySelector('.el-checkbox__input').classList.toggle('is-checked', on);
+    renderFront(); return;
+  }
+  // 上传（示范：点了就当已上传，显示缩图）
+  if ((q = t.closest('.img-uploader'))) { q.innerHTML = '<span class="thumb thumb--wide" style="width:120px;height:70px"></span>'; return; }
+  if ((q = t.closest('[data-card-del]'))) { q.closest('.upload-card-body').querySelector('.img-uploader').innerHTML = '点击上传图片'; return; }
+  if ((q = t.closest('.el-button')) && q.textContent.trim() === '选择文件') {
+    var path = q.parentNode.querySelector('.upload-row__path');
+    if (path) path.innerHTML = '<span class="thumb"></span>';
+    else if (!q.nextElementSibling || !q.nextElementSibling.classList.contains('thumb')) q.insertAdjacentHTML('afterend', '<span class="thumb" style="margin-left:6px"></span>');
+    return;
+  }
+
+  if ((q = t.closest('[data-imgtab]'))) { imgDevice = q.dataset.imgtab; renderSrc(); return; }
+  if ((q = t.closest('[data-act="srcSave"]'))) {
+    if (srcItem) {
+      var so = document.querySelector('[data-src-sort]'), st2 = document.querySelector('[data-src-title]');
+      if (so) srcItem.sort = Math.max(0, Math.floor(Number(so.value) || 0));
+      if (st2 && st2.value.trim()) srcItem.title = st2.value.trim();
+      if (radioVals['src_活动状态']) srcItem.on = radioVals['src_活动状态'] === '1';
+      if (radioVals['src_发放方式']) srcItem.auto = radioVals['src_发放方式'] === '1';
+      var tOf = function(sel){ var el = document.querySelector(sel); return el ? (el.value.trim() || '--') : undefined; };
+      ['start','end'].forEach(function(k){ var v = tOf('[data-src-'+k+']'); if (v !== undefined) srcItem[k] = v === '--' ? undefined : v; });
+      var se = tOf('[data-src-show-end]'); if (se !== undefined) srcItem.showEnd = se;   // 显示时间只管卡片出不出现；倒数照活动时间
+      renderMat();
+    }
+    message('保存成功'); return;
+  }
+  // 原型页签：后台／前台 H5
+  if ((q = t.closest('[data-proto]'))) {
+    var isAdmin = q.dataset.proto === 'admin';
+    document.getElementById('protoAdmin').classList.toggle('hidden', !isAdmin);
+    document.getElementById('protoFront').classList.toggle('hidden', isAdmin);
+    document.querySelectorAll('[data-proto]').forEach(function(x){ x.classList.toggle('is-on', x === q); });
+    if (!isAdmin) renderFront();
+    return;
+  }
+  // 前台 H5
+  if ((q = t.closest('[data-front-login]'))) { frontLogin = q.dataset.frontLogin === '1'; document.querySelectorAll('[data-front-login]').forEach(function(x){ x.classList.toggle('is-on', x === q); }); renderFront(); return; }
+  if ((q = t.closest('.h5-login'))) { message('前往登入（示意）'); return; }
+  if ((q = t.closest('[data-front-dot]'))) { featIdx = Number(q.dataset.frontDot); renderFront(); return; }
+  if ((q = t.closest('[data-front-cat]'))) { frontCat = q.dataset.frontCat; renderFront(); return; }
+  // 卡片、按钮都走现行路径：打开 Event Details 弹窗（内容照各活动既有），领取在弹窗里做；列表这层不直接领
+  if ((q = t.closest('[data-front-btn]'))) { message('打开「'+byId(q.dataset.frontBtn).title+'」Event Details（示意）'); return; }
+  if ((q = t.closest('[data-front-open]'))) { message('打开「'+byId(q.dataset.frontOpen).title+'」Event Details（示意）'); return; }
+  // 画面切换
+  if ((q = t.closest('[data-go]'))) { show(q.dataset.go); return; }
+
+  // 汇总页
+  if ((q = t.closest('[data-act="search"]'))) { renderMat(); return; }
+  if ((q = t.closest('[data-feat]'))) { if (!q.classList.contains('is-disabled')) { var it = byId(q.dataset.feat); it.feat = !it.feat; renderMat(); message('保存成功'); } return; }
+  if ((q = t.closest('[data-on]'))) { var o = byId(q.dataset.on); o.on = !o.on; renderMat(); message('保存成功'); return; }
+  if ((q = t.closest('[data-goto]'))) {
+    var gi = byId(q.dataset.goto), gs = gi.src;
+    if (gs === 'X-BOMB' || gs === '预约活动') { v2Item = gi; renderV2(); show('v2'); return; }
+    if (gs === '游戏挑战赛') { renderGc(); show('gc'); return; }
+    var SRC_GO = {'充值活动':'rech','每日首充':'drech','每日存款':'ddep','新用户首充':'newbie','负盈利活动':'lose','消费活动':'cons'};
+    if (SRC_GO[gs]) { srcItem = gi; show(SRC_GO[gs]); return; }
+    message('前往「'+gs+'」设定页'); return;
+  }
+  // 标签管理弹窗：清单新增／编辑／删除
+  if ((q = t.closest('[data-tag-new]'))) { openTagEdit(-1); return; }
+  if ((q = t.closest('[data-tag-edit]'))) { openTagEdit(Number(q.dataset.tagEdit)); return; }
+  if ((q = t.closest('[data-tag-del]'))) {
+    if (q.disabled) return;   // 使用中不能删
+    var ti = Number(q.dataset.tagDel);
+    askDel('此操作将删除标签「'+TAGS[ti].name+'」，是否继续？', function(){ TAGS.splice(ti, 1); renderTagModal(); redrawAll(); }); return;
+  }
+  if ((q = t.closest('[data-tag]'))) {
+    if (q.dataset.tag === 'open') { renderTagModal(); document.getElementById('tagModal').classList.remove('hidden'); }
+    if (q.dataset.tag === 'close') { document.getElementById('tagModal').classList.add('hidden'); redrawAll(); }
+    return;
+  }
+  if ((q = t.closest('[data-tagedit]'))) {
+    if (q.dataset.tagedit === 'save') saveTagEdit(); else document.getElementById('tagEditModal').classList.add('hidden');
+    return;
+  }
+  // 设定标签：列表「标签」钮 → 小弹窗挑选，确定才存
+  if ((q = t.closest('[data-item-tag]'))) { openTagSet(q.dataset.itemTag); return; }
+  if ((q = t.closest('[data-tagset]'))) {
+    if (q.dataset.tagset === 'save') { byId(tagSet.id).tags = tagSet.tags.slice(); renderMat(); message('保存成功'); }
+    document.getElementById('tagSetModal').classList.add('hidden'); open.multi = null; tagSet = null; return;
+  }
+  if ((q = t.closest('[data-mat-new]'))) { openMat(q.dataset.matNew); return; }
+  // 编辑：在哪个表（PC／H5）点的，弹窗标题就是哪个端
+  if ((q = t.closest('[data-mat-edit]'))) { var me = byId(q.dataset.matEdit); openMat(me.dev, me); return; }
+  // 删除：先跳确认框
+  if ((q = t.closest('[data-mat-del]'))) { askDel('此操作将删除「'+byId(q.dataset.matDel).title+'」，是否继续？', function(){ items = items.filter(function(x){ return x.id !== Number(q.dataset.matDel); }); renderMat(); }); return; }
+  if ((q = t.closest('[data-cat-del]'))) { if (q.disabled) return; askDel('此操作将删除「'+cats[q.dataset.catDel].name+'」，是否继续？', function(){ cats.splice(Number(q.dataset.catDel), 1); renderCats(); }); return; }
+  if ((q = t.closest('[data-del]'))) {
+    document.getElementById('delBox').classList.add('hidden');
+    if (q.dataset.del === 'yes' && delThen) { delThen(); message('删除成功'); }
+    delThen = null; return;
+  }
+  if ((q = t.closest('[data-mat]'))) {
+    document.getElementById('matModal').classList.add('hidden');
+    if (q.dataset.mat === 'save') {
+      var mSort = Math.max(0, Math.floor(Number(document.getElementById('mSort').value) || 0)), mTitle = document.getElementById('mTitle').value.trim();
+      if (matEditing) {   // 编辑：存回那笔 → 汇总页、前台同步
+        matEditing.sort = mSort; if (mTitle) matEditing.title = mTitle;
+        matEditing.on = radioOf('mSt','1') === '1'; matEditing.def = radioOf('mDef','0') === '1' ? '是' : '否';
+      } else {            // 新增：示意存进该端的表
+        items.push({id:Date.now(), src:'素材', dev:matDevice, lang:'英语', def:radioOf('mDef','0') === '1' ? '是' : '否', title:mTitle || '新素材', sub:'', end:'--', showEnd:'--', on:radioOf('mSt','1') === '1', sort:mSort, feat:false, tags:[], cats:matNew.cats.slice()});
+      }
+      renderMat(); message('保存成功');
+    }
+    return;
+  }
+  if ((q = t.closest('[data-act="gcSave"]'))) {
+    var gci = items.find(function(x){ return x.src === '游戏挑战赛'; });
+    if (gci) {
+      gci.sort = Math.max(0, Math.floor(Number(document.getElementById('gcSort').value) || 0));
+      if (document.getElementById('gcTitle').value.trim()) gci.title = document.getElementById('gcTitle').value.trim();
+      gci.on = radioVals.gcStatus === '1';
+      gci.start = document.getElementById('gcStart').value.trim() || undefined; gci.end = document.getElementById('gcEnd').value.trim() || undefined;
+      gci.showEnd = document.getElementById('gcShowEnd').value.trim() || '--';
+      renderMat();
+    }
+    message('保存成功'); return;
+  }
+
+  // 活动类别管理
+  if ((q = t.closest('[data-cat-on]'))) { var c = cats[q.dataset.catOn]; c.on = !c.on; renderCats(); message('保存成功'); return; }
+  if ((q = t.closest('[data-cat-edit]'))) { openCat(Number(q.dataset.catEdit)); return; }
+  if ((q = t.closest('[data-cat]'))) {
+    if (q.dataset.cat === 'new') openCat(-1);
+    if (q.dataset.cat === 'close') document.getElementById('catModal').classList.add('hidden');
+    if (q.dataset.cat === 'save') {
+      var name = document.getElementById('catName').value.trim(), sort = Number(document.getElementById('catSort').value) || 0;
+      if (catEditing > -1) {
+        var oldCat = cats[catEditing].name, newCat = name || oldCat;
+        if (newCat !== oldCat) items.forEach(function(it){ it.cats = it.cats.map(function(x){ return x === oldCat ? newCat : x; }); });   // 改名：用到的活动跟着改
+        cats[catEditing].name = newCat; cats[catEditing].sort = sort;
+      }
+      else cats.push({name:name || '新类别', sort:sort, created:'2026-10-19 15:40', on:true});
+      document.getElementById('catModal').classList.add('hidden'); renderCats(); message('保存成功');
+    }
+  }
+});
+
+// 标签弹窗：输入框按 Enter＝确定
+document.addEventListener('keydown', function(e){ if (e.target.id === 'tagName' && e.key === 'Enter') { e.preventDefault(); saveTagEdit(); } });
+// 汇总页排序：改完离开输入框就保存，列表照新排序重排
+document.addEventListener('change', function(e){
+  if (e.target.id === 'v2Sort' && v2Item) { v2Item.sort = Math.max(0, Math.floor(Number(e.target.value) || 0)); renderMat(); message('保存成功'); return; }
+  var id = e.target.dataset && e.target.dataset.sort;
+  if (!id) return;
+  byId(id).sort = Math.max(0, Math.floor(Number(e.target.value) || 0));
+  renderMat(); message('保存成功');
+});
+
+renderFilter();
+renderMat();
+renderCats();
+renderFront();
+renderV2();
+renderGc();
+</script>
+</body>
+</html>

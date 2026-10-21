@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewards 页改版 · 做法与回复</title>
+<style>
+/* 颜色、间距统一在这里管 */
+:root{
+  --c-text:#1f2329; --c-text-2:#5b6270; --c-border:#e3e6eb; --c-bg:#f6f7f9; --c-card:#fff;
+  --c-red:#d4380d; --c-red-bg:#fff2e8; --c-blue:#1d5fd1; --c-blue-bg:#e8f0fe; --c-green:#1a7f4b; --c-green-bg:#e6f6ec; --c-gray-bg:#f0f1f3;
+  --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --c-text:#e6e8eb; --c-text-2:#a4abb6; --c-border:#343a44; --c-bg:#16191e; --c-card:#1e2228;
+    --c-red:#ff8a65; --c-red-bg:#3a2620; --c-blue:#7fa8ff; --c-blue-bg:#1f2a40; --c-green:#6fcf97; --c-green-bg:#1f3a2a; --c-gray-bg:#262b33;
+  }
+}
+:root[data-theme="dark"]{
+  --c-text:#e6e8eb; --c-text-2:#a4abb6; --c-border:#343a44; --c-bg:#16191e; --c-card:#1e2228;
+  --c-red:#ff8a65; --c-red-bg:#3a2620; --c-blue:#7fa8ff; --c-blue-bg:#1f2a40; --c-green:#6fcf97; --c-green-bg:#1f3a2a; --c-gray-bg:#262b33;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--c-bg);color:var(--c-text);font:16px/1.6 "PingFang SC","Microsoft YaHei",sans-serif;}
+main{max-width:1100px;margin:0 auto;padding:var(--space-6) 16px 48px;}
+h1{font-size:1.5rem;margin:0 0 4px;}
+.lede{color:var(--c-text-2);margin:0 0 var(--space-6);}
+h2{font-size:1.2rem;margin:var(--space-6) 0 var(--space-3);padding-left:10px;border-left:4px solid var(--c-blue);}
+h3{font-size:1rem;margin:var(--space-4) 0 var(--space-2);}
+p{margin:0 0 var(--space-2);}
+ul{margin:0 0 var(--space-3);padding-left:22px;}
+li{margin-bottom:4px;}
+.card{background:var(--c-card);border:1px solid var(--c-border);border-radius:8px;padding:var(--space-4);margin-bottom:var(--space-3);}
+.table-wrap{overflow-x:auto;background:var(--c-card);border:1px solid var(--c-border);border-radius:8px;margin-bottom:var(--space-3);}
+table{width:100%;border-collapse:collapse;font-size:0.9rem;min-width:760px;}
+th,td{padding:10px 12px;border-bottom:1px solid var(--c-border);text-align:left;vertical-align:top;}
+th{background:var(--c-gray-bg);font-weight:600;white-space:nowrap;}
+tr:last-child td{border-bottom:none;}
+td:first-child{white-space:nowrap;color:var(--c-text-2);}
+.tag{display:inline-block;padding:0 8px;border-radius:10px;font-size:0.8rem;line-height:1.7;white-space:nowrap;}
+.tag--no{background:var(--c-red-bg);color:var(--c-red);}
+.tag--alt{background:var(--c-blue-bg);color:var(--c-blue);}
+.tag--ok{background:var(--c-green-bg);color:var(--c-green);}
+.tag--open{background:var(--c-gray-bg);color:var(--c-text-2);}
+.muted{color:var(--c-text-2);font-size:0.9rem;}
+</style>
+</head>
+<body>
+<main>
+  <h1>Rewards 页改版 · 做法与回复</h1>
+  <p class="lede">给运营看的版本：第一部分讲改版会怎么做，第二部分回复改版书里哪些做不到或建议不做，第三部分是需要运营回复或动手的事。出处标到改版书章节。最后更新：2026-10-21</p>
+
+  <!-- ================================================================ -->
+  <h2>一、改版会怎么做</h2>
+
+  <h3>前台 Rewards 页（H5；PC 之后照同一套做）</h3>
+  <div class="card">
+    <p><b>1. 顶部个人栏</b>（改版书 2.1）：把首页的个人栏搬过来：头像、余额、积分、Deposit 按钮、搜索。未登入时显示 Login 按钮。原本页面上的 My points / My voucher 两块拿掉，积分收进个人栏。</p>
+    <p><b>2. Featured 精选</b>（2.2）：最多 3 个活动轮播，每张用该活动的「奖励精选图」，图上叠活动名称；剩不到 24 小时的挂倒数。运营在后台汇总页打开「精选」开关即可。</p>
+    <p><b>3. More promotions</b>（2.3）：</p>
+    <ul>
+      <li><b>快捷入口</b>（2.3.1）＝现有的「活动类别」，一排彩色小方块，第一格 All。点一个类别，下方列表只显示该类别的活动。类别在「活动类别管理」开关、排序，全部关掉这一排就不出现。</li>
+      <li><b>活动小卡</b>（2.3.2）固定三行：①活动名称 ②活动时间（起 – 迄；没设时间显示 Permanent event；已结束显示 Expired）③标签。左边是 112×88 的「奖励列表图」，右边一颗 View 按钮，点了打开现有的 Event Details 弹窗，领取在弹窗里做（跟现在一样）。</li>
+      <li><b>角标</b>两种、两个位置，前台自动判断，后台不用设：图片底部色带＝时间（剩 ≤24 小时才出现「Ends in 倒数」）；图片左上角小标＝「Auto Claimed」（该活动的发放方式是自动发放才有）。两个可以同时出现。</li>
+      <li><b>有可领的活动</b>：卡片右上角挂红色数字、排在最前面（沿用现有逻辑）。</li>
+      <li><b>标签</b>（2.3.3）：每个活动最多 3 个，灰色小标签显示在卡片第三行；没选就空着。</li>
+      <li><b>顺序</b>：有可领的排最前，其余照后台「奖励页排序」由大到小（沿用现有逻辑）。</li>
+    </ul>
+    <p><b>4. 任务中心</b>：从 Rewards 页移出（改版书「当前情况梳理」要求）。</p>
+  </div>
+
+  <h3>后台怎么配置</h3>
+  <div class="card">
+    <p><b>活动图素材管理 › 优惠活动</b>（变成奖励页的汇总页）：列出前台会出现的全部活动（素材、充值、每日首充、每日存款、新用户首充、消费、盈利、X-BOMB、预约、游戏挑战赛），PC 表和 H5 表各一张。运营在这里做三件跨活动的事：</p>
+    <ul>
+      <li><b>奖励页排序</b>：直接在列表改数字，数字大的在前。这个值就是各活动自己设定页的「排序」，两边同一个值。</li>
+      <li><b>精选</b>：开关，PC、H5 各最多 3 个，满了其余反灰。</li>
+      <li><b>标签</b>：工具列「标签管理」建清单（新增／编辑／删除，使用中的不能删）；每一笔的「标签」钮挑最多 3 个。</li>
+      <li>素材在这里直接编辑；其他来源按「前往设定」回各自的设定页改。</li>
+    </ul>
+    <p><b>各活动自己的设定页</b>（充值、每日首充、每日存款、新用户首充、消费、盈利、游戏挑战赛、活动配置(新)编辑活动）：</p>
+    <ul>
+      <li>原本的列表图统一改名「<b>奖励列表图</b>」（尺寸 112×88），就是前台小卡左边那张图。</li>
+      <li>新增「<b>奖励精选图</b>」（非必填），开精选时轮播用这张；没传就用奖励列表图顶上。</li>
+      <li>X-BOMB、预约、游戏挑战赛原本没有类别，新增「<b>活动类别</b>」勾选；没勾就只出现在 All。</li>
+    </ul>
+    <p><b>活动类别管理</b>：不改。「是否开启」「排序」同时决定前台快捷入口显不显示、顺序。</p>
+  </div>
+
+  <!-- ================================================================ -->
+  <h2>二、改版书里不做、或做法不同的项目</h2>
+  <p class="muted">「不可行」＝现有资料算不出来或开发量过大；「建议不做」＝做了反而误导用户或多出运营工作；「改做法」＝目的一样，用现有功能达成。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>出处</th><th>改版书要求</th><th>结论</th><th>原因</th><th>改成怎么做</th></tr></thead>
+      <tbody>
+        <tr><td>2.2</td><td>Featured 领取交互卡：Ready to claim 金额、Tier 1–3 进度、Claim All 按钮，公版／特殊设计两种样式</td><td><span class="tag tag--no">不可行</span></td><td>可领金额、阶梯进度每个活动来源算法不同，大多数来源给不出这两个数字；Claim All 要跨活动一次领取，现有系统没有这个机制。</td><td>精选只做轮播；领取仍在各活动的 Event Details 弹窗里做。</td></tr>
+        <tr><td>2.3.2</td><td>小卡上的卖点文案（如 ₱18.50 cashback、Up to ₱6,000,000）</td><td><span class="tag tag--no">不可行</span></td><td>金额每个用户不同，固定文字配不出来；由运营手打又会跟实际金额对不上。</td><td>小卡＝图＋活动名称＋活动时间＋标签。</td></tr>
+        <tr><td>2.3.4</td><td>按钮 7 种状态（Claim、引导 My Voucher、任务进行中、Pre-Resigned、已截止可领、VIP 限制、自动发放）</td><td><span class="tag tag--no">不可行</span></td><td>要每个活动回传该用户的参与状态，现有接口只有少数来源算得出「可领」，其余状态没有资料。列表这层本来就不直接领奖。</td><td>按钮一律 View，点开 Event Details 弹窗（现有）。有可领的用右上角红色数字提醒；自动发放的挂 Auto Claimed 小标。</td></tr>
+        <tr><td>2.3.5</td><td>自动推送排序 P0～P5（用户标签、可领、即将结束、即将完成、自动发放）</td><td><span class="tag tag--no">不可行</span></td><td>文字版和图版的优先级对不上（文字 P0 用户标签、图 P0 可领），「用户标签」来源没有定义，「即将完成」需要每个活动的进度资料。</td><td>沿用现有：有可领排最前，其余照奖励页排序。之后要做请运营先定一版优先级。</td></tr>
+        <tr><td>2.3.2 角标</td><td>角标 7 种：Auto Claimed、Claim within、Sign-up ends、Use within、Resets in、Activity End、Ends in</td><td><span class="tag tag--alt">改做法</span></td><td>Claim within、Sign-up ends、Use within、Resets in 需要「领取期限」「报名截止」「使用期限」「重置时间」，现有活动没有这些栏位。Activity End 跟卡片第二行的日期重复。</td><td>只做 Ends in（剩 ≤24 小时）和 Auto Claimed，前台自动判断，运营不用设。</td></tr>
+        <tr><td>2.3.1</td><td>快捷入口＝「次级精选活动」，每格指定一个活动，点了直达</td><td><span class="tag tag--alt">改做法</span></td><td>再做一层「指定活动」要新增配置和图示上传，而且跟 Featured 精选重叠；现有的活动类别已经是分类导览。</td><td>快捷入口＝活动类别筛选，沿用「活动类别管理」的开关和排序，不上图示，方块只显示类别名称。</td></tr>
+        <tr><td>2.3.3</td><td>标签可以是不同颜色</td><td><span class="tag tag--alt">改做法</span></td><td>标签由运营自建，没有固定分组可以对应颜色；多色也让卡片变杂。</td><td>一律灰色小标签。</td></tr>
+        <tr><td>2.1</td><td>个人栏缩小 Voucher 入口、My Rewards 显示可领数量（文字有写，图上没有）</td><td><span class="tag tag--alt">建议不做</span></td><td>改版书 2.1 的图只有个人栏，文字和图不一致；可领数已有底部导航红点和卡片红色数字承担。</td><td>照图做：个人栏＝头像、余额、积分、Deposit、搜索。券入口走现有 My 页。运营坚持要的话，最小做法是个人栏加一个小券图示。</td></tr>
+        <tr><td>2.2</td><td>Featured 精选的活动在 More promotions 不再出现</td><td><span class="tag tag--alt">建议不做</span></td><td>试过不重复：点快捷入口时会出现「精选明明有这类活动、列表却是空的」。</td><td>精选过的活动在列表照样出现（跟现在一样）。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ================================================================ -->
+  <h2>三、需要运营回复或动手的事</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>项目</th><th>内容</th><th>需要运营做什么</th></tr></thead>
+      <tbody>
+        <tr><td>图片尺寸</td><td>改版书「奖励精选图 尺寸：」后面空白；奖励列表图只给 H5 的 112×88，PC 没给。</td><td>请设计／运营补：奖励精选图（H5、PC）、奖励列表图（PC）。没给之前后台不写死。</td></tr>
+        <tr><td>重出图片</td><td>现有各活动的列表图都是宽版长条图，直接放进 112×88 小卡会被裁掉一大半。</td><td>改版上线前重出每个活动的「奖励列表图」；要上精选的活动再出「奖励精选图」。</td></tr>
+        <tr><td>类别名称</td><td>改版书快捷入口写 Daily Bonus／Free Spins…，现有类别叫正盈利活动、每日首充…。</td><td>在「活动类别管理」把类别名称整理成前台要显示的英文；空的类别关掉「是否开启」。</td></tr>
+        <tr><td>标签清单</td><td>改版书 Excel 的标签当预设放进后台（Cashback、Points、Spin…）。标签名称要短，小卡文字区约 130px，三个长标签放不下的会整颗不显示。</td><td>确认清单；「Resigned Only」疑似应为 Registered，请确认英文。</td></tr>
+        <tr><td>前台英文</td><td>线上既有照用：Permanent event、Expired、Deposit、Login。改版书原文：Featured、More promotions、Auto Claimed、Ends in、View。</td><td>请定稿这几个暂填的：快捷入口第一格「All」、列表空时「No promotions」、未登入「Welcome to OKBet!」、卡片第二行日期格式「2026/10/01 – 2027/10/30」。</td></tr>
+        <tr><td>PC 奖励中心</td><td>PC 版原本有 Hot Events 轮播、Points Mall、Task center、Daily Rebate、Sign-In Rewards、Invite Your Friends 一排入口，改版书没提。</td><td>请定保留或拿掉；Hot Events 轮播可考虑由精选取代。</td></tr>
+        <tr><td>红点数字</td><td>底部导航 Rewards 的红点＝活动可领数＋任务中心未领数。改版把任务中心移出 Rewards 页后，用户点进来可能找不到任务那部分。</td><td>请定红点要不要排除任务中心的数字。</td></tr>
+        <tr><td>其他文档</td><td>改版书说要兼顾「OKBet Rewards 页面 v2.0」「活动页面改版（含首页卡片）」两份 Lark 文档，我们读不到。</td><td>请贴出相关段落，或确认改版书已涵盖全部需求。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ================================================================ -->
+  <h2>四、运营操作上要知道的既有限制</h2>
+  <div class="card">
+    <ul>
+      <li><b>精选开着但活动被关掉或已结束</b>：前台自动不显示，但精选开关不会自动关、名额照占。请运营自己关掉腾位置。</li>
+      <li><b>充值、每日首充、每日存款、新用户首充</b>这四种来源算不出「可领」，卡片不会有红色数字、也不会排最前（现有限制）。</li>
+      <li><b>充值、每日首充、盈利、消费</b>的「排序」同时管首页，在汇总页改奖励页排序会连首页一起变。</li>
+      <li><b>素材</b>PC、H5 是两笔独立资料，语系必须完全相同，漏建某语系那个语系的用户就看不到。每日特别返水／返水加码本身不产生卡片，要另建素材卡并设「待领取提示关联」。</li>
+      <li><b>每日首充</b>的「显示时间」实际没作用（既有问题，不在改版范围），新建活动最长要等 1 天才出现在前台。</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>
