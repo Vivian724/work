@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>充值页 · 优惠券未达最低充值提醒 — 规格书 v1</title>
+
+<!--
+  ============================================================================
+  充值页 ‧ 优惠券未达最低充值提醒  规格书（原型 × 规格 对照版）
+  ----------------------------------------------------------------------------
+  左栏：可实际操作的 H5 充值页原型（勾券 → 输金额 → 点 Submit → 底部弹窗）。
+  右栏：对应的规格。只有前台，没有后台。
+
+  本次只改两件事：
+    1. 勾了券、金额没到最低充值：Submit 不再被挡住（原本会变灰不能点）。
+    2. 这时点 Submit：从底部弹出提醒，让会员选「补足金额」或「放弃优惠继续充值」。
+  ============================================================================
+-->
+
+<style>
+/* ==========================================================================
+   Design Token
+   ========================================================================== */
+:root {
+  --c-primary:      #2f4fd8;
+  --c-primary-dark: #2440b8;
+  --c-coupon-line:  #9dbde8;
+  --c-accent:       #ef4136;
+  --c-bg:           #f2f4f7;
+  --c-surface:      #ffffff;
+  --c-border:       #e3e6ea;
+  --c-text:         #1a1d21;
+  --c-text-2:       #5c6169;
+  --c-text-3:       #8b9099;
+  --c-mute-bg:      #f4f5f7;
+
+  --tag-new-bg:    #e7f6ec;  --tag-new-text:    #256b34;
+  --tag-change-bg: #fdf2e3;  --tag-change-text: #8a5a08;
+  --tag-same-bg:   #eef0f3;  --tag-same-text:   #5c6068;
+
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
+  --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+
+  --radius: 8px;  --radius-lg: 14px;
+
+  --fs-xs:   0.722rem;   /* 13px */
+  --fs-sm:   0.833rem;   /* 15px */
+  --fs-base: 0.889rem;   /* 16px */
+  --fs-md:   1rem;       /* 18px */
+  --fs-lg:   1.167rem;   /* 21px */
+  --fs-xl:   1.389rem;   /* 25px */
+}
+
+/* ==========================================================================
+   Reset & Base
+   ========================================================================== */
+html { font-size: 18px; height: 100%; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; height: 100%;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: var(--fs-base); line-height: 1.7;
+  color: var(--c-text); background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 600; }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+code {
+  background: #eef1f5; padding: 1px 5px; border-radius: 3px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em;
+}
+
+/* ==========================================================================
+   两栏版面
+   ========================================================================== */
+.wrap { display: flex; height: 100vh; overflow: hidden; }
+.pane { display: flex; flex-direction: column; min-width: 0; }
+.pane--proto { flex: 0 0 46%; border-right: 1px solid var(--c-border); background: var(--c-bg); }
+.pane--spec  { flex: 1 1 54%; background: var(--c-surface); }
+
+.pane-bar {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background: #2b2f38; color: #e8eaed; font-size: var(--fs-sm);
+  flex: 0 0 auto;
+}
+.pane-bar__title { font-weight: 600; white-space: nowrap; }
+.pane-bar__hint { color: #a9aeb8; font-size: var(--fs-xs); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.pane__scroll { flex: 1 1 auto; overflow: auto; }
+.proto-stage { padding: var(--sp-5); display: flex; justify-content: center; }
+.spec-body { max-width: 860px; padding: var(--sp-5) var(--sp-6) 80px; }
+
+@media (max-width: 1024px) {
+  .wrap { flex-direction: column; height: auto; overflow: visible; }
+  .pane--proto { flex: none; border-right: 0; border-bottom: 1px solid var(--c-border); }
+  .pane__scroll { overflow: visible; }
+}
+
+/* ==========================================================================
+   标注
+   ========================================================================== */
+.tag {
+  display: inline-block; padding: 1px var(--sp-2); border-radius: 10px;
+  font-size: var(--fs-xs); font-weight: 600; line-height: 1.6; white-space: nowrap; vertical-align: middle;
+}
+.tag--new    { background: var(--tag-new-bg);    color: var(--tag-new-text); }
+.tag--change { background: var(--tag-change-bg); color: var(--tag-change-text); }
+.tag--same   { background: var(--tag-same-bg);   color: var(--tag-same-text); }
+
+/* ==========================================================================
+   手机壳（照 daily_front.html 的壳）
+   ========================================================================== */
+.phone {
+  width: 100%; max-width: 420px; position: relative;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 18px; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .07);
+}
+.phone__bar {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--c-surface); border-bottom: 1px solid var(--c-border);
+}
+.phone__back { font-size: var(--fs-xl); line-height: 1; color: var(--c-text-2); }
+.phone__title { font-weight: 700; font-size: var(--fs-md); }
+.phone__body { padding: var(--sp-4); }
+.phone__gap { height: var(--sp-3); background: var(--c-bg); margin: 0 calc(var(--sp-4) * -1); }
+
+/* ==========================================================================
+   Promotions ‧ 优惠券（照既有前台）
+   ========================================================================== */
+.promo-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.promo-head__title { font-size: var(--fs-lg); font-weight: 700; }
+
+.coupon-row { display: flex; align-items: center; gap: var(--sp-3); }
+.coupon-check {
+  flex: 0 0 auto; position: relative;
+  width: 22px; height: 22px;
+  border: 1.5px solid var(--c-text-3); border-radius: 4px;
+  background: var(--c-surface); cursor: pointer;
+}
+.coupon-check[aria-checked="true"] { background: var(--c-primary); border-color: var(--c-primary); }
+.coupon-check[aria-checked="true"]::after {
+  content: ""; position: absolute; left: 7px; top: 3px;
+  width: 5px; height: 11px;
+  border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
+}
+.coupon {
+  flex: 1 1 auto; min-width: 0; position: relative;
+  display: flex; align-items: stretch;
+  background: linear-gradient(90deg, #f2f7fe 0%, #dbe9fb 100%);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+.coupon__left {
+  flex: 0 0 96px; position: relative;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: var(--sp-3) var(--sp-2);
+  border-right: 1px dashed var(--c-coupon-line); text-align: center;
+}
+.coupon__left::before, .coupon__left::after {
+  content: ""; position: absolute; right: -8px;
+  width: 16px; height: 16px; border-radius: 50%; background: var(--c-surface);
+}
+.coupon__left::before { top: -8px; }
+.coupon__left::after  { bottom: -8px; }
+.coupon__pct  { color: var(--c-primary); font-size: 1.333rem; font-weight: 700; line-height: 1.2; }
+.coupon__kind { color: var(--c-primary); font-size: var(--fs-base); line-height: 1.3; }
+.coupon__right { flex: 1 1 auto; min-width: 0; padding: var(--sp-3) var(--sp-3) var(--sp-3) var(--sp-4); }
+.coupon__cap { margin: 0 0 2px; padding-right: 60px; color: var(--c-text); font-size: var(--fs-md); font-weight: 700; }
+.coupon__cap b { color: var(--c-accent); font-size: 1.111rem; font-weight: 700; }
+.coupon__meta { color: #7a8394; font-size: var(--fs-sm); line-height: 1.5; }
+.coupon__tou {
+  position: absolute; top: 12px; right: 12px;
+  padding: 2px 10px;
+  background: var(--c-accent); color: #fff;
+  border-radius: 12px; font-size: var(--fs-sm);
+  box-shadow: 0 3px 6px rgba(239, 65, 54, .3);
+}
+
+/* ==========================================================================
+   Payment Amount（照既有前台）
+   ========================================================================== */
+.pay-title { font-size: var(--fs-lg); font-weight: 700; margin-bottom: var(--sp-3); }
+.quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3) var(--sp-2); }
+.quick {
+  padding: var(--sp-3) var(--sp-2);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border); border-radius: var(--radius);
+  color: var(--c-text-2); font: inherit; font-size: var(--fs-md); cursor: pointer;
+}
+.quick:hover { border-color: var(--c-primary); color: var(--c-primary); }
+
+.amount-box {
+  width: 100%; margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--c-border); border-radius: var(--radius);
+  font: inherit; font-size: var(--fs-lg); color: var(--c-text);
+}
+.amount-box:focus { border-color: var(--c-primary); }
+.amount-box.is-error { border-color: var(--c-accent); }
+.amount-err { margin: var(--sp-2) 0 0; color: var(--c-accent); font-size: var(--fs-base); }
+.amount-err[hidden] { display: none; }
+
+.btn-submit {
+  display: block; width: 100%; margin-top: var(--sp-4);
+  padding: var(--sp-3);
+  background: var(--c-primary); border: 0; border-radius: var(--radius);
+  color: #fff; font: inherit; font-size: var(--fs-md); font-weight: 600; cursor: pointer;
+}
+.btn-submit:hover { background: var(--c-primary-dark); }
+.btn-submit:disabled { background: #9db2ec; cursor: not-allowed; }
+
+/* ==========================================================================
+   底部弹窗（本次新增）—— 照运营给的初步样式：白底、上圆角、两颗并排按钮
+   ========================================================================== */
+.sheet-mask {
+  position: absolute; inset: 0;
+  background: rgba(0, 0, 0, .45);
+  display: flex; align-items: flex-end;
+  z-index: 10;
+}
+.sheet-mask[hidden] { display: none; }
+.sheet {
+  width: 100%;
+  background: var(--c-surface);
+  border-radius: 18px 18px 0 0;
+  padding: var(--sp-5) var(--sp-4) var(--sp-5);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, .15);
+}
+.sheet__title { font-size: var(--fs-lg); font-weight: 700; margin-bottom: var(--sp-3); }
+.sheet__line  { font-size: var(--fs-base); color: var(--c-text); line-height: 1.6; }
+.sheet__line + .sheet__line { margin-top: var(--sp-2); }
+.sheet__num   { color: var(--c-accent); font-weight: 700; }
+.sheet__btns  { display: flex; gap: var(--sp-3); margin-top: var(--sp-5); }
+.sheet__btn {
+  flex: 1 1 0; padding: var(--sp-3);
+  border-radius: var(--radius); font: inherit; font-size: var(--fs-md); font-weight: 600; cursor: pointer;
+}
+.sheet__btn--ghost   { background: var(--c-surface); border: 1px solid var(--c-border); color: var(--c-text); }
+.sheet__btn--ghost:hover { border-color: var(--c-text-3); }
+.sheet__btn--primary { background: var(--c-primary); border: 0; color: #fff; }
+.sheet__btn--primary:hover { background: var(--c-primary-dark); }
+
+/* 原型里送出成功后的小提示（只是让操作有回馈，不是正式画面） */
+.toast {
+  position: absolute; left: 50%; top: 18px; transform: translateX(-50%);
+  padding: var(--sp-2) var(--sp-4);
+  background: rgba(27, 30, 36, .9); color: #fff; border-radius: 999px;
+  font-size: var(--fs-sm); white-space: nowrap; z-index: 20;
+}
+.toast[hidden] { display: none; }
+
+/* ==========================================================================
+   规格（右栏）
+   ========================================================================== */
+.doc-head { border-bottom: 1px solid var(--c-border); padding-bottom: var(--sp-4); margin-bottom: var(--sp-5); }
+.doc-head__title { font-size: var(--fs-xl); margin-bottom: var(--sp-2); }
+.doc-head__meta  { color: var(--c-text-2); font-size: var(--fs-sm); }
+.doc-head__meta b { color: var(--c-text); }
+
+.sec { margin-bottom: var(--sp-6); }
+.sec__title { font-size: var(--fs-lg); margin-bottom: var(--sp-3); padding-left: var(--sp-3); border-left: 4px solid var(--c-primary); }
+.sec__title .tag { margin-left: var(--sp-2); }
+.sub { margin: var(--sp-4) 0 var(--sp-2); font-size: var(--fs-md); }
+.sub .tag { margin-left: var(--sp-2); }
+.lede { color: var(--c-text-2); margin-bottom: var(--sp-3); }
+
+.rules { margin: 0 0 var(--sp-3); padding-left: 1.4em; }
+.rules li { margin-bottom: var(--sp-1); }
+.rules li::marker { color: var(--c-text-3); }
+
+.tbl { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); margin: var(--sp-2) 0 var(--sp-4); }
+.tbl th, .tbl td { border: 1px solid var(--c-border); padding: var(--sp-2) var(--sp-3); text-align: left; vertical-align: top; }
+.tbl th { background: var(--c-mute-bg); font-weight: 600; white-space: nowrap; }
+.tbl td.c { text-align: center; }
+
+.copy { background: var(--c-mute-bg); border-left: 3px solid var(--c-primary); padding: var(--sp-3) var(--sp-4); border-radius: 0 var(--radius) var(--radius) 0; margin: var(--sp-2) 0 var(--sp-3); }
+.copy p { margin: 0; }
+.copy p + p { margin-top: var(--sp-1); }
+.copy .var { color: var(--c-accent); font-weight: 600; }
+
+.note { color: var(--c-text-2); font-size: var(--fs-sm); margin-top: var(--sp-2); }
+
+.flow { list-style: none; padding: 0; margin: var(--sp-2) 0 var(--sp-4); }
+.flow li { position: relative; padding: var(--sp-2) var(--sp-3) var(--sp-2) 44px; border: 1px solid var(--c-border); border-radius: var(--radius); margin-bottom: var(--sp-2); background: var(--c-surface); }
+.flow__n { position: absolute; left: 12px; top: 10px; width: 22px; height: 22px; border-radius: 50%; background: var(--c-primary); color: #fff; font-size: var(--fs-xs); font-weight: 700; display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ====================================================================
+       左栏：H5 充值页原型
+       ==================================================================== -->
+  <section class="pane pane--proto" aria-label="原型">
+    <div class="pane-bar">
+      <span class="pane-bar__title">前台原型 · 充值页（H5）</span>
+      <span class="pane-bar__hint">勾券 → 选金额 → 点 Submit，金额低于 100 会弹底部提醒</span>
+    </div>
+    <div class="pane__scroll">
+      <div class="proto-stage">
+        <main class="phone" id="phone">
+          <div class="phone__bar">
+            <span class="phone__back">‹</span>
+            <span class="phone__title">Deposit</span>
+            <span aria-hidden="true">　</span>
+          </div>
+
+          <div class="phone__body">
+            <!-- ── Promotions ─────────────────────────────── -->
+            <div class="promo-head">
+              <h2 class="promo-head__title">Promotions</h2>
+            </div>
+            <div class="coupon-row">
+              <span class="coupon-check" id="chkCoupon" role="checkbox" aria-checked="true" tabindex="0" aria-label="Top-up Coupon"></span>
+              <article class="coupon">
+                <span class="coupon__tou">TOU</span>
+                <div class="coupon__left">
+                  <span class="coupon__pct">5%</span>
+                  <span class="coupon__kind">Top-up<br>Coupon</span>
+                </div>
+                <div class="coupon__right">
+                  <p class="coupon__cap">Capped At <b>₱ 5</b></p>
+                  <p class="coupon__meta">
+                    Turnover:<br>
+                    0.25x deposited + 20x turnover of bonus<br>
+                    Min Deposit 100.00
+                  </p>
+                </div>
+              </article>
+            </div>
+
+            <div class="phone__gap"></div>
+
+            <!-- ── Payment Amount ─────────────────────────── -->
+            <h2 class="pay-title">Payment Amount</h2>
+            <div class="quick-grid">
+              <button type="button" class="quick js-quick" data-add="20">+ 20</button>
+              <button type="button" class="quick js-quick" data-add="50">+ 50</button>
+              <button type="button" class="quick js-quick" data-add="100">+ 100</button>
+            </div>
+            <input class="amount-box" id="amount" type="text" inputmode="decimal" value="₱ 0" aria-label="Deposit amount">
+            <p class="amount-err" id="amountErr" hidden>Deposit amount less than min limit.</p>
+
+            <button type="button" class="btn-submit" id="btnSubmit" disabled>Submit</button>
+          </div>
+
+          <!-- ── 底部弹窗（本次新增）──────────────────────── -->
+          <div class="sheet-mask" id="sheetMask" hidden>
+            <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+              <h2 class="sheet__title" id="sheetTitle">Unlock Your Bonus!</h2>
+              <p class="sheet__line">Minimum deposit: <span class="sheet__num">₱<span id="sMin">100.00</span></span></p>
+              <p class="sheet__line">Deposit <span class="sheet__num">₱<span id="sMore">80.00</span></span> more to get <span class="sheet__num">₱<span id="sBonus">5</span></span> extra!</p>
+              <div class="sheet__btns">
+                <button type="button" class="sheet__btn sheet__btn--ghost" id="btnSkip">Skip Bonus</button>
+                <button type="button" class="sheet__btn sheet__btn--primary" id="btnMore">Deposit more</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="toast" id="toast" hidden></div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       右栏：规格
+       ==================================================================== -->
+  <section class="pane pane--spec" aria-label="规格">
+    <div class="pane-bar">
+      <span class="pane-bar__title">规格书</span>
+      <span class="pane-bar__hint">只有前台，后台不动</span>
+    </div>
+    <div class="pane__scroll">
+      <article class="spec-body">
+
+        <header class="doc-head">
+          <h1 class="doc-head__title">充值页 · 优惠券未达最低充值提醒 · v1</h1>
+          <p class="doc-head__meta">范围：<b>前台充值页（H5）</b>　｜　后台：不涉及</p>
+          <p class="doc-head__meta">本次摘要：
+            <span class="tag tag--change">修改</span> 勾券但金额未达最低充值时，Submit 不再锁定；
+            <span class="tag tag--new">新增</span> 点 Submit 弹出底部提醒，让会员选择补足金额或放弃优惠继续充值。
+          </p>
+        </header>
+
+        <!-- 1 ------------------------------------------------------------ -->
+        <section class="sec">
+          <h2 class="sec__title">1. 需求目的</h2>
+          <p>现况：会员勾了充值优惠券，但输入的金额低于券的最低充值金额时，Submit 按钮会被锁住，会员只能自己回头改金额或取消勾选，流程卡住、也不知道差多少。</p>
+          <p>本次改成不锁按钮，改用底部弹窗告诉会员「还差多少、补足能多拿多少」，让会员自己决定补足金额或放弃优惠直接充值，减少流失。</p>
+        </section>
+
+        <!-- 2 ------------------------------------------------------------ -->
+        <section class="sec">
+          <h2 class="sec__title">2. 前台 · 充值页</h2>
+          <p class="lede">对应左侧原型。本页只有 Promotions 区的优惠券与 Payment Amount 区的 Submit 按钮有关联，其他区块不动。</p>
+
+          <!-- 2.1 -->
+          <h3 class="sub">2.1 Submit 按钮的锁定判断 <span class="tag tag--change">修改</span></h3>
+          <ol class="rules">
+            <li>勾选优惠券、且输入金额<b>低于</b>券的「Min Deposit」时，Submit <b>不再变灰锁定</b>，维持可点击。</li>
+            <li>金额输入框下方的红字 <code>Deposit amount less than min limit.</code> 与输入框红框<b>照既有显示</b>，不异动。</li>
+            <li>金额为 0 或空白时，Submit 照既有维持锁定，不异动。</li>
+            <li>未勾选优惠券时，Submit 照既有规则，不异动。</li>
+          </ol>
+
+          <!-- 2.2 -->
+          <h3 class="sub">2.2 底部提醒弹窗 <span class="tag tag--new">新增</span></h3>
+          <p class="lede">触发条件：勾选优惠券、输入金额大于 0 且低于券的 Min Deposit，会员点击 Submit。此时<b>不送出充值</b>，先从页面底部弹出提醒。</p>
+
+          <h4 class="sub">2.2.1 文案（英文由运营提供，照抄）</h4>
+          <div class="copy">
+            <p><b>标题：</b>Unlock Your Bonus!</p>
+            <p><b>第一行：</b>Minimum deposit: ₱<span class="var">{Min Deposit}</span></p>
+            <p><b>第二行：</b>Deposit ₱<span class="var">{X}</span> more to get ₱<span class="var">{Bonus}</span> extra!</p>
+            <p><b>按钮 1：</b>Deposit more</p>
+            <p><b>按钮 2：</b>Skip Bonus</p>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>变量</th><th>取值</th><th>格式</th><th>例（5% 券、上限 ₱5、Min 100、输入 20）</th></tr></thead>
+            <tbody>
+              <tr><td>{Min Deposit}</td><td>该券的最低充值金额</td><td>与券面「Min Deposit」相同，保留两位小数、千分位</td><td>100.00</td></tr>
+              <tr><td>{X}</td><td>Min Deposit − 目前输入金额</td><td>同上</td><td>80.00</td></tr>
+              <tr><td>{Bonus}</td><td>以 Min Deposit 充值可拿到的奖励＝Min Deposit × 券的百分比，超过上限取上限</td><td>与券面「Capped At」及既有试算条相同格式</td><td>5</td></tr>
+            </tbody>
+          </table>
+          <p class="note">文案长度：英文固定、数字会变，内容依弹窗宽度自然换行，不截断、不加省略号。字级不小于 12px。</p>
+
+          <h4 class="sub">2.2.2 样式</h4>
+          <ol class="rules">
+            <li>由页面底部向上弹出，白底、上方圆角，背景压半透明黑色遮罩，弹窗出现时页面其他区域不可操作。</li>
+            <li>内容由上到下：标题、两行说明、两颗并排等宽按钮。</li>
+            <li>「Deposit more」为主要按钮（蓝底白字，右侧）；「Skip Bonus」为次要按钮（白底灰框，左侧）。</li>
+          </ol>
+
+          <h4 class="sub">2.2.3 交互</h4>
+          <table class="tbl">
+            <thead><tr><th>会员操作</th><th>结果</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>点「Deposit more」</td>
+                <td>关闭弹窗，回到充值页，<b>优惠券维持勾选</b>，金额维持原输入，游标停在金额输入框让会员补足。不送出充值。</td>
+              </tr>
+              <tr>
+                <td>点「Skip Bonus」</td>
+                <td>关闭弹窗，<b>自动取消勾选该优惠券</b>，并以目前输入金额<b>直接送出充值</b>（后续走既有送出流程）。本笔不套用优惠。</td>
+              </tr>
+              <tr>
+                <td>点遮罩（弹窗以外区域）</td>
+                <td>同「Deposit more」：关闭弹窗、什么都不改、不送出。</td>
+              </tr>
+            </tbody>
+          </table>
+          <ol class="rules">
+            <li>弹窗关闭后不记忆：会员再次以同样条件点 Submit，仍会再弹一次。</li>
+            <li>弹窗显示期间会员若改了金额（例如用实体返回键关闭），以关闭当下的输入金额重新判断，不用弹窗上的旧数字。</li>
+          </ol>
+
+          <!-- 2.3 -->
+          <h3 class="sub">2.3 情境穷举 <span class="tag tag--same">含不异动项</span></h3>
+          <table class="tbl">
+            <thead><tr><th>#</th><th>优惠券</th><th>输入金额</th><th>Submit 状态</th><th>点 Submit 后</th><th>异动</th></tr></thead>
+            <tbody>
+              <tr><td class="c">1</td><td>未勾选</td><td>0 / 空白</td><td>锁定</td><td>—</td><td><span class="tag tag--same">不异动</span></td></tr>
+              <tr><td class="c">2</td><td>未勾选</td><td>&gt; 0</td><td>可点</td><td>直接送出（走既有流程）</td><td><span class="tag tag--same">不异动</span></td></tr>
+              <tr><td class="c">3</td><td>勾选</td><td>0 / 空白</td><td>锁定</td><td>—</td><td><span class="tag tag--same">不异动</span></td></tr>
+              <tr><td class="c">4</td><td>勾选</td><td>&gt; 0 且 &lt; Min Deposit</td><td><b>可点</b>（原本锁定）</td><td><b>弹出 2.2 底部提醒</b>，不送出</td><td><span class="tag tag--change">修改</span>＋<span class="tag tag--new">新增</span></td></tr>
+              <tr><td class="c">5</td><td>勾选</td><td>≥ Min Deposit</td><td>可点</td><td>直接送出，套用优惠（走既有流程）</td><td><span class="tag tag--same">不异动</span></td></tr>
+            </tbody>
+          </table>
+
+          <!-- 2.4 -->
+          <h3 class="sub">2.4 判断流程（点 Submit 时）</h3>
+          <ol class="flow">
+            <li><span class="flow__n">1</span>有勾选优惠券吗？没有 → 直接送出（既有）。</li>
+            <li><span class="flow__n">2</span>输入金额 ≥ 该券 Min Deposit 吗？是 → 直接送出，套用优惠（既有）。</li>
+            <li><span class="flow__n">3</span>否 → 弹出底部提醒，等会员选择。</li>
+            <li><span class="flow__n">4</span>选 Deposit more → 关弹窗、回页面补金额；选 Skip Bonus → 取消勾选券、直接送出。</li>
+          </ol>
+        </section>
+
+        <!-- 3 ------------------------------------------------------------ -->
+        <section class="sec">
+          <h2 class="sec__title">3. 本次未涉及之既有规则</h2>
+          <ol class="rules">
+            <li>优惠券的显示条件、券面内容（百分比、Capped At、Turnover、Min Deposit）与勾选方式。</li>
+            <li>支付方式本身的最低／最高充值限制及其提示文案。</li>
+            <li>金额为 0 或空白时的锁定、红字提示。</li>
+            <li>Submit 送出后的既有流程（跳转支付、成功／失败提示）。</li>
+            <li>后台所有设定。</li>
+          </ol>
+        </section>
+
+      </article>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ============================================================================
+   原型互动（只为了让规格看得见，不是正式程式）
+   ============================================================================ */
+(function () {
+  // 这张示范券的参数：5%、上限 5、最低充值 100
+  var COUPON = { pct: 5, cap: 5, min: 100 };
+
+  var chk      = document.getElementById('chkCoupon');
+  var amountEl = document.getElementById('amount');
+  var errEl    = document.getElementById('amountErr');
+  var btn      = document.getElementById('btnSubmit');
+  var mask     = document.getElementById('sheetMask');
+  var toast    = document.getElementById('toast');
+
+  function checked() { return chk.getAttribute('aria-checked') === 'true'; }
+  function readAmount() {
+    var n = parseFloat(String(amountEl.value).replace(/[^\d.]/g, ''));
+    return isNaN(n) ? 0 : n;
+  }
+  function money(n) { return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function bonusAtMin() { return Math.min(COUPON.min * COUPON.pct / 100, COUPON.cap); }
+
+  /* 重画：红字照既有；Submit 只在金额 0 时锁定（本次修改：低于门槛不再锁） */
+  function render() {
+    var a = readAmount();
+    var belowMin = checked() && a > 0 && a < COUPON.min;
+    errEl.hidden = !belowMin;
+    amountEl.classList.toggle('is-error', belowMin);
+    btn.disabled = a <= 0;
+  }
+
+  function showToast(msg) {
+    toast.textContent = msg; toast.hidden = false;
+    clearTimeout(showToast.t);
+    showToast.t = setTimeout(function () { toast.hidden = true; }, 1800);
+  }
+
+  /* 送出（原型只显示提示） */
+  function submit() {
+    var a = readAmount();
+    showToast('已送出 ₱' + money(a) + (checked() ? '（套用优惠）' : '（不套用优惠）'));
+  }
+
+  /* 勾选 */
+  chk.addEventListener('click', function () {
+    chk.setAttribute('aria-checked', checked() ? 'false' : 'true');
+    render();
+  });
+  chk.addEventListener('keydown', function (e) {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); chk.click(); }
+  });
+
+  /* 快捷金额：累加 */
+  document.querySelectorAll('.js-quick').forEach(function (q) {
+    q.addEventListener('click', function () {
+      amountEl.value = '₱ ' + (readAmount() + Number(q.dataset.add));
+      render();
+    });
+  });
+  amountEl.addEventListener('input', render);
+  amountEl.addEventListener('focus', function () { if (readAmount() === 0) amountEl.value = '₱ '; });
+  amountEl.addEventListener('blur',  function () { if (readAmount() === 0) amountEl.value = '₱ 0'; render(); });
+
+  /* 点 Submit：2.4 判断流程 */
+  btn.addEventListener('click', function () {
+    var a = readAmount();
+    if (checked() && a < COUPON.min) {
+      document.getElementById('sMin').textContent   = money(COUPON.min);
+      document.getElementById('sMore').textContent  = money(COUPON.min - a);
+      document.getElementById('sBonus').textContent = bonusAtMin();
+      mask.hidden = false;
+      return;
+    }
+    submit();
+  });
+
+  /* 弹窗：Deposit more → 关闭回去补金额 */
+  document.getElementById('btnMore').addEventListener('click', function () {
+    mask.hidden = true;
+    amountEl.focus();
+  });
+  /* 弹窗：Skip Bonus → 取消勾选券、直接送出 */
+  document.getElementById('btnSkip').addEventListener('click', function () {
+    mask.hidden = true;
+    chk.setAttribute('aria-checked', 'false');
+    render();
+    submit();
+  });
+  /* 点遮罩 → 同 Deposit more */
+  mask.addEventListener('click', function (e) { if (e.target === mask) mask.hidden = true; });
+
+  render();
+})();
+</script>
+</body>
+</html>
