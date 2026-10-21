@@ -87,11 +87,15 @@ code {
   flex: 0 0 auto;
 }
 .pane-bar__title { font-weight: 600; white-space: nowrap; }
+.side-switch { display: inline-flex; border: 1px solid #4a505c; border-radius: 4px; overflow: hidden; flex: none; }
+.side-switch__btn { padding: 2px 12px; border: 0; background: #3a3f4a; color: #c7ccd4; font: inherit; font-size: var(--fs-xs); cursor: pointer; }
+.side-switch__btn + .side-switch__btn { border-left: 1px solid #4a505c; }
+.side-switch__btn[aria-pressed="true"] { background: var(--c-primary); color: #fff; font-weight: 600; }
 .pane-bar__hint { color: #a9aeb8; font-size: var(--fs-xs); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .pane__scroll { flex: 1 1 auto; overflow: auto; }
 .proto-stage { padding: var(--sp-5); display: flex; justify-content: center; }
-.spec-body { max-width: 860px; padding: var(--sp-5) var(--sp-6) 80px; }
+.spec-body { max-width: 960px; padding: var(--sp-5) var(--sp-6) 80px; }
 
 @media (max-width: 1024px) {
   .wrap { flex-direction: column; height: auto; overflow: visible; }
@@ -129,6 +133,26 @@ code {
 .phone__title { font-weight: 700; font-size: var(--fs-md); }
 .phone__body { padding: var(--sp-4); }
 .phone__gap { height: var(--sp-3); background: var(--c-bg); margin: 0 calc(var(--sp-4) * -1); }
+.phone__close { visibility: hidden; }
+.wallet-nav, .wallet-balance { display: none; }
+
+/* --- PC 版：照线上 Wallet 弹窗（标题置中＋右上 X、左侧 Deposit/Withdraw、右侧内容） --- */
+.phone--pc { max-width: 760px; border-radius: 14px; }
+.phone--pc .phone__bar { justify-content: center; position: relative; padding: var(--sp-4); }
+.phone--pc .phone__back { display: none; }
+.phone--pc .phone__title { font-size: var(--fs-xl); }
+.phone--pc .phone__close { visibility: visible; position: absolute; right: var(--sp-4); top: 50%; transform: translateY(-50%); color: var(--c-text-3); font-size: var(--fs-lg); }
+.phone--pc .phone__layout { display: flex; gap: var(--sp-3); padding: var(--sp-3); background: var(--c-bg); }
+.phone--pc .wallet-nav { display: flex; flex-direction: column; gap: var(--sp-2); flex: 0 0 180px; padding: var(--sp-3); background: var(--c-surface); border-radius: var(--radius-lg); align-self: flex-start; }
+.wallet-nav__item { padding: var(--sp-2) var(--sp-3); border-radius: var(--radius); color: var(--c-text-2); font-weight: 600; }
+.wallet-nav__item--on { background: var(--c-primary); color: #fff; }
+.phone--pc .phone__body { flex: 1 1 auto; min-width: 0; background: var(--c-surface); border-radius: var(--radius-lg); }
+.phone--pc .wallet-balance { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-4); padding: var(--sp-3) var(--sp-4); background: #eaf1fe; border-radius: var(--radius-lg); }
+.wallet-balance b { color: var(--c-primary); font-size: var(--fs-lg); }
+.wallet-balance__btn { padding: 2px var(--sp-3); background: var(--c-primary); color: #fff; border-radius: 6px; font-size: var(--fs-xs); font-weight: 600; }
+/* PC 的提醒不是底部抽屉，改在 Wallet 弹窗正中央弹出 */
+.phone--pc .sheet-mask { align-items: center; justify-content: center; }
+.phone--pc .sheet { width: 420px; border-radius: 14px; }
 
 /* ==========================================================================
    Promotions ‧ 优惠券（照既有前台）
@@ -262,7 +286,7 @@ code {
    ========================================================================== */
 .doc-head { border-bottom: 1px solid var(--c-border); padding-bottom: var(--sp-4); margin-bottom: var(--sp-5); }
 .doc-head__title { font-size: var(--fs-xl); margin-bottom: var(--sp-2); }
-.doc-head__meta  { color: var(--c-text-2); font-size: var(--fs-sm); }
+.doc-head__meta  { color: var(--c-text-2); font-size: var(--fs-base); }
 .doc-head__meta b { color: var(--c-text); }
 
 .sec { margin-bottom: var(--sp-6); }
@@ -276,12 +300,12 @@ code {
 .rules li { margin-bottom: var(--sp-1); }
 .rules li::marker { color: var(--c-text-3); }
 
-.tbl { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); margin: var(--sp-2) 0 var(--sp-4); }
+.tbl { width: 100%; border-collapse: collapse; font-size: var(--fs-base); margin: var(--sp-2) 0 var(--sp-4); }
 .tbl th, .tbl td { border: 1px solid var(--c-border); padding: var(--sp-2) var(--sp-3); text-align: left; vertical-align: top; }
 .tbl th { background: var(--c-mute-bg); font-weight: 600; white-space: nowrap; }
 .tbl td.c { text-align: center; }
 .tbl--i18n th { white-space: normal; }
-.tbl--i18n td { font-size: var(--fs-xs); }
+.tbl--i18n td { font-size: var(--fs-sm); }
 .tbl--i18n td:first-child, .tbl--i18n th:first-child { white-space: nowrap; }
 
 .copy { background: var(--c-mute-bg); border-left: 3px solid var(--c-primary); padding: var(--sp-3) var(--sp-4); border-radius: 0 var(--radius) var(--radius) 0; margin: var(--sp-2) 0 var(--sp-3); }
@@ -289,7 +313,7 @@ code {
 .copy p + p { margin-top: var(--sp-1); }
 .copy .var { color: var(--c-accent); font-weight: 600; }
 
-.note { color: var(--c-text-2); font-size: var(--fs-sm); margin-top: var(--sp-2); }
+.note { color: var(--c-text-2); font-size: var(--fs-base); margin-top: var(--sp-2); }
 
 .flow { list-style: none; padding: 0; margin: var(--sp-2) 0 var(--sp-4); }
 .flow li { position: relative; padding: var(--sp-2) var(--sp-3) var(--sp-2) 44px; border: 1px solid var(--c-border); border-radius: var(--radius); margin-bottom: var(--sp-2); background: var(--c-surface); }
@@ -304,19 +328,29 @@ code {
        ==================================================================== -->
   <section class="pane pane--proto" aria-label="原型">
     <div class="pane-bar">
-      <span class="pane-bar__title">前台原型 · 充值页（H5）</span>
-      <span class="pane-bar__hint">勾券 → 选金额 → 点 Submit；低于 100 挡、100～499 弹底部提醒</span>
+      <span class="pane-bar__title">前台原型 · 充值页</span>
+      <span class="side-switch" role="group" aria-label="版本">
+        <button type="button" class="side-switch__btn" id="swH5" aria-pressed="true">H5</button>
+        <button type="button" class="side-switch__btn" id="swPC" aria-pressed="false">PC</button>
+      </span>
+      <span class="pane-bar__hint">勾券 → 选金额 → 点 Submit；低于 100 挡、100～499 弹提醒</span>
     </div>
     <div class="pane__scroll">
       <div class="proto-stage">
         <main class="phone" id="phone">
           <div class="phone__bar">
             <span class="phone__back">‹</span>
-            <span class="phone__title">Deposit</span>
-            <span aria-hidden="true">　</span>
+            <span class="phone__title" id="frameTitle">Deposit</span>
+            <span class="phone__close" aria-hidden="true">✕</span>
           </div>
 
+          <div class="phone__layout">
+          <nav class="wallet-nav" aria-label="Wallet">
+            <span class="wallet-nav__item wallet-nav__item--on">Deposit</span>
+            <span class="wallet-nav__item">Withdraw</span>
+          </nav>
           <div class="phone__body">
+            <div class="wallet-balance"><b>₱ 101,213.23</b><span class="wallet-balance__btn">Fund Accounts</span></div>
             <!-- ── Promotions ─────────────────────────────── -->
             <div class="promo-head">
               <h2 class="promo-head__title">Promotions</h2>
@@ -359,6 +393,7 @@ code {
 
             <button type="button" class="btn-submit" id="btnSubmit" disabled>Submit</button>
           </div>
+          </div>
 
           <!-- ── 底部弹窗（本次新增）──────────────────────── -->
           <div class="sheet-mask" id="sheetMask" hidden>
@@ -392,13 +427,13 @@ code {
 
         <header class="doc-head">
           <h1 class="doc-head__title">充值页 · 优惠券未达最低充值提醒 · v2</h1>
-          <p class="doc-head__meta">范围：<b>前台充值页（H5）</b>，后台不涉及。套用所有优惠券。</p>
+          <p class="doc-head__meta">范围：<b>前台充值页（H5＋PC）</b>，后台不涉及。套用所有优惠券。</p>
           <p class="doc-head__meta">本次：<span class="tag tag--change">修改</span> 勾券但未达券的最低充值 → Submit 不再锁定、不显示红字；<span class="tag tag--new">新增</span> 点 Submit 弹底部提醒。</p>
         </header>
 
         <section class="sec">
           <h2 class="sec__title">1. 需求目的</h2>
-          <p>现况：勾了券、金额没到券的最低充值，Submit 被锁住，会员不知道差多少。改成不锁，弹窗告诉会员差多少、补足能多拿多少，由会员选补足或放弃优惠。</p>
+          <p>不阻挡充值。会员勾了券、金额没到券的最低充值，现况会锁住 Submit、充不了；改成照样能充，只用弹窗提醒一下，要补足还是放弃优惠由会员自己决定。</p>
         </section>
 
         <section class="sec">
@@ -419,7 +454,7 @@ code {
 
         <section class="sec">
           <h2 class="sec__title">3. 底部提醒弹窗 <span class="tag tag--new">新增</span></h2>
-          <p class="lede">由底部弹出，白底上圆角，背景遮罩。文案运营提供，照抄；数字取当前勾选那张券。</p>
+          <p class="lede">H5 由底部弹出，白底上圆角；PC 在 Wallet 弹窗正中央弹出。皆压背景遮罩。文案、按钮、行为 H5 与 PC 相同。文案运营提供，照抄；数字取当前勾选那张券。</p>
 
           <table class="tbl tbl--i18n">
             <thead><tr><th>位置</th><th>英文</th><th>简中</th><th>菲律宾语</th><th>越南语</th><th>宿雾语</th></tr></thead>
@@ -457,6 +492,8 @@ code {
           <ol class="rules">
             <li>优惠券的显示、券面内容、勾选方式。</li>
             <li>渠道最低／最高充值限制、输入框范围提示、红字文案。</li>
+            <li>不勾券的其他充值逻辑。</li>
+            <li>PC Wallet 弹窗的既有版面（左侧 Deposit／Withdraw、余额、活动横幅）。</li>
             <li>Submit 送出后的既有流程。</li>
           </ol>
         </section>
@@ -558,6 +595,17 @@ code {
   });
   /* 点遮罩 → 同 Deposit more */
   mask.addEventListener('click', function (e) { if (e.target === mask) { mask.hidden = true; amountEl.focus(); } });
+
+  /* H5 / PC 切换：同一份画面换壳，逻辑不变 */
+  var frame = document.getElementById('phone');
+  function setMode(pc) {
+    frame.classList.toggle('phone--pc', pc);
+    document.getElementById('frameTitle').textContent = pc ? 'Wallet' : 'Deposit';
+    document.getElementById('swH5').setAttribute('aria-pressed', String(!pc));
+    document.getElementById('swPC').setAttribute('aria-pressed', String(pc));
+  }
+  document.getElementById('swH5').addEventListener('click', function () { setMode(false); });
+  document.getElementById('swPC').addEventListener('click', function () { setMode(true); });
 
   render();
 })();
