@@ -477,7 +477,7 @@ code {
               <tr><td><span class="rev">只在点 Submit 时</span></td><td>勾着券，金额已达渠道最低、但低于该券 Min Deposit（第 2 节 #4）。<span class="rev">勾券当下不弹，要按 Submit 才判断。</span></td></tr>
             </tbody>
           </table>
-          <p class="note"><span class="rev">弹窗内金额：整数不带小数点（₱999）；有小数就四舍五入到小数后两位、固定显示两位（₱99.9 → ₱99.90、₱12.345 → ₱12.35）。</span>文案依容器宽度换行，不截断。弹窗不记忆，条件相同再点 Submit 会再弹。</p>
+          <p class="note"><span class="rev">弹窗内金额：整数不带小数点（₱999）；有小数就无条件舍去到小数后两位、固定显示两位（₱99.9 → ₱99.90、₱99.345 → ₱99.34）。</span>文案依容器宽度换行，不截断。弹窗不记忆，条件相同再点 Submit 会再弹。</p>
           <p class="note"><span class="rev">备注：券的最低充值高于渠道最高充值（例：券 Min 1,111、渠道上限 1,000）属特殊情境，照上述规则弹窗即可，不需特别压测；生产环境渠道上限有到 50,000。</span></p>
 
           <table class="tbl tbl--i18n">
@@ -561,9 +561,9 @@ code {
     var n = parseFloat(String(amountEl.value).replace(/[^\d.]/g, ''));
     return isNaN(n) ? 0 : n;
   }
-  /* 金额格式：整数不带小数；有小数固定两位（99.90），最多两位 */
+  /* 金额格式：整数不带小数；有小数无条件舍去到两位、固定显示两位（99.345 → 99.34） */
   function money(n) {
-    n = Math.round(n * 100) / 100;
+    n = Math.floor(n * 100 + 1e-9) / 100;
     var d = Number.isInteger(n) ? 0 : 2;
     return n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
   }
