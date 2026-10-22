@@ -308,6 +308,8 @@ code {
 .copy p + p { margin-top: var(--sp-1); }
 .copy .var { color: var(--c-accent); font-weight: 600; }
 
+/* 本次补充的句子用红字标示 */
+.rev { color: #d84b4b; }
 .note { color: var(--c-text-2); font-size: var(--fs-base); margin-top: var(--sp-2); }
 
 .flow { list-style: none; padding: 0; margin: var(--sp-2) 0 var(--sp-4); }
@@ -328,7 +330,7 @@ code {
         <button type="button" class="side-switch__btn" id="swH5" aria-pressed="true">H5</button>
         <button type="button" class="side-switch__btn" id="swPC" aria-pressed="false">PC</button>
       </span>
-      <span class="pane-bar__hint">选金额 → 勾券或点 Submit；低于 100 挡、低于券门槛弹提醒（第二张券示范其他类型）</span>
+      <span class="pane-bar__hint">勾券 → 选金额 → 点 Submit；低于 100 挡、低于券门槛弹提醒（第二张券示范其他类型）</span>
     </div>
     <div class="pane__scroll">
       <div class="proto-stage">
@@ -472,10 +474,11 @@ code {
           <table class="tbl">
             <thead><tr><th>弹出时机</th><th>条件</th></tr></thead>
             <tbody>
-              <tr><td>勾选任一优惠券时</td><td>输入金额已达渠道最低、但低于该券 Min Deposit。金额为 0 / 空白或低于渠道最低不弹。</td></tr>
-              <tr><td>点 Submit 时</td><td>勾着券，金额已达渠道最低、但低于该券 Min Deposit（第 2 节 #4）。</td></tr>
+              <tr><td><span class="rev">只在点 Submit 时</span></td><td>勾着券，金额已达渠道最低、但低于该券 Min Deposit（第 2 节 #4）。<span class="rev">勾券当下不弹，要按 Submit 才判断。</span></td></tr>
             </tbody>
           </table>
+          <p class="note"><span class="rev">弹窗内金额：整数不带小数点（₱999）；有小数就四舍五入到小数后两位、固定显示两位（₱99.9 → ₱99.90、₱12.345 → ₱12.35）。</span>文案依容器宽度换行，不截断。弹窗不记忆，条件相同再点 Submit 会再弹。</p>
+          <p class="note"><span class="rev">备注：券的最低充值高于渠道最高充值（例：券 Min 1,111、渠道上限 1,000）属特殊情境，照上述规则弹窗即可，不需特别压测；生产环境渠道上限有到 50,000。</span></p>
 
           <table class="tbl tbl--i18n">
             <thead><tr><th>位置</th><th>Key</th><th>英文</th><th>简中</th><th>菲律宾语</th><th>越南语</th><th>宿雾语</th></tr></thead>
@@ -513,13 +516,12 @@ code {
               <tr><td>点遮罩</td><td>没有反应。只能点上面两颗按钮关闭。</td></tr>
             </tbody>
           </table>
-          <p class="note">弹窗内金额一律不带小数点 .00，有小数才显示。文案依容器宽度换行，不截断；字级不小于 12px。弹窗不记忆，条件相同再勾券或再点 Submit 会再弹。</p>
         </section>
 
         <section class="sec">
           <h2 class="sec__title">4. 不异动</h2>
           <ol class="rules">
-            <li>优惠券的显示、券面内容。</li>
+            <li>优惠券的显示、券面内容、勾选方式。</li>
             <li>渠道最低／最高充值限制、输入框范围提示、红字文案。</li>
             <li>不勾券的其他充值逻辑。</li>
             <li>PC Wallet 弹窗的既有版面（左侧 Deposit／Withdraw、余额、活动横幅）。</li>
@@ -559,7 +561,12 @@ code {
     var n = parseFloat(String(amountEl.value).replace(/[^\d.]/g, ''));
     return isNaN(n) ? 0 : n;
   }
-  function money(n) { return n.toLocaleString('en-US', { maximumFractionDigits: 2 }); }
+  /* 金额格式：整数不带小数；有小数固定两位（99.90），最多两位 */
+  function money(n) {
+    n = Math.round(n * 100) / 100;
+    var d = Number.isInteger(n) ? 0 : 2;
+    return n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
   function bonusAtMin(c) { return Math.min(c.min * c.pct / 100, c.cap); }
 
   /* 重画：渠道门槛照既有（红字＋锁定）；券门槛不再锁、不显示红字（本次修改） */
@@ -582,14 +589,14 @@ code {
     document.getElementById('line2Other').hidden = isCash;
     if (isCash) {
       document.getElementById('sMore').textContent  = money(c.min - a);
-      document.getElementById('sBonus').textContent = bonusAtMin(c).toLocaleString('en-US');
+      document.getElementById('sBonus').textContent = money(bonusAtMin(c));
     } else {
       document.getElementById('sMore2').textContent = money(c.min - a);
     }
     mask.hidden = false;
   }
 
-  /* 勾选：一次只能勾一张（照既有）；勾上时金额已输入且低于该券门槛 → 立刻弹提醒 */
+  /* 勾选：一次只能勾一张（照既有）；勾券当下不弹提醒，要按 Submit 才判断 */
   rows.forEach(function (row) {
     var box = row.querySelector('.coupon-check');
     box.addEventListener('click', function () {
@@ -597,9 +604,6 @@ code {
       rows.forEach(function (r) { setChecked(r, false); });
       setChecked(row, on);
       render();
-      var c = current(), a = readAmount();
-      // 金额要先过渠道门槛才弹（Skip 会直接送出，低于渠道最低不能送）
-      if (c && a >= CHANNEL.min && a < c.min) openSheet(c, a);
     });
     box.addEventListener('keydown', function (e) {
       if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); box.click(); }
