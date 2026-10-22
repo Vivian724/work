@@ -9,12 +9,12 @@
   ============================================================================
   充值页 ‧ 优惠券未达最低充值提醒  规格书（原型 × 规格 对照版）
   ----------------------------------------------------------------------------
-  左栏：可实际操作的 H5 充值页原型（勾券 → 输金额 → 点 Submit → 底部弹窗）。
+  左栏：可实际操作的充值页原型（勾券 → 输金额 → 点 Submit → 提醒弹窗）。
   右栏：对应的规格。只有前台，没有后台。
 
   本次只改两件事：
     1. 勾了券、金额没到最低充值：Submit 不再被挡住（原本会变灰不能点）。
-    2. 这时点 Submit：从底部弹出提醒，让会员选「补足金额」或「放弃优惠继续充值」。
+    2. 这时点 Submit：弹出提醒，让会员选「补足金额」或「放弃优惠继续充值」。
   ============================================================================
 -->
 
@@ -150,9 +150,7 @@ code {
 .phone--pc .wallet-balance { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-4); padding: var(--sp-3) var(--sp-4); background: #eaf1fe; border-radius: var(--radius-lg); }
 .wallet-balance b { color: var(--c-primary); font-size: var(--fs-lg); }
 .wallet-balance__btn { padding: 2px var(--sp-3); background: var(--c-primary); color: #fff; border-radius: 6px; font-size: var(--fs-xs); font-weight: 600; }
-/* PC 的提醒不是底部抽屉，改在 Wallet 弹窗正中央弹出 */
-.phone--pc .sheet-mask { align-items: center; justify-content: center; }
-.phone--pc .sheet { width: 420px; border-radius: 14px; }
+
 
 /* ==========================================================================
    Promotions ‧ 优惠券（照既有前台）
@@ -246,21 +244,21 @@ code {
 .btn-submit:disabled { background: #9db2ec; cursor: not-allowed; }
 
 /* ==========================================================================
-   底部弹窗（本次新增）—— 照运营给的初步样式：白底、上圆角、两颗并排按钮
+   提醒弹窗（本次新增）—— 画面正中央弹出：白底、圆角、两颗并排按钮
    ========================================================================== */
 .sheet-mask {
   position: absolute; inset: 0;
   background: rgba(0, 0, 0, .45);
-  display: flex; align-items: flex-end;
+  display: flex; align-items: center; justify-content: center;
   z-index: 10;
 }
 .sheet-mask[hidden] { display: none; }
 .sheet {
-  width: 100%;
+  width: calc(100% - 2 * var(--sp-4)); max-width: 420px;
   background: var(--c-surface);
-  border-radius: 18px 18px 0 0;
+  border-radius: 14px;
   padding: var(--sp-5) var(--sp-4) var(--sp-5);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, .15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
 }
 .sheet__title { font-size: var(--fs-lg); font-weight: 700; margin-bottom: var(--sp-3); }
 .sheet__line  { font-size: var(--fs-base); color: var(--c-text); line-height: 1.6; }
@@ -409,7 +407,7 @@ code {
           </div>
           </div>
 
-          <!-- ── 底部弹窗（本次新增）──────────────────────── -->
+          <!-- ── 提醒弹窗（本次新增）──────────────────────── -->
           <div class="sheet-mask" id="sheetMask" hidden>
             <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
               <h2 class="sheet__title" id="sheetTitle">Unlock Your Bonus!</h2>
@@ -470,7 +468,7 @@ code {
 
         <section class="sec">
           <h2 class="sec__title">3. 提醒弹窗 <span class="tag tag--new">新增</span></h2>
-          <p class="lede"><b>只在「有勾选券、且金额未达该券最低充值」时弹出，其他情况一律不弹。</b>H5 由底部弹出，白底上圆角；PC 在 Wallet 弹窗正中央弹出。皆压背景遮罩。文案、按钮、行为 H5 与 PC 相同。文案运营提供，照抄；数字取当前勾选那张券。<b>不限券种：其他类型的券（如 free feature）只要有最低充值要求，同样弹此提醒。</b></p>
+          <p class="lede"><b>只在「有勾选券、且金额未达该券最低充值」时弹出，其他情况一律不弹。</b>弹窗压背景遮罩，样式见左侧原型。文案运营提供，照抄；数字取当前勾选那张券。<b>不限券种：其他类型的券（如 free feature）只要有最低充值要求，同样弹此提醒。</b></p>
           <table class="tbl">
             <thead><tr><th>弹出时机</th><th>条件</th></tr></thead>
             <tbody>
