@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>积分商城改版 — 前台原型 (H5)</title>
+<style>
+/* =========================================================
+   Design Tokens — 沿用任务中心前台原型的同一套变数，
+   让积分商城跟奖励中心长得像一家人
+   ========================================================= */
+:root{
+  --c-bg:#f4f7fc;
+  --c-bg-grad-1:#eaf2ff;
+  --c-bg-grad-2:#f6f8fc;
+  --c-card:#ffffff;
+  --c-card-2:#f3f7ff;
+  --c-line:#e3e9f3;
+  --c-text:#1b2a44;
+  --c-text-2:#5b6a85;
+  --c-text-3:#8a97ad;
+  --c-primary:#2f6bff;
+  --c-primary-d:#2258e0;
+  --c-green:#1fb36a;
+  --c-orange:#ff7a1a;
+  --c-red:#f0484e;
+  --c-gold:#e8a200;
+  --c-purple:#7c4dff;      /* 兑换按钮、折扣角标：参考图用的紫 */
+  --c-navy:#1e2a46;        /* 赚积分任务区的深色底 */
+  --radius:14px;
+  --radius-s:10px;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;
+  --font:"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,"Noto Sans CJK SC",sans-serif;
+}
+*{box-sizing:border-box;}
+html{font-size:17px;}
+body{
+  margin:0;font-family:var(--font);
+  background:#dfe6f1;color:var(--c-text);
+  display:flex;justify-content:center;padding:20px;min-height:100vh;
+}
+button{font-family:inherit;cursor:pointer;border:none;}
+[hidden]{display:none!important;}
+
+/* 手机框：430 × 900（设计稿看得清楚），内容在框内滚动 */
+.phone{
+  width:100%;max-width:430px;background:linear-gradient(180deg,var(--c-bg-grad-1),var(--c-bg-grad-2));
+  border-radius:26px;overflow:hidden;position:relative;
+  box-shadow:0 20px 60px rgba(27,42,68,.18);height:900px;
+  display:flex;flex-direction:column;
+}
+.scroll{flex:1;overflow-y:auto;padding-bottom:82px;scrollbar-width:thin;scrollbar-color:rgba(27,42,68,.2) transparent;}
+.scroll::-webkit-scrollbar{width:6px;}
+.scroll::-webkit-scrollbar-thumb{background:rgba(27,42,68,.18);border-radius:3px;}
+.screen{display:none;}
+.screen.is-active{display:block;}
+
+/* =========================================================
+   Header（顶栏）：钱包 ₱ 跟 积分 ★ 并排
+   ========================================================= */
+.topbar{
+  display:flex;align-items:center;gap:4px;
+  padding:12px 10px 10px;position:sticky;top:0;z-index:5;
+  background:linear-gradient(180deg,#eaf2ff,rgba(234,242,255,.9));
+  backdrop-filter:blur(6px);
+}
+.topbar__menu{font-size:1.1rem;color:var(--c-primary);font-weight:800;}
+.avatar{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffb066,#c9701f);border:2px solid #ffd089;flex:0 0 auto;}
+.wallet{display:flex;align-items:center;gap:3px;background:#fff;box-shadow:0 1px 4px rgba(27,42,68,.08);border-radius:16px;padding:3px 6px 3px 4px;font-size:.7rem;font-weight:700;white-space:nowrap;}
+.wallet .rf{color:var(--c-primary);font-weight:400;font-size:.7rem;}
+.coin{width:15px;height:15px;border-radius:50%;display:inline-grid;place-items:center;color:#fff;font-size:.56rem;font-weight:900;flex:0 0 auto;}
+.coin--peso{background:radial-gradient(circle at 30% 30%,#ffd76b,#f0912a);}
+.coin--pt{background:radial-gradient(circle at 35% 30%,#ff8b8b,#e0342f);}
+.topbar__spacer{flex:1;}
+.btn-invite{background:linear-gradient(90deg,#ff5b5b,#ff7a3d);color:#fff;font-weight:700;padding:5px 8px;border-radius:16px;font-size:.7rem;white-space:nowrap;}
+.btn-topup{background:var(--c-primary);color:#fff;font-weight:700;padding:5px 9px;border-radius:16px;font-size:.72rem;white-space:nowrap;}
+.icon-btn{width:24px;height:24px;flex:0 0 auto;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(27,42,68,.08);display:grid;place-items:center;color:var(--c-text-2);font-size:.8rem;}
+
+/* 子页面顶栏（Ichiban / 盲盒）：左返回、中标题 */
+.subbar{display:flex;align-items:center;padding:12px 14px;position:sticky;top:0;z-index:5;background:rgba(234,242,255,.92);backdrop-filter:blur(6px);}
+.subbar__back{font-size:1.1rem;font-weight:800;background:none;color:var(--c-text);width:30px;text-align:left;}
+.subbar__title{flex:1;text-align:center;font-weight:800;font-size:1rem;margin-right:30px;}
+
+/* =========================================================
+   快捷入口：VIP 会员 ／ 积分明细 ／ 背包中心
+   ========================================================= */
+.quick{
+  margin:4px 12px 10px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.10);
+  display:grid;grid-template-columns:1fr 1fr 1fr;padding:10px 4px;
+}
+.quick__item{display:flex;align-items:center;gap:6px;padding:0 6px;cursor:pointer;background:none;text-align:left;}
+.quick__item + .quick__item{border-left:1px solid var(--c-line);}
+.quick__ico{font-size:1.5rem;line-height:1;flex:0 0 auto;}
+.quick__t{font-weight:800;font-size:.82rem;line-height:1.2;}
+.quick__s{font-size:.66rem;color:var(--c-text-2);margin-top:2px;white-space:nowrap;}
+
+/* =========================================================
+   赚积分任务：深色底 ＋ 任务卡（沿用任务中心卡片规则）
+   ========================================================= */
+.earn{margin:0 0 12px;background:var(--c-navy);padding:10px 12px;display:flex;flex-direction:column;gap:8px;}
+.earn__head{display:flex;align-items:center;color:#fff;font-weight:800;font-size:.9rem;padding:0 2px 2px;}
+.earn__head .more{margin-left:auto;font-size:.72rem;font-weight:400;color:#b8c6e6;background:none;}
+/* =========================================================
+   Playground 横幅（轮播）
+   ========================================================= */
+.sec{padding:0 12px;}
+.sec__title{font-weight:800;font-size:1rem;padding:2px 2px 6px;display:flex;align-items:center;}
+.sec__title .more{margin-left:auto;color:var(--c-primary);font-size:.76rem;font-weight:600;background:none;}
+.banner{
+  position:relative;border-radius:var(--radius);overflow:hidden;height:140px;cursor:pointer;
+  background:linear-gradient(120deg,#8fc3ff 0%,#dbeeff 55%,#ffd9ec 100%);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;
+  text-shadow:0 2px 0 rgba(0,0,0,.18);
+}
+.banner__t{font-size:1.5rem;font-weight:900;color:#ffb300;letter-spacing:.5px;text-shadow:0 2px 0 #b35f00;}
+.banner__s{background:#2f6bff;color:#fff;font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:12px;margin-top:4px;}
+.banner__deco{position:absolute;font-size:2rem;opacity:.9;}
+.banner__dots{display:flex;gap:4px;justify-content:center;margin:6px 0 10px;}
+.banner__dots i{width:5px;height:5px;border-radius:50%;background:#c9d4e6;} .banner__dots i:first-child{width:14px;border-radius:3px;background:var(--c-primary);}
+
+/* =========================================================
+   「积分兑好礼」区块标题带
+   ========================================================= */
+.band{
+  margin:0 12px 10px;border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:8px;
+  background:linear-gradient(90deg,#ffe3ee,#e3edff 60%,#dff2ff);font-weight:900;font-size:1rem;color:#c2305a;
+}
+.band__ico{font-size:1.4rem;}
+
+/* 分类页签（带图示） */
+.cats{display:flex;gap:8px;padding:0 12px 8px;overflow-x:auto;scrollbar-width:none;}
+.cats::-webkit-scrollbar{display:none;}
+.cat{flex:0 0 auto;display:flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--c-line);border-radius:18px;padding:5px 12px 5px 8px;font-size:.8rem;color:var(--c-text);white-space:nowrap;}
+.cat__ico{font-size:1rem;line-height:1;}
+.cat--on{background:#e3edff;border-color:#bcd2ff;color:var(--c-primary);font-weight:800;}
+.cat--all .cat__ico{font-size:.6rem;font-weight:900;color:var(--c-primary);background:#fff;border:1px solid #bcd2ff;border-radius:8px 8px 8px 2px;padding:2px 4px;}
+
+/* 筛选列：我能兑换的 ／ 星币排序 */
+.filters{display:flex;gap:8px;padding:2px 12px 10px;}
+.flt{background:#fff;border:1px solid var(--c-line);border-radius:18px;padding:6px 14px;font-size:.8rem;color:var(--c-text-2);display:flex;align-items:center;gap:5px;}
+.flt--on{background:#fff1e3;border-color:#ffd3a6;color:#e2651a;font-weight:700;}
+.flt .coin{width:14px;height:14px;}
+
+/* =========================================================
+   Flash Sales 区块：标题 ＋ 倒数 ＋ 横向滑动卡
+   ========================================================= */
+.fs{margin:0 12px 12px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:10px 10px 12px;}
+.fs__head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.fs__ico{width:34px;height:34px;border-radius:10px;background:#ffe7d6;display:grid;place-items:center;color:var(--c-orange);font-size:1.1rem;}
+.fs__t{font-weight:900;font-size:1rem;line-height:1.1;}
+.fs__s{font-size:.7rem;color:var(--c-text-2);}
+.cd{margin-left:auto;display:flex;align-items:center;gap:2px;font-weight:800;font-size:.78rem;color:var(--c-red);}
+.cd b{background:var(--c-red);color:#fff;border-radius:5px;padding:2px 5px;min-width:24px;text-align:center;}
+.fs__all{color:var(--c-primary);font-weight:700;font-size:.8rem;background:none;}
+.hrow{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+.hrow::-webkit-scrollbar{display:none;}
+
+/* 商品卡（横向大卡） */
+.g{flex:0 0 340px;border:1px solid var(--c-line);border-radius:12px;padding:8px;display:flex;gap:10px;background:#fff;}
+.g__img{width:132px;height:132px;border-radius:10px;flex:0 0 auto;position:relative;display:grid;place-items:center;color:#fff;font-weight:900;text-align:center;font-size:.8rem;line-height:1.15;text-shadow:0 1px 2px rgba(0,0,0,.4);overflow:hidden;}
+.g__off{position:absolute;left:6px;top:6px;background:#ff5b5b;color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:10px;}
+.g__body{flex:1;min-width:0;display:flex;flex-direction:column;}
+.g__name{font-weight:900;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.g__sub{font-size:.72rem;color:var(--c-text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.price{display:flex;align-items:center;gap:5px;margin-top:6px;}
+.price__now{font-weight:900;font-size:1.1rem;color:var(--c-text);}
+.price__old{font-size:.78rem;color:var(--c-text-3);text-decoration:line-through;}
+.bar{height:6px;border-radius:3px;background:#eceff5;margin-top:6px;overflow:hidden;}
+.bar i{display:block;height:100%;background:var(--c-purple);border-radius:3px;}
+.g__left{font-size:.7rem;color:#6b47d8;font-weight:700;margin-top:3px;}
+.btn-redeem{margin-top:auto;background:var(--c-purple);color:#fff;font-weight:800;font-size:.84rem;padding:8px 0;border-radius:10px;width:100%;}
+.btn-redeem--dis{background:#c9cfdd;cursor:not-allowed;}
+
+/* 分类区块（首页）：标题 ＋ More ＋ 先露 4 个 */
+.csec{padding:0 12px;}
+.csec__t{display:flex;align-items:center;font-weight:900;font-size:1rem;padding:6px 2px 8px;margin:0;}
+.csec__more{margin-left:auto;color:var(--c-primary);font-size:.78rem;font-weight:600;background:none;}
+.csec .grid{padding:0 0 10px;}
+
+/* 商品卡（直向小卡，两栏） */
+.grid{padding:0 12px 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.gs{background:#fff;border:1px solid var(--c-line);border-radius:12px;padding:8px;display:flex;flex-direction:column;cursor:pointer;}
+.gs:active{background:var(--c-card-2);}
+.gs .g__left{align-self:flex-start;background:#f0f3f9;color:var(--c-text-2);font-weight:400;padding:2px 6px;border-radius:6px;margin:6px 0 2px;}
+.gs .price{margin-top:4px;}
+.gs .g__img{width:100%;height:150px;}
+.gs .g__name{margin-top:6px;font-size:.88rem;}
+.grid__empty{grid-column:1/-1;text-align:center;color:var(--c-text-3);font-size:.8rem;padding:30px 0;}
+
+/* 占位图配色（正式版换成后台上传的商品图） */
+.img-gems{background:linear-gradient(135deg,#5b2ba8,#c13ec1);}
+.img-zeus{background:linear-gradient(135deg,#1b4f9c,#5aa0ff);}
+.img-ichi{background:linear-gradient(135deg,#ffb84d,#ff6a3d);}
+.img-blind{background:linear-gradient(135deg,#2f6bff,#8e4dff);}
+.img-cash{background:linear-gradient(135deg,#1fb36a,#8de0b2);}
+.img-coupon{background:linear-gradient(135deg,#ff7a1a,#ffc46b);}
+.img-item{background:linear-gradient(135deg,#ff6a8a,#ffb3c6);}
+.img-free{background:linear-gradient(135deg,#00a7b5,#7fe0e8);}
+
+/* 底部导航 */
+.tabbar{
+  position:absolute;left:0;right:0;bottom:0;height:70px;background:#fff;border-top:1px solid var(--c-line);box-shadow:0 -2px 10px rgba(27,42,68,.05);
+  display:flex;justify-content:space-around;align-items:center;padding-bottom:4px;
+}
+.tabbar__item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.68rem;color:var(--c-text-3);flex:1;}
+.tabbar__item .ic{font-size:1.15rem;}
+.tabbar__item--on{color:#2f6bff;font-weight:700;}
+
+/* =========================================================
+   Playground 子页：Ichiban Luck Draw
+   ========================================================= */
+.sky{background:linear-gradient(180deg,#9fd0ff,#dff0ff 70%,#f6f8fc);padding-bottom:12px;}
+.map{position:relative;height:170px;display:flex;align-items:flex-end;justify-content:space-around;padding:0 8px 8px;}
+.isle{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.6rem;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);cursor:pointer;background:none;}
+.isle__ico{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:radial-gradient(circle at 40% 30%,#fff5c9,#ffb84d);box-shadow:0 4px 10px rgba(0,0,0,.18);}
+.isle--on .isle__ico{outline:3px solid #fff;transform:scale(1.12);}
+.isle--lock .isle__ico{background:radial-gradient(circle at 40% 30%,#9aa5b8,#5f6b80);filter:grayscale(1);}
+.isle--lock{color:#e4e9f2;}
+.hero{margin:0 12px;background:#fff8e6;border:2px solid #ffd27a;border-radius:var(--radius);padding:12px 14px;position:relative;text-align:center;}
+.hero__t{font-size:1.35rem;font-weight:900;color:#d8323c;line-height:1.05;}
+.hero__s{font-size:.74rem;color:#9a6b00;margin-top:4px;}
+.hero__rules{position:absolute;right:10px;bottom:-12px;background:#ff8a65;color:#fff;font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:12px;}
+.panel{margin:16px 12px 0;background:#fff;border-radius:var(--radius);padding:12px;box-shadow:0 2px 10px rgba(47,107,255,.08);}
+.panel__row{display:flex;align-items:center;font-size:.8rem;}
+.panel__row .fp{margin-left:auto;background:#fff1e3;color:#e2651a;font-weight:700;font-size:.7rem;padding:3px 8px;border-radius:10px;}
+.draws{height:10px;border-radius:5px;background:#f0e4e4;margin:16px 0 4px;position:relative;}
+.draws i{display:block;height:100%;width:32%;background:linear-gradient(90deg,#ff8a65,#e0342f);border-radius:5px;}
+.draws .mk{position:absolute;top:-14px;font-size:.9rem;transform:translateX(-50%);}
+.mypt{display:flex;align-items:center;gap:6px;font-weight:800;font-size:.85rem;}
+.mypt .get{margin-left:auto;background:#fff1e3;color:#e2651a;font-size:.72rem;padding:4px 10px;border-radius:12px;font-weight:700;}
+.drawbtns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;}
+.drawbtn{background:#f6a04b;color:#fff;border-radius:10px;padding:6px 0;font-weight:900;font-size:.95rem;line-height:1;}
+.drawbtn small{display:block;font-size:.62rem;font-weight:700;margin-top:3px;}
+.drawbtn--on{background:#e0342f;}
+.ticket{margin-top:10px;border:2px dashed #ffb3a8;border-radius:10px;display:flex;overflow:hidden;}
+.ticket__l{background:#fff1ef;color:#e0342f;font-weight:900;padding:10px 12px;font-size:.95rem;border-right:2px dashed #ffb3a8;}
+.ticket__r{flex:1;display:flex;align-items:center;justify-content:center;font-size:.74rem;color:#e0342f;white-space:nowrap;}
+.ticket__r b{margin:0 3px;}
+.panel__note{text-align:center;font-size:.7rem;color:var(--c-text-2);margin-top:8px;}
+.panel__note b{color:#e0342f;}
+.prize-h{display:flex;align-items:center;margin:14px 12px 6px;font-weight:900;font-size:1rem;}
+.prize-h .more{margin-left:auto;background:#ff6a8a;color:#fff;font-size:.72rem;padding:4px 10px;border-radius:12px;font-weight:700;}
+.final{margin:0 12px;background:#fff;border-radius:var(--radius);padding:10px 12px;display:flex;gap:10px;position:relative;box-shadow:0 2px 10px rgba(47,107,255,.08);}
+.final__img{width:84px;height:84px;border-radius:10px;background:linear-gradient(135deg,#7fb0ff,#ffb3c6);display:grid;place-items:center;font-size:2rem;flex:0 0 auto;position:relative;}
+.final__img .last{position:absolute;left:4px;top:4px;background:#ff8a65;color:#fff;font-size:.58rem;padding:1px 6px;border-radius:8px;font-weight:700;}
+.final__amt{font-weight:900;font-size:1.05rem;color:#e0342f;}
+.final__d{font-size:.7rem;color:var(--c-text-2);margin-top:2px;}
+.final__tag{display:inline-block;margin-top:4px;border:1px solid #ffb3a8;color:#e0342f;font-size:.62rem;padding:1px 6px;border-radius:8px;}
+.final__w{font-size:.68rem;color:#e0342f;margin-top:4px;}
+.final__fp{position:absolute;right:8px;top:8px;background:#ffd6e0;color:#c2305a;font-size:.58rem;font-weight:900;padding:4px 6px;border-radius:50%;line-height:1.05;text-align:center;transform:rotate(12deg);}
+.strip{display:flex;gap:6px;padding:10px 12px 14px;overflow-x:auto;scrollbar-width:none;}
+.strip::-webkit-scrollbar{display:none;}
+.pz{flex:0 0 64px;background:#fff;border-radius:10px;padding:6px 4px;text-align:center;box-shadow:0 2px 6px rgba(47,107,255,.08);}
+.pz__ico{font-size:1.5rem;}
+.pz__t{font-size:.6rem;font-weight:700;color:#e0342f;background:#fff1ef;border-radius:8px;padding:2px 0;margin-top:4px;white-space:nowrap;}
+
+/* =========================================================
+   Playground 子页：Mystery Blind Box
+   ========================================================= */
+.machine{margin:0 12px;background:linear-gradient(180deg,#3d7bff,#1d49c9);border-radius:18px;padding:12px;color:#fff;box-shadow:0 10px 30px rgba(29,73,201,.35);}
+.machine__t{text-align:center;font-weight:900;font-size:1.2rem;color:#ffd84d;text-shadow:0 2px 0 #9c2f2f;}
+.machine__s{text-align:center;font-size:.66rem;letter-spacing:2px;color:#ffe9a6;margin-bottom:8px;}
+.bgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;}
+.bcell{grid-column:span 4;}
+.bcell--sm{grid-column:span 3;}
+.bcell{background:rgba(255,255,255,.92);color:var(--c-text);border-radius:10px;padding:8px 4px;text-align:center;}
+.bcell__ico{font-size:1.4rem;}
+.bcell--sm .bcell__t{font-size:.56rem;}
+.bcell__t{font-size:.6rem;font-weight:800;color:#fff;background:#ff6a8a;border-radius:8px;padding:2px 0;margin-top:4px;}
+.bcell--big{grid-column:5/9;grid-row:1/3;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,#ffe3ee,#ffd2e2);}
+.bcell--big .bcell__ico{font-size:2.6rem;}
+.bcell--big .bcell__t{font-size:.95rem;background:#e0342f;padding:3px 0;}
+.bcell--hit{outline:3px solid #ffd84d;box-shadow:0 0 0 4px rgba(255,216,77,.35);}
+.btn-draw{display:block;width:60%;margin:12px auto 0;background:linear-gradient(180deg,#ff5f6d,#e0342f);color:#ffd84d;font-weight:900;font-size:1.3rem;letter-spacing:2px;padding:10px 0;border-radius:12px;box-shadow:0 4px 0 #9c2f2f;}
+.machine__cost{display:flex;justify-content:space-between;font-size:.76rem;color:#ffe9a6;font-weight:700;margin-top:12px;}
+.machine__cost b{color:#ffd84d;}
+.wtabs{display:flex;gap:6px;margin-top:10px;}
+.wtab{flex:1;background:rgba(255,255,255,.18);color:#fff;border-radius:8px;padding:6px 0;font-size:.78rem;font-weight:700;}
+.wtab--on{background:#ffd84d;color:#1d49c9;}
+.wlist{margin-top:8px;background:rgba(0,0,0,.18);border-radius:10px;padding:4px 8px;}
+.wrow{display:flex;align-items:center;gap:8px;font-size:.76rem;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1);}
+.wrow:last-child{border-bottom:none;}
+.wrow .who{margin-left:auto;color:#ffe9a6;}
+.wrow--top{color:#ffd84d;font-weight:800;}
+
+
+/* =========================================================
+   任务中心（新样式）：首页「赚积分」区 ＋ Task List 页共用
+   ========================================================= */
+.tk{background:#f6f7fa;border-radius:12px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:5px 10px;align-items:start;}
+.tk__name{font-weight:800;font-size:.95rem;}
+.tk__name .info{color:var(--c-text-3);font-weight:400;font-size:.78rem;margin-left:4px;}
+.tk__timer{color:var(--c-red);font-weight:700;font-size:.78rem;text-align:right;white-space:nowrap;}
+.tk__prog{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--c-text-2);white-space:nowrap;}
+.tk__bar{flex:0 0 84px;height:6px;border-radius:3px;background:#e6e9f0;overflow:hidden;}
+.tk__bar i{display:block;height:100%;background:#ff8a4d;border-radius:3px;}
+.tk__prog b{color:var(--c-red);font-weight:700;}
+.tk__reward{display:inline-flex;align-items:center;gap:4px;background:#fff1e3;border-radius:14px;padding:4px 10px;color:#e0342f;font-weight:800;font-size:.9rem;justify-self:start;}
+.tk__quota{font-size:.76rem;color:var(--c-text-2);}
+.tk__quota b{color:var(--c-red);font-weight:700;margin:0 4px;}
+.tk__btn{grid-column:2;grid-row:2/5;align-self:center;color:#fff;font-weight:700;font-size:.86rem;padding:9px 18px;border-radius:10px;white-space:nowrap;}
+/* 按钮颜色＝任务中心既有：领取橙、去投注绿、去充值洋红、处理中浅蓝、已完成灰 */
+.tk__btn--receive{background:linear-gradient(180deg,#ffb36b,#ff8a4d);}
+.tk__btn--bet{background:#8cd56b;}
+.tk__btn--deposit{background:#e84393;}
+.tk__btn--pending{background:#7fb0ff;}
+.tk__btn--done{background:#c9cfdd;cursor:default;}
+
+/* 任务组卡：橘色渐层外框 ＋ Extra Rewards 里程碑 ＋ View All 展开子任务 */
+.tg{border:2px solid #e8c89a;border-radius:16px;background:linear-gradient(135deg,#fbe4cc,#f9f1e6 60%,#fdebd6);padding:12px 12px 0;position:relative;overflow:hidden;}
+.tg__head{display:flex;align-items:flex-start;}
+.tg__name{font-weight:900;font-size:1.1rem;color:#7a3e8a;}
+.tg__name .info{color:var(--c-text-3);font-weight:400;font-size:.78rem;margin-left:4px;}
+.tg__head .tk__timer{margin-left:auto;padding-top:2px;}
+.tg__done{font-size:.8rem;color:var(--c-text-2);margin-top:2px;}
+.tg__done b{color:var(--c-primary);margin-left:6px;}
+.extra{background:rgba(255,255,255,.55);border-radius:12px;padding:10px 12px 12px;margin-top:10px;}
+.extra__t{font-weight:700;font-size:.82rem;}
+.ms{position:relative;display:flex;justify-content:space-between;margin:16px 10px 8px;}
+.ms::before{content:"";position:absolute;left:0;right:0;top:50%;height:5px;background:#dfe3ea;border-radius:3px;}
+.ms::after{content:"";position:absolute;left:0;width:var(--done,50%);top:50%;height:5px;background:#ff8a4d;border-radius:3px;}
+.ms__node{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:1rem;position:relative;z-index:1;box-shadow:0 2px 6px rgba(27,42,68,.15);}
+.ms__node--done{background:#4cc26b;color:#fff;font-weight:900;}
+.ms__node--next{background:radial-gradient(circle at 40% 35%,#ffc46b,#f08a1e);}
+.ms__node--lock{background:#c6cddc;filter:grayscale(1);}
+.ms__labels{display:flex;justify-content:space-between;font-weight:800;color:#e0342f;font-size:.8rem;}
+.ms__labels span{display:flex;align-items:center;gap:3px;}
+.tg__more{display:block;width:100%;text-align:center;color:var(--c-primary);font-weight:700;font-size:.9rem;padding:10px 0;border-top:1px solid rgba(255,255,255,.9);margin-top:10px;background:rgba(255,255,255,.25);}
+.tg__subs{display:flex;flex-direction:column;gap:8px;padding:0 0 10px;}
+.tg__subs[hidden]{display:none;}
+.tg__subs .tk__bar{flex-basis:56px;}
+.tg__subs .tk__btn{padding:8px 12px;font-size:.8rem;}
+
+/* Task List 页 */
+.tl-head{display:flex;align-items:center;gap:8px;padding:14px 14px 10px;font-weight:900;font-size:1.25rem;}
+.tl-head__ico{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#ffb36b,#ff7a3d);display:grid;place-items:center;font-size:1rem;}
+.tl-head__rules{margin-left:auto;background:none;font-size:1.2rem;color:var(--c-text);}
+.tl-body{margin:0 12px 12px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:12px;display:flex;flex-direction:column;gap:10px;}
+.recall{display:flex;align-items:center;gap:6px;color:var(--c-primary);font-size:.9rem;font-weight:600;background:none;padding:0;}
+.recall .n{background:var(--c-red);color:#fff;border-radius:10px;font-size:.7rem;padding:1px 7px;}
+.ttabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:6px 0 4px;}
+.ttabs::-webkit-scrollbar{display:none;}
+.ttab{flex:0 0 auto;position:relative;background:#fff;border:1px solid var(--c-line);border-radius:18px;padding:6px 16px;font-size:.84rem;color:var(--c-text);white-space:nowrap;}
+.ttab--on{background:var(--c-primary);border-color:var(--c-primary);color:#fff;font-weight:700;}
+.ttab__n{position:absolute;top:-7px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--c-red);color:#fff;font-size:.62rem;font-weight:700;line-height:17px;text-align:center;}
+
+/* =========================================================
+   Popups（兑换确认／成功／积分不足）
+   ========================================================= */
+.mask{position:absolute;inset:0;background:rgba(27,42,68,.45);display:none;align-items:center;justify-content:center;z-index:20;padding:24px;}
+.mask.is-open{display:flex;}
+.pop{background:#fff;border-radius:18px;padding:22px 18px 16px;width:100%;max-width:300px;text-align:center;position:relative;}
+.pop__ico{font-size:2.4rem;line-height:1;}
+.pop__t{font-weight:900;font-size:1.05rem;margin-top:8px;}
+.pop__d{font-size:.8rem;color:var(--c-text-2);margin-top:6px;line-height:1.5;}
+.pop__d b{color:var(--c-red);}
+.pop__btns{display:flex;gap:8px;margin-top:16px;}
+.pop__btns button{flex:1;padding:9px 0;border-radius:10px;font-weight:700;font-size:.86rem;}
+.btn-ghost{background:#eef2f9;color:var(--c-text-2);}
+.btn-main{background:var(--c-primary);color:#fff;}
+.btn-main--purple{background:var(--c-purple);}
+
+/* demo 控制列（原型用，不是正式画面） */
+.demo-bar{max-width:430px;margin:0 auto 12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+.demo-bar button{background:#fff;color:#2f6bff;border:1px solid #c9d8f2;border-radius:8px;padding:6px 10px;font-size:.74rem;}
+.demo-bar button.on{background:#2f6bff;color:#fff;}
+.demo-hint{color:#5b6a85;font-size:.72rem;text-align:center;margin:0 auto 6px;max-width:430px;}
+</style>
+</head>
+<body>
+<div style="width:100%;max-width:430px;">
+  <p class="demo-hint">点下方按钮切换画面；分类页签、筛选、商品卡、Playground 横幅都可点。</p>
+  <div class="demo-bar">
+    <button class="on" onclick="go('mall',this)">商城首页</button>
+    <button onclick="go('tasks',this)">任务中心 Task List</button>
+    <button onclick="go('ichiban',this)">Ichiban Luck Draw</button>
+    <button onclick="go('blind',this)">Mystery Blind Box</button>
+    <button onclick="showPop('ok')">兑换成功弹窗</button>
+    <button onclick="showPop('lack')">积分不足弹窗</button>
+  </div>
+
+  <!-- ============ Phone ============ -->
+  <div class="phone">
+    <div class="scroll" id="scroll">
+
+      <!-- ===================================================
+           画面 1：商城首页
+           =================================================== -->
+      <section class="screen is-active" id="scr-mall">
+        <header class="topbar">
+          <span class="topbar__menu">☰</span>
+          <div class="avatar" aria-label="头像"></div>
+          <span class="wallet"><i class="coin coin--peso">₱</i>232 <span class="rf">↻</span></span>
+          <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
+          <span class="topbar__spacer"></span>
+          <button class="btn-invite">🎁Invite</button>
+          <button class="btn-topup">Deposit</button>
+          <button class="icon-btn" aria-label="搜索">🔍</button>
+        </header>
+
+        <!-- 快捷入口 -->
+        <nav class="quick" aria-label="快捷入口">
+          <button class="quick__item"><span class="quick__ico">👑</span><span><div class="quick__t">VIP 会员</div><div class="quick__s">查看等级福利 ›</div></span></button>
+          <button class="quick__item"><span class="quick__ico">🪙</span><span><div class="quick__t"><span class="my-pts">100</span></div><div class="quick__s">明细/兑换记录 ›</div></span></button>
+          <button class="quick__item"><span class="quick__ico">🎁</span><span><div class="quick__t">背包中心</div><div class="quick__s">我的道具 ›</div></span></button>
+        </nav>
+
+        <!-- 赚积分任务（深色区）：任务中心搬来这里，首页先露 2 张，全部任务 › 进 Task List 页 -->
+        <section class="earn" aria-label="赚积分任务">
+          <div class="earn__head">赚积分 <button class="more" onclick="go('tasks')">全部任务 ›</button></div>
+          <article class="tk">
+            <div class="tk__name">Top up ₱50<span class="info">ⓘ</span></div>
+            <div class="tk__timer">⏱ <span class="t-task">01:39:59</span></div>
+            <div class="tk__prog">Completed <span class="tk__bar"><i style="width:0"></i></span><b>₱0</b>/ ₱50</div>
+            <div class="tk__reward">🎰 ₱100</div>
+            <div class="tk__quota">Rewarded<b>0/100</b>User</div>
+            <button class="tk__btn tk__btn--receive">Receive</button>
+          </article>
+          <article class="tk">
+            <div class="tk__name">Slots Daily 10K<span class="info">ⓘ</span></div>
+            <div class="tk__timer">⏱ <span class="t-task">01:39:59</span></div>
+            <div class="tk__prog">Completed <span class="tk__bar"><i style="width:0"></i></span><b>₱0</b>/ ₱10,000</div>
+            <div class="tk__reward"><i class="coin coin--pt">★</i>1,000</div>
+            <div class="tk__quota">Rewarded<b>12/500</b>User</div>
+            <button class="tk__btn tk__btn--bet">Bet Now</button>
+          </article>
+        </section>
+
+        <!-- Playground 横幅 -->
+        <section class="sec" aria-label="Playground">
+          <h2 class="sec__title" style="margin:0">Playground</h2>
+          <div class="banner" onclick="go('ichiban')" role="button">
+            <span class="banner__deco" style="left:10px;top:10px">🏰</span>
+            <span class="banner__deco" style="right:12px;top:14px">🎡</span>
+            <span class="banner__deco" style="left:30px;bottom:6px">🪙</span>
+            <span class="banner__deco" style="right:40px;bottom:4px">⭐</span>
+            <div class="banner__t">Point Casino</div>
+            <div class="banner__s">★ Daily Offers ★</div>
+          </div>
+          <div class="banner__dots"><i></i><i></i><i></i></div>
+        </section>
+
+        <!-- 积分兑好礼 -->
+        <div class="band"><span class="band__ico">🎁</span>积分兑好礼</div>
+
+        <!-- 分类页签：来源＝后台「商品分类」，图示由后台上传。点页签＝进该分类页（同 More） -->
+        <nav class="cats" id="cats" aria-label="商品分类">
+          <button class="cat cat--all cat--on" data-cat="all"><span class="cat__ico">ALL</span>All</button>
+          <button class="cat" data-cat="flash"><span class="cat__ico">🏷️</span>Flash Sales</button>
+          <button class="cat" data-cat="play"><span class="cat__ico">🎮</span>Playground</button>
+          <button class="cat" data-cat="free"><span class="cat__ico">🎡</span>Free Spin</button>
+          <button class="cat" data-cat="cash"><span class="cat__ico">💵</span>Cash</button>
+          <button class="cat" data-cat="coupon"><span class="cat__ico">🎫</span>Coupon</button>
+          <button class="cat" data-cat="item"><span class="cat__ico">📦</span>Item</button>
+        </nav>
+
+        <!-- 筛选（首页跟分类页共用同一组状态） -->
+        <div class="filters">
+          <button class="flt js-can" onclick="toggleCan()">我能兑换的</button>
+          <button class="flt js-sort" onclick="toggleSort()"><i class="coin coin--pt">★</i>星币 <span class="js-arrow">↕</span></button>
+        </div>
+
+        <!-- Flash Sales：固定区块，横向滑动；All → Flash Sales 分类页 -->
+        <section class="fs" id="fsBlock" aria-label="Flash Sales">
+          <div class="fs__head">
+            <div class="fs__ico">⚡</div>
+            <div><div class="fs__t">Flash Sales</div><div class="fs__s">Ends in</div></div>
+            <div class="cd"><b id="cdH">11</b>:<b id="cdM">44</b>:<b id="cdS">31</b></div>
+            <button class="fs__all" onclick="openCat('flash')">All</button>
+          </div>
+          <div class="hrow" id="fsRow"></div>
+        </section>
+
+        <!-- 各分类区块：每类先露 4 个 ＋ More，由程序照商品资料产生 -->
+        <div id="homeSecs"></div>
+      </section>
+
+      <!-- ===================================================
+           画面 4：分类页（点 More 或分类页签进来；照游戏大厅既有做法另开一页）
+           =================================================== -->
+      <section class="screen" id="scr-cat">
+        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title" id="catTitle">Cash</span></header>
+        <div class="filters" style="padding-top:10px">
+          <button class="flt js-can" onclick="toggleCan()">我能兑换的</button>
+          <button class="flt js-sort" onclick="toggleSort()"><i class="coin coin--pt">★</i>星币 <span class="js-arrow">↕</span></button>
+        </div>
+        <section class="grid" id="catGrid" aria-label="分类商品"></section>
+      </section>
+
+      <!-- ===================================================
+           画面 5：Task List（任务中心搬进积分商城；版面照 10/27 新设计，按钮逻辑照既有）
+           =================================================== -->
+      <section class="screen" id="scr-tasks">
+        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Points Mall</span></header>
+        <div class="tl-head"><span class="tl-head__ico">📋</span>Task List<button class="tl-head__rules" aria-label="任务规则">📄</button></div>
+        <div class="tl-body">
+          <button class="recall">Reward Retrieval <span class="n">20</span> ›</button>
+          <nav class="ttabs" aria-label="任务页签">
+            <button class="ttab ttab--on">All<span class="ttab__n">4</span></button>
+            <button class="ttab">Basic<span class="ttab__n">2</span></button>
+            <button class="ttab">Daily<span class="ttab__n">2</span></button>
+            <button class="ttab">Weekly<span class="ttab__n">2</span></button>
+            <button class="ttab">Limited-Time<span class="ttab__n">1</span></button>
+          </nav>
+
+          <!-- 任务组：Extra Rewards 里程碑，子任务预设收合，View All 展开 -->
+          <article class="tg">
+            <div class="tg__head"><div class="tg__name">Daily Triple Quest<span class="info">ⓘ</span></div><div class="tk__timer">⏱ <span class="t-task">01:39:59</span></div></div>
+            <div class="tg__done">Completed <b>2 / 3</b></div>
+            <div class="extra">
+              <div class="extra__t">🎁 Extra Rewards</div>
+              <div class="ms" style="--done:50%">
+                <span class="ms__node ms__node--done">✓</span>
+                <span class="ms__node ms__node--next">🧰</span>
+                <span class="ms__node ms__node--lock">🧰</span>
+              </div>
+              <div class="ms__labels"><span>🎰 ₱10000</span><span>🎫 x1</span><span><i class="coin coin--pt">★</i>10000</span></div>
+            </div>
+            <div class="tg__subs" id="tgSubs" hidden>
+              <article class="tk"><div class="tk__name">Top up ₱50<span class="info">ⓘ</span></div><div class="tk__timer"></div><div class="tk__prog">Completed <span class="tk__bar"><i style="width:100%"></i></span><b>₱50</b>/ ₱50</div><div class="tk__reward">🎰 ₱100</div><div class="tk__quota">Rewarded<b>3/100</b>User</div><button class="tk__btn tk__btn--done">Completed</button></article>
+              <article class="tk"><div class="tk__name">Bet ₱500<span class="info">ⓘ</span></div><div class="tk__timer"></div><div class="tk__prog">Completed <span class="tk__bar"><i style="width:100%"></i></span><b>₱500</b>/ ₱500</div><div class="tk__reward">🎫 x1</div><div class="tk__quota">Rewarded<b>3/100</b>User</div><button class="tk__btn tk__btn--done">Completed</button></article>
+              <article class="tk"><div class="tk__name">Login 3 days<span class="info">ⓘ</span></div><div class="tk__timer"></div><div class="tk__prog">Completed <span class="tk__bar"><i style="width:66%"></i></span><b>2</b>/ 3</div><div class="tk__reward"><i class="coin coin--pt">★</i>500</div><div class="tk__quota">Rewarded<b>1/100</b>User</div><button class="tk__btn tk__btn--pending">In progress</button></article>
+            </div>
+            <button class="tg__more" onclick="toggleSubs(this)">View All(3) ⌄</button>
+          </article>
+
+          <!-- 基础任务卡 -->
+          <article class="tk">
+            <div class="tk__name">Top up ₱50<span class="info">ⓘ</span></div>
+            <div class="tk__timer">⏱ <span class="t-task">01:39:59</span></div>
+            <div class="tk__prog">Completed <span class="tk__bar"><i style="width:0"></i></span><b>₱0</b>/ ₱50</div>
+            <div class="tk__reward">🎰 ₱100</div>
+            <div class="tk__quota">Rewarded<b>0/100</b>User</div>
+            <button class="tk__btn tk__btn--receive">Receive</button>
+          </article>
+          <article class="tk">
+            <div class="tk__name">Top up ₱50<span class="info">ⓘ</span></div>
+            <div class="tk__timer">⏱ <span class="t-task">01:39:59</span></div>
+            <div class="tk__prog">Completed <span class="tk__bar"><i style="width:0"></i></span><b>₱0</b>/ ₱50</div>
+            <div class="tk__reward">🎫 x1</div>
+            <div class="tk__quota">Rewarded<b>0/100</b>User</div>
+            <button class="tk__btn tk__btn--deposit">Deposit</button>
+          </article>
+          <article class="tk">
+            <div class="tk__name">Slots Daily 10K<span class="info">ⓘ</span></div>
+            <div class="tk__timer">⏱ <span class="t-task">01:39:59</span></div>
+            <div class="tk__prog">Completed <span class="tk__bar"><i style="width:0"></i></span><b>₱0</b>/ ₱10,000</div>
+            <div class="tk__reward"><i class="coin coin--pt">★</i>1,000</div>
+            <div class="tk__quota">Rewarded<b>12/500</b>User</div>
+            <button class="tk__btn tk__btn--bet">Bet Now</button>
+          </article>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           画面 2：Ichiban Luck Draw（Playground 子页）
+           =================================================== -->
+      <section class="screen" id="scr-ichiban">
+        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Playground</span></header>
+        <div class="sky">
+          <!-- 地图：各游乐场入口，等级不够显示锁 -->
+          <div class="map">
+            <button class="isle" onclick="go('mall')"><span class="isle__ico">🎰</span>Slot Kingdom</button>
+            <button class="isle isle--on"><span class="isle__ico">🎁</span>Ichiban Luck Draw</button>
+            <button class="isle" onclick="go('blind')"><span class="isle__ico">🎲</span>Mystery Blind Box</button>
+            <button class="isle isle--lock"><span class="isle__ico">🔒</span>Unlock at Lv.5</button>
+          </div>
+          <div class="hero">
+            <div class="hero__t">ICHIBAN<br>LUCK DRAW</div>
+            <div class="hero__s">Big Prizes · Every Draw Wins</div>
+            <button class="hero__rules">📋 Rules</button>
+          </div>
+          <div class="panel">
+            <div class="panel__row">🎁 Remaining <b style="color:#e0342f;margin:0 4px">88,438</b>/129,999 Draws <span class="fp">🔥 Final Prize</span></div>
+            <div class="draws"><i></i><span class="mk" style="left:20%">🎁</span><span class="mk" style="left:45%">🎁</span><span class="mk" style="left:72%">🎁</span><span class="mk" style="left:97%">🎁</span></div>
+          </div>
+          <div class="panel" style="margin-top:10px">
+            <div class="mypt"><i class="coin coin--pt">★</i>My Points: <span style="color:#e0342f" class="my-pts">100</span><button class="get">Get More Points ›</button></div>
+            <div class="drawbtns">
+              <button class="drawbtn drawbtn--on">1<small>Draw</small></button>
+              <button class="drawbtn">5<small>Draws</small></button>
+              <button class="drawbtn">10<small>Draws</small></button>
+              <button class="drawbtn" style="font-size:.78rem;padding:12px 0">Draw All</button>
+            </div>
+            <div class="ticket"><div class="ticket__l">ICHIBAN</div><div class="ticket__r"><span>Required <b>400</b> More Points</span></div></div>
+            <div class="panel__note"><b>500 Points</b> per Ticket. Every Ticket Wins a Prize.</div>
+          </div>
+          <div class="prize-h">🎁 All Prizes <button class="more">View All ›</button></div>
+          <div class="final">
+            <div class="final__img"><span class="last">Last</span>💸</div>
+            <div>
+              <div class="final__amt"><i class="coin coin--peso" style="font-size:.5rem">₱</i> 200,000.00</div>
+              <div class="final__d">Awarded to the user who makes the last draw.</div>
+              <span class="final__tag">E-Credit</span>
+              <div class="final__w">🏆 Last Ticket Winner</div>
+            </div>
+            <span class="final__fp">FINAL<br>PRIZE</span>
+          </div>
+          <div class="strip">
+            <div class="pz"><div class="pz__ico">🎡</div><div class="pz__t">25 Free Spins</div></div>
+            <div class="pz"><div class="pz__ico">💸</div><div class="pz__t">₱1,000</div></div>
+            <div class="pz"><div class="pz__ico">⭐</div><div class="pz__t">10,000 Points</div></div>
+            <div class="pz"><div class="pz__ico">🎡</div><div class="pz__t">20 Free Spins</div></div>
+            <div class="pz"><div class="pz__ico">💸</div><div class="pz__t">₱50</div></div>
+            <div class="pz"><div class="pz__ico">🎡</div><div class="pz__t">5 Free Spins</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           画面 3：Mystery Blind Box（Playground 子页）
+           =================================================== -->
+      <section class="screen" id="scr-blind">
+        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Playground</span></header>
+        <div class="sky">
+          <div class="map">
+            <button class="isle" onclick="go('mall')"><span class="isle__ico">🎰</span>Slot Kingdom</button>
+            <button class="isle" onclick="go('ichiban')"><span class="isle__ico">🎁</span>Ichiban Luck Draw</button>
+            <button class="isle isle--on"><span class="isle__ico">🎲</span>Mystery Blind Box</button>
+            <button class="isle isle--lock"><span class="isle__ico">🔒</span>Unlock at Lv.5</button>
+          </div>
+          <div class="machine">
+            <div class="machine__t">MYSTERY BLIND BOX</div>
+            <div class="machine__s">· LUCKY STAR ·</div>
+            <div class="bgrid" id="bgrid">
+              <div class="bcell"><div class="bcell__ico">🎡</div><div class="bcell__t">5 Free Spins</div></div>
+              <div class="bcell bcell--big"><div class="bcell__ico">💸</div><div class="bcell__t">₱3,000</div></div>
+              <div class="bcell"><div class="bcell__ico">💵</div><div class="bcell__t">₱10</div></div>
+              <div class="bcell"><div class="bcell__ico">💵</div><div class="bcell__t">₱1,000</div></div>
+              <div class="bcell"><div class="bcell__ico">⭐</div><div class="bcell__t">2,000 Points</div></div>
+              <div class="bcell bcell--sm"><div class="bcell__ico">⭐</div><div class="bcell__t">10,000 Points</div></div>
+              <div class="bcell bcell--sm"><div class="bcell__ico">🎡</div><div class="bcell__t">25 Free Spins</div></div>
+              <div class="bcell bcell--sm"><div class="bcell__ico">💵</div><div class="bcell__t">₱50</div></div>
+              <div class="bcell bcell--sm"><div class="bcell__ico">🎡</div><div class="bcell__t">20 Free Spins</div></div>
+            </div>
+            <button class="btn-draw" onclick="blindDraw()">DRAW</button>
+            <div class="machine__cost"><span>Cost: <b>2,000 Points</b></span><span>My Points: <b><span class="my-pts">100</span> Points</b></span></div>
+            <div class="wtabs"><button class="wtab wtab--on" onclick="wtab(this,0)">Recent Winners</button><button class="wtab" onclick="wtab(this,1)">My Rewards</button></div>
+            <div class="wlist" id="wlist0">
+              <div class="wrow wrow--top">💸 ₱3,000 <span class="who">winner</span></div>
+              <div class="wrow">🎡 20 Free Spins <span class="who">Marjorie</span></div>
+              <div class="wrow">🎡 20 Free Spins <span class="who">magic01</span></div>
+              <div class="wrow">🎡 25 Free Spins <span class="who">ok***ju</span></div>
+            </div>
+            <div class="wlist" id="wlist1" hidden>
+              <div class="wrow" style="justify-content:center;color:#ffe9a6">还没有抽奖纪录</div>
+            </div>
+          </div>
+          <div style="height:12px"></div>
+        </div>
+      </section>
+
+    </div><!-- /scroll -->
+
+    <!-- 底部导航 -->
+    <nav class="tabbar">
+      <div class="tabbar__item"><span class="ic">🏠</span>Home</div>
+      <div class="tabbar__item"><span class="ic">🎁</span>Rewards</div>
+      <div class="tabbar__item tabbar__item--on"><span class="ic">🛍️</span>Points Mall</div>
+      <div class="tabbar__item"><span class="ic">🏆</span>Tourney</div>
+      <div class="tabbar__item"><span class="ic">👤</span>My</div>
+    </nav>
+
+    <!-- 弹窗 -->
+    <div class="mask" id="mask" onclick="if(event.target===this)closePop()">
+      <div class="pop" id="pop"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- 基本资料（原型用假资料） ---------- */
+var MY_POINTS = 100;   /* 参考图里会员只有 100 积分，用来示范「我能兑换的」与「积分不足」 */
+document.querySelectorAll('.my-pts').forEach(function(e){ e.textContent = MY_POINTS.toLocaleString(); });
+
+/* ---------- 画面切换：商城首页 / Ichiban / 盲盒 ---------- */
+function go(name, btn){
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('is-active', s.id==='scr-'+name); });
+  document.querySelectorAll('.demo-bar button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('onclick').indexOf("'"+name+"'")>-1); });
+  document.getElementById('scroll').scrollTop = 0;
+  if(name==='mall') curCat = null;
+}
+
+/* ---------- 商品资料（原型假资料；正式版来自后台商品分类＋商品） ---------- */
+var CATS = [
+  {key:'flash', name:'Flash Sales'}, {key:'play', name:'Playground'}, {key:'free', name:'Free Spin'},
+  {key:'cash', name:'Cash'}, {key:'coupon', name:'Coupon'}, {key:'item', name:'Item'}
+];
+var PRODUCTS = [
+  /* Flash Sales：有折扣、有剩余数 */
+  {cat:'flash', name:'Gems Bonanza', sub:'Free Spins Reward', price:450, old:1300, left:'2,980 remaining', pct:60, img:'img-gems', txt:'GEMS<br>BONANZA<br><small>FREE SPINS</small>', off:'65% OFF'},
+  {cat:'flash', name:'Gates of Olympus', sub:'Free Spins Reward', price:650, old:1300, left:'620 remaining', pct:25, img:'img-zeus', txt:'GATES OF<br>OLYMPUS<br><small>FREE SPINS</small>', off:'50% OFF'},
+  {cat:'flash', name:'Deposit Coupon ₱50', sub:'Coupon', price:80, old:100, left:'150 remaining', pct:85, img:'img-coupon', txt:'₱50<br>COUPON', off:'20% OFF'},
+  {cat:'flash', name:'Cash ₱200', sub:'E-Credit', price:1500, old:2000, left:'40 remaining', pct:10, img:'img-cash', txt:'₱200<br>CASH', off:'25% OFF'},
+  {cat:'flash', name:'Sweet Bonanza', sub:'20 Free Spins', price:400, old:600, left:'900 remaining', pct:45, img:'img-free', txt:'SWEET<br>BONANZA<br><small>FREE SPINS</small>', off:'33% OFF'},
+  /* Playground：游乐场入口 */
+  {cat:'play', name:'Ichiban Luck Draw', sub:'Every Ticket Wins a Prize', price:500, unit:'/ Ticket', img:'img-ichi', txt:'ICHIBAN<br>LUCK DRAW', go:'ichiban'},
+  {cat:'play', name:'Mystery Blind Box', sub:'Lucky Star', price:2000, unit:'/ Draw', img:'img-blind', txt:'MYSTERY<br>BLIND BOX', go:'blind'},
+  /* Free Spin */
+  {cat:'free', name:'Sweet Bonanza', sub:'10 Free Spins', price:300, left:'In stock 1,200', img:'img-free', txt:'SWEET<br>BONANZA<br><small>FREE SPINS</small>'},
+  {cat:'free', name:'Wild West Gold', sub:'5 Free Spins', price:100, left:'In stock 860', img:'img-free', txt:'WILD<br>WEST<br><small>FREE SPINS</small>'},
+  {cat:'free', name:'Starlight Princess', sub:'10 Free Spins', price:350, left:'In stock 500', img:'img-free', txt:'STARLIGHT<br>PRINCESS<br><small>FREE SPINS</small>'},
+  {cat:'free', name:'Big Bass Bonanza', sub:'15 Free Spins', price:480, left:'In stock 320', img:'img-free', txt:'BIG BASS<br>BONANZA<br><small>FREE SPINS</small>'},
+  {cat:'free', name:'Fruit Party', sub:'5 Free Spins', price:90, left:'In stock 2,000', img:'img-free', txt:'FRUIT<br>PARTY<br><small>FREE SPINS</small>'},
+  {cat:'free', name:'Wolf Gold', sub:'20 Free Spins', price:700, left:'In stock 150', img:'img-free', txt:'WOLF<br>GOLD<br><small>FREE SPINS</small>'},
+  /* Cash */
+  {cat:'cash', name:'Cash ₱100', sub:'E-Credit', price:1000, left:'In stock 2,100', img:'img-cash', txt:'₱100<br>CASH'},
+  {cat:'cash', name:'Cash ₱500', sub:'E-Credit', price:4000, left:'In stock 300', img:'img-cash', txt:'₱500<br>CASH'},
+  {cat:'cash', name:'Cash ₱1,000', sub:'E-Credit', price:8000, left:'In stock 120', img:'img-cash', txt:'₱1,000<br>CASH'},
+  {cat:'cash', name:'Cash ₱50', sub:'E-Credit', price:500, left:'In stock 5,000', img:'img-cash', txt:'₱50<br>CASH'},
+  {cat:'cash', name:'Cash ₱10', sub:'E-Credit', price:100, left:'In stock 9,999', img:'img-cash', txt:'₱10<br>CASH'},
+  /* Coupon */
+  {cat:'coupon', name:'Deposit Coupon ₱20', sub:'Coupon', price:60, left:'In stock 5,000', img:'img-coupon', txt:'₱20<br>COUPON'},
+  {cat:'coupon', name:'Deposit Coupon ₱100', sub:'Coupon', price:300, left:'In stock 1,000', img:'img-coupon', txt:'₱100<br>COUPON'},
+  {cat:'coupon', name:'Rebate Coupon 1%', sub:'Coupon', price:200, left:'In stock 800', img:'img-coupon', txt:'1%<br>REBATE'},
+  {cat:'coupon', name:'Free Bet ₱50', sub:'Coupon', price:250, left:'In stock 600', img:'img-coupon', txt:'₱50<br>FREE BET'},
+  {cat:'coupon', name:'Free Bet ₱100', sub:'Coupon', price:480, left:'In stock 200', img:'img-coupon', txt:'₱100<br>FREE BET'},
+  /* Item：实物 */
+  {cat:'item', name:'Wireless Headset', sub:'Physical item', price:8000, left:'In stock 6', img:'img-item', txt:'🎧<br>HEADSET'},
+  {cat:'item', name:'OKBet Cap', sub:'Physical item', price:1500, left:'In stock 60', img:'img-item', txt:'🧢<br>CAP'},
+  {cat:'item', name:'OKBet T-Shirt', sub:'Physical item', price:2500, left:'In stock 40', img:'img-item', txt:'👕<br>T-SHIRT'},
+  {cat:'item', name:'Power Bank', sub:'Physical item', price:5000, left:'In stock 12', img:'img-item', txt:'🔋<br>POWER BANK'},
+  {cat:'item', name:'Smart Watch', sub:'Physical item', price:20000, left:'In stock 3', img:'img-item', txt:'⌚<br>WATCH'}
+];
+var HOME_SHOW = 4;   /* 首页每个分类先露几个；超过的按 More 看 */
+
+/* ---------- 筛选状态（首页跟分类页共用） ---------- */
+var onlyCan = false, sortDir = 0, curCat = null; /* sortDir 0=不排序 1=低到高 2=高到低 */
+function toggleCan(){ onlyCan = !onlyCan; renderAll(); }
+function toggleSort(){ sortDir = (sortDir+1)%3; renderAll(); }
+function syncFilterBtns(){
+  document.querySelectorAll('.js-can').forEach(function(b){ b.classList.toggle('flt--on', onlyCan); });
+  document.querySelectorAll('.js-sort').forEach(function(b){ b.classList.toggle('flt--on', sortDir>0); });
+  document.querySelectorAll('.js-arrow').forEach(function(e){ e.textContent = sortDir===1?'↑':sortDir===2?'↓':'↕'; });
+}
+/* 依筛选／排序取出某分类的商品 */
+function listOf(cat){
+  var arr = PRODUCTS.filter(function(p){ return p.cat===cat && !(onlyCan && p.price > MY_POINTS); });
+  if(sortDir) arr = arr.slice().sort(function(a,b){ return sortDir===1 ? a.price-b.price : b.price-a.price; });
+  return arr;
+}
+function fmt(n){ return n.toLocaleString(); }
+function esc(t){ return t.replace(/'/g,"\\'"); }
+
+/* 卡片 HTML：直向小卡（首页分类区／分类页） */
+/* 照既有：卡片没有按钮，整张卡可点（点了进兑换／进游乐场） */
+function cardSmall(p){
+  var btn = '';
+  var click = p.go ? 'go(\''+p.go+'\')' : 'redeem(\''+esc(p.name)+'\','+p.price+')';
+  return '<article class="gs" role="button" onclick="'+click+'">'
+    + '<div class="g__img '+p.img+'">'+(p.off?'<span class="g__off">'+p.off+'</span>':'')+p.txt+'</div>'
+    + '<div class="g__name">'+p.name+'</div><div class="g__sub">'+p.sub+'</div>'
+    + (p.left?'<div class="g__left">'+p.left+'</div>':'')
+    + '<div class="price"><i class="coin coin--pt">★</i><span class="price__now">'+fmt(p.price)+'</span>'
+    + (p.old?'<span class="price__old">'+fmt(p.old)+'</span>':'') + (p.unit?'<span class="g__sub" style="margin-left:2px">'+p.unit+'</span>':'') + '</div>'
+    + btn + '</article>';
+}
+/* 卡片 HTML：Flash Sales 横向大卡 */
+function cardFlash(p){
+  return '<article class="g"><div class="g__img '+p.img+'"><span class="g__off">'+p.off+'</span>'+p.txt+'</div><div class="g__body">'
+    + '<div class="g__name">'+p.name+'</div><div class="g__sub">'+p.sub+'</div>'
+    + '<div class="price"><i class="coin coin--pt">★</i><span class="price__now">'+fmt(p.price)+'</span><span class="price__old">'+fmt(p.old)+'</span></div>'
+    + '<div class="bar"><i style="width:'+p.pct+'%"></i></div><div class="g__left">'+p.left+'</div>'
+    + '<button class="btn-redeem" onclick="redeem(\''+esc(p.name)+'\','+p.price+')">Redeem now</button></div></article>';
+}
+
+/* 首页：Flash Sales 横向区 ＋ 各分类区块（先露 HOME_SHOW 个，多的看 More） */
+function renderHome(){
+  var fl = listOf('flash');
+  document.getElementById('fsRow').innerHTML = fl.map(cardFlash).join('');
+  document.getElementById('fsBlock').hidden = fl.length===0;
+  var html = '';
+  CATS.forEach(function(c){
+    if(c.key==='flash') return;              /* Flash Sales 已有自己的区块 */
+    var arr = listOf(c.key); if(!arr.length) return;
+    html += '<section class="csec"><h3 class="csec__t">'+c.name
+         + (arr.length>HOME_SHOW ? '<button class="csec__more" onclick="openCat(\''+c.key+'\')">More ›</button>' : '')
+         + '</h3><div class="grid">'+arr.slice(0,HOME_SHOW).map(cardSmall).join('')+'</div></section>';
+  });
+  document.getElementById('homeSecs').innerHTML = html || '<div class="grid__empty">没有可兑换的商品</div>';
+}
+/* 分类页：该分类全部商品 */
+function renderCat(){
+  if(!curCat) return;
+  var c = CATS.filter(function(x){ return x.key===curCat; })[0];
+  document.getElementById('catTitle').textContent = c.name;
+  var arr = listOf(curCat);
+  document.getElementById('catGrid').innerHTML = arr.length ? arr.map(cardSmall).join('') : '<div class="grid__empty">没有可兑换的商品</div>';
+}
+function renderAll(){ syncFilterBtns(); renderHome(); renderCat(); }
+function openCat(key){ curCat = key; renderCat(); go('cat'); }
+
+/* 分类页签：All 留在首页；其他页签＝进该分类页（跟 More 同一个地方） */
+document.getElementById('cats').addEventListener('click', function(ev){
+  var b = ev.target.closest('.cat'); if(!b) return;
+  if(b.dataset.cat==='all'){ go('mall'); return; }
+  openCat(b.dataset.cat);
+});
+renderAll();
+
+/* ---------- 兑换：先确认 → 积分够就成功，不够就提示 ---------- */
+var POPS = {
+  ok:   {ico:'🎉', t:'兑换成功', d:'奖励已发放，可在「背包中心」或「兑换记录」查看。', btns:[['知道了','btn-main--purple']]},
+  lack: {ico:'😢', t:'积分不足', d:'目前积分 <b>'+MY_POINTS+'</b>，还差一点点。完成任务可赚更多积分。', btns:[['稍后再说','btn-ghost'],['去赚积分','btn-main']]}
+};
+function redeem(name, price){
+  if(price > MY_POINTS){ showPop('lack'); return; }
+  showPop({ico:'🛍️', t:'确认兑换', d:'将扣除 <b>★ '+price.toLocaleString()+'</b> 积分兑换「'+name+'」', btns:[['取消','btn-ghost'],['确认兑换','btn-main--purple','ok']]});
+}
+function showPop(p){
+  if(typeof p==='string') p = POPS[p];
+  var html = '<div class="pop__ico">'+p.ico+'</div><div class="pop__t">'+p.t+'</div><div class="pop__d">'+p.d+'</div><div class="pop__btns">';
+  p.btns.forEach(function(b){ html += '<button class="'+(b[1]||'')+'" onclick="'+(b[2]?"showPop('"+b[2]+"')":'closePop()')+'">'+b[0]+'</button>'; });
+  document.getElementById('pop').innerHTML = html + '</div>';
+  document.getElementById('mask').classList.add('is-open');
+}
+function closePop(){ document.getElementById('mask').classList.remove('is-open'); }
+
+/* ---------- 盲盒：Demo 抽一次 → 积分不够就提示 ---------- */
+function blindDraw(){
+  if(2000 > MY_POINTS){ showPop('lack'); return; }
+  var cells = document.querySelectorAll('#bgrid .bcell'); var i = Math.floor(Math.random()*cells.length);
+  cells.forEach(function(c){ c.classList.remove('bcell--hit'); }); cells[i].classList.add('bcell--hit');
+}
+function toggleSubs(b){ var el=document.getElementById('tgSubs'); el.hidden=!el.hidden; b.textContent = el.hidden ? 'View All(3) ⌄' : 'Collapse ⌃'; }
+function wtab(b, i){
+  document.querySelectorAll('.wtab').forEach(function(x){ x.classList.toggle('wtab--on', x===b); });
+  document.getElementById('wlist0').hidden = i!==0; document.getElementById('wlist1').hidden = i!==1;
+}
+
+/* ---------- 倒数：Flash Sales 跟任务倒数每秒跳 ---------- */
+var fsLeft = 11*3600+44*60+31, taskLeft = 1*3600+39*60+59;
+function two(n){ return (n<10?'0':'')+n; }
+setInterval(function(){
+  fsLeft--; taskLeft--;
+  document.getElementById('cdH').textContent = two(Math.floor(fsLeft/3600));
+  document.getElementById('cdM').textContent = two(Math.floor(fsLeft%3600/60));
+  document.getElementById('cdS').textContent = two(fsLeft%60);
+  var t = two(Math.floor(taskLeft/3600))+':'+two(Math.floor(taskLeft%3600/60))+':'+two(taskLeft%60);
+  document.querySelectorAll('.t-task').forEach(function(e){ e.textContent = t; });
+}, 1000);
+</script>
+</body>
+</html>

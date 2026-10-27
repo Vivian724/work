@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewards 页改版 · 开发评估回复</title>
+<style>
+/* 颜色、间距统一在这里管 */
+:root{
+  --c-text:#1f2329; --c-text-2:#5b6270; --c-border:#dfe3e8; --c-bg:#f6f7f9; --c-card:#fff;
+  --c-red:#d4380d; --c-red-bg:#fff2e8; --c-blue:#1d5fd1; --c-blue-bg:#e8f0fe; --c-green:#1a7f4b; --c-green-bg:#e6f6ec;
+  --c-orange:#b45309; --c-orange-bg:#fff4e0; --c-gray-bg:#f0f1f3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --c-text:#e6e8eb; --c-text-2:#a4abb6; --c-border:#343a44; --c-bg:#16191e; --c-card:#1e2228;
+    --c-red:#ff8a65; --c-red-bg:#3a2620; --c-blue:#7fa8ff; --c-blue-bg:#1f2a40; --c-green:#6fcf97; --c-green-bg:#1f3a2a;
+    --c-orange:#f5b355; --c-orange-bg:#3a2d18; --c-gray-bg:#262b33;
+  }
+}
+:root[data-theme="dark"]{
+  --c-text:#e6e8eb; --c-text-2:#a4abb6; --c-border:#343a44; --c-bg:#16191e; --c-card:#1e2228;
+  --c-red:#ff8a65; --c-red-bg:#3a2620; --c-blue:#7fa8ff; --c-blue-bg:#1f2a40; --c-green:#6fcf97; --c-green-bg:#1f3a2a;
+  --c-orange:#f5b355; --c-orange-bg:#3a2d18; --c-gray-bg:#262b33;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--c-bg);color:var(--c-text);font:18px/1.7 "PingFang SC","PingFang TC","Microsoft YaHei",sans-serif;}
+main{max-width:1200px;margin:0 auto;padding:32px 20px 64px;}
+h1{font-size:1.7rem;margin:0 0 6px;}
+.lede{color:var(--c-text-2);margin:0 0 24px;font-size:1rem;}
+h2{font-size:1.25rem;margin:40px 0 14px;padding-left:12px;border-left:4px solid var(--c-blue);display:flex;align-items:center;gap:10px;}
+h2 .num{background:var(--c-blue);color:#fff;border-radius:6px;padding:0 10px;font-size:1rem;line-height:1.9;}
+h3{font-size:1.1rem;margin:0 0 10px;}
+p{margin:0 0 8px;}
+ul{margin:0;padding-left:24px;}
+li{margin-bottom:6px;}
+figure{margin:0 0 14px;}
+figure img{max-width:min(760px,100%);height:auto;display:block;border-radius:6px;border:1px solid var(--c-border);}
+figcaption{font-size:0.9rem;color:var(--c-text-2);margin-top:6px;}
+.muted{color:var(--c-text-2);}
+
+.tag{display:inline-block;padding:0 12px;border-radius:12px;font-size:0.9rem;line-height:1.9;white-space:nowrap;font-weight:600;}
+.tag--ok{background:var(--c-green-bg);color:var(--c-green);}
+.tag--cut{background:var(--c-orange-bg);color:var(--c-orange);}
+.tag--no{background:var(--c-red-bg);color:var(--c-red);}
+.tag--open{background:var(--c-gray-bg);color:var(--c-text-2);font-weight:400;}
+
+/* 一眼看结论 */
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.card{background:var(--c-card);border:1px solid var(--c-border);border-radius:10px;padding:18px 22px;margin-bottom:14px;}
+.summary .card{margin:0;}
+.summary ul{font-size:0.95rem;}
+@media (max-width:800px){.summary{grid-template-columns:1fr;}}
+
+/* 表格 */
+.table-wrap{overflow-x:auto;background:var(--c-card);border:1px solid var(--c-border);border-radius:10px;margin-bottom:14px;}
+table{width:100%;border-collapse:collapse;min-width:900px;table-layout:fixed;}
+th,td{padding:14px 16px;border-bottom:1px solid var(--c-border);text-align:left;vertical-align:top;}
+th{background:var(--c-gray-bg);font-weight:600;white-space:nowrap;}
+th:nth-child(1){width:30%;} th:nth-child(2){width:11%;} th:nth-child(3){width:37%;} th:nth-child(4){width:22%;}
+td.pm{border-left:1px solid var(--c-border);background:var(--c-blue-bg);}
+table.ops{min-width:0;table-layout:auto;font-size:0.95rem;}
+table.ops th:nth-child(n){width:auto;}
+table.ops td:first-child{white-space:nowrap;font-weight:600;}
+.table-wrap--ops{max-width:900px;}
+tr:last-child td{border-bottom:none;}
+td.ask{font-weight:600;}
+td.verdict{white-space:nowrap;}
+td.devcell{border-left:1px solid var(--c-border);}
+td.devcell p{margin:0;}
+td.devcell .more{margin-top:8px;color:var(--c-text-2);font-size:0.95rem;}
+img.strip{display:block;max-width:100%;margin-top:10px;border:1px solid var(--c-border);border-radius:6px;}
+.sum{background:var(--c-blue-bg);border-left:5px solid var(--c-blue);border-radius:0 8px 8px 0;padding:12px 16px;margin:0 0 14px;}
+.sum b{display:block;font-size:0.9rem;color:var(--c-blue);margin-bottom:4px;}
+.sum p{margin:0;}
+.bg{background:var(--c-card);border:1px solid var(--c-border);border-radius:10px;padding:18px 22px;margin-bottom:14px;}
+.bg li{margin-bottom:8px;}
+</style>
+</head>
+<body>
+<main>
+  <h1>Rewards 页改版 · 开发评估回复</h1>
+  <p class="lede">给运营看的版本。改版书（OKGAMES 2026 REWARD 页面改造需求文档）里每一项要求，开发都给了结论。照改版书章节一节一张表：运营要的、结论、开发评估原文（一字不改，直接从开发的文件贴过来）、PM 建议。整理日期：2026-10-27</p>
+
+  <h2>一、一眼看结论</h2>
+  <div class="summary">
+    <div class="card"><h3><span class="tag tag--ok">照做</span> 10 项</h3><ul>
+      <li>2.1 个人栏：头像、余额、积分、Deposit、Voucher 入口</li>
+      <li>2.2 Hero Banner 倒计时与活动名称浮层</li>
+      <li>2.3.1 快捷入口专区（含前台显示开关）</li>
+      <li>2.3.2 Banner 角标：后台选 NEW、HOT、倒数</li>
+      <li>2.3.3 活动标签，每次最多三个</li>
+      <li>2.3.4 状态六：不可参与／限制</li>
+      <li>2.3.4 状态七：Auto Claimed 标签＋View Details</li>
+      <li>2.3.5 P0 按后台标签排序</li>
+      <li>2.3.5 P2 即将结束的活动</li>
+      <li>2.3.5 P5 自动发放的活动</li></ul></div>
+    <div class="card"><h3><span class="tag tag--no">建議先不做</span> 13 项</h3><ul>
+      <li>2.1 My Rewards 显示目前可领几笔</li>
+      <li>2.2 依会员状态自动挑选精选活动</li>
+      <li>2.2 精选卡片「有券可用」</li>
+      <li>2.3.2 Banner 上显示个人数字（例：可领 3 笔）</li>
+      <li>2.3.4 状态二：有券可用（Use 按钮）</li>
+      <li>2.3.4 状态三：进度数字（₱400 / ₱500）</li>
+      <li>2.3.4 状态七：卡片上显示入账金额</li>
+      <li>2.3.5 P1 可领取的排前面</li>
+      <li>2.3.5 P3 即将完成的排前面</li>
+      <li>2.2 精选领取卡片（可领金额、券数）<span class="muted">（开发：缩小范围）</span></li>
+      <li>2.3.4 状态一：可领取 <span class="muted">（开发：缩小范围）</span></li>
+      <li>2.3.4 状态四：Pre-Registered <span class="muted">（开发：缩小范围）</span></li>
+      <li>2.3.4 状态五：已截止但开放领取 <span class="muted">（开发：缩小范围）</span></li></ul>
+      <p class="muted" style="margin:8px 0 0;font-size:0.95rem">最后四项开发评估为「缩小范围」，只能接 V2 新框架活动和已有角标数的 7 种活动。PM 建议先不做，等所有活动都能支援再一起处理。</p></div>
+  </div>
+
+  <h2>二、改版書背景（原文）</h2>
+  <div class="bg">
+    <ul>
+      <li><b>頁面利用效率低</b>：Reward頁面當前一屏只能展現兩個活動，并且展現樣式更多是類似於信息分發，缺少可以直接點擊轉化刺激用戶參與的點</li>
+      <li><b>信息分發層級不清</b>：Reward 的第一任務應當是「查看、領取及使用個人獎勵」為核心，活動曝光與任務探索圍繞這個目的安排。所以需要調整個人獎勵的展現方式以及交互方式。</li>
+      <li><b>不夠 User-friendly</b>：能使用，但閱讀與判斷成本偏高</li>
+      <li>Task中心不應當出現在當前頁面，會給用戶造成認知和閲讀干擾</li>
+    </ul>
+    <p class="muted" style="margin-top:10px;font-size:0.95rem">改版書「1. 整體情況概覽」原文：根據業務需求整理——兼顧以下兩份文檔的核心需求進行設計修改：OKBet Rewards 页面 v2.0、活动页面改版（含首页卡片）。這一段只是背景，開發沒有評估。</p>
+  </div>
+
+  <h2>三、逐項對照</h2>
+<section class="sec"><h2><span class="num">2.1</span>頂部個人信息欄統一站內視覺</h2><figure><img src="dev_assessment_img/s21_personal_bar.png" alt="改版書 2.1 示意圖"><figcaption>改版書 2.1 示意圖</figcaption></figure><div class="table-wrap"><table><thead><tr><th>運營要的</th><th>結論</th><th>開發評估（原文）</th><th>PM 建議</th></tr></thead><tbody><tr><td class="ask">用戶頭像＋用戶頭像框＋用戶 Balance / Points＋【Deposit】快速按鈕＋縮小 Voucher 的入口</td><td class="verdict"><span class="tag tag--ok">照做</span></td><td class="devcell" rowspan="2"><p>建議本次先不做「顯示目前有多少可以領取」：要把所有活動的可領數加總，每人進頁多一輪全活動查詢。改沿用底部導覽既有的待領取總數。頭像、餘額、積分、Deposit、Voucher 入口照做。</p></td><td class="pm">照改版书做。</td></tr><tr><td class="ask">顯示 My Rewards ——顯示當前有多少可以領取</td><td class="verdict"><span class="tag tag--no">建議先不做</span></td><td class="pm">不做。可领数沿用底部导航既有的待领取红点。</td></tr></tbody></table></div></section>
+<section class="sec"><h2><span class="num">2.2</span>Featured Promotion：精選活動區域</h2><figure><img src="dev_assessment_img/s22_featured.png" alt="改版書 2.2 示意圖"><figcaption>改版書 2.2 示意圖</figcaption></figure><div class="table-wrap"><table><thead><tr><th>運營要的</th><th>結論</th><th>開發評估（原文）</th><th>PM 建議</th></tr></thead><tbody><tr><td class="ask">新增：Hero Banner 倒計時和活動名稱浮層</td><td class="verdict"><span class="tag tag--ok">照做</span></td><td class="devcell" rowspan="2"><p>倒數計時與活動名稱浮層可以做（倒數純前端計算）。但「依會員狀態自動挑選精選活動」建議先不做，改由後台指定。</p></td><td class="pm">做。倒数由前台计算。</td></tr><tr><td class="ask">依會員狀態自動挑選精選活動</td><td class="verdict"><span class="tag tag--no">建議先不做</span></td><td class="pm">不做。精选活动改由后台指定。</td></tr><tr><td class="ask">新增：Featured Promotion 領取交互卡片（狀態一、狀態二）<img class="strip" src="dev_assessment_img/s22_state1.png" alt=""><img class="strip" src="dev_assessment_img/s22_state2.png" alt=""></td><td class="verdict"><span class="tag tag--cut">縮小範圍</span></td><td class="devcell" rowspan="1"><p>精選卡片的「可領金額」「券數」每人進頁都要查獎勵與券兩張表。建議本次只接 V2 新框架活動與已有角標數的 7 種活動；「有券可用」先不做。</p></td><td class="pm">建议先不做。目前只能支援部分活动，等所有活动都能支援再一起处理。</td></tr><tr><td class="ask">新增：分層標題——Feature；Featured Promotion Banner 尺寸（設計規範以及 Pagcor 的安全距離線）；卡片展示樣式（公版默認樣式／特殊設計樣式）</td><td class="verdict"><span class="tag tag--open">開發未標註</span></td><td class="devcell" rowspan="1"><p class="muted">開發沒有對這幾項寫評估。</p></td><td class="pm">照设计稿做。</td></tr></tbody></table></div></section>
+<section class="sec"><h2><span class="num">2.3.1</span>配置展示次級精選活動快捷入口專區</h2><figure><img src="dev_assessment_img/s231_quick_entry.png" alt="改版書 2.3.1 示意圖"><figcaption>改版書 2.3.1 示意圖</figcaption></figure><div class="table-wrap"><table><thead><tr><th>運營要的</th><th>結論</th><th>開發評估（原文）</th><th>PM 建議</th></tr></thead><tbody><tr><td class="ask">後台支持配置快捷入口專區——該區域需要後台有是否前端展示的開關</td><td class="verdict"><span class="tag tag--ok">照做</span></td><td class="devcell" rowspan="1"><p>照做沒問題，純後台配置，不看會員狀態。</p></td><td class="pm">照做，后台加显示开关。</td></tr></tbody></table></div></section>
+<section class="sec"><h2><span class="num">2.3.2</span>配置展示次級活動 Banner</h2><figure><img src="dev_assessment_img/s232_banner.png" alt="改版書 2.3.2 設計參考"><figcaption>改版書 2.3.2 設計參考</figcaption></figure><div class="table-wrap table-wrap--ops"><table class="ops"><thead><tr><th>出現場景</th><th>顯示規則</th></tr></thead><tbody><tr><td>活動結束時間</td><td>Ends in：Date（DD/MM/YY)</td></tr><tr><td>獎勵領取截止</td><td>Claim within：這筆或這組可領獎勵的領取期限</td></tr><tr><td>報名截止時間</td><td>Sign-up ends：預登記／報名截止</td></tr><tr><td>獎勵券使用截止</td><td>Use within：已領取獎勵券的使用期限</td></tr><tr><td>任務週期結束</td><td>Resets in：每日任務刷新時間</td></tr><tr><td>1 小時≤剩餘時間≤24 小時</td><td>Ends in: HH:MM:SS (玫紅色）</td></tr><tr><td>自動發放獎勵</td><td>Auto Claimed</td></tr><tr><td>活動結束 但是開放入口給用戶領取獎勵</td><td>Activity End</td></tr><tr><td>沒有配置</td><td>不展示</td></tr></tbody></table></div><p class="muted" style="margin:-6px 0 14px;font-size:0.9rem">改版書 2.3.2 嵌入的 Badge 選項表（原文，取自 docx 內嵌 Excel）</p><div class="table-wrap"><table><thead><tr><th>運營要的</th><th>結論</th><th>開發評估（原文）</th><th>PM 建議</th></tr></thead><tbody><tr><td class="ask">Banner Badge 展現邏輯：下屬選項運營可後台自動配置進行展現選擇</td><td class="verdict"><span class="tag tag--ok">照做</span></td><td class="devcell" rowspan="2"><p>Badge 用後台選的標籤（NEW、HOT、倒數）照做沒問題。「顯示個人數字（例：可領 3 筆）」建議先不做，每張 Banner 都要為每個會員各查一次。</p><p class="more">改版書同段另有一句：目前示意把倒計時放在Hero或縮圖內；時計是動態資料層，不能在營運圖片中寫死。</p></td><td class="pm">后台下拉选角标；倒数由前台计算，不做进图片。</td></tr><tr><td class="ask">顯示個人數字（例：可領 3 筆）</td><td class="verdict"><span class="tag tag--no">建議先不做</span></td><td class="pm">不做。</td></tr><tr><td class="ask">設計需求：設計參考尺寸和顏色（顏色可以修改）；標籤可以是不同顏色</td><td class="verdict"><span class="tag tag--open">開發未標註</span></td><td class="devcell" rowspan="1"><p class="muted">開發沒有對這項寫評估。</p></td><td class="pm">照设计稿做。</td></tr></tbody></table></div></section>
+<section class="sec"><h2><span class="num">2.3.3</span>配置展示活動 Labels——每次配置最多三個</h2><div class="table-wrap table-wrap--ops"><table class="ops"><thead><tr><th>獎勵分類</th><th>Labels</th><th>使用原則</th></tr></thead><tbody><tr><td>興趣分類</td><td>Slot、Casino、Perya、Sports</td><td>不用作爲More Promotion的標簽展示，但是需要根據用戶興趣選擇的標簽展示</td></tr><tr><td>1. 獎勵價值</td><td>Cashback、Points、Extra、Spin</td><td>金額、倍數和獎勵種類必須有規則支持；正文已寫清楚的內容不重複</td></tr><tr><td>2. 參與門檻</td><td>No Deposit、Free Entry</td><td>不需充值才能標 No Deposit；Free Entry 只表示免報名費，不能暗示沒有其他任務條件</td></tr><tr><td>3. 領取與使用條件</td><td>No Wagering、Instant Credit、Turnover Require</td><td>No Wagering 指獎勵無額外流水要求；Instant Credit 必須確實即時入帳，不能拿「可領取」代替</td></tr><tr><td>4. 適用資格</td><td>New Players、VIP、Invite Only、Resigned Only</td><td>對應明確資格；有具體 VIP 門檻時，直接顯示等級更清楚</td></tr><tr><td>5. 遊戲適用範圍</td><td>All Games、Selected Games、Sports Only</td><td>必須明確這個字段指「任務計算範圍」還是「獎勵使用範圍」，不能混用</td></tr><tr><td>6. 活動頻率與新鮮度</td><td>Daily、Weekends、New、Special、Popular</td><td>Daily 不代表無條件每天發獎；New 要有固定展示期限，不能永久掛著</td></tr><tr><td>7. 活動類型</td><td>Rebate、Loss Rebate、Leaderboard、Deposit</td><td>表示活動類型</td></tr></tbody></table></div><p class="muted" style="margin:-6px 0 14px;font-size:0.9rem">改版書 2.3.3 嵌入的 Labels 分類表（原文，取自 docx 內嵌 Excel）</p><div class="table-wrap"><table><thead><tr><th>運營要的</th><th>結論</th><th>開發評估（原文）</th><th>PM 建議</th></tr></thead><tbody><tr><td class="ask">後台配置活動 Labels，每次配置最多三個</td><td class="verdict"><span class="tag tag--ok">照做</span></td><td class="devcell" rowspan="1"><p>照做沒問題，純後台配置。</p></td><td class="pm">照做，上限 3 个。</td></tr></tbody></table></div></section>
+<section class="sec"><h2><span class="num">2.3.4</span>More Promotion 交互按鈕</h2><div class="table-wrap"><table><thead><tr><th>運營要的</th><th>結論</th><th>開發評估（原文）</th><th>PM 建議</th></tr></thead><tbody><tr><td class="ask">狀態一：可以領取前獎勵<img class="strip" src="dev_assessment_img/s234_state1.png" alt=""></td><td class="verdict"><span class="tag tag--cut">縮小範圍</span></td><td class="devcell" rowspan="1"><p>縮小範圍：只接 V2 新框架活動（預約、周卡、XBomb）與已有角標數的 7 種活動，其餘舊活動顯示 View Details。</p></td><td class="pm">建议先不做。目前只能支援部分活动，等所有活动都能支援再一起处理。</td></tr><tr><td class="ask">狀態二：已經有可以使用的獎勵券，引導進入 MY Voucher 進行查看<img class="strip" src="dev_assessment_img/s234_state2.png" alt=""></td><td class="verdict"><span class="tag tag--no">建議先不做</span></td><td class="devcell" rowspan="1"><p>建議先不做：每張卡多查一次優惠券，券用掉後按鈕會停在 Use 幾分鐘，容易誤點。改走 View Details，券入口維持頂部 Voucher。</p></td><td class="pm">不做，按钮走 View Details；券入口维持顶部 Voucher。</td></tr><tr><td class="ask">狀態三：任務進行中<img class="strip" src="dev_assessment_img/s234_state3.png" alt=""></td><td class="verdict"><span class="tag tag--no">建議先不做</span></td><td class="devcell" rowspan="1"><p>建議先不做進度數字「₱400 / ₱500」：要統計每人在每檔活動的投注累計，是整個畫面最耗資源的一項，且投注後本來就不即時。按鈕固定 View Tasks，進度在詳情頁看。</p></td><td class="pm">按钮固定 View Tasks，不显示进度数字；进度在详情页看。</td></tr><tr><td class="ask">狀態四：Pre-Registered<img class="strip" src="dev_assessment_img/s234_state4.png" alt=""></td><td class="verdict"><span class="tag tag--cut">縮小範圍</span></td><td class="devcell" rowspan="1"><p>縮小範圍：只接 V2 預約活動，其他活動沒有統一的報名紀錄。</p></td><td class="pm">建议先不做。目前只能支援部分活动，等所有活动都能支援再一起处理。</td></tr><tr><td class="ask">狀態五：已經截止但是開放入口進行領取<img class="strip" src="dev_assessment_img/s234_state5.png" alt=""></td><td class="verdict"><span class="tag tag--cut">縮小範圍</span></td><td class="devcell" rowspan="1"><p>同狀態一，縮小範圍到 V2 與既有 7 種活動。</p></td><td class="pm">建议先不做。目前只能支援部分活动，等所有活动都能支援再一起处理。</td></tr><tr><td class="ask">狀態六：不可參與／限制（VIP 專屬活動／未註冊無法參與活動）<img class="strip" src="dev_assessment_img/s234_state6.png" alt=""></td><td class="verdict"><span class="tag tag--ok">照做</span></td><td class="devcell" rowspan="1"><p>照做沒問題，用會員等級就能判斷。</p></td><td class="pm">做，用会员等级判断。</td></tr><tr><td class="ask">狀態七：自動發放（被動入賬活動）<img class="strip" src="dev_assessment_img/s234_state7.png" alt=""></td><td class="verdict"><span class="tag tag--ok">照做</span><br><span class="tag tag--no">金額先不做</span></td><td class="devcell" rowspan="1"><p>顯示 Auto Claimed 標籤與 View Details 照做。「卡片上顯示入帳金額」建議先不做，要再多查一次派彩紀錄，金額在詳情頁看。</p></td><td class="pm">做 Auto Claimed 标签＋View Details；卡片不显示金额。</td></tr></tbody></table></div><div class="sum"><b>開發總結（原文）</b><p>總結：七狀態全做時一張卡要查 4~5 次，12 張卡 50~60 次，是現在的 5~10 倍；依上述縮減後與現在相當。</p></div></section>
+<section class="sec"><h2><span class="num">2.3.5</span>More Promotion 自動推送展現邏輯</h2><div class="table-wrap"><table><thead><tr><th>運營要的</th><th>結論</th><th>開發評估（原文）</th><th>PM 建議</th></tr></thead><tbody><tr><td class="ask">P0：根據活動標籤展示用戶帶有標籤的活動</td><td class="verdict"><span class="tag tag--ok">照做</span></td><td class="devcell" rowspan="1"><p>若標籤是後台標籤照做沒問題；若是會員標籤需再評估。</p></td><td class="pm">用后台标签做；是不是后台标签请运营确认。</td></tr><tr><td class="ask">P1：展示用戶可以領取的獎勵<img class="strip" src="dev_assessment_img/s235_p1_claim.png" alt=""></td><td class="verdict"><span class="tag tag--no">建議先不做</span></td><td class="devcell" rowspan="1"><p>建議先不做：要先查完所有卡片才知道哪張可領，讓「點進去才查」變成「進頁就全查」，Expand 折疊救不了。可領的卡片維持現有角標數字。</p></td><td class="pm">不做。可领的卡片维持现有角标红字。</td></tr><tr><td class="ask">P2：展現即將結束的活動<img class="strip" src="dev_assessment_img/s235_p2_ending.png" alt=""></td><td class="verdict"><span class="tag tag--ok">照做</span></td><td class="devcell" rowspan="1"><p>照做沒問題，只看時間。</p></td><td class="pm">做，只看时间。</td></tr><tr><td class="ask">P3：展現用戶即將完成的活動<img class="strip" src="dev_assessment_img/s235_p3_progress.png" alt=""></td><td class="verdict"><span class="tag tag--no">建議先不做</span></td><td class="devcell" rowspan="1"><p>建議先不做：和狀態三一樣要先算完每檔活動的進度才能排。</p></td><td class="pm">不做。</td></tr><tr><td class="ask">P5：展現自動發送的活動<img class="strip" src="dev_assessment_img/s235_p5_auto.png" alt=""></td><td class="verdict"><span class="tag tag--ok">照做</span></td><td class="devcell" rowspan="1"><p>顯示 Auto Claimed 卡片照做，不顯示金額。</p></td><td class="pm">做 Auto Claimed 卡片，不显示金额。</td></tr></tbody></table></div><div class="sum"><b>開發總結（原文）</b><p>總結：排序會把「點進去才查」變成「進頁就全查」；派獎、推播那幾分鐘大家同時進頁，尖峰放大 5~10 倍。先不做 P1、P3，其餘照做。</p></div></section>
+
+  <h2>四、需求厘清（请运营回复）</h2>
+  <div class="card"><ol>
+    <li><b>2.3.5 P0 的「标签」</b>指后台标签还是会员标签？后台标签照做；会员标签开发要再评估。</li>
+    <li><b>2.3.2 Badge 选项表</b>列的是 Ends in、Claim within、Sign-up ends、Use within、Resets in、Auto Claimed、Activity End 这些时间类角标，开发回复写的是「后台选的标签（NEW、HOT、倒数）」。请运营确认本期角标要哪几种，再请开发逐一确认。</li>
+    <li><b>2.3.5 排序的图和文字对不上</b>：图标的是 P0 可领取、P1 即将结束、P2 即将完成、P4 自动发放；文字是 P0 标签、P1 可领、P2 即将结束、P3 即将完成、P5 自动发放。开发是照文字版评估的，本表照文字版排，图上的卡片按内容对应放到各列；请运营确认以文字版为准。</li>
+    <li><b>缩小范围的四项</b>（精选卡片、状态一、状态四、状态五）：开发只能支援部分活动，其余旧活动会显示 View Details。PM 建议这四项先不做，等所有活动都能支援再一起处理，请运营确认。</li>
+  </ol></div>
+
+  <h2>五、名词小抄</h2>
+  <div class="card"><ul>
+    <li><b>V2 新框架活动</b>：开发指预约、周卡、XBomb 这三种用新框架做的活动。</li>
+    <li><b>已有角标数的 7 种活动</b>：开发原文用语，指目前奖励页上已经会显示红色待领取数字的既有活动。具体是哪 7 种，开发文件没有列，要再向开发确认。</li>
+    <li><b>「点进去才查」与「进页就全查」</b>：现在是会员点进某个活动才查那个活动的资料；改版要求的个人数字、排序，会变成一进奖励页就把所有活动都查一遍，人一多页面就慢。</li>
+  </ul></div>
+</main>
+</body>
+</html>
