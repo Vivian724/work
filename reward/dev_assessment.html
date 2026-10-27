@@ -75,6 +75,11 @@ img.strip{display:block;max-width:100%;margin-top:10px;border:1px solid var(--c-
 .sum p{margin:0;}
 .bg{background:var(--c-card);border:1px solid var(--c-border);border-radius:10px;padding:18px 22px;margin-bottom:14px;}
 .bg li{margin-bottom:8px;}
+.sub{margin-top:12px;padding-top:12px;border-top:1px dashed var(--c-border);}
+.sub__title{font-weight:600;margin:0 0 6px;}
+.sub__pm{margin:8px 0 0;}
+.sum ul{margin:4px 0 0;padding-left:22px;}
+.sum li{margin-bottom:4px;}
 </style>
 </head>
 <body>
@@ -105,11 +110,18 @@ img.strip{display:block;max-width:100%;margin-top:10px;border:1px solid var(--c-
       <li>2.3.4 状态七：卡片上显示入账金额</li>
       <li>2.3.5 P1 可领取的排前面</li>
       <li>2.3.5 P3 即将完成的排前面</li>
-      <li>2.2 精选领取卡片（可领金额、券数）<span class="muted">（开发：缩小范围）</span></li>
-      <li>2.3.4 状态一：可领取 <span class="muted">（开发：缩小范围）</span></li>
-      <li>2.3.4 状态四：Pre-Registered <span class="muted">（开发：缩小范围）</span></li>
-      <li>2.3.4 状态五：已截止但开放领取 <span class="muted">（开发：缩小范围）</span></li></ul>
-      <p class="muted" style="margin:8px 0 0;font-size:0.95rem">最后四项开发评估为「缩小范围」，只能接 V2 新框架活动和已有角标数的 7 种活动。PM 建议先不做，等所有活动都能支援再一起处理。</p></div>
+</ul>
+      <div class="sub">
+        <p class="sub__title">以下四項開發評估為「縮小範圍」（只能接 V2 新框架活動和已有角標數的 7 種活動）</p>
+        <ul>
+          <li>2.2 精选领取卡片（可领金额、券数）</li>
+          <li>2.3.4 状态一：可领取</li>
+          <li>2.3.4 状态四：Pre-Registered</li>
+          <li>2.3.4 状态五：已截止但开放领取</li>
+        </ul>
+        <p class="sub__pm"><b>PM 建议</b>：先不做，等所有活动都能支援再一起处理。</p>
+        <div class="sum" style="margin:10px 0 0"><b>這樣做的好處</b><p>所有活動的卡片行為一致，不會出現「有的活動卡片能一鍵領、有的要點進去領」的混用畫面，運營解釋規則與客服回答都單純。</p></div>
+      </div></div>
   </div>
 
   <h2>二、改版書背景（原文）</h2>
@@ -137,7 +149,13 @@ img.strip{display:block;max-width:100%;margin-top:10px;border:1px solid var(--c-
     <li><b>2.3.5 P0 的「标签」</b>指后台标签还是会员标签？后台标签照做；会员标签开发要再评估。</li>
     <li><b>2.3.2 Badge 选项表</b>列的是 Ends in、Claim within、Sign-up ends、Use within、Resets in、Auto Claimed、Activity End 这些时间类角标，开发回复写的是「后台选的标签（NEW、HOT、倒数）」。请运营确认本期角标要哪几种，再请开发逐一确认。</li>
     <li><b>2.3.5 排序的图和文字对不上</b>：图标的是 P0 可领取、P1 即将结束、P2 即将完成、P4 自动发放；文字是 P0 标签、P1 可领、P2 即将结束、P3 即将完成、P5 自动发放。开发是照文字版评估的，本表照文字版排，图上的卡片按内容对应放到各列；请运营确认以文字版为准。</li>
-    <li><b>缩小范围的四项</b>（精选卡片、状态一、状态四、状态五）：开发只能支援部分活动，其余旧活动会显示 View Details。PM 建议这四项先不做，等所有活动都能支援再一起处理，请运营确认。</li>
+    <li><b>缩小范围的四项</b>（精选卡片、状态一、状态四、状态五）
+      <ul style="margin-top:4px">
+        <li>开发评估：只能接 V2 新框架活动和已有角标数的 7 种活动，其余旧活动显示 View Details。</li>
+        <li>PM 建议：先不做，等所有活动都能支援再一起处理。</li>
+        <li>好处：所有活動的卡片行為一致，不會出現「有的活動卡片能一鍵領、有的要點進去領」的混用畫面，運營解釋規則與客服回答都單純。</li>
+        <li>请运营确认。</li>
+      </ul></li>
   </ol></div>
 
   <h2>五、名词小抄</h2>
