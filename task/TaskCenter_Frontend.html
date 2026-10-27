@@ -246,6 +246,10 @@ img{max-width:100%;display:block;}
 .pop__desc{font-size:.84rem;color:#5b6a85;line-height:1.6;margin:6px 0 0;}
 .pop__btn{margin-top:16px;width:100%;background:var(--c-primary);color:#fff;font-weight:700;border-radius:12px;padding:12px;font-size:.95rem;}
 /* 领取成功弹窗（照既有前台：3D 图示压在上缘＋星光、浅橘渐层底、红字奖励、蓝色确定）；新增奖励类型沿用同版型，只换图示与文字 */
+.pop--full{background:linear-gradient(150deg,#fde1e1 0%,#fff 45%);padding-top:16px;}
+.pop--full .pop__mascot{display:block;width:120px;height:auto;margin:0 auto 4px;mix-blend-mode:multiply;-webkit-mask-image:radial-gradient(circle,#000 58%,transparent 72%);mask-image:radial-gradient(circle,#000 58%,transparent 72%);}   /* 吉祥物：先从设计截图裁出示意，正式图请设计给 */
+.pop--full .pop__desc{font-size:.9rem;color:var(--c-text);line-height:1.7;margin:4px 0 0;}
+.pop--full .pop__btn{margin-top:16px;background:#0b4fe3;border-radius:8px;font-weight:500;}
 .pop--rw{background:linear-gradient(150deg,#ffeee2 0%,#fff 42%);padding-top:64px;}
 .pop--rw .pop__ic{position:absolute;left:50%;top:-58px;transform:translateX(-50%);width:112px;height:112px;margin:0;filter:drop-shadow(0 8px 14px rgba(0,0,0,.18));}
 .pop--rw::before,.pop--rw::after{content:"✦";position:absolute;color:#fff;text-shadow:0 0 6px rgba(255,255,255,.9),0 0 2px rgba(180,190,220,.9);pointer-events:none;}
@@ -397,6 +401,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
     <button onclick="showPop('coupon')">领取成功·优惠券</button>
     <button onclick="showPop('gdticket')">领取成功·golden draw券</button>
     <button onclick="showPop('fail')">领取失败</button>
+    <button onclick="showPop('quotafull')">额满弹窗</button>
     <button onclick="showPop('rule')">任务规则</button>
     <button onclick="showIntro('当日有效投注满 ₱100 即可领取彩金 50。')">任务介绍</button>
     <button onclick="openRecall()">奖励找回</button>
@@ -844,6 +849,12 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
         <div class="pop__coin pop__coin--fail">✖</div>
         <div class="pop__title">领取失败</div>
         <div class="pop__desc">请稍后再试</div>
+        <button class="pop__btn" onclick="hidePop()">确定</button>
+      </div>
+      <!-- quotafull 额满提示（新增，A150，照设计稿）：会员已可领取、但名额同时被别人领完，页面没刷新就点「领取」→ 跳这个；吉祥物＋2 行文案＋确定，没有标题 -->
+      <div class="pop pop--full" data-pop="quotafull" hidden>
+        <img class="pop__mascot" src="img/mascot_full.png" alt="">
+        <div class="pop__desc">当前奖励已额满，<br>无法领取。</div>
         <button class="pop__btn" onclick="hidePop()">确定</button>
       </div>
       <!-- freespin 免费旋转领取成功（新增）-->
