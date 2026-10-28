@@ -118,6 +118,33 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .banner__dots{display:flex;gap:4px;justify-content:center;margin:6px 0 10px;}
 .banner__dots i{width:5px;height:5px;border-radius:50%;background:#c9d4e6;} .banner__dots i:first-child{width:14px;border-radius:3px;background:var(--c-primary);}
 
+/* 首页：游乐场入口卡（横幅＋脚注），整卡可点 */
+.pgcard{background:#fff;border:1px solid var(--c-line);border-radius:12px;overflow:hidden;cursor:pointer;}
+.pgcard:active{background:var(--c-card-2);}
+.pgcard__foot{display:flex;align-items:center;gap:6px;padding:8px 12px;font-size:.78rem;color:var(--c-text-2);}
+.pgcard__foot b{color:var(--c-text);}
+.pgcard__foot .pgcard__go{margin-left:auto;color:var(--c-primary);font-weight:700;white-space:nowrap;}
+
+/* 游乐场专页＝乐园地图：天空底、金色步道、各设施是一座岛，点岛进去玩 */
+.park{position:relative;height:400px;margin:0 0 4px;overflow:hidden;}
+.park__cloud{position:absolute;font-size:2.4rem;opacity:.85;}
+.park__path{position:absolute;inset:0;width:100%;height:100%;}
+.park__isle{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.72rem;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.45);cursor:pointer;background:none;width:110px;}
+.park__ico{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;font-size:2.1rem;background:radial-gradient(circle at 40% 30%,#fff5c9,#ffb84d);box-shadow:0 6px 14px rgba(0,0,0,.2);border:3px solid #fff;}
+.park__tag{background:#fff;color:#6b47d8;font-size:.66rem;font-weight:800;padding:2px 8px;border-radius:10px;text-shadow:none;box-shadow:0 2px 6px rgba(27,42,68,.15);white-space:nowrap;}
+.park__isle--soon .park__ico{background:radial-gradient(circle at 40% 30%,#d5dbe6,#8f9bb0);filter:grayscale(1);opacity:.8;}
+.park__isle--soon{cursor:default;color:#eef2f8;}
+.park__isle--soon .park__tag{background:#e9edf3;color:#7a8597;}
+.park__mascot{position:absolute;font-size:2.6rem;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25));}
+.park__title{position:absolute;left:0;right:0;top:12px;text-align:center;font-size:1.35rem;font-weight:900;color:#ffb300;letter-spacing:.5px;text-shadow:0 2px 0 #b35f00,0 4px 10px rgba(0,0,0,.2);}
+/* 首页入口卡：同一张地图的缩图 */
+.minimap{position:relative;height:130px;background:linear-gradient(180deg,#9fd0ff,#dff0ff);overflow:hidden;}
+.minimap .park__isle{width:84px;font-size:.6rem;gap:2px;}
+.minimap .park__ico{width:48px;height:48px;font-size:1.3rem;border-width:2px;}
+.minimap .park__cloud{font-size:1.6rem;}
+.minimap .park__mascot{font-size:1.7rem;}
+.pg-my{margin:0 12px 12px;background:#fff;border-radius:var(--radius);padding:10px 12px;box-shadow:0 2px 10px rgba(47,107,255,.08);}
+
 /* =========================================================
    「积分兑好礼」区块标题带
    ========================================================= */
@@ -369,10 +396,11 @@ button{font-family:inherit;cursor:pointer;border:none;}
 </head>
 <body>
 <div style="width:100%;max-width:430px;">
-  <p class="demo-hint">点下方按钮切换画面；分类页签、筛选、商品卡、Playground 横幅都可点。</p>
+  <p class="demo-hint">点下方按钮切换画面；分类页签、筛选、商品卡、Playground 游戏卡都可点。</p>
   <div class="demo-bar">
     <button class="on" onclick="go('mall',this)">商城首页</button>
     <button onclick="go('tasks',this)">任务中心 Task List</button>
+    <button onclick="go('play',this)">游乐场 Playground</button>
     <button onclick="go('ichiban',this)">Ichiban Luck Draw</button>
     <button onclick="go('blind',this)">Mystery Blind Box</button>
     <button onclick="showPop('ok')">兑换成功弹窗</button>
@@ -426,18 +454,24 @@ button{font-family:inherit;cursor:pointer;border:none;}
           </article>
         </section>
 
-        <!-- Playground 横幅 -->
-        <section class="sec" aria-label="Playground">
-          <h2 class="sec__title" style="margin:0">Playground</h2>
-          <div class="banner" onclick="go('ichiban')" role="button">
-            <span class="banner__deco" style="left:10px;top:10px">🏰</span>
-            <span class="banner__deco" style="right:12px;top:14px">🎡</span>
-            <span class="banner__deco" style="left:30px;bottom:6px">🪙</span>
-            <span class="banner__deco" style="right:40px;bottom:4px">⭐</span>
-            <div class="banner__t">Point Casino</div>
-            <div class="banner__s">★ Daily Offers ★</div>
-          </div>
-          <div class="banner__dots"><i></i><i></i><i></i></div>
+        <!-- Playground：一张入口卡（横幅＋底下列出有哪些游乐设施），点进游乐场专页 -->
+        <section class="sec" aria-label="Playground" style="padding-bottom:12px">
+          <h2 class="sec__title" style="margin:0">🎮 Playground</h2>
+          <article class="pgcard" role="button" onclick="go('play')">
+            <!-- 乐园地图缩图：跟专页同一张图 -->
+            <div class="minimap">
+              <svg class="park__path" viewBox="0 0 406 130" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M40 120 C 100 90, 160 70, 203 60 S 330 30, 370 25" fill="none" stroke="#ffd27a" stroke-width="9" stroke-linecap="round"/>
+              </svg>
+              <span class="park__cloud" style="left:120px;top:4px">☁️</span>
+              <span class="park__cloud" style="right:10px;bottom:6px">☁️</span>
+              <span class="park__isle" style="left:40px;top:14px"><span class="park__ico">🎰</span>Slot Kingdom</span>
+              <span class="park__isle" style="left:160px;top:34px"><span class="park__ico">🎁</span>Ichiban Luck Draw</span>
+              <span class="park__isle" style="right:30px;top:6px"><span class="park__ico">🎲</span>Mystery Blind Box</span>
+              <span class="park__mascot" style="left:10px;bottom:4px">🐯</span>
+            </div>
+            <div class="pgcard__foot" id="pgFoot"></div>
+          </article>
         </section>
 
         <!-- 积分兑好礼 -->
@@ -473,6 +507,34 @@ button{font-family:inherit;cursor:pointer;border:none;}
 
         <!-- 各分类区块：每类先露 4 个 ＋ More，由程序照商品资料产生 -->
         <div id="homeSecs"></div>
+      </section>
+
+      <!-- ===================================================
+           画面 4b：游乐场专页（首页 All、分类页签 Playground 进来）
+           =================================================== -->
+      <section class="screen" id="scr-play">
+        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Playground</span></header>
+        <div class="sky">
+          <!-- 乐园地图：放大版的岛屿地图（参考图一番赏页顶部那块），点岛进该设施；灰岛＝预告未来有新游戏 -->
+          <div class="park">
+            <div class="park__title">POINT CASINO</div>
+            <svg class="park__path" viewBox="0 0 430 400" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M60 370 C 90 290, 150 230, 215 170 C 260 130, 310 100, 357 100 M215 170 C 170 150, 110 130, 69 110" fill="none" stroke="#ffd27a" stroke-width="14" stroke-linecap="round"/>
+              <path d="M60 370 C 90 290, 150 230, 215 170 C 260 130, 310 100, 357 100 M215 170 C 170 150, 110 130, 69 110" fill="none" stroke="#fff3cf" stroke-width="4" stroke-dasharray="10 12" stroke-linecap="round"/>
+            </svg>
+            <span class="park__cloud" style="left:6px;top:50px">☁️</span>
+            <span class="park__cloud" style="right:14px;top:240px">☁️</span>
+            <span class="park__cloud" style="left:150px;bottom:30px">☁️</span>
+            <span class="park__cloud" style="right:130px;top:40px">☁️</span>
+            <button class="park__isle" style="left:14px;top:70px" onclick="go('mall')"><span class="park__ico">🎰</span>Slot Kingdom<span class="park__tag">Points Mall</span></button>
+            <button class="park__isle" style="left:160px;top:120px" onclick="go('ichiban')"><span class="park__ico">🎁</span>Ichiban Luck Draw<span class="park__tag">★ 500 / Ticket</span></button>
+            <button class="park__isle" style="right:18px;top:60px" onclick="go('blind')"><span class="park__ico">🎲</span>Mystery Blind Box<span class="park__tag">★ 2,000 / Draw</span></button>
+            <button class="park__isle park__isle--soon" style="right:36px;top:200px"><span class="park__ico">✨</span>Coming Soon<span class="park__tag">New game</span></button>
+            <span class="park__mascot" style="left:40px;bottom:14px">🐯</span>
+          </div>
+          <!-- 我的积分：沿用一番赏页的 My Points 列 -->
+          <div class="pg-my" style="margin-top:0"><div class="mypt"><i class="coin coin--pt">★</i>My Points: <span style="color:#e0342f" class="my-pts">100</span><button class="get" onclick="go('tasks')">Get More Points ›</button></div></div>
+        </div>
       </section>
 
       <!-- ===================================================
@@ -556,7 +618,7 @@ button{font-family:inherit;cursor:pointer;border:none;}
            画面 2：Ichiban Luck Draw（Playground 子页）
            =================================================== -->
       <section class="screen" id="scr-ichiban">
-        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Playground</span></header>
+        <header class="subbar"><button class="subbar__back" onclick="go('play')">‹</button><span class="subbar__title">Playground</span></header>
         <div class="sky">
           <!-- 地图：各游乐场入口，等级不够显示锁 -->
           <div class="map">
@@ -611,7 +673,7 @@ button{font-family:inherit;cursor:pointer;border:none;}
            画面 3：Mystery Blind Box（Playground 子页）
            =================================================== -->
       <section class="screen" id="scr-blind">
-        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Playground</span></header>
+        <header class="subbar"><button class="subbar__back" onclick="go('play')">‹</button><span class="subbar__title">Playground</span></header>
         <div class="sky">
           <div class="map">
             <button class="isle" onclick="go('mall')"><span class="isle__ico">🎰</span>Slot Kingdom</button>
@@ -724,6 +786,19 @@ var PRODUCTS = [
 ];
 var HOME_SHOW = 4;   /* 首页每个分类先露几个；超过的按 More 看 */
 
+/* ---------- 游乐场游戏（原型假资料；正式版由后台「游乐场」配置：名称、图、每次花费、是否上架、解锁等级） ---------- */
+var GAMES = [
+  {key:'ichiban', name:'Ichiban Luck Draw', sub:'Every Ticket Wins a Prize', price:500, unit:'/ Ticket', img:'img-ichi', txt:'ICHIBAN<br>LUCK DRAW', tag:'🔥 Final Prize ₱200,000', stat:'88,438 / 129,999 Draws left'},
+  {key:'blind',   name:'Mystery Blind Box', sub:'Lucky Star', price:2000, unit:'/ Draw', img:'img-blind', txt:'MYSTERY<br>BLIND BOX', tag:'💸 Top Prize ₱3,000', stat:'9 prizes · Every draw wins'},
+  {key:'lock',    name:'Coming Soon', sub:'New game coming soon', price:0, img:'', txt:'✨', lock:true}   /* 预告卡：预告未来有新游戏，文案待运营定 */
+];
+function renderGames(){
+  var live = GAMES.filter(function(g){ return !g.lock; });
+  /* 首页入口卡脚注：有几个游乐设施、叫什么 */
+  document.getElementById('pgFoot').innerHTML = '<b>'+live.length+' games</b> · '+live.map(function(g){ return g.name; }).join(' · ')+'<span class="pgcard__go">Play ›</span>';
+
+}
+
 /* ---------- 筛选状态（首页跟分类页共用） ---------- */
 var onlyCan = false, sortDir = 0, curCat = null; /* sortDir 0=不排序 1=低到高 2=高到低 */
 function toggleCan(){ onlyCan = !onlyCan; renderAll(); }
@@ -771,7 +846,7 @@ function renderHome(){
   document.getElementById('fsBlock').hidden = fl.length===0;
   var html = '';
   CATS.forEach(function(c){
-    if(c.key==='flash') return;              /* Flash Sales 已有自己的区块 */
+    if(c.key==='flash' || c.key==='play') return;   /* Flash Sales、Playground 各有自己的区块 */
     var arr = listOf(c.key); if(!arr.length) return;
     html += '<section class="csec"><h3 class="csec__t">'+c.name
          + (arr.length>HOME_SHOW ? '<button class="csec__more" onclick="openCat(\''+c.key+'\')">More ›</button>' : '')
@@ -794,9 +869,10 @@ function openCat(key){ curCat = key; renderCat(); go('cat'); }
 document.getElementById('cats').addEventListener('click', function(ev){
   var b = ev.target.closest('.cat'); if(!b) return;
   if(b.dataset.cat==='all'){ go('mall'); return; }
+  if(b.dataset.cat==='play'){ go('play'); return; }   /* Playground 有自己的专页 */
   openCat(b.dataset.cat);
 });
-renderAll();
+renderAll(); renderGames();
 
 /* ---------- 兑换：先确认 → 积分够就成功，不够就提示 ---------- */
 var POPS = {

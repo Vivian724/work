@@ -446,7 +446,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
           <div class="box box--key"><span class="box__t">按钮行为照既有</span>前台按钮的显示判断、点击、引导跳转，全部照既有《任务按钮显示规则 v1.1》。只多一处：名额满显示「额满」（3.5）。</div>
           <div class="box box--key"><span class="box__t">B 站（WOWGAMES）前台有专属设计稿，请前端特别处理</span>画面照 B 站设计稿；后台配置、前台规则都同本规格书。B 站不一样的地方会直接标「B 站」（例：3.3 子任务预设显示数量）。</div>
           <div class="lazy">
-            <div class="lazy__h">10/16、10/27 调整（开发先看这里）</div>
+            <div class="lazy__h">10/16、10/27、10/28 调整（开发先看这里）</div>
             <div class="tbl-scroll"><table class="t">
               <thead><tr><th class="nw">位置</th><th>调整</th></tr></thead>
               <tbody>
@@ -454,6 +454,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td class="nw">2.7 适用等级/层级</td><td>没设等级、标签＝「—」（原本「全部VIP」「不限标签」拿掉）；只设一种就只显示那一种。</td></tr>
                 <tr><td class="nw">2.7、2.9 子任务收合（10/27）</td><td>任务组子任务<b>预设收合</b>，ID 前加箭头 ▸／▾，点了展开／收起（报表的明细行同）；栏名「名额」改「已领取 / 上限」。照开发设计。</td></tr>
                 <tr><td class="nw">2.8 任务完成记录</td><td>状态「名额已满」<b>改名「额满」</b>（筛选同步）；只有额满红字，其他状态一般文字（不加标签）。</td></tr>
+                <tr class="mkr"><td class="nw">2.8 奖励类型／奖励值（10/28）</td><td>免费旋转、免费投注、优惠券：奖励类型只写类型，<b>奖励值＝券名称</b>（如 ON色碟）。golden draw券：<b>奖励值＝×1</b>，不写「张」。</td></tr>
                 <tr><td class="nw">2.9 任务报表统计</td><td>汇总行不加「任务组」标签；明细行不加「└」。</td></tr>
                 <tr><td class="nw">2.10 影响画面（新增）</td><td>优惠券记录「来源」、大奖池券奖纪录「类型」各新增「任务奖励」；名称填任务名称（子任务＝子任务名称）。</td></tr>
                 <tr><td class="nw">3.3 任务组卡</td><td><b>B 站 PC 版预设显示 2 个子任务</b>（其他都是 1 个）。子任务排序逻辑不变，说明改简单。</td></tr>
@@ -469,7 +470,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <p class="lazy__one"><b>怎么读：</b>有「交互一览」表的节先看表（操作 → 结果），再看规则；栏位限制看 2.1，文字长度看 3.2。<br><b>一句话：</b>后台新增「任务组＋额外奖励」、4 种奖励类型（3 种券类＋golden draw券）和「名额上限」；前台跟着显示任务组卡、额满、新奖励图示；按钮照既有，只多「额满」。</p>
             <div class="lazy__grid">
               <div class="lazy__card"><b class="lazy__t">后台 · 新增任务弹窗</b><ul class="lazy__list"><li><b>任务组</b>任务类别新增「任务组」：把多个子任务包成一个任务，最多 10 个；每个子任务有自己的名称<span class="lazy__ref">2.1、2.3</span></li><li><b>游戏页展示</b>原「任务标签」改名；任务组不适用<span class="lazy__ref">2.1</span></li><li><b>奖励类型</b>新增免费旋转、免费投注、优惠券、golden draw券；券类多填「价值」（只给前台显示 ₱价值，不影响发放）；彩金、积分、价值只能填整数，额外奖励最多 6 位<span class="lazy__ref">2.2</span></li><li><b>额外奖励</b>任意完成 n 个子任务再送，1～3 档；不用审核、不受名额限制、不进奖励找回<span class="lazy__ref">2.3</span></li><li><b>名额上限</b>一项奖励最多几人领到，领完即额满；有设名额就不能设奖励领取时限（不进奖励找回）<span class="lazy__ref">2.4、2.6</span></li><li><b>参与对象</b>按 VIP、标签、累计充值／投注指定，都不勾＝不限；标签多个＝全部都要有<span class="lazy__ref">2.5</span></li><li><b>任务时间</b>条件不能搭配的选项自动反灰<span class="lazy__ref">2.6</span></li></ul></div>
-              <div class="lazy__card"><b class="lazy__t">后台 · 列表、记录、报表</b><ul class="lazy__list"><li><b>任务列表</b>新增「已领取 / 上限」栏；任务类别多「任务组」；任务组下方列出子任务，可收合<span class="lazy__ref">2.7</span></li><li><b>完成记录</b>子任务、额外奖励各自一行（名称：子任务名称／额外奖励 · 任意完成 n 个）；新增「额满」状态；券类奖励值固定「1 张」；任务ID 可搜母 ID（整组）或子任务 ID<span class="lazy__ref">2.8</span></li><li><b>报表</b>新增 4 个券类栏位（只算张数、不算价值）、任务ID 搜索；任务组分汇总行与明细行<span class="lazy__ref">2.9</span></li><li><b>影响画面</b>优惠券记录、大奖池券奖纪录新增「任务奖励」<span class="lazy__ref">2.10</span></li></ul></div>
+              <div class="lazy__card"><b class="lazy__t">后台 · 列表、记录、报表</b><ul class="lazy__list"><li><b>任务列表</b>新增「已领取 / 上限」栏；任务类别多「任务组」；任务组下方列出子任务，可收合<span class="lazy__ref">2.7</span></li><li><b>完成记录</b><span>子任务、额外奖励各自一行（名称：子任务名称／额外奖励 · 任意完成 n 个）；新增「额满」状态；<span class="mkr">免费旋转、免费投注、优惠券奖励值＝券名称；golden draw券奖励值「×1」</span>；任务ID 可搜母 ID（整组）或子任务 ID</span><span class="lazy__ref">2.8</span></li><li><b>报表</b>新增 4 个券类栏位（只算张数、不算价值）、任务ID 搜索；任务组分汇总行与明细行<span class="lazy__ref">2.9</span></li><li><b>影响画面</b>优惠券记录、大奖池券奖纪录新增「任务奖励」<span class="lazy__ref">2.10</span></li></ul></div>
               <div class="lazy__card"><b class="lazy__t">前台 · 会员看到的（以 H5 为准）</b><ul class="lazy__list"><li><b>页签</b>限时、周限时合并为「限时」；页签下方红字新增（基础任务、每周、限时）；红点要算进子任务、额外奖励，不含奖励找回<span class="lazy__ref">3.1、4</span></li><li><b>任务卡</b>奖励标签、进度条、已发送 x/y 人；各处文字几行、超出怎么处理看「前台文案长度一览」<span class="lazy__ref">3.2</span></li><li><b>奖励写法</b>彩金、积分只放数字（不加 ₱、+）；券类＝₱价值；golden draw券＝×张数；各处写法看 3.2 对照表<span class="lazy__ref">3.2</span></li><li><b>任务组卡</b>预设显示额外奖励＋1 个子任务（B 站 PC 版 2 个），其余收合；子任务排序：可领取 → 进度快的 → 已完成；不放「任务组」角标<span class="lazy__ref">3.3</span></li><li><b>额外奖励</b>宝箱换新样式（银宝箱／红宝箱／绿勾），可领取时宝箱开合；下方「n 个」＋奖励红字<span class="lazy__ref">3.4</span></li><li><b>额满</b>名额发完时的按钮状态<span class="lazy__ref">3.5</span></li><li><b>领取成功弹窗</b>新奖励类型；券类＝₱价值＋灰字券名称（最多 2 行，不翻译）；自动发放不跳<span class="lazy__ref">3.6</span></li><li><b>谁看得到</b>VIP、标签不符合＝看不到；参与要求没达成＝看得到，按钮引导去完成<span class="lazy__ref">3.7</span></li><li><b>奖励找回</b>不显示合计；一键领取用通用图示；清单空＝「暂无可找回的奖励」<span class="lazy__ref">3.8</span></li><li><b>提示弹窗</b>图示依类型；左上关闭钮换成灰蓝圆＋白 ✕；券类只放 ₱价值；名称结尾是「任务」不再接「任务」<span class="lazy__ref">3.9</span></li></ul></div>
               <div class="lazy__card"><b class="lazy__t">不变</b><span class="lazy__sub">后台</span><ul class="lazy__list"><li><b>累计充值／有效投注大于等于</b>配置与计算方式照既有<span class="lazy__ref">2.5</span></li><li><b>任务时间</b>重置周期照既有<span class="lazy__ref">2.6</span></li><li><b>既有分页</b>资料审核、黑名单设置<span class="lazy__ref">2.7</span></li></ul><span class="lazy__sub">前台</span><ul class="lazy__list"><li><b>按钮</b>显示判断、点击、引导跳转<span class="lazy__ref">3.5、v1.1</span></li><li><b>奖励找回</b>补领规则照既有<span class="lazy__ref">3.8</span></li><li><b>提示弹窗</b>检查频率、出现页面、次数、点「领取」跳转<span class="lazy__ref">3.9</span></li><li><b>任务简介</b>标题后 ⓘ、点了跳弹窗<span class="lazy__ref">3.10</span></li><li><b>黑名单</b>前台显示照任务中心既有逻辑<span class="lazy__ref">3.7</span></li><li><b>任务规则弹窗</b>照既有<span class="lazy__ref">—</span></li></ul></div>
             </div>
@@ -792,7 +793,8 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <li><b>任务名称</b>：基础任务照既有。子任务＝子任务名称；额外奖励没有名称，显示「额外奖励 · 任意完成 n 个」。属于哪个任务组看任务ID 就知道（1030-1、1030 都是 1030 这一组）。</li>
             <li><b>子任务</b>：ID＝子任务 ID（1030-1）；例：充值满 ₱100。</li>
             <li><b>额外奖励</b>：ID＝母 ID（1030）；例：额外奖励 · 任意完成 1 个。额外奖励不用审核，状态只会是自动发放、待领取、已领取，不会有待审核、审核未通过。</li>
-            <li><b>券类奖励</b>：奖励类型下方显示券名称（券管理后台的名称，如 ON色碟）；奖励值固定「1 张」（每次发 1 张，2.2）。</li>
+            <li class="mkr"><b>券类奖励</b>：免费旋转、免费投注、优惠券：奖励类型只显示类型，奖励值显示券名称（券管理后台的名称，如 ON色碟）。<span class="mk">（10/28 修改）</span></li>
+            <li class="mkr"><b>golden draw券</b>：奖励值显示「×张数」，例：×1，不写「张」。<span class="mk">（10/28 修改）</span></li>
             <li><b>额满（新增状态）</b>：任务完成了，但名额满了领不到。自动发放＝完成时名额已经满了；用户手动领取＝还没领名额就满了（原本「待领取」改成「额满」）。状态红字，奖励值「—」。发放状态筛选多「额满」这个选项。</li>
             <li><b>任务ID 搜索（新增）</b>：母 ID（1030）＝整组（子任务＋额外奖励）；子任务 ID（1030-2）＝只列该子任务；比对要完全相同（搜 103 不会出现 1030）。</li>
           </ul>
@@ -1006,7 +1008,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <tr><td>领取成功弹窗（3.6）</td><td class="nw">100</td><td><b>₱20</b>＋下方灰字<b>后台券名称</b>（如 ON色碟）</td><td class="nw">×1</td></tr>
               <tr><td>提示弹窗（3.9）</td><td class="nw">奖励100</td><td class="nw">奖励₱20</td><td class="nw">奖励×1</td></tr>
               <tr><td>奖励找回「一键领取」弹窗（3.8）</td><td colspan="3">不列奖励内容，只显示通用图示＋「奖励领取成功」</td></tr>
-              <tr><td>后台任务完成记录（2.8）</td><td colspan="3">照既有；券类显示后台建的券名称（如 ON色碟）</td></tr>
+              <tr class="mkr"><td>后台任务完成记录（2.8）<span class="mk">（10/28 修改）</span></td><td class="nw">照既有</td><td>奖励值＝券名称（如 ON色碟）</td><td class="nw">×1</td></tr>
             </tbody>
           </table></div>
           <ul>
