@@ -703,8 +703,8 @@ tbody.nd{outline:2px dashed var(--c-danger);outline-offset:-2px;}
             <div class="cond-ln">
               <select class="select" id="condCat" onchange="onCond()" style="max-width:150px"><option value="info">信息完善</option><option value="fund">资金</option><option value="other">其他</option></select>
               <select class="select" id="condSub" onchange="onCondSub()" style="max-width:170px"></select>
-              <span id="condAmt" class="hidden inl"><input class="input" placeholder="充值金额（0＝不限）" style="max-width:210px"/></span>
-              <span id="condBet" class="hidden inl"><button class="btn btn--sm" style="white-space:nowrap" onclick="openGameModal(event)">限制游戏配置</button><input class="input" placeholder="有效投注金额" style="max-width:140px"/></span>
+              <span id="condAmt" class="hidden inl"><input class="input" placeholder="充值金额（需大于 0）" style="max-width:210px" oninput="amtGt0(this)"/></span>
+              <span id="condBet" class="hidden inl"><button class="btn btn--sm" style="white-space:nowrap" onclick="openGameModal(event)">限制游戏配置</button><input class="input" placeholder="有效投注金额（需大于 0）" style="max-width:210px;min-width:210px" oninput="amtGt0(this)"/></span>
             </div>
           </div>
         </div>
@@ -980,6 +980,8 @@ tbody.nd{outline:2px dashed var(--c-danger);outline-offset:-2px;}
 </div>
 
 <script>
+/* 充值金额、有效投注金额强制大于 0：只能输入数字，开头的 0 直接去掉（输入 0 打不进去） */
+function amtGt0(el){ el.value=el.value.replace(/\D/g,'').replace(/^0+/,''); }
 /* ===== sub-tab switch ===== */
 document.querySelectorAll('.subtab').forEach(function(t){
   t.addEventListener('click',function(){
@@ -1147,8 +1149,8 @@ function condLineHTML(first){
   return '<div class="cond-line" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
     +'<select class="select subCat" style="max-width:150px" onchange="onSubCat(this)"><option value="info">信息完善</option><option value="fund" selected>资金</option><option value="other">其他</option></select>'
     +'<select class="select subCond" style="max-width:170px" onchange="onSubCond(this)"></select>'
-    +'<span class="subAmt" style="display:none;align-items:center;gap:6px"><input class="input" placeholder="充值金额（0＝不限）" style="max-width:210px"/></span>'
-    +'<span class="subBet" style="display:none;align-items:center;gap:6px"><button class="btn btn--sm" style="white-space:nowrap" onclick="openGameModal(event)">限制游戏配置</button><input class="input" placeholder="有效投注金额" style="max-width:140px"/></span>'
+    +'<span class="subAmt" style="display:none;align-items:center;gap:6px"><input class="input" placeholder="充值金额（需大于 0）" style="max-width:210px" oninput="amtGt0(this)"/></span>'
+    +'<span class="subBet" style="display:none;align-items:center;gap:6px"><button class="btn btn--sm" style="white-space:nowrap" onclick="openGameModal(event)">限制游戏配置</button><input class="input" placeholder="有效投注金额（需大于 0）" style="max-width:210px;min-width:210px" oninput="amtGt0(this)"/></span>'
     +'</div>';
 }
 /* 子任务：先选类别（信息完善/资金/其他）→ 再选对应任务条件 */
