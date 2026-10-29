@@ -803,11 +803,11 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
       <div class="tabbar__item"><span class="ic">👤</span>我的</div>
     </nav>
 
-    <!-- ===== 提示弹窗：文案固定「奖励 {{a}}，恭喜完成 {{b}} 任务！」（A134），{{a}}＝依奖励类型、{{b}}＝任务名称（子任务、额外奖励用任务组名称）；手动领取有「领取」钮（点了直接跳：手机版到奖励中心、电脑版到任务中心），自动发放无按钮；停留 3 秒；每 10 秒跳一个 ===== -->
+    <!-- ===== 提示弹窗：文案固定「奖励 {{a}}，恭喜完成 {{b}} 任务！」（A134），{{a}}＝依奖励类型、{{b}}＝任务名称（基础任务、子任务用自己的名称，额外奖励用任务组名称）；手动领取有「领取」钮（点了直接跳：手机版到奖励中心、电脑版到任务中心），自动发放无按钮；停留 3 秒；每 10 秒跳一个 ===== -->
     <div class="ntf" id="ntf" hidden>
       <button class="ntf__x" onclick="closeNtf()" aria-label="关闭">✕</button>
       <img class="ntf__ic" id="ntfIc" src="img/rw_cash.png" alt="彩金">
-      <div class="ntf__txt">奖励 <span id="ntfA">100</span>，恭喜完成 <span id="ntfB">每日三连·组任务</span><span id="ntfT"> 任务</span>！</div>
+      <div class="ntf__txt">奖励 <span id="ntfA">100</span>，恭喜完成 <span id="ntfB">充值满 ₱50</span><span id="ntfT"> 任务</span>！</div>
       <button class="ntf__btn" id="ntfBtn" onclick="claimNtf()">领取</button>
     </div>
 
@@ -1151,9 +1151,9 @@ function claimAllRecall(){
    手动领取：有「领取」；点「领取」直接跳奖励中心（手机）／任务中心（电脑），弹窗关闭，人已在任务中心，之后不再跳。
    自动发放：没有按钮。 */
 var NQ=[
-  {lb:'积分 100',      b:'每日三连·组任务'},
-  {lb:'免费投注 ₱30',b:'连续任务挑战 · 组任务'},
-  {lb:'优惠券 ₱100',  b:'每周活跃挑战 · 组任务'},   /* 额外奖励达成 */
+  {lb:'积分 100',      b:'充值满 ₱50'},   /* 子任务：用子任务名称 */
+  {lb:'免费投注 ₱30',b:'投注满 ₱1,000'},   /* 子任务：用子任务名称 */
+  {lb:'优惠券 ₱100',  b:'每周活跃挑战 · 组任务'},   /* 额外奖励达成：用任务组名称 */
   {lb:'免费旋转 ₱20',b:'每周投注送免费旋转', auto:true}
 ], nqi=0, ntfT=null, ntfN=null;
 function showNtf(i){
