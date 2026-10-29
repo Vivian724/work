@@ -272,7 +272,7 @@ img{max-width:100%;display:block;}
 /* 奖励找回：入口蓝字＋红色数字；点开为整页（返回键、红字说明、清单、底部一键领取）。清单含基础任务、子任务，不含额外奖励；不显示合计 */
 .recall{color:#2f6bff;cursor:pointer;}
 .rc-page{position:absolute;inset:0;z-index:15;background:#f4f6fa;display:flex;flex-direction:column;}
-.rc-page[hidden]{display:none;}
+.rc-page[hidden],.recall[hidden]{display:none;}
 .rc-hd{position:relative;height:48px;display:flex;align-items:center;justify-content:center;background:#fff;font-weight:700;font-size:1rem;color:var(--c-text);flex:0 0 auto;}
 .rc-back{position:absolute;left:10px;top:50%;transform:translateY(-50%);background:none;font-size:1.4rem;color:var(--c-text);line-height:1;padding:4px 8px;}
 .rc-body{flex:1;overflow-y:auto;padding:12px;}
@@ -380,8 +380,8 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
 .is-pc .ms__track{top:16px;height:6px;}
 .is-pc .ms__amt{font-size:.95rem;}
 .is-pc .ms__amt .rwi{width:20px;height:20px;}
-/* 弹窗：提示弹窗改放内容区右下；奖励找回整页只盖内容区 */
-.is-pc .ntf{left:auto;right:24px;bottom:24px;width:380px;}
+/* 弹窗：提示弹窗改放内容区中下；奖励找回整页只盖内容区 */
+.is-pc .ntf{left:calc(220px + (100% - 220px - 380px) / 2);right:auto;bottom:24px;width:380px;}
 .is-pc .rc-page{left:220px;top:56px;}
 /* demo controls */
 .demo-bar{max-width:360px;margin:0 auto 12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
@@ -919,7 +919,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
       <div class="pop pop--rw" data-pop="recallall" hidden>
         <img class="pop__ic" src="img/rw_all.svg" alt="奖励">
         <div class="pop__title">奖励领取成功</div>
-        <button class="pop__btn" onclick="hidePop()">确定</button>
+        <button class="pop__btn" onclick="hidePop();closeRecall()">确定</button>
       </div>
       <!-- extra 额外奖励领取成功 -->
       <div class="pop pop--rw" data-pop="extra" hidden>
@@ -1137,14 +1137,14 @@ function showPop(name){
   mask.querySelectorAll('[data-pop]').forEach(function(p){ p.hidden = (p.getAttribute('data-pop')!==name); });
   mask.classList.add('open');
 }
-/* 奖励找回（示意）：入口进整页；一键领取＝清单全部领取 → 领取成功弹窗（通用图示、只有标题，不列奖励），清单清空、入口数字隐藏 */
+/* 奖励找回（示意）：入口进整页；一键领取＝清单全部领取 → 领取成功弹窗（通用图示、只有标题，不列奖励），点确定回任务列表；没有可找回＝入口隐藏 */
 function openRecall(){ document.getElementById('rcPage').hidden=false; }
 function closeRecall(){ document.getElementById('rcPage').hidden=true; }
 function claimAllRecall(){
   document.getElementById('rcList').innerHTML='';
   document.getElementById('rcEmpty').hidden=false;
   document.getElementById('rcAll').disabled=true;
-  document.getElementById('recallCnt').hidden=true;
+  document.getElementById('recallEntry').hidden=true;
   showPop('recallall');
 }
 /* 提示弹窗（示意）：每 10 秒跳一个；停留 3 秒自动关（手动领取、自动发放都一样），也可点 × 提前关。
@@ -1248,7 +1248,7 @@ updateTabDots();
     document.getElementById('rcList').innerHTML=rcSnap;
     document.getElementById('rcEmpty').hidden=true;
     document.getElementById('rcAll').disabled=false;
-    document.getElementById('recallCnt').hidden=false;
+    document.getElementById('recallEntry').hidden=false;
   }
   function reset(){
     /* 蓝框一直留着，换到别的章节才清掉 */

@@ -193,7 +193,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .h5-feat .h5-card__dot{top:-5px;right:-3px;z-index:2;}
 /* 精选卡下半：跟列表卡同一列（名称／时间／标签＋按钮），10/21 她定「跟下面一样」 */
 .h5-feat__row{display:flex;align-items:center;gap:10px;padding:10px 14px 12px;background:#fff;}
-/* 时间角标（前台自动判断）：图片底部色带，只剩 ≤24h 才出现；角标只有这一种。Auto Claimed＝运营自建的标签（10/21 她定） */
+/* 时间角标（前台自动判断）：图片底部色带，只在活动结束当天（最后一天）出现；角标只有这一种。Auto Claimed＝运营自建的标签（10/21 她定） */
 .h5-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(13,34,69,.85);color:#fff;font-size:11px;font-weight:600;border-radius:10px;padding:2px 8px;white-space:nowrap;}
 .h5-badge--hot{background:#D6246E;}
 
@@ -218,8 +218,8 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 /* 卡片第三行小标签＝运营在后台选的标签；没选就空着 */
 .h5-tags{display:flex;gap:4px;flex-wrap:nowrap;overflow:hidden;}
 .h5-tag{display:inline-block;flex-shrink:0;margin-top:4px;background:#566C84;color:#fff;font-size:10px;line-height:16px;padding:0 6px;border-radius:3px;white-space:nowrap;}   /* 标签不缩、整排在右缘裁掉：前两个读得到，比三个都变「Tur…」好 */
+/* 10/29 她看过改版感试做后定：彩色标签、New／Popular 角标、已结束卡淡化排最后 都不要；红色数字留着（既有逻辑）。前台只照既有逻辑＋改版书版面 */
 .h5-btn{flex-shrink:0;height:32px;min-width:64px;padding:0 12px;border-radius:16px;font-size:13px;font-weight:600;border:1.5px solid #025BE8;background:#fff;color:#025BE8;}
-.h5-btn.h5-btn--claim{background:#025BE8;color:#fff;}   /* 可领：实心 */
 .h5-card{position:relative;}
 /* 待领红点：照线上，挂在卡片右上角（数字＝该活动可领笔数，既有 pendingClaimCount） */
 .h5-card__dot{position:absolute;top:-5px;right:-3px;min-width:18px;height:18px;line-height:14px;padding:0 5px;border-radius:9px;background:#E8453C;color:#fff;font-size:11px;font-weight:700;text-align:center;border:2px solid #fff;}
@@ -553,7 +553,7 @@ var items = [
   {id:10, src:'预约活动',   lang:'—',    def:'—',  title:'預約活動2',            sub:'',                        start:'2026-09-01 00:00:00', end:'2026-09-21 00:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false},
   {id:19, src:'周卡',       lang:'—',    def:'—',  title:'Weekly Card',          sub:'',                        start:'2026-10-01 00:00:00', end:'2026-12-31 23:59:59', showEnd:'--',                  on:true,  sort:0,     feat:false},
   {id:11, src:'消费活动',   lang:'—',    def:'—',  title:'消费活动-日返',        sub:'',                        start:'2026-07-01 00:00:00', end:'2027-06-30 23:59:59', showEnd:'--',                  on:true,  sort:0,     feat:false},
-  {id:12, src:'每日首充',   lang:'—',    def:'—',  title:'每日首充活动',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-10-20 08:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false, auto:true},
+  {id:12, src:'每日首充',   lang:'—',    def:'—',  title:'每日首充活动',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-10-19 23:30:00', showEnd:'--',                  on:true,  sort:0,     feat:false, auto:true},
   {id:13, src:'新用户首充', lang:'—',    def:'—',  title:'新用户首充',           sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:0,     feat:false},
   {id:14, src:'负盈利活动', lang:'—',    def:'—',  title:'JustinTest活動',       sub:'',                        start:'2026-10-01 00:00:00', end:'2026-10-31 00:00:00', showEnd:'--',                  on:false, sort:0,     feat:false}
 ];
@@ -616,15 +616,17 @@ function langName(obj){ return (obj.i18n && obj.i18n['英语']) || obj.name; }  
 
 /* 标签（10/21 她定）
    - 清单：「活动类别管理 › 标签」页签新增／编辑／删除，做法跟活动类别一样；名称旁「＋」开国际化列表配多语言；使用中的不能删（照活动类别既有规则）
-     预设 25 个＝企划书 2.3.3 Excel；颜色一律灰
-   - 每个活动选哪些：「活动图素材管理 › 优惠活动」列表「标签」栏＋操作「标签」钮，小弹窗里从清单挑，最多 3 个；存在 items[].tags（存名称） */
+     预设 26 个＝改版书 2.3.3 Excel 的 22 个＋Auto Claimed；颜色一律灰
+     10/29 她定：改版书 2.3.3 表的「奖励分类」「使用原则」是运营自己挂标签的原则，不是系统功能，后台不存（曾加过两栏，已拿掉）
+   - 每个活动选哪些：「活动图素材管理 › 奖励页列表」操作「标签」钮，小弹窗里从清单挑，最多 3 个；存在 items[].tags（存名称） */
 var TAGS = ['Cashback','Points','Extra','Spin','No Deposit','Free Entry','No Wagering','Instant Credit','Turnover Require',
             'New Players','VIP','Invite Only','Resigned Only','All Games','Selected Games','Sports Only',
             'Daily','Weekends','New','Special','Popular','Rebate','Loss Rebate','Leaderboard','Deposit','Auto Claimed']
   .map(function(n, i){ return {id:101+i, name:n, created:'2026-10-19 '+(10+Math.floor(i/6))+':'+(10+i%6*8)+':00', i18n:{'英语':n}}; });
 function tagByName(n){ return TAGS.find(function(t){ return t.name === n; }); }
+/* 10/29 她定：标签不分色（一律灰）、不做左上角角标；New／Popular 跟其他标签一样放第三行 */
 var TAG_MAX = 3;
-var ITEM_TAGS = {1:['Leaderboard'], 3:['Rebate','Daily'], 15:['Leaderboard'], 17:['Rebate','Daily'], 4:['Leaderboard','Popular'], 6:['Auto Claimed','Deposit'], 12:['Auto Claimed'], 7:['Loss Rebate']};
+var ITEM_TAGS = {1:['Leaderboard'], 3:['Rebate','Daily'], 15:['Leaderboard'], 17:['Rebate','Daily'], 4:['Leaderboard','Popular'], 6:['Auto Claimed','Deposit'], 12:['Auto Claimed'], 7:['Loss Rebate'], 9:['New','Instant Credit'], 5:['VIP','Cashback'], 18:['VIP','Cashback']};
 /* 某张表（PC／H5）列哪些：该端的素材＋全部其他来源 */
 function onDev(it, dev){ return it.src !== '素材' || it.dev === dev; }
 items.forEach(function(it){ it.tags = ITEM_TAGS[it.id] || []; });
@@ -709,7 +711,7 @@ function elMulti(key, chosen){
   var drop = isOpen ? '<div class="el-select-dropdown el-popper is-multiple"><div class="el-scrollbar"><div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin:0;max-height:240px"><ul class="el-scrollbar__view el-select-dropdown__list">'+
     TAGS.map(function(tg){
       var t = tg.name, on = chosen.indexOf(t) > -1, off = !on && full;
-      return '<li class="el-select-dropdown__item'+(on?' selected':'')+(off?' is-disabled':'')+'" data-mopt="'+key+'|'+t+'"><span>'+t+'</span></li>';
+      return '<li class="el-select-dropdown__item'+(on?' selected':'')+(off?' is-disabled':'')+'" data-mopt="'+key+'|'+t+'"><span>'+esc(t)+'</span></li>';
     }).join('')+(TAGS.length ? '' : '<li class="el-select-dropdown__item is-disabled"><span>尚无标签，请先到「标签管理」新增</span></li>')+'</ul></div></div></div>' : '';
   return '<div class="el-select el-select--small is-multiple" data-multi="'+key+'" style="width:100%">'+
     '<div class="el-select__tags">'+(tags || '<span class="el-select__placeholder">请选择标签（最多 3 个）</span>')+'</div>'+
@@ -1142,13 +1144,14 @@ function renderSrc(){
    前台 H5：改版后 Rewards 页（读后台同一组资料；只读 H5 表＝H5 素材＋其他来源）
    - 卡片顺序照既有：有可领的排最前，其余照奖励页排序大→小
    - 精选区（改版书 2.2：支持配置三个、只展示周期内的；10/21 她定：一次只显示一个，候补清单≤3 有顺序，显示第一个在显示期内的，前一个结束下一个自动接上）：一张大图版活动卡＝Banner（清单里上传的精选图，必填）＋倒数色带，
-     下半跟列表卡同一列：名称／时间／标签＋按钮（有可领 Claim、否则 View，都进详情页）；红色数字同列表卡；领奖卡（金额／阶梯／Claim All）10/21 她定不做
+     下半跟列表卡同一列：名称／时间／标签＋按钮（一律 View 进详情页）；红色数字同列表卡；领奖卡（金额／阶梯／Claim All）10/21 她定不做
      精选活动被关掉／已结束，前台整区不出；精选的在下方列表照样出现（跟现行一样）
    - 快捷入口：活动类别管理里「是否开启」的类别（既有开关）；全部关掉整排就不显示
-   - 图片底部色带＝时间角标（剩 ≤24h 玫红倒数，照活动结束时间），角标只有这一种；Auto Claimed＝运营在标签清单自建、自己挂（10/21 她定）
+   - 图片底部色带＝时间角标（活动结束当天才玫红倒数，照活动结束时间；10/29 她定「最后一天才进入倒数」），角标只有这一种；Auto Claimed＝运营在标签清单自建、自己挂（10/21 她定）
      卡片第二行＝现行 Event time 起–迄／Permanent event／Expired
-   - 按钮：有可领＝实心 Claim，其他＝View；两种都是打开现行 Event Details（既有逻辑：列表只是入口，细节与领取都在详情页）
-     有可领的照线上在卡片右上角挂红色数字＋排最前
+   - 按钮：一律 View，打开现行 Event Details（既有逻辑：列表只是入口，细节与领取都在详情页）
+     有可领的照线上在卡片右上角挂红色数字＋排最前；Claim 钮（改版书 2.3.4 状态一）10/27 开发评估只能接部分活动→PM 定先不做（10/29 她确认）
+   - 状态六「不可参与／锁定」（改版书 2.3.4）10/29 她定先不做：后台没有统一的「最低 VIP 等级」栏位，只会部分活动锁得出来、行为不一致；资格照现行在详情页看
    ========================================================================== */
 var NOW0 = new Date('2026-10-19T15:38:34'), T0 = Date.now();   // 原型的「现在」＝后台抬头时间，之后照真实时间往前走
 function nowMs(){ return NOW0.getTime() + (Date.now() - T0); }
@@ -1167,15 +1170,15 @@ function visibleNow(it){
   return (!st || st <= n) && (!e || n <= e);
 }
 function pad(x){ return (x < 10 ? '0' : '') + x; }
-/* 色带只有一种：活动剩 ≤24h 挂玫红「Ends in」；已结束／永久／还有一天以上都不挂
+/* 色带只有一种：活动结束当天（最后一天，00:00 起）挂玫红「Ends in」倒数；已结束／永久／还没到最后一天都不挂（10/29 她定，取代原本「剩 ≤24h」）
    2.3.4 的「Claim within 领取截止倒数」「Activity Ended」色带 10/21 她定先不做（要各来源回领取截止，逻辑复杂）；
-   有可领只靠既有可领数：按钮 Claim＋红色数字＋排最前 */
+   有可领只靠既有可领数：红色数字＋排最前 */
 function badgeOf(it){
   var e = tms(it.end), n = nowMs();
   if (!e || e <= n) return null;   // 永久活动不倒数；已结束、还在显示期间：不挂角标（10/20 她定，拿掉 Activity End）
-  var left = e - n;
-  if (left <= 24*3600*1000) { var s = Math.floor(left/1000); return {cls:'h5-badge--hot', clock:true, cd:true, text:'Ends in '+pad(Math.floor(s/3600))+':'+pad(Math.floor(s%3600/60))+':'+pad(s%60)}; }
-  return null;   // 还有一天以上：不挂角标，日期写在卡片第二行（现行 Event time）
+  var left = e - n, de = new Date(e), dn = new Date(n);
+  if (de.getFullYear() === dn.getFullYear() && de.getMonth() === dn.getMonth() && de.getDate() === dn.getDate()) {   /* 同一个日历日＝最后一天 */ var s = Math.floor(left/1000); return {cls:'h5-badge--hot', clock:true, cd:true, text:'Ends in '+pad(Math.floor(s/3600))+':'+pad(Math.floor(s%3600/60))+':'+pad(s%60)}; }
+  return null;   // 还没到最后一天：不挂角标，日期写在卡片第二行（现行 Event time）
 }
 function badgeHtml(b){ return b ? '<span class="h5-badge '+b.cls+'"'+(b.cd?' data-cd':'')+'>'+(b.clock?'<i class="h5-clock"></i>':'')+b.text+'</span>' : ''; }
 /* 「Auto Claimed」不是系统判断：运营在标签清单自己建一颗 Auto Claimed，想挂哪个活动就挂（10/21 她定）；前台不看「发放方式」 */
@@ -1187,10 +1190,10 @@ function timeText(it){
   if (e <= nowMs()) return 'Expired';          // 活动已结束、还在显示期：照现行前台显示 Expired
   return (st ? dmy(st)+'–' : '')+dmy(e);   // 一行放得下才能维持三行高度，所以不带「Event time:」字样；没设开始日只显示结束日
 }
-byId(9).pending = true; byId(9).pendingN = 2;   // X-BOMB 有可领（示范精选卡的 Claim）
-/* 精选卡下半＝跟列表卡同一列：名称／时间／标签＋按钮（有可领 Claim、否则 View，都进详情页）；后端不用为精选回任何新资料 */
+byId(9).pending = true; byId(9).pendingN = 2;   // X-BOMB 有可领（示范精选卡的红色数字）
+/* 精选卡下半＝跟列表卡同一列：名称／时间／标签＋按钮（一律 View 进详情页）；后端不用为精选回任何新资料 */
 function cardBody(it){ var tt = timeText(it); return '<div class="h5-body"><div class="h5-title">'+esc(it.title)+'</div>'+(tt ? '<div class="h5-time">'+tt+'</div>' : '')+cardTags(it)+'</div>'; }
-function cardBtn(it){ return frontLogin && it.pending ? '<button type="button" class="h5-btn h5-btn--claim" data-front-btn="'+it.id+'">Claim</button>' : '<button type="button" class="h5-btn" data-front-btn="'+it.id+'">View</button>'; }
+function cardBtn(it){ return '<button type="button" class="h5-btn" data-front-btn="'+it.id+'">View</button>'; }
 function cardDot(it){ return frontLogin && it.pending ? '<span class="h5-card__dot">'+(it.pendingN||1)+'</span>' : ''; }
 /* 卡片属于哪些类别＝该笔活动在后台勾的「活动类型」（既有）或「活动类别」（X-BOMB／预约／挑战赛新增）；后台改勾选前台即时跟着变 */
 function itemCats(it){ return it.cats || []; }
@@ -1200,7 +1203,7 @@ function cardTags(it){
 }
 function renderFront(){
   var box = document.getElementById('h5'); if (!box) return;
-  var vis = items.filter(function(x){ return onDev(x, 'H5'); }).filter(visibleNow).sort(function(a,b){ return ((frontLogin&&b.pending)?1:0) - ((frontLogin&&a.pending)?1:0) || b.sort - a.sort; });
+  var vis = items.filter(function(x){ return onDev(x, 'H5'); }).filter(visibleNow).sort(function(a,b){ return ((frontLogin&&b.pending)?1:0) - ((frontLogin&&a.pending)?1:0) || b.sort - a.sort; });   // 照既有：可领最前，其余照奖励页排序；已结束的不特别往后排
   var feat = featLive('H5');   // 精选＝候补清单里第一个在显示期内的；全部不在显示期就整区不出
   var catsOn = cats.filter(function(c){ return c.on; }).sort(function(a,b){ return b.sort - a.sort; });   // 快捷入口＝「是否开启」的类别；全关就整排不显示
   if (frontCat && !catsOn.some(function(c){ return c.name === frontCat; })) frontCat = '';   // 选中的类别被关掉／改名：回到 All
@@ -1220,7 +1223,7 @@ function renderFront(){
   // 快捷入口：彩色方块照企划书 2.3.1 的位置，只放类别名称（类别不上图示，10/20 她定）
   if (catsOn.length) h += '<div class="h5-cats"><div class="h5-cat h5-cat--1'+(!frontCat?' is-on':'')+'" data-front-cat=""><div class="h5-cat__name">All</div></div>'+catsOn.map(function(c, i){ return '<div class="h5-cat h5-cat--'+(i%6)+(frontCat===c.name?' is-on':'')+'" data-front-cat="'+esc(c.name)+'"><div class="h5-cat__name">'+esc(langName(c))+'</div></div>'; }).join('')+'</div>';
   h += '<div class="h5-list">'+(list.length ? list.map(function(it){
-    return '<div class="h5-card" data-front-open="'+it.id+'">'+cardDot(it)+'<div class="h5-thumb">'+badgeHtml(badgeOf(it))+'</div>'+cardBody(it)+cardBtn(it)+'</div>';   // Claim 也是进详情页领（既有逻辑：列表只是入口）
+    return '<div class="h5-card" data-front-open="'+it.id+'">'+cardDot(it)+'<div class="h5-thumb">'+badgeHtml(badgeOf(it))+'</div>'+cardBody(it)+cardBtn(it)+'</div>';   // 一律 View 进详情页（既有逻辑：列表只是入口，领取在详情页）
   }).join('') : '<div class="h5-empty">No promotions</div>')+'</div>';
   h += '<div class="h5-nav"><div><i></i>Home</div><div class="is-on"><i></i>Rewards</div><div><i></i>Points Mall</div><div><i></i>Tourney</div><div><i></i>My</div></div>';
   box.innerHTML = h;
