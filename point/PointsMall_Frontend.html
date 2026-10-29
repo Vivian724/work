@@ -125,26 +125,62 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .pgcard__foot b{color:var(--c-text);}
 .pgcard__foot .pgcard__go{margin-left:auto;color:var(--c-primary);font-weight:700;white-space:nowrap;}
 
-/* 游乐场专页＝乐园地图：天空底、金色步道、各设施是一座岛，点岛进去玩 */
-.park{position:relative;height:400px;margin:0 0 4px;overflow:hidden;}
-.park__cloud{position:absolute;font-size:2.4rem;opacity:.85;}
+/* 游乐场专页＝乐园地图：上半天空（太阳、云），下半海面；每座设施是一座浮在海上的岛（草地＋沙滩＋倒影），岛上立木牌写名称；白色虚线＝航线串起各岛。
+   正式版整张地图由设计出图，岛的位置、数量由后台「游乐场」配置；这里用 CSS／emoji 占位 */
+#scr-play.is-active{display:flex;flex-direction:column;min-height:100%;}
+#scr-play .sky{display:flex;flex-direction:column;flex:1;padding-bottom:0;}
+#scr-play .park{flex:1;min-height:430px;margin:0;}
+#scr-play .pg-my{margin:12px;}
+.park{position:relative;height:430px;margin:0 0 4px;overflow:hidden;
+  background:linear-gradient(180deg,#7cc6ff 0,#c4e7ff 146px,#4f9fe8 150px,#2f7fd6 430px,#2a74c8 100%);}   /* 海平线固定在 150px，地图拉长时不跑位 */
+.park::before{content:"";position:absolute;left:0;right:0;top:150px;bottom:0;opacity:.35;
+  background:radial-gradient(ellipse 60px 10px at 50% 50%,rgba(255,255,255,.9),transparent 70%);background-size:140px 36px;}
+.park__sun{position:absolute;right:28px;top:26px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle,#fff6b5,#ffd34d 60%,rgba(255,211,77,0) 72%);box-shadow:0 0 30px 10px rgba(255,220,100,.45);}
+.park__cloud{position:absolute;font-size:2.4rem;opacity:.9;}
 .park__path{position:absolute;inset:0;width:100%;height:100%;}
-.park__isle{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.72rem;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.45);cursor:pointer;background:none;width:110px;}
-.park__ico{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;font-size:2.1rem;background:radial-gradient(circle at 40% 30%,#fff5c9,#ffb84d);box-shadow:0 6px 14px rgba(0,0,0,.2);border:3px solid #fff;}
-.park__tag{background:#fff;color:#6b47d8;font-size:.66rem;font-weight:800;padding:2px 8px;border-radius:10px;text-shadow:none;box-shadow:0 2px 6px rgba(27,42,68,.15);white-space:nowrap;}
-.park__isle--soon .park__ico{background:radial-gradient(circle at 40% 30%,#d5dbe6,#8f9bb0);filter:grayscale(1);opacity:.8;}
-.park__isle--soon{cursor:default;color:#eef2f8;}
-.park__isle--soon .park__tag{background:#e9edf3;color:#7a8597;}
-.park__mascot{position:absolute;font-size:2.6rem;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25));}
+#scr-play .park__path{height:430px;bottom:auto;}
 .park__title{position:absolute;left:0;right:0;top:12px;text-align:center;font-size:1.35rem;font-weight:900;color:#ffb300;letter-spacing:.5px;text-shadow:0 2px 0 #b35f00,0 4px 10px rgba(0,0,0,.2);}
+.park__mascot{position:absolute;font-size:2.4rem;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25));}
+/* 码头：吉祥物站的小木板 */
+.park__dock{position:absolute;width:70px;height:16px;background:repeating-linear-gradient(90deg,#b8783c 0 10px,#9c6230 10px 12px);border-radius:4px;box-shadow:0 6px 0 rgba(0,40,90,.25);}
+/* 岛 */
+.park__isle{position:absolute;display:flex;flex-direction:column;align-items:center;cursor:pointer;background:none;width:130px;padding:0;}
+.park__land{position:relative;width:112px;height:62px;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 35%,#a8ea8a,#5fb84a 72%);
+  box-shadow:0 9px 0 #efd394,0 15px 0 rgba(0,40,90,.28),inset 0 -6px 0 rgba(0,0,0,.08);}
+.park__land::after{content:"";position:absolute;left:14px;right:14px;bottom:-34px;height:16px;border-radius:50%;background:rgba(255,255,255,.28);filter:blur(2px);}
+.park__ico{position:absolute;left:50%;top:-30px;transform:translateX(-50%);font-size:2.6rem;line-height:1;filter:drop-shadow(0 5px 5px rgba(0,0,0,.3));}
+.park__sign{position:relative;margin-top:16px;background:linear-gradient(#a8703a,#7d4f23);color:#fff3d0;font-size:.7rem;font-weight:900;padding:4px 10px;border-radius:6px;border:2px solid #5a3615;box-shadow:0 3px 6px rgba(0,0,0,.3);white-space:nowrap;text-shadow:0 1px 0 rgba(0,0,0,.4);}
+.park__sign::before{content:"";position:absolute;left:50%;top:-10px;width:6px;height:10px;margin-left:-3px;background:#6a4019;}
+.park__isle:active .park__land{transform:translateY(2px);}
+/* 待解锁岛：暗色岛＋大锁＋铁链，木牌灰的；不可点。之后新游戏上架就换成正常岛 */
+.park__isle--soon{cursor:default;}
+.park__isle--soon .park__land{background:radial-gradient(ellipse at 50% 35%,#8da2b8,#4e6480 72%);box-shadow:0 9px 0 #b9c3d0,0 15px 0 rgba(0,40,90,.3);}
+.park__isle--soon .park__land::before{content:"⛓️⛓️";position:absolute;left:50%;top:18px;transform:translateX(-50%) rotate(-10deg);font-size:1.25rem;letter-spacing:-6px;white-space:nowrap;opacity:.95;}
+.park__isle--soon .park__ico{top:-34px;font-size:2.4rem;filter:drop-shadow(0 5px 5px rgba(0,0,0,.35));}
+.park__isle--soon .park__sign{background:linear-gradient(#7f8a9c,#56627a);border-color:#3d475a;color:#e6ebf3;}
+.park__isle--soon .park__sign small{display:block;font-weight:700;font-size:.58rem;color:#c9d2e0;}
+.park__fog{position:absolute;width:190px;height:120px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.75),rgba(255,255,255,0) 70%);pointer-events:none;}
 /* 首页入口卡：同一张地图的缩图 */
-.minimap{position:relative;height:130px;background:linear-gradient(180deg,#9fd0ff,#dff0ff);overflow:hidden;}
-.minimap .park__isle{width:84px;font-size:.6rem;gap:2px;}
-.minimap .park__ico{width:48px;height:48px;font-size:1.3rem;border-width:2px;}
-.minimap .park__cloud{font-size:1.6rem;}
-.minimap .park__mascot{font-size:1.7rem;}
+.minimap{position:relative;height:150px;overflow:hidden;background:linear-gradient(180deg,#7cc6ff 0%,#c4e7ff 30%,#4f9fe8 31%,#2f7fd6 100%);}
+.minimap .park__isle{width:84px;}
+.minimap .park__land{width:62px;height:34px;box-shadow:0 5px 0 #efd394,0 9px 0 rgba(0,40,90,.28);}
+.minimap .park__land::after{bottom:-20px;height:9px;}
+.minimap .park__ico{font-size:1.4rem;top:-16px;}
+.minimap .park__sign{font-size:.56rem;padding:2px 6px;margin-top:9px;border-width:1px;}
+.minimap .park__sign::before{top:-6px;height:6px;width:4px;margin-left:-2px;}
+.minimap .park__cloud{font-size:1.5rem;}
+.minimap .park__mascot{font-size:1.5rem;}
+.minimap .park__sun{width:30px;height:30px;right:12px;top:8px;box-shadow:0 0 16px 6px rgba(255,220,100,.45);}
+.minimap .park__dock{width:44px;height:10px;}
 .pg-my{margin:0 12px 12px;background:#fff;border-radius:var(--radius);padding:10px 12px;box-shadow:0 2px 10px rgba(47,107,255,.08);}
 
+/* 游戏列表页：一座岛＝一种游戏；后台配了几套就列几张卡，点卡进那一套 */
+.glist__head{display:flex;align-items:center;gap:10px;padding:12px 12px 10px;color:#1b2a44;}
+.glist__head .park__ico{position:static;transform:none;flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:radial-gradient(circle at 40% 30%,#fff5c9,#ffb84d);border:2px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.15);filter:none;}
+.glist__t{font-weight:900;font-size:1.05rem;}
+.glist__s{font-size:.74rem;color:var(--c-text-2);margin-top:2px;}
+.gs--off{opacity:.55;}
 /* =========================================================
    「积分兑好礼」区块标题带
    ========================================================= */
@@ -171,19 +207,33 @@ button{font-family:inherit;cursor:pointer;border:none;}
 /* =========================================================
    Flash Sales 区块：标题 ＋ 倒数 ＋ 横向滑动卡
    ========================================================= */
-.fs{margin:0 12px 12px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:10px 10px 12px;}
+.fs{margin:0 12px 12px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:12px 0 12px 12px;}
+.fs__head{padding-right:12px;}
 .fs__head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
 .fs__ico{width:34px;height:34px;border-radius:10px;background:#ffe7d6;display:grid;place-items:center;color:var(--c-orange);font-size:1.1rem;}
 .fs__t{font-weight:900;font-size:1rem;line-height:1.1;}
 .fs__s{font-size:.7rem;color:var(--c-text-2);}
+/* 张数：照既有「限时抢购 1/1」灰胶囊，滑动时跟着变（左边那张是第几张／共几张） */
+.fs__n{display:inline-block;margin-left:6px;background:#eef1f6;color:#6b7a99;font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:8px;vertical-align:2px;}
 .cd{margin-left:auto;display:flex;align-items:center;gap:2px;font-weight:800;font-size:.78rem;color:var(--c-red);}
 .cd b{background:var(--c-red);color:#fff;border-radius:5px;padding:2px 5px;min-width:24px;text-align:center;}
 .fs__all{color:var(--c-primary);font-weight:700;font-size:.8rem;background:none;}
-.hrow{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+.hrow{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:2px 12px 4px 0;}
 .hrow::-webkit-scrollbar{display:none;}
 
 /* 商品卡（横向大卡） */
-.g{flex:0 0 340px;border:1px solid var(--c-line);border-radius:12px;padding:8px;display:flex;gap:10px;background:#fff;}
+/* Flash Sales 卡：直向小卡、一次露两张（跟下面商品卡同宽），多的往右滑；细节照参考图（黄底红字折扣胶囊、紫进度条、紫圆角钮） */
+.g{flex:0 0 calc(50% - 5px);border:1px solid var(--c-line);border-radius:14px;padding:8px 8px 10px;display:flex;flex-direction:column;background:#fff;box-shadow:0 2px 8px rgba(27,42,68,.05);scroll-snap-align:start;}
+.g > .g__img{width:100%;height:112px;border-radius:10px;}
+.g .g__off{left:6px;top:6px;background:#ffe14d;color:#e0342f;font-size:.66rem;font-weight:900;padding:3px 9px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.15);}
+.g .g__name{margin-top:8px;font-size:.9rem;}
+.g .g__sub{margin-top:1px;}
+.g .price{margin-top:5px;}
+.g .price__now{font-size:1.1rem;}
+.g .bar{margin-top:6px;height:6px;}
+.g .g__left{margin-top:4px;font-size:.7rem;}
+.g .btn-redeem{margin-top:8px;border-radius:12px;padding:8px 0;font-size:.84rem;}
+.hrow{scroll-snap-type:x mandatory;}
 .g__img{width:132px;height:132px;border-radius:10px;flex:0 0 auto;position:relative;display:grid;place-items:center;color:#fff;font-weight:900;text-align:center;font-size:.8rem;line-height:1.15;text-shadow:0 1px 2px rgba(0,0,0,.4);overflow:hidden;}
 .g__off{position:absolute;left:6px;top:6px;background:#ff5b5b;color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:10px;}
 .g__body{flex:1;min-width:0;display:flex;flex-direction:column;}
@@ -263,6 +313,12 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .ticket__l{background:#fff1ef;color:#e0342f;font-weight:900;padding:10px 12px;font-size:.95rem;border-right:2px dashed #ffb3a8;}
 .ticket__r{flex:1;display:flex;align-items:center;justify-content:center;font-size:.74rem;color:#e0342f;white-space:nowrap;}
 .ticket__r b{margin:0 3px;}
+.ticket{cursor:pointer;}
+.ticket__r .coin{margin:0 2px 0 6px;}
+/* 积分不足：票券变灰、红字「还差 N 积分」；抽数按钮买不起的变灰 */
+.ticket--off{border-color:#d9dde6;}
+.ticket--off .ticket__l{background:#f1f3f7;color:#9aa3b5;border-color:#d9dde6;}
+.drawbtn--off{background:#d9dde6;color:#fff;cursor:default;}
 .panel__note{text-align:center;font-size:.7rem;color:var(--c-text-2);margin-top:8px;}
 .panel__note b{color:#e0342f;}
 .prize-h{display:flex;align-items:center;margin:14px 12px 6px;font-weight:900;font-size:1rem;}
@@ -301,6 +357,9 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .btn-draw{display:block;width:60%;margin:12px auto 0;background:linear-gradient(180deg,#ff5f6d,#e0342f);color:#ffd84d;font-weight:900;font-size:1.3rem;letter-spacing:2px;padding:10px 0;border-radius:12px;box-shadow:0 4px 0 #9c2f2f;}
 .machine__cost{display:flex;justify-content:space-between;font-size:.76rem;color:#ffe9a6;font-weight:700;margin-top:12px;}
 .machine__cost b{color:#ffd84d;}
+/* 积分不足：DRAW 变灰、底下红字「还差 N 积分」 */
+.btn-draw--off{background:linear-gradient(180deg,#b9c0cc,#8f98a8);color:#f4f6fa;box-shadow:0 4px 0 #6b7382;}
+.machine__need{text-align:center;color:#ffb3a8;font-size:.76rem;font-weight:800;margin-top:8px;}
 .wtabs{display:flex;gap:6px;margin-top:10px;}
 .wtab{flex:1;background:rgba(255,255,255,.18);color:#fff;border-radius:8px;padding:6px 0;font-size:.78rem;font-weight:700;}
 .wtab--on{background:#ffd84d;color:#1d49c9;}
@@ -401,10 +460,11 @@ button{font-family:inherit;cursor:pointer;border:none;}
     <button class="on" onclick="go('mall',this)">商城首页</button>
     <button onclick="go('tasks',this)">任务中心 Task List</button>
     <button onclick="go('play',this)">游乐场 Playground</button>
-    <button onclick="go('ichiban',this)">Ichiban Luck Draw</button>
-    <button onclick="go('blind',this)">Mystery Blind Box</button>
+    <button onclick="openGame('ichiban')">一番赏列表（多套）</button>
+    <button onclick="openGame('blind')">Slot Kingdom 盲盒列表（多套）</button>
     <button onclick="showPop('ok')">兑换成功弹窗</button>
     <button onclick="showPop('lack')">积分不足弹窗</button>
+    <button onclick="togglePoints(this)">切换积分：目前 100（不足）</button>
   </div>
 
   <!-- ============ Phone ============ -->
@@ -460,15 +520,16 @@ button{font-family:inherit;cursor:pointer;border:none;}
           <article class="pgcard" role="button" onclick="go('play')">
             <!-- 乐园地图缩图：跟专页同一张图 -->
             <div class="minimap">
-              <svg class="park__path" viewBox="0 0 406 130" preserveAspectRatio="none" aria-hidden="true">
-                <path d="M40 120 C 100 90, 160 70, 203 60 S 330 30, 370 25" fill="none" stroke="#ffd27a" stroke-width="9" stroke-linecap="round"/>
+              <span class="park__sun"></span>
+              <svg class="park__path" viewBox="0 0 406 150" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M40 132 C 80 115, 110 100, 150 92 S 240 70, 280 62 S 330 50, 360 46" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round" opacity=".85"/>
               </svg>
-              <span class="park__cloud" style="left:120px;top:4px">☁️</span>
-              <span class="park__cloud" style="right:10px;bottom:6px">☁️</span>
-              <span class="park__isle" style="left:40px;top:14px"><span class="park__ico">🎰</span>Slot Kingdom</span>
-              <span class="park__isle" style="left:160px;top:34px"><span class="park__ico">🎁</span>Ichiban Luck Draw</span>
-              <span class="park__isle" style="right:30px;top:6px"><span class="park__ico">🎲</span>Mystery Blind Box</span>
-              <span class="park__mascot" style="left:10px;bottom:4px">🐯</span>
+              <span class="park__cloud" style="left:30px;top:6px">☁️</span>
+              <span class="park__cloud" style="left:200px;top:2px">☁️</span>
+              <span class="park__isle" style="left:110px;top:58px"><span class="park__land"><span class="park__ico">🎰</span></span><span class="park__sign">Slot Kingdom</span></span>
+              <span class="park__isle" style="right:14px;top:30px"><span class="park__land"><span class="park__ico">🎁</span></span><span class="park__sign">Ichiban Luck Draw</span></span>
+              <span class="park__dock" style="left:16px;bottom:10px"></span>
+              <span class="park__mascot" style="left:28px;bottom:14px">🐯</span>
             </div>
             <div class="pgcard__foot" id="pgFoot"></div>
           </article>
@@ -498,8 +559,8 @@ button{font-family:inherit;cursor:pointer;border:none;}
         <section class="fs" id="fsBlock" aria-label="Flash Sales">
           <div class="fs__head">
             <div class="fs__ico">⚡</div>
-            <div><div class="fs__t">Flash Sales</div><div class="fs__s">Ends in</div></div>
-            <div class="cd"><b id="cdH">11</b>:<b id="cdM">44</b>:<b id="cdS">31</b></div>
+            <div><div class="fs__t">Flash Sales<span class="fs__n" id="fsN">1/1</span></div><div class="fs__s">Ends in</div></div>
+            <div class="cd"><b id="cdD" hidden>155D</b><span id="cdDsep" hidden>:</span><b id="cdH">11</b>:<b id="cdM">44</b>:<b id="cdS">31</b></div>
             <button class="fs__all" onclick="openCat('flash')">All</button>
           </div>
           <div class="hrow" id="fsRow"></div>
@@ -518,22 +579,39 @@ button{font-family:inherit;cursor:pointer;border:none;}
           <!-- 乐园地图：放大版的岛屿地图（参考图一番赏页顶部那块），点岛进该设施；灰岛＝预告未来有新游戏 -->
           <div class="park">
             <div class="park__title">POINT CASINO</div>
-            <svg class="park__path" viewBox="0 0 430 400" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M60 370 C 90 290, 150 230, 215 170 C 260 130, 310 100, 357 100 M215 170 C 170 150, 110 130, 69 110" fill="none" stroke="#ffd27a" stroke-width="14" stroke-linecap="round"/>
-              <path d="M60 370 C 90 290, 150 230, 215 170 C 260 130, 310 100, 357 100 M215 170 C 170 150, 110 130, 69 110" fill="none" stroke="#fff3cf" stroke-width="4" stroke-dasharray="10 12" stroke-linecap="round"/>
+            <span class="park__sun"></span>
+            <span class="park__cloud" style="left:10px;top:44px">☁️</span>
+            <span class="park__cloud" style="left:150px;top:36px">☁️</span>
+            <span class="park__cloud" style="right:90px;top:60px">☁️</span>
+            <!-- 航线：从码头出发，串起三座岛 -->
+            <svg class="park__path" viewBox="0 0 430 430" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M70 372 C 100 330, 110 290, 130 250 C 170 200, 240 190, 300 200" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="9 9" stroke-linecap="round" opacity=".85"/>
+              <!-- 往待解锁岛的航线：灰色，表示还没开 -->
+              <path d="M355 215 C 380 260, 380 300, 360 340 M330 400 C 290 430, 250 450, 220 470" fill="none" stroke="#cfe0f2" stroke-width="4" stroke-dasharray="6 10" stroke-linecap="round" opacity=".55"/>
             </svg>
-            <span class="park__cloud" style="left:6px;top:50px">☁️</span>
-            <span class="park__cloud" style="right:14px;top:240px">☁️</span>
-            <span class="park__cloud" style="left:150px;bottom:30px">☁️</span>
-            <span class="park__cloud" style="right:130px;top:40px">☁️</span>
-            <button class="park__isle" style="left:14px;top:70px" onclick="go('mall')"><span class="park__ico">🎰</span>Slot Kingdom<span class="park__tag">Points Mall</span></button>
-            <button class="park__isle" style="left:160px;top:120px" onclick="go('ichiban')"><span class="park__ico">🎁</span>Ichiban Luck Draw<span class="park__tag">★ 500 / Ticket</span></button>
-            <button class="park__isle" style="right:18px;top:60px" onclick="go('blind')"><span class="park__ico">🎲</span>Mystery Blind Box<span class="park__tag">★ 2,000 / Draw</span></button>
-            <button class="park__isle park__isle--soon" style="right:36px;top:200px"><span class="park__ico">✨</span>Coming Soon<span class="park__tag">New game</span></button>
-            <span class="park__mascot" style="left:40px;bottom:14px">🐯</span>
+            <button class="park__isle" style="left:60px;top:170px" onclick="openGame('blind')"><span class="park__land"><span class="park__ico">🎰</span></span><span class="park__sign">Slot Kingdom</span></button>
+            <button class="park__isle" style="right:36px;top:140px" onclick="openGame('ichiban')"><span class="park__land"><span class="park__ico">🎁</span></span><span class="park__sign">Ichiban Luck Draw</span></button>
+            <!-- 两座待解锁岛（她 10/29 说有两个待解锁）：暗色岛＋大锁＋铁链，雾里，不可点；文案待运营定 -->
+            <span class="park__fog" style="right:-30px;top:320px"></span>
+            <span class="park__fog" style="left:120px;top:450px"></span>
+            <button class="park__isle park__isle--soon" style="right:16px;top:340px"><span class="park__land"><span class="park__ico">🔒</span></span><span class="park__sign">Coming Soon<small>New game</small></span></button>
+            <button class="park__isle park__isle--soon" style="left:160px;top:470px"><span class="park__land"><span class="park__ico">🔒</span></span><span class="park__sign">Coming Soon<small>New game</small></span></button>
+            <span class="park__dock" style="left:34px;top:376px"></span>
+            <span class="park__mascot" style="left:48px;top:336px">🐯</span>
           </div>
           <!-- 我的积分：沿用一番赏页的 My Points 列 -->
           <div class="pg-my" style="margin-top:0"><div class="mypt"><i class="coin coin--pt">★</i>My Points: <span style="color:#e0342f" class="my-pts">100</span><button class="get" onclick="go('tasks')">Get More Points ›</button></div></div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           画面 4c：游戏列表页（乐园地图点岛进来；后台配了几套一番赏／盲盒就列几张卡。只配一套时跳过此页直接进游戏）
+           =================================================== -->
+      <section class="screen" id="scr-glist">
+        <header class="subbar"><button class="subbar__back" onclick="go('play')">‹</button><span class="subbar__title" id="glistTitle">Ichiban Luck Draw</span></header>
+        <div class="sky" style="min-height:100%">
+          <div class="glist__head" id="glistHead"></div>
+          <section class="grid" id="glistGrid" aria-label="游戏列表"></section>
         </div>
       </section>
 
@@ -618,13 +696,12 @@ button{font-family:inherit;cursor:pointer;border:none;}
            画面 2：Ichiban Luck Draw（Playground 子页）
            =================================================== -->
       <section class="screen" id="scr-ichiban">
-        <header class="subbar"><button class="subbar__back" onclick="go('play')">‹</button><span class="subbar__title">Playground</span></header>
+        <header class="subbar"><button class="subbar__back" onclick="backFromSet('ichiban')">‹</button><span class="subbar__title js-set-title" data-game="ichiban">Ichiban Luck Draw</span></header>
         <div class="sky">
           <!-- 地图：各游乐场入口，等级不够显示锁 -->
           <div class="map">
-            <button class="isle" onclick="go('mall')"><span class="isle__ico">🎰</span>Slot Kingdom</button>
+            <button class="isle" onclick="openGame('blind')"><span class="isle__ico">🎰</span>Slot Kingdom</button>
             <button class="isle isle--on"><span class="isle__ico">🎁</span>Ichiban Luck Draw</button>
-            <button class="isle" onclick="go('blind')"><span class="isle__ico">🎲</span>Mystery Blind Box</button>
             <button class="isle isle--lock"><span class="isle__ico">🔒</span>Unlock at Lv.5</button>
           </div>
           <div class="hero">
@@ -633,19 +710,21 @@ button{font-family:inherit;cursor:pointer;border:none;}
             <button class="hero__rules">📋 Rules</button>
           </div>
           <div class="panel">
-            <div class="panel__row">🎁 Remaining <b style="color:#e0342f;margin:0 4px">88,438</b>/129,999 Draws <span class="fp">🔥 Final Prize</span></div>
-            <div class="draws"><i></i><span class="mk" style="left:20%">🎁</span><span class="mk" style="left:45%">🎁</span><span class="mk" style="left:72%">🎁</span><span class="mk" style="left:97%">🎁</span></div>
+            <div class="panel__row">🎁 Remaining <b style="color:#e0342f;margin:0 4px" id="ichRem">88,438</b>/<span id="ichTot">129,999</span> Draws <span class="fp">🔥 Final Prize</span></div>
+            <div class="draws"><i id="ichBar"></i><span class="mk" style="left:20%">🎁</span><span class="mk" style="left:45%">🎁</span><span class="mk" style="left:72%">🎁</span><span class="mk" style="left:97%">🎁</span></div>
           </div>
           <div class="panel" style="margin-top:10px">
-            <div class="mypt"><i class="coin coin--pt">★</i>My Points: <span style="color:#e0342f" class="my-pts">100</span><button class="get">Get More Points ›</button></div>
-            <div class="drawbtns">
-              <button class="drawbtn drawbtn--on">1<small>Draw</small></button>
-              <button class="drawbtn">5<small>Draws</small></button>
-              <button class="drawbtn">10<small>Draws</small></button>
-              <button class="drawbtn" style="font-size:.78rem;padding:12px 0">Draw All</button>
+            <div class="mypt"><i class="coin coin--pt">★</i>My Points: <span style="color:#e0342f" class="my-pts">100</span><button class="get" onclick="go('tasks')">Get More Points ›</button></div>
+            <!-- 抽数：买不起的抽数变灰不能选 -->
+            <div class="drawbtns" id="drawbtns">
+              <button class="drawbtn" data-n="1" onclick="pickDraw(1)">1<small>Draw</small></button>
+              <button class="drawbtn" data-n="5" onclick="pickDraw(5)">5<small>Draws</small></button>
+              <button class="drawbtn" data-n="10" onclick="pickDraw(10)">10<small>Draws</small></button>
+              <button class="drawbtn" data-n="all" style="font-size:.78rem;padding:12px 0" onclick="pickDraw('all')">Draw All</button>
             </div>
-            <div class="ticket"><div class="ticket__l">ICHIBAN</div><div class="ticket__r"><span>Required <b>400</b> More Points</span></div></div>
-            <div class="panel__note"><b>500 Points</b> per Ticket. Every Ticket Wins a Prize.</div>
+            <!-- 票券：积分够＝「Draw Now ★N」点了抽；不够＝灰票＋红字「Required N More Points」点了开积分不足弹窗 -->
+            <div class="ticket" id="ticket" onclick="ichibanDraw()"><div class="ticket__l">ICHIBAN</div><div class="ticket__r" id="ticketR"></div></div>
+            <div class="panel__note"><b><span id="ichPrice">500</span> Points</b> per Ticket. Every Ticket Wins a Prize.</div>
           </div>
           <div class="prize-h">🎁 All Prizes <button class="more">View All ›</button></div>
           <div class="final">
@@ -673,17 +752,16 @@ button{font-family:inherit;cursor:pointer;border:none;}
            画面 3：Mystery Blind Box（Playground 子页）
            =================================================== -->
       <section class="screen" id="scr-blind">
-        <header class="subbar"><button class="subbar__back" onclick="go('play')">‹</button><span class="subbar__title">Playground</span></header>
+        <header class="subbar"><button class="subbar__back" onclick="backFromSet('blind')">‹</button><span class="subbar__title js-set-title" data-game="blind">Slot Kingdom</span></header>
         <div class="sky">
           <div class="map">
-            <button class="isle" onclick="go('mall')"><span class="isle__ico">🎰</span>Slot Kingdom</button>
-            <button class="isle" onclick="go('ichiban')"><span class="isle__ico">🎁</span>Ichiban Luck Draw</button>
-            <button class="isle isle--on"><span class="isle__ico">🎲</span>Mystery Blind Box</button>
+            <button class="isle isle--on"><span class="isle__ico">🎰</span>Slot Kingdom</button>
+            <button class="isle" onclick="openGame('ichiban')"><span class="isle__ico">🎁</span>Ichiban Luck Draw</button>
             <button class="isle isle--lock"><span class="isle__ico">🔒</span>Unlock at Lv.5</button>
           </div>
           <div class="machine">
             <div class="machine__t">MYSTERY BLIND BOX</div>
-            <div class="machine__s">· LUCKY STAR ·</div>
+            <div class="machine__s" id="blindSub">· LUCKY STAR ·</div>
             <div class="bgrid" id="bgrid">
               <div class="bcell"><div class="bcell__ico">🎡</div><div class="bcell__t">5 Free Spins</div></div>
               <div class="bcell bcell--big"><div class="bcell__ico">💸</div><div class="bcell__t">₱3,000</div></div>
@@ -695,8 +773,9 @@ button{font-family:inherit;cursor:pointer;border:none;}
               <div class="bcell bcell--sm"><div class="bcell__ico">💵</div><div class="bcell__t">₱50</div></div>
               <div class="bcell bcell--sm"><div class="bcell__ico">🎡</div><div class="bcell__t">20 Free Spins</div></div>
             </div>
-            <button class="btn-draw" onclick="blindDraw()">DRAW</button>
-            <div class="machine__cost"><span>Cost: <b>2,000 Points</b></span><span>My Points: <b><span class="my-pts">100</span> Points</b></span></div>
+            <button class="btn-draw" id="btnDraw" onclick="blindDraw()">DRAW</button>
+            <div class="machine__cost"><span>Cost: <b><span id="blindCost">2,000</span> Points</b></span><span>My Points: <b><span class="my-pts">100</span> Points</b></span></div>
+            <div class="machine__need" id="blindNeed" hidden></div>
             <div class="wtabs"><button class="wtab wtab--on" onclick="wtab(this,0)">Recent Winners</button><button class="wtab" onclick="wtab(this,1)">My Rewards</button></div>
             <div class="wlist" id="wlist0">
               <div class="wrow wrow--top">💸 ₱3,000 <span class="who">winner</span></div>
@@ -757,7 +836,7 @@ var PRODUCTS = [
   {cat:'flash', name:'Sweet Bonanza', sub:'20 Free Spins', price:400, old:600, left:'900 remaining', pct:45, img:'img-free', txt:'SWEET<br>BONANZA<br><small>FREE SPINS</small>', off:'33% OFF'},
   /* Playground：游乐场入口 */
   {cat:'play', name:'Ichiban Luck Draw', sub:'Every Ticket Wins a Prize', price:500, unit:'/ Ticket', img:'img-ichi', txt:'ICHIBAN<br>LUCK DRAW', go:'ichiban'},
-  {cat:'play', name:'Mystery Blind Box', sub:'Lucky Star', price:2000, unit:'/ Draw', img:'img-blind', txt:'MYSTERY<br>BLIND BOX', go:'blind'},
+  {cat:'play', name:'Slot Kingdom', sub:'Mystery Blind Box', price:2000, unit:'/ Draw', img:'img-blind', txt:'SLOT<br>KINGDOM', go:'blind'},
   /* Free Spin */
   {cat:'free', name:'Sweet Bonanza', sub:'10 Free Spins', price:300, left:'In stock 1,200', img:'img-free', txt:'SWEET<br>BONANZA<br><small>FREE SPINS</small>'},
   {cat:'free', name:'Wild West Gold', sub:'5 Free Spins', price:100, left:'In stock 860', img:'img-free', txt:'WILD<br>WEST<br><small>FREE SPINS</small>'},
@@ -789,15 +868,96 @@ var HOME_SHOW = 4;   /* 首页每个分类先露几个；超过的按 More 看 *
 /* ---------- 游乐场游戏（原型假资料；正式版由后台「游乐场」配置：名称、图、每次花费、是否上架、解锁等级） ---------- */
 var GAMES = [
   {key:'ichiban', name:'Ichiban Luck Draw', sub:'Every Ticket Wins a Prize', price:500, unit:'/ Ticket', img:'img-ichi', txt:'ICHIBAN<br>LUCK DRAW', tag:'🔥 Final Prize ₱200,000', stat:'88,438 / 129,999 Draws left'},
-  {key:'blind',   name:'Mystery Blind Box', sub:'Lucky Star', price:2000, unit:'/ Draw', img:'img-blind', txt:'MYSTERY<br>BLIND BOX', tag:'💸 Top Prize ₱3,000', stat:'9 prizes · Every draw wins'},
+  {key:'blind',   name:'Slot Kingdom', sub:'Mystery Blind Box · Every draw wins', price:2000, unit:'/ Draw', img:'img-blind', txt:'SLOT<br>KINGDOM', tag:'💸 Top Prize ₱3,000', stat:'9 prizes · Every draw wins'},   /* 她 10/28 说：盲盒就是 Slot Kingdom，同一座岛 */
   {key:'lock',    name:'Coming Soon', sub:'New game coming soon', price:0, img:'', txt:'✨', lock:true}   /* 预告卡：预告未来有新游戏，文案待运营定 */
 ];
+/* 后台在每种游戏底下可以配置多套（线上一番赏已是一套一个 id）。一座岛＝一种游戏，不随套数变；点岛进该游戏的列表，列表里一套一张卡。
+   原型假资料：一番赏配了 3 套（其中 1 套抽完）、盲盒配了 2 套。ico＝岛上图示；no＝期数角标（沿用线上 #5 这种） */
+var SETS = [
+  {game:'ichiban', id:5, no:'#5', name:'Ichiban Luck Draw · Vol.5', sub:'🔥 Final Prize ₱200,000', price:500, unit:'/ Ticket', left:'88,438 / 129,999 Draws left', rem:88438, total:129999, img:'img-ichi', txt:'ICHIBAN<br>VOL.5'},
+  {game:'ichiban', id:6, no:'#6', name:'Gold Rush Draw', sub:'🔥 Final Prize ₱100,000', price:120, unit:'/ Ticket', left:'190 / 190 Draws left', rem:190, total:190, img:'img-ichi', txt:'GOLD<br>RUSH'},
+  {game:'ichiban', id:4, no:'#4', name:'Ichiban Luck Draw · Vol.4', sub:'🔥 Final Prize ₱50,000', price:300, unit:'/ Ticket', left:'0 / 9,999 Draws left', rem:0, total:9999, img:'img-ichi', txt:'ICHIBAN<br>VOL.4', soldout:true},
+  {game:'blind',   id:1, no:'#1', name:'Lucky Star', sub:'💸 Top Prize ₱3,000', price:2000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'LUCKY<br>STAR'},
+  {game:'blind',   id:2, no:'#2', name:'Golden Night', sub:'💸 Top Prize ₱10,000', price:5000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'GOLDEN<br>NIGHT'}
+];
+function setsOf(key){ return SETS.filter(function(x){ return x.game===key; }); }
+function gameOf(key){ return GAMES.filter(function(g){ return g.key===key; })[0]; }
 function renderGames(){
   var live = GAMES.filter(function(g){ return !g.lock; });
   /* 首页入口卡脚注：有几个游乐设施、叫什么 */
   document.getElementById('pgFoot').innerHTML = '<b>'+live.length+' games</b> · '+live.map(function(g){ return g.name; }).join(' · ')+'<span class="pgcard__go">Play ›</span>';
-
 }
+/* 点岛：这种游戏只配一套 → 直接进；多套 → 先到列表页挑 */
+function openGame(key){
+  var arr = setsOf(key);
+  if(arr.length===1){ openSet(key, arr[0].id); return; }
+  var g = gameOf(key);
+  document.getElementById('glistTitle').textContent = g.name;
+  document.getElementById('glistHead').innerHTML = '<span class="park__ico">'+(key==='ichiban'?'🎁':'🎰')+'</span><div><div class="glist__t">'+g.name+'</div><div class="glist__s">'+g.sub+'</div></div>';
+  /* 一套一张卡（卡片样式沿用商品小卡；角标＝期数，抽完的灰掉＝沿用线上「已抢光」） */
+  document.getElementById('glistGrid').innerHTML = arr.map(function(x){
+    return '<article class="gs'+(x.soldout?' gs--off':'')+'" role="button" onclick="openSet(\''+key+'\','+x.id+')">'
+      + '<div class="g__img '+x.img+'"><span class="g__off">'+x.no+'</span>'+x.txt+'</div>'
+      + '<div class="g__name">'+x.name+'</div><div class="g__sub">'+x.sub+'</div>'
+      + '<div class="g__left">'+(x.soldout?'已抢光':x.left)+'</div>'
+      + '<div class="price"><i class="coin coin--pt">★</i><span class="price__now">'+fmt(x.price)+'</span><span class="g__sub" style="margin-left:2px">'+x.unit+'</span></div></article>';
+  }).join('');
+  go('glist');
+}
+/* 进某一套：子页标题换成这一套的名称（页面长相不变，内容依那一套的后台配置） */
+var curSet = {ichiban:null, blind:null}, drawN = 1;   /* 目前进的是哪一套；一番赏选了几抽 */
+function openSet(key, id){
+  var x = SETS.filter(function(s){ return s.game===key && s.id===id; })[0];
+  document.querySelectorAll('.js-set-title[data-game="'+key+'"]').forEach(function(e){ e.textContent = x.name; });
+  curSet[key] = x; drawN = 1; renderSet(key);
+  go(key);
+}
+/* ---------- 积分不足状态：进页就比「这一套每抽要多少」跟「我有多少」 ---------- */
+function renderSet(key){
+  var x = curSet[key]; if(!x) return;
+  if(key==='ichiban'){
+    document.getElementById('ichRem').textContent = fmt(x.rem);
+    document.getElementById('ichTot').textContent = fmt(x.total);
+    document.getElementById('ichBar').style.width = (x.total ? Math.round(x.rem/x.total*100) : 0)+'%';
+    document.getElementById('ichPrice').textContent = fmt(x.price);
+    var canN = Math.min(x.rem, Math.floor(MY_POINTS / x.price));   /* 最多买得起几抽 */
+    if(drawN==='all' ? canN<1 : drawN*x.price > MY_POINTS) drawN = 1;   /* 选的抽数买不起就退回 1 抽 */
+    document.querySelectorAll('#drawbtns .drawbtn').forEach(function(b){
+      var n = b.dataset.n, cost = n==='all' ? x.price : n*x.price;   /* Draw All 只要买得起 1 抽就能选 */
+      b.classList.toggle('drawbtn--off', cost > MY_POINTS || x.rem===0);
+      b.classList.toggle('drawbtn--on', String(drawN)===n);
+    });
+    var cost = (drawN==='all' ? canN : drawN) * x.price, need = cost - MY_POINTS;
+    var tk = document.getElementById('ticket'), r = document.getElementById('ticketR');
+    if(x.rem===0){ tk.classList.add('ticket--off'); r.innerHTML = '<span>Sold Out</span>'; }
+    else if(need > 0){ tk.classList.add('ticket--off'); r.innerHTML = '<span>Required <b>'+fmt(need)+'</b> More Points</span>'; }
+    else { tk.classList.remove('ticket--off'); r.innerHTML = '<span>Draw Now<i class="coin coin--pt">★</i><b>'+fmt(cost)+'</b></span>'; }
+  } else {
+    document.getElementById('blindSub').textContent = '· '+x.name.toUpperCase()+' ·';
+    document.getElementById('blindCost').textContent = fmt(x.price);
+    var short = x.price - MY_POINTS, bd = document.getElementById('btnDraw'), nd = document.getElementById('blindNeed');
+    bd.classList.toggle('btn-draw--off', short > 0);
+    nd.hidden = short <= 0; nd.textContent = 'Required '+fmt(Math.max(short,0))+' More Points';
+  }
+}
+function pickDraw(n){ var x = curSet.ichiban; if(!x) return; var cost = n==='all' ? x.price : n*x.price; if(cost > MY_POINTS || x.rem===0) return; drawN = n; renderSet('ichiban'); }
+/* 一番赏抽：积分不够→积分不足弹窗；够→确认后成功 */
+function ichibanDraw(){
+  var x = curSet.ichiban; if(x.rem===0) return;
+  var n = drawN==='all' ? Math.min(x.rem, Math.floor(MY_POINTS/x.price)) : drawN, cost = n*x.price;
+  if(cost > MY_POINTS){ showPop('lack'); return; }
+  showPop({ico:'🎟️', t:'确认抽奖', d:'将扣除 <b>★ '+fmt(cost)+'</b> 积分，抽 '+n+' 次「'+x.name+'」', btns:[['取消','btn-ghost'],['确认','btn-main--purple','ok']]});
+}
+/* demo：切换会员积分 100 ⇄ 10,000，看积分不足／足够两种状态 */
+function togglePoints(b){
+  MY_POINTS = MY_POINTS===100 ? 10000 : 100;
+  document.querySelectorAll('.my-pts').forEach(function(e){ e.textContent = fmt(MY_POINTS); });
+  POPS.lack.d = '目前积分 <b>'+fmt(MY_POINTS)+'</b>，还差一点点。完成任务可赚更多积分。';
+  b.textContent = '切换积分：目前 '+fmt(MY_POINTS)+(MY_POINTS===100?'（不足）':'（足够）');
+  renderAll(); renderSet('ichiban'); renderSet('blind');
+}
+/* 子页返回：这种游戏有多套就回列表，只一套就回乐园地图 */
+function backFromSet(key){ if(setsOf(key).length>1) openGame(key); else go('play'); }
 
 /* ---------- 筛选状态（首页跟分类页共用） ---------- */
 var onlyCan = false, sortDir = 0, curCat = null; /* sortDir 0=不排序 1=低到高 2=高到低 */
@@ -821,7 +981,7 @@ function esc(t){ return t.replace(/'/g,"\\'"); }
 /* 照既有：卡片没有按钮，整张卡可点（点了进兑换／进游乐场） */
 function cardSmall(p){
   var btn = '';
-  var click = p.go ? 'go(\''+p.go+'\')' : 'redeem(\''+esc(p.name)+'\','+p.price+')';
+  var click = p.go ? 'openGame(\''+p.go+'\')' : 'redeem(\''+esc(p.name)+'\','+p.price+')';
   return '<article class="gs" role="button" onclick="'+click+'">'
     + '<div class="g__img '+p.img+'">'+(p.off?'<span class="g__off">'+p.off+'</span>':'')+p.txt+'</div>'
     + '<div class="g__name">'+p.name+'</div><div class="g__sub">'+p.sub+'</div>'
@@ -839,10 +999,18 @@ function cardFlash(p){
     + '<button class="btn-redeem" onclick="redeem(\''+esc(p.name)+'\','+p.price+')">Redeem now</button></div></article>';
 }
 
+/* Flash Sales 张数「1/5」：左边那张是第几张；往右滑会跟着变 */
+function fsCount(){
+  var row = document.getElementById('fsRow'), cards = row.children; if(!cards.length){ document.getElementById('fsN').textContent = '0/0'; return; }
+  var step = cards[0].offsetWidth + 10, i = Math.min(cards.length, Math.round(row.scrollLeft/step)+1);
+  document.getElementById('fsN').textContent = i+'/'+cards.length;
+}
+document.getElementById('fsRow').addEventListener('scroll', fsCount);
 /* 首页：Flash Sales 横向区 ＋ 各分类区块（先露 HOME_SHOW 个，多的看 More） */
 function renderHome(){
   var fl = listOf('flash');
   document.getElementById('fsRow').innerHTML = fl.map(cardFlash).join('');
+  fsCount();
   document.getElementById('fsBlock').hidden = fl.length===0;
   var html = '';
   CATS.forEach(function(c){
@@ -873,11 +1041,12 @@ document.getElementById('cats').addEventListener('click', function(ev){
   openCat(b.dataset.cat);
 });
 renderAll(); renderGames();
+curSet.ichiban = setsOf('ichiban')[0]; curSet.blind = setsOf('blind')[0]; renderSet('ichiban'); renderSet('blind');
 
 /* ---------- 兑换：先确认 → 积分够就成功，不够就提示 ---------- */
 var POPS = {
   ok:   {ico:'🎉', t:'兑换成功', d:'奖励已发放，可在「背包中心」或「兑换记录」查看。', btns:[['知道了','btn-main--purple']]},
-  lack: {ico:'😢', t:'积分不足', d:'目前积分 <b>'+MY_POINTS+'</b>，还差一点点。完成任务可赚更多积分。', btns:[['稍后再说','btn-ghost'],['去赚积分','btn-main']]}
+  lack: {ico:'😢', t:'积分不足', d:'目前积分 <b>'+MY_POINTS+'</b>，还差一点点。完成任务可赚更多积分。', btns:[['稍后再说','btn-ghost'],['去赚积分','btn-main','tasks']]}
 };
 function redeem(name, price){
   if(price > MY_POINTS){ showPop('lack'); return; }
@@ -886,7 +1055,7 @@ function redeem(name, price){
 function showPop(p){
   if(typeof p==='string') p = POPS[p];
   var html = '<div class="pop__ico">'+p.ico+'</div><div class="pop__t">'+p.t+'</div><div class="pop__d">'+p.d+'</div><div class="pop__btns">';
-  p.btns.forEach(function(b){ html += '<button class="'+(b[1]||'')+'" onclick="'+(b[2]?"showPop('"+b[2]+"')":'closePop()')+'">'+b[0]+'</button>'; });
+  p.btns.forEach(function(b){ html += '<button class="'+(b[1]||'')+'" onclick="'+(b[2]==='tasks' ? "closePop();go('tasks')" : b[2] ? "showPop('"+b[2]+"')" : 'closePop()')+'">'+b[0]+'</button>'; });
   document.getElementById('pop').innerHTML = html + '</div>';
   document.getElementById('mask').classList.add('is-open');
 }
@@ -894,7 +1063,7 @@ function closePop(){ document.getElementById('mask').classList.remove('is-open')
 
 /* ---------- 盲盒：Demo 抽一次 → 积分不够就提示 ---------- */
 function blindDraw(){
-  if(2000 > MY_POINTS){ showPop('lack'); return; }
+  if(curSet.blind.price > MY_POINTS){ showPop('lack'); return; }
   var cells = document.querySelectorAll('#bgrid .bcell'); var i = Math.floor(Math.random()*cells.length);
   cells.forEach(function(c){ c.classList.remove('bcell--hit'); }); cells[i].classList.add('bcell--hit');
 }
@@ -905,11 +1074,14 @@ function wtab(b, i){
 }
 
 /* ---------- 倒数：Flash Sales 跟任务倒数每秒跳 ---------- */
-var fsLeft = 11*3600+44*60+31, taskLeft = 1*3600+39*60+59;
+var fsLeft = 155*86400+6*3600+29*60+32, taskLeft = 1*3600+39*60+59;   /* 限时抢购可以跨好几天：照既有前台，超过一天多显示「155D」 */
 function two(n){ return (n<10?'0':'')+n; }
 setInterval(function(){
   fsLeft--; taskLeft--;
-  document.getElementById('cdH').textContent = two(Math.floor(fsLeft/3600));
+  var d = Math.floor(fsLeft/86400);
+  document.getElementById('cdD').hidden = document.getElementById('cdDsep').hidden = d<1;
+  document.getElementById('cdD').textContent = d+'D';
+  document.getElementById('cdH').textContent = two(Math.floor(fsLeft%86400/3600));
   document.getElementById('cdM').textContent = two(Math.floor(fsLeft%3600/60));
   document.getElementById('cdS').textContent = two(fsLeft%60);
   var t = two(Math.floor(taskLeft/3600))+':'+two(Math.floor(taskLeft%3600/60))+':'+two(taskLeft%60);
