@@ -187,7 +187,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 /* 精选（大图版活动卡，一次只显示一个） */
 .h5-feat{margin:0 16px;position:relative;background:#fff;border-radius:14px;box-shadow:0 6px 18px rgba(2,91,232,.18);}   /* Banner＋下半列同一张卡 */
 .h5-feat .h5-hero{border-radius:14px 14px 0 0;overflow:hidden;}
-.h5-hero{position:relative;height:172px;background:linear-gradient(135deg,#1B3A8A,#025BE8 55%,#7FB0FF);}
+.h5-hero{position:relative;aspect-ratio:370/154;   /* 10/30 精选图 370×154 照比例 */background:linear-gradient(135deg,#1B3A8A,#025BE8 55%,#7FB0FF);}
 .h5-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 75% 30%,rgba(255,255,255,.35),transparent 45%);}
 .h5-hero .h5-badge{z-index:1;}
 .h5-feat .h5-card__dot{top:-5px;right:-3px;z-index:2;}
@@ -210,7 +210,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 /* 活动小卡 */
 .h5-list{padding:0 16px;display:flex;flex-direction:column;gap:10px;}
 .h5-card{display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:8px;box-shadow:0 2px 8px rgba(13,34,69,.06);cursor:pointer;}
-.h5-thumb{width:112px;height:88px;border-radius:8px;flex-shrink:0;position:relative;overflow:hidden;background:linear-gradient(135deg,#CFE1FF,#9CC3FF);}
+.h5-thumb{width:112px;height:58px;border-radius:8px;flex-shrink:0;position:relative;overflow:hidden;background:linear-gradient(135deg,#CFE1FF,#9CC3FF);}
 .h5-thumb .h5-badge{position:absolute;left:0;right:0;bottom:0;border-radius:0;justify-content:center;padding:4px 6px;}
 .h5-body{flex:1;min-width:0;}
 .h5-title{font-size:14px;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -390,8 +390,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
                   <div class="section-title">活动列表设置</div>
                   <div data-radios="v2List" style="margin-bottom:14px"></div>
                   <div class="is-new" data-mark="改名称：原「PC 图片／H5 图片」"><div class="img-grid" data-uploads="PC 奖励列表图|H5 奖励列表图"></div>
-                  <p class="section-hint">图片格式:png、bmp、jpg、gif、webp;大小限制 5MB 内</p>
-                  <div class="el-form-item__tip el-form-item__tip--red" style="margin-bottom:12px">尺寸 112×88</div></div>
+                  <p class="section-hint" style="margin-bottom:12px">图片格式:png、bmp、jpg、gif、webp;大小限制 5MB 内</p></div>
                   <form class="el-form list-form" onsubmit="return false">
                     <div class="is-new" data-reward="v2"></div>
                     <div class="is-mod"><div class="el-form-item el-form-item--small"><label class="el-form-item__label">排序:</label><div class="el-form-item__content"><div class="el-input el-input--small" style="width:200px"><input class="el-input__inner" value="0" id="v2Sort"></div></div></div></div>
@@ -573,6 +572,8 @@ function featStatus(it, dev){
   return st && st > n ? elTag('未开始','info') : elTag('已结束','info');
 }
 var featUp = {PC:false, H5:false};   // 加入列里精选图传了没（示意）
+var FEAT_SIZE = {H5:'740×308', PC:''};
+/* 奖励列表图：10/30 她给 H5 显示 112×58 → 上传 2 倍 224×116，各上传区红字「尺寸 H5 224×116」；PC 晚点给 */   // 精选图上传尺寸＝前台显示尺寸的 2 倍（10/30 她给 H5 显示 370×154 → 传 740×308；PC 晚点给，没给不写死）
 function featRange(it){ var a = it.start && it.start !== '--' ? it.start : '', b = it.end && it.end !== '--' ? it.end : ''; return a || b ? esc(a || '--')+'<br>～ '+esc(b || '--') : '--'; }   // 活动时间起～迄；都没设＝--（前台显示 Permanent event）
 function renderFeatured(){
   ['PC','H5'].forEach(function(dev){
@@ -582,7 +583,8 @@ function renderFeatured(){
       '<span class="feat-add__lb"><span class="req">*</span>活动</span><span data-select="fFeat'+dev+'"></span>'+
       '<span class="feat-add__lb"><span class="req">*</span>精选图</span>'+fileBtn('data-feat-up="'+dev+'"'+(full ? ' disabled' : ''))+(featUp[dev] ? '<span class="thumb thumb--wide"></span>' : '')+
       '<button type="button" class="el-button el-button--primary el-button--small'+(full ? ' is-disabled' : '')+'" data-feat-add="'+dev+'"'+(full ? ' disabled' : '')+'><span>加 入</span></button>'+
-      '<span class="el-form-item__tip" style="margin:0">最多 '+FEAT_MAX+' 个</span></div>';
+      '<span class="el-form-item__tip" style="margin:0">最多 '+FEAT_MAX+' 个</span>'+
+      (FEAT_SIZE[dev] ? '<span class="el-form-item__tip el-form-item__tip--red" style="margin:0">尺寸 '+FEAT_SIZE[dev]+'</span>' : '')+'</div>';
     var rows = FEATURED[dev].map(byId).filter(Boolean).map(function(it, i, arr){
       return [i+1, esc(it.title)+'<div style="color:var(--c-text-3);font-size:11px">'+esc(it.src)+'</div>', featRange(it), '<span class="thumb thumb--wide"></span><div>'+elTextBtn('更换','data-feat-img="'+dev+'|'+i+'"')+'</div>', featStatus(it, dev),
         elTextBtn('上移','data-feat-move="'+dev+'|'+i+'|-1"', i === 0)+elTextBtn('下移','data-feat-move="'+dev+'|'+i+'|1"', i === arr.length-1)+elTextBtn('移除','data-feat-rm="'+dev+'|'+i+'"')];
@@ -871,7 +873,7 @@ function renderMatModal(){
   var daily = radioOf('mDaily','0') === '1';
   document.getElementById('matModalBody').innerHTML = '<form class="el-form el-form--label-right" onsubmit="return false">'+
     formItem('标题:', true, '<div style="display:flex;gap:16px;align-items:center">'+inp(it.title).replace('<input ', '<input id="mTitle" ')+'<label class="el-checkbox'+(daily?' is-checked':'')+'" data-radio="mDaily|'+(daily?'0':'1')+'"><span class="el-checkbox__input'+(daily?' is-checked':'')+'"><span class="el-checkbox__inner"></span></span><span class="el-checkbox__label">每日返水</span></label></div>', lw)+
-    '<div class="is-new" data-mark="改名称：原「标题图片」">'+formItem('奖励列表图:', true, up+'<div class="el-form-item__tip el-form-item__tip--red">尺寸 112×88</div>', lw-16)+'</div>'+
+    '<div class="is-new" data-mark="改名称：原「标题图片」">'+formItem('奖励列表图:', true, up+'<div class="el-form-item__tip el-form-item__tip--red">H5 尺寸 224×116</div>', lw-16)+'</div>'+
     formItem('弹窗图片:', false, up+'<div class="el-form-item__tip el-form-item__tip--red">PC: 800*600 H5: 640*118</div>', lw)+
     formItem('首页图片(移动端用):', false, up, lw)+
     formItem('首页浮窗设置', false, elRadios('mFloat', [['1','开启'],['0','关闭']], radioOf('mFloat','0')), lw)+
@@ -1016,7 +1018,7 @@ function renderV2(){
   document.querySelectorAll('[data-radios]').forEach(function(el){ el.innerHTML = elRadios('page_'+el.dataset.radios, [['1','开启'],['0','关闭']], radioVals[el.dataset.radios]); });
   document.querySelectorAll('[data-uploads]').forEach(function(el){
     el.innerHTML = el.dataset.uploads.split('|').map(function(t){
-      return '<div class="upload-card"><div class="upload-card-header"><span class="req">*</span>'+t+'</div><div class="upload-card-body"><div class="img-uploader">点击上传图片</div>'+
+      return '<div class="upload-card"><div class="upload-card-header"><span class="req">*</span>'+t+(t === 'H5 奖励列表图' ? '<span class="el-form-item__tip el-form-item__tip--red" style="margin:0 0 0 10px;display:inline">尺寸 224×116</span>' : '')+'</div><div class="upload-card-body"><div class="img-uploader">点击上传图片</div>'+
              '<div class="upload-actions"><button type="button" class="el-button el-button--text el-button--mini" data-card-del><i class="el-icon-delete"></i><span>删除</span></button></div></div></div>';
     }).join('');
   });
@@ -1037,7 +1039,7 @@ function renderGc(){
     '<div class="is-new">'+rewardFields('gc', {labelWidth:lw-16, colon:''}, catsOfKey('gc'))+'</div>'+
     '<div class="is-mod">'+formItem('排序', true, inp(it.sort,'160px','id="gcSort"'), lw-16)+'</div>'+   // 排序移到活动类别之后（10/21 她定：排序放偏下）
     '<div class="section-title section-title--plain"><span class="req">*</span>活动素材配置</div>'+
-    '<div class="is-new" data-mark="改名称：原「列表页图」">'+formItem('奖励列表图：', true, '<div class="upload-pair"><span class="upload-pair__item">PC：'+fileBtn()+'</span><span class="upload-pair__item">移动端：'+fileBtn()+'</span></div><div class="el-form-item__tip">仅支持图片文件：.PNG .JPG .WEBP 图片大小不超过2MB</div><div class="el-form-item__tip el-form-item__tip--red">尺寸 112×88</div>', lw-16)+'</div>'+
+    '<div class="is-new" data-mark="改名称：原「列表页图」">'+formItem('奖励列表图：', true, '<div class="upload-pair"><span class="upload-pair__item">PC：'+fileBtn()+'</span><span class="upload-pair__item">移动端：'+fileBtn()+'<span class="el-form-item__tip el-form-item__tip--red" style="margin:0 0 0 8px">尺寸 224×116</span></span></div><div class="el-form-item__tip">仅支持图片文件：.PNG .JPG .WEBP 图片大小不超过2MB</div>', lw-16)+'</div>'+
     formItem('浮窗开关', true, elRadios('page_gcFloat', [['1','开启'],['0','关闭']], radioVals.gcFloat), lw)+
     formItem('PC端图片', true, fileBtn(), lw)+formItem('H5端图片', true, fileBtn(), lw)+
     formItem('首页展示排序', true, inp('0','160px')+'<div class="el-form-item__tip">建议上传 png/jpg/gif 格式图片，大小不超过 5MB</div>', lw)+
@@ -1125,8 +1127,9 @@ function renderSrc(){
   h += areaTitle('内容配置') + '<div class="el-radio-group dev-tabs">'+['PC','手机端'].map(function(d){ return '<label class="el-radio-button el-radio-button--mini'+(imgDevice===d?' is-active':'')+'" data-imgtab="'+d+'"><input type="radio" class="el-radio-button__orig-radio"'+(imgDevice===d?' checked':'')+'><span class="el-radio-button__inner">'+d+'图片设置</span></label>'; }).join('')+'</div>';
   h += pg.imgs.map(function(t){
     var isList = t === '奖励列表图', req = isList || !!pg.imgReq;
-    var ctrl = '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'+(isList ? '<div class="el-form-item__tip el-form-item__tip--red">尺寸 112×88</div>' : '')+upThumb();
-    var item = formItem(dev+t+':', req, ctrl, isList ? lw-16 : lw);
+    var ctrl = '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'+(isList && dev === '手机端' ? '<div class="el-form-item__tip el-form-item__tip--red">尺寸 224×116</div>' : '')+upThumb();   // 尺寸只标手机端（10/30 她给 H5；PC 晚点给）
+    var ilw = dev === '手机端' ? 180 : lw;   // 手机端的 label 较长（手机端首页推荐展示图／手机端奖励列表图），加宽才不换行
+    var item = formItem(dev+t+':', req, ctrl, isList ? ilw-16 : ilw);
     return isList ? '<div class="is-new" data-mark="改名称：原「'+dev+(srcView === 'ddep' ? '奖励列表' : '列表页图')+'」">'+item+'</div>' : item;
   }).join('');
   h += pg.content.map(srcField).join('') + (pg.extra || []).map(srcField).join('');

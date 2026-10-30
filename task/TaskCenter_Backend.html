@@ -1133,7 +1133,7 @@ var GROUP_TASK_ID='1030';
 function subRowHTML(i){
   return '<div class="range-inline sub-card">'
     +'<div class="sub-card__hd"><span><span class="pill">子任务'+i+'</span><span class="subId"></span></span><a class="link-del" onclick="delSub(event,this)">删除</a></div>'
-    +'<div class="sub-card__ln"><span class="sub-card__lb"><span class="req">*</span>名称</span><input class="input subName" placeholder="请输入子任务名称" style="max-width:320px;flex:1"/><a class="i18n-add" onclick="openI18n()" title="国际化列表">＋</a></div>'
+    +'<div class="sub-card__ln"><span class="sub-card__lb"><span class="req">*</span>名称</span><input class="input subName" placeholder="请输入子任务名称" style="max-width:320px;flex:1"/></div>'
     +'<div class="sub-card__ln"><span class="sub-card__lb"><span class="req">*</span>条件</span><div class="subConds" style="display:flex;flex-direction:column;gap:8px;flex:1">'+condLineHTML(true)+'</div></div>'
     +'<div class="sub-card__ln"><span class="sub-card__lb"><span class="req">*</span>奖励</span>'
     +'<select class="select subReward" style="max-width:150px" onchange="onSubReward(this)">'+rewardOptsHTML('p')+'</select>'
