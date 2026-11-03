@@ -468,7 +468,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr class="mkr"><td style="width:9em">3.8 奖励找回入口（10/29）</td><td>没有可找回（无红点）时，任务列表的「奖励找回 ›」入口<b>隐藏</b>；一键领取弹窗点「确定」后<b>回到任务列表</b>。</td></tr>
                 <tr class="mkr"><td style="width:9em">3.9 提示弹窗（10/29）</td><td>PC 版提示弹窗从内容区右下<b>改到内容区中下</b>；H5 不变。任务名称：<b>基础任务、子任务用自己的名称，额外奖励用任务组名称</b>（原本子任务也用任务组名称）。</td></tr>
                 <tr class="mkr"><td style="width:9em">2.3 子任务名称多语言（10/30）</td><td>新增／编辑弹窗里子任务名称<b>不放国际化「＋」</b>；多语言统一在任务设置列表的子任务行「＋」设定（2.7）。</td></tr>
-                <tr class="mkr"><td style="width:9em">2.3 额外奖励非必填（11/03）</td><td>额外奖励<b>拿掉必填 *</b>，可设 0～3 档；每档都能删。</td></tr>
+                <tr class="mkr"><td style="width:9em">2.3 额外奖励非必填（11/03）</td><td>额外奖励<b>拿掉必填 *</b>，可设 0～3 档；新增时每档都能删。<b>送出后编辑时整块反灰</b>，不能新增、删除或修改；<b>子任务也不能增减</b>。新增／编辑的差别看 2.3「子任务 × 额外奖励」表。</td></tr>
                 <tr class="mkr"><td style="width:9em">3.4 没设额外奖励（11/03）</td><td>后台没设额外奖励 → 前台额外奖励<b>整块隐藏</b>，任务组卡只显示子任务。</td></tr>
                 <tr class="mkr"><td style="width:9em">3.9 两站统一（11/03）</td><td>主站、B 站提示弹窗<b>逻辑保持一致</b>，都照 3.9；只有画面照各站设计稿。</td></tr>
               </tbody>
@@ -479,7 +479,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <div class="lazy__h">懒人包：一分钟看懂这次做什么</div>
             <p class="lazy__one"><b>怎么读：</b>有「交互一览」表的节先看表（操作 → 结果），再看规则；栏位限制看 2.1，文字长度看 3.2。<br><b>一句话：</b>后台新增「任务组＋额外奖励」、4 种奖励类型（3 种券类＋golden draw券）和「名额上限」；前台跟着显示任务组卡、额满、新奖励图示；按钮照既有，只多「额满」。</p>
             <div class="lazy__grid">
-              <div class="lazy__card"><b class="lazy__t">后台 · 新增任务弹窗</b><ul class="lazy__list"><li><b>任务组</b>任务类别新增「任务组」：把多个子任务包成一个任务，最多 10 个；每个子任务有自己的名称<span class="lazy__ref">2.1、2.3</span></li><li><b>游戏页展示</b>原「任务标签」改名；任务组不适用<span class="lazy__ref">2.1</span></li><li><b>奖励类型</b>新增免费旋转、免费投注、优惠券、golden draw券；券类多填「价值」（只给前台显示 ₱价值，不影响发放）；彩金、积分、价值只能填整数，额外奖励最多 6 位<span class="lazy__ref">2.2</span></li><li><b>额外奖励</b>任意完成 n 个子任务再送，非必填，0～3 档；不用审核、不受名额限制、不进奖励找回<span class="lazy__ref">2.3</span></li><li><b>名额上限</b>一项奖励最多几人领到，领完即额满；有设名额就不能设奖励领取时限（不进奖励找回）<span class="lazy__ref">2.4、2.6</span></li><li><b>参与对象</b>按 VIP、标签、累计充值／投注指定，都不勾＝不限；标签多个＝全部都要有<span class="lazy__ref">2.5</span></li><li><b>任务时间</b>条件不能搭配的选项自动反灰<span class="lazy__ref">2.6</span></li></ul></div>
+              <div class="lazy__card"><b class="lazy__t">后台 · 新增任务弹窗</b><ul class="lazy__list"><li><b>任务组</b>任务类别新增「任务组」：把多个子任务包成一个任务，最多 10 个；每个子任务有自己的名称<span class="lazy__ref">2.1、2.3</span></li><li><b>游戏页展示</b>原「任务标签」改名；任务组不适用<span class="lazy__ref">2.1</span></li><li><b>奖励类型</b>新增免费旋转、免费投注、优惠券、golden draw券；券类多填「价值」（只给前台显示 ₱价值，不影响发放）；彩金、积分、价值只能填整数，额外奖励最多 6 位<span class="lazy__ref">2.2</span></li><li><b>额外奖励</b>任意完成 n 个子任务再送，非必填，0～3 档，送出后不能改；不用审核、不受名额限制、不进奖励找回<span class="lazy__ref">2.3</span></li><li><b>名额上限</b>一项奖励最多几人领到，领完即额满；有设名额就不能设奖励领取时限（不进奖励找回）<span class="lazy__ref">2.4、2.6</span></li><li><b>参与对象</b>按 VIP、标签、累计充值／投注指定，都不勾＝不限；标签多个＝全部都要有<span class="lazy__ref">2.5</span></li><li><b>任务时间</b>条件不能搭配的选项自动反灰<span class="lazy__ref">2.6</span></li></ul></div>
               <div class="lazy__card"><b class="lazy__t">后台 · 列表、记录、报表</b><ul class="lazy__list"><li><b>任务列表</b>新增「已领取 / 上限」栏；任务类别多「任务组」；任务组下方列出子任务，可收合<span class="lazy__ref">2.7</span></li><li><b>完成记录</b><span>子任务、额外奖励各自一行（名称：子任务名称／额外奖励 · 任意完成 n 个）；新增「额满」状态；<span class="mkr">免费旋转、免费投注、优惠券奖励值＝券名称；golden draw券奖励值「×1」</span>；任务ID 可搜母 ID（整组）或子任务 ID</span><span class="lazy__ref">2.8</span></li><li><b>报表</b>新增 4 个券类栏位（只算张数、不算价值）、任务ID 搜索；任务组分汇总行与明细行<span class="lazy__ref">2.9</span></li><li><b>影响画面</b><span>优惠券记录、大奖池券奖纪录新增「任务奖励」；<span class="mkr">资金明细、用户积分纪录、免费项目记录也写任务名称（额外奖励写任务组名称）</span></span><span class="lazy__ref">2.10</span></li></ul></div>
               <div class="lazy__card"><b class="lazy__t">前台 · 会员看到的（以 H5 为准）</b><ul class="lazy__list"><li><b>页签</b>限时、周限时合并为「限时」；页签下方红字新增（基础任务、每周、限时）；红点要算进子任务、额外奖励，不含奖励找回<span class="lazy__ref">3.1、4</span></li><li><b>任务卡</b>奖励标签、进度条、已发送 x/y 人；各处文字几行、超出怎么处理看「前台文案长度一览」<span class="lazy__ref">3.2</span></li><li><b>奖励写法</b>彩金、积分只放数字（不加 ₱、+）；券类＝₱价值；golden draw券＝×张数；各处写法看 3.2 对照表<span class="lazy__ref">3.2</span></li><li><b>任务组卡</b>预设显示额外奖励＋1 个子任务（B 站 PC 版 2 个），其余收合；子任务排序：可领取 → 进度快的 → 已完成；不放「任务组」角标<span class="lazy__ref">3.3</span></li><li><b>额外奖励</b>宝箱换新样式（银宝箱／红宝箱／绿勾），可领取时宝箱开合；下方「n 个」＋奖励红字；没设＝整块隐藏<span class="lazy__ref">3.4</span></li><li><b>额满</b>名额发完时的按钮状态<span class="lazy__ref">3.5</span></li><li><b>领取成功弹窗</b>新奖励类型；券类＝₱价值＋灰字券名称（最多 2 行，不翻译）；自动发放不跳<span class="lazy__ref">3.6</span></li><li><b>谁看得到</b>VIP、标签不符合＝看不到；参与要求没达成＝看得到，按钮引导去完成<span class="lazy__ref">3.7</span></li><li><b>奖励找回</b>不显示合计；一键领取用通用图示；没有可找回＝入口隐藏<span class="lazy__ref">3.8</span></li><li><b>提示弹窗</b>图示依类型；左上关闭钮换成灰蓝圆＋白 ✕；券类只放 ₱价值；名称：基础任务、子任务用自己的，额外奖励用任务组的；结尾是「任务」不再接「任务」<span class="lazy__ref">3.9</span></li></ul></div>
               <div class="lazy__card"><b class="lazy__t">不变</b><span class="lazy__sub">后台</span><ul class="lazy__list"><li><b>累计充值／有效投注大于等于</b>配置与计算方式照既有<span class="lazy__ref">2.5</span></li><li><b>任务时间</b>重置周期照既有<span class="lazy__ref">2.6</span></li><li><b>既有分页</b>资料审核、黑名单设置<span class="lazy__ref">2.7</span></li></ul><span class="lazy__sub">前台</span><ul class="lazy__list"><li><b>按钮</b>显示判断、点击、引导跳转<span class="lazy__ref">3.5、v1.1</span></li><li><b>奖励找回</b>补领规则照既有<span class="lazy__ref">3.8</span></li><li><b>提示弹窗</b>检查频率、出现页面、次数、点「领取」跳转<span class="lazy__ref">3.9</span></li><li><b>任务简介</b>标题后 ⓘ、点了跳弹窗<span class="lazy__ref">3.10</span></li><li><b>黑名单</b>前台显示照任务中心既有逻辑<span class="lazy__ref">3.7</span></li><li><b>任务规则弹窗</b>照既有<span class="lazy__ref">—</span></li></ul></div>
@@ -519,7 +519,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
           <h3 class="sub">规则</h3>
           <ul>
             <li><b>任务类别 *</b>：基础任务（预设）／任务组。选任务组，任务内容区改成子任务＋额外奖励（2.3）：任务条件、任务奖励、跳转地址、游戏页展示收起，改显示子任务（预设 2 个）、额外奖励（预设 1 档，非必填）；名额上限两种都有。</li>
-            <li><b>编辑时</b>：任务类别反灰不可改。</li>
+            <li><b>编辑时</b>：任务类别反灰不可改<span class="mkr">；任务组的子任务不能增减、额外奖励反灰不可改（2.3）</span>。</li>
             <li><b>游戏页展示</b>（<b>改名</b>：原「任务标签」，选项、逻辑照既有）：选项「无、体育、电子、真人、小游戏、其他」，决定任务卡出现在前台哪个游戏分类页的「Task」区块。<b>任务组不适用</b>：选任务组时这一栏收起。</li>
             <li><b>币种、任务名称</b>：照既有。任务名称在前台只显示一行，超出以「…」截断。</li>
           </ul>
@@ -543,7 +543,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <tr><td>选券（券类）</td><td class="nw">是</td><td>—</td><td>下拉，来源＝券管理后台已建立的券</td><td class="nw">请选择</td></tr>
               <tr><td>价值（新增，券类）</td><td class="nw">否</td><td>可以 0（前台显示 ₱0）</td><td><b>整数</b>；单位 ₱；<b>额外奖励：最多 6 位</b>（999,999），其他不限位数</td><td class="nw">0</td></tr>
               <tr><td>golden draw券张数</td><td class="nw">是</td><td>照既有</td><td>照既有</td><td class="nw">0</td></tr>
-              <tr><td>额外奖励「任意完成 n 个」</td><td class="nw"><span class="mkr">否</span></td><td>—</td><td>下拉 1～子任务数；各档不能重复；<span class="mkr">0～3 档</span>且不超过子任务数<span class="mk">（11/03 新增）</span></td><td class="nw">空白</td></tr>
+              <tr><td>额外奖励「任意完成 n 个」</td><td class="nw"><span class="mkr">否</span></td><td>—</td><td>下拉 1～子任务数；各档不能重复；<span class="mkr">0～3 档</span>且不超过子任务数<span class="mkr">；编辑时反灰不可改</span><span class="mk">（11/03 新增）</span></td><td class="nw">空白</td></tr>
               <tr><td>名额上限（新增）</td><td class="nw">否</td><td>留空或 0＝不限</td><td>正整数；不做防呆；永久任务反灰</td><td class="nw">空白</td></tr>
               <tr><td>VIP 等级／用户标签</td><td class="nw">否</td><td>都不勾＝不限</td><td>多选，选项照既有</td><td class="nw">不勾</td></tr>
               <tr><td>任务参与要求</td><td class="nw">否</td><td>没勾＝不限</td><td>勾了才能填金额（照既有）</td><td class="nw">不勾</td></tr>
@@ -623,10 +623,10 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 
           <h3 class="sub">子任务</h3>
           <ul>
-            <li><b>数量</b>：预设 2 个，最少 1 个，最多 10 个。满 10 个「＋ 添加子任务」反灰；只剩 1 个时「删除」反灰。新加的子任务预设「资金 · 充值」＋积分；跟其他子任务没有共同任务时间时，自动换成可以放一起的条件（2.6）。</li>
+            <li><b>数量</b>：预设 2 个，最少 1 个，最多 10 个。满 10 个「＋ 添加子任务」反灰；只剩 1 个时「删除」反灰。<span class="mkr">编辑时不能增减（见下方「子任务 × 额外奖励」）。</span>新加的子任务预设「资金 · 充值」＋积分；跟其他子任务没有共同任务时间时，自动换成可以放一起的条件（2.6）。</li>
             <li><b>内容</b>：每个子任务一个<b>名称</b>＋一个条件＋一份奖励＋一个跳转；条件、奖励、跳转规则同 2.2。</li>
             <li><b>子任务名称 *</b>：子任务卡片里的「名称」，规则<b>同「任务名称」</b>（必填、字数）；前台子任务行显示这个名称，1 行，超出「…」。<span class="mkr">名称旁<b>不放</b>国际化「＋」，多语言统一在任务设置列表的子任务行设定（2.7）。</span><span class="mk">（10/30 修改）</span>任务组名称＝上方「任务名称」。</li>
-            <li><b>ID</b>：母ID-序号，显示在每个子任务标题旁。<br>新增任务时：删掉一个子任务，后面的序号往前补。<br>编辑已建立的任务组时：序号固定不动，删掉的号码空着不再用，新加的接在最大号后面。例：有 1030-1、-2、-3，删掉 -2 再新增一个 → 1030-1、-3、-4。</li>
+            <li><b>ID</b>：母ID-序号，显示在每个子任务标题旁。<br>新增任务时：删掉一个子任务，后面的序号往前补。<br><span class="mkr">编辑已建立的任务组时：子任务不能增减，序号固定不动。</span><span class="mk">（11/03 修改）</span></li>
             <li><b>任务时间</b>：整组共用，在 2.6 设定。</li>
           </ul>
 
@@ -641,6 +641,20 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <li><b>计算</b>：完成数按当期算，跟着任务时间重置。</li>
           </ul>
 
+          <h3 class="sub mkr">子任务 × 额外奖励（新增、编辑分开看）<span class="mk">（11/03 新增）</span></h3>
+          <p class="mkr">子任务、额外奖励送出后，再编辑<b>都不能增减</b>：子任务不能加、不能删；额外奖励整块反灰。</p>
+          <div class="tbl-scroll"><table class="t mkr">
+            <thead><tr><th class="nw">项目</th><th class="nw">动作</th><th>新增任务时</th><th>编辑任务时（已送出）</th></tr></thead>
+            <tbody>
+              <tr><td class="nw" rowspan="2"><b>子任务</b></td><td class="nw">加</td><td>✓ 可以，最多 10 个</td><td><b>✗ 不能加</b></td></tr>
+              <tr><td class="nw">删</td><td>✓ 可以，最少留 1 个</td><td><b>✗ 不能删</b></td></tr>
+              <tr><td class="nw" rowspan="3"><b>额外奖励</b></td><td class="nw">加档</td><td>✓ 可以，0～3 档，不超过子任务数</td><td><b>✗ 不能</b>（整块反灰）</td></tr>
+              <tr><td class="nw">删档</td><td>✓ 可以，可删到 0 档</td><td><b>✗ 不能</b></td></tr>
+              <tr><td class="nw">改 n、奖励</td><td>✓ 可以</td><td><b>✗ 不能</b></td></tr>
+            </tbody>
+          </table></div>
+          <p class="mkr" style="font-size:.92em">新增时删子任务，某档 n 比剩下的子任务还多 → 该档 n 自动清空，要重选或删掉那档才能保存。</p>
+
           <h3 class="sub">例子<span style="font-weight:400;font-size:.8em;color:var(--c-text-3,#888);margin-left:8px">左侧画面带入的就是这个例子</span></h3>
           <p>子任务：① 充值 ₱100 → 积分 100　② 投注 ₱1,000 → 积分 150　③ 投注 ₱200 → 积分 200<br>额外奖励：任意完成 1 个 → 积分 50　2 个 → 彩金 100　3 个 → 积分 500</p>
           <div class="tbl-scroll"><table class="t">
@@ -651,12 +665,6 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <tr><td class="nw">③ 投注 ₱200</td><td>3 / 3</td><td>积分 200 ＋ 积分 500</td></tr>
             </tbody>
           </table></div>
-
-          <h3 class="sub">补充</h3>
-          <ul>
-            <li>删子任务后，某档额外奖励要求的数量比剩下的子任务还多：该档「任意完成 __ 个」的数字会自动清空，要运营重新选或删掉那一档。例：原本 3 个子任务、有一档「任意完成 3 个」，删到剩 2 个，这档就做不到了，所以清空。</li>
-            <li>删子任务后，额外奖励的档数比子任务还多（例：3 档、删到剩 2 个子任务）：多出来的那档选不到数字，要删掉那一档才能保存。</li>
-          </ul>
 
         </article>
 

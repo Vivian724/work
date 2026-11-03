@@ -312,6 +312,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
 .link-add.is-off{color:var(--c-text-3);opacity:.6;cursor:not-allowed;pointer-events:none;}
 .link-del{color:var(--c-danger);font-size:.8rem;cursor:pointer;white-space:nowrap;}
 .link-del.is-off{color:var(--c-text-3);opacity:.5;cursor:not-allowed;pointer-events:none;}   /* 只剩 1 个子任务时，删除反灰 */
+#groupExtra.is-locked .form__control{opacity:.5;pointer-events:none;}   /* 编辑任务组：额外奖励整块反灰不能改（11/03） */
 .subId{margin-left:6px;color:var(--c-text-3);font-size:.75rem;}
 .hidden{display:none !important;}
 .i18n-add{color:var(--c-primary);font-size:.95rem;margin-left:4px;}
@@ -1002,7 +1003,10 @@ function openBlModal(){ document.getElementById('blModal').classList.add('open')
 function closeBlModal(){ document.getElementById('blModal').classList.remove('open'); }
 
 function openModal(mode,kind){
-  SUB_EDIT=false; if(document.getElementById('subTasks').children.length) renumberSubs();
+  /* 编辑时：额外奖励整块反灰、子任务不能增减（新增时才能配置） */
+  document.getElementById('groupExtra').classList.toggle('is-locked', mode==='edit');
+  SUB_EDIT=false; [].forEach.call(document.getElementById('subTasks').children,function(r){ delete r.dataset.saved; });
+  if(document.getElementById('subTasks').children.length) renumberSubs();
   document.getElementById('taskModalTitle').textContent = (mode==='edit'?'编辑任务':'新增任务');
   /* 防呆：编辑时「任务类别」反灰不可改（基础任务↔任务组切换会让任务ID、完成记录对不上）*/
   var cat=document.getElementById('taskCat'); cat.disabled=(mode==='edit');
@@ -1022,9 +1026,11 @@ function openModal(mode,kind){
     document.querySelector('input[name="grant"][value="manual"]').checked=true; onGrant();
   }
   if(mode==='edit' && kind==='group'){
-    /* 示例：编辑任务组＝带入任务组表单（类别反灰），子任务编号固定 1030-1、1030-2…；删掉的号码不再用 */
+    /* 示例：编辑任务组＝带入任务组表单（类别反灰），子任务编号固定 1030-1、1030-2…；子任务不能增减 */
     if(cat.value!=='group'){ cat.value='group'; onTaskCat(); syncDd(cat); }
-    seedTiers(); seedSubNames(); renumberSubs(); SUB_EDIT=true;
+    seedTiers(); seedSubNames();
+    [].forEach.call(document.getElementById('subTasks').children,function(r){ r.dataset.saved='1'; });   /* 已送出的子任务：编辑时不能删 */
+    renumberSubs(); SUB_EDIT=true;
     seedRow();
   } else if(mode==='edit'){
     if(cat.value!=='basic'){ cat.value='basic'; onTaskCat(); syncDd(cat); }
@@ -1248,7 +1254,7 @@ function onSubReward(sel){
   val.placeholder = REWARD_HINT[v]||'奖励值';
   if(row.closest('#tierRewards') && (v==='c'||v==='p')) val.maxLength=6; else val.removeAttribute('maxlength');   /* 只有额外奖励：彩金、积分最多 6 位数 */
 }
-/* 子任务编号：新增任务时，删除后重排；编辑任务时，编号不变、删掉的号码不再用（新加的接最大号）*/
+/* 子任务编号：新增任务时，删除后重排；编辑任务时，编号不变，子任务不能增减 */
 var SUB_EDIT=false, SUB_NEXT=0;
 function renumberSubs(){
   var box=document.getElementById('subTasks');
@@ -1256,16 +1262,16 @@ function renumberSubs(){
     if(!SUB_EDIT || !row.dataset.no) row.dataset.no = SUB_EDIT ? (++SUB_NEXT) : (idx+1);
     row.querySelector('.pill').textContent='子任务'+row.dataset.no;
     var sid=row.querySelector('.subId'); if(sid) sid.textContent=GROUP_TASK_ID+'-'+row.dataset.no;
-    row.querySelector('.link-del').classList.toggle('is-off', box.children.length<=1);   /* 最少 1 个 */
+    row.querySelector('.link-del').classList.toggle('is-off', box.children.length<=1 || !!row.dataset.saved);   /* 最少 1 个；编辑时子任务不能删 */
   });
   if(!SUB_EDIT) SUB_NEXT=box.children.length;
   /* 配置限制：子任务最多 10 个——满 10 个「添加子任务」反灰不可点 */
-  document.getElementById('addSubBtn').classList.toggle('is-off', box.children.length>=10);
+  document.getElementById('addSubBtn').classList.toggle('is-off', box.children.length>=10 || isGrpLocked());   /* 满 10 个；编辑时不能加 */
   syncTiers();
 }
-function addSub(e){ if(e)e.preventDefault();
+function addSub(e,seed){ if(e)e.preventDefault();   /* seed＝程式带入示例（不受编辑锁定限制） */
   var box=document.getElementById('subTasks');
-  if(box.children.length>=10) return;
+  if(box.children.length>=10 || (!seed && isGrpLocked())) return;
   var d=document.createElement('div'); d.innerHTML=subRowHTML(box.children.length+1);
   var row=d.firstChild; box.appendChild(row); ddInitAll(row);
   onSubCat(row.querySelector('.subCat')); fitSub(row); onSubReward(row.querySelector('.subReward')); renumberSubs();
@@ -1281,8 +1287,10 @@ function fitSub(row){
     if(ok.length){ catSel.value=cats[i]; onSubCat(catSel); condSel.value=ok[0]; onSubCond(condSel); syncDd(catSel); syncDd(condSel); return; }
   }
 }
+/* 编辑时（11/03）：子任务、额外奖励都不能增减（子任务 data-saved、额外奖励 is-locked） */
+function isGrpLocked(){ return document.getElementById('groupExtra').classList.contains('is-locked'); }
 function delSub(e,btn){ if(e)e.preventDefault();
-  if(subCount()<=1) return;
+  if(subCount()<=1 || btn.closest('.range-inline').dataset.saved) return;
   btn.closest('.range-inline').remove(); renumberSubs(); checkGroupTime(); }
 /* ===== 额外奖励：任意完成 n 个子任务 → 获得一笔奖励（最多 3 笔；奖励类型同子任务；彩金需配流水倍数）===== */
 function tierRowHTML(n,type,val){
@@ -1341,7 +1349,7 @@ function seedTiers(){
   var box=document.getElementById('tierRewards'); if(!box) return;
   if([].some.call(box.querySelectorAll('.tierN'),function(x){ return x.value; })) return;
   box.innerHTML='';
-  while(subCount()<3) addSub();   /* 示例补到 3 个子任务，才放得下 3 档（档数不超过子任务数） */
+  while(subCount()<3) addSub(null,true);   /* 示例补到 3 个子任务，才放得下 3 档（档数不超过子任务数） */
   addTier(null,'1','p','50'); addTier(null,'2','c','100'); addTier(null,'3','p','500');   /* 同规格书 2.3 例子：1 个积分 50、2 个彩金 100、3 个积分 500 */
 }
 function onTaskCat(){
@@ -1354,7 +1362,7 @@ function onTaskCat(){
   document.getElementById('rowTaskTag').classList.toggle('hidden',isGroup);   /* 任务组不适用游戏页展示 */
   if(isGroup) document.getElementById('rowChip').style.display='none'; else onReward();
   var box=document.getElementById('subTasks');
-  if(isGroup && box.children.length===0){ addSub(); addSub(); }
+  if(isGroup && box.children.length===0){ addSub(null,true); addSub(null,true); }
   if(isGroup && document.getElementById('tierRewards').children.length===0) addTier(null);
   checkGroupTime();
 }

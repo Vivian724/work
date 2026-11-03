@@ -25,6 +25,8 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .is-new{position:relative;border:1.5px solid var(--c-danger);border-radius:5px;padding:12px 16px 0;margin:10px 0 14px;}
 .is-new::before{content:"新增";position:absolute;top:-9px;left:8px;background:var(--c-danger);color:#fff;font-size:11px;line-height:15px;padding:0 5px;border-radius:2px;}
 .is-new>.el-form-item:last-child,.is-mod>.el-form-item:last-child{margin-bottom:12px;}
+.sw-row{display:flex;align-items:center;flex-wrap:wrap;} .sw-row>*{flex:none;}   /* 浮窗开关＋奖励页小精选同一行，两组都不缩 */
+.is-new--sw{display:inline-flex;align-items:center;gap:12px;padding:0 12px;margin:0 0 0 32px;vertical-align:middle;line-height:30px;}   /* 奖励页小精选：跟浮窗开关同一行（11/03 她定） */
 .is-new>.el-form-item__tip:last-child,.is-mod>.el-form-item__tip:last-child{margin-bottom:12px;}
 .is-new[data-mark]::before{content:attr(data-mark);}
 .is-new--inline{display:inline-block;padding:6px 10px 2px;margin:0;}
@@ -61,10 +63,6 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .toolbar{display:flex;justify-content:flex-end;gap:var(--space-3);margin-bottom:var(--space-3);}
 .box__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);}
 .box__title{font-size:16px;color:var(--c-text);}
-.pick-row{display:flex;align-items:center;gap:12px;padding:5px 0;}
-.pick-row__lb{width:48px;color:var(--c-text-2);white-space:nowrap;}
-.pick-row__img{width:72px;display:inline-flex;align-items:center;}
-.pick-row__st{min-width:60px;}
 
 /* ===== 表格 ===== */
 .el-table{width:100%;}
@@ -203,7 +201,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .h5-clock{width:11px;height:11px;border:1.5px solid #fff;border-radius:50%;position:relative;display:inline-block;flex-shrink:0;}
 .h5-clock::after{content:"";position:absolute;left:3.5px;top:1.5px;width:1.5px;height:3.5px;background:#fff;box-shadow:1.5px 2px 0 -0.5px #fff;}
 /* 快捷入口（活动类别） */
-/* 奖励页精选区块（10/30 照设计图）：一排方块，每格＝一个活动的首页浮窗图；超过 4 个横向滑 */
+/* 奖励页精选区块（10/30 照设计图）：一排方块，每格＝一个活动的首页浮窗图；11/03 她定改成各活动自己开「奖励页小精选」开关，前台照首页浮窗排序取前 4 个 */
 .h5-picks{display:flex;gap:8px;padding:2px 16px 10px;overflow-x:auto;scrollbar-width:none;}
 .h5-picks::-webkit-scrollbar{display:none;}
 .h5-pick{flex:0 0 calc((100% - 24px) / 4);aspect-ratio:17/10;border-radius:10px;cursor:pointer;background-size:cover;background-position:center;}
@@ -321,10 +319,6 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
                 <button type="button" class="el-button el-button--primary el-button--small" data-mat-new="PC"><span>新增PC活动优惠素材图</span></button>
                 <button type="button" class="el-button el-button--primary el-button--small" data-mat-new="H5"><span>新增H5活动优惠素材图</span></button>
               </div>
-              <div class="box is-new" data-mark="新增" style="padding-top:14px">
-                <div class="box__head" style="margin-bottom:8px"><span class="box__title">奖励页精选区块</span></div>
-                <div id="pickBlock"></div>
-              </div>
               <div class="box">
                 <div class="box__head"><span class="box__title">PC版活动素材</span></div>
                 <div class="js-table"></div>
@@ -385,7 +379,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
                 <p class="section-hint" style="margin-top:0">设置首页浮窗图片、活动列表图片及活动备注。</p>
                 <div class="section">
                   <div class="section-title">首页浮窗设置</div>
-                  <div data-radios="v2Float" style="margin-bottom:14px"></div>
+                  <div class="sw-row" style="margin-bottom:14px"><span data-radios="v2Float"></span><span data-pick="v2Pick"></span></div>
                   <div class="img-grid" data-uploads="PC 图片|H5 图片"></div>
                   <p class="section-hint">图片格式:png、bmp、jpg、gif、webp;大小限制 5MB 内</p>
                   <form class="el-form list-form" onsubmit="return false"><div class="el-form-item el-form-item--small"><label class="el-form-item__label">排序:</label><div class="el-form-item__content"><div class="el-input el-input--small" style="width:200px"><input class="el-input__inner" value="6011"></div></div></div></form>
@@ -540,18 +534,20 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
    dev＝素材才有：线上 PC 版／H5 版素材是两笔独立资料，各自有排序／标签；其他来源一笔、PC 与 H5 两表共用同一个值
    ========================================================================== */
 var items = [
-  {id:1,  src:'素材', dev:'H5', lang:'英语', def:'是', title:'wins排行版',           sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:10000},
+  {id:1,  src:'素材', dev:'H5', lang:'英语', def:'是', title:'wins排行版',           sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:10000, pick:true, fsort:1},
   {id:2,  src:'素材', dev:'H5', lang:'英语', def:'否', title:'每日返水加码活动',     sub:'Daily Rebate',            end:'--',                  showEnd:'--',                  on:true,  sort:9999,  feat:false},
   {id:3,  src:'素材', dev:'H5', lang:'英语', def:'是', title:'每日特别返水',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-07-28 23:59:00', showEnd:'2027-05-31 00:00:00', on:true,  sort:9998,  feat:false, pending:true, pendingN:2},
   {id:15, src:'素材', dev:'PC', lang:'英语', def:'是', title:'wins排行版',           sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:10000},
   {id:16, src:'素材', dev:'PC', lang:'英语', def:'否', title:'每日返水加码活动',     sub:'Daily Rebate',            end:'--',                  showEnd:'--',                  on:true,  sort:9999,  feat:false},
   {id:17, src:'素材', dev:'PC', lang:'英语', def:'是', title:'每日特别返水',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-07-28 23:59:00', showEnd:'2027-05-31 00:00:00', on:true,  sort:9998,  feat:false, pending:true, pendingN:2},
   {id:18, src:'素材', dev:'PC', lang:'英语', def:'否', title:'vip返水加码',          sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:88,    feat:false},
-  {id:4,  src:'游戏挑战赛', lang:'—',    def:'—',  title:'Game Challenge',       sub:'',                        start:'2026-09-01 00:00:00', end:'2026-10-31 00:00:00', showEnd:'2026-10-31 00:00:00', on:true,  sort:999,   feat:true},
+  {id:20, src:'素材', dev:'H5', lang:'英语', def:'否', title:'大奖池',               sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:9997,  feat:false, pick:true, fsort:3},
+  {id:21, src:'素材', dev:'PC', lang:'英语', def:'否', title:'大奖池',               sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:9997,  feat:false},
+  {id:4,  src:'游戏挑战赛', lang:'—',    def:'—',  title:'Game Challenge',       sub:'',                        start:'2026-09-01 00:00:00', end:'2026-10-31 00:00:00', showEnd:'2026-10-31 00:00:00', on:true,  sort:999,   feat:true, pick:true, fsort:2},
   {id:5,  src:'素材', dev:'H5', lang:'英语', def:'否', title:'vip返水加码',          sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:88,    feat:false},
   {id:6,  src:'充值活动',   lang:'—',    def:'—',  title:'Deposit Activity',     sub:'',                        start:'2025-10-17 00:00:00', end:'2028-01-01 00:00:00', showEnd:'--',                  on:true,  sort:8,     feat:false, auto:true},
   {id:7,  src:'负盈利活动', lang:'—',    def:'—',  title:'负盈利-手动领-自动到', sub:'负盈利活动-内容标题文字', start:'2026-10-01 00:00:00', end:'2027-10-30 23:59:59', showEnd:'--',                  on:true,  sort:1,     feat:false, pending:true},
-  {id:8,  src:'每日存款',   lang:'—',    def:'—',  title:'will存款活动Test',     sub:'',                        start:'2026-10-01 00:00:00', end:'2026-11-30 00:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false},
+  {id:8,  src:'每日存款',   lang:'—',    def:'—',  title:'will存款活动Test',     sub:'',                        start:'2026-10-01 00:00:00', end:'2026-11-30 00:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false, pick:true, fsort:4},
   {id:9,  src:'X-BOMB',     lang:'—',    def:'—',  title:'AA_XBOMB_ALEX_0908',   sub:'',                        start:'2026-09-08 00:00:00', end:'2026-10-20 09:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false},
   {id:10, src:'预约活动',   lang:'—',    def:'—',  title:'預約活動2',            sub:'',                        start:'2026-09-01 00:00:00', end:'2026-09-21 00:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false},
   {id:19, src:'周卡',       lang:'—',    def:'—',  title:'Weekly Card',          sub:'',                        start:'2026-10-01 00:00:00', end:'2026-12-31 23:59:59', showEnd:'--',                  on:true,  sort:0,     feat:false},
@@ -601,36 +597,13 @@ var ITEM_TAGS = {1:['Leaderboard'], 3:['Rebate'], 15:['Leaderboard'], 17:['Rebat
 /* 某张表（PC／H5）列哪些：该端的素材＋全部其他来源 */
 function onDev(it, dev){ return it.src !== '素材' || it.dev === dev; }
 items.forEach(function(it){ it.tags = ITEM_TAGS[it.id] || []; });
-/* 奖励页精选区块（10/30 她定；10/30 再定「只有四格」→ 做成固定 4 个位置）
-   后台：奖励页列表页上方「奖励页精选区块」，位置 1～4 各一个下拉选活动；只能选有首页浮窗图的活动（素材、活动配置(新) 的 X-BOMB／预约／周卡、游戏挑战赛），
-   图直接用该活动的首页浮窗图（PC 用 PC 图片、H5 用 H5 图片），不另传；同一活动不能占两格；位置可空
-   前台：个人栏下一排方块，照位置 1→4，只显示在显示期内且状态开启的；该格活动没在显示期就跳过（不留空格）；四格都没有整排不出
-   专项活动页（充值／消费／盈利／每日首充／每日存款／新用户首充）没有首页浮窗，选不到 */
-var PICK_SLOTS = 4;
-var FLOAT_SRC = ['素材', 'X-BOMB', '预约活动', '周卡', '游戏挑战赛'];   // 带首页浮窗设置的来源
-function hasFloat(it){ return FLOAT_SRC.indexOf(it.src) > -1; }
-function pickIds(){ var a = []; for (var i = 0; i < PICK_SLOTS; i++) a.push(Number(selects['pick'+i].val) || 0); return a; }
-function pickStatus(it){
-  if (!it.on) return elTag('已关闭','info');
-  if (visibleNow(it)) return elTag('显示中','success');
-  var n = nowMs(), st = tms(it.showStart) || tms(it.start);
-  return st && st > n ? elTag('未开始','info') : elTag('已结束','info');
-}
-function renderPicks(){
-  var el = document.getElementById('pickBlock'); if (!el) return;
-  var ids = pickIds(), rows = '';
-  for (var i = 0; i < PICK_SLOTS; i++) {
-    var key = 'pick'+i, taken = ids.filter(function(x, j){ return j !== i && x; });
-    selects[key].opts = [['','不设定']].concat(items.filter(function(x){ return hasFloat(x) && taken.indexOf(x.id) < 0; }).sort(function(a,b){ return b.sort - a.sort; })
-      .map(function(x){ return [String(x.id), x.title+'（'+x.src+(x.src === '素材' ? ' '+x.dev : '')+(x.on ? '' : '・已关闭')+'）']; }));
-    if (!selects[key].opts.some(function(o){ return o[0] === selects[key].val; })) selects[key].val = '';
-    var it = byId(ids[i]);
-    rows += '<div class="pick-row"><span class="pick-row__lb">位置 '+(i+1)+'</span>'+elSelect(key, '360px')+
-            '<span class="pick-row__img">'+(it ? '<span class="thumb thumb--wide"></span>' : '')+'</span>'+
-            '<span class="pick-row__st">'+(it ? pickStatus(it) : '')+'</span></div>';
-  }
-  el.innerHTML = rows;
-}
+/* 奖励页精选区块（10/30 她定；11/03 她定改法：不集中配置，各活动自己的「首页浮窗设置」旁加一个「奖励页小精选」开关，图共用首页浮窗图）
+   可开的活动＝她 11/03 列的 8 种：排行榜、游戏挑战赛、大奖池、VIP 反水加码、每日存款、Daily Special、预约活动、X-BOMB
+   → 开关放在：素材弹窗、活动配置(新) 步骤 2 首页浮窗设置、游戏挑战赛 活动素材配置、每日存款活动页（每日存款原本没浮窗，一并加上浮窗栏位）
+   前台：个人栏下一排方块，取开了精选、在显示期内且状态开启的活动，照首页浮窗排序（数字小在前）取前 4 个；一个都没有整排不出
+   it.pick＝精选开关；it.fsort＝首页浮窗排序（示范资料才有，没有当 999） */
+var PICK_OK = ['素材', '游戏挑战赛', '每日存款', '预约活动', 'X-BOMB'];   // 有「奖励页小精选」开关的来源（她 11/03 列的 8 种活动）
+function pickList(dev){ return items.filter(function(x){ return x.pick && onDev(x, dev) && visibleNow(x); }).sort(function(a,b){ return (a.fsort || 999) - (b.fsort || 999); }).slice(0, 4); }
 
 /* 每笔活动自己勾的类别（素材、专项活动＝既有「活动类型」；X-BOMB／预约／挑战赛＝新增「活动类别」）
    前台快捷入口照这个筛选；没勾任何类别＝只在 All 出现（10/19 她定） */
@@ -656,7 +629,7 @@ var SRC_PAGES = {
   ddep:  {title:'每日存款活动', back:true, i18n:true,
           basic:['活动名称','活动时间','领取方式','发放方式','活动状态','活动类型','排序'],
           radios:{'领取方式':[['1','自动发放','d']], '发放方式':[['1','自动到账','d']]},
-          reward:'week', cond:['flow','ip'], agent:true, imgs:['奖励列表图','内容图片'], imgReq:true, content:['活动标题','活动内容']},
+          reward:'week', cond:['flow','ip'], agent:true, imgs:['奖励列表图','内容图片'], imgReq:true, float:true, content:['活动标题','活动内容']},   // float：11/03 她定每日存款也要进奖励页精选区块、共用首页浮窗设置 → 加上素材既有的三个浮窗栏位
   newbie:{title:'新用户首充活动', tabs:['活动配置','活动统计'], typeFirst:true, i18n:true,
           basic:['是否显示首页','活动名称','活动时间','显示时间','领取方式','发放方式','活动状态','排序'],
           radios:{'领取方式':[['1','自动发放']], '发放方式':[['1','自动到账']]},
@@ -690,8 +663,7 @@ var selects = {
   fSt:{val:'', opts:[['','全部'],['1','开启'],['0','关闭']]},
   fSrc:{val:'', opts:[['','全部']].concat(items.map(function(x){ return x.src; }).filter(function(v,i,a){ return a.indexOf(v) === i; }).map(function(s){ return [s,s]; }))},
   i18nLang:{val:'英语', opts:LANGS.map(function(l){ return [l,l]; })},
-  itemTag:{val:'', opts:[]},   // 设定标签弹窗：单选，选项＝「无」＋标签管理里的全部标签
-  pick0:{val:'9', opts:[]}, pick1:{val:'4', opts:[]}, pick2:{val:'19', opts:[]}, pick3:{val:'1', opts:[]}   // 奖励页精选区块位置 1～4（示范：X-BOMB、挑战赛、周卡、wins排行版）
+  itemTag:{val:'', opts:[]}   // 设定标签弹窗：单选，选项＝「无」＋标签管理里的全部标签
 };
 
 /* ==========================================================================
@@ -715,6 +687,8 @@ function elRadios(key, opts, val){
     return '<label class="el-radio'+(on?' is-checked':'')+dis+'" data-radio="'+key+'|'+o[0]+'"><span class="el-radio__input'+(on?' is-checked':'')+dis+'"><span class="el-radio__inner"></span><input type="radio" class="el-radio__original"></span><span class="el-radio__label">'+o[1]+'</span></label>';
   }).join('')+'</div>';
 }
+/* 奖励页小精选开关（11/03 她定：跟浮窗开关排同一行、共用首页浮窗图）；inline 红框＋名称＋单选 */
+function pickSwitch(key, val){ return '<span class="is-new is-new--sw"><span>奖励页小精选</span>'+elRadios(key, [['1','开启'],['0','关闭']], val)+'</span>'; }
 function elChecks(key, chosen){
   return '<div class="check-grid">'+cats.map(function(c){
     var on = chosen.indexOf(c.name) > -1;
@@ -770,13 +744,18 @@ function catsOfKey(key){
    画面一：汇总页
    ========================================================================== */
 var MAT_COLS = [
-  {t:'来源',w:100,isNew:true},{t:'语系',w:50},{t:'默认显示',w:60},{t:'奖励页排序',w:92,isNew:true,was:'排序'},{t:'标签',w:124,isNew:true},
-  {t:'标题文字'},{t:'奖励列表图',w:96,isNew:true,was:'标题图片'},{t:'弹窗图片',w:80},{t:'首页图片(移动端用)',w:80},{t:'内容标题文字',w:100},{t:'内容文字',w:80},{t:'内容图片',w:80},{t:'结束时间',w:90},{t:'显示结束时间',w:90},{t:'状态',w:60,isMod:true},{t:'操作',w:118,isMod:true}
+  {t:'来源',w:100,isNew:true},{t:'语系',w:50},{t:'默认显示',w:60},{t:'奖励页排序',w:92,isNew:true,was:'排序'},
+  {t:'标题文字'},{t:'奖励列表图',w:96,isNew:true,was:'标题图片'},{t:'弹窗图片',w:80},{t:'首页图片(移动端用)',w:80},{t:'内容标题文字',w:100},{t:'内容文字',w:80},{t:'内容图片',w:80},{t:'结束时间',w:90},{t:'显示结束时间',w:90},
+  {t:'标签',w:124,isNew:true},{t:'小精选',w:70,isNew:true},{t:'状态',w:60,isMod:true},{t:'操作',w:118,isMod:true}   // 既有栏位照线上顺序不动；新增的 来源 放最前，标签／小精选 跟 状态 一起放最后（都是显示控制）
 ];
+/* 小精选栏（11/03 她定做法 2）：只显示开启／关闭（她定：不放排序、不放提示字，后台画面＝规格示意图，多画开发就会做） */
+function pickCell(it){
+  if (PICK_OK.indexOf(it.src) < 0) return '--';
+  return it.pick ? elTag('开启','success') : elTag('关闭','info');
+}
 function tagChips(tags){ return tags.length ? '<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center">'+tags.map(function(t){ return elTag(esc(t),'info'); }).join('')+'</div>' : '--'; }
 function renderFilter(){
   document.querySelectorAll('[data-select]').forEach(function(el){ el.innerHTML = elSelect(el.dataset.select); });
-  renderPicks();   // 奖励页精选区块的 4 个下拉也在这里重画（开合、选完都走 redrawAll）
 }
 function renderMat(){
   renderFilter();
@@ -795,11 +774,11 @@ function matTable(dev){
       mine ? elTag('素材','') : elTag(it.src,'info')+(isV2(it.src) ? '<div style="color:var(--c-text-3);font-size:11px;margin-top:2px">活动配置(新)</div>' : ''),
       it.lang, it.def,
       '<div class="el-input el-input--mini sort-input"><input type="number" min="0" class="el-input__inner" value="'+it.sort+'" data-sort="'+it.id+'" title="'+(SORT_FIELD[it.src] ? '与「'+it.src+'」的「'+SORT_FIELD[it.src]+'」同步' : '仅奖励页使用')+'"></div>',
-      tagChips(it.tags),
       esc(it.title),
       '<span class="thumb thumb--wide"></span>',
       mine ? '<span class="thumb"></span>' : '--', mine ? '<span class="thumb"></span>' : '--', it.sub ? esc(it.sub) : '--', mine ? '<span class="thumb"></span>' : '--', mine ? '<span class="thumb"></span>' : '--',   // 素材既有栏位照线上保留；其他来源没有＝--
       fmtTime(it.end), fmtTime(it.showEnd),
+      tagChips(it.tags), pickCell(it),
       elSwitch(it.on, mine ? 'data-on="'+it.id+'"' : '', !mine),
       (mine ? elTextBtn('编辑','data-mat-edit="'+it.id+'"')+elTextBtn('删除','data-mat-del="'+it.id+'"') : elTextBtn('前往设定','data-goto="'+it.id+'"'))+elTextBtn('标签','data-item-tag="'+it.id+'"')
     ];
@@ -814,9 +793,9 @@ var matDevice = 'H5', matEditing = null;   // matEditing＝正在编辑的素材
 function openMat(device, it){
   matDevice = device; matEditing = it || null; open.select = open.multi = null;
   // 单选目前值：新增照线上预设；编辑带入假资料
-  ['mFloat','mPend','mHome','mSt','mDef','mJump','mText','mImg','mImgJump','mDaily'].forEach(function(k){ delete radioVals[k]; });
+  ['mFloat','mPick','mPend','mHome','mSt','mDef','mJump','mText','mImg','mImgJump','mDaily'].forEach(function(k){ delete radioVals[k]; });
   matNew = {cats:[]};   // 新增＝空白；编辑直接用该笔的 cats
-  if (it) { radioVals.mSt = it.on ? '1' : '0'; radioVals.mDef = it.def === '是' ? '1' : '0'; radioVals.mPend = it.title.indexOf('返水') > -1 ? '2' : '0'; }
+  if (it) { radioVals.mSt = it.on ? '1' : '0'; radioVals.mPick = it.pick ? '1' : '0'; radioVals.mDef = it.def === '是' ? '1' : '0'; radioVals.mPend = it.title.indexOf('返水') > -1 ? '2' : '0'; }
   document.getElementById('matModalTitle').textContent = (it ? '修改' : '新增')+device+'活动优惠素材图';
   renderMatModal();
   document.getElementById('matModal').classList.remove('hidden');
@@ -860,7 +839,7 @@ function renderMatModal(){
     '<div class="is-new" data-mark="改名称：原「标题图片」">'+formItem('奖励列表图:', true, up+'<div class="el-form-item__tip el-form-item__tip--red">H5 尺寸 224×116</div>', lw-16)+'</div>'+
     formItem('弹窗图片:', false, up+'<div class="el-form-item__tip el-form-item__tip--red">PC: 800*600 H5: 640*118</div>', lw)+
     formItem('首页图片(移动端用):', false, up, lw)+
-    formItem('首页浮窗设置', false, elRadios('mFloat', [['1','开启'],['0','关闭']], radioOf('mFloat','0')), lw)+
+    formItem('首页浮窗设置', false, '<div class="sw-row">'+elRadios('mFloat', [['1','开启'],['0','关闭']], radioOf('mFloat','0'))+pickSwitch('mPick', radioOf('mPick','0'))+'</div>', lw)+   // 奖励页小精选跟浮窗开关同一行，图共用下面的浮窗图片
     formItem('浮窗图片:', false, up, lw)+
     formItem('首页浮窗排序:', true, inp('999'), lw)+
     formItem('活动类型:', false, elChecks('matCats', catsOfKey('matCats')), lw)+
@@ -1000,14 +979,16 @@ function openCat(i){
    ========================================================================== */
 var radioVals = {v2Float:'1', v2List:'1', gcStatus:'1', gcFloat:'0'};
 function renderV2(){
+  if (!v2Item) v2Item = items.find(function(x){ return x.src === 'X-BOMB'; }) || null;
+  radioVals.v2Pick = v2Item && v2Item.pick ? '1' : '0';   // 奖励页小精选开关＝该笔活动的 pick
   document.querySelectorAll('[data-radios]').forEach(function(el){ el.innerHTML = elRadios('page_'+el.dataset.radios, [['1','开启'],['0','关闭']], radioVals[el.dataset.radios]); });
+  document.querySelectorAll('[data-pick]').forEach(function(el){ el.innerHTML = pickSwitch('page_'+el.dataset.pick, radioVals[el.dataset.pick]); });
   document.querySelectorAll('[data-uploads]').forEach(function(el){
     el.innerHTML = el.dataset.uploads.split('|').map(function(t){
       return '<div class="upload-card"><div class="upload-card-header"><span class="req">*</span>'+t+(t === 'H5 奖励列表图' ? '<span class="el-form-item__tip el-form-item__tip--red" style="margin:0 0 0 10px;display:inline">尺寸 224×116</span>' : '')+'</div><div class="upload-card-body"><div class="img-uploader">点击上传图片</div>'+
              '<div class="upload-actions"><button type="button" class="el-button el-button--text el-button--mini" data-card-del><i class="el-icon-delete"></i><span>删除</span></button></div></div></div>';
     }).join('');
   });
-  if (!v2Item) v2Item = items.find(function(x){ return x.src === 'X-BOMB'; }) || null;
   document.querySelector('[data-reward="v2"]').innerHTML = rewardFields('v2', {labelWidth:132, colon:':'}, catsOfKey('v2'));
   document.getElementById('v2Sort').value = v2Item ? v2Item.sort : 0;
   document.querySelector('.wizard__bar-title').textContent = '活动配置步骤'+(v2Item ? '：'+v2Item.title : '');
@@ -1034,7 +1015,7 @@ function renderGc(){
           '<span class="el-form-item__tip gc-row__tip">仅支持图片文件：.PNG .JPG .WEBP 图片大小不超过2MB</span>'+
         '</div>'+
       '</div>'+
-      formItem('浮窗开关', true, elRadios('page_gcFloat', [['1','开启'],['0','关闭']], radioVals.gcFloat), lw)+
+      formItem('浮窗开关', true, '<div class="sw-row">'+elRadios('page_gcFloat', [['1','开启'],['0','关闭']], radioVals.gcFloat)+pickSwitch('page_gcPick', it.pick ? '1' : '0')+'</div>', lw)+
       '<div class="gc-row gc-row--wide">'+
         '<div class="gc-up"><span class="gc-up__lb"><span class="req">*</span>PC端图片</span>'+fileBtn()+'<div class="gc-box"><span class="gc-box__img"></span></div></div>'+
         '<div class="gc-up"><span class="gc-up__lb"><span class="req">*</span>H5端图片</span>'+fileBtn()+'<div class="gc-box"><span class="gc-box__img"></span></div></div>'+
@@ -1131,6 +1112,11 @@ function renderSrc(){
     var item = formItem(dev+t+':', req, ctrl, isList ? ilw-16 : ilw);
     return isList ? '<div class="is-new" data-mark="改名称：原「'+dev+(srcView === 'ddep' ? '奖励列表' : '列表页图')+'」">'+item+'</div>' : item;
   }).join('');
+  // 首页浮窗设置（11/03 她定：每日存款要进奖励页精选区块、共用首页浮窗设置）：栏位照素材的「首页浮窗设置／浮窗图片／首页浮窗排序」，浮窗图片跟上面一样分 PC／手机端
+  if (pg.float) { var flw = (dev === '手机端' ? 180 : lw) - 16; h += '<div class="is-new" data-mark="新增">'+
+    formItem('首页浮窗设置:', false, '<div class="sw-row">'+elRadios('src_浮窗开关', [['1','开启'],['0','关闭']], radioOf('src_浮窗开关','0'))+pickSwitch('src_奖励页精选', radioOf('src_奖励页精选', srcItem && srcItem.pick ? '1' : '0'))+'</div>', flw)+
+    formItem(dev+'浮窗图片:', false, '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'+upThumb(), flw)+
+    formItem('首页浮窗排序:', true, '<div class="el-input el-input--small" style="width:320px"><input class="el-input__inner" value="999"></div>', flw)+'</div>'; }
   h += pg.content.map(srcField).join('') + (pg.extra || []).map(srcField).join('');
   h += formItem('', false, '<button type="button" class="el-button el-button--primary el-button--small" data-act="srcSave"><span>保存</span></button><button type="button" class="el-button el-button--default el-button--small"><span>重置</span></button>', lw);
   var form = '<form class="el-form el-form--label-right src-form" onsubmit="return false">'+h+'</form>';
@@ -1213,8 +1199,8 @@ function renderFront(){
       '<div><i class="h5-coin h5-coin--p"></i>60 <span class="h5-refresh">⟳</span></div><div><i class="h5-coin h5-coin--pt"></i>2,150 <span class="h5-refresh">⟳</span></div></div>'+
       '<button type="button" class="h5-deposit">Deposit</button><i class="h5-search"></i></div>'
     : '<div class="h5-top"><div class="h5-avatar" style="background:#C9D3E6"></div><div class="h5-guest">Welcome to OKBet!</div><button type="button" class="h5-login">Login</button><i class="h5-search"></i></div>';
-  // 奖励页精选区块：后台位置 1～4 选的活动，一格一个、显示其首页浮窗图（H5 图片）；四格都没有就整排不出
-  var picks = pickIds().map(byId).filter(function(x){ return x && onDev(x, 'H5') && visibleNow(x); });   // 照位置 1→4；不在显示期的跳过
+  // 奖励页精选区块：各活动开了「奖励页精选」的，一格一个、显示其首页浮窗图（H5 图片），照首页浮窗排序取前 4 个；一个都没有整排不出
+  var picks = pickList('H5');
   if (picks.length) h += '<div class="h5-picks">'+picks.map(function(it, i){ return '<div class="h5-pick h5-pick--'+(i%4)+'" data-front-open="'+it.id+'" title="'+esc(it.title)+'"></div>'; }).join('')+'</div>';
   h += '<div class="h5-sec">More promotions</div>';
   // 快捷入口：彩色方块照企划书 2.3.1 的位置，只放类别名称（类别不上图示，10/20 她定）
@@ -1248,6 +1234,7 @@ function show(view){
   }
   if (view === 'gc') renderGc();   // 进页时重画：类别改名／新增后勾选清单才会是最新的
   if (view === 'v2') renderV2();
+  if (view === 'mat') renderMat();   // 回列表时重画：各活动页开的小精选、排序才会是最新的
   Object.keys(VIEWS).forEach(function(k){ document.getElementById(VIEWS[k][0]).classList.toggle('hidden', k !== view); });
   document.getElementById('viewSrc').classList.toggle('hidden', !isSrc);
   document.getElementById('bcCur').textContent = isSrc ? (SRC_PAGES[view].crumb || SRC_PAGES[view].title) : VIEWS[view][1];
@@ -1290,6 +1277,8 @@ document.addEventListener('click', function(e){
   if ((q = t.closest('[data-radio]'))) {
     e.preventDefault(); if (q.classList.contains('is-disabled')) return; var rv = q.dataset.radio.split('|');
     if (rv[0].indexOf('page_') === 0) radioVals[rv[0].slice(5)] = rv[1];
+    if (rv[0] === 'page_v2Pick' && v2Item) v2Item.pick = rv[1] === '1';   // 奖励页小精选开关直接存回该笔（前台切页签就看得到）
+    if (rv[0] === 'page_gcPick') { var gcIt = items.find(function(x){ return x.src === '游戏挑战赛'; }); if (gcIt) gcIt.pick = rv[1] === '1'; }
     else radioVals[rv[0]] = rv[1];   // 素材弹窗的单选（含跳转方式切换）
     if (rv[0].indexOf('src_') === 0 || rv[0] === 'catOn') {   // 专项活动设定页／类别弹窗：只切这组单选，不重画整张表单（不然打到一半的字会被清掉）
       q.closest('.el-radio-group').querySelectorAll('.el-radio').forEach(function(r){ var on = r.dataset.radio === q.dataset.radio; r.classList.toggle('is-checked', on); r.querySelector('.el-radio__input').classList.toggle('is-checked', on); });
@@ -1320,6 +1309,7 @@ document.addEventListener('click', function(e){
       if (so) srcItem.sort = Math.max(0, Math.floor(Number(so.value) || 0));
       if (st2 && st2.value.trim()) srcItem.title = st2.value.trim();
       if (radioVals['src_活动状态']) srcItem.on = radioVals['src_活动状态'] === '1';
+      if (radioVals['src_奖励页精选']) srcItem.pick = radioVals['src_奖励页精选'] === '1';
       if (radioVals['src_发放方式']) srcItem.auto = radioVals['src_发放方式'] === '1';
       var tOf = function(sel){ var el = document.querySelector(sel); return el ? (el.value.trim() || '--') : undefined; };
       ['start','end'].forEach(function(k){ var v = tOf('[data-src-'+k+']'); if (v !== undefined) srcItem[k] = v === '--' ? undefined : v; });
@@ -1407,9 +1397,9 @@ document.addEventListener('click', function(e){
       var mSort = Math.max(0, Math.floor(Number(document.getElementById('mSort').value) || 0)), mTitle = document.getElementById('mTitle').value.trim();
       if (matEditing) {   // 编辑：存回那笔 → 汇总页、前台同步
         matEditing.sort = mSort; if (mTitle) matEditing.title = mTitle;
-        matEditing.on = radioOf('mSt','1') === '1'; matEditing.def = radioOf('mDef','0') === '1' ? '是' : '否';
+        matEditing.on = radioOf('mSt','1') === '1'; matEditing.pick = radioOf('mPick','0') === '1'; matEditing.def = radioOf('mDef','0') === '1' ? '是' : '否';
       } else {            // 新增：示意存进该端的表
-        items.push({id:Date.now(), src:'素材', dev:matDevice, lang:'英语', def:radioOf('mDef','0') === '1' ? '是' : '否', title:mTitle || '新素材', sub:'', end:'--', showEnd:'--', on:radioOf('mSt','1') === '1', sort:mSort, tags:[], cats:matNew.cats.slice()});
+        items.push({id:Date.now(), src:'素材', dev:matDevice, lang:'英语', def:radioOf('mDef','0') === '1' ? '是' : '否', title:mTitle || '新素材', sub:'', end:'--', showEnd:'--', on:radioOf('mSt','1') === '1', pick:radioOf('mPick','0') === '1', sort:mSort, tags:[], cats:matNew.cats.slice()});
       }
       renderMat(); message('保存成功');
     }
