@@ -222,17 +222,18 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .hrow::-webkit-scrollbar{display:none;}
 
 /* 商品卡（横向大卡） */
-/* Flash Sales 卡：直向小卡、一次露两张（跟下面商品卡同宽），多的往右滑；细节照参考图（黄底红字折扣胶囊、紫进度条、紫圆角钮） */
-.g{flex:0 0 calc(50% - 5px);border:1px solid var(--c-line);border-radius:14px;padding:8px 8px 10px;display:flex;flex-direction:column;background:#fff;box-shadow:0 2px 8px rgba(27,42,68,.05);scroll-snap-align:start;}
-.g > .g__img{width:100%;height:112px;border-radius:10px;}
-.g .g__off{left:6px;top:6px;background:#ffe14d;color:#e0342f;font-size:.66rem;font-weight:900;padding:3px 9px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.15);}
-.g .g__name{margin-top:8px;font-size:.9rem;}
-.g .g__sub{margin-top:1px;}
-.g .price{margin-top:5px;}
-.g .price__now{font-size:1.1rem;}
-.g .bar{margin-top:6px;height:6px;}
-.g .g__left{margin-top:4px;font-size:.7rem;}
-.g .btn-redeem{margin-top:8px;border-radius:12px;padding:8px 0;font-size:.84rem;}
+/* Flash Sales 卡：直向小卡（比商品卡小一号），一次露两张多一点，多的往右滑；细节照参考图（黄底红字折扣胶囊、紫进度条、紫圆角钮） */
+.g{flex:0 0 44%;border:1px solid var(--c-line);border-radius:12px;padding:6px 6px 8px;display:flex;flex-direction:column;background:#fff;box-shadow:0 2px 8px rgba(27,42,68,.05);scroll-snap-align:start;}
+.g > .g__img{width:100%;height:84px;border-radius:8px;font-size:.68rem;}
+.g .g__off{left:5px;top:5px;background:#ffe14d;color:#e0342f;font-size:.6rem;font-weight:900;padding:2px 7px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.15);}
+.g .g__name{margin-top:6px;font-size:.8rem;}
+.g .g__sub{margin-top:0;font-size:.66rem;}
+.g .price{margin-top:3px;gap:4px;}
+.g .price__now{font-size:.95rem;}
+.g .price__old{font-size:.7rem;}
+.g .bar{margin-top:5px;height:5px;}
+.g .g__left{margin-top:3px;font-size:.64rem;}
+.g .btn-redeem{margin-top:6px;border-radius:9px;padding:6px 0;font-size:.76rem;}
 .hrow{scroll-snap-type:x mandatory;}
 .g__img{width:132px;height:132px;border-radius:10px;flex:0 0 auto;position:relative;display:grid;place-items:center;color:#fff;font-weight:900;text-align:center;font-size:.8rem;line-height:1.15;text-shadow:0 1px 2px rgba(0,0,0,.4);overflow:hidden;}
 .g__off{position:absolute;left:6px;top:6px;background:#ff5b5b;color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:10px;}
@@ -504,14 +505,7 @@ button{font-family:inherit;cursor:pointer;border:none;}
             <div class="tk__quota">Rewarded<b>0/100</b>User</div>
             <button class="tk__btn tk__btn--receive">Receive</button>
           </article>
-          <article class="tk">
-            <div class="tk__name">Slots Daily 10K<span class="info">ⓘ</span></div>
-            <div class="tk__timer">⏱ <span class="t-task">01:39:59</span></div>
-            <div class="tk__prog">Completed <span class="tk__bar"><i style="width:0"></i></span><b>₱0</b>/ ₱10,000</div>
-            <div class="tk__reward"><i class="coin coin--pt">★</i>1,000</div>
-            <div class="tk__quota">Rewarded<b>12/500</b>User</div>
-            <button class="tk__btn tk__btn--bet">Bet Now</button>
-          </article>
+          <!-- 首页只露 1 张任务卡（她 10/30 定），照任务中心既有排序取第一张；其余按「全部任务」 -->
         </section>
 
         <!-- Playground：一张入口卡（横幅＋底下列出有哪些游乐设施），点进游乐场专页 -->
@@ -566,7 +560,7 @@ button{font-family:inherit;cursor:pointer;border:none;}
           <div class="hrow" id="fsRow"></div>
         </section>
 
-        <!-- 各分类区块：每类先露 4 个 ＋ More，由程序照商品资料产生 -->
+        <!-- 各分类区块：每类只露一排 2 个 ＋ More，由程序照商品资料产生 -->
         <div id="homeSecs"></div>
       </section>
 
@@ -863,7 +857,7 @@ var PRODUCTS = [
   {cat:'item', name:'Power Bank', sub:'Physical item', price:5000, left:'In stock 12', img:'img-item', txt:'🔋<br>POWER BANK'},
   {cat:'item', name:'Smart Watch', sub:'Physical item', price:20000, left:'In stock 3', img:'img-item', txt:'⌚<br>WATCH'}
 ];
-var HOME_SHOW = 4;   /* 首页每个分类先露几个；超过的按 More 看 */
+var HOME_SHOW = 2;   /* 首页每个分类只露一排 2 个（她 10/30 定）；超过的按 More 看 */
 
 /* ---------- 游乐场游戏（原型假资料；正式版由后台「游乐场」配置：名称、图、每次花费、是否上架、解锁等级） ---------- */
 var GAMES = [

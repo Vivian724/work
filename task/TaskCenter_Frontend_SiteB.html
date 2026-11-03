@@ -240,6 +240,14 @@ body.is-pc{flex-wrap:nowrap;}
 .is-pc .more{padding-top:12px;}
 /* 领取成功弹窗：PC 固定宽度，在画面正中 */
 .is-pc .pop{width:400px;}
+/* 提示弹窗（逻辑同 A 站 3.9）：H5 在画面底部；PC 在内容区中下 */
+.ntf{position:absolute;left:10px;right:10px;bottom:16px;z-index:12;display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:14px 12px 14px 22px;box-shadow:0 8px 24px rgba(27,42,68,.18);}
+.ntf[hidden]{display:none;}
+.ntf__x{position:absolute;left:6px;top:6px;width:18px;height:18px;border-radius:50%;background:#a7b0c9;color:#fff;font-size:.62rem;font-weight:700;line-height:18px;text-align:center;padding:0;border:0;}
+.ntf__ic{width:40px;height:40px;object-fit:contain;flex:0 0 auto;}
+.ntf__txt{flex:1;font-size:.8rem;font-weight:600;color:#1b2a44;line-height:1.45;}
+.ntf__btn{flex:0 0 auto;background:var(--blue);color:#fff;font-size:.84rem;border:0;border-radius:8px;padding:8px 14px;white-space:nowrap;}
+.is-pc .ntf{left:calc(230px + (100% - 230px - 380px) / 2);right:auto;bottom:24px;width:380px;}
 .is-pc .pop .btn{height:44px;font-size:.95rem;border-radius:8px;}
 </style>
 </head>
@@ -260,6 +268,7 @@ body.is-pc{flex-wrap:nowrap;}
     <button onclick="showPop('freespin','₱20')">领取成功·免费旋转</button>
     <button onclick="showPop('freebet','₱30')">领取成功·免费投注</button>
     <button onclick="showPop('coupon','₱100')">领取成功·优惠券</button>
+    <button onclick="showNtf(0)">提示弹窗</button>
     
   </div>
 </aside>
@@ -508,6 +517,14 @@ body.is-pc{flex-wrap:nowrap;}
       <button class="btn" onclick="hidePop()">Confirm</button>
     </div>
   </div>
+
+  <!-- 提示弹窗（逻辑同 A 站 3.9）：文案 A134「Reward {{a}}, congratulations on completing the {{b}} task!」；{{b}}＝基础任务、子任务用自己的名称，额外奖励用任务组名称；手动领取有「Receive」，自动发放无按钮；停留 3 秒；每 10 秒跳一个 -->
+  <div class="ntf" id="ntf" hidden>
+    <button class="ntf__x" onclick="closeNtf()" aria-label="Close">✕</button>
+    <img class="ntf__ic" id="ntfIc" alt="">
+    <div class="ntf__txt">Reward <span id="ntfA">100</span>, congratulations on completing the <span id="ntfB"></span> task!</div>
+    <button class="ntf__btn" id="ntfBtn" onclick="claimNtf()">Receive</button>
+  </div>
 </div>
 
 <script>
@@ -554,6 +571,30 @@ function showPop(ic, amt){
   document.getElementById('mask').classList.add('on');
 }
 function hidePop(){ document.getElementById('mask').classList.remove('on'); }
+
+/* 提示弹窗（示意，逻辑同 A 站 3.9）：每 10 秒跳一个；停留 3 秒自动关，也可点 × 提前关。
+   手动领取：有「Receive」，点了直接跳任务中心（原型示意＝关闭弹窗、卷回顶部）；自动发放：没有按钮。
+   券类只放 ₱价值，类型看图示。本站没有 golden draw。 */
+var NQ=[
+  {ic:'point',    a:'100',  b:'充值满 ₱50'},              /* 子任务：用子任务名称 */
+  {ic:'freebet',  a:'₱30',  b:'投注满 ₱300'},             /* 子任务：用子任务名称 */
+  {ic:'coupon',   a:'₱100', b:'每周充投·组任务'},          /* 额外奖励：用任务组名称 */
+  {ic:'freespin', a:'₱20',  b:'每周投注送免费旋转', auto:true}   /* 基础任务、自动发放：没有按钮 */
+], nqi=0, ntfT=null, ntfN=null;
+function showNtf(i){
+  clearTimeout(ntfT); clearTimeout(ntfN);
+  nqi=i||0; var n=NQ[nqi]; if(!n){ hideNtf(); return; }
+  document.getElementById('ntfIc').src=ICONS[n.ic];
+  document.getElementById('ntfA').textContent=n.a;
+  document.getElementById('ntfB').textContent=n.b;
+  document.getElementById('ntfBtn').hidden=!!n.auto;
+  document.getElementById('ntf').hidden=false;
+  ntfT=setTimeout(function(){ document.getElementById('ntf').hidden=true; },3000);
+  ntfN=setTimeout(function(){ showNtf(nqi+1); },10000);
+}
+function hideNtf(){ clearTimeout(ntfT); clearTimeout(ntfN); document.getElementById('ntf').hidden=true; }
+function closeNtf(){ clearTimeout(ntfT); document.getElementById('ntf').hidden=true; }   /* ×：只关这一个，下一个照 10 秒节奏 */
+function claimNtf(){ hideNtf(); var sc=document.querySelector('.scroll'); if(sc) sc.scrollTop=0; }
 
 /* 任务介绍弹窗：显示该任务的简介 */
 function showIntro(txt){ document.getElementById('introBody').textContent = txt; document.getElementById('introMask').classList.add('on'); }

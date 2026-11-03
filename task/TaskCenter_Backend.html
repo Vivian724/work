@@ -311,7 +311,7 @@ th.cell-id,td.cell-id{white-space:nowrap;}
 .link-add{display:inline-block;color:var(--c-primary);font-size:.82rem;cursor:pointer;}
 .link-add.is-off{color:var(--c-text-3);opacity:.6;cursor:not-allowed;pointer-events:none;}
 .link-del{color:var(--c-danger);font-size:.8rem;cursor:pointer;white-space:nowrap;}
-.link-del.is-off{color:var(--c-text-3);opacity:.5;cursor:not-allowed;pointer-events:none;}   /* 只剩 1 个子任务／1 档额外奖励时，删除反灰 */
+.link-del.is-off{color:var(--c-text-3);opacity:.5;cursor:not-allowed;pointer-events:none;}   /* 只剩 1 个子任务时，删除反灰 */
 .subId{margin-left:6px;color:var(--c-text-3);font-size:.75rem;}
 .hidden{display:none !important;}
 .i18n-add{color:var(--c-primary);font-size:.95rem;margin-left:4px;}
@@ -755,7 +755,7 @@ tbody.nd{outline:2px dashed var(--c-danger);outline-offset:-2px;}
         </div>
       </div>
       <div class="form__row hidden" id="groupExtra">
-        <label class="form__label"><span class="req">*</span>额外奖励：</label>
+        <label class="form__label">额外奖励：</label>
         <div class="form__control">
           <div id="tierRewards" style="display:flex;flex-direction:column;gap:8px"></div>
           <a class="link-add" id="addTierBtn" style="margin-top:4px" onclick="addTier(event)">＋ 添加额外奖励</a>
@@ -1301,15 +1301,14 @@ function addTier(e,n,type,val){ if(e)e.preventDefault();
   syncTiers(); if(n){ row.querySelector('.tierN').value=n; syncTiers(); }
   onSubReward(row.querySelector('.tierReward')); renumberTiers();
 }
-function delTier(e,btn){ if(e)e.preventDefault(); if(document.getElementById('tierRewards').children.length<=1) return; btn.closest('.range-inline').remove(); syncTiers(); }
+function delTier(e,btn){ if(e)e.preventDefault(); btn.closest('.range-inline').remove(); syncTiers(); }
 /* 配置限制：额外奖励最多 3 笔，且不超过子任务数（n 只能 1~子任务数、各档不重复）*/
 function subCount(){ return document.getElementById('subTasks').children.length; }
 function tierMax(){ return Math.min(3, subCount()); }
 function renumberTiers(){
   var box=document.getElementById('tierRewards');
   document.getElementById('addTierBtn').classList.toggle('is-off', box.children.length>=tierMax());
-  /* 额外奖励最少 1 档：只剩 1 档时删除反灰 */
-  [].forEach.call(box.querySelectorAll('.link-del'),function(a){ a.classList.toggle('is-off', box.children.length<=1); });
+  /* 额外奖励非必填（11/03）：每档都能删，删到 0 档＝不设 */
 }
 /* 「任意完成 n 个」下拉：选项＝1~子任务数；别档已选的反灰；子任务删到比 n 少时，该档清空重选 */
 function syncTiers(){
@@ -1337,7 +1336,7 @@ function seedSubNames(){
     row.querySelector('.subVal').value=e.v;
   });
 }
-/* 新增表单预设 1 档空白（额外奖励最少 1 档）；规格书 2.3 示意时才带入两档示例 */
+/* 新增表单预设 1 档空白（非必填，可删）；规格书 2.3 示意时才带入两档示例 */
 function seedTiers(){
   var box=document.getElementById('tierRewards'); if(!box) return;
   if([].some.call(box.querySelectorAll('.tierN'),function(x){ return x.value; })) return;
