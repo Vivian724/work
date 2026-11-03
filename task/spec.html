@@ -471,6 +471,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr class="mkr"><td style="width:9em">2.3 额外奖励非必填（11/03）</td><td>额外奖励<b>拿掉必填 *</b>，可设 0～3 档；新增时每档都能删。<b>送出后编辑时整块反灰</b>，不能新增、删除或修改；<b>子任务也不能增减</b>。新增／编辑的差别看 2.3「子任务 × 额外奖励」表。</td></tr>
                 <tr class="mkr"><td style="width:9em">3.4 没设额外奖励（11/03）</td><td>后台没设额外奖励 → 前台额外奖励<b>整块隐藏</b>，任务组卡只显示子任务。</td></tr>
                 <tr class="mkr"><td style="width:9em">3.9 两站统一（11/03）</td><td>主站、B 站提示弹窗<b>逻辑保持一致</b>，都照 3.9；只有画面照各站设计稿。</td></tr>
+                <tr class="mkr"><td style="width:9em">3.9 任务中心也跳（11/03）</td><td>人在任务中心页面时<b>也会跳</b>提示弹窗；弹跳方式、停留时间都<b>照既有</b>。</td></tr>
               </tbody>
             </table></div>
             <p class="lazy__one">后台原型的<b>红色虚线框＝本期新增的数据</b>（任务组、额满），只是标示，正式画面不显示。其余几节只精简文字，规则没变。</p>
@@ -1279,12 +1280,12 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <tr><td>用户手动领取</td><td>右边有「领取」</td></tr>
               <tr><td>自动发放</td><td>没有按钮（奖励已入帐）</td></tr>
               <tr><td>同时完成多笔</td><td>一次只显示一个，每 10 秒跳下一个</td></tr>
-              <tr><td>正在任务中心页面</td><td>不跳，之后也不补跳</td></tr>
+              <tr class="mkr"><td>正在任务中心页面</td><td>会跳<span class="mk">（11/03 修改）</span></td></tr>
               <tr><td>未登录</td><td>不跳（黑名单照既有）</td></tr>
               <tr><td>其他页面（含游戏页、活动页）</td><td>都跳；下载页、404、维护页、App 内嵌不跳</td></tr>
-              <tr><td>不动</td><td>3 秒自动关闭</td></tr>
+              <tr class="mkr"><td>不动</td><td>弹跳方式、停留时间都照既有<span class="mk">（11/03 修改）</span></td></tr>
               <tr><td>点左上关闭钮</td><td>只关这一个；下一笔照 10 秒节奏再跳</td></tr>
-              <tr><td>点「领取」</td><td>弹窗关闭并直接跳转，不另跳确认：H5 到奖励中心（/reward-center）、PC 到任务中心（/user/task-center）；之后人在任务中心就不再跳</td></tr>
+              <tr><td>点「领取」</td><td>弹窗关闭并直接跳转，不另跳确认：H5 到奖励中心（/reward-center）、PC 到任务中心（/user/task-center）</td></tr>
             </tbody>
           </table></div>
         </article>

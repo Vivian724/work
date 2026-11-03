@@ -518,7 +518,7 @@ body.is-pc{flex-wrap:nowrap;}
     </div>
   </div>
 
-  <!-- 提示弹窗（逻辑同 A 站 3.9）：文案 A134「Reward {{a}}, congratulations on completing the {{b}} task!」；{{b}}＝基础任务、子任务用自己的名称，额外奖励用任务组名称；手动领取有「Receive」，自动发放无按钮；停留 3 秒；每 10 秒跳一个 -->
+  <!-- 提示弹窗（逻辑同 A 站 3.9）：文案 A134「Reward {{a}}, congratulations on completing the {{b}} task!」；{{b}}＝基础任务、子任务用自己的名称，额外奖励用任务组名称；手动领取有「Receive」，自动发放无按钮；在任务中心也会跳；弹跳方式、停留时间都照既有；每 10 秒跳一个 -->
   <div class="ntf" id="ntf" hidden>
     <button class="ntf__x" onclick="closeNtf()" aria-label="Close">✕</button>
     <img class="ntf__ic" id="ntfIc" alt="">
@@ -572,7 +572,7 @@ function showPop(ic, amt){
 }
 function hidePop(){ document.getElementById('mask').classList.remove('on'); }
 
-/* 提示弹窗（示意，逻辑同 A 站 3.9）：每 10 秒跳一个；停留 3 秒自动关，也可点 × 提前关。
+/* 提示弹窗（示意，逻辑同 A 站 3.9）：每 10 秒跳一个；自动关，弹跳方式、停留时间都照既有（示意用 3 秒），也可点 × 提前关。
    手动领取：有「Receive」，点了直接跳任务中心（原型示意＝关闭弹窗、卷回顶部）；自动发放：没有按钮。
    券类只放 ₱价值，类型看图示。本站没有 golden draw。 */
 var NQ=[

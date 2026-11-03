@@ -71,6 +71,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .el-table .cell{white-space:normal;word-break:break-all;text-overflow:clip;}
 .thumb{display:inline-block;width:44px;height:26px;border-radius:2px;background:linear-gradient(135deg,#c6e2ff,#ecf5ff);vertical-align:middle;}
 .thumb--wide{width:72px;}
+.thumb--ico{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#FFD66B,#F5A623);}   /* 类别图示（示意） */
 .sort-input{width:76px;}
 .sort-input .el-input__inner{text-align:center;padding:0 6px;}
 
@@ -172,68 +173,71 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .front{min-height:100vh;background:#5b6270;display:flex;justify-content:center;padding:52px 0 48px;}
 .phone{width:375px;height:780px;background:#fff;border-radius:28px;overflow:hidden;position:relative;box-shadow:0 12px 40px rgba(0,0,0,.35);
   font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif;color:#0D2245;font-size:14px;line-height:1.4;}
-.h5{height:100%;overflow-y:auto;background:linear-gradient(180deg,#E3EEFF 0%,#F2F6FD 220px,#F5F7FB 100%);padding-bottom:70px;}
+.h5{height:100%;overflow-y:auto;background:linear-gradient(180deg,#EAF1FF 0%,#F2F6FD 300px,#F5F7FB 100%);padding-bottom:78px;}
 .h5 *{box-sizing:border-box;}
-/* 顶部个人栏（搬首页的） */
-.h5-top{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;}
-.h5-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#9CC3FF,#025BE8);border:2px solid #fff;box-shadow:0 0 0 2px #B7D2FF;flex-shrink:0;}
+/* ---------- 11/03 她给设计稿「奖励中心-未登录-日间」：整页照图重画。内容宽 355、左右留 10 ---------- */
+/* 顶部栏：白色圆角卡片，左 Logo、右 Register / Login＋搜寻（已登入沿用原本头像／余额／Deposit，放进同一张卡片） */
+.h5-top{display:flex;align-items:center;gap:10px;margin:12px 10px 10px;padding:10px 14px;background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(13,34,69,.06);min-height:56px;}
+.h5-logo{font-size:22px;font-weight:900;font-style:italic;letter-spacing:-.5px;color:#1F5BFF;flex:1;white-space:nowrap;}
+.h5-logo em{font-style:normal;color:#E8453C;}
+.h5-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#9CC3FF,#025BE8);border:2px solid #fff;box-shadow:0 0 0 2px #B7D2FF;flex-shrink:0;}
 .h5-wallet{flex:1;min-width:0;font-size:13px;font-weight:600;}
 .h5-wallet div{display:flex;align-items:center;gap:5px;line-height:18px;}
 .h5-coin{width:14px;height:14px;border-radius:50%;display:inline-block;}
 .h5-coin--p{background:#F5A623;} .h5-coin--pt{background:#E8453C;}
 .h5-refresh{color:#8A97B0;font-size:11px;}
-.h5-deposit{background:#025BE8;color:#fff;border:0;border-radius:18px;height:34px;padding:0 16px;font-size:14px;font-weight:600;}
-.h5-search{width:22px;height:22px;border:2px solid #0D2245;border-radius:50%;position:relative;margin-left:4px;}
-.h5-login{background:#fff;color:#025BE8;border:1.5px solid #025BE8;border-radius:18px;height:34px;padding:0 16px;font-size:14px;font-weight:600;}
-.h5-guest{flex:1;font-size:13px;color:#5B6B85;}
+.h5-deposit{background:#1F5BFF;color:#fff;border:0;border-radius:10px;height:36px;padding:0 16px;font-size:14px;font-weight:600;}
+.h5-login{background:#EAF1FF;color:#1F5BFF;border:0;border-radius:10px;height:36px;padding:0 14px;font-size:15px;font-weight:600;box-shadow:0 2px 6px rgba(31,91,255,.15);}
+.h5-search{width:20px;height:20px;border:2.5px solid #1F5BFF;border-radius:50%;position:relative;margin-left:4px;flex-shrink:0;}
+.h5-search::after{content:"";position:absolute;width:2.5px;height:8px;background:#1F5BFF;right:-5px;bottom:-7px;transform:rotate(-45deg);border-radius:2px;}
 /* 原型用：切换登入／未登入 */
 .front__bar{position:absolute;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:4px;background:#2b3038;border-radius:6px;padding:3px;}
 .front__bar span{color:#c9ced6;font-size:12px;padding:3px 10px;border-radius:4px;cursor:pointer;}
 .front__bar span.is-on{background:#fff;color:#1f2329;font-weight:600;}
 .front{position:relative;}
-.h5-search::after{content:"";position:absolute;width:2px;height:8px;background:#0D2245;right:-4px;bottom:-6px;transform:rotate(-45deg);}
-/* 区块标题 */
-.h5-sec{padding:6px 16px 8px;font-size:16px;font-weight:700;}
-/* 时间角标（前台自动判断）：图片底部色带，只在活动结束当天（最后一天）出现；角标只有这一种。Auto Claimed＝运营自建的标签（10/21 她定） */
-.h5-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(13,34,69,.85);color:#fff;font-size:11px;font-weight:600;border-radius:10px;padding:2px 8px;white-space:nowrap;}
-.h5-badge--hot{background:#D6246E;}
-
-.h5-clock{width:11px;height:11px;border:1.5px solid #fff;border-radius:50%;position:relative;display:inline-block;flex-shrink:0;}
-.h5-clock::after{content:"";position:absolute;left:3.5px;top:1.5px;width:1.5px;height:3.5px;background:#fff;box-shadow:1.5px 2px 0 -0.5px #fff;}
-/* 快捷入口（活动类别） */
-/* 奖励页精选区块（10/30 照设计图）：一排方块，每格＝一个活动的首页浮窗图；11/03 她定改成各活动自己开「奖励页小精选」开关，前台照首页浮窗排序取前 4 个 */
-.h5-picks{display:flex;gap:8px;padding:2px 16px 10px;overflow-x:auto;scrollbar-width:none;}
-.h5-picks::-webkit-scrollbar{display:none;}
-.h5-pick{flex:0 0 calc((100% - 24px) / 4);aspect-ratio:17/10;border-radius:10px;cursor:pointer;background-size:cover;background-position:center;}
-.h5-pick--0{background:linear-gradient(135deg,#F9D6E8,#F3B9D6);} .h5-pick--1{background:linear-gradient(135deg,#D9DAFB,#BFC2F7);} .h5-pick--2{background:linear-gradient(135deg,#FCE4B3,#F7D08A);} .h5-pick--3{background:linear-gradient(135deg,#CFF0DC,#AEE3C4);}
-.h5-cats{display:flex;gap:10px;padding:2px 16px 10px;overflow-x:auto;scrollbar-width:none;}
+/* Hero 大图（＝奖励页大精选，后台栏位她说之后另加；前台先照设计稿留整块图位） */
+.h5-hero{margin:0 10px 12px;height:304px;border-radius:16px;overflow:hidden;position:relative;cursor:pointer;
+  background:radial-gradient(120% 80% at 30% 20%,#6D2FB8 0%,#3B1A7A 45%,#1B0A3F 100%);}
+.h5-hero::after{content:"";position:absolute;left:10px;right:10px;bottom:10px;height:74px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);}
+/* 奖励页小精选：一排 4 个正方形方块，每格＝一个活动的首页浮窗图（11/03 她定：各活动自己开「奖励页小精选」开关，照首页浮窗排序取前 4 个） */
+.h5-picks{display:flex;gap:10px;padding:0 10px 12px;}
+.h5-pick{flex:1 1 0;aspect-ratio:1/1;border-radius:14px;cursor:pointer;background:#EAF1FF;box-shadow:0 2px 8px rgba(13,34,69,.06);background-size:cover;background-position:center;}
+/* 快捷入口（活动类别）：药丸按钮；选中＝蓝底白字；All 固定格子图示；其余＝后台「图示」栏上传的小图，没上传吃预设日历图示（11/03 她定） */
+.h5-cats{display:flex;gap:10px;padding:0 10px 12px;overflow-x:auto;scrollbar-width:none;}
 .h5-cats::-webkit-scrollbar{display:none;}
-.h5-cat{flex:0 0 auto;min-width:64px;border-radius:12px;padding:9px 12px;text-align:center;font-size:12px;font-weight:500;color:#0D2245;border:1.5px solid transparent;cursor:pointer;}
-.h5-cat--0{background:#EDE7FF;} .h5-cat--1{background:#E3F0FF;} .h5-cat--2{background:#FFF3D6;} .h5-cat--3{background:#DFF5E8;} .h5-cat--4{background:#FFE8E8;} .h5-cat--5{background:#E6F7FA;}
-.h5-cat.is-on{border-color:#025BE8;color:#025BE8;font-weight:600;box-shadow:0 0 0 2px #fff inset;}
-.h5-cat__name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-/* 活动小卡 */
-.h5-list{padding:0 16px;display:flex;flex-direction:column;gap:10px;}
-.h5-card{display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:8px;box-shadow:0 2px 8px rgba(13,34,69,.06);cursor:pointer;}
-.h5-thumb{width:112px;height:58px;border-radius:8px;flex-shrink:0;position:relative;overflow:hidden;background:linear-gradient(135deg,#CFE1FF,#9CC3FF);}
-.h5-thumb .h5-badge{position:absolute;left:0;right:0;bottom:0;border-radius:0;justify-content:center;padding:4px 6px;}
-.h5-body{flex:1;min-width:0;}
-.h5-title{font-size:14px;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.h5-time{font-size:11px;color:#7A869C;margin-top:3px;line-height:1.35;white-space:nowrap;letter-spacing:-.2px;overflow:hidden;text-overflow:ellipsis;}
-/* 标签＝运营在后台选的那一个（10/30 她定只能一个）；10/30 照设计图：图左上角金色角标（金渐层胶囊、深色粗体大写字）；没选就不显示 */
-.h5-tag{position:absolute;left:5px;top:5px;z-index:1;max-width:calc(100% - 10px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  background:linear-gradient(180deg,#FFE58A 0%,#F5C33B 55%,#D99A12 100%);color:#3A2A00;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;line-height:16px;padding:0 7px;border-radius:9px;box-shadow:0 1px 3px rgba(0,0,0,.25);}
-/* 10/29 她看过改版感试做后定：彩色标签、已结束卡淡化排最后 都不要（角标 10/30 改照设计图：金色、图左上角）；红色数字留着（既有逻辑）。前台只照既有逻辑＋改版书版面 */
-.h5-btn{flex-shrink:0;height:32px;min-width:64px;padding:0 12px;border-radius:16px;font-size:13px;font-weight:600;border:1.5px solid #025BE8;background:#fff;color:#025BE8;}
-.h5-card{position:relative;}
+.h5-cat{flex:0 0 auto;display:flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:17px;background:#EEF1F8;color:#5B6B85;font-size:14px;font-weight:600;cursor:pointer;}
+.h5-cat.is-on{background:#1F5BFF;color:#fff;box-shadow:0 3px 8px rgba(31,91,255,.3);}
+.h5-cat svg{width:16px;height:16px;flex-shrink:0;}
+.h5-cat__ico{width:16px;height:16px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#FFD66B,#F5A623);}   /* 后台上传的类别图示（示意） */
+.h5-cat__name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
+/* 活动卡＝一张运营上传的「奖励列表图」（返利文字、活动时间、图样都画在图里，11/03 她定），H5 显示 355×178。
+   前台只叠三样：左上标签（后台配置、只能一个）、右下倒数（只在活动最后一天）、右下按钮（有红点＝礼物图示，一般＝箭头） */
+.h5-list{padding:0 10px;display:flex;flex-direction:column;gap:12px;}
+.h5-card{position:relative;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px rgba(13,34,69,.08);cursor:pointer;}
+.h5-thumb{height:178px;position:relative;overflow:hidden;background:linear-gradient(120deg,#3A0E24 0%,#7A1F3C 55%,#C0405A 100%);}   /* 渐层＝图位示意 */
+.h5-thumb--1{background:linear-gradient(120deg,#2A0F5E 0%,#5B2BB5 55%,#8E5CE8 100%);}
+.h5-thumb--2{background:linear-gradient(120deg,#0B2A6B 0%,#1F5BFF 55%,#5B8CFF 100%);}
+.h5-thumb .h5-badge{position:absolute;right:12px;bottom:48px;}
+.h5-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(13,34,69,.78);color:#fff;font-size:12px;font-weight:600;border-radius:12px;padding:3px 10px;white-space:nowrap;}
+.h5-badge--hot{background:rgba(13,34,69,.78);}
+.h5-clock{width:12px;height:12px;border:1.5px solid #fff;border-radius:50%;position:relative;display:inline-block;flex-shrink:0;}
+.h5-clock::after{content:"";position:absolute;left:4px;top:2px;width:1.5px;height:4px;background:#fff;box-shadow:1.5px 2.5px 0 -0.5px #fff;}
+/* 标签＝后台选的那一个（10/30 她定只能一个）：图左上角金色胶囊、深色粗体大写字；没选就不显示 */
+.h5-tag{position:absolute;left:10px;top:10px;z-index:1;max-width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  background:linear-gradient(180deg,#FFE58A 0%,#F5C33B 55%,#D99A12 100%);color:#3A2A00;font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;line-height:20px;padding:0 10px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.25);}
+/* 右下按钮：一般＝蓝底白箭头；有可领（红点）＝金底 礼物图示＋箭头 */
+.h5-btn{position:absolute;right:12px;bottom:7px;z-index:1;width:56px;height:32px;border-radius:16px;border:0;background:#2F5BFF;color:#fff;display:flex;align-items:center;justify-content:center;gap:3px;box-shadow:0 2px 6px rgba(0,0,0,.3);cursor:pointer;}
+.h5-btn svg{width:16px;height:16px;flex-shrink:0;}
+.h5-btn--gift{background:linear-gradient(180deg,#FFE27A 0%,#F5B800 100%);color:#1A0E1E;}
+.h5-btn--gift .ico-gift{width:18px;height:18px;}
 /* 待领红点：照线上，挂在卡片右上角（数字＝该活动可领笔数，既有 pendingClaimCount） */
-.h5-card__dot{position:absolute;top:-5px;right:-3px;min-width:18px;height:18px;line-height:14px;padding:0 5px;border-radius:9px;background:#E8453C;color:#fff;font-size:11px;font-weight:700;text-align:center;border:2px solid #fff;}
+.h5-card__dot{position:absolute;top:6px;right:6px;z-index:2;min-width:18px;height:18px;line-height:14px;padding:0 5px;border-radius:9px;background:#E8453C;color:#fff;font-size:11px;font-weight:700;text-align:center;border:2px solid #fff;}
 .h5-empty{text-align:center;color:#8A97B0;font-size:13px;padding:30px 0;}
-/* 底部导航（照线上） */
-.h5-nav{position:absolute;z-index:2;left:0;right:0;bottom:0;height:60px;background:#fff;border-top:1px solid #E6ECF5;display:flex;justify-content:space-around;align-items:center;font-size:10px;color:#8A97B0;border-radius:0 0 28px 28px;}
+/* 底部导航（照设计稿：Home／Rewards／Points Mall／Wins／My，线图示） */
+.h5-nav{position:absolute;z-index:2;left:0;right:0;bottom:0;height:66px;background:#fff;border-top:1px solid #E6ECF5;display:flex;justify-content:space-around;align-items:center;font-size:11px;color:#8A97B0;border-radius:0 0 28px 28px;}
 .h5-nav div{text-align:center;}
-.h5-nav i{display:block;width:22px;height:22px;border-radius:6px;background:#C9D3E6;margin:0 auto 3px;}
-.h5-nav div.is-on{color:#025BE8;} .h5-nav div.is-on i{background:#025BE8;}
+.h5-nav svg{display:block;width:24px;height:24px;margin:0 auto 3px;stroke:#A9B5CB;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.h5-nav div.is-on{color:#1F5BFF;} .h5-nav div.is-on svg{stroke:#1F5BFF;}
 </style>
 </head>
 <body>
@@ -267,6 +271,10 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
           <li class="el-menu-item" style="padding-left:40px" data-go="ddep" data-menu="ddep" role="menuitem">每日存款活动</li>
           <li class="el-menu-item" style="padding-left:40px" data-go="newbie" data-menu="newbie" role="menuitem">新用户首充活动</li>
           <li class="el-menu-item" style="padding-left:40px" data-go="gc" data-menu="gc" role="menuitem">游戏挑战赛</li>
+          <li class="el-menu-item" style="padding-left:40px" data-go="lb" data-menu="lb" role="menuitem">Okbet排行榜</li>
+          <li class="el-menu-item" style="padding-left:40px" data-go="jp" data-menu="jp" role="menuitem">大奖池活动</li>
+          <li class="el-menu-item" style="padding-left:40px" data-go="vipr" data-menu="vipr" role="menuitem">vip返水加码活动</li>
+          <li class="el-menu-item" style="padding-left:40px" data-go="dsp" data-menu="dsp" role="menuitem">每日特别返水</li>
         </ul>
       </li>
       <li class="el-submenu is-opened" role="menuitem">
@@ -333,7 +341,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 
         <!-- ================================================================
              画面二：活动类别管理
-             页签一「活动类别」照线上不改：前台快捷入口＝「是否开启」的类别；不上图示；名称旁「＋」＝既有的国际化列表（多语言）
+             页签一「活动类别」照线上，只加一栏「图示」（11/03 她定）：前台快捷入口＝「是否开启」的类别，药丸左边的小图示＝这里上传的；没上传吃前台预设图示（日历）；名称旁「＋」＝既有的国际化列表（多语言）
              页签二「标签」新增（10/21 她定）：奖励页卡片标签的清单在这里新增／编辑／删除，做法跟活动类别一样，名称旁「＋」配多语言
              ================================================================ -->
         <section id="viewCat" class="hidden">
@@ -534,17 +542,13 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
    dev＝素材才有：线上 PC 版／H5 版素材是两笔独立资料，各自有排序／标签；其他来源一笔、PC 与 H5 两表共用同一个值
    ========================================================================== */
 var items = [
-  {id:1,  src:'素材', dev:'H5', lang:'英语', def:'是', title:'wins排行版',           sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:10000, pick:true, fsort:1},
+  {id:1,  src:'排行榜',     lang:'—',    def:'—',  title:'wins排行版',           sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:10000, pick:true, fsort:1},   // 11/03 她定：排行榜／大奖池／VIP返水加码／每日特别返水 改成各自的专项活动模组（原本当素材画）
   {id:2,  src:'素材', dev:'H5', lang:'英语', def:'否', title:'每日返水加码活动',     sub:'Daily Rebate',            end:'--',                  showEnd:'--',                  on:true,  sort:9999,  feat:false},
-  {id:3,  src:'素材', dev:'H5', lang:'英语', def:'是', title:'每日特别返水',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-07-28 23:59:00', showEnd:'2027-05-31 00:00:00', on:true,  sort:9998,  feat:false, pending:true, pendingN:2},
-  {id:15, src:'素材', dev:'PC', lang:'英语', def:'是', title:'wins排行版',           sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:10000},
+  {id:3,  src:'每日特别返水', lang:'—',  def:'—',  title:'每日特别返水',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-07-28 23:59:00', showEnd:'2027-05-31 00:00:00', on:true,  sort:9998,  feat:false, pending:true, pendingN:2},
   {id:16, src:'素材', dev:'PC', lang:'英语', def:'否', title:'每日返水加码活动',     sub:'Daily Rebate',            end:'--',                  showEnd:'--',                  on:true,  sort:9999,  feat:false},
-  {id:17, src:'素材', dev:'PC', lang:'英语', def:'是', title:'每日特别返水',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-07-28 23:59:00', showEnd:'2027-05-31 00:00:00', on:true,  sort:9998,  feat:false, pending:true, pendingN:2},
-  {id:18, src:'素材', dev:'PC', lang:'英语', def:'否', title:'vip返水加码',          sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:88,    feat:false},
-  {id:20, src:'素材', dev:'H5', lang:'英语', def:'否', title:'大奖池',               sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:9997,  feat:false, pick:true, fsort:3},
-  {id:21, src:'素材', dev:'PC', lang:'英语', def:'否', title:'大奖池',               sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:9997,  feat:false},
+  {id:20, src:'大奖池',     lang:'—',    def:'—',  title:'Gold Draw dev',        sub:'',                        start:'2026-05-03 00:00:00', end:'2026-12-28 15:59:59', showEnd:'2026-12-28 15:59:59', on:true,  sort:9997,  feat:false, pick:true, fsort:3},
   {id:4,  src:'游戏挑战赛', lang:'—',    def:'—',  title:'Game Challenge',       sub:'',                        start:'2026-09-01 00:00:00', end:'2026-10-31 00:00:00', showEnd:'2026-10-31 00:00:00', on:true,  sort:999,   feat:true, pick:true, fsort:2},
-  {id:5,  src:'素材', dev:'H5', lang:'英语', def:'否', title:'vip返水加码',          sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:88,    feat:false},
+  {id:5,  src:'VIP返水加码', lang:'—',   def:'—',  title:'vip返水加码',          sub:'',                        end:'--',                  showEnd:'--',                  on:true,  sort:88,    feat:false},
   {id:6,  src:'充值活动',   lang:'—',    def:'—',  title:'Deposit Activity',     sub:'',                        start:'2025-10-17 00:00:00', end:'2028-01-01 00:00:00', showEnd:'--',                  on:true,  sort:8,     feat:false, auto:true},
   {id:7,  src:'负盈利活动', lang:'—',    def:'—',  title:'负盈利-手动领-自动到', sub:'负盈利活动-内容标题文字', start:'2026-10-01 00:00:00', end:'2027-10-30 23:59:59', showEnd:'--',                  on:true,  sort:1,     feat:false, pending:true},
   {id:8,  src:'每日存款',   lang:'—',    def:'—',  title:'will存款活动Test',     sub:'',                        start:'2026-10-01 00:00:00', end:'2026-11-30 00:00:00', showEnd:'--',                  on:true,  sort:0,     feat:false, pick:true, fsort:4},
@@ -557,11 +561,11 @@ var items = [
   {id:14, src:'负盈利活动', lang:'—',    def:'—',  title:'JustinTest活動',       sub:'',                        start:'2026-10-01 00:00:00', end:'2026-10-31 00:00:00', showEnd:'--',                  on:false, sort:0,     feat:false}
 ];
 /* 精选（Featured）10/30 她定移除：前台 Featured 大图卡、后台「奖励页精选」页签都拿掉，特殊活动另开需求 */
-/* 奖励列表图：10/30 她给 H5 显示 112×58 → 上传 2 倍 224×116，各上传区红字标尺寸；PC 晚点给，没给不写死 */
+/* 奖励列表图：11/03 设计稿改整张卡＝一张图，H5 显示 355×178 → 上传 2 倍 710×356（依设计稿比例推算，待她跟设计确认），各上传区红字标尺寸；PC 晚点给，没给不写死 */
 
 /* 奖励页排序＝各来源既有「排序」栏位同一个值，两边同步（10/20 她定，全部来源都同步、不另存）
    X-BOMB／预约＝活动配置(新)「活动列表设置·排序」 */
-var SORT_FIELD = {'素材':'排序', 'X-BOMB':'活动列表设置·排序', '预约活动':'活动列表设置·排序', '周卡':'活动列表设置·排序', '游戏挑战赛':'排序', '新用户首充':'排序', '每日存款':'排序',
+var SORT_FIELD = {'素材':'排序', '排行榜':'排序', 'X-BOMB':'活动列表设置·排序', '预约活动':'活动列表设置·排序', '周卡':'活动列表设置·排序', '游戏挑战赛':'排序', '新用户首充':'排序', '每日存款':'排序',
                   '充值活动':'排序', '每日首充':'排序', '负盈利活动':'排序', '消费活动':'排序'};
 /* 活动配置(新)的模板（10/21 她定：往后新活动一律从这里建，步骤 2「活动列表设置」开启＝进奖励页；既有活动维持各自配置页）
    现况后端只让 X-BOMB、预约进列表，改成开启的都进；新模板沿用同一页，不另做配置 */
@@ -573,8 +577,8 @@ var LANGS = ['简体中文','越南文','菲律宾语','英语'], LANG_SUFFIX = 
 function i18nAll(name){ var o = {}; LANGS.forEach(function(l){ o[l] = name+'-'+LANG_SUFFIX[l]; }); return o; }   // 线上现况：类别四种语言都是「名称-代码」
 /* 活动类别：照线上现有 6 笔（10/20 线上截图全开）；不加图示；i18n＝国际化列表（线上既有） */
 var cats = [
-  {id:22, name:'正盈利活动', sort:200, created:'2024-05-07 00:14', on:true, i18n:i18nAll('正盈利活动')},
-  {id:23, name:'负盈利活动', sort:180, created:'2024-05-07 00:15', on:true, i18n:i18nAll('负盈利活动')},
+  {id:22, name:'正盈利活动', sort:200, created:'2024-05-07 00:14', on:true, i18n:i18nAll('正盈利活动'), icon:true},   // icon：11/03 新增「图示」栏位（有上传＝true；没上传前台吃预设日历图示）
+  {id:23, name:'负盈利活动', sort:180, created:'2024-05-07 00:15', on:true, i18n:i18nAll('负盈利活动'), icon:true},
   {id:24, name:'消费活动',   sort:160, created:'2024-05-07 00:14', on:true, i18n:i18nAll('消费活动')},
   {id:31, name:'新用户首充', sort:140, created:'2025-12-19 09:38', on:true, i18n:i18nAll('新用户首充')},
   {id:32, name:'每日首充',   sort:120, created:'2025-12-19 09:39', on:true, i18n:i18nAll('每日首充')},
@@ -593,7 +597,7 @@ var TAGS = ['Cashback','Points','Extra','Spin','No Deposit','Free Entry','No Wag
   .map(function(n, i){ return {id:101+i, name:n, created:'2026-10-19 '+(10+Math.floor(i/6))+':'+(10+i%6*8)+':00', i18n:{'英语':n}}; });
 function tagByName(n){ return TAGS.find(function(t){ return t.name === n; }); }
 /* 10/29 她定：标签不分色（一律灰）、不做左上角角标；10/30 她定：每个活动只能配一个标签（设定标签弹窗＝单选下拉，可选「无」） */
-var ITEM_TAGS = {1:['Leaderboard'], 3:['Rebate'], 15:['Leaderboard'], 17:['Rebate'], 4:['Leaderboard'], 6:['Auto Claimed'], 12:['Auto Claimed'], 7:['Loss Rebate'], 9:['New'], 5:['VIP'], 18:['VIP']};
+var ITEM_TAGS = {1:['Leaderboard'], 3:['Rebate'], 4:['Leaderboard'], 6:['Auto Claimed'], 12:['Auto Claimed'], 7:['Loss Rebate'], 9:['New'], 5:['VIP']};
 /* 某张表（PC／H5）列哪些：该端的素材＋全部其他来源 */
 function onDev(it, dev){ return it.src !== '素材' || it.dev === dev; }
 items.forEach(function(it){ it.tags = ITEM_TAGS[it.id] || []; });
@@ -602,7 +606,7 @@ items.forEach(function(it){ it.tags = ITEM_TAGS[it.id] || []; });
    → 开关放在：素材弹窗、活动配置(新) 步骤 2 首页浮窗设置、游戏挑战赛 活动素材配置、每日存款活动页（每日存款原本没浮窗，一并加上浮窗栏位）
    前台：个人栏下一排方块，取开了精选、在显示期内且状态开启的活动，照首页浮窗排序（数字小在前）取前 4 个；一个都没有整排不出
    it.pick＝精选开关；it.fsort＝首页浮窗排序（示范资料才有，没有当 999） */
-var PICK_OK = ['素材', '游戏挑战赛', '每日存款', '预约活动', 'X-BOMB'];   // 有「奖励页小精选」开关的来源（她 11/03 列的 8 种活动）
+var PICK_OK = ['素材', '游戏挑战赛', '每日存款', '预约活动', 'X-BOMB', '排行榜', '大奖池', 'VIP返水加码', '每日特别返水'];   // 有「奖励页小精选」开关的来源（她 11/03 列的 8 种活动；素材保留）
 function pickList(dev){ return items.filter(function(x){ return x.pick && onDev(x, dev) && visibleNow(x); }).sort(function(a,b){ return (a.fsort || 999) - (b.fsort || 999); }).slice(0, 4); }
 
 /* 每笔活动自己勾的类别（素材、专项活动＝既有「活动类型」；X-BOMB／预约／挑战赛＝新增「活动类别」）
@@ -642,7 +646,22 @@ var SRC_PAGES = {
   lose:  {title:'盈利活动', back:true,
           basic:['是否显示首页','活动名称','活动时间','显示时间','领取方式','发放方式','发放周期','活动状态','活动类型','活动类型2','排序'],
           radios:{'领取方式':[['2','手动领取'],['1','自动发放']], '发放方式':[['2','审核发放'],['1','自动到账']], '发放周期':[['1','日','d'],['2','周','d'],['3','月','d']], '活动类型2':[['1','负盈利','d'],['2','正盈利','d']]},
-          reward:'tier', cond:['ip','kyc'], imgs:IMGS4, content:['活动内容','活动内容(App)','内容标题文字']}
+          reward:'tier', cond:['ip','kyc'], imgs:IMGS4, content:['活动内容','活动内容(App)','内容标题文字']},
+  /* 11/03 她定「这几个活动可以新增一下」：排行榜／大奖池／VIP返水加码／每日特别返水 当专项活动来源进奖励页列表（栏位照 sportsadmin 线上 11/03 读到的）
+     simple：照 fields 顺序画；'#xx'＝线上的折叠区块标题；'@float'＝首页浮窗设置（floatNew＝线上没有→红框新增；float={sw,pc,h5,sort}＝线上既有栏位名）；'@listimg'＝红框新增 奖励列表图 */
+  lb:    {title:'Okbet排行榜', back:true, simple:true, lw:180,
+          radios:{'周期类型':[['1','自定义'],['2','日榜'],['3','周榜']], '参与用户':[['1','全部用户'],['2','注册时间≤ 天'],['3','注册时间≥ 天']], '配置类型':[['1','第三方游戏'],['2','体育游戏'],['3','厂商维度']], '领取方式':[['1','用户登录领取']]},
+          fields:['排序','活动名称','周期类型','参与用户','活动时间','开始展示时间','顶部活动素材','配置类型','排行榜参与游戏','前端显示游戏','活动状态','领取方式','奖励发放周期','最低上榜要求：有效投注','列表页图片','@float'], floatNew:true},
+  jp:    {title:'大奖池活动', crumb:'大奖池活动 › 活动配置', tabs:['当前活动配置','上期活动配置'], simple:true,
+          radios:{'活动开关':[['1','开启'],['0','关闭']], '领取方式':[['1','自动领取'],['2','手动领取']], '活动主题':[['1','默认'],['2','圣诞']]},
+          fields:['#基本配置','活动开关','活动名称','活动时间','展示时间','领取方式','活动主题','流水倍数','#抽奖券配置','#奖池配置','#日奖励配置','#周奖励配置','#月奖励配置','@listimg','#首页浮窗入口','@float','#直播相关'],
+          float:{sw:'开关', pc:'PC图', h5:'移动端图', sort:'首页展示排序'}},
+  vipr:  {title:'vip返水加码活动', tabs:['优惠活动','优惠活动统计'], simple:true,
+          fields:['#首页浮窗设置','@float','@listimg'], float:{sw:'首页浮窗设置', pc:'PC图片', h5:'移动端图片', sort:'首页展示排序'}},
+  dsp:   {title:'每日特别返水', tabs:['活动配置','抽取记录','领取记录'], simple:true,
+          radios:{'返水比例刷新':[['1','保持返水比例'],['2','重新随机']]},
+          fields:['活动名称','活动时间','活动状态','礼金所需流水倍数','活动逻辑','返水比例刷新','保底随机返水比例','活动参与游戏池配置（限制50款）','用户从游戏池中抽取返水游戏数量','#参与游戏条件','@float','@listimg'],
+          float:{sw:null, pc:'PC图片', h5:'移动端图片', sort:'首页展示顺序'}}
 };
 var srcView = 'rech', imgDevice = 'PC';   // 目前开着哪一页、图片页签在 PC 还是手机端
 var matTab = 'list';   // 活动图素材管理：奖励页列表
@@ -651,7 +670,7 @@ function showMatTab(tab){
   document.querySelectorAll('[data-mattab]').forEach(function(x){ x.classList.toggle('is-active', x.dataset.mattab === tab); });
   document.getElementById('matPaneList').classList.toggle('hidden', tab !== 'list');
 }
-var SRC_OF = {rech:'充值活动', drech:'每日首充', ddep:'每日存款', newbie:'新用户首充', cons:'消费活动', lose:'负盈利活动', gc:'游戏挑战赛'};
+var SRC_OF = {rech:'充值活动', drech:'每日首充', ddep:'每日存款', newbie:'新用户首充', cons:'消费活动', lose:'负盈利活动', gc:'游戏挑战赛', lb:'排行榜', jp:'大奖池', vipr:'VIP返水加码', dsp:'每日特别返水'};
 var srcItem = null;   // 设定页正在编辑的活动（从汇总页「前往设定」带过来；直接从选单进来就拿该来源第一笔）
 function pickItem(key, id){ srcItem = id ? byId(id) : items.find(function(x){ return x.src === SRC_OF[key]; }) || null; }
 var v2Item = null;    // 编辑活动（X-BOMB／预约）正在编辑的活动
@@ -744,7 +763,7 @@ function catsOfKey(key){
    画面一：汇总页
    ========================================================================== */
 var MAT_COLS = [
-  {t:'来源',w:100,isNew:true},{t:'语系',w:50},{t:'默认显示',w:60},{t:'奖励页排序',w:92,isNew:true,was:'排序'},
+  {t:'来源',w:116,isNew:true},{t:'语系',w:50},{t:'默认显示',w:60},{t:'奖励页排序',w:92,isNew:true,was:'排序'},
   {t:'标题文字'},{t:'奖励列表图',w:96,isNew:true,was:'标题图片'},{t:'弹窗图片',w:80},{t:'首页图片(移动端用)',w:80},{t:'内容标题文字',w:100},{t:'内容文字',w:80},{t:'内容图片',w:80},{t:'结束时间',w:90},{t:'显示结束时间',w:90},
   {t:'标签',w:124,isNew:true},{t:'小精选',w:70,isNew:true},{t:'状态',w:60,isMod:true},{t:'操作',w:118,isMod:true}   // 既有栏位照线上顺序不动；新增的 来源 放最前，标签／小精选 跟 状态 一起放最后（都是显示控制）
 ];
@@ -836,7 +855,7 @@ function renderMatModal(){
   var daily = radioOf('mDaily','0') === '1';
   document.getElementById('matModalBody').innerHTML = '<form class="el-form el-form--label-right" onsubmit="return false">'+
     formItem('标题:', true, '<div style="display:flex;gap:16px;align-items:center">'+inp(it.title).replace('<input ', '<input id="mTitle" ')+'<label class="el-checkbox'+(daily?' is-checked':'')+'" data-radio="mDaily|'+(daily?'0':'1')+'"><span class="el-checkbox__input'+(daily?' is-checked':'')+'"><span class="el-checkbox__inner"></span></span><span class="el-checkbox__label">每日返水</span></label></div>', lw)+
-    '<div class="is-new" data-mark="改名称：原「标题图片」">'+formItem('奖励列表图:', true, up+'<div class="el-form-item__tip el-form-item__tip--red">H5 尺寸 224×116</div>', lw-16)+'</div>'+
+    '<div class="is-new" data-mark="改名称：原「标题图片」">'+formItem('奖励列表图:', true, up+'<div class="el-form-item__tip el-form-item__tip--red">H5 尺寸 710×356</div>', lw-16)+'</div>'+
     formItem('弹窗图片:', false, up+'<div class="el-form-item__tip el-form-item__tip--red">PC: 800*600 H5: 640*118</div>', lw)+
     formItem('首页图片(移动端用):', false, up, lw)+
     formItem('首页浮窗设置', false, '<div class="sw-row">'+elRadios('mFloat', [['1','开启'],['0','关闭']], radioOf('mFloat','0'))+pickSwitch('mPick', radioOf('mPick','0'))+'</div>', lw)+   // 奖励页小精选跟浮窗开关同一行，图共用下面的浮窗图片
@@ -944,7 +963,8 @@ function renderTagSet(){
 /* ==========================================================================
    画面二：活动类别管理
    ========================================================================== */
-var catEditing = null;
+var catEditing = null, catIconTmp = false;   // catIconTmp：弹窗里有没有（已上传）图示
+function catIconThumb(has){ return has ? '<span class="thumb thumb--ico" style="margin-left:6px"></span>' : ''; }   // 弹窗里按钮旁的缩图（已上传才有）
 function catUsed(name){ return items.some(function(it){ return it.cats.indexOf(name) > -1; }); }
 function renderCats(){
   document.getElementById('catTabs').innerHTML =
@@ -952,9 +972,9 @@ function renderCats(){
     '<div class="el-tabs__item is-top'+(catTab==='tag'?' is-active':'')+'" role="tab" data-cattab="tag">标签<span class="th-new">新增</span></div>';
   document.getElementById('catPane').classList.toggle('hidden', catTab !== 'cat');
   document.getElementById('tagPane').classList.toggle('hidden', catTab !== 'tag');
-  var cols = [{t:'活动类型名称'},{t:'排序',w:120},{t:'创建时间',w:200},{t:'是否开启',w:120},{t:'操作',w:140}];
+  var cols = [{t:'活动类型名称'},{t:'图示',w:90,isNew:true},{t:'排序',w:120},{t:'创建时间',w:200},{t:'是否开启',w:120},{t:'操作',w:140}];   // 图示：11/03 新增，前台药丸的小图示
   var rows = cats.map(function(c, i){
-    return [esc(c.name)+plusI18n('cat', i), c.sort, c.created,
+    return [esc(c.name)+plusI18n('cat', i), c.icon ? '<span class="thumb thumb--ico"></span>' : '--', c.sort, c.created,
             elSwitch(c.on, 'data-cat-on="'+i+'"', false), elTextBtn('编辑','data-cat-edit="'+i+'"')+elTextBtn('删除','data-cat-del="'+i+'"', catUsed(c.name))];   // 照线上：使用中的类别删除反灰
   });
   document.getElementById('catTable').innerHTML = elTable(cols, rows);
@@ -969,7 +989,9 @@ function openCat(i){
     formItem('活动类型名称:', true, '<div class="el-input el-input--small"><input class="el-input__inner" id="catName" value="'+esc(c.name)+'" placeholder="请输入"></div>')+
     formItem('排序:', true, '<div class="el-input el-input--small"><input class="el-input__inner" id="catSort" type="number" value="'+c.sort+'" placeholder="请输入"></div>')+
     formItem('是否开启:', false, elRadios('catOn', [['1','开启'],['0','关闭']], c.on === false ? '0' : '1'))+
+    '<div class="is-new" data-mark="新增">'+formItem('图示:', false, '<div class="upload-line">'+fileBtn('data-cat-upload')+catIconThumb(!!c.icon)+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG</span></div><div class="el-form-item__tip el-form-item__tip--red">尺寸 32×32；未上传时前台显示预设图示</div>', 120-16)+'</div>'+   // 11/03 她定：类别可配小图示，前台药丸用；没配吃预设
   '</form>';
+  catIconTmp = !!c.icon;
   radioVals.catOn = c.on === false ? '0' : '1';
   document.getElementById('catModal').classList.remove('hidden');
 }
@@ -985,7 +1007,7 @@ function renderV2(){
   document.querySelectorAll('[data-pick]').forEach(function(el){ el.innerHTML = pickSwitch('page_'+el.dataset.pick, radioVals[el.dataset.pick]); });
   document.querySelectorAll('[data-uploads]').forEach(function(el){
     el.innerHTML = el.dataset.uploads.split('|').map(function(t){
-      return '<div class="upload-card"><div class="upload-card-header"><span class="req">*</span>'+t+(t === 'H5 奖励列表图' ? '<span class="el-form-item__tip el-form-item__tip--red" style="margin:0 0 0 10px;display:inline">尺寸 224×116</span>' : '')+'</div><div class="upload-card-body"><div class="img-uploader">点击上传图片</div>'+
+      return '<div class="upload-card"><div class="upload-card-header"><span class="req">*</span>'+t+(t === 'H5 奖励列表图' ? '<span class="el-form-item__tip el-form-item__tip--red" style="margin:0 0 0 10px;display:inline">尺寸 710×356</span>' : '')+'</div><div class="upload-card-body"><div class="img-uploader">点击上传图片</div>'+
              '<div class="upload-actions"><button type="button" class="el-button el-button--text el-button--mini" data-card-del><i class="el-icon-delete"></i><span>删除</span></button></div></div></div>';
     }).join('');
   });
@@ -1011,7 +1033,7 @@ function renderGc(){
         '<div class="gc-mat__title"><span class="req">*</span>奖励列表图：</div>'+
         '<div class="gc-row">'+
           '<div class="gc-up"><span class="gc-up__lb">PC：：</span>'+fileBtn()+'<div class="gc-box"><span class="gc-box__img"></span></div></div>'+
-          '<div class="gc-up"><span class="gc-up__lb">移动端：：</span>'+fileBtn()+'<span class="el-form-item__tip el-form-item__tip--red" style="margin:0 0 0 10px">尺寸 224×116</span><div class="gc-box"><span class="gc-box__img"></span></div></div>'+
+          '<div class="gc-up"><span class="gc-up__lb">移动端：：</span>'+fileBtn()+'<span class="el-form-item__tip el-form-item__tip--red" style="margin:0 0 0 10px">尺寸 710×356</span><div class="gc-box"><span class="gc-box__img"></span></div></div>'+
           '<span class="el-form-item__tip gc-row__tip">仅支持图片文件：.PNG .JPG .WEBP 图片大小不超过2MB</span>'+
         '</div>'+
       '</div>'+
@@ -1039,15 +1061,21 @@ function sCheck(t, on){ return '<label class="el-checkbox'+(on?' is-checked':'')
 function richEditor(){ return '<div class="rich"><div class="rich__bar"><span>↶</span><span>↷</span><span>&lt;&gt;</span><b>A</b><b>B</b><i>I</i><u>U</u><span>Paragraph ⌄</span><span>System Font ⌄</span><span>12pt ⌄</span></div><div class="rich__body"></div><div class="rich__foot">P<span>POWERED BY TINY</span></div></div>'; }
 function upThumb(){ return '<div class="up-thumb"><span class="thumb thumb--wide"></span></div>'; }
 function srcField(label){
-  var pg = SRC_PAGES[srcView], it = srcItem || {}, lw = SLW, tv = function(v){ return v && v !== '--' ? v : ''; };
+  var pg = SRC_PAGES[srcView], it = srcItem || {}, lw = pg.lw || SLW, tv = function(v){ return v && v !== '--' ? v : ''; };
   var show = label === '活动类型2' ? '活动类型' : label;
   if (label === '活动类型') return formItem(show+':', false, elChecks('srcCats_'+srcView, catsOfKey('srcCats_'+srcView)), lw);
   var opts = (pg.radios && pg.radios[label]) || SRC_RADIOS[label];
   if (opts) {   // 活动状态／发放方式带入该活动目前值（跟汇总页同一笔）；'1'＝自动到账／自动发放
-    var def = label === '活动状态' ? (it.on === false ? '0' : '1') : label === '发放方式' ? (it.auto ? '1' : '2') : opts[0][0];
+    var def = (label === '活动状态' || label === '活动开关') ? (it.on === false ? '0' : '1') : label === '发放方式' ? (it.auto ? '1' : '2') : opts[0][0];
     if (!opts.some(function(o){ return o[0] === def; })) def = opts[0][0];
     return formItem(show+':', label !== '活动类型2', elRadios('src_'+label, opts, radioOf('src_'+label, def)), lw);
   }
+  if (label === '开始展示时间') return formItem(label+':', true, '<div class="el-input el-input--small el-input--prefix" style="width:200px"><input class="el-input__inner" placeholder="选择日期时间"><span class="el-input__prefix"><i class="el-input__icon el-icon-time"></i></span></div>', lw);
+  if (label === '列表页图片') return '<div class="is-new" data-mark="改名称：原「列表页图片」">'+formItem('奖励列表图:', true, '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div><div class="el-form-item__tip el-form-item__tip--red">H5 尺寸 710×356</div>'+upThumb(), lw-16)+'</div>';   // 排行榜：线上单张列表页图片，跟其他页一样改名奖励列表图
+  if (/素材$|图片$/.test(label)) return formItem(label+':', true, fileBtn(), lw);
+  if (['流水倍数','礼金所需流水倍数','保底随机返水比例','用户从游戏池中抽取返水游戏数量','最低上榜要求：有效投注'].indexOf(label) > -1) return formItem(label+':', true, sInp('150px'), lw);
+  if (label === '奖励发放周期') return formItem(label+':', true, sInp('80px')+' 天', lw);
+  if (label === '活动参与游戏池配置（限制50款）') return formItem(label+':', true, '<button type="button" class="el-button el-button--primary el-button--small"><span>选择游戏</span></button>', lw);
   if (/时间$/.test(label)) { var isAct = /活动时间/.test(label); return formItem(label+':', isAct, '<div class="el-date-editor el-range-editor el-input__inner el-range-editor--small" style="width:330px"><i class="el-input__icon el-range__icon el-icon-time"></i><input class="el-range-input" placeholder="开始时间" value="'+(isAct ? tv(it.start) : tv(it.showStart))+'" '+(isAct ? 'data-src-start' : 'data-src-show-start')+'><span class="el-range-separator">~</span><input class="el-range-input" placeholder="结束时间" value="'+(isAct ? tv(it.end) : tv(it.showEnd))+'" '+(isAct ? 'data-src-end' : 'data-src-show-end')+'></div>', lw); }
   if (/^活动内容/.test(label)) return formItem(label+':', label === '活动内容', richEditor(), lw);
   if (label === '内容标题文字' || label === '活动标题') return formItem(label+':', label === '活动标题', '<div style="display:flex;align-items:center;gap:4px"><div class="el-textarea" style="width:420px"><textarea class="el-textarea__inner" rows="2"></textarea></div>'+(pg.i18n && label === '活动标题' ? plusIcon() : '')+'</div>', lw);
@@ -1059,6 +1087,26 @@ function srcField(label){
   if (/^(PC图片|移动端图片)/.test(label)) return formItem(label+':', false, fileBtn(), lw);
   if (label === '首页展示排序') return formItem(label+':', false, sInp('150px'), lw);
   return formItem(label+':', false, sSel('240px'), lw);
+}
+/* 首页浮窗设置＋奖励页小精选（11/03 她定：小精选开关跟浮窗开关同一行、共用浮窗图）
+   floatNew＝线上没有浮窗（排行榜）→ 整组红框新增；float={sw,pc,h5,sort}＝线上既有栏位名（大奖池／vip返水加码／每日特别返水），只有小精选是新增；sw 为空（每日特别返水没有开关）→ 小精选自己一行红框 */
+function floatBlock(pg, lw){
+  var up = function(){ return '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'+upThumb(); };
+  var pickVal = radioOf('src_奖励页精选', srcItem && srcItem.pick ? '1' : '0');
+  if (pg.floatNew) return '<div class="is-new" data-mark="新增">'+
+    formItem('首页浮窗设置:', false, '<div class="sw-row">'+elRadios('src_浮窗开关', [['1','开启'],['0','关闭']], radioOf('src_浮窗开关','0'))+pickSwitch('src_奖励页精选', pickVal)+'</div>', lw-16)+
+    formItem('PC浮窗图片:', false, up(), lw-16)+formItem('H5浮窗图片:', false, up(), lw-16)+
+    formItem('首页浮窗排序:', true, sInp('320px','999'), lw-16)+'</div>';
+  var f = pg.float, h = '';
+  if (f.sw) h += formItem(f.sw+':', true, '<div class="sw-row">'+elRadios('src_浮窗开关', [['1','开启'],['0','关闭']], radioOf('src_浮窗开关','1'))+pickSwitch('src_奖励页精选', pickVal)+'</div>', lw);
+  else h += '<div class="is-new" data-mark="新增">'+formItem('奖励页小精选:', false, elRadios('src_奖励页精选', [['1','开启'],['0','关闭']], pickVal), lw-16)+'</div>';
+  h += formItem(f.pc+':', true, up(), lw)+formItem(f.h5+':', true, up(), lw)+formItem(f.sort+':', true, sInp('150px'), lw);
+  return h;
+}
+/* 奖励列表图（红框新增）：这几页线上没有列表图，奖励页卡片要用 → PC／H5 各一张，H5 标 710×356（新增栏位的端别名称统一叫 PC／H5；既有栏位照线上原名） */
+function listImgBlock(){
+  var up = function(){ return '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'; };
+  return '<div class="is-new" data-mark="新增">'+formItem('PC奖励列表图:', true, up()+upThumb(), 180-16)+formItem('H5奖励列表图:', true, up()+'<div class="el-form-item__tip el-form-item__tip--red">尺寸 710×356</div>'+upThumb(), 180-16)+'</div>';   // 新增栏位一律 PC／H5（11/03 她定统一）
 }
 /* 奖励配置示意（线上各页长相不同；不在改版范围，只画样子） */
 function vipRows(from, sub, openFirst){
@@ -1096,8 +1144,17 @@ var COND_LINES = {
   flow:  function(){ return formItem('奖金所需流水:', false, sCheck('本金')+sCheck('奖金')+sInp('80px')+' 倍', SLW); }
 };
 function renderSrc(){
-  var pg = SRC_PAGES[srcView], lw = SLW, dev = imgDevice === 'PC' ? 'PC' : '手机端', h = '';
+  var pg = SRC_PAGES[srcView], lw = pg.lw || SLW, dev = imgDevice === 'PC' ? 'PC' : '手机端', h = '';
   if (pg.back) h += '<div style="margin-bottom:12px"><button type="button" class="el-button el-button--default el-button--small" data-go="mat"><i class="el-icon-arrow-left"></i><span>返回列表</span></button></div>';
+  if (pg.simple) {   // 11/03 新增的四页：照 fields 顺序画（见 SRC_PAGES 注解）
+    pg.fields.forEach(function(f){
+      if (f === '@float') h += floatBlock(pg, lw);
+      else if (f === '@listimg') h += listImgBlock();
+      else if (f.charAt(0) === '#') h += '<div class="el-collapse-item__header" style="margin:0 0 10px;border-bottom:1px solid #EBEEF5">'+f.slice(1)+'<i class="el-collapse-item__arrow el-icon-arrow-right"></i></div>';
+      else h += srcField(f);
+    });
+    return srcFinish(pg, h, lw);
+  }
   if (pg.typeFirst) h += srcField('活动类型');   // 新用户首充：活动类型在区块标题之上（照线上）
   h += areaTitle('基本信息配置') + pg.basic.map(srcField).join('');
   h += areaTitle('奖励配置') + rewardBlock(pg.reward) + (pg.rewardTail || []).map(srcField).join('');
@@ -1107,7 +1164,7 @@ function renderSrc(){
   h += areaTitle('内容配置') + '<div class="el-radio-group dev-tabs">'+['PC','手机端'].map(function(d){ return '<label class="el-radio-button el-radio-button--mini'+(imgDevice===d?' is-active':'')+'" data-imgtab="'+d+'"><input type="radio" class="el-radio-button__orig-radio"'+(imgDevice===d?' checked':'')+'><span class="el-radio-button__inner">'+d+'图片设置</span></label>'; }).join('')+'</div>';
   h += pg.imgs.map(function(t){
     var isList = t === '奖励列表图', req = isList || !!pg.imgReq;
-    var ctrl = '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'+(isList && dev === '手机端' ? '<div class="el-form-item__tip el-form-item__tip--red">尺寸 224×116</div>' : '')+upThumb();   // 尺寸只标手机端（10/30 她给 H5；PC 晚点给）
+    var ctrl = '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'+(isList && dev === '手机端' ? '<div class="el-form-item__tip el-form-item__tip--red">尺寸 710×356</div>' : '')+upThumb();   // 尺寸只标手机端（10/30 她给 H5；PC 晚点给）
     var ilw = dev === '手机端' ? 180 : lw;   // 手机端的 label 较长（手机端首页推荐展示图／手机端奖励列表图），加宽才不换行
     var item = formItem(dev+t+':', req, ctrl, isList ? ilw-16 : ilw);
     return isList ? '<div class="is-new" data-mark="改名称：原「'+dev+(srcView === 'ddep' ? '奖励列表' : '列表页图')+'」">'+item+'</div>' : item;
@@ -1115,9 +1172,13 @@ function renderSrc(){
   // 首页浮窗设置（11/03 她定：每日存款要进奖励页精选区块、共用首页浮窗设置）：栏位照素材的「首页浮窗设置／浮窗图片／首页浮窗排序」，浮窗图片跟上面一样分 PC／手机端
   if (pg.float) { var flw = (dev === '手机端' ? 180 : lw) - 16; h += '<div class="is-new" data-mark="新增">'+
     formItem('首页浮窗设置:', false, '<div class="sw-row">'+elRadios('src_浮窗开关', [['1','开启'],['0','关闭']], radioOf('src_浮窗开关','0'))+pickSwitch('src_奖励页精选', radioOf('src_奖励页精选', srcItem && srcItem.pick ? '1' : '0'))+'</div>', flw)+
-    formItem(dev+'浮窗图片:', false, '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'+upThumb(), flw)+
+    formItem((dev === '手机端' ? 'H5' : 'PC')+'浮窗图片:', false, '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'+upThumb(), flw)+
     formItem('首页浮窗排序:', true, '<div class="el-input el-input--small" style="width:320px"><input class="el-input__inner" value="999"></div>', flw)+'</div>'; }
   h += pg.content.map(srcField).join('') + (pg.extra || []).map(srcField).join('');
+  srcFinish(pg, h, lw);
+}
+/* 专项活动页收尾：保存／重置钮＋（有页签的）页签外框 */
+function srcFinish(pg, h, lw){
   h += formItem('', false, '<button type="button" class="el-button el-button--primary el-button--small" data-act="srcSave"><span>保存</span></button><button type="button" class="el-button el-button--default el-button--small"><span>重置</span></button>', lw);
   var form = '<form class="el-form el-form--label-right src-form" onsubmit="return false">'+h+'</form>';
   document.getElementById('srcPage').innerHTML = pg.tabs
@@ -1163,22 +1224,27 @@ function badgeOf(it){
   var e = tms(it.end), n = nowMs();
   if (!e || e <= n) return null;   // 永久活动不倒数；已结束、还在显示期间：不挂角标（10/20 她定，拿掉 Activity End）
   var left = e - n, de = new Date(e), dn = new Date(n);
-  if (de.getFullYear() === dn.getFullYear() && de.getMonth() === dn.getMonth() && de.getDate() === dn.getDate()) {   /* 同一个日历日＝最后一天 */ var s = Math.floor(left/1000); return {cls:'h5-badge--hot', clock:true, cd:true, text:'Ends in '+pad(Math.floor(s/3600))+':'+pad(Math.floor(s%3600/60))+':'+pad(s%60)}; }
+  if (de.getFullYear() === dn.getFullYear() && de.getMonth() === dn.getMonth() && de.getDate() === dn.getDate()) {   /* 同一个日历日＝最后一天 */ var s = Math.floor(left/1000); return {cls:'h5-badge--hot', clock:true, cd:true, text:'Ends '+pad(Math.floor(s/3600))+':'+pad(Math.floor(s%3600/60))+':'+pad(s%60)}; }
   return null;   // 还没到最后一天：不挂角标，日期写在卡片第二行（现行 Event time）
 }
 function badgeHtml(b){ return b ? '<span class="h5-badge '+b.cls+'"'+(b.cd?' data-cd':'')+'>'+(b.clock?'<i class="h5-clock"></i>':'')+b.text+'</span>' : ''; }
 /* 「Auto Claimed」不是系统判断：运营在标签清单自己建一颗 Auto Claimed，想挂哪个活动就挂（10/21 她定）；前台不看「发放方式」 */
 /* 卡片第二行＝现行的活动时间文字：Event time 起 – 迄；没设时间＝Permanent event（都是现行文案） */
-function dmy(ms){ var d = new Date(ms); return d.getFullYear()+'/'+pad(d.getMonth()+1)+'/'+pad(d.getDate()); }
-function timeText(it){
-  var e = tms(it.end), st = tms(it.start);
-  if (!e) return 'Permanent event';
-  if (e <= nowMs()) return 'Expired';          // 活动已结束、还在显示期：照现行前台显示 Expired
-  return (st ? dmy(st)+'–' : '')+dmy(e);   // 一行放得下才能维持卡片高度，所以不带「Event time:」字样；没设开始日只显示结束日
-}
 byId(9).pending = true; byId(9).pendingN = 2;   // X-BOMB 有可领（示范红色数字）
-function cardBody(it){ var tt = timeText(it); return '<div class="h5-body"><div class="h5-title">'+esc(it.title)+'</div>'+(tt ? '<div class="h5-time">'+tt+'</div>' : '')+'</div>'; }
-function cardBtn(it){ return '<button type="button" class="h5-btn" data-front-btn="'+it.id+'">View</button>'; }
+/* 小图示（inline SVG，照设计稿的线条图示） */
+var ICO = {
+  grid: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>',
+  cal:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h2v2h6V2h2v2h3a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3V2zm13 8H4v10h16V10z"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  home: '<svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>',
+  gift: '<svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13M12 8s-1.5-5-4.5-5a2.2 2.2 0 0 0 0 4.4H12zM12 8s1.5-5 4.5-5a2.2 2.2 0 0 1 0 4.4H12z"/></svg>',
+  mall: '<svg viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9M3 9h18v3a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0zM5 13v8h14v-8M10 21v-5h4v5"/></svg>',
+  wins: '<svg viewBox="0 0 24 24"><path d="M8 3h8v6a4 4 0 0 1-8 0zM8 5H5a3 3 0 0 0 3 5M16 5h3a3 3 0 0 1-3 5M12 13v4M8 21h8M10 17h4"/></svg>',
+  my:   '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+  gift2:'<svg class="ico-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="5" rx="1" fill="#E8453C"/><rect x="4.5" y="13" width="15" height="8" rx="1" fill="#D6246E"/><rect x="10.5" y="8" width="3" height="13" fill="#FFE58A"/><path d="M12 8s-1.5-5-4.5-5a2.2 2.2 0 0 0 0 4.4H12zM12 8s1.5-5 4.5-5a2.2 2.2 0 0 1 0 4.4H12z" fill="none" stroke="#E8453C" stroke-width="1.6"/></svg>'
+};
+/* 右下按钮：有可领（既有 pendingClaimCount＞0，＝红点）→ 金底 礼物图示＋箭头；一般＝蓝底箭头。都进详情页 */
+function cardBtn(it){ var gift = frontLogin && it.pending; return '<button type="button" class="h5-btn'+(gift?' h5-btn--gift':'')+'" data-front-btn="'+it.id+'">'+(gift?ICO.gift2:'')+ICO.arrow+'</button>'; }
 function cardDot(it){ return frontLogin && it.pending ? '<span class="h5-card__dot">'+(it.pendingN||1)+'</span>' : ''; }
 /* 卡片属于哪些类别＝该笔活动在后台勾的「活动类型」（既有）或「活动类别」（X-BOMB／预约／挑战赛新增）；后台改勾选前台即时跟着变 */
 function itemCats(it){ return it.cats || []; }
@@ -1191,24 +1257,26 @@ function renderFront(){
   var vis = items.filter(function(x){ return onDev(x, 'H5'); }).filter(visibleNow).sort(function(a,b){ return ((frontLogin&&b.pending)?1:0) - ((frontLogin&&a.pending)?1:0) || b.sort - a.sort; });   // 照既有：可领最前，其余照奖励页排序；已结束的不特别往后排
   var catsOn = cats.filter(function(c){ return c.on; }).sort(function(a,b){ return b.sort - a.sort; });   // 快捷入口＝「是否开启」的类别；全关就整排不显示
   if (frontCat && !catsOn.some(function(c){ return c.name === frontCat; })) frontCat = '';   // 选中的类别被关掉／改名：回到 All
-  var isPending = function(x){ return frontLogin && x.pending; };
   var list = vis.filter(function(x){ return !frontCat || itemCats(x).indexOf(frontCat) > -1; });
-  // 顶部个人栏：登入＝头像＋余额／积分＋Deposit；未登入照线上＝Login
+  // 顶部栏（白色卡片）：左 Logo；已登入＝头像＋余额／积分＋Deposit＋搜寻；未登入照设计稿＝Register / Login＋搜寻
+  var logo = '<div class="h5-logo">OK<em>·</em>BET</div>';
   var h = frontLogin
     ? '<div class="h5-top"><div class="h5-avatar"></div><div class="h5-wallet">'+
       '<div><i class="h5-coin h5-coin--p"></i>60 <span class="h5-refresh">⟳</span></div><div><i class="h5-coin h5-coin--pt"></i>2,150 <span class="h5-refresh">⟳</span></div></div>'+
       '<button type="button" class="h5-deposit">Deposit</button><i class="h5-search"></i></div>'
-    : '<div class="h5-top"><div class="h5-avatar" style="background:#C9D3E6"></div><div class="h5-guest">Welcome to OKBet!</div><button type="button" class="h5-login">Login</button><i class="h5-search"></i></div>';
-  // 奖励页精选区块：各活动开了「奖励页精选」的，一格一个、显示其首页浮窗图（H5 图片），照首页浮窗排序取前 4 个；一个都没有整排不出
+    : '<div class="h5-top">'+logo+'<button type="button" class="h5-login">Register / Login</button><i class="h5-search"></i></div>';
+  // Hero 大图＝奖励页大精选（后台栏位之后另加）：前台先照设计稿留整块图位
+  h += '<div class="h5-hero" data-front-hero></div>';
+  // 奖励页小精选：各活动开了「奖励页小精选」的，一格一个、显示其首页浮窗图（H5 图片），照首页浮窗排序取前 4 个；一个都没有整排不出
   var picks = pickList('H5');
-  if (picks.length) h += '<div class="h5-picks">'+picks.map(function(it, i){ return '<div class="h5-pick h5-pick--'+(i%4)+'" data-front-open="'+it.id+'" title="'+esc(it.title)+'"></div>'; }).join('')+'</div>';
-  h += '<div class="h5-sec">More promotions</div>';
-  // 快捷入口：彩色方块照企划书 2.3.1 的位置，只放类别名称（类别不上图示，10/20 她定）
-  if (catsOn.length) h += '<div class="h5-cats"><div class="h5-cat h5-cat--1'+(!frontCat?' is-on':'')+'" data-front-cat=""><div class="h5-cat__name">All</div></div>'+catsOn.map(function(c, i){ return '<div class="h5-cat h5-cat--'+(i%6)+(frontCat===c.name?' is-on':'')+'" data-front-cat="'+esc(c.name)+'"><div class="h5-cat__name">'+esc(langName(c))+'</div></div>'; }).join('')+'</div>';
-  h += '<div class="h5-list">'+(list.length ? list.map(function(it){
-    return '<div class="h5-card" data-front-open="'+it.id+'">'+cardDot(it)+'<div class="h5-thumb">'+cardTags(it)+badgeHtml(badgeOf(it))+'</div>'+cardBody(it)+cardBtn(it)+'</div>';   // 一律 View 进详情页（既有逻辑：列表只是入口，领取在详情页）
+  if (picks.length) h += '<div class="h5-picks">'+picks.map(function(it){ return '<div class="h5-pick" data-front-open="'+it.id+'" title="'+esc(it.title)+'"></div>'; }).join('')+'</div>';
+  // 快捷入口：药丸按钮，All 在最前（固定格子图示），其余＝后台开启的类别：有上传「图示」用上传的，没有吃预设日历图示
+  if (catsOn.length) h += '<div class="h5-cats"><div class="h5-cat'+(!frontCat?' is-on':'')+'" data-front-cat="">'+ICO.grid+'<div class="h5-cat__name">ALL</div></div>'+catsOn.map(function(c){ return '<div class="h5-cat'+(frontCat===c.name?' is-on':'')+'" data-front-cat="'+esc(c.name)+'">'+(c.icon ? '<i class="h5-cat__ico"></i>' : ICO.cal)+'<div class="h5-cat__name">'+esc(langName(c))+'</div></div>'; }).join('')+'</div>';
+  // 活动卡＝整张奖励列表图，叠 标签／Ends 倒数／右下按钮。整张卡、按钮都进详情页（既有逻辑：列表只是入口，领取在详情页）
+  h += '<div class="h5-list">'+(list.length ? list.map(function(it, i){
+    return '<div class="h5-card" data-front-open="'+it.id+'">'+cardDot(it)+'<div class="h5-thumb h5-thumb--'+(i%3)+'">'+cardTags(it)+badgeHtml(badgeOf(it))+cardBtn(it)+'</div></div>';
   }).join('') : '<div class="h5-empty">No promotions</div>')+'</div>';
-  h += '<div class="h5-nav"><div><i></i>Home</div><div class="is-on"><i></i>Rewards</div><div><i></i>Points Mall</div><div><i></i>Tourney</div><div><i></i>My</div></div>';
+  h += '<div class="h5-nav"><div>'+ICO.home+'Home</div><div class="is-on">'+ICO.gift+'Rewards</div><div>'+ICO.mall+'Points Mall</div><div>'+ICO.wins+'Wins</div><div>'+ICO.my+'My</div></div>';
   box.innerHTML = h;
 }
 /* 倒数每秒跳：只改有倒数的角标，不重画整页 */
@@ -1295,6 +1363,7 @@ document.addEventListener('click', function(e){
   // 上传（示范：点了就当已上传，显示缩图）
   if ((q = t.closest('.img-uploader'))) { q.innerHTML = '<span class="thumb thumb--wide" style="width:120px;height:70px"></span>'; return; }
   if ((q = t.closest('[data-card-del]'))) { q.closest('.upload-card-body').querySelector('.img-uploader').innerHTML = '点击上传图片'; return; }
+  if ((q = t.closest('[data-cat-upload]'))) { catIconTmp = true; if (!q.nextElementSibling.classList.contains('thumb')) q.insertAdjacentHTML('afterend', catIconThumb(true)); return; }   // 类别图示：示意选了档案就当上传完成（要放在下面共用的「选择文件」处理之前）
   if ((q = t.closest('.el-button')) && q.textContent.trim() === '选择文件') {
     var path = q.parentNode.querySelector('.upload-row__path');
     if (path) path.innerHTML = '<span class="thumb"></span>';
@@ -1309,6 +1378,7 @@ document.addEventListener('click', function(e){
       if (so) srcItem.sort = Math.max(0, Math.floor(Number(so.value) || 0));
       if (st2 && st2.value.trim()) srcItem.title = st2.value.trim();
       if (radioVals['src_活动状态']) srcItem.on = radioVals['src_活动状态'] === '1';
+      if (radioVals['src_活动开关']) srcItem.on = radioVals['src_活动开关'] === '1';   // 大奖池的叫活动开关
       if (radioVals['src_奖励页精选']) srcItem.pick = radioVals['src_奖励页精选'] === '1';
       if (radioVals['src_发放方式']) srcItem.auto = radioVals['src_发放方式'] === '1';
       var tOf = function(sel){ var el = document.querySelector(sel); return el ? (el.value.trim() || '--') : undefined; };
@@ -1333,6 +1403,7 @@ document.addEventListener('click', function(e){
   // 快捷入口：点类别筛选列表，再点 All 取消
   if ((q = t.closest('[data-front-cat]'))) { frontCat = q.dataset.frontCat; renderFront(); return; }
   // 卡片、按钮都走现行路径：打开 Event Details 弹窗（内容照各活动既有），领取在弹窗里做；列表这层不直接领
+  if ((q = t.closest('[data-front-hero]'))) { message('打开 Hero 大精选活动（示意，后台栏位之后另加）'); return; }
   if ((q = t.closest('[data-front-btn]'))) { message('打开「'+byId(q.dataset.frontBtn).title+'」Event Details（示意）'); return; }
   if ((q = t.closest('[data-front-open]'))) { message('打开「'+byId(q.dataset.frontOpen).title+'」Event Details（示意）'); return; }
   // 画面切换
@@ -1345,7 +1416,7 @@ document.addEventListener('click', function(e){
     var gi = byId(q.dataset.goto), gs = gi.src;
     if (isV2(gs)) { v2Item = gi; renderV2(); show('v2'); return; }
     if (gs === '游戏挑战赛') { renderGc(); show('gc'); return; }
-    var SRC_GO = {'充值活动':'rech','每日首充':'drech','每日存款':'ddep','新用户首充':'newbie','负盈利活动':'lose','消费活动':'cons'};
+    var SRC_GO = {'充值活动':'rech','每日首充':'drech','每日存款':'ddep','新用户首充':'newbie','负盈利活动':'lose','消费活动':'cons','排行榜':'lb','大奖池':'jp','VIP返水加码':'vipr','每日特别返水':'dsp'};
     if (SRC_GO[gs]) { srcItem = gi; show(SRC_GO[gs]); return; }
     message('前往「'+gs+'」设定页'); return;
   }
@@ -1429,9 +1500,9 @@ document.addEventListener('click', function(e){
       if (catEditing > -1) {
         var oldCat = cats[catEditing].name, newCat = name || oldCat;
         if (newCat !== oldCat) items.forEach(function(it){ it.cats = it.cats.map(function(x){ return x === oldCat ? newCat : x; }); });   // 改名：用到的活动跟着改
-        cats[catEditing].name = newCat; cats[catEditing].sort = sort; cats[catEditing].on = radioOf('catOn','1') === '1';
+        cats[catEditing].name = newCat; cats[catEditing].sort = sort; cats[catEditing].on = radioOf('catOn','1') === '1'; cats[catEditing].icon = catIconTmp;
       }
-      else cats.push({id:40+cats.length, name:name || '新类别', sort:sort, created:'2026-10-19 15:40', on:radioOf('catOn','1') === '1', i18n:{}});
+      else cats.push({id:40+cats.length, name:name || '新类别', sort:sort, created:'2026-10-19 15:40', on:radioOf('catOn','1') === '1', i18n:{}, icon:catIconTmp});
       document.getElementById('catModal').classList.add('hidden'); renderCats(); message('保存成功');
     }
   }
