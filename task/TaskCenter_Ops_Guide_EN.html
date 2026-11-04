@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Task Center User Guide</title>
+<style>
+:root{--c-text:#1d2433;--c-text-2:#4a5468;--c-line:#e3e8f0;--c-pri:#2f6bff;--c-pri-bg:#eef3ff;--c-warn:#c2410c;--c-warn-bg:#fff4e8;--c-ok:#15803d;--c-bg:#f6f8fb;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--c-bg);color:var(--c-text);font:18px/1.75 -apple-system,BlinkMacSystemFont,sans-serif;}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 80px;}
+header{background:#fff;border-radius:14px;padding:28px 32px;border:1px solid var(--c-line);margin-bottom:24px}
+header h1{margin:0 0 6px;font-size:32px}
+nav.toc{background:#fff;border:1px solid var(--c-line);border-radius:14px;padding:20px 32px;margin-bottom:24px}
+nav.toc b{font-size:20px}
+nav.toc ol{margin:6px 0 0;padding-left:24px}
+nav.toc a{color:var(--c-pri);text-decoration:none}
+header p{margin:0;color:var(--c-text-2)}
+section{background:#fff;border:1px solid var(--c-line);border-radius:14px;padding:28px 32px;margin-bottom:24px}
+h2{font-size:26px;margin:0 0 16px}
+h2 .n{color:var(--c-pri);margin-right:8px}
+h3{font-size:20px;margin:24px 0 8px}
+ul{padding-left:22px;margin:6px 0}
+li{margin:4px 0}
+.step{display:flex;gap:14px;margin:18px 0 6px;align-items:baseline}
+.step .k{flex:none;width:30px;height:30px;border-radius:50%;background:var(--c-pri);color:#fff;font-weight:700;display:grid;place-items:center;font-size:16px}
+.step b{font-size:19px}
+.step p{margin:2px 0 0}
+figure{margin:10px 0 16px}
+figure img{display:block;max-width:100%;border:1px solid var(--c-line);border-radius:10px}
+figure.ph img{max-width:360px}
+figcaption{font-size:16px;color:var(--c-text-2);margin-top:6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;align-items:start}
+.warn{background:var(--c-warn-bg);border-left:4px solid var(--c-warn);border-radius:8px;padding:12px 16px;margin:12px 0}
+.warn b{color:var(--c-warn)}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:17px}
+th,td{border:1px solid var(--c-line);padding:8px 12px;text-align:left}
+th{background:#f1f4f9}
+@media (max-width:760px){.grid{grid-template-columns:1fr}section{padding:20px 16px}figure.ph img{max-width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Task Center User Guide</h1>
+  <p>Where to find it: back office › Task center management › Mission Settings</p>
+</header>
+
+<nav class="toc"><b>Contents</b>
+<ol start="0">
+  <li><a href="#s0">Read this first</a></li>
+  <li><a href="#s1">Two types of missions</a></li>
+  <li><a href="#s2">Create a Basic Mission</a></li>
+  <li><a href="#s3">Create a Mission Group</a></li>
+  <li><a href="#s4">What players see</a></li>
+  <li><a href="#s5">Check the data</a></li>
+  <li><a href="#s6">Key rules to remember</a></li>
+</ol></nav>
+
+<!-- 0 -->
+<section id="s0">
+<h2><span class="n">0</span>Read this first</h2>
+<div class="warn"><b>If this guide does not talk about it, it works the same as before.</b> This guide only shows the main settings and the new features. Currency, Bonus Betting Multiplier, Applicable Port, Mission Audit Record, Blacklist settings and language settings are the same as before.</div>
+<h3>What's new</h3>
+<ul>
+<li><b>Mission Group</b>: a new Mission Category. Put many sub missions on one card. You can also add Extra Rewards.</li>
+<li><b>Quota Limit</b>: set how many players can get a reward. When no places are left, players see "Full".</li>
+<li><b>Reward types</b>: added Free Spin, Free Bet, Coupon and Golden Draw Ticket.</li>
+<li><b>Game Page Display</b>: new name for the old “任务标签” (task tag) field. It works the same.</li>
+<li><b>Front-end tabs</b>: "Limited Time" and "Weekly Limited Time" now show in one tab: "Limited Time Task".</li>
+</ul>
+<h3>Common terms</h3>
+<table>
+<tr><th style="width:8em">Term</th><th>Meaning</th></tr>
+<tr><td>Period</td><td>The time until a mission starts again. Daily = 1 day. Weekly = 1 week. Permanent and Limited Time missions have only 1 period.</td></tr>
+<tr><td>Reset</td><td>A new period starts. Progress goes back to 0, and players can do the mission again. Daily = every day at 00:00. Weekly = every Monday at 00:00.</td></tr>
+<tr><td>Greyed out</td><td>The field is grey. You can't click it or type in it.</td></tr>
+<tr><td>Quota</td><td>The most players who can get a reward.</td></tr>
+<tr><td>Full</td><td>No places are left. Players who did not get the reward yet can't get it now.</td></tr>
+</table>
+</section>
+
+<!-- 1 -->
+<section id="s1">
+<h2><span class="n">1</span>Two types of missions</h2>
+<table>
+<tr><th style="width:9em">Type</th><th>What it is</th><th>Example</th></tr>
+<tr><td><b>Basic Mission</b></td><td>Complete 1 condition, get 1 reward</td><td>Bet ₱200 → 100 Points</td></tr>
+<tr><td><b>Mission Group</b></td><td>Many sub missions on one card. Each one gives its own reward. Finish a set number of them to get an Extra Reward</td><td>3 sub missions. Finish any 2 to get 100 Bonus more</td></tr>
+</table>
+<figure><img src="img/guide_en/b_list.png" alt="Mission Settings list"><figcaption>Mission Settings list: click "＋ Add Mission" to make a new mission. Click "Edit" to change one. Click ▸ next to a Mission Group to see its sub missions.</figcaption></figure>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+<h2><span class="n">2</span>Create a Basic Mission</h2>
+
+<div class="step"><span class="k">1</span><div><b>Basic Info</b><p>Choose "Basic Mission" in Mission Category. Type the Mission Name. Players see only 1 line, so a long name ends with "…".<br>Game Page Display: to also show the mission on a game page (Sports, Slots, Live…), choose that page. If not, choose "None".</p></div></div>
+<figure><img src="img/guide_en/b_s1_basic.png" alt="Basic Info"></figure>
+
+<div class="step"><span class="k">2</span><div><b>Mission Content</b><p>Mission Condition: first choose the type, then the condition. Recharge and Bet need an amount. It must be a whole number above 0.<br>Forward Address: the page players go to when they tap "To do", "Top Up" or "Bet Now".<br>Mission Reward: Bonus, Points, Free Spin, Free Bet, Coupon or Golden Draw Ticket. For Free Spin, Free Bet and Coupon, also type a "Value". Players see it as ₱Value.<br>Quota Limit: the most players who can get the reward in each period. First come, first served. Blank or 0 = no limit.</p></div></div>
+<figure><img src="img/guide_en/b_s2_content.png" alt="Mission Content"></figure>
+
+<div class="step"><span class="k">3</span><div><b>Participants</b><p>VIP Level and User Label: if you tick nothing, everyone can join. If you tick some, players who don't match <b>can't see</b> the mission.<br>If you tick more than 1 label, players need <b>all</b> of them. Example: tick TH and ML, and players need both.<br>Requirements for participating in the mission (KYC, total recharge, total valid bet): only work when ticked. Players who don't meet them can still see the mission. The button tells them what to do first.</p></div></div>
+<figure><img src="img/guide_en/b_s3_target.png" alt="Participants"></figure>
+
+<div class="step"><span class="k">4</span><div><b>Time &amp; Delivery</b><p>Mission Time: Permanent, Daily, Weekly, Limited Time or Weekly Limited Time. Each condition only allows some of them. The others are grey (see the red text).<br>Audit Method: Auto Audit = the mission is done when the player reaches the goal. Manual Audit = the mission is done only after you approve it in "Mission Audit Record".<br>Reward Distribution Method: Auto Distribution = the reward goes to the player right away. User Self-Claim = the player must tap "Receive".<br>Reward Expiry Time: only shows for User Self-Claim with Daily or Limited Time. If you type N days, players can still get missed rewards in "Reward Retrieval" for N days after the reset or end.</p></div></div>
+<figure><img src="img/guide_en/b_s4_time.png" alt="Time &amp; Delivery"></figure>
+
+<div class="step"><span class="k">5</span><div><b>Others, then click "Submit"</b><p>Sort: a smaller number shows higher on the player's page. Missions that are done or Full move to the bottom by themselves.<br>Display Mission Description: choose "Yes" to show ⓘ next to the title. Players tap it to read the Mission Description.<br>Mission Status: choose "Turn on" so players can see it.</p></div></div>
+<figure><img src="img/guide_en/b_s5_other.png" alt="Others"></figure>
+
+<h3>What players see</h3>
+<figure class="ph"><img src="img/guide_en/f_card_quota.png" alt="Basic Mission card"><figcaption>From top to bottom: mission name, progress, reward, and how many players got it (only when there is a quota). On the right: time left (not for Permanent missions) and the button.</figcaption></figure>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+<h2><span class="n">3</span>Create a Mission Group</h2>
+<p>The steps are the same as a Basic Mission, but steps 1 and 2 are a bit different. When you choose "Mission Group", "Game Page Display" goes away, and Mission Content looks like this.</p>
+<figure><img src="img/guide_en/b_s2_group.png" alt="Mission Group content"></figure>
+<ul>
+<li><b>Sub Mission</b>: starts with 1. Click "＋ Add sub mission" to add more. You can have up to 10. Each one needs a Name, Condition, Reward and Redirect.</li>
+<li><b>Extra Rewards</b> (you can skip this): "Complete any n" gives 1 more reward. It does not matter which ones the player finishes. Up to 3 levels, and not more levels than sub missions. Click "Delete" if you don't need it.</li>
+<li><b>Mission Time</b>: the whole group uses 1 Mission Time. So all sub mission conditions must work with the same Mission Time. Conditions that don't work are grey.</li>
+<li><b>Quota Limit</b>: each sub mission has its own count, with the same number. Extra Rewards have no limit.</li>
+</ul>
+<h3>What players see</h3>
+<div class="grid">
+<figure class="ph"><img src="img/guide_en/f_group.png" alt="Mission Group card"><figcaption>The chests at the top are the Extra Rewards. Tap "View All" to see all sub missions.</figcaption></figure>
+<div>
+<table>
+<tr><th>Chest</th><th>Meaning</th></tr>
+<tr><td>Grey</td><td>Not there yet</td></tr>
+<tr><td>Orange, moving</td><td>Ready. Tap the chest to get it. (With Auto Distribution you won't see this. It goes straight to a tick.)</td></tr>
+<tr><td>Green tick</td><td>Already got it</td></tr>
+</table>
+</div>
+</div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+<h2><span class="n">4</span>What players see</h2>
+<div class="grid">
+<figure class="ph"><img src="img/guide_en/f_tabs.png" alt="Tabs"><figcaption><b>Tabs</b>: sorted by Mission Time. The red number = how many rewards are ready to get.</figcaption></figure>
+<figure class="ph"><img src="img/guide_en/f_card_full.png" alt="Full"><figcaption><b>Full</b>: when no places are left, players who did not get it see "Full", and the player count turns red.</figcaption></figure>
+<figure class="ph"><img src="img/guide_en/f_pop_point.png" alt="Reward received"><figcaption><b>Reward received</b>: shows after the player taps "Receive". It does not show for Auto Distribution.</figcaption></figure>
+<figure class="ph"><img src="img/guide_en/f_ntf.png" alt="Pop-up message"><figcaption><b>Pop-up message</b>: pops up when a player finishes a mission. With User Self-Claim it has a "Receive" button. With Auto Distribution it has no button.</figcaption></figure>
+<figure class="ph"><img src="img/guide_en/f_recall.png" alt="Reward Retrieval"><figcaption><b>Reward Retrieval</b>: if a mission has a Reward Expiry Time, players can get missed rewards here within N days.</figcaption></figure>
+<figure class="ph"><img src="img/guide_en/f_intro.png" alt="Task introduction"><figcaption><b>Task introduction</b>: if "Display Mission Description" is "Yes", ⓘ shows next to the title.</figcaption></figure>
+</div>
+<table>
+<tr><th>Mission Time</th><th>Tab players see</th></tr>
+<tr><td>Permanent</td><td>Basic Task</td></tr>
+<tr><td>Daily / Weekly</td><td>Daily / Weekly</td></tr>
+<tr><td>Limited Time, Weekly Limited Time</td><td>Limited Time Task</td></tr>
+</table>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+<h2><span class="n">5</span>Check the data</h2>
+<h3>Mission Completion Record: who finished it, and if they got the reward</h3>
+<figure><img src="img/guide_en/b_record.png" alt="Mission Completion Record"></figure>
+<h3>Mission Report Statistics: how many times each mission was finished, and how much reward was given</h3>
+<figure><img src="img/guide_en/b_report.png" alt="Mission Report Statistics"></figure>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+<h2><span class="n">6</span>Key rules to remember</h2>
+<div class="warn"><b>After you click Submit, you can't change:</b> the Mission Category. For a Mission Group, you also can't add or remove sub missions, and you can't change Extra Rewards at all.</div>
+<ul>
+<li><b>2025 new version access, 关注Facebook, 体验平台PWA</b>: only 1 of each in the whole Task Center. Sub missions count too.</li>
+<li><b>Christmas Countdown Mission, Brand Daily Passcode</b>: Basic Mission only. Mission Time must be "Limited Time". To limit players, use the "Daily participation limit" field (same as before).</li>
+<li><b>Permanent missions</b>: can't have a Quota Limit.</li>
+<li><b>Missions with a quota</b> and <b>Extra Rewards</b>: not in Reward Retrieval. Players must get them before the period ends.</li>
+<li><b>Coupon "Value"</b>: only shown to players. If you leave it empty, players see ₱0.</li>
+<li><b>The order on the player's page doesn't change right away</b>: after a player gets a reward, or after you change Sort, players must refresh the page to see the new order.</li>
+</ul>
+</section>
+
+</div>
+</body>
+</html>

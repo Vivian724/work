@@ -193,6 +193,10 @@ button{font-family:inherit;cursor:pointer;border:none;}
 /* 分类页签（带图示） */
 .cats{display:flex;gap:8px;padding:0 12px 8px;overflow-x:auto;scrollbar-width:none;}
 .cats::-webkit-scrollbar{display:none;}
+.cats::after{content:"";flex:0 0 4px;}   /* 滑到底时最后一颗不贴边 */
+.grid .g{flex:none;width:auto;}          /* Flash Sales 分类页：同一种卡放进两栏格 */
+.cat-fs{margin:0 12px 10px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:10px 12px;}
+.cat-fs .fs__head{margin-bottom:0;padding-right:0;}
 .cat{flex:0 0 auto;display:flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--c-line);border-radius:18px;padding:5px 12px 5px 8px;font-size:.8rem;color:var(--c-text);white-space:nowrap;}
 .cat__ico{font-size:1rem;line-height:1;}
 .cat--on{background:#e3edff;border-color:#bcd2ff;color:var(--c-primary);font-weight:800;}
@@ -533,15 +537,7 @@ button{font-family:inherit;cursor:pointer;border:none;}
         <div class="band"><span class="band__ico">🎁</span>积分兑好礼</div>
 
         <!-- 分类页签：来源＝后台「商品分类」，图示由后台上传。点页签＝进该分类页（同 More） -->
-        <nav class="cats" id="cats" aria-label="商品分类">
-          <button class="cat cat--all cat--on" data-cat="all"><span class="cat__ico">ALL</span>All</button>
-          <button class="cat" data-cat="flash"><span class="cat__ico">🏷️</span>Flash Sales</button>
-          <button class="cat" data-cat="play"><span class="cat__ico">🎮</span>Playground</button>
-          <button class="cat" data-cat="free"><span class="cat__ico">🎡</span>Free Spin</button>
-          <button class="cat" data-cat="cash"><span class="cat__ico">💵</span>Cash</button>
-          <button class="cat" data-cat="coupon"><span class="cat__ico">🎫</span>Coupon</button>
-          <button class="cat" data-cat="item"><span class="cat__ico">📦</span>Item</button>
-        </nav>
+        <nav class="cats js-cats" aria-label="商品分类"></nav>
 
         <!-- 筛选（首页跟分类页共用同一组状态） -->
         <div class="filters">
@@ -554,7 +550,7 @@ button{font-family:inherit;cursor:pointer;border:none;}
           <div class="fs__head">
             <div class="fs__ico">⚡</div>
             <div><div class="fs__t">Flash Sales<span class="fs__n" id="fsN">1/1</span></div><div class="fs__s">Ends in</div></div>
-            <div class="cd"><b id="cdD" hidden>155D</b><span id="cdDsep" hidden>:</span><b id="cdH">11</b>:<b id="cdM">44</b>:<b id="cdS">31</b></div>
+            <div class="cd"><b class="js-cdD" hidden>155D</b><span class="js-cdDsep" hidden>:</span><b class="js-cdH">11</b>:<b class="js-cdM">44</b>:<b class="js-cdS">31</b></div>
             <button class="fs__all" onclick="openCat('flash')">All</button>
           </div>
           <div class="hrow" id="fsRow"></div>
@@ -614,7 +610,14 @@ button{font-family:inherit;cursor:pointer;border:none;}
            =================================================== -->
       <section class="screen" id="scr-cat">
         <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title" id="catTitle">Cash</span></header>
-        <div class="filters" style="padding-top:10px">
+        <!-- 分类页也放同一排页签：目前分类亮起，可直接切到别的分类，不用先返回 -->
+        <nav class="cats js-cats" style="padding-top:10px" aria-label="商品分类"></nav>
+        <!-- Flash Sales 分类：跟首页同一个倒数 -->
+        <section class="cat-fs" id="catFs" hidden>
+          <div class="fs__head"><div class="fs__ico">⚡</div><div><div class="fs__t">Flash Sales</div><div class="fs__s">Ends in</div></div>
+            <div class="cd"><b class="js-cdD" hidden>155D</b><span class="js-cdDsep" hidden>:</span><b class="js-cdH">11</b>:<b class="js-cdM">44</b>:<b class="js-cdS">31</b></div></div>
+        </section>
+        <div class="filters">
           <button class="flt js-can" onclick="toggleCan()">我能兑换的</button>
           <button class="flt js-sort" onclick="toggleSort()"><i class="coin coin--pt">★</i>星币 <span class="js-arrow">↕</span></button>
         </div>
@@ -813,14 +816,28 @@ function go(name, btn){
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('is-active', s.id==='scr-'+name); });
   document.querySelectorAll('.demo-bar button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('onclick').indexOf("'"+name+"'")>-1); });
   document.getElementById('scroll').scrollTop = 0;
-  if(name==='mall') curCat = null;
+  if(name==='mall'){ curCat = null; renderCats(); }
+  if(name==='cat') scrollCatIntoView();
 }
 
 /* ---------- 商品资料（原型假资料；正式版来自后台商品分类＋商品） ---------- */
 var CATS = [
-  {key:'flash', name:'Flash Sales'}, {key:'play', name:'Playground'}, {key:'free', name:'Free Spin'},
-  {key:'cash', name:'Cash'}, {key:'coupon', name:'Coupon'}, {key:'item', name:'Item'}
+  {key:'flash', name:'Flash Sales', ico:'🏷️'}, {key:'play', name:'Playground', ico:'🎮'}, {key:'free', name:'Free Spin', ico:'🎡'},
+  {key:'cash', name:'Cash', ico:'💵'}, {key:'coupon', name:'Coupon', ico:'🎫'}, {key:'item', name:'Item', ico:'📦'}
 ];
+/* 分类页签（首页、分类页各一排，同一份资料）：目前所在的亮起；分类页会把亮起的那颗滑到看得见的位置 */
+function renderCats(){
+  var cur = curCat || 'all';
+  var html = '<button class="cat cat--all'+(cur==='all'?' cat--on':'')+'" data-cat="all"><span class="cat__ico">ALL</span>All</button>'
+    + CATS.map(function(c){ return '<button class="cat'+(cur===c.key?' cat--on':'')+'" data-cat="'+c.key+'"><span class="cat__ico">'+c.ico+'</span>'+c.name+'</button>'; }).join('');
+  document.querySelectorAll('.js-cats').forEach(function(nav){ nav.innerHTML = html; });
+  scrollCatIntoView();
+}
+/* 分类页：把亮起的页签滑到中间（画面显示出来之后才量得到位置） */
+function scrollCatIntoView(){
+  var on = document.querySelector('#scr-cat .cat--on'); if(!on || !on.offsetWidth) return;
+  var nav = on.parentNode; nav.scrollLeft = Math.max(0, on.offsetLeft - (nav.clientWidth - on.offsetWidth)/2);
+}
 var PRODUCTS = [
   /* Flash Sales：有折扣、有剩余数 */
   {cat:'flash', name:'Gems Bonanza', sub:'Free Spins Reward', price:450, old:1300, left:'2,980 remaining', pct:60, img:'img-gems', txt:'GEMS<br>BONANZA<br><small>FREE SPINS</small>', off:'65% OFF'},
@@ -1021,18 +1038,21 @@ function renderCat(){
   if(!curCat) return;
   var c = CATS.filter(function(x){ return x.key===curCat; })[0];
   document.getElementById('catTitle').textContent = c.name;
-  var arr = listOf(curCat);
-  document.getElementById('catGrid').innerHTML = arr.length ? arr.map(cardSmall).join('') : '<div class="grid__empty">没有可兑换的商品</div>';
+  var arr = listOf(curCat), isFs = curCat==='flash';
+  document.getElementById('catFs').hidden = !isFs;
+  document.getElementById('catGrid').innerHTML = arr.length ? arr.map(isFs ? cardFlash : cardSmall).join('') : '<div class="grid__empty">没有可兑换的商品</div>';
 }
-function renderAll(){ syncFilterBtns(); renderHome(); renderCat(); }
-function openCat(key){ curCat = key; renderCat(); go('cat'); }
+function renderAll(){ syncFilterBtns(); renderCats(); renderHome(); renderCat(); }
+function openCat(key){ curCat = key; renderCats(); renderCat(); go('cat'); }
 
-/* 分类页签：All 留在首页；其他页签＝进该分类页（跟 More 同一个地方） */
-document.getElementById('cats').addEventListener('click', function(ev){
+/* 分类页签（两排共用）：All＝回首页；Playground＝游乐场专页；其他＝进／切到该分类页。已经在这个分类就不动 */
+document.addEventListener('click', function(ev){
   var b = ev.target.closest('.cat'); if(!b) return;
-  if(b.dataset.cat==='all'){ go('mall'); return; }
-  if(b.dataset.cat==='play'){ go('play'); return; }   /* Playground 有自己的专页 */
-  openCat(b.dataset.cat);
+  var k = b.dataset.cat;
+  if(k==='all'){ go('mall'); return; }
+  if(k==='play'){ go('play'); return; }
+  if(k===curCat) return;
+  openCat(k);
 });
 renderAll(); renderGames();
 curSet.ichiban = setsOf('ichiban')[0]; curSet.blind = setsOf('blind')[0]; renderSet('ichiban'); renderSet('blind');
@@ -1073,11 +1093,12 @@ function two(n){ return (n<10?'0':'')+n; }
 setInterval(function(){
   fsLeft--; taskLeft--;
   var d = Math.floor(fsLeft/86400);
-  document.getElementById('cdD').hidden = document.getElementById('cdDsep').hidden = d<1;
-  document.getElementById('cdD').textContent = d+'D';
-  document.getElementById('cdH').textContent = two(Math.floor(fsLeft%86400/3600));
-  document.getElementById('cdM').textContent = two(Math.floor(fsLeft%3600/60));
-  document.getElementById('cdS').textContent = two(fsLeft%60);
+  function setAll(cls, fn){ document.querySelectorAll('.'+cls).forEach(fn); }
+  setAll('js-cdD', function(e){ e.hidden = d<1; e.textContent = d+'D'; });
+  setAll('js-cdDsep', function(e){ e.hidden = d<1; });
+  setAll('js-cdH', function(e){ e.textContent = two(Math.floor(fsLeft%86400/3600)); });
+  setAll('js-cdM', function(e){ e.textContent = two(Math.floor(fsLeft%3600/60)); });
+  setAll('js-cdS', function(e){ e.textContent = two(fsLeft%60); });
   var t = two(Math.floor(taskLeft/3600))+':'+two(Math.floor(taskLeft%3600/60))+':'+two(taskLeft%60);
   document.querySelectorAll('.t-task').forEach(function(e){ e.textContent = t; });
 }, 1000);

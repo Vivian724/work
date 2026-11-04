@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>任务中心 使用说明书</title>
+<style>
+:root{--c-text:#1d2433;--c-text-2:#4a5468;--c-line:#e3e8f0;--c-pri:#2f6bff;--c-pri-bg:#eef3ff;--c-warn:#c2410c;--c-warn-bg:#fff4e8;--c-ok:#15803d;--c-bg:#f6f8fb;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--c-bg);color:var(--c-text);font:18px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 80px;}
+header{background:#fff;border-radius:14px;padding:28px 32px;border:1px solid var(--c-line);margin-bottom:24px}
+header h1{margin:0 0 6px;font-size:32px}
+nav.toc{background:#fff;border:1px solid var(--c-line);border-radius:14px;padding:20px 32px;margin-bottom:24px}
+nav.toc b{font-size:20px}
+nav.toc ol{margin:6px 0 0;padding-left:24px}
+nav.toc a{color:var(--c-pri);text-decoration:none}
+header p{margin:0;color:var(--c-text-2)}
+section{background:#fff;border:1px solid var(--c-line);border-radius:14px;padding:28px 32px;margin-bottom:24px}
+h2{font-size:26px;margin:0 0 16px}
+h2 .n{color:var(--c-pri);margin-right:8px}
+h3{font-size:20px;margin:24px 0 8px}
+ul{padding-left:22px;margin:6px 0}
+li{margin:4px 0}
+.step{display:flex;gap:14px;margin:18px 0 6px;align-items:baseline}
+.step .k{flex:none;width:30px;height:30px;border-radius:50%;background:var(--c-pri);color:#fff;font-weight:700;display:grid;place-items:center;font-size:16px}
+.step b{font-size:19px}
+.step p{margin:2px 0 0}
+figure{margin:10px 0 16px}
+figure img{display:block;max-width:100%;border:1px solid var(--c-line);border-radius:10px}
+figure.ph img{max-width:360px}
+figcaption{font-size:16px;color:var(--c-text-2);margin-top:6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;align-items:start}
+.warn{background:var(--c-warn-bg);border-left:4px solid var(--c-warn);border-radius:8px;padding:12px 16px;margin:12px 0}
+.warn b{color:var(--c-warn)}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:17px}
+th,td{border:1px solid var(--c-line);padding:8px 12px;text-align:left}
+th{background:#f1f4f9}
+@media (max-width:760px){.grid{grid-template-columns:1fr}section{padding:20px 16px}figure.ph img{max-width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>任务中心 使用说明书</h1>
+  <p>后台位置：运营后台 › 任务中心管理 › 任务设置</p>
+</header>
+
+<nav class="toc"><b>目录</b>
+<ol start="0">
+  <li><a href="#s0">先看这里</a></li>
+  <li><a href="#s1">任务有两种</a></li>
+  <li><a href="#s2">建一个基础任务</a></li>
+  <li><a href="#s3">建一个任务组</a></li>
+  <li><a href="#s4">会员在前台会看到什么</a></li>
+  <li><a href="#s5">查数据</a></li>
+  <li><a href="#s6">记住这几条</a></li>
+</ol></nav>
+
+<!-- 0 -->
+<section id="s0">
+<h2><span class="n">0</span>先看这里</h2>
+<div class="warn"><b>没写到的，都跟以前一样。</b>这份只讲常用设定和这次新增的功能。币种、彩金流水倍数、适用端口、资料审核、黑名单、多语言等，操作方式都没变。</div>
+<h3>这次新增了什么</h3>
+<ul>
+<li><b>任务组</b>：任务类别多了「任务组」，可以把多个子任务放在同一张卡，还能设额外奖励。</li>
+<li><b>名额上限</b>：可以限制一项奖励最多几个人领到，领完会显示「额满」。</li>
+<li><b>奖励类型</b>：多了免费旋转、免费投注、优惠券、golden draw券。</li>
+<li><b>游戏页展示</b>：就是原本的「任务标签」，只是改了名字。</li>
+<li><b>前台页签</b>：「限时」和「周限时」合成一个「限时」页签。</li>
+</ul>
+<h3>常见用词</h3>
+<table>
+<tr><th style="width:8em">用词</th><th>意思</th></tr>
+<tr><td>一期</td><td>任务重新开始前的这段时间。每日任务＝一天，每周任务＝一周；永久、限时任务只有一期。</td></tr>
+<tr><td>重置</td><td>新的一期开始，进度归零、可以重新做。每日＝每天 00:00，每周＝每周一 00:00。</td></tr>
+<tr><td>反灰</td><td>栏位变灰色，不能点、不能填。</td></tr>
+<tr><td>名额</td><td>一项奖励最多几个人领到。</td></tr>
+<tr><td>额满</td><td>名额被领完，还没领到的人领不到了。</td></tr>
+</table>
+</section>
+
+<!-- 1 -->
+<section id="s1">
+<h2><span class="n">1</span>任务有两种</h2>
+<table>
+<tr><th style="width:8em">种类</th><th>说明</th><th>例子</th></tr>
+<tr><td><b>基础任务</b></td><td>完成 1 个条件，领 1 份奖励</td><td>投注满 ₱200 → 积分 100</td></tr>
+<tr><td><b>任务组</b></td><td>多个子任务放在同一张卡，每完成一个领一份；完成到指定个数，再送额外奖励</td><td>3 个子任务，任意完成 2 个再送彩金 100</td></tr>
+</table>
+<figure><img src="img/guide/b_list.png" alt="任务设置列表"><figcaption>任务设置列表：点「＋ 新增任务」建任务，点「编辑」改任务。任务组点 ▸ 展开子任务。</figcaption></figure>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+<h2><span class="n">2</span>建一个基础任务</h2>
+
+<div class="step"><span class="k">1</span><div><b>填基本信息</b><p>任务类别选「基础任务」，填任务名称（前台只显示 1 行，太长会变「…」）。<br>游戏页展示：要让任务也出现在某个游戏分类页（体育、电子、真人…）就选那一页；不用就选「无」。</p></div></div>
+<figure><img src="img/guide/b_s1_basic.png" alt="基本信息"></figure>
+
+<div class="step"><span class="k">2</span><div><b>设定任务内容</b><p>任务条件：先选大类，再选条件；充值、投注要填金额（大于 0 的整数）。<br>跳转地址：会员点「去完成／去充值／去投注」时要去的页面。<br>任务奖励：彩金、积分、免费旋转、免费投注、优惠券、golden draw券。券类要填「价值」，前台显示 ₱价值。<br>名额上限：每一期最多几个人能领到，先领先得；留空或 0＝不限。</p></div></div>
+<figure><img src="img/guide/b_s2_content.png" alt="任务内容"></figure>
+
+<div class="step"><span class="k">3</span><div><b>选参与对象</b><p>VIP 等级、用户标签：都不勾＝所有人都能参加。勾了的话，不符合的会员<b>看不到</b>这个任务。<br>标签勾多个＝会员要<b>全部都有</b>才符合（例：勾 TH、ML，要两个都有）。<br>任务参与要求（KYC、累计充值、累计投注）：勾了才生效；没达到的会员看得到任务，按钮会引导他先去完成。</p></div></div>
+<figure><img src="img/guide/b_s3_target.png" alt="参与对象"></figure>
+
+<div class="step"><span class="k">4</span><div><b>设定时间与发放</b><p>任务时间：永久／每日／每周／限时／周限时。条件会限制能选哪几种，不能选的会反灰（看下方红字）。<br>审核方式：自动审核＝达成就算完成；人工审核＝要在「资料审核」通过才算完成。<br>奖励发放方式：自动发放＝完成就直接入帐；用户手动领取＝会员要自己点「领取」。<br>奖励领取时限：只有「用户手动领取」＋每日／限时才会出现。填 N 天＝重置或结束后 N 天内，会员还能到「奖励找回」补领。</p></div></div>
+<figure><img src="img/guide/b_s4_time.png" alt="时间与发放"></figure>
+
+<div class="step"><span class="k">5</span><div><b>其他，然后点「确定」</b><p>排序：数字越小，在前台越前面；已完成、额满的会自动排到最下面。<br>是否显示任务简介：选「是」，前台标题旁会出现 ⓘ，点了看任务简介。<br>任务状态：选「开启」，前台才看得到。</p></div></div>
+<figure><img src="img/guide/b_s5_other.png" alt="其他"></figure>
+
+<h3>前台会员看到</h3>
+<figure class="ph"><img src="img/guide/f_card_quota.png" alt="基础任务卡"><figcaption>由上到下：任务名称、进度、奖励、已发送人数（有设名额才显示）；右边是倒数（永久任务没有）和按钮。</figcaption></figure>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+<h2><span class="n">3</span>建一个任务组</h2>
+<p>步骤和基础任务一样，差别在第 1、2 步：任务类别选「任务组」后，没有「游戏页展示」，任务内容变成下面这样。</p>
+<figure><img src="img/guide/b_s2_group.png" alt="任务组内容"></figure>
+<ul>
+<li><b>子任务</b>：预设 1 个，点「＋ 添加子任务」加，最多 10 个。每个子任务都要填名称、条件、奖励、跳转地址。</li>
+<li><b>额外奖励</b>（可以不设）：「任意完成 n 个」再送一份奖励，不管完成哪几个。最多 3 档，而且不能比子任务多。不用就点「删除」。</li>
+<li><b>任务时间</b>：整组共用一个，所以子任务的条件要能放在同一种任务时间。放不到一起的条件会反灰。</li>
+<li><b>名额上限</b>：每个子任务各自算，共用同一个数字。额外奖励不受名额限制。</li>
+</ul>
+<h3>前台会员看到</h3>
+<div class="grid">
+<figure class="ph"><img src="img/guide/f_group.png" alt="任务组卡"><figcaption>上方宝箱＝额外奖励；点「查看全部」展开子任务。</figcaption></figure>
+<div>
+<table>
+<tr><th>宝箱</th><th>意思</th></tr>
+<tr><td>灰色</td><td>还没完成</td></tr>
+<tr><td>橘色、会动</td><td>可以领，点宝箱领取（自动发放的不会出现，直接打勾）</td></tr>
+<tr><td>绿色打勾</td><td>已领取</td></tr>
+</table>
+</div>
+</div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+<h2><span class="n">4</span>会员在前台会看到什么</h2>
+<div class="grid">
+<figure class="ph"><img src="img/guide/f_tabs.png" alt="页签"><figcaption><b>页签</b>：按任务时间分；红色数字＝可领几笔。</figcaption></figure>
+<figure class="ph"><img src="img/guide/f_card_full.png" alt="额满"><figcaption><b>额满</b>：名额被领完，还没领到的会员按钮变「额满」，人数变红字。</figcaption></figure>
+<figure class="ph"><img src="img/guide/f_pop_point.png" alt="领取成功"><figcaption><b>领取成功</b>：会员点「领取」后跳出；自动发放的不跳。</figcaption></figure>
+<figure class="ph"><img src="img/guide/f_ntf.png" alt="提示弹窗"><figcaption><b>提示弹窗</b>：完成任务时跳出提醒。手动领取的有「领取」钮，自动发放的没有。</figcaption></figure>
+<figure class="ph"><img src="img/guide/f_recall.png" alt="奖励找回"><figcaption><b>奖励找回</b>：有设「奖励领取时限」的任务，过期没领的奖励在 N 天内可以来这里补领。</figcaption></figure>
+<figure class="ph"><img src="img/guide/f_intro.png" alt="任务介绍"><figcaption><b>任务介绍</b>：后台「显示任务简介」选「是」，标题旁出现 ⓘ。</figcaption></figure>
+</div>
+<table>
+<tr><th>任务时间</th><th>出现在哪个页签</th></tr>
+<tr><td>永久</td><td>基础任务</td></tr>
+<tr><td>每日／每周</td><td>每日／每周</td></tr>
+<tr><td>限时、周限时</td><td>限时</td></tr>
+</table>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+<h2><span class="n">5</span>查数据</h2>
+<h3>任务完成记录：谁完成了、领了没有</h3>
+<figure><img src="img/guide/b_record.png" alt="任务完成记录"></figure>
+<h3>任务报表统计：每个任务完成几次、发了多少奖励</h3>
+<figure><img src="img/guide/b_report.png" alt="任务报表统计"></figure>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+<h2><span class="n">6</span>记住这几条</h2>
+<div class="warn"><b>送出后不能改：</b>任务类别；任务组的子任务不能加减，额外奖励整块不能改。</div>
+<ul>
+<li><b>2025新版访问、关注Facebook、体验平台PWA</b>：整个任务中心每种只能建一个（子任务也算在内）。</li>
+<li><b>圣诞、Passcode 任务</b>：只能建成基础任务，任务时间只能选「限时」，人数用原本的「每日最大参与人数」限制。</li>
+<li><b>永久任务</b>：不能设名额。</li>
+<li><b>有设名额的任务</b>、<b>额外奖励</b>：不能到奖励找回补领，要在这一期结束前领。</li>
+<li><b>券的「价值」</b>：只是前台显示用，没填会显示 ₱0。</li>
+<li><b>前台排序不会马上变</b>：领完奖励或改了排序，会员要重新整理页面，卡片才会重排。</li>
+</ul>
+</section>
+
+</div>
+</body>
+</html>
