@@ -43,12 +43,12 @@
   --radius: 4px;  --radius-lg: 8px;
 
   /* 以 root 18px 换算。这份文件会被长时间阅读，字不能小 */
-  --fs-xs:   0.722rem;   /* 13px —— 标签、补充说明，已高于规范的 12px 下限 */
-  --fs-sm:   0.833rem;   /* 15px —— 表格内文 */
-  --fs-base: 0.889rem;   /* 16px —— 正文 */
-  --fs-md:   1rem;       /* 18px —— 小节标题 */
-  --fs-lg:   1.167rem;   /* 21px */
-  --fs-xl:   1.389rem;   /* 25px —— 章标题 */
+  --fs-xs:   0.889rem;   /* 16px —— 标签、补充说明（11/04 她说整份字要再大，注记不小于 16） */
+  --fs-sm:   0.944rem;   /* 17px —— 表格内文 */
+  --fs-base: 1rem;       /* 18px —— 正文 */
+  --fs-md:   1.111rem;   /* 20px —— 小节标题 */
+  --fs-lg:   1.278rem;   /* 23px */
+  --fs-xl:   1.5rem;     /* 27px —— 章标题 */
 }
 
 /* ==========================================================================
@@ -130,7 +130,7 @@ pre {
 .spec-inner { display: flex; flex: 1 1 auto; min-height: 0; }
 
 .spec-nav {
-  flex: 0 0 186px; overflow-y: auto;
+  flex: 0 0 210px; overflow-y: auto;
   padding: var(--sp-2) 0;
   background: #fafbfc; border-right: 1px solid var(--c-border-light);
 }
@@ -354,7 +354,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 
 /* 3.6 领取成功弹窗示意（样式照前台原型 .pop--rw） */
 /* 2.10 影响画面示意：优惠券记录（照既有后台截图简化） */
-.cpx{border:1px solid var(--c-border);border-radius:6px;background:#fff;font-size:.74rem;color:#606266;padding-bottom:150px;margin:var(--sp-3,12px) 0;}
+.cpx{border:1px solid var(--c-border);border-radius:6px;background:#fff;font-size:.889rem;color:#606266;padding-bottom:150px;margin:var(--sp-3,12px) 0;}
 .cpx__tabs{display:flex;background:#f5f7fa;border-bottom:1px solid var(--c-border-light);}
 .cpx__tabs span{padding:8px 16px;}
 .cpx__tabs .on{background:#fff;color:var(--c-primary);border-right:1px solid var(--c-border-light);border-left:1px solid var(--c-border-light);}
@@ -368,7 +368,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 .cpx__new{outline:2px dashed var(--c-danger);outline-offset:-2px;}
 .cpx__btn{background:var(--c-primary);color:#fff;border-radius:4px;padding:5px 12px;}
 .cpx__tw{overflow-x:auto;padding:0 12px 12px;}
-.cpx table{border-collapse:collapse;width:100%;min-width:720px;}
+.cpx table{border-collapse:collapse;width:100%;min-width:960px;}
 .cpx th,.cpx td{border:1px solid var(--c-border-light);padding:7px 6px;text-align:center;}
 .cpx th{background:#fafafa;font-weight:500;color:#909399;}
 .cpx tr.cpx__new{outline-offset:-2px;}
@@ -377,26 +377,26 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 .mk,.mkr{color:var(--c-danger);}
 .mk{font-size:.85em;font-weight:600;white-space:nowrap;}
 .popx{display:flex;flex-wrap:wrap;gap:40px 14px;margin:56px 0 var(--sp-4);}
-.popx__it{width:150px;background:linear-gradient(150deg,#ffeee2 0%,#fff 42%);border:1px solid #eee3da;border-radius:14px;padding:44px 12px 12px;text-align:center;position:relative;box-sizing:border-box;}
+.popx__it{width:176px;background:linear-gradient(150deg,#ffeee2 0%,#fff 42%);border:1px solid #eee3da;border-radius:14px;padding:44px 12px 12px;text-align:center;position:relative;box-sizing:border-box;}
 .popx__it img{position:absolute;left:50%;top:-40px;transform:translateX(-50%);width:76px;height:76px;object-fit:contain;filter:drop-shadow(0 6px 10px rgba(0,0,0,.16));}
-.popx__t{font-size:.8rem;color:#1b2a44;}
-.popx__a{font-size:.85rem;font-weight:700;color:#e8383e;margin-top:6px;}
-.popx__n{font-size:.68rem;color:#8a97ad;line-height:1.45;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.popx__b{margin-top:12px;background:#0b4fe3;color:#fff;border-radius:6px;padding:6px;font-size:.75rem;}
-.popx__k{font-size:.72rem;color:#8a97ad;margin-top:8px;}
+.popx__t{font-size:.889rem;color:#1b2a44;}
+.popx__a{font-size:1rem;font-weight:700;color:#e8383e;margin-top:6px;}
+.popx__n{font-size:.833rem;color:#8a97ad;line-height:1.45;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.popx__b{margin-top:12px;background:#0b4fe3;color:#fff;border-radius:6px;padding:7px;font-size:.889rem;}
+.popx__k{font-size:.833rem;color:#8a97ad;margin-top:8px;}
 
 /* 3.9 提示弹窗示意（样式照前台原型 .ntf） */
-.ntfx{display:flex;flex-direction:column;gap:12px;max-width:380px;margin:0 0 var(--sp-4);}
+.ntfx{display:flex;flex-direction:column;gap:12px;max-width:440px;margin:0 0 var(--sp-4);}
 .ntfx__it{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e9f3;border-radius:14px;padding:14px 12px 14px 22px;box-shadow:0 6px 18px rgba(27,42,68,.12);position:relative;}
-.ntfx__x{position:absolute;left:6px;top:6px;width:16px;height:16px;border-radius:50%;background:#a7b0c9;color:#fff;font-size:.55rem;font-weight:700;line-height:16px;text-align:center;}
+.ntfx__x{position:absolute;left:6px;top:6px;width:18px;height:18px;border-radius:50%;background:#a7b0c9;color:#fff;font-size:.667rem;font-weight:700;line-height:18px;text-align:center;}
 .ntfx__it img{width:40px;height:40px;object-fit:contain;flex:0 0 auto;}
-.ntfx__t{flex:1;font-size:.8rem;font-weight:600;color:#1b2a44;line-height:1.45;}
-.ntfx__b{flex:0 0 auto;background:#2f6bff;color:#fff;font-size:.8rem;border-radius:8px;padding:7px 12px;}
-.ntfx__k{font-size:.72rem;color:#8a97ad;margin:-6px 0 0 4px;}
+.ntfx__t{flex:1;font-size:.889rem;font-weight:600;color:#1b2a44;line-height:1.45;}
+.ntfx__b{flex:0 0 auto;background:#2f6bff;color:#fff;font-size:.889rem;border-radius:8px;padding:7px 12px;}
+.ntfx__k{font-size:.833rem;color:#8a97ad;margin:-6px 0 0 4px;}
 /* 示意图变量标示：黄底虚线框＋圆号码，对应文案里的 {{a}}、{{b}}，给测试／开发看哪段会变 */
 .ntfv{position:relative;display:inline-block;background:#fff6d1;border:1px dashed #e0a800;border-radius:4px;padding:0 3px;margin:0 2px;}
-.ntfv::before{content:attr(data-v);position:absolute;top:-9px;left:-7px;width:14px;height:14px;border-radius:50%;background:#e0a800;color:#fff;font-size:.58rem;line-height:14px;text-align:center;font-weight:700;}
-.ntfx__lg{font-size:.76rem;color:#5b6a85;line-height:1.7;margin-top:2px;}
+.ntfv::before{content:attr(data-v);position:absolute;top:-10px;left:-8px;width:16px;height:16px;border-radius:50%;background:#e0a800;color:#fff;font-size:.667rem;line-height:16px;text-align:center;font-weight:700;}
+.ntfx__lg{font-size:.889rem;color:#5b6a85;line-height:1.7;margin-top:2px;}
 .ntfx__lg .ntfv{padding:0 4px;}
 .ntfx__lg .ntfv::before{display:none;}
 </style>

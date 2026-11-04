@@ -71,7 +71,9 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .el-table .cell{white-space:normal;word-break:break-all;text-overflow:clip;}
 .thumb{display:inline-block;width:44px;height:26px;border-radius:2px;background:linear-gradient(135deg,#c6e2ff,#ecf5ff);vertical-align:middle;}
 .thumb--wide{width:72px;}
-.thumb--ico{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#FFD66B,#F5A623);}   /* 类别图示（示意） */
+.thumb--ico{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#FFD66B,#F5A623);}   /* 类别图示 日间（示意） */
+.thumb--ico-n{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#6C7CFF,#2B2F6B);}   /* 类别图示 夜间（示意） */
+.thumb-pair{display:inline-flex;gap:6px;align-items:center;}
 .sort-input{width:76px;}
 .sort-input .el-input__inner{text-align:center;padding:0 6px;}
 
@@ -162,6 +164,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 /* ==========================================================================
    原型顶部页签：后台 ／ 前台 H5
    ========================================================================== */
+#protoAdmin,.phone,.el-dialog__wrapper,.el-message-box__wrapper,.el-message{zoom:1.15;}   /* 11/04 她说字太小：后台、前台整体放大 15%（Element small 13px→约 15px；手机模拟也等比放大） */
 .proto-tabs{position:sticky;top:0;z-index:3000;display:flex;gap:4px;padding:6px 16px;background:#1f2329;}
 .proto-tabs span{color:#c9ced6;font-size:13px;padding:5px 14px;border-radius:4px;cursor:pointer;}
 .proto-tabs span.is-on{background:#fff;color:#1f2329;font-weight:600;}
@@ -216,7 +219,8 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .h5-cat{flex:0 0 auto;display:flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:17px;background:#EEF1F8;color:#5B6B85;font-size:14px;font-weight:600;cursor:pointer;}
 .h5-cat.is-on{background:#1F5BFF;color:#fff;box-shadow:0 3px 8px rgba(31,91,255,.3);}
 .h5-cat svg{width:16px;height:16px;flex-shrink:0;}
-.h5-cat__ico{width:16px;height:16px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#FFD66B,#F5A623);}   /* 后台上传的类别图示（示意） */
+.h5-cat__ico{width:16px;height:16px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#FFD66B,#F5A623);}   /* 后台上传的类别图示 日间（示意） */
+.h5-cat__ico--n{background:linear-gradient(135deg,#6C7CFF,#2B2F6B);}   /* 夜间图示（示意） */
 .h5-cat__name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
 /* 活动卡＝一张运营上传的「奖励列表图」（返利文字、活动时间、图样都画在图里，11/03 她定），H5 显示 355×178。
    前台只叠三样：左上标签（后台配置、只能一个）、右下倒数（只在活动最后一天）、右下按钮（有红点＝礼物图示，一般＝箭头） */
@@ -252,7 +256,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 
 <!-- ===== 前台 H5（改版后 Rewards 页）：读的是下面后台同一组资料 ===== -->
 <div class="front hidden" id="protoFront">
-  <div class="front__bar"><span class="is-on" data-front-login="1">已登入</span><span data-front-login="0">未登入</span></div>
+  <div class="front__bar"><span class="is-on" data-front-login="1">已登入</span><span data-front-login="0">未登入</span><span style="width:1px;background:#555;margin:0 2px"></span><span class="is-on" data-front-theme="day">日间</span><span data-front-theme="night">夜间</span></div>
   <div class="phone"><div class="h5" id="h5"></div></div>
 </div>
 
@@ -584,8 +588,8 @@ var LANGS = ['简体中文','越南文','菲律宾语','英语'], LANG_SUFFIX = 
 function i18nAll(name){ var o = {}; LANGS.forEach(function(l){ o[l] = name+'-'+LANG_SUFFIX[l]; }); return o; }   // 线上现况：类别四种语言都是「名称-代码」
 /* 活动类别：照线上现有 6 笔（10/20 线上截图全开）；不加图示；i18n＝国际化列表（线上既有） */
 var cats = [
-  {id:22, name:'正盈利活动', sort:200, created:'2024-05-07 00:14', on:true, i18n:i18nAll('正盈利活动'), icon:true},   // icon：11/03 新增「图示」栏位（有上传＝true；没上传前台吃预设日历图示）
-  {id:23, name:'负盈利活动', sort:180, created:'2024-05-07 00:15', on:true, i18n:i18nAll('负盈利活动'), icon:true},
+  {id:22, name:'正盈利活动', sort:200, created:'2024-05-07 00:14', on:true, i18n:i18nAll('正盈利活动'), iconDay:true, iconNight:true},   // iconDay／iconNight：11/03 新增「图示」栏位，分日间／夜间（有上传＝true；没上传前台吃预设日历图示；夜间没传用日间）
+  {id:23, name:'负盈利活动', sort:180, created:'2024-05-07 00:15', on:true, i18n:i18nAll('负盈利活动'), iconDay:true, iconNight:false},
   {id:24, name:'消费活动',   sort:160, created:'2024-05-07 00:14', on:true, i18n:i18nAll('消费活动')},
   {id:31, name:'新用户首充', sort:140, created:'2025-12-19 09:38', on:true, i18n:i18nAll('新用户首充')},
   {id:32, name:'每日首充',   sort:120, created:'2025-12-19 09:39', on:true, i18n:i18nAll('每日首充')},
@@ -972,17 +976,17 @@ function renderTagSet(){
 /* ==========================================================================
    画面二：活动类别管理
    ========================================================================== */
-var catEditing = null, catIconTmp = false;   // catIconTmp：弹窗里有没有（已上传）图示
-function catIconThumb(has){ return has ? '<span class="thumb thumb--ico" style="margin-left:6px"></span>' : ''; }   // 弹窗里按钮旁的缩图（已上传才有）
+var catEditing = null, catIconTmp = {day:false, night:false};   // catIconTmp：弹窗里日间／夜间图示有没有（已上传）
+function catIconThumb(has, mode){ return has ? '<span class="thumb '+(mode==='night' ? 'thumb--ico-n' : 'thumb--ico')+'" style="margin-left:6px"></span>' : ''; }   // 弹窗里按钮旁的缩图（已上传才有）
 function renderCats(){
   document.getElementById('catTabs').innerHTML =
     '<div class="el-tabs__item is-top'+(catTab==='cat'?' is-active':'')+'" role="tab" data-cattab="cat">活动类别</div>'+
     '<div class="el-tabs__item is-top'+(catTab==='tag'?' is-active':'')+'" role="tab" data-cattab="tag">标签<span class="th-new">新增</span></div>';
   document.getElementById('catPane').classList.toggle('hidden', catTab !== 'cat');
   document.getElementById('tagPane').classList.toggle('hidden', catTab !== 'tag');
-  var cols = [{t:'活动类型名称'},{t:'图示',w:90,isNew:true},{t:'排序',w:120},{t:'创建时间',w:200},{t:'是否开启',w:120},{t:'操作',w:140}];   // 图示：11/03 新增，前台药丸的小图示
+  var cols = [{t:'活动类型名称'},{t:'日间图示',w:100,isNew:true},{t:'夜间图示',w:100,isNew:true},{t:'排序',w:120},{t:'创建时间',w:200},{t:'是否开启',w:120},{t:'操作',w:140}];   // 图示：11/03 新增，前台药丸的小图示
   var rows = cats.map(function(c, i){
-    return [esc(c.name)+plusI18n('cat', i), c.icon ? '<span class="thumb thumb--ico"></span>' : '--', c.sort, c.created,
+    return [esc(c.name)+plusI18n('cat', i), c.iconDay ? '<span class="thumb thumb--ico"></span>' : '--', c.iconNight ? '<span class="thumb thumb--ico-n"></span>' : '--', c.sort, c.created,
             elSwitch(c.on, 'data-cat-on="'+i+'"', false), elTextBtn('编辑','data-cat-edit="'+i+'"')+elTextBtn('删除','data-cat-del="'+i+'"', c.on)];   // 11/03 她定：开启中的类别删除反灰；关闭后才能删
   });
   document.getElementById('catTable').innerHTML = elTable(cols, rows);
@@ -997,9 +1001,10 @@ function openCat(i){
     formItem('活动类型名称:', true, '<div class="el-input el-input--small"><input class="el-input__inner" id="catName" value="'+esc(c.name)+'" placeholder="请输入"></div>')+
     formItem('排序:', true, '<div class="el-input el-input--small"><input class="el-input__inner" id="catSort" type="number" value="'+c.sort+'" placeholder="请输入"></div>')+
     formItem('是否开启:', false, elRadios('catOn', [['1','开启'],['0','关闭']], c.on === false ? '0' : '1'))+
-    '<div class="is-new" data-mark="新增">'+formItem('图示:', false, '<div class="upload-line">'+fileBtn('data-cat-upload')+catIconThumb(!!c.icon)+'<span class="el-form-item__tip" style="margin:0">图片格式：png、bmp、jpg、gif、webp；大小限制 5MB 内。</span></div><div class="el-form-item__tip el-form-item__tip--red">尺寸 48×48；未上传时前台显示预设图示</div>', 120-16)+'</div>'+   // 11/03 她定：类别可配小图示，前台药丸用；没配吃预设
+    '<div class="is-new" data-mark="新增">'+formItem('日间图示:', false, '<div class="upload-line">'+fileBtn('data-cat-upload="day"')+catIconThumb(!!c.iconDay, 'day')+'<span class="el-form-item__tip" style="margin:0">图片格式：png、bmp、jpg、gif、webp；大小限制 5MB 内。</span></div>', 120-16)+
+    formItem('夜间图示:', false, '<div class="upload-line">'+fileBtn('data-cat-upload="night"')+catIconThumb(!!c.iconNight, 'night')+'<span class="el-form-item__tip" style="margin:0">图片格式：png、bmp、jpg、gif、webp；大小限制 5MB 内。</span></div><div class="el-form-item__tip el-form-item__tip--red">尺寸 48×48；未上传时前台显示预设图示，夜间未上传则沿用日间图示</div>', 120-16)+'</div>'+   // 11/03 她定：类别可配小图示，前台药丸用；没配吃预设。11/04 她定：分日间／夜间两张
   '</form>';
-  catIconTmp = !!c.icon;
+  catIconTmp = {day:!!c.iconDay, night:!!c.iconNight};
   radioVals.catOn = c.on === false ? '0' : '1';
   document.getElementById('catModal').classList.remove('hidden');
 }
@@ -1215,6 +1220,8 @@ function nowMs(){ return NOW0.getTime() + (Date.now() - T0); }
 function tms(v){ return v && v !== '--' ? new Date(v.replace(' ', 'T')).getTime() : null; }
 var frontCat = '';   // 目前点选的快捷入口（空＝全部）
 var frontLogin = true;   // 原型切换：登入／未登入（未登入没有红点、没有可领）
+var frontDark = false;   // 原型切换：日间／夜间（11/04 她定：类别图示分日夜两张；夜间没传沿用日间，都没传吃预设）
+function catIconHtml(c){ if (frontDark && c.iconNight) return '<i class="h5-cat__ico h5-cat__ico--n"></i>'; if (c.iconDay) return '<i class="h5-cat__ico"></i>'; return ICO.cal; }
 
 /* 卡片在奖励页看不看得到：照既有 showActivityByDate（后端盘点 2.3）
    - 显示开始／结束任一有设：只看显示时间，完全不看活动时间
@@ -1286,7 +1293,7 @@ function renderFront(){
   var picks = pickList('H5');
   if (picks.length) h += '<div class="h5-picks">'+picks.map(function(it, i){ return '<div class="h5-pick h5-pick--'+(i%4)+'" data-front-open="'+it.id+'" title="'+esc(it.title)+'">'+ICO.pick[i%4]+'</div>'; }).join('')+'</div>';
   // 快捷入口：药丸按钮，All 在最前（固定格子图示），其余＝后台开启的类别：有上传「图示」用上传的，没有吃预设日历图示
-  if (catsOn.length) h += '<div class="h5-cats"><div class="h5-cat'+(!frontCat?' is-on':'')+'" data-front-cat="">'+ICO.grid+'<div class="h5-cat__name">ALL</div></div>'+catsOn.map(function(c){ return '<div class="h5-cat'+(frontCat===c.name?' is-on':'')+'" data-front-cat="'+esc(c.name)+'">'+(c.icon ? '<i class="h5-cat__ico"></i>' : ICO.cal)+'<div class="h5-cat__name">'+esc(langName(c))+'</div></div>'; }).join('')+'</div>';
+  if (catsOn.length) h += '<div class="h5-cats"><div class="h5-cat'+(!frontCat?' is-on':'')+'" data-front-cat="">'+ICO.grid+'<div class="h5-cat__name">ALL</div></div>'+catsOn.map(function(c){ return '<div class="h5-cat'+(frontCat===c.name?' is-on':'')+'" data-front-cat="'+esc(c.name)+'">'+catIconHtml(c)+'<div class="h5-cat__name">'+esc(langName(c))+'</div></div>'; }).join('')+'</div>';
   // 活动卡＝整张奖励列表图，叠 标签／Ends 倒数／右下按钮。整张卡、按钮都进详情页（既有逻辑：列表只是入口，领取在详情页）
   h += '<div class="h5-list">'+(list.length ? list.map(function(it, i){
     return '<div class="h5-card" data-front-open="'+it.id+'"><div class="h5-thumb h5-thumb--'+(i%3)+'">'+cardTags(it)+badgeHtml(badgeOf(it))+cardBtn(it)+'</div></div>';
@@ -1379,7 +1386,7 @@ document.addEventListener('click', function(e){
   // 上传（示范：点了就当已上传，显示缩图）
   if ((q = t.closest('.img-uploader'))) { q.innerHTML = '<span class="thumb thumb--wide" style="width:120px;height:70px"></span>'; return; }
   if ((q = t.closest('[data-card-del]'))) { q.closest('.upload-card-body').querySelector('.img-uploader').innerHTML = '点击上传图片'; return; }
-  if ((q = t.closest('[data-cat-upload]'))) { catIconTmp = true; if (!q.nextElementSibling.classList.contains('thumb')) q.insertAdjacentHTML('afterend', catIconThumb(true)); return; }   // 类别图示：示意选了档案就当上传完成（要放在下面共用的「选择文件」处理之前）
+  if ((q = t.closest('[data-cat-upload]'))) { var md = q.dataset.catUpload; catIconTmp[md] = true; if (!q.nextElementSibling.classList.contains('thumb')) q.insertAdjacentHTML('afterend', catIconThumb(true, md)); return; }   // 类别图示：示意选了档案就当上传完成（要放在下面共用的「选择文件」处理之前）
   if ((q = t.closest('.el-button')) && q.textContent.trim() === '选择文件') {
     var path = q.parentNode.querySelector('.upload-row__path');
     if (path) path.innerHTML = '<span class="thumb"></span>';
@@ -1417,6 +1424,7 @@ document.addEventListener('click', function(e){
   }
   // 前台 H5
   if ((q = t.closest('[data-front-login]'))) { frontLogin = q.dataset.frontLogin === '1'; document.querySelectorAll('[data-front-login]').forEach(function(x){ x.classList.toggle('is-on', x === q); }); renderFront(); return; }
+  if ((q = t.closest('[data-front-theme]'))) { frontDark = q.dataset.frontTheme === 'night'; document.querySelectorAll('[data-front-theme]').forEach(function(x){ x.classList.toggle('is-on', x === q); }); renderFront(); return; }
   if ((q = t.closest('.h5-login'))) { message('前往登入（示意）'); return; }
   // 快捷入口：点类别筛选列表，再点 All 取消
   if ((q = t.closest('[data-front-cat]'))) { frontCat = q.dataset.frontCat; renderFront(); return; }
@@ -1522,9 +1530,9 @@ document.addEventListener('click', function(e){
       if (catEditing > -1) {
         var oldCat = cats[catEditing].name, newCat = name || oldCat;
         if (newCat !== oldCat) items.forEach(function(it){ it.cats = it.cats.map(function(x){ return x === oldCat ? newCat : x; }); });   // 改名：用到的活动跟着改
-        cats[catEditing].name = newCat; cats[catEditing].sort = sort; cats[catEditing].on = radioOf('catOn','1') === '1'; cats[catEditing].icon = catIconTmp;
+        cats[catEditing].name = newCat; cats[catEditing].sort = sort; cats[catEditing].on = radioOf('catOn','1') === '1'; cats[catEditing].iconDay = catIconTmp.day; cats[catEditing].iconNight = catIconTmp.night;
       }
-      else cats.push({id:40+cats.length, name:name || '新类别', sort:sort, created:'2026-10-19 15:40', on:radioOf('catOn','1') === '1', i18n:{}, icon:catIconTmp});
+      else cats.push({id:40+cats.length, name:name || '新类别', sort:sort, created:'2026-10-19 15:40', on:radioOf('catOn','1') === '1', i18n:{}, iconDay:catIconTmp.day, iconNight:catIconTmp.night});
       document.getElementById('catModal').classList.add('hidden'); renderCats(); message('保存成功');
     }
   }
