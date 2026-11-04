@@ -1062,6 +1062,15 @@ var COND_SUB = {
   fund:['充值','投注','Maya充值','Maya提款','Glife充值','Glife提款'],
   other:['2025新版访问','关注Facebook','体验平台PWA','圣诞倒计时专属任务','Brand Daily Passcode']
 };
+/* 圣诞、Passcode：子任务不能选；基础任务选了不显示名额上限（照既有「每日最大参与人数」） */
+var NO_SUB=['圣诞倒计时专属任务','Brand Daily Passcode'];
+function subOpts(cat){ return COND_SUB[cat].filter(function(c){ return NO_SUB.indexOf(c)<0; }); }
+function syncQuota(){
+  var hide=document.getElementById('taskCat').value!=='group' && NO_SUB.indexOf(document.getElementById('condSub').value)>-1;
+  var qr=document.getElementById('quotaRow'), qi=document.getElementById('quotaInput');
+  qr.classList.toggle('hidden',hide);
+  if(hide && qi.value){ qi.value=''; onGrant(); }
+}
 function onCond(){
   var cat=document.getElementById('condCat').value;
   var sub=document.getElementById('condSub');
@@ -1075,6 +1084,7 @@ function onCondSub(){
   var isBet = (cat==='fund' && sub==='投注');
   document.getElementById('condAmt').classList.toggle('hidden', !isDeposit);
   document.getElementById('condBet').classList.toggle('hidden', !isBet);
+  syncQuota();
   checkGroupTime();
 }
 /* ===== 打码量限定游戏设置弹窗 ===== */
@@ -1163,7 +1173,7 @@ function condLineHTML(first){
 function onSubCat(catSel){
   var cat=catSel.value;
   var condSel=catSel.closest('.cond-line').querySelector('.subCond');
-  condSel.innerHTML = COND_SUB[cat].map(function(o){return '<option>'+o+'</option>';}).join('');
+  condSel.innerHTML = subOpts(cat).map(function(o){return '<option>'+o+'</option>';}).join('');
   onSubCond(condSel);
 }
 /* 子任务条件目标值：与基础任务一致——充值类填金额门槛；「投注」另需限制游戏配置＋打码量 */
@@ -1214,7 +1224,7 @@ function checkGroupTime(){
       var cond=row.querySelector('.subCond'), cat=row.querySelector('.subCat');
       [].forEach.call(cond.options,function(o){ o.disabled = meet(lock,allowOf(o.value||o.textContent)).length===0; });
       [].forEach.call(cat.options,function(o){   /* 整个类别都不能选时，类别也反灰 */
-        o.disabled = COND_SUB[o.value].every(function(c){ return meet(lock,allowOf(c)).length===0; });
+        o.disabled = subOpts(o.value).every(function(c){ return meet(lock,allowOf(c)).length===0; });
       });
       syncDd(cond); syncDd(cat);
     });
@@ -1283,7 +1293,7 @@ function fitSub(row){
   if(meet(lock,allowOf(condSel.value)).length) return;
   var cats=['fund','info','other'];
   for(var i=0;i<cats.length;i++){
-    var ok=COND_SUB[cats[i]].filter(function(c){ return meet(lock,allowOf(c)).length>0; });
+    var ok=subOpts(cats[i]).filter(function(c){ return meet(lock,allowOf(c)).length>0; });
     if(ok.length){ catSel.value=cats[i]; onSubCat(catSel); condSel.value=ok[0]; onSubCond(condSel); syncDd(catSel); syncDd(condSel); return; }
   }
 }
@@ -1362,8 +1372,9 @@ function onTaskCat(){
   document.getElementById('rowTaskTag').classList.toggle('hidden',isGroup);   /* 任务组不适用游戏页展示 */
   if(isGroup) document.getElementById('rowChip').style.display='none'; else onReward();
   var box=document.getElementById('subTasks');
-  if(isGroup && box.children.length===0){ addSub(null,true); addSub(null,true); }
+  if(isGroup && box.children.length===0){ addSub(null,true); }
   if(isGroup && document.getElementById('tierRewards').children.length===0) addTier(null);
+  syncQuota();
   checkGroupTime();
 }
 
