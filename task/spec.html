@@ -446,7 +446,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
           <div class="box box--key"><span class="box__t">按钮行为照既有</span>前台按钮的显示判断、点击、引导跳转，全部照既有《任务按钮显示规则 v1.1》。只多一处：名额满显示「额满」（3.5）。</div>
           <div class="box box--key"><span class="box__t">B 站（WOWGAMES）前台有专属设计稿，请前端特别处理</span>画面照 B 站设计稿；后台配置、前台规则都同本规格书。B 站不一样的地方会直接标「B 站」（例：3.3 子任务预设显示数量）。</div>
           <div class="lazy">
-            <div class="lazy__h">10/16、10/27、10/28、10/29、10/30、11/03、11/04 调整（开发先看这里）</div>
+            <div class="lazy__h">10/16、10/27、10/28、10/29、10/30、11/03、11/04、11/05 调整（开发先看这里）</div>
             <div class="tbl-scroll"><table class="t">
               <thead><tr><th class="nw">位置</th><th>调整</th></tr></thead>
               <tbody>
@@ -477,6 +477,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr class="mkr"><td style="width:9em">2.2 只能配一个（11/04）</td><td>2025新版访问、关注Facebook、体验平台PWA：整个任务中心<b>各只能配一个</b>，基础任务、子任务一起算。</td></tr>
                 <tr class="mkr"><td style="width:9em">2.6 任务时间红字（11/04）</td><td>任务时间下方红字补上「“品牌活动”类型任务仅支持「限时」」。</td></tr>
                 <tr class="mkr"><td style="width:9em">2.4 圣诞、Passcode 名额（11/04）</td><td>圣诞倒计时专属任务、Brand Daily Passcode <b>不显示名额上限</b>；原本已有「每日最大参与人数」，照既有。</td></tr>
+                <tr class="mkr"><td style="width:9em">3.3、4 查看全部加括号（11/05）</td><td>子任务展开按钮数字加括号：「查看全部 3」→<b>「查看全部(3)」</b>；运营翻译文件 A132 已改，五种语言都加。</td></tr>
               </tbody>
             </table></div>
             <p class="lazy__one">后台原型的<b>红色虚线框＝本期新增的数据</b>（任务组、额满），只是标示，正式画面不显示。其余几节只精简文字，规则没变。</p>
@@ -1320,7 +1321,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
 
           <h3 class="sub">规则</h3>
           <ul>
-            <li><b>以运营的翻译文件为准</b>：本期全部新增，A123～A134、A150。<span class="mkr">A150 为额满弹窗文案</span><span class="mk">（10/27 新增）</span></li>
+            <li><b>以运营的翻译文件为准</b>：本期全部新增，A123～A134、A150。<span class="mkr">A150 为额满弹窗文案</span><span class="mk">（10/27 新增）</span><span class="mkr">；A132 数字加括号「查看全部({{a}})」</span><span class="mk">（11/05 修改）</span></li>
             <li><b>不在本表</b>：券名称照券管理后台原样显示，不翻译。</li>
             <li><b>{{a}}、{{b}}</b>：变量，照原样保留，不翻译；{{a}} 代第一个值、{{b}} 代第二个值。</li>
           </ul>

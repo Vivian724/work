@@ -181,17 +181,8 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .glist__t{font-weight:900;font-size:1.05rem;}
 .glist__s{font-size:.74rem;color:var(--c-text-2);margin-top:2px;}
 .gs--off{opacity:.55;}
-/* =========================================================
-   「积分兑好礼」区块标题带
-   ========================================================= */
-.band{
-  margin:0 12px 10px;border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:8px;
-  background:linear-gradient(90deg,#ffe3ee,#e3edff 60%,#dff2ff);font-weight:900;font-size:1rem;color:#c2305a;
-}
-.band__ico{font-size:1.4rem;}
-
 /* 分类页签（带图示） */
-.cats{display:flex;gap:8px;padding:0 12px 8px;overflow-x:auto;scrollbar-width:none;}
+.cats{display:flex;gap:8px;padding:0 12px 10px;overflow-x:auto;scrollbar-width:none;}
 .cats::-webkit-scrollbar{display:none;}
 .cats::after{content:"";flex:0 0 4px;}   /* 滑到底时最后一颗不贴边 */
 .grid .g{flex:none;width:auto;}          /* Flash Sales 分类页：同一种卡放进两栏格 */
@@ -500,7 +491,7 @@ button{font-family:inherit;cursor:pointer;border:none;}
 
         <!-- 赚积分任务（深色区）：任务中心搬来这里，首页先露 2 张，全部任务 › 进 Task List 页 -->
         <section class="earn" aria-label="赚积分任务">
-          <div class="earn__head">赚积分 <button class="more" onclick="go('tasks')">全部任务 ›</button></div>
+          <div class="earn__head">TASK LIST <button class="more" onclick="go('tasks')">全部任务 ›</button></div>
           <article class="tk">
             <div class="tk__name">Top up ₱50<span class="info">ⓘ</span></div>
             <div class="tk__timer">⏱ <span class="t-task">01:39:59</span></div>
@@ -533,19 +524,11 @@ button{font-family:inherit;cursor:pointer;border:none;}
           </article>
         </section>
 
-        <!-- 积分兑好礼 -->
-        <div class="band"><span class="band__ico">🎁</span>积分兑好礼</div>
-
-        <!-- 分类页签：来源＝后台「商品分类」，图示由后台上传。点页签＝进该分类页（同 More） -->
+        <!-- 分类页签：来源＝后台「商品分类」，图示由后台上传。照线上：点页签＝同一页直接换下面的商品，不跳页。
+             All＝Flash Sales 区块＋筛选＋各分类区块（每类一排＋More）；选某分类＝筛选＋该分类全部商品。Playground 不在页签里，是上面的固定区块 -->
         <nav class="cats js-cats" aria-label="商品分类"></nav>
 
-        <!-- 筛选（首页跟分类页共用同一组状态） -->
-        <div class="filters">
-          <button class="flt js-can" onclick="toggleCan()">我能兑换的</button>
-          <button class="flt js-sort" onclick="toggleSort()"><i class="coin coin--pt">★</i>星币 <span class="js-arrow">↕</span></button>
-        </div>
-
-        <!-- Flash Sales：固定区块，横向滑动；All → Flash Sales 分类页 -->
+        <!-- Flash Sales：固定区块，横向滑动（只在 All 显示）；All 钮＝切到 Flash Sales 页签（不受下方筛选影响） -->
         <section class="fs" id="fsBlock" aria-label="Flash Sales">
           <div class="fs__head">
             <div class="fs__ico">⚡</div>
@@ -556,8 +539,22 @@ button{font-family:inherit;cursor:pointer;border:none;}
           <div class="hrow" id="fsRow"></div>
         </section>
 
-        <!-- 各分类区块：每类只露一排 2 个 ＋ More，由程序照商品资料产生 -->
+        <!-- Flash Sales 页签：倒数抬头（跟上面同一个倒数） -->
+        <section class="cat-fs" id="catFs" hidden>
+          <div class="fs__head"><div class="fs__ico">⚡</div><div><div class="fs__t">Flash Sales</div><div class="fs__s">Ends in</div></div>
+            <div class="cd"><b class="js-cdD" hidden>155D</b><span class="js-cdDsep" hidden>:</span><b class="js-cdH">11</b>:<b class="js-cdM">44</b>:<b class="js-cdS">31</b></div></div>
+        </section>
+
+        <!-- 筛选：放在要筛的商品正上方；All 时管各分类区块，选分类时管该分类商品 -->
+        <div class="filters">
+          <button class="flt js-can" onclick="toggleCan()">我能兑换的</button>
+          <button class="flt js-sort" onclick="toggleSort()"><i class="coin coin--pt">★</i>星币 <span class="js-arrow">↕</span></button>
+        </div>
+
+        <!-- All：各分类区块，每类只露一排 2 个 ＋ More（More＝切到该页签），由程序照商品资料产生 -->
         <div id="homeSecs"></div>
+        <!-- 选某分类：该分类全部商品两栏格 -->
+        <section class="grid" id="catGrid" hidden aria-label="分类商品"></section>
       </section>
 
       <!-- ===================================================
@@ -603,25 +600,6 @@ button{font-family:inherit;cursor:pointer;border:none;}
           <div class="glist__head" id="glistHead"></div>
           <section class="grid" id="glistGrid" aria-label="游戏列表"></section>
         </div>
-      </section>
-
-      <!-- ===================================================
-           画面 4：分类页（点 More 或分类页签进来；照游戏大厅既有做法另开一页）
-           =================================================== -->
-      <section class="screen" id="scr-cat">
-        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title" id="catTitle">Cash</span></header>
-        <!-- 分类页也放同一排页签：目前分类亮起，可直接切到别的分类，不用先返回 -->
-        <nav class="cats js-cats" style="padding-top:10px" aria-label="商品分类"></nav>
-        <!-- Flash Sales 分类：跟首页同一个倒数 -->
-        <section class="cat-fs" id="catFs" hidden>
-          <div class="fs__head"><div class="fs__ico">⚡</div><div><div class="fs__t">Flash Sales</div><div class="fs__s">Ends in</div></div>
-            <div class="cd"><b class="js-cdD" hidden>155D</b><span class="js-cdDsep" hidden>:</span><b class="js-cdH">11</b>:<b class="js-cdM">44</b>:<b class="js-cdS">31</b></div></div>
-        </section>
-        <div class="filters">
-          <button class="flt js-can" onclick="toggleCan()">我能兑换的</button>
-          <button class="flt js-sort" onclick="toggleSort()"><i class="coin coin--pt">★</i>星币 <span class="js-arrow">↕</span></button>
-        </div>
-        <section class="grid" id="catGrid" aria-label="分类商品"></section>
       </section>
 
       <!-- ===================================================
@@ -816,13 +794,11 @@ function go(name, btn){
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('is-active', s.id==='scr-'+name); });
   document.querySelectorAll('.demo-bar button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('onclick').indexOf("'"+name+"'")>-1); });
   document.getElementById('scroll').scrollTop = 0;
-  if(name==='mall'){ curCat = null; renderCats(); }
-  if(name==='cat') scrollCatIntoView();
 }
 
 /* ---------- 商品资料（原型假资料；正式版来自后台商品分类＋商品） ---------- */
 var CATS = [
-  {key:'flash', name:'Flash Sales', ico:'🏷️'}, {key:'play', name:'Playground', ico:'🎮'}, {key:'free', name:'Free Spin', ico:'🎡'},
+  {key:'flash', name:'Flash Sales', ico:'🏷️'}, {key:'free', name:'Free Spin', ico:'🎡'},
   {key:'cash', name:'Cash', ico:'💵'}, {key:'coupon', name:'Coupon', ico:'🎫'}, {key:'item', name:'Item', ico:'📦'}
 ];
 /* 分类页签（首页、分类页各一排，同一份资料）：目前所在的亮起；分类页会把亮起的那颗滑到看得见的位置 */
@@ -835,7 +811,7 @@ function renderCats(){
 }
 /* 分类页：把亮起的页签滑到中间（画面显示出来之后才量得到位置） */
 function scrollCatIntoView(){
-  var on = document.querySelector('#scr-cat .cat--on'); if(!on || !on.offsetWidth) return;
+  var on = document.querySelector('#scr-mall .cat--on'); if(!on || !on.offsetWidth) return;
   var nav = on.parentNode; nav.scrollLeft = Math.max(0, on.offsetLeft - (nav.clientWidth - on.offsetWidth)/2);
 }
 var PRODUCTS = [
@@ -845,9 +821,6 @@ var PRODUCTS = [
   {cat:'flash', name:'Deposit Coupon ₱50', sub:'Coupon', price:80, old:100, left:'150 remaining', pct:85, img:'img-coupon', txt:'₱50<br>COUPON', off:'20% OFF'},
   {cat:'flash', name:'Cash ₱200', sub:'E-Credit', price:1500, old:2000, left:'40 remaining', pct:10, img:'img-cash', txt:'₱200<br>CASH', off:'25% OFF'},
   {cat:'flash', name:'Sweet Bonanza', sub:'20 Free Spins', price:400, old:600, left:'900 remaining', pct:45, img:'img-free', txt:'SWEET<br>BONANZA<br><small>FREE SPINS</small>', off:'33% OFF'},
-  /* Playground：游乐场入口 */
-  {cat:'play', name:'Ichiban Luck Draw', sub:'Every Ticket Wins a Prize', price:500, unit:'/ Ticket', img:'img-ichi', txt:'ICHIBAN<br>LUCK DRAW', go:'ichiban'},
-  {cat:'play', name:'Slot Kingdom', sub:'Mystery Blind Box', price:2000, unit:'/ Draw', img:'img-blind', txt:'SLOT<br>KINGDOM', go:'blind'},
   /* Free Spin */
   {cat:'free', name:'Sweet Bonanza', sub:'10 Free Spins', price:300, left:'In stock 1,200', img:'img-free', txt:'SWEET<br>BONANZA<br><small>FREE SPINS</small>'},
   {cat:'free', name:'Wild West Gold', sub:'5 Free Spins', price:100, left:'In stock 860', img:'img-free', txt:'WILD<br>WEST<br><small>FREE SPINS</small>'},
@@ -1019,13 +992,14 @@ function fsCount(){
 document.getElementById('fsRow').addEventListener('scroll', fsCount);
 /* 首页：Flash Sales 横向区 ＋ 各分类区块（先露 HOME_SHOW 个，多的看 More） */
 function renderHome(){
-  var fl = listOf('flash');
+  var fl = PRODUCTS.filter(function(p){ return p.cat==='flash'; });   /* 首页 Flash Sales 在筛选列上方，不套筛选 */
   document.getElementById('fsRow').innerHTML = fl.map(cardFlash).join('');
   fsCount();
-  document.getElementById('fsBlock').hidden = fl.length===0;
+  document.getElementById('fsBlock').hidden = !!curCat || fl.length===0;   /* 只在 All 显示 */
+  document.getElementById('homeSecs').hidden = !!curCat;
   var html = '';
   CATS.forEach(function(c){
-    if(c.key==='flash' || c.key==='play') return;   /* Flash Sales、Playground 各有自己的区块 */
+    if(c.key==='flash') return;   /* Flash Sales 有自己的区块；Playground 不是分类，是首页固定区块 */
     var arr = listOf(c.key); if(!arr.length) return;
     html += '<section class="csec"><h3 class="csec__t">'+c.name
          + (arr.length>HOME_SHOW ? '<button class="csec__more" onclick="openCat(\''+c.key+'\')">More ›</button>' : '')
@@ -1033,24 +1007,27 @@ function renderHome(){
   });
   document.getElementById('homeSecs').innerHTML = html || '<div class="grid__empty">没有可兑换的商品</div>';
 }
-/* 分类页：该分类全部商品 */
+/* 选了某分类：同一页换成该分类全部商品（Flash Sales 分类另带倒数抬头、用 Flash 卡） */
 function renderCat(){
-  if(!curCat) return;
-  var c = CATS.filter(function(x){ return x.key===curCat; })[0];
-  document.getElementById('catTitle').textContent = c.name;
+  var grid = document.getElementById('catGrid'), fsHead = document.getElementById('catFs');
+  if(!curCat){ grid.hidden = true; fsHead.hidden = true; return; }
   var arr = listOf(curCat), isFs = curCat==='flash';
-  document.getElementById('catFs').hidden = !isFs;
-  document.getElementById('catGrid').innerHTML = arr.length ? arr.map(isFs ? cardFlash : cardSmall).join('') : '<div class="grid__empty">没有可兑换的商品</div>';
+  fsHead.hidden = !isFs; grid.hidden = false;
+  grid.innerHTML = arr.length ? arr.map(isFs ? cardFlash : cardSmall).join('') : '<div class="grid__empty">没有可兑换的商品</div>';
 }
 function renderAll(){ syncFilterBtns(); renderCats(); renderHome(); renderCat(); }
-function openCat(key){ curCat = key; renderCats(); renderCat(); go('cat'); }
+/* 切页签（页签、More ›、Flash Sales 的 All 钮都走这里）：换完把页签列顶到画面最上面，商品从页签下方开始 */
+function openCat(key){
+  curCat = key; renderAll();
+  var sc = document.getElementById('scroll'), nav = document.querySelector('#scr-mall .js-cats'), top = document.querySelector('#scr-mall .topbar');
+  sc.scrollTop = nav.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop - top.offsetHeight - 6;   /* 顶栏是钉住的，要扣掉它的高度 */
+}
 
-/* 分类页签（两排共用）：All＝回首页；Playground＝游乐场专页；其他＝进／切到该分类页。已经在这个分类就不动 */
+/* 分类页签：照线上同一页切换。All＝全部（Flash Sales＋各分类区块）；其他＝该分类全部商品。已经在这个分类就不动 */
 document.addEventListener('click', function(ev){
   var b = ev.target.closest('.cat'); if(!b) return;
   var k = b.dataset.cat;
-  if(k==='all'){ go('mall'); return; }
-  if(k==='play'){ go('play'); return; }
+  if(k==='all') k = null;
   if(k===curCat) return;
   openCat(k);
 });
