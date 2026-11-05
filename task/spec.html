@@ -456,7 +456,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
                 <tr><td style="width:9em">2.9 任务报表统计</td><td>汇总行不加「任务组」标签；明细行不加「└」。</td></tr>
                 <tr><td style="width:9em">3.3 任务组卡</td><td><b>B 站 PC 版预设显示 2 个子任务</b>（其他都是 1 个）。子任务排序逻辑不变，说明改简单。</td></tr>
                 <tr><td style="width:9em">3.4 额外奖励</td><td>可领取的宝箱：上下跳动 → <b>宝箱开合</b>（B 站同）。</td></tr>
-                <tr><td style="width:9em">4 多语言文案</td><td><b>以运营翻译文件为准</b>：变量改 {{a}}、{{b}}；A127「任务组」加回；A128 改「已发送 {{a}}/{{b}} 人」；A132 拿掉括号「查看全部 {{a}}」；A134 变量前后加空格；10/27 新增 A150（额满弹窗）。</td></tr>
+                <tr><td style="width:9em">4 多语言文案</td><td><b>以运营翻译文件为准</b>：变量改 {{a}}、{{b}}；A127「任务组」加回；A128 改「已发送 {{a}}/{{b}} 人」；<span class="mkr">A132「查看全部({{a}})」数字加括号</span><span class="mk">（11/05 修改）</span>；A134 变量前后加空格；10/27 新增 A150（额满弹窗）。</td></tr>
                 <tr><td style="width:9em">2.7、2.9 子任务收合（10/27）</td><td>任务组子任务<b>预设收合</b>，ID 前加箭头 ▸／▾，点了展开／收起（报表的明细行同）；栏名「名额」改「已领取 / 上限」。照开发设计。</td></tr>
                 <tr><td style="width:9em">3.5 额满弹窗（10/27 新增）</td><td>会员已可领取、但名额同时被其他会员领完，页面没刷新就点「领取」 → 跳额满弹窗（吉祥物＋A150「当前奖励已额满，无法领取。」＋确定）；关闭后按钮变「额满」。</td></tr>
                 <tr class="mkr"><td style="width:9em">2.8 奖励类型／奖励值（10/28）</td><td>免费旋转、免费投注、优惠券：奖励类型只写类型，<b>奖励值＝券名称</b>（如 ON色碟）。golden draw券：<b>奖励值＝×1</b>，不写「张」。</td></tr>
@@ -1061,7 +1061,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
             <li><b>任务简介</b>：ⓘ 放在任务组标题后面，子任务没有，照既有（3.10）。</li>
             <li><b>进度</b>：「已完成子任务数 / 子任务总数」，达成就算（含还没领的）。人工审核：点「领取」送审（处理中），审核通过才算进度。</li>
             <li><b>子任务行</b>：标题＝后台配置的子任务名称（2.3），一行超出以「…」截断；其余同基础任务卡，每行一个按钮。</li>
-            <li><b>收合</b>：预设显示<b>额外奖励＋1 个子任务</b>（照下方顺序排第一的）<span class="mkr">；没设额外奖励就只显示子任务</span>。<span class="mk">（11/03 新增）</span><b>B 站 PC 版例外：预设 2 个</b>。其余点「查看全部 n ⌄」展开（n＝子任务总数），「收起 ⌃」收回；每张卡各自展开。子任务不超过预设数量时，不显示按钮。</li>
+            <li><b>收合</b>：预设显示<b>额外奖励＋1 个子任务</b>（照下方顺序排第一的）<span class="mkr">；没设额外奖励就只显示子任务</span>。<span class="mk">（11/03 新增）</span><b>B 站 PC 版例外：预设 2 个</b>。其余点<span class="mkr">「查看全部(n) ⌄」</span><span class="mk">（11/05 修改）</span>展开（n＝子任务总数），「收起 ⌃」收回；每张卡各自展开。子任务不超过预设数量时，不显示按钮。</li>
             <li><b>子任务顺序</b>：
               <ol>
                 <li><b>可领取</b>：放最前面。</li>
@@ -1338,7 +1338,7 @@ table.t th:last-child, table.t td:last-child { width: auto; }
               <tr><td class="nw">A129</td><td>额满<br><span class="hint-in">按钮</span></td><td>full</td><td>Puno na</td><td>Đã đầy</td><td>Puno na</td></tr>
               <tr><td class="nw">A130</td><td>额外奖励<br><span class="hint-in">额外奖励标题</span></td><td>Extra Rewards</td><td>Dagdag na Reward</td><td>Phần thưởng thêm</td><td>Dugang nga Reward</td></tr>
               <tr><td class="nw">A131</td><td>{{a}} 个<br><span class="hint-in">宝箱下方</span></td><td>{{a}} Rewards</td><td>{{a}} Reward</td><td>{{a}} phần thưởng</td><td>{{a}} ka Reward</td></tr>
-              <tr><td class="nw">A132</td><td>查看全部 {{a}}<br><span class="hint-in">子任务展开</span></td><td>View All {{a}}</td><td>Tingnan Lahat {{a}}</td><td>Xem tất cả {{a}}</td><td>Tan-awa Tanan {{a}}</td></tr>
+              <tr><td class="nw">A132</td><td><span class="mkr">查看全部({{a}})</span><span class="mk">（11/05 修改）</span><br><span class="hint-in">子任务展开</span></td><td><span class="mkr">View All({{a}})</span></td><td><span class="mkr">Tingnan Lahat({{a}})</span></td><td><span class="mkr">Xem tất cả({{a}})</span></td><td><span class="mkr">Tan-awa Tanan({{a}})</span></td></tr>
               <tr><td class="nw">A133</td><td>收起<br><span class="hint-in">子任务收合</span></td><td>Hide</td><td>Itago</td><td>Thu gọn</td><td>Itago</td></tr>
               <tr><td class="nw">A134</td><td>奖励 {{a}}，恭喜完成 {{b}} 任务！<br><span class="hint-in">提示弹窗</span></td><td>Reward {{a}}, congratulations on completing the {{b}} task!</td><td>Reward {{a}}, binabati kita sa pagtapos ng {{b}} task!</td><td>Thưởng {{a}}, chúc mừng bạn đã hoàn thành nhiệm vụ {{b}} !</td><td>Reward {{a}}, pahalipay sa pagkompleto sa {{b}} task!</td></tr>
               <tr class="mkr"><td class="nw">A150<br><span class="mk">（10/27 新增）</span></td><td>当前奖励已额满，<br>无法领取。<br><span class="hint-in">额满弹窗（3.5）</span></td><td>Reward Fully Claimed.<br>No More Available To Claim.</td><td>Naubos na ang Reward.<br>Wala nang maaaring i-claim.</td><td>Phần thưởng đã được nhận hết.<br>Không thể nhận thêm.</td><td>Nahurot na ang Reward.<br>Wala nay mahimong ma-claim.</td></tr>

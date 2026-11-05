@@ -524,7 +524,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
               <div class="gr__r"><span class="chip-st chip-st--bet" onclick="showRedirect('首页')">去投注</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部 3 ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部(3) ⌄</button>
         </article>
 
         <!-- 1042｜投注 ₱100（CQ9电子）｜积分 100｜名额 200/200 已满（每日）｜每日｜自动审核｜排序 3 -->
@@ -568,7 +568,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
               <div class="gr__r"><span class="chip-st chip-st--bet" onclick="showRedirect('首页')">去投注</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部 2 ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部(2) ⌄</button>
         </article>
 
         <!-- 1030｜任务组 · 限时｜子任务 3 个、每项上限 500｜额外奖励 1 个 积分 50／2 个 彩金 100／3 个 积分 500（配满 3 档）｜排序 6｜VIP1＋TH（有等级/标签限制：未登录不显示）-->
@@ -596,7 +596,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
               <div class="gr__r"><span class="chip-st chip-st--full">额满</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部 3 ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部(3) ⌄</button>
         </article>
 
         <!-- 1070｜投注 ₱1,000｜免费旋转（₱20）｜名额 86/500（每周）｜每周｜自动审核｜自动发放｜排序 7 -->
@@ -689,7 +689,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
               <div class="gr__r"><span class="chip-st chip-st--claim" data-amt="优惠券 ₱50" onclick="claimSub(this)">领取</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部 3 ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部(3) ⌄</button>
         </article>
 
         <!-- 任务组 · 永久｜人工审核（只审子任务，额外奖励不用审核；子任务处理中／未通过示例：关注Facebook 上传证明未通过）｜信息完善＋其他类，子任务配满 10 个＝后台上限；前面子任务已完成的显示示例；永久不设名额，前台不显示名额（新增情境）｜后台 1095｜永久｜人工审核｜排序 103 -->
@@ -744,7 +744,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
               <div class="gr__r"><span class="chip-st chip-st--reject" onclick="showPop('reject')">未通过</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部 10 ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部(10) ⌄</button>
         </article>
 
         <!-- 任务组 · 每周｜自动审核（一般状态：领取／去充值／已完成；额外奖励领完打勾）；子任务皆为每周可用类型（充值／投注）；额外奖励配满 3 档（后台上限），n 不超过子任务数（新增情境）｜后台 1098｜每周｜排序 104 -->
@@ -776,7 +776,7 @@ body.is-pc > div:first-of-type{max-width:1240px!important;}
               <div class="gr__r"><span class="chip-st chip-st--deposit" onclick="showRedirect('充值页')">去充值</span></div>
             </div>
           </div>
-          <button class="grp__more" onclick="toggleGroup(this)">查看全部 4 ⌄</button>
+          <button class="grp__more" onclick="toggleGroup(this)">查看全部(4) ⌄</button>
         </article>
 
         <!-- 949｜信息完善-KYC认证｜彩金 20｜永久｜参与要求：完成KYC部分认证（没达成＝照 v1.1 第二层「去认证」）｜排序 105 -->
@@ -978,13 +978,13 @@ function layoutGroups(){
         .sort(function(a,b){ return a.rk-b.rk || (a.rk===1 ? b.p-a.p : 0) || a.i-b.i; })
         .forEach(function(o,i){ list.appendChild(o.r); o.r.classList.toggle('gr--more', i>=GR_SHOW); });
     var btn=card.querySelector('.grp__more');
-    if(btn){ btn.hidden = rows.length<=GR_SHOW; btn.textContent='查看全部 '+rows.length+' ⌄'; }
+    if(btn){ btn.hidden = rows.length<=GR_SHOW; btn.textContent='查看全部('+rows.length+') ⌄'; }
   });
 }
 function toggleGroup(btn){
   var card=btn.closest('.grp'), n=card.querySelectorAll('.gr').length;
   var open=card.classList.toggle('open');
-  btn.textContent = open ? '收起 ⌃' : '查看全部 '+n+' ⌄';
+  btn.textContent = open ? '收起 ⌃' : '查看全部('+n+') ⌄';
 }
 /* 依奖励文字找对应图示 */
 function rwIcon(label){
