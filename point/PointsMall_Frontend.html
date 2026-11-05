@@ -185,9 +185,6 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .cats{display:flex;gap:8px;padding:0 12px 10px;overflow-x:auto;scrollbar-width:none;}
 .cats::-webkit-scrollbar{display:none;}
 .cats::after{content:"";flex:0 0 4px;}   /* 滑到底时最后一颗不贴边 */
-.grid .g{flex:none;width:auto;}          /* Flash Sales 分类页：同一种卡放进两栏格 */
-.cat-fs{margin:0 12px 10px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:10px 12px;}
-.cat-fs .fs__head{margin-bottom:0;padding-right:0;}
 .cat{flex:0 0 auto;display:flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--c-line);border-radius:18px;padding:5px 12px 5px 8px;font-size:.8rem;color:var(--c-text);white-space:nowrap;}
 .cat__ico{font-size:1rem;line-height:1;}
 .cat--on{background:#e3edff;border-color:#bcd2ff;color:var(--c-primary);font-weight:800;}
@@ -212,7 +209,6 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .fs__n{display:inline-block;margin-left:6px;background:#eef1f6;color:#6b7a99;font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:8px;vertical-align:2px;}
 .cd{margin-left:auto;display:flex;align-items:center;gap:2px;font-weight:800;font-size:.78rem;color:var(--c-red);}
 .cd b{background:var(--c-red);color:#fff;border-radius:5px;padding:2px 5px;min-width:24px;text-align:center;}
-.fs__all{color:var(--c-primary);font-weight:700;font-size:.8rem;background:none;}
 .hrow{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:2px 12px 4px 0;}
 .hrow::-webkit-scrollbar{display:none;}
 
@@ -367,6 +363,95 @@ button{font-family:inherit;cursor:pointer;border:none;}
 
 
 /* =========================================================
+   记录页（积分历史 ＋ 兑换记录，照线上两页合成一页、上方页签切换）
+   ========================================================= */
+.rec-tabs{display:flex;margin:10px 12px 0;background:#fff;border-radius:var(--radius) var(--radius) 0 0;border-bottom:1px solid var(--c-line);}
+.rec-tab{flex:1;padding:12px 0;background:none;font-size:.92rem;font-weight:700;color:var(--c-text-2);position:relative;}
+.rec-tab--on{color:var(--c-primary);}
+.rec-tab--on::after{content:"";position:absolute;left:30%;right:30%;bottom:-1px;height:3px;border-radius:2px;background:var(--c-primary);}
+.rec-body{margin:0 12px 12px;background:#fff;border-radius:0 0 var(--radius) var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:12px;}
+.rec-note{font-size:.72rem;color:var(--c-text-3);margin-bottom:8px;}
+.rec-note--red{color:var(--c-red);}
+.seg{display:inline-flex;background:#eef2f9;border-radius:18px;padding:3px;margin-bottom:10px;}
+.seg__b{background:none;border-radius:16px;padding:5px 18px;font-size:.8rem;color:var(--c-text-2);}
+.seg__b--on{background:var(--c-primary);color:#fff;font-weight:700;}
+.rec-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--c-line);}
+.rec-item:last-child{border-bottom:0;}
+.rec-item__ico{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:1.2rem;flex:0 0 auto;color:#fff;}
+.rec-item__t{font-weight:700;font-size:.86rem;}
+.rec-item__s{font-size:.72rem;color:var(--c-text-3);margin-top:2px;}
+.rec-item__n{margin-left:auto;font-weight:800;font-size:.95rem;white-space:nowrap;}
+.rec-item__n--in{color:var(--c-green);}
+.rec-item__n--out{color:var(--c-red);}
+.rec-item__n .coin{width:13px;height:13px;margin-right:2px;}
+.rec-end{text-align:center;color:var(--c-text-3);font-size:.74rem;padding:12px 0 2px;}
+.rec-empty{text-align:center;color:var(--c-text-3);font-size:.8rem;padding:40px 0;}
+.rec-empty i{display:block;font-size:2.4rem;margin-bottom:8px;font-style:normal;opacity:.5;}
+
+/* =========================================================
+   VIP 俱乐部（线上既有页 /user/vip-club 的 H5 版，内容照线上不改）
+   ========================================================= */
+.vip-me{margin:10px 12px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:12px;display:flex;align-items:center;gap:10px;}
+.vip-me .avatar{width:42px;height:42px;}
+.vip-me__name{font-weight:800;font-size:.9rem;}
+.vip-badge{display:inline-block;background:linear-gradient(90deg,#2f6bff,#6aa0ff);color:#fff;font-size:.6rem;font-weight:900;padding:1px 7px;border-radius:8px;margin-top:3px;font-style:italic;}
+.vip-me__need{margin-left:auto;text-align:right;border-left:1px solid var(--c-line);padding-left:12px;}
+.vip-me__need b{display:block;color:var(--c-primary);font-size:1rem;}
+.vip-me__need small{font-size:.68rem;color:var(--c-text-2);}
+.vip-row{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:4px 12px 12px;scroll-snap-type:x mandatory;}
+.vip-row::-webkit-scrollbar{display:none;}
+.vlv{flex:0 0 78%;scroll-snap-align:start;border-radius:14px;padding:12px;position:relative;color:#1b3a7a;background:linear-gradient(135deg,#e9f1ff,#cfe0ff);}
+.vlv--pink{background:linear-gradient(135deg,#ffe9f1,#ffcfe0);color:#8a2a55;}
+.vlv--red{background:linear-gradient(135deg,#ffe3e3,#ffbdbd);color:#8a2a2a;}
+.vlv__cur{position:absolute;left:0;top:0;background:var(--c-primary);color:#fff;font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:14px 0 10px 0;}
+.vlv__t{font-weight:900;font-size:1.5rem;font-style:italic;margin-top:8px;}
+.vlv__medal{position:absolute;right:12px;top:12px;font-size:2rem;}
+.vlv__bar{display:flex;align-items:center;gap:6px;font-size:.72rem;margin-top:6px;}
+.vlv__bar i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.7);position:relative;overflow:hidden;}
+.vlv__bar i::after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--p,0);background:var(--c-primary);border-radius:3px;}
+.vlv__pct{font-size:.6rem;background:var(--c-primary);color:#fff;border-radius:8px;padding:0 5px;}
+.vlv__cond{margin-top:10px;background:rgba(255,255,255,.7);border-radius:10px;padding:8px;text-align:center;}
+.vlv__cond b{display:block;font-size:1rem;}
+.vlv__cond small{font-size:.68rem;}
+.vip-next{margin:0 12px 12px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:10px 12px;display:flex;font-size:.72rem;color:var(--c-text-2);}
+.vip-next div{flex:1;text-align:center;}
+.vip-next b{display:block;color:var(--c-text);font-size:1rem;}
+.vip-h{font-weight:900;font-size:1rem;padding:0 14px 8px;}
+.vip-ben{margin:0 12px 12px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:4px 12px;}
+.vben{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--c-line);}
+.vben:last-child{border-bottom:0;}
+.vben__ico{font-size:1.8rem;flex:0 0 auto;}
+.vben__t{font-weight:800;font-size:.84rem;}
+.vben__s{font-size:.68rem;color:var(--c-text-3);}
+.vben__li{font-size:.8rem;color:var(--c-orange);font-weight:700;margin-top:2px;}
+.vip-rb{display:flex;gap:10px;padding:0 12px 6px;}
+.vrb{flex:1;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:10px;position:relative;}
+.vrb__tag{display:inline-block;background:var(--c-primary);color:#fff;font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:0 10px 10px 0;margin:-10px 0 8px -10px;}
+.vrb__row{display:flex;align-items:center;gap:8px;font-size:.72rem;padding:4px 0;}
+.vrb__row .ico{font-size:1.3rem;}
+.vrb__row b{display:block;font-size:.8rem;}
+.vrb__max{display:inline-block;background:#ffe3e3;color:var(--c-red);font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:8px;}
+.vip-note{font-size:.72rem;color:var(--c-text-2);padding:0 14px 14px;}
+
+/* =========================================================
+   我的背包（前身＝线上「我的票券／优惠券」：未使用／待结算／已使用／已过期 ＋ 票卡）
+   ========================================================= */
+.bag-tabs{display:flex;margin:10px 12px 0;background:#fff;border-radius:var(--radius) var(--radius) 0 0;border-bottom:1px solid var(--c-line);}
+.bag-tab{flex:1;padding:12px 0;background:none;font-size:.84rem;font-weight:700;color:var(--c-text-2);position:relative;white-space:nowrap;}
+.bag-tab--on{color:var(--c-primary);}
+.bag-tab--on::after{content:"";position:absolute;left:22%;right:22%;bottom:-1px;height:3px;border-radius:2px;background:var(--c-primary);}
+.bag-body{margin:0 12px 12px;background:#fff;border-radius:0 0 var(--radius) var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:12px;display:flex;flex-direction:column;gap:10px;}
+.tkt{display:flex;gap:10px;align-items:center;background:#f6f7fa;border-radius:12px;padding:10px;}
+.tkt__img{width:64px;height:64px;border-radius:10px;flex:0 0 auto;display:grid;place-items:center;color:#fff;font-weight:900;font-size:.62rem;text-align:center;line-height:1.2;position:relative;}
+.tkt__x{position:absolute;top:-6px;right:-6px;background:var(--c-red);color:#fff;font-size:.6rem;font-weight:800;border-radius:8px;padding:1px 5px;}
+.tkt__t{font-weight:800;font-size:.86rem;}
+.tkt__d{font-size:.68rem;color:var(--c-red);margin-top:3px;line-height:1.5;}
+.tkt__d span{color:var(--c-text-3);}
+.tkt__btn{margin-left:auto;flex:0 0 auto;background:var(--c-primary);color:#fff;font-weight:700;font-size:.74rem;padding:6px 10px;border-radius:14px;white-space:nowrap;}
+.tkt--off{opacity:.55;}
+.tkt--off .tkt__btn{background:#c9d4e6;}
+
+/* =========================================================
    任务中心（新样式）：首页「赚积分」区 ＋ Task List 页共用
    ========================================================= */
 .tk{background:#f6f7fa;border-radius:12px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:5px 10px;align-items:start;}
@@ -456,6 +541,9 @@ button{font-family:inherit;cursor:pointer;border:none;}
     <button class="on" onclick="go('mall',this)">商城首页</button>
     <button onclick="go('tasks',this)">任务中心 Task List</button>
     <button onclick="go('play',this)">游乐场 Playground</button>
+    <button onclick="openRec('hist')">记录（积分历史/兑换记录）</button>
+    <button onclick="go('bag',this)">我的背包</button>
+    <button onclick="go('vip',this)">VIP 俱乐部</button>
     <button onclick="openGame('ichiban')">一番赏列表（多套）</button>
     <button onclick="openGame('blind')">Slot Kingdom 盲盒列表（多套）</button>
     <button onclick="showPop('ok')">兑换成功弹窗</button>
@@ -484,9 +572,9 @@ button{font-family:inherit;cursor:pointer;border:none;}
 
         <!-- 快捷入口 -->
         <nav class="quick" aria-label="快捷入口">
-          <button class="quick__item"><span class="quick__ico">👑</span><span><div class="quick__t">VIP 会员</div><div class="quick__s">查看等级福利 ›</div></span></button>
-          <button class="quick__item"><span class="quick__ico">🪙</span><span><div class="quick__t"><span class="my-pts">100</span></div><div class="quick__s">明细/兑换记录 ›</div></span></button>
-          <button class="quick__item"><span class="quick__ico">🎁</span><span><div class="quick__t">背包中心</div><div class="quick__s">我的道具 ›</div></span></button>
+          <button class="quick__item" onclick="go('vip')"><span class="quick__ico">👑</span><span><div class="quick__t">VIP 会员</div><div class="quick__s">查看等级福利 ›</div></span></button>
+          <button class="quick__item" onclick="openRec('hist')"><span class="quick__ico">🪙</span><span><div class="quick__t"><span class="my-pts">100</span></div><div class="quick__s">明细/兑换记录 ›</div></span></button>
+          <button class="quick__item" onclick="go('bag')"><span class="quick__ico">🎁</span><span><div class="quick__t">我的背包</div><div class="quick__s">票券/道具 ›</div></span></button>
         </nav>
 
         <!-- 赚积分任务（深色区）：任务中心搬来这里，首页先露 2 张，全部任务 › 进 Task List 页 -->
@@ -525,27 +613,20 @@ button{font-family:inherit;cursor:pointer;border:none;}
         </section>
 
         <!-- 分类页签：来源＝后台「商品分类」，图示由后台上传。照线上：点页签＝同一页直接换下面的商品，不跳页。
-             All＝Flash Sales 区块＋筛选＋各分类区块（每类一排＋More）；选某分类＝筛选＋该分类全部商品。Playground 不在页签里，是上面的固定区块 -->
-        <nav class="cats js-cats" aria-label="商品分类"></nav>
-
-        <!-- Flash Sales：固定区块，横向滑动（只在 All 显示）；All 钮＝切到 Flash Sales 页签（不受下方筛选影响） -->
+             All＝筛选＋各分类区块（每类一排＋More）；选某分类＝筛选＋该分类全部商品。Flash Sales、Playground 都不在页签里，是上面的固定区块 -->
+        <!-- Flash Sales：照线上限时抢购，钉在页签上方的固定区块，横向滑动看全部；不是分类、没有页签，也不受筛选影响 -->
         <section class="fs" id="fsBlock" aria-label="Flash Sales">
           <div class="fs__head">
             <div class="fs__ico">⚡</div>
             <div><div class="fs__t">Flash Sales<span class="fs__n" id="fsN">1/1</span></div><div class="fs__s">Ends in</div></div>
             <div class="cd"><b class="js-cdD" hidden>155D</b><span class="js-cdDsep" hidden>:</span><b class="js-cdH">11</b>:<b class="js-cdM">44</b>:<b class="js-cdS">31</b></div>
-            <button class="fs__all" onclick="openCat('flash')">All</button>
           </div>
           <div class="hrow" id="fsRow"></div>
         </section>
 
-        <!-- Flash Sales 页签：倒数抬头（跟上面同一个倒数） -->
-        <section class="cat-fs" id="catFs" hidden>
-          <div class="fs__head"><div class="fs__ico">⚡</div><div><div class="fs__t">Flash Sales</div><div class="fs__s">Ends in</div></div>
-            <div class="cd"><b class="js-cdD" hidden>155D</b><span class="js-cdDsep" hidden>:</span><b class="js-cdH">11</b>:<b class="js-cdM">44</b>:<b class="js-cdS">31</b></div></div>
-        </section>
+        <nav class="cats js-cats" aria-label="商品分类"></nav>
 
-        <!-- 筛选：放在要筛的商品正上方；All 时管各分类区块，选分类时管该分类商品 -->
+        <!-- 筛选：照线上放页签正下方；All 时管各分类区块，选分类时管该分类商品 -->
         <div class="filters">
           <button class="flt js-can" onclick="toggleCan()">我能兑换的</button>
           <button class="flt js-sort" onclick="toggleSort()"><i class="coin coin--pt">★</i>星币 <span class="js-arrow">↕</span></button>
@@ -605,6 +686,89 @@ button{font-family:inherit;cursor:pointer;border:none;}
       <!-- ===================================================
            画面 5：Task List（任务中心搬进积分商城；版面照 10/27 新设计，按钮逻辑照既有）
            =================================================== -->
+      <!-- ===================================================
+           画面：记录页。线上是两页（积分历史、兑换记录），这里合成一页用上方页签切换；
+           两边内容照线上：积分历史＝全部/收入/支出 ＋「仅展示近30日数据」；兑换记录＝分类胶囊 ＋ 延迟提示
+           =================================================== -->
+      <section class="screen" id="scr-rec">
+        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Points Mall</span></header>
+        <nav class="rec-tabs" aria-label="记录页签">
+          <button class="rec-tab" data-rec="hist" onclick="openRec('hist')">积分历史</button>
+          <button class="rec-tab" data-rec="ex" onclick="openRec('ex')">兑换记录</button>
+        </nav>
+        <div class="rec-body">
+          <!-- 积分历史 -->
+          <div id="recHist">
+            <div class="rec-note">*仅展示近30日数据</div>
+            <div class="seg" id="histSeg">
+              <button class="seg__b seg__b--on" onclick="setHist('all',this)">全部</button>
+              <button class="seg__b" onclick="setHist('in',this)">收入</button>
+              <button class="seg__b" onclick="setHist('out',this)">支出</button>
+            </div>
+            <div id="histList"></div>
+          </div>
+          <!-- 兑换记录 -->
+          <div id="recEx" hidden>
+            <nav class="cats" style="padding:0 0 8px" id="exCats"></nav>
+            <div class="rec-note rec-note--red">*订单记录数据同步存在延迟，若您未发现最新订单记录，请稍后再试。</div>
+            <div id="exList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           画面：VIP 俱乐部 ＝ 线上既有页（/user/vip-club）的 H5 版。首页「VIP 会员」入口点进来；内容区块照线上，不新增
+           =================================================== -->
+      <section class="screen" id="scr-vip">
+        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">VIP</span><button class="tl-head__rules" style="position:absolute;right:14px" aria-label="规则">📄</button></header>
+        <div class="vip-me">
+          <span class="avatar"></span>
+          <div><div class="vip-me__name">vivian01…</div><span class="vip-badge">VIP4</span></div>
+          <div class="vip-me__need"><b>4,811,641</b><small>升级所需</small></div>
+        </div>
+        <div class="vip-row">
+          <article class="vlv"><span class="vlv__cur">当前VIP等级</span><span class="vlv__medal">🛡️</span><div class="vlv__t">VIP4</div>
+            <div class="vlv__bar">VIP 4 <i style="--p:3.76%"></i> VIP 5 <span class="vlv__pct">3.76%</span></div>
+            <div class="vlv__cond"><b>5,000,000</b><small>升级条件</small></div></article>
+          <article class="vlv vlv--pink"><span class="vlv__medal">💎</span><div class="vlv__t">VIP5</div>
+            <div class="vlv__bar">VIP 5 <i></i> VIP 6</div>
+            <div class="vlv__cond"><b>6,000,000</b><small>升级条件</small></div></article>
+          <article class="vlv vlv--red"><span class="vlv__medal">🏅</span><div class="vlv__t">VIP6</div>
+            <div class="vlv__bar">VIP 6 <i></i> VIP 7</div>
+            <div class="vlv__cond"><b>7,000,000</b><small>升级条件</small></div></article>
+        </div>
+        <div class="vip-next"><div><b>09:17:54</b>下次返水发放</div><div><b>0.00</b>预计金额</div></div>
+        <div class="vip-h">VIP权益</div>
+        <div class="vip-ben">
+          <div class="vben"><span class="vben__ico">🎂</span><div><div class="vben__t">生日礼金</div><div class="vben__li">🎫 中奖加奖券无上限</div></div></div>
+          <div class="vben"><span class="vben__ico">🧧</span><div><div class="vben__t">周礼金</div><div class="vben__s">流水 20</div>
+            <div class="vben__li">🎫 存送券1%-有效期1小时-本金1倍流水</div><div class="vben__li">🎡 JILI 免费旋转 B1/D1/D30</div><div class="vben__li">🃏 超强力特色道具卡 B3/D1/D30</div></div></div>
+        </div>
+        <div class="vip-rb">
+          <div class="vrb"><span class="vrb__tag">每日返水</span>
+            <div class="vrb__row"><span class="ico">💰</span><div><b>0.00</b><span class="vrb__max">最高至 10.00 %</span></div></div>
+            <div class="vrb__row"><span class="ico">💎</span><div><b>0</b><span class="vrb__max">最高至 700,021</span></div></div></div>
+          <div class="vrb"><span class="vrb__tag">每周返水</span>
+            <div class="vrb__row"><span class="ico">🧧</span><div><b>0.00</b><span class="vrb__max">最高至 3.00 %</span></div></div>
+            <div class="vrb__row"><span class="ico">🎁</span><div><b>0</b><span class="vrb__max">最高至 500,000</span></div></div></div>
+        </div>
+        <div class="vip-note">返水奖励每30分钟更新。</div>
+      </section>
+
+      <!-- ===================================================
+           画面：我的背包（前身＝线上「我的票券」：未使用/待结算/已使用/已过期，票卡＝图＋名称＋获得/失效日期＋立即使用）
+           =================================================== -->
+      <section class="screen" id="scr-bag">
+        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">我的背包</span><button class="tl-head__rules" style="position:absolute;right:14px" aria-label="规则">📄</button></header>
+        <nav class="bag-tabs" aria-label="背包页签">
+          <button class="bag-tab bag-tab--on" onclick="setBag('new',this)">未使用(2)</button>
+          <button class="bag-tab" onclick="setBag('wait',this)">待结算(0)</button>
+          <button class="bag-tab" onclick="setBag('used',this)">已使用(1)</button>
+          <button class="bag-tab" onclick="setBag('exp',this)">已过期(3)</button>
+        </nav>
+        <div class="bag-body" id="bagList"></div>
+      </section>
+
       <section class="screen" id="scr-tasks">
         <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Points Mall</span></header>
         <div class="tl-head"><span class="tl-head__ico">📋</span>Task List<button class="tl-head__rules" aria-label="任务规则">📄</button></div>
@@ -798,7 +962,7 @@ function go(name, btn){
 
 /* ---------- 商品资料（原型假资料；正式版来自后台商品分类＋商品） ---------- */
 var CATS = [
-  {key:'flash', name:'Flash Sales', ico:'🏷️'}, {key:'free', name:'Free Spin', ico:'🎡'},
+  {key:'free', name:'Free Spin', ico:'🎡'},
   {key:'cash', name:'Cash', ico:'💵'}, {key:'coupon', name:'Coupon', ico:'🎫'}, {key:'item', name:'Item', ico:'📦'}
 ];
 /* 分类页签（首页、分类页各一排，同一份资料）：目前所在的亮起；分类页会把亮起的那颗滑到看得见的位置 */
@@ -995,11 +1159,10 @@ function renderHome(){
   var fl = PRODUCTS.filter(function(p){ return p.cat==='flash'; });   /* 首页 Flash Sales 在筛选列上方，不套筛选 */
   document.getElementById('fsRow').innerHTML = fl.map(cardFlash).join('');
   fsCount();
-  document.getElementById('fsBlock').hidden = !!curCat || fl.length===0;   /* 只在 All 显示 */
+  document.getElementById('fsBlock').hidden = fl.length===0;
   document.getElementById('homeSecs').hidden = !!curCat;
   var html = '';
   CATS.forEach(function(c){
-    if(c.key==='flash') return;   /* Flash Sales 有自己的区块；Playground 不是分类，是首页固定区块 */
     var arr = listOf(c.key); if(!arr.length) return;
     html += '<section class="csec"><h3 class="csec__t">'+c.name
          + (arr.length>HOME_SHOW ? '<button class="csec__more" onclick="openCat(\''+c.key+'\')">More ›</button>' : '')
@@ -1007,23 +1170,22 @@ function renderHome(){
   });
   document.getElementById('homeSecs').innerHTML = html || '<div class="grid__empty">没有可兑换的商品</div>';
 }
-/* 选了某分类：同一页换成该分类全部商品（Flash Sales 分类另带倒数抬头、用 Flash 卡） */
+/* 选了某分类：同一页换成该分类全部商品 */
 function renderCat(){
-  var grid = document.getElementById('catGrid'), fsHead = document.getElementById('catFs');
-  if(!curCat){ grid.hidden = true; fsHead.hidden = true; return; }
-  var arr = listOf(curCat), isFs = curCat==='flash';
-  fsHead.hidden = !isFs; grid.hidden = false;
-  grid.innerHTML = arr.length ? arr.map(isFs ? cardFlash : cardSmall).join('') : '<div class="grid__empty">没有可兑换的商品</div>';
+  var grid = document.getElementById('catGrid');
+  if(!curCat){ grid.hidden = true; return; }
+  var arr = listOf(curCat); grid.hidden = false;
+  grid.innerHTML = arr.length ? arr.map(cardSmall).join('') : '<div class="grid__empty">没有可兑换的商品</div>';
 }
 function renderAll(){ syncFilterBtns(); renderCats(); renderHome(); renderCat(); }
-/* 切页签（页签、More ›、Flash Sales 的 All 钮都走这里）：换完把页签列顶到画面最上面，商品从页签下方开始 */
+/* 切页签（页签、More › 都走这里）：换完把页签列顶到画面最上面，商品从页签下方开始 */
 function openCat(key){
   curCat = key; renderAll();
   var sc = document.getElementById('scroll'), nav = document.querySelector('#scr-mall .js-cats'), top = document.querySelector('#scr-mall .topbar');
   sc.scrollTop = nav.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop - top.offsetHeight - 6;   /* 顶栏是钉住的，要扣掉它的高度 */
 }
 
-/* 分类页签：照线上同一页切换。All＝全部（Flash Sales＋各分类区块）；其他＝该分类全部商品。已经在这个分类就不动 */
+/* 分类页签：照线上同一页切换。All＝各分类区块；其他＝该分类全部商品。已经在这个分类就不动 */
 document.addEventListener('click', function(ev){
   var b = ev.target.closest('.cat'); if(!b) return;
   var k = b.dataset.cat;
@@ -1033,6 +1195,69 @@ document.addEventListener('click', function(ev){
 });
 renderAll(); renderGames();
 curSet.ichiban = setsOf('ichiban')[0]; curSet.blind = setsOf('blind')[0]; renderSet('ichiban'); renderSet('blind');
+
+/* ---------- 记录页：积分历史 ＋ 兑换记录（示范资料；正式由后台记录产生） ---------- */
+var HIST = [
+  {t:'Complete 资金-首次充值 task', d:'2026-11-05 15:52:04', n:2000},
+  {t:'Redeem Cash ₱100', d:'2026-11-04 20:11:30', n:-1000},
+  {t:'Ichiban Luck Draw · Vol.5 ×1', d:'2026-11-04 18:02:17', n:-500},
+  {t:'Complete 其他-2025新版访问 task', d:'2026-11-03 15:53:10', n:100},
+  {t:'Slot Kingdom · Lucky Star ×1', d:'2026-11-01 09:40:52', n:-2000}
+];
+var EXREC = [
+  {cat:'cash',   name:'Cash ₱100',          d:'2026-11-04 20:11:30', n:1000, ico:'💵', img:'img-cash'},
+  {cat:'item',   name:'OKBet Cap',          d:'2026-10-30 12:08:11', n:1500, ico:'📦', img:'img-item'},
+  {cat:'coupon', name:'Deposit Coupon ₱20', d:'2026-10-28 22:31:05', n:60,   ico:'🎫', img:'img-coupon'},
+  {cat:'free',   name:'Sweet Bonanza 10 Free Spins', d:'2026-10-26 10:15:40', n:300, ico:'🎡', img:'img-free'}
+];
+var histKind = 'all', exCat = 'all';
+function openRec(tab){
+  document.querySelectorAll('.rec-tab').forEach(function(b){ b.classList.toggle('rec-tab--on', b.dataset.rec===tab); });
+  document.getElementById('recHist').hidden = tab!=='hist';
+  document.getElementById('recEx').hidden = tab!=='ex';
+  renderHist(); renderEx();
+  if(!document.getElementById('scr-rec').classList.contains('is-active')) go('rec');
+}
+function setHist(k, b){ histKind = k; b.parentNode.querySelectorAll('.seg__b').forEach(function(x){ x.classList.toggle('seg__b--on', x===b); }); renderHist(); }
+function renderHist(){
+  var arr = HIST.filter(function(h){ return histKind==='all' || (histKind==='in' ? h.n>0 : h.n<0); });
+  document.getElementById('histList').innerHTML = arr.length
+    ? arr.map(function(h){ return '<div class="rec-item"><div><div class="rec-item__t">'+h.t+'</div><div class="rec-item__s">'+h.d+'</div></div>'
+        + '<div class="rec-item__n '+(h.n>0?'rec-item__n--in':'rec-item__n--out')+'">'+(h.n>0?'+':'-')+fmt(Math.abs(h.n))+'</div></div>'; }).join('') + '<div class="rec-end">没有更多</div>'
+    : '<div class="rec-empty"><i>📄</i>暂无任何内容</div>';
+}
+function renderEx(){
+  /* 分类胶囊：全部 ＋ 后台商品分类（跟首页页签同一份） */
+  document.getElementById('exCats').innerHTML = '<button class="cat'+(exCat==='all'?' cat--on':'')+'" onclick="setEx(\'all\')">全部</button>'
+    + CATS.map(function(c){ return '<button class="cat'+(exCat===c.key?' cat--on':'')+'" onclick="setEx(\''+c.key+'\')">'+c.name+'</button>'; }).join('');
+  var arr = EXREC.filter(function(r){ return exCat==='all' || r.cat===exCat; });
+  document.getElementById('exList').innerHTML = arr.length
+    ? arr.map(function(r){ return '<div class="rec-item"><div class="rec-item__ico '+r.img+'">'+r.ico+'</div><div><div class="rec-item__t">'+r.name+'</div><div class="rec-item__s">'+r.d+'</div></div>'
+        + '<div class="rec-item__n rec-item__n--out"><i class="coin coin--pt">★</i>-'+fmt(r.n)+'</div></div>'; }).join('') + '<div class="rec-end">没有更多</div>'
+    : '<div class="rec-empty"><i>📄</i>暂无任何内容</div>';
+}
+function setEx(k){ exCat = k; renderEx(); }
+
+/* ---------- 我的背包：票券／道具（照线上「我的票券」四个状态；示范资料） ---------- */
+var BAG = [
+  {st:'new',  name:'Sweet Bonanza Free Spins', x:'X10', img:'img-free',   txt:'FREE<br>SPIN', got:'11/04/2026 17:46:50', exp:'11/11/2026 17:46:50'},
+  {st:'new',  name:'Deposit Coupon ₱20',       x:'',    img:'img-coupon', txt:'₱20<br>COUPON', got:'10/28/2026 22:31:05', exp:'11/28/2026 22:31:05'},
+  {st:'used', name:'Deposit Coupon ₱50',       x:'',    img:'img-coupon', txt:'₱50<br>COUPON', got:'10/20/2026 10:02:11', exp:'11/20/2026 10:02:11'},
+  {st:'exp',  name:'Gates of Olympus Free Spins', x:'X5', img:'img-zeus', txt:'FREE<br>SPIN', got:'09/01/2026 08:00:00', exp:'09/08/2026 08:00:00'},
+  {st:'exp',  name:'Deposit Coupon ₱10',       x:'',    img:'img-coupon', txt:'₱10<br>COUPON', got:'08/15/2026 12:30:00', exp:'09/15/2026 12:30:00'},
+  {st:'exp',  name:'Wild West Gold Free Spins', x:'X5', img:'img-free',   txt:'FREE<br>SPIN', got:'08/01/2026 09:10:00', exp:'08/08/2026 09:10:00'}
+];
+var bagSt = 'new';
+function setBag(st, b){ bagSt = st; document.querySelectorAll('.bag-tab').forEach(function(x){ x.classList.toggle('bag-tab--on', x===b); }); renderBag(); }
+function renderBag(){
+  var arr = BAG.filter(function(t){ return t.st===bagSt; }), lbl = {new:'立即使用', wait:'待结算', used:'已使用', exp:'已过期'}[bagSt];
+  document.getElementById('bagList').innerHTML = arr.length
+    ? arr.map(function(t){ return '<article class="tkt'+(bagSt==='new'?'':' tkt--off')+'"><div class="tkt__img '+t.img+'">'+t.txt+(t.x?'<span class="tkt__x">'+t.x+'</span>':'')+'</div>'
+        + '<div><div class="tkt__t">'+t.name+'</div><div class="tkt__d"><span>获得日期：</span>'+t.got+'<br><span>失效日期：</span>'+t.exp+'</div></div>'
+        + '<button class="tkt__btn">'+lbl+'</button></article>'; }).join('')
+    : '<div class="rec-empty"><i>🎒</i>暂无任何内容</div>';
+}
+renderHist(); renderEx(); renderBag();
 
 /* ---------- 兑换：先确认 → 积分够就成功，不够就提示 ---------- */
 var POPS = {
