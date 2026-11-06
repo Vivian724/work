@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新用户首充阶梯奖励　需求单</title>
+<style>
+:root{
+  --bg:#ffffff; --text:#303133; --sub:#606266; --muted:#909399;
+  --line:#EBEEF5; --head:#F5F7FA; --input-bg:#ffffff; --input-bd:#DCDFE6;
+  --primary:#409EFF; --new-bg:#FFF6F6; --new-text:#F56C6C; --phone-bg:#F5F6FA;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme: dark;
+    --bg:#1d1e20; --text:#E5EAF3; --sub:#CFD3DC; --muted:#8D9095;
+    --line:#2f3034; --head:#26272b; --input-bg:#141414; --input-bd:#4C4D4F;
+    --primary:#409EFF; --new-bg:#2b1d1d; --new-text:#F89898; --phone-bg:#26272b;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--text);
+  font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;font-size:18px}
+.wrap{max-width:1320px;margin:0 auto;overflow-x:auto}
+.inner{min-width:1260px}
+h2{display:flex;align-items:center;gap:8px;font-size:24px;margin:0 0 14px}
+.ex{width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:14px;
+  display:inline-flex;align-items:center;justify-content:center}
+.grid{display:grid;grid-template-columns:110px 290px 150px 130px 150px 1fr;gap:12px;align-items:center;white-space:nowrap}
+.hdr{font-size:16px;font-weight:600;color:var(--sub);background:var(--head);border-radius:4px;padding:10px 10px;letter-spacing:.5px}
+.sec{padding:12px 0 8px;border-bottom:1px solid var(--line)}
+.title{display:flex;justify-content:space-between;align-items:center;margin:0 10px 6px;min-height:32px}
+.title label{display:flex;align-items:center;gap:8px;font-weight:500;font-size:18px;color:var(--text);cursor:pointer}
+.title input:checked + span{color:var(--primary)}
+.extra{display:flex;align-items:center;gap:8px;color:var(--sub)}
+.row{padding:6px 10px;border-radius:4px}
+.row.new{background:var(--new-bg)}
+.tier{color:var(--sub)}
+.tag{font-size:14px;color:var(--new-text);margin-left:6px}
+.lbl{display:inline-block;width:130px;color:var(--sub)}
+.field{display:inline-flex;align-items:center;height:38px;border:1px solid var(--input-bd);border-radius:4px;
+  background:var(--input-bg);padding:0 10px}
+.field input{border:none;outline:none;background:transparent;color:var(--text);font:inherit;width:100%}
+.field .unit{color:var(--muted);font-size:14px;margin-left:6px;white-space:nowrap}
+.field:focus-within{border-color:var(--primary)}
+select{height:38px;width:130px;border:1px solid var(--input-bd);border-radius:4px;background:var(--input-bg);
+  color:var(--text);font:inherit;padding:0 8px}
+.flow{display:flex;align-items:center;gap:6px}
+.flow label{display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+.flow input:checked + span{color:var(--primary)}
+.ghost{visibility:hidden}
+input[type=checkbox]{appearance:none;-webkit-appearance:none;width:18px;height:18px;margin:0;border:1px solid var(--input-bd);border-radius:3px;background:var(--input-bg);position:relative;cursor:pointer;flex:none}
+input[type=checkbox]:checked{background:var(--primary);border-color:var(--primary)}
+input[type=checkbox]:checked::after{content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+input[type=checkbox]:disabled{opacity:.6;cursor:not-allowed}
+.sec.off{opacity:.45}
+.sec.off *{cursor:not-allowed}
+.hint{font-size:16px;color:var(--muted);margin:10px 2px 0}
+.err{display:none;font-size:14px;color:var(--new-text);margin-left:6px}
+.bad .err{display:inline}
+.bad .min2wrap{border-color:var(--new-text)}
+
+.page-h{font-size:28px;font-weight:700;margin:0 0 4px}
+.page-sub{color:var(--muted);font-size:16px;margin-bottom:18px}
+.part{margin-bottom:34px}
+.part-t{display:inline-block;font-size:16px;font-weight:700;color:#fff;background:var(--primary);border-radius:4px;padding:3px 10px;margin-bottom:12px}
+.front{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+.phone{width:420px;background:var(--phone-bg);border:1px solid var(--line);border-radius:14px;padding:16px}
+.ph-t{text-align:center;font-weight:700;font-size:18px;margin-bottom:12px}
+.ph-lab{font-size:15px;color:var(--sub);margin-bottom:6px}
+.ph-amt{display:flex;align-items:center;background:var(--input-bg);border:1px solid var(--input-bd);border-radius:8px;padding:0 12px;height:42px}
+.ph-amt span{color:var(--muted);margin-right:6px}
+.ph-amt input{border:none;outline:none;background:transparent;color:var(--text);font:inherit;font-size:17px;width:100%}
+.ph-h{font-weight:700;font-size:19px;margin:16px 0 10px}
+.cp{position:relative;display:flex;border-radius:14px;overflow:hidden;background:linear-gradient(90deg,#EC6A7E,#F0A060);color:#fff;min-height:86px;margin-bottom:10px;cursor:pointer;font-family:Roboto,Arial,sans-serif;outline:3px solid transparent;outline-offset:2px}
+.cp.sel{outline-color:var(--primary)}
+.cp .l{width:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1.5px dashed rgba(255,255,255,.7);text-align:center}
+.cp .big{font-size:24px;font-weight:800}
+.cp .sm{font-size:13px}
+.cp .r{flex:1;padding:12px;display:flex;flex-direction:column;justify-content:center}
+.cp .cap{font-weight:800;font-size:18px;margin-bottom:4px}
+.cp .tn{font-size:13px;line-height:1.5}
+.cp .tou{position:absolute;top:10px;right:10px;background:#E8484F;font-size:12px;border-radius:8px;padding:1px 8px}
+.ph-btn{background:#7BA4F7;color:#fff;text-align:center;border-radius:8px;padding:12px;font-size:17px;margin-top:4px}
+.empty{color:var(--muted);font-size:16px;padding:14px 0}
+.rules{flex:1;min-width:280px;font-size:18px;color:var(--sub);line-height:1.9}
+.rules b{color:var(--text)}
+/* 活动详情页 */
+.ev-top{display:flex;align-items:center;justify-content:center;position:relative;font-weight:700;font-size:18px;margin-bottom:12px}
+.ev-top i{position:absolute;left:4px;width:0;height:0;border:8px solid transparent;border-right-color:#2F6BFF;border-left:0}
+.ev-banner{height:110px;border-radius:10px;background:linear-gradient(135deg,#2F6BFF,#5AA0FF);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Roboto,Arial,sans-serif;font-weight:900;font-size:20px;letter-spacing:.5px;margin-bottom:12px}
+.ev-title{font-size:19px;color:var(--text);margin-bottom:2px;font-family:Roboto,Arial,sans-serif}
+.ev-date{font-size:14px;color:#2F6BFF;margin-bottom:12px;font-family:Roboto,Arial,sans-serif}
+.ev-card{background:var(--input-bg);border-radius:12px;padding:14px;outline:3px solid #E8484F;outline-offset:2px;font-family:Roboto,Arial,sans-serif}
+.ev-stats{display:flex;margin-bottom:14px}
+.ev-stat{flex:1;display:flex;align-items:center;justify-content:center;gap:10px}
+.ev-stat+.ev-stat{border-left:1px solid var(--line)}
+.ev-ic{width:40px;height:40px;border-radius:50%;background:#F5A623;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px}
+.ev-ic.w{border-radius:8px;background:#4C8DFF;font-size:14px}
+.ev-v{font-size:20px;font-weight:700;color:var(--text);line-height:1.1}
+.ev-l{font-size:13px;color:var(--muted)}
+.ev-btn{background:#2F6BFF;color:#fff;text-align:center;border-radius:8px;padding:12px;font-size:17px}
+
+.spec{max-width:1320px;margin:0 auto 22px;line-height:1.8}
+.spec h3{font-size:24px;margin:20px 0 6px;padding-left:8px;border-left:3px solid var(--primary)}
+.spec h4{font-size:20px;margin:12px 0 2px}
+.spec p{margin:0;color:var(--sub)}
+.spec ul{margin:0;padding-left:20px;color:var(--sub)}
+.spec .muted{color:var(--muted);font-size:16px}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="inner">
+<div class="page-h">新用户首充阶梯奖励　需求单</div>
+<div class="page-sub">后台配置阶梯，前端依配置判断展示。</div>
+</div></div>
+
+<div class="wrap"><div class="inner"><span class="part-t">后台 · 专项活动 &gt; 新用户首充</span></div></div>
+<div class="wrap"><div class="inner">
+  <h2><span class="ex">!</span>奖励配置</h2>
+
+  <div class="grid hdr">
+    <span>阶梯</span><span>领取条件</span><span>奖励选择</span><span>奖励比例</span><span>上限金额</span><span>奖金所需流水</span>
+  </div>
+
+  <!-- 新用户限时首充 -->
+  <div class="sec" data-group="limited" data-tier>
+    <div class="title">
+      <label><input type="checkbox" class="main"><span>新用户限时首充奖励配置</span></label>
+    </div>
+    <div class="grid row timerow">
+      <span class="tier"></span>
+      <span><span class="lbl">奖励限时时效</span><span class="field" style="width:140px"><input value="120"><span class="unit">分钟</span></span></span>
+    </div>
+    <div class="grid row">
+      <span class="tier">阶梯 1</span>
+      <span><span class="lbl">最低充值金额</span><span class="field" style="width:140px"><input class="min1" value="0"></span></span>
+      <select><option>彩金</option></select>
+      <span class="field" style="width:100px"><input value="50"><span class="unit">%</span></span>
+      <span class="field" style="width:130px"><input value="1000"></span>
+      <span class="flow"><label><input type="checkbox"><span>本金</span></label><label><input type="checkbox"><span>奖金</span></label>
+        <span class="field" style="width:90px"><input value=""><span class="unit">倍</span></span></span>
+    </div>
+    <div class="grid row new">
+      <span class="tier">阶梯 2<span class="tag">新增</span></span>
+      <span><span class="lbl">最低充值金额</span><span class="field min2wrap" style="width:140px"><input class="min2" value=""></span><span class="err">须大于阶梯 1</span></span>
+      <select><option>彩金</option></select>
+      <span class="field" style="width:100px"><input value=""><span class="unit">%</span></span>
+      <span class="field" style="width:130px"><input value=""></span>
+      <span class="flow"><label><input type="checkbox"><span>本金</span></label><label><input type="checkbox"><span>奖金</span></label>
+        <span class="field" style="width:90px"><input value=""><span class="unit">倍</span></span></span>
+    </div>
+  </div>
+
+  <!-- 新用户限时次日 -->
+  <div class="sec" data-group="limited">
+    <div class="title"><label><input type="checkbox" class="main"><span>新用户限时次日奖励配置</span></label></div>
+    <div class="grid row">
+      <span class="tier">—</span>
+      <span><span class="lbl">有效投注</span><span class="field" style="width:140px"><input value="100"></span></span>
+      <select><option>彩金</option></select>
+      <span class="field" style="width:100px"><input value="36"><span class="unit">%</span></span>
+      <span class="field" style="width:130px"><input value="550"></span>
+      <span class="flow"><label class="ghost"><input type="checkbox"><span>本金</span></label><label class="ghost"><input type="checkbox"><span>奖金</span></label>
+        <span class="field" style="width:90px"><input value="45"><span class="unit">倍</span></span></span>
+    </div>
+  </div>
+
+  <!-- 新用户普通首充 -->
+  <div class="sec" data-group="normal" data-tier>
+    <div class="title"><label><input type="checkbox" class="main" checked><span>新用户普通首充奖励配置</span></label></div>
+    <div class="grid row">
+      <span class="tier">阶梯 1</span>
+      <span><span class="lbl">最低充值金额</span><span class="field" style="width:140px"><input class="min1" value="100"></span></span>
+      <select><option>彩金</option></select>
+      <span class="field" style="width:100px"><input value="100"><span class="unit">%</span></span>
+      <span class="field" style="width:130px"><input value="1000"></span>
+      <span class="flow"><label><input type="checkbox" checked><span>本金</span></label><label><input type="checkbox" checked><span>奖金</span></label>
+        <span class="field" style="width:90px"><input value="5"><span class="unit">倍</span></span></span>
+    </div>
+    <div class="grid row new">
+      <span class="tier">阶梯 2<span class="tag">新增</span></span>
+      <span><span class="lbl">最低充值金额</span><span class="field min2wrap" style="width:140px"><input class="min2" value="5000"></span><span class="err">须大于阶梯 1</span></span>
+      <select><option>彩金</option></select>
+      <span class="field" style="width:110px"><input value="120"><span class="unit">%</span></span>
+      <span class="field" style="width:130px"><input value="60000"></span>
+      <span class="flow"><label><input type="checkbox" checked><span>本金</span></label><label><input type="checkbox" checked><span>奖金</span></label>
+        <span class="field" style="width:90px"><input value="5"><span class="unit">倍</span></span></span>
+    </div>
+  </div>
+
+  <!-- 新用户普通次日 -->
+  <div class="sec" data-group="normal">
+    <div class="title"><label><input type="checkbox" class="main"><span>新用户普通次日奖励配置</span></label></div>
+    <div class="grid row">
+      <span class="tier">—</span>
+      <span><span class="lbl">有效投注</span><span class="field" style="width:140px"><input value="500"></span></span>
+      <select><option>彩金</option></select>
+      <span class="field" style="width:100px"><input value="10"><span class="unit">%</span></span>
+      <span class="field" style="width:130px"><input value="5000"></span>
+      <span class="flow"><label class="ghost"><input type="checkbox"><span>本金</span></label><label class="ghost"><input type="checkbox"><span>奖金</span></label>
+        <span class="field" style="width:90px"><input value="1"><span class="unit">倍</span></span></span>
+    </div>
+  </div>
+  <div class="hint">防呆：限时首充与普通首充择一、限时次日与普通次日择一，勾选其中一项时另一项反灰不可编辑；阶梯 2 最低充值金额须大于阶梯 1。</div>
+</div></div>
+
+
+<div class="wrap" style="margin-top:28px"><div class="inner">
+<div class="part"><span class="part-t">前台 · Promotion 详情页</span>
+<div class="front">
+  <div class="phone">
+    <div class="ev-top"><i></i>Event Details</div>
+    <div class="ev-banner">FIRST DEPOSIT BONUS</div>
+    <div class="ev-title">100% Welcome Bonus!</div>
+    <div class="ev-date">2026/01/01 - 2027/02/28</div>
+    <div class="ev-card">
+      <div class="ev-stats">
+        <div class="ev-stat"><span class="ev-ic w">▭</span><div><div class="ev-v" id="ev-ratio">100.00%</div><div class="ev-l">Additional</div></div></div>
+        <div class="ev-stat"><span class="ev-ic">₱</span><div><div class="ev-v" id="ev-cap">1,000.00</div><div class="ev-l">Capped At</div></div></div>
+      </div>
+      <div class="ev-btn">Deposit</div>
+    </div>
+  </div>
+  <div class="rules">
+    <b>前台规则</b><br>
+    · 红框区块显示最高阶梯的数值：有配置阶梯 2 取阶梯 2，否则取阶梯 1。<br>
+    · Additional＝该阶梯奖励比例，Capped At＝该阶梯上限金额。<br>
+    · 横幅、标题、日期、下方 Event Details 表格为运营既有配置，不变。<br>
+    · 其他前台配置、逻辑都不变。
+  </div>
+</div></div>
+</div></div>
+
+<div class="wrap" style="margin-top:28px"><div class="inner">
+<div class="part"><span class="part-t">前台 · 充值页</span>
+<div class="front">
+  <div class="phone">
+    <div class="ph-t">Deposit</div>
+    <div class="ph-lab">Enter Amount</div>
+    <div class="ph-amt"><span>₱</span><input id="amt" placeholder="1-1,000,000" inputmode="numeric"></div>
+    <div class="ph-h">Available Coupons</div>
+    <div id="coupons"></div>
+    <div class="ph-btn">Proceed</div>
+  </div>
+  <div class="rules">
+    <b>前台规则</b><br>
+    · 显示当前勾选的首充配置（限时或普通）的券。<br>
+    · 配置阶梯 2 时显示两张券，依阶梯顺序排列，只能勾选一张。<br>
+    · 文案沿用现有，只换数值：比例、上限金额、流水倍数、Min Deposit。<br>
+    · 未配置阶梯 2：维持一张券。<br>
+    · 其余交互依照既有逻辑。
+  </div>
+</div></div>
+</div></div>
+
+<script>
+const secs=[...document.querySelectorAll('.sec')];
+function sync(){
+  const pair=s=>s.hasAttribute('data-tier')?'first':'next';
+  secs.forEach(s=>{
+    const off=secs.some(o=>o!==s&&pair(o)===pair(s)&&o.querySelector('.main').checked);
+    s.classList.toggle('off',off);
+    s.querySelectorAll('input,select').forEach(el=>el.disabled=off);
+  });
+}
+function check(s){
+  const a=s.querySelector('.min1'),b=s.querySelector('.min2');
+  if(!a||!b)return;
+  const row=b.closest('.row');
+  const bad=b.value!==''&&Number(b.value)<=Number(a.value||0);
+  row.classList.toggle('bad',bad);
+}
+secs.forEach(s=>{
+  s.querySelector('.main').addEventListener('change',sync);
+  s.querySelectorAll('.min1,.min2').forEach(i=>i.addEventListener('input',()=>check(s)));
+  check(s);
+});
+sync();
+
+const fmt=n=>Number(n).toLocaleString('en-US');
+let selIdx=-1;
+function tiersOf(sec){
+  return [...sec.querySelectorAll('.row:not(.timerow)')].map(r=>{
+    const f=r.querySelectorAll('.field input');
+    return {min:f[0].value,ratio:f[1].value,cap:f[2].value,flow:f[3].value};
+  }).filter(t=>t.min!=='');
+}
+function render(){
+  const box=document.getElementById('coupons');
+  const sec=secs.find(s=>s.hasAttribute('data-tier')&&s.querySelector('.main').checked);
+  if(!sec){box.innerHTML='<div class="empty">其他可用优惠券依既有逻辑显示</div>';return;}
+  const ts=tiersOf(sec);
+  const top=ts[ts.length-1];
+  document.getElementById('ev-ratio').textContent=Number(top.ratio||0).toFixed(2)+'%';
+  document.getElementById('ev-cap').textContent=Number(top.cap||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(selIdx>=ts.length)selIdx=-1;
+  box.innerHTML=ts.map((t,i)=>`<div class="cp${i===selIdx?' sel':''}" data-i="${i}">
+    <div class="l"><div class="big">${t.ratio||0}%</div><div class="sm">Top-up Coupon</div></div>
+    <div class="r"><div class="cap">Capped At ₱ ${fmt(t.cap||0)}</div>
+    <div class="tn">${t.flow||0}x turnover of deposited and bonus<br>Min Deposit ${Number(t.min).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}</div></div>
+    <span class="tou">TOU</span></div>`).join('');
+  box.querySelectorAll('.cp').forEach(c=>c.onclick=()=>{const i=+c.dataset.i;selIdx=selIdx===i?-1:i;render();});
+}
+document.querySelectorAll('.sec input,.sec select').forEach(el=>{el.addEventListener('input',render);el.addEventListener('change',render);});
+render();
+</script>
+</body>
+</html>
