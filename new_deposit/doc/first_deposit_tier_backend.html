@@ -53,8 +53,13 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:18px;height:1
 input[type=checkbox]:checked{background:var(--primary);border-color:var(--primary)}
 input[type=checkbox]:checked::after{content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
 input[type=checkbox]:disabled{opacity:.6;cursor:not-allowed}
-.sec.off{opacity:.45}
-.sec.off *{cursor:not-allowed}
+
+.addrow{padding:6px 10px}
+.add-btn{display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 15px;border:1px solid #b3d8ff;border-radius:3px;
+  background:#ecf5ff;color:var(--primary);font-size:14px;cursor:pointer;user-select:none}
+.add-btn:hover{background:var(--primary);border-color:var(--primary);color:#fff}
+.del-btn{color:var(--new-text);font-size:14px;cursor:pointer;margin-left:8px;white-space:nowrap}
+.del-btn:hover{text-decoration:underline}
 .hint{font-size:16px;color:var(--muted);margin:10px 2px 0}
 .err{display:none;font-size:14px;color:var(--new-text);margin-left:6px}
 .bad .err{display:inline}
@@ -87,15 +92,7 @@ input[type=checkbox]:disabled{opacity:.6;cursor:not-allowed}
       <span class="flow"><label><input type="checkbox"><span>本金</span></label><label><input type="checkbox"><span>奖金</span></label>
         <span class="field" style="width:90px"><input value=""><span class="unit">倍</span></span></span>
     </div>
-    <div class="grid row new">
-      <span class="tier">阶梯 2<span class="tag">新增</span></span>
-      <span><span class="lbl">最低充值金额</span><span class="field min2wrap" style="width:140px"><input class="min2" value=""></span><span class="err">须大于阶梯 1</span></span>
-      <select><option>彩金</option></select>
-      <span class="field" style="width:100px"><input value=""><span class="unit">%</span></span>
-      <span class="field" style="width:130px"><input value=""></span>
-      <span class="flow"><label><input type="checkbox"><span>本金</span></label><label><input type="checkbox"><span>奖金</span></label>
-        <span class="field" style="width:90px"><input value=""><span class="unit">倍</span></span></span>
-    </div>
+    <div class="addrow"><span class="add-btn">＋ 新增阶梯</span><span class="tag">新增</span></div>
   </div>
 
   <!-- 新用户限时次日 -->
@@ -124,15 +121,16 @@ input[type=checkbox]:disabled{opacity:.6;cursor:not-allowed}
       <span class="flow"><label><input type="checkbox" checked><span>本金</span></label><label><input type="checkbox" checked><span>奖金</span></label>
         <span class="field" style="width:90px"><input value="5"><span class="unit">倍</span></span></span>
     </div>
-    <div class="grid row new">
+    <div class="grid row new tier2">
       <span class="tier">阶梯 2<span class="tag">新增</span></span>
       <span><span class="lbl">最低充值金额</span><span class="field min2wrap" style="width:140px"><input class="min2" value="5000"></span><span class="err">须大于阶梯 1</span></span>
       <select><option>彩金</option></select>
       <span class="field" style="width:110px"><input value="120"><span class="unit">%</span></span>
       <span class="field" style="width:130px"><input value="60000"></span>
       <span class="flow"><label><input type="checkbox" checked><span>本金</span></label><label><input type="checkbox" checked><span>奖金</span></label>
-        <span class="field" style="width:90px"><input value="5"><span class="unit">倍</span></span></span>
+        <span class="field" style="width:90px"><input value="5"><span class="unit">倍</span></span><span class="del-btn">删除</span></span>
     </div>
+    <div class="addrow" hidden><span class="add-btn">＋ 新增阶梯</span><span class="tag">新增</span></div>
   </div>
 
   <!-- 新用户普通次日 -->
@@ -148,18 +146,18 @@ input[type=checkbox]:disabled{opacity:.6;cursor:not-allowed}
         <span class="field" style="width:90px"><input value="1"><span class="unit">倍</span></span></span>
     </div>
   </div>
-  <div class="hint">防呆：限时首充与普通首充择一、限时次日与普通次日择一，勾选其中一项时另一项反灰不可编辑；阶梯 2 最低充值金额须大于阶梯 1。</div>
+  <div class="hint">阶梯：预设只有阶梯 1，按「＋ 新增阶梯」才出现阶梯 2，最多 2 个阶梯；阶梯 2 最低充值金额须大于阶梯 1。<br>
+  发放沿用既有：每个用户只能领一次首充奖励；限时与普通都配置时优先限时，领过限时就不能再领普通，后台不需互斥。</div>
 </div></div>
 <script>
 const secs=[...document.querySelectorAll('.sec')];
-function sync(){
-  const pair=s=>s.hasAttribute('data-tier')?'first':'next';
-  secs.forEach(s=>{
-    const off=secs.some(o=>o!==s&&pair(o)===pair(s)&&o.querySelector('.main').checked);
-    s.classList.toggle('off',off);
-    s.querySelectorAll('input,select').forEach(el=>el.disabled=off);
-  });
-}
+const TIER2=`<span class="tier">阶梯 2<span class="tag">新增</span></span>
+      <span><span class="lbl">最低充值金额</span><span class="field min2wrap" style="width:140px"><input class="min2" value=""></span><span class="err">须大于阶梯 1</span></span>
+      <select><option>彩金</option></select>
+      <span class="field" style="width:100px"><input value=""><span class="unit">%</span></span>
+      <span class="field" style="width:130px"><input value=""></span>
+      <span class="flow"><label><input type="checkbox"><span>本金</span></label><label><input type="checkbox"><span>奖金</span></label>
+        <span class="field" style="width:90px"><input value=""><span class="unit">倍</span></span><span class="del-btn">删除</span></span>`;
 function check(s){
   const a=s.querySelector('.min1'),b=s.querySelector('.min2');
   if(!a||!b)return;
@@ -167,12 +165,23 @@ function check(s){
   const bad=b.value!==''&&Number(b.value)<=Number(a.value||0);
   row.classList.toggle('bad',bad);
 }
+function bindTier2(s){
+  const row=s.querySelector('.tier2');if(!row)return;
+  row.querySelector('.min2').addEventListener('input',()=>check(s));
+  row.querySelector('.del-btn').onclick=()=>{row.remove();s.querySelector('.addrow').hidden=false;};
+}
 secs.forEach(s=>{
-  s.querySelector('.main').addEventListener('change',sync);
-  s.querySelectorAll('.min1,.min2').forEach(i=>i.addEventListener('input',()=>check(s)));
+  const add=s.querySelector('.addrow');
+  if(add){
+    add.querySelector('.add-btn').onclick=()=>{
+      const row=document.createElement('div');row.className='grid row new tier2';row.innerHTML=TIER2;
+      add.before(row);add.hidden=true;bindTier2(s);check(s);
+    };
+  }
+  s.querySelectorAll('.min1').forEach(i=>i.addEventListener('input',()=>check(s)));
+  bindTier2(s);
   check(s);
 });
-sync();
 </script>
 </body>
 </html>
