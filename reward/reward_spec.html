@@ -25,8 +25,8 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .is-new{position:relative;border:1.5px solid var(--c-danger);border-radius:5px;padding:12px 16px 0;margin:10px 0 14px;}
 .is-new::before{content:"新增";position:absolute;top:-9px;left:8px;background:var(--c-danger);color:#fff;font-size:11px;line-height:15px;padding:0 5px;border-radius:2px;}
 .is-new>.el-form-item:last-child,.is-mod>.el-form-item:last-child{margin-bottom:12px;}
-.sw-row{display:flex;align-items:center;flex-wrap:wrap;} .sw-row>*{flex:none;}   /* 浮窗开关＋奖励页小精选同一行，两组都不缩 */
-.is-new--sw{display:inline-flex;align-items:center;gap:12px;padding:0 12px;margin:0 0 0 32px;vertical-align:middle;line-height:30px;}   /* 奖励页小精选：跟浮窗开关同一行（11/03 她定） */
+.sw-row{display:flex;align-items:center;flex-wrap:wrap;} .sw-row>*{flex:none;}   /* 浮窗开关一行 */
+.is-new--sw{display:inline-flex;align-items:center;gap:12px;padding:0 12px;margin:0 0 0 32px;vertical-align:middle;line-height:30px;}   /* 保留：行内新增标记用 */
 .is-new>.el-form-item__tip:last-child,.is-mod>.el-form-item__tip:last-child{margin-bottom:12px;}
 .is-new[data-mark]::before{content:attr(data-mark);}
 .is-new--inline{display:inline-block;padding:6px 10px 2px;margin:0;}
@@ -69,7 +69,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 /* ===== 表格 ===== */
 .el-table{width:100%;}
 .js-table .el-table{overflow-x:auto;}   /* 汇总页两张表栏位多，窄萤幕时整张表横向卷动（表头、表身一起），不挤栏 */
-.js-table .el-table__header,.js-table .el-table__body{min-width:1500px;}
+.js-table .el-table__header,.js-table .el-table__body{min-width:1680px;}   /* 11/09 加了小精选栏 */
 #catTable .el-table__header,#catTable .el-table__body{min-width:770px;}#tagTable .el-table__header,#tagTable .el-table__body{min-width:900px;}   /* 类别表 11/05 分四栏图示后压到 770，规格书左栏（约 820）放得下、操作栏看得到 */   /* 类别／标签表：窄时整表缩放（fitAdmin），不把名称栏挤成直排 */
 .el-table .cell{white-space:normal;word-break:break-all;text-overflow:clip;}
 .thumb{display:inline-block;width:44px;height:26px;border-radius:2px;background:linear-gradient(135deg,#c6e2ff,#ecf5ff);vertical-align:middle;}
@@ -78,6 +78,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .thumb--ico-n{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#6C7CFF,#2B2F6B);}
 .thumb--ico-on{box-shadow:0 0 0 2px #2F5BFF;}   /* 类别图示 夜间（示意） */
 .thumb-pair{display:inline-flex;gap:6px;align-items:center;}
+.pickcell{display:inline-flex;flex-direction:column;align-items:center;gap:12px;padding:4px 0;}   /* 列表 小精选栏：开关＋首页浮窗图预览 */
 .sort-input{width:76px;}
 .sort-input .el-input__inner{text-align:center;padding:0 6px;}
 
@@ -255,7 +256,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .pc-list{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .pc-list .h5-thumb{height:242px;}
 .pc-list .h5-empty{grid-column:1/-1;}
-/* 奖励页小精选：一排 4 个正方形方块，每格＝一个活动的首页浮窗图（11/03 她定：各活动自己开「奖励页小精选」开关，照首页浮窗排序取前 4 个） */
+/* 奖励页小精选：一排 4 个正方形方块，每格＝一个活动的首页浮窗图（11/09 她定：开关集中在奖励页列表、最多开 4 个，顺序＝奖励页排序） */
 .h5-picks{display:flex;gap:10px;padding:0 10px 12px;}
 .h5-pick{flex:1 1 0;aspect-ratio:1/1;border-radius:14px;cursor:pointer;background:#EAF1FF;box-shadow:0 2px 8px rgba(13,34,69,.06);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
 .h5-pick::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 70% at 50% 60%,var(--pk,#9CC3FF) 0%,transparent 100%);opacity:.55;}
@@ -781,8 +782,8 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
              ============================================================ -->
         <article class="panel" id="p-map">
           <div class="panel__head"><span class="panel__num">1</span><h2 class="panel__title">总览</h2></div>
-          <p class="intro">奖励页重排成五块：顶栏、大精选、小精选、活动类别 tab、活动卡。活动卡整张由运营出图。后台只在既有页面加栏位；进奖励页有两个入口：各活动自己的设定页，或在奖励页列表新增素材。</p>
-          <div class="blk"><div class="blk__t">每块在后台哪里设</div><div class="rule"><div class="rule__row"><div class="rule__k">顶栏 3.1</div><div class="rule__v">不用设，照首页个人栏。</div></div><div class="rule__row"><div class="rule__k">大精选 3.2</div><div class="rule__v">活动配置(新) 步骤 2「奖励页大精选设置」（2.6）。</div></div><div class="rule__row"><div class="rule__k">小精选 3.3</div><div class="rule__v">各活动设定页「奖励页小精选」开关（2.2、2.5、2.6）。</div></div><div class="rule__row"><div class="rule__k">活动类别 tab 3.4</div><div class="rule__v">活动类别管理（2.3）＋各活动勾的类别（2.5、2.6）。</div></div><div class="rule__row"><div class="rule__k">活动卡 3.5</div><div class="rule__v">奖励列表图（2.2、2.5、2.6）、标签（2.1、2.4）、奖励页排序（2.1）。</div></div><div class="rule__row"><div class="rule__k">礼物钮 3.5</div><div class="rule__v">不用设，照既有可领数（第 4 节）。</div></div></div></div>
+          <p class="intro">奖励页重排成五块：顶栏、大精选、小精选、活动类别 tab、活动卡。活动卡整张由运营出图。后台：排序、标签、小精选、大精选集中在奖励页列表管；活动的图片在各活动自己的设定页传，大精选图在「大精选设置」传。进奖励页有两个入口：各活动自己的设定页，或在奖励页列表新增素材。</p>
+          <div class="blk"><div class="blk__t">每块在后台哪里设</div><div class="rule"><div class="rule__row"><div class="rule__k">顶栏 3.1</div><div class="rule__v">不用设，照首页个人栏。</div></div><div class="rule__row"><div class="rule__k">大精选 3.2</div><div class="rule__v">奖励页列表上方「大精选设置」（2.1）：开关、PC／H5 大精选图、关联的联名挑战活动。</div></div><div class="rule__row"><div class="rule__k">小精选 3.3</div><div class="rule__v">奖励页列表「小精选」开关（2.1）；图＝该活动既有的首页浮窗图。</div></div><div class="rule__row"><div class="rule__k">活动类别 tab 3.4</div><div class="rule__v">活动类别管理（2.3）＋各活动勾的类别（2.5、2.6）。</div></div><div class="rule__row"><div class="rule__k">活动卡 3.5</div><div class="rule__v">奖励列表图（2.2、2.5、2.6）、标签（2.1、2.4）、奖励页排序（2.1，和各活动页同一个值）。</div></div><div class="rule__row"><div class="rule__k">礼物钮 3.5</div><div class="rule__v">不用设，照既有可领数（第 4 节）。</div></div></div></div>
           <div class="blk"><div class="blk__t">标记</div><div class="rule"><div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--new">新增</span>新加的栏位或功能 ／ <span class="chip chip--rename">改名称</span>只改名称，功能不变 ／ <span class="chip chip--mod">修改</span>既有功能有调整 ／ <span class="chip chip--same">既有</span>照旧，不动。左栏示意点哪个画面，右边只讲那个画面。</div></div></div></div>
         </article>
 
@@ -791,22 +792,24 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
              ============================================================ -->
         <article class="panel" id="p-b1">
           <div class="panel__head"><span class="panel__num">2.1</span><h2 class="panel__title">后台 · 奖励页列表</h2></div>
-          <p class="intro">位置：活动配置 › 活动图素材管理 › 「奖励页列表」（原「优惠活动」）。列出全部来源，PC、H5 各一张表：素材照上传时的端别只列一边；其他来源两张表都列，缩图显示该端的奖励列表图。</p>
-          <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="list" data-pv='{"proto":"admin","go":"mat"}'>列表</button><button type="button" class="pv__btn" data-view="pop" data-pv='{"proto":"admin","go":"mat","pop":"tagset"}'>设定标签弹窗</button></p>
-          <div class="blk" data-view-of="list"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v"><span class="chip chip--mod">修改</span>原本只列素材，改成全部来源。</div></div><div class="rule__row"><div class="rule__k">顺序</div><div class="rule__v"><span class="chip chip--same">既有</span>奖励页排序数字越大越前面。</div></div><div class="rule__row"><div class="rule__k">筛选</div><div class="rule__v"><span class="chip chip--new">新增</span>「来源」下拉，预设全部，按「搜索」套用。13 种：素材、充值活动、消费活动、盈利活动、每日首充活动、每日存款活动、新用户首充活动、游戏挑战赛、Okbet排行榜、大奖池活动、vip返水加码活动、每日特别返水、活动配置(新)。</div></div><div class="rule__row"><div class="rule__k">奖励页排序</div><div class="rule__v"><span class="chip chip--rename">改名称</span>原「排序」。素材在格子里改；其他来源只显示，按「前往设定」去改。</div></div><div class="rule__row"><div class="rule__k">前往设定</div><div class="rule__v"><span class="chip chip--new">新增</span>跳到该活动的设定页（活动配置(新) 跳到编辑活动步骤 2），保存后回列表。</div></div><div class="rule__row"><div class="rule__k">新增钮</div><div class="rule__v"><span class="chip chip--rename">改名称</span>「新增PC素材」「新增H5素材」，功能不变。</div></div><div class="rule__row"><div class="rule__k">标签钮</div><div class="rule__v"><span class="chip chip--new">新增</span>开「设定标签」弹窗。</div></div><div class="rule__row"><div class="rule__k">删除</div><div class="rule__v"><span class="chip chip--same">既有</span>只有素材能删，确认后列表、前台一起消失。</div></div></div></div>
+          <p class="intro">位置：活动配置 › 活动图素材管理 › 「奖励页列表」（原「优惠活动」）。列出全部来源，PC、H5 各一张表：素材照上传时的端别只列一边；其他来源两张表都列，缩图显示该端的奖励列表图。排序、标签、小精选、大精选都在这一页管。</p>
+          <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="list" data-pv='{"proto":"admin","go":"mat"}'>列表</button><button type="button" class="pv__btn" data-view="pop" data-pv='{"proto":"admin","go":"mat","pop":"tagset"}'>设定标签弹窗</button><button type="button" class="pv__btn" data-view="hero" data-pv='{"proto":"admin","go":"mat","pop":"hero"}'>大精选设置</button></p>
+          <div class="blk" data-view-of="list"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v"><span class="chip chip--mod">修改</span>原本只列素材，改成全部来源。</div></div><div class="rule__row"><div class="rule__k">顺序</div><div class="rule__v"><span class="chip chip--new">新增</span>照奖励页排序排，预设降序（数字大的在前，和前台一样）；表头可切升序／降序，只改列表看的顺序，前台不受影响（3.6）。</div></div><div class="rule__row"><div class="rule__k">筛选</div><div class="rule__v"><span class="chip chip--new">新增</span>「来源」下拉，预设全部，按「搜索」套用。13 种：素材、充值活动、消费活动、盈利活动、每日首充活动、每日存款活动、新用户首充活动、游戏挑战赛、Okbet排行榜、大奖池活动、vip返水加码活动、每日特别返水、活动配置(新)。</div></div><div class="rule__row"><div class="rule__k">奖励页排序</div><div class="rule__v"><span class="chip chip--rename">改名称</span>原「排序」。<span class="chip chip--mod">修改</span>全部来源都能在格子里改，离开格子就保存，写回该活动设定页的「排序」，两边同一个值。充值活动、消费活动、盈利活动、每日首充活动的排序同时管首页，在这里改首页也跟着变（照既有）。</div></div><div class="rule__row"><div class="rule__k">小精选</div><div class="rule__v"><span class="chip chip--new">新增</span>开关＋该端首页浮窗图预览。开启＝进前台小精选（3.3）；最多开 4 个，已经开了 4 个再开第 5 个不切换，提示「小精选最多开 4 个，请先关一个」。PC、H5 两张表同一个开关，一边开另一边也开，缩图各看各端的图。素材一端一笔、小精选只看 H5，PC 表的素材列显示「-」。</div></div><div class="rule__row"><div class="rule__k">小精选 换图</div><div class="rule__v">缩图只能看，不能点了换图；换图按「前往设定」到该活动的首页浮窗设置。</div></div><div class="rule__row"><div class="rule__k">小精选 没图</div><div class="rule__v">没有首页浮窗设置的来源显示「-」。有首页浮窗设置但还没传图：开关反灰开不了，提示「先在活动设定页上传首页浮窗图」。开了之后图被删：前台不显示这格，开关不动。</div></div><div class="rule__row"><div class="rule__k">状态</div><div class="rule__v"><span class="chip chip--mod">修改</span>素材照既有，在这里就能开关。其他来源置灰只显示，不能在这里切，要开或关按「前往设定」到该活动的设定页改；活动配置(新) 看「奖励页列表设置」开关。</div></div><div class="rule__row"><div class="rule__k">大精选设置钮</div><div class="rule__v"><span class="chip chip--new">新增</span>列表上方，开「大精选设置」弹窗；大精选是独立一组设定，不是活动的栏位。</div></div><div class="rule__row"><div class="rule__k">前往设定</div><div class="rule__v"><span class="chip chip--new">新增</span>跳到该活动的设定页（活动配置(新) 跳到编辑活动步骤 2），保存后回列表。</div></div><div class="rule__row"><div class="rule__k">新增钮</div><div class="rule__v"><span class="chip chip--rename">改名称</span>「新增PC素材」「新增H5素材」，功能不变。</div></div><div class="rule__row"><div class="rule__k">标签钮</div><div class="rule__v"><span class="chip chip--new">新增</span>开「设定标签」弹窗。</div></div><div class="rule__row"><div class="rule__k">删除</div><div class="rule__v"><span class="chip chip--same">既有</span>只有素材能删，确认后列表、前台一起消失。</div></div></div></div>
 
           <div class="blk" data-view-of="pop"><div class="blk__t">设定标签弹窗</div><div class="rule"><div class="rule__row"><div class="rule__k">弹窗</div><div class="rule__v"><span class="chip chip--new">新增</span>显示活动来源＋名称，一个下拉「标签」。</div></div><div class="rule__row"><div class="rule__k">下拉</div><div class="rule__v">「无」＋全部标签，只能选 1 个。</div></div><div class="rule__row"><div class="rule__k">前往标签管理</div><div class="rule__v">关弹窗，跳到 2.4。</div></div><div class="rule__row"><div class="rule__k">保存</div><div class="rule__v">「确定」才保存；列表标签栏、前台角标跟着变。</div></div></div></div>
-          <div class="blk" data-view-of="list"><div class="blk__t">素材和其他来源差在哪</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw" style="width:26%">栏位</th><th class="nw">素材</th><th>其他来源</th></tr></thead><tbody><tr><td class="nw">来源 <span class="chip chip--new">新增</span></td><td class="nw">「素材」</td><td>来源名称；活动配置(新) 的加小字「活动配置(新)」</td></tr><tr><td class="nw">标题文字</td><td class="nw">标题</td><td>活动名称</td></tr><tr><td>奖励列表图 <span class="chip chip--rename">改名称</span></td><td>缩图（原「标题图片」）</td><td>缩图</td></tr><tr><td>奖励页排序 <span class="chip chip--rename">改名称</span></td><td class="nw">可改</td><td>只显示</td></tr><tr><td class="nw">标签 <span class="chip chip--new">新增</span></td><td>1 个，没有「-」</td><td>同左</td></tr><tr><td class="nw">小精选 <span class="chip chip--new">新增</span></td><td class="nw">开启／关闭</td><td>开启／关闭；没有浮窗的页「-」</td></tr><tr><td class="nw">状态 <span class="chip chip--mod">修改</span></td><td>可切换</td><td>置灰，显示该活动设定页的活动状态（活动配置(新) 看「奖励页列表设置」开关）</td></tr><tr><td>其余既有栏位</td><td class="nw">照既有</td><td>「-」</td></tr><tr><td class="nw">操作 <span class="chip chip--mod">修改</span></td><td class="nw">编辑、删除、标签</td><td>前往设定、标签</td></tr></tbody></table></div></div>
+          <div class="blk" data-view-of="hero"><div class="blk__t">大精选设置弹窗</div><div class="rule"><div class="rule__row"><div class="rule__k">开关</div><div class="rule__v"><span class="chip chip--new">新增</span>开启／关闭，预设关闭。</div></div><div class="rule__row"><div class="rule__k">大精选图</div><div class="rule__v">PC（非必填，建议尺寸 2400×640）、H5（开启时必填，建议尺寸 1100×672）；格式、大小照既有上传限制。</div></div><div class="rule__row"><div class="rule__k">关联活动</div><div class="rule__v">下拉，只列联名挑战活动（活动配置(新) 活动类型＝联名挑战活动的），必填。大精选上外显的关卡进度、领取，和点图进的详情，都是这个活动的。</div></div><div class="rule__row"><div class="rule__k">保存</div><div class="rule__v">「确定」一次保存。开启时 H5 图没传提示「请上传 H5 大精选图」，没选活动提示「请选择关联活动」，都不保存。关闭时不校验。</div></div><div class="rule__row"><div class="rule__k">换活动</div><div class="rule__v">改下拉就好，图可以不动。</div></div></div></div>
+          <div class="blk" data-view-of="list hero"><div class="blk__t">大精选显不显示<span class="blk__hint">前台 3.2 用同一条</span></div><div class="rule"><div class="rule__row"><div class="rule__k">显示</div><div class="rule__v">开关开启、有 H5 大精选图、关联活动的奖励页列表设置开启且在显示期内（3.6），四项都成立才显示。</div></div><div class="rule__row"><div class="rule__k">不显示</div><div class="rule__v">少任何一项整块不显示，下方往上补。</div></div></div></div>
+          <div class="blk" data-view-of="list"><div class="blk__t">素材和其他来源差在哪</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw" style="width:26%">栏位</th><th class="nw">素材</th><th>其他来源</th></tr></thead><tbody><tr><td class="nw">来源 <span class="chip chip--new">新增</span></td><td class="nw">「素材」</td><td>来源名称；活动配置(新) 的加小字「活动配置(新)」</td></tr><tr><td class="nw">标题文字</td><td class="nw">标题</td><td>活动名称</td></tr><tr><td>奖励列表图 <span class="chip chip--rename">改名称</span></td><td>缩图（原「标题图片」）</td><td>缩图</td></tr><tr><td>奖励页排序 <span class="chip chip--rename">改名称</span></td><td class="nw">可改</td><td>可改，写回该活动页「排序」</td></tr><tr><td class="nw">标签 <span class="chip chip--new">新增</span></td><td>1 个，没有「-」</td><td>同左</td></tr><tr><td class="nw">小精选 <span class="chip chip--new">新增</span></td><td class="nw">开关＋浮窗图预览</td><td>同左；没有首页浮窗图的来源「-」</td></tr><tr><td class="nw">状态 <span class="chip chip--mod">修改</span></td><td>可切换</td><td>置灰，显示该活动设定页的活动状态（活动配置(新) 看「奖励页列表设置」开关）</td></tr><tr><td>其余既有栏位</td><td class="nw">照既有</td><td>「-」</td></tr><tr><td class="nw">操作 <span class="chip chip--mod">修改</span></td><td class="nw">编辑、删除、标签</td><td>前往设定、标签</td></tr></tbody></table></div></div>
 
-          <div class="blk" data-view-of="list"><div class="blk__t">奖励页排序输入限制<span class="blk__hint">只有素材能在列表改</span></div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw">输入</th><th>结果</th></tr></thead><tbody><tr><td class="nw">任何输入</td><td>照既有素材「排序」的校验和保存。</td></tr><tr><td class="nw">两个活动数字相同</td><td>先后照既有，不另定。</td></tr></tbody></table></div></div>
+          <div class="blk" data-view-of="list"><div class="blk__t">奖励页排序输入限制</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw">输入</th><th>结果</th></tr></thead><tbody><tr><td class="nw">任何输入</td><td>照该活动设定页「排序」既有的校验和保存；活动配置(新) 取消 0～9999 上限（2.6）。</td></tr><tr><td class="nw">两个活动数字相同</td><td>先后照既有，不另定。</td></tr></tbody></table></div></div>
         </article>
 
         <article class="panel" id="p-b2">
           <div class="panel__head"><span class="panel__num">2.2</span><h2 class="panel__title">后台 · 素材新增／修改弹窗</h2></div>
-          <p class="intro">新增钮和「编辑」开同一个弹窗。<b>既有逻辑不动</b>，只做三件事：改名称、加「奖励页小精选」开关、「排序」挪到奖励列表图下方。</p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">弹窗标题</div><div class="rule__v"><span class="chip chip--rename">改名称</span>「新增／修改PC素材」「新增／修改H5素材」。</div></div><div class="rule__row"><div class="rule__k">奖励列表图</div><div class="rule__v"><span class="chip chip--rename">改名称</span>原「标题图片」，必填照旧；上传区标建议尺寸：PC 1368×560、H5 1100×600（新增PC素材标 PC、新增H5素材标 H5）。</div></div><div class="rule__row"><div class="rule__k">奖励页小精选</div><div class="rule__v"><span class="chip chip--new">新增</span>和「首页浮窗设置」同一行，预设关闭；开启时浮窗图片必填。</div></div><div class="rule__row"><div class="rule__k">首页浮窗排序</div><div class="rule__v"><span class="chip chip--mod">修改</span>既有栏位，多一个用途：决定小精选先后，数字越大越前面。</div></div><div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span>只挪位置到奖励列表图下方，其余照既有；＝2.1 奖励页排序。</div></div><div class="rule__row"><div class="rule__k">时间、活动类型</div><div class="rule__v"><span class="chip chip--same">既有</span>照既有；显示规则见 3.6，活动类型决定出现在哪些 tab。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">标签在 2.1 的「标签」钮设。</div></div></div></div>
+          <p class="intro">新增钮和「编辑」开同一个弹窗。<b>既有逻辑不动</b>，只做两件事：改名称、「排序」挪到奖励列表图下方。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">弹窗标题</div><div class="rule__v"><span class="chip chip--rename">改名称</span>「新增／修改PC素材」「新增／修改H5素材」。</div></div><div class="rule__row"><div class="rule__k">奖励列表图</div><div class="rule__v"><span class="chip chip--rename">改名称</span>原「标题图片」，必填照旧；上传区标建议尺寸：PC 1368×560、H5 1100×600（新增PC素材标 PC、新增H5素材标 H5）。</div></div><div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span>只挪位置到奖励列表图下方，其余照既有；＝2.1 奖励页排序。</div></div><div class="rule__row"><div class="rule__k">时间、活动类型</div><div class="rule__v"><span class="chip chip--same">既有</span>照既有；显示规则见 3.6，活动类型决定出现在哪些 tab。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">标签、小精选在 2.1 列表设；小精选用这里的浮窗图片。</div></div></div></div>
 
-          <div class="blk"><div class="blk__t">输入限制</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw">栏位</th><th class="nw">必填</th><th>限制</th></tr></thead><tbody><tr><td class="nw">奖励列表图</td><td class="nw">是</td><td>照既有；建议尺寸 PC 1368×560、H5 1100×600。</td></tr><tr><td class="nw">奖励页小精选</td><td class="nw">—</td><td>开启／关闭，预设关闭。</td></tr><tr><td class="nw">排序、首页浮窗排序</td><td class="nw">是</td><td>照既有。</td></tr><tr><td class="nw">4 个时间栏位</td><td class="nw">否</td><td>留空＝没设。</td></tr></tbody></table></div></div>
+          <div class="blk"><div class="blk__t">输入限制</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw">栏位</th><th class="nw">必填</th><th>限制</th></tr></thead><tbody><tr><td class="nw">奖励列表图</td><td class="nw">是</td><td>照既有；建议尺寸 PC 1368×560、H5 1100×600。</td></tr><tr><td class="nw">排序、首页浮窗排序</td><td class="nw">是</td><td>照既有。</td></tr><tr><td class="nw">4 个时间栏位</td><td class="nw">否</td><td>留空＝没设。</td></tr></tbody></table></div></div>
 
           <div class="blk"><div class="blk__t">提示文案</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw">情况</th><th>提示</th></tr></thead><tbody><tr><td>必填没填、图片不符</td><td>照既有提示，不保存；奖励列表图的提示用新名称。</td></tr><tr><td>保存成功</td><td>「保存成功」，关弹窗。</td></tr></tbody></table></div></div>
         </article>
@@ -843,25 +846,23 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
           <div class="blk"><div class="blk__t">点一页看要加什么</div>
           <div class="pg-tabs" id="pgTabs"><button type="button" class="pg-tab" data-pg="rech" aria-pressed="true">充值活动</button><button type="button" class="pg-tab" data-pg="cons" aria-pressed="false">消费活动</button><button type="button" class="pg-tab" data-pg="lose" aria-pressed="false">盈利活动</button><button type="button" class="pg-tab" data-pg="drech" aria-pressed="false">每日首充活动</button><button type="button" class="pg-tab" data-pg="ddep" aria-pressed="false">每日存款活动</button><button type="button" class="pg-tab" data-pg="newbie" aria-pressed="false">新用户首充活动</button><button type="button" class="pg-tab" data-pg="gc" aria-pressed="false">游戏挑战赛</button><button type="button" class="pg-tab" data-pg="lb" aria-pressed="false">Okbet排行榜</button><button type="button" class="pg-tab" data-pg="jp" aria-pressed="false">大奖池活动</button><button type="button" class="pg-tab" data-pg="vipr" aria-pressed="false">vip返水加码活动</button><button type="button" class="pg-tab" data-pg="dsp" aria-pressed="false">每日特别返水</button></div>
-          <div class="pg-pane is-on" data-pg="rech"><div class="pg-pane__t">充值活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；没有浮窗。</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="cons"><div class="pg-pane__t">消费活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；没有浮窗。</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="lose"><div class="pg-pane__t">盈利活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；没有浮窗。</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="drech"><div class="pg-pane__t">每日首充活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；没有浮窗。</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="ddep"><div class="pg-pane__t">每日存款活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>首页浮窗设置整组：开关＋奖励页小精选、首页浮窗图片（PC、H5）、首页浮窗排序</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>PC／手机端奖励列表 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="newbie"><div class="pg-pane__t">新用户首充活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；没有浮窗。</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="gc"><div class="pg-pane__t">游戏挑战赛 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；浮窗图片必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>活动类别（多选）；浮窗开关那一行加奖励页小精选</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序；首页展示排序＝小精选顺序</span></div></div><div class="pg-pane" data-pg="lb"><div class="pg-pane__t">Okbet排行榜 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>活动类别（多选）</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>首页浮窗设置整组：开关＋奖励页小精选、首页浮窗图片（PC、H5）、首页浮窗排序</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图片 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="jp"><div class="pg-pane__t">大奖池活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>没有列表图；浮窗图片必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>活动类别（多选）</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>奖励列表图（PC／H5）；浮窗入口开关那一行加奖励页小精选</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>首页展示排序＝小精选顺序</span></div></div><div class="pg-pane" data-pg="vipr"><div class="pg-pane__t">vip返水加码活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>没有列表图；浮窗图片必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>活动类别（多选）</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>浮窗设置那一行加奖励页小精选；奖励列表图（PC／H5）</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>首页展示排序＝小精选顺序</span></div></div><div class="pg-pane" data-pg="dsp"><div class="pg-pane__t">每日特别返水 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>没有列表图；浮窗图片必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>活动类别（多选）</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>奖励页小精选（自己一行）；奖励列表图（PC／H5）</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>首页展示顺序＝小精选顺序</span></div></div>
+          <div class="pg-pane is-on" data-pg="rech"><div class="pg-pane__t">充值活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；没有浮窗。</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="cons"><div class="pg-pane__t">消费活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；没有浮窗。</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="lose"><div class="pg-pane__t">盈利活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；没有浮窗。</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="drech"><div class="pg-pane__t">每日首充活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；没有浮窗。</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="ddep"><div class="pg-pane__t">每日存款活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>首页浮窗设置整组：开关、首页浮窗图片（PC、H5）、首页浮窗排序；小精选用这张图</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>PC／手机端奖励列表 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="newbie"><div class="pg-pane__t">新用户首充活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；没有浮窗。</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="gc"><div class="pg-pane__t">游戏挑战赛 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图非必填；浮窗图片必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>活动类别（多选）</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="lb"><div class="pg-pane__t">Okbet排行榜 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>奖励列表图必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>活动类别（多选）</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>首页浮窗设置整组：开关、首页浮窗图片（PC、H5）、首页浮窗排序；小精选用这张图</span></div><div class="scope__row"><span class="chip chip--rename">改名称</span><span>列表页图片 → 奖励列表图</span></div><div class="scope__row"><span class="chip chip--mod">修改</span><span>排序＝奖励页排序</span></div></div><div class="pg-pane" data-pg="jp"><div class="pg-pane__t">大奖池活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>没有列表图；浮窗图片必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>活动类别（多选）</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>奖励列表图（PC／H5）</span></div></div><div class="pg-pane" data-pg="vipr"><div class="pg-pane__t">vip返水加码活动 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>没有列表图；浮窗图片必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>活动类别（多选）</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>奖励列表图（PC／H5）</span></div></div><div class="pg-pane" data-pg="dsp"><div class="pg-pane__t">每日特别返水 · 这一页加什么</div><div class="scope__row"><span class="chip chip--same">线上</span><span>没有列表图；浮窗图片必填。</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>活动类别（多选）</span></div><div class="scope__row"><span class="chip chip--new">新增</span><span>奖励列表图（PC／H5）</span></div></div>
           </div>
 
-          <div class="blk"><div class="blk__t">共用规则</div><div class="rule"><div class="rule__row"><div class="rule__k">奖励列表图</div><div class="rule__v"><span class="chip chip--rename">改名称</span>栏位名统一「奖励列表图」；必填照各页既有；没传图不进奖励页；上传区标建议尺寸：PC 1368×560、H5 1100×600。</div></div><div class="rule__row"><div class="rule__k">奖励页小精选</div><div class="rule__v"><span class="chip chip--new">新增</span>预设关闭，和浮窗开关同一行；开启时浮窗图片必填；前台只取排序最大的 4 个。</div></div><div class="rule__row"><div class="rule__k">浮窗排序</div><div class="rule__v"><span class="chip chip--mod">修改</span>各页名称不同（首页浮窗排序／首页展示排序／首页展示顺序），都＝小精选先后，数字越大越前面。</div></div><div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span>＝奖励页排序，只能在这里改。</div></div><div class="rule__row"><div class="rule__k">活动类别</div><div class="rule__v"><span class="chip chip--new">新增</span>没有「活动类型」的页新增多选；选项＝2.3；没勾只在 ALL。</div></div><div class="rule__row"><div class="rule__k">活动状态、时间</div><div class="rule__v"><span class="chip chip--same">既有</span>照既有，显示规则见 3.6。</div></div></div></div>
+          <div class="blk"><div class="blk__t">共用规则</div><div class="rule"><div class="rule__row"><div class="rule__k">奖励列表图</div><div class="rule__v"><span class="chip chip--rename">改名称</span>栏位名统一「奖励列表图」；必填照各页既有；没传图不进奖励页；上传区标建议尺寸：PC 1368×560、H5 1100×600。</div></div><div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span>＝奖励页排序；这里改或在 2.1 列表改都行，同一个值。</div></div><div class="rule__row"><div class="rule__k">首页浮窗图</div><div class="rule__v"><span class="chip chip--same">既有</span>照既有；在 2.1 开了小精选的活动，前台小精选用这张图。</div></div><div class="rule__row"><div class="rule__k">活动类别</div><div class="rule__v"><span class="chip chip--new">新增</span>没有「活动类型」的页新增多选；选项＝2.3；没勾只在 ALL。</div></div><div class="rule__row"><div class="rule__k">活动状态、时间</div><div class="rule__v"><span class="chip chip--same">既有</span>照既有，显示规则见 3.6。</div></div></div></div>
 
-          <div class="blk"><div class="blk__t">提示文案</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw">情况</th><th>提示</th></tr></thead><tbody><tr><td>奖励列表图没传按保存</td><td>照各页既有；非必填的页存得进去，前台不显示这张卡。</td></tr><tr><td>小精选开启、浮窗图片没传按保存</td><td>红字「请上传浮窗图片」，不保存。</td></tr><tr><td>其他</td><td>照各页既有。</td></tr></tbody></table></div></div>
+          <div class="blk"><div class="blk__t">提示文案</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw">情况</th><th>提示</th></tr></thead><tbody><tr><td>奖励列表图没传按保存</td><td>照各页既有；非必填的页存得进去，前台不显示这张卡。</td></tr><tr><td>其他</td><td>照各页既有。</td></tr></tbody></table></div></div>
 
         </article>
 
         <article class="panel" id="p-b6">
           <div class="panel__head"><span class="panel__num">2.6</span><h2 class="panel__title">后台 · 活动配置(新) 步骤 2</h2></div>
           <p class="intro">位置：活动配置(新) › 活动列表 › 编辑活动 › 步骤 2「活动图片」。预约活动、周卡活动、联名挑战活动三个模板都在这里。</p>
-          <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="v2a" data-pv='{"proto":"admin","go":"v2","v2":"预约活动"}'>预约活动</button><button type="button" class="pv__btn" data-view="v2b" data-pv='{"proto":"admin","go":"v2","v2":"周卡"}'>周卡活动</button><button type="button" class="pv__btn" data-view="hero" data-pv='{"proto":"admin","go":"v2","v2":"联名挑战","anchor":"[data-radios=v2Hero]"}'>联名挑战活动</button></p>
+          <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="v2a" data-pv='{"proto":"admin","go":"v2","v2":"预约活动"}'>预约活动</button><button type="button" class="pv__btn" data-view="v2b" data-pv='{"proto":"admin","go":"v2","v2":"周卡"}'>周卡活动</button><button type="button" class="pv__btn" data-view="v2c" data-pv='{"proto":"admin","go":"v2","v2":"联名挑战"}'>联名挑战活动</button></p>
 
-          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">首页浮窗设置</div><div class="rule__v"><span class="chip chip--new">新增</span>开关那一行加「奖励页小精选」；下方「排序」＝小精选先后，数字越大越前面；图用这里的 PC／H5 图片。</div></div><div class="rule__row" data-view-of="hero"><div class="rule__k">奖励页大精选设置</div><div class="rule__v"><span class="chip chip--new">新增</span>只有联名挑战活动有，放首页浮窗设置下方。开启／关闭（预设关闭）＋PC、H5 大精选图；开启时 H5 必填、PC 非必填；上传区标建议尺寸：PC 2400×640、H5 1100×672。</div></div><div class="rule__row"><div class="rule__k">奖励页列表设置</div><div class="rule__v"><span class="chip chip--rename">改名称</span>原「活动列表设置」。<span class="chip chip--mod">修改</span>开启＝进奖励页，关闭＝不进；原本只有联名挑战活动、预约活动会进，改成开启的都进。<span class="chip chip--same">既有</span>关闭时下面栏位收起，开启才出现、图必填。</div></div><div class="rule__row rule__row--plain" data-view-of="v2a v2b"><div class="rule__v">预约活动、周卡活动把这两组放在最下方「附加显示配置」区。</div></div><div class="rule__row"><div class="rule__k">奖励列表图</div><div class="rule__v"><span class="chip chip--rename">改名称</span>原「PC 图片／H5 图片」，PC、H5 各一张，必填；上传区标建议尺寸：PC 1368×560、H5 1100×600。</div></div><div class="rule__row"><div class="rule__k">活动类别</div><div class="rule__v"><span class="chip chip--new">新增</span>放在奖励页列表设置里，多选，同 2.5。</div></div><div class="rule__row"><div class="rule__k">两个「排序」</div><div class="rule__v"><span class="chip chip--same">既有</span>奖励页列表设置的＝奖励页排序；首页浮窗设置的＝小精选先后。都数字越大越前面，只收 0～9999。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">开关改了立刻生效；排序离开格子就保存。</div></div></div></div>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">首页浮窗设置</div><div class="rule__v"><span class="chip chip--same">既有</span>不动；在 2.1 开了小精选的活动，前台小精选用这里的 PC／H5 图片。</div></div><div class="rule__row"><div class="rule__k">奖励页列表设置</div><div class="rule__v"><span class="chip chip--rename">改名称</span>原「活动列表设置」。<span class="chip chip--mod">修改</span>开启＝进奖励页，关闭＝不进；预约活动、周卡活动、联名挑战活动本来就会进，往后新模板开启的也都进。<span class="chip chip--same">既有</span>关闭时下面栏位收起，开启才出现、图必填。</div></div><div class="rule__row rule__row--plain" data-view-of="v2a v2b"><div class="rule__v">预约活动、周卡活动把这两组放在最下方「附加显示配置」区。</div></div><div class="rule__row rule__row--plain" data-view-of="v2c"><div class="rule__v">大精选在 2.1「大精选设置」，这页没有大精选栏位。</div></div><div class="rule__row"><div class="rule__k">奖励列表图</div><div class="rule__v"><span class="chip chip--rename">改名称</span>原「PC 图片／H5 图片」，PC、H5 各一张，必填；上传区标建议尺寸：PC 1368×560、H5 1100×600。</div></div><div class="rule__row"><div class="rule__k">活动类别</div><div class="rule__v"><span class="chip chip--new">新增</span>放在奖励页列表设置里，多选，同 2.5。</div></div><div class="rule__row"><div class="rule__k">两个「排序」</div><div class="rule__v"><span class="chip chip--same">既有</span>奖励页列表设置的＝奖励页排序，在 2.1 列表改也同步；首页浮窗设置的照既有，只管首页。都数字越大越前面。<span class="chip chip--mod">修改</span>奖励页列表设置的排序取消 0～9999 上限，和其他来源一致，不设上限。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">开关改了立刻生效；排序离开格子就保存。</div></div></div></div>
 
-          <div class="blk" data-view-of="hero"><div class="blk__t">大精选显示哪一个<span class="blk__hint">前台 3.2 用同一条</span></div><div class="rule"><div class="rule__row"><div class="rule__k">条件</div><div class="rule__v">联名挑战活动、大精选开启、奖励页列表设置开启、在显示期内（3.6）。</div></div><div class="rule__row"><div class="rule__k">结果</div><div class="rule__v">符合的有 1 个就显示它；2 个以上只显示奖励页排序最大的；0 个整块不显示。</div></div></div></div>
-
-          <div class="blk"><div class="blk__t">情境表</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw">操作</th><th>结果</th></tr></thead><tbody><tr><td>奖励页列表设置 关闭</td><td>图片、排序收起；2.1 状态＝关闭；前台没有这张卡，小精选也没有。</td></tr><tr><td>奖励页列表设置 开启、小精选 开启</td><td>前台有活动卡；小精选按排序取前 4。</td></tr><tr data-view-of="v2b"><td>周卡活动 奖励页列表设置 开启</td><td>进奖励页，来源「周卡活动」＋小字「活动配置(新)」。</td></tr><tr><td>首页浮窗设置的排序改到最大</td><td>小精选排第一。</td></tr><tr data-view-of="hero"><td>大精选 开启、传 H5 图</td><td>顶栏下方出现大图；点图进详情。</td></tr><tr data-view-of="hero"><td>大精选 开启、没传 H5 图就保存</td><td>挡下来，提示图片必填；只传 H5 可以。</td></tr><tr data-view-of="hero"><td>两个联名挑战活动都开大精选</td><td>只显示奖励页排序大的。</td></tr><tr data-view-of="v2a v2b"><td>预约活动、周卡活动</td><td>没有「奖励页大精选设置」。</td></tr><tr data-view-of="hero"><td>开大精选的活动关闭或过了显示期</td><td>大精选不显示，下方往上补。</td></tr></tbody></table></div></div>
+          <div class="blk"><div class="blk__t">情境表</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw">操作</th><th>结果</th></tr></thead><tbody><tr><td>奖励页列表设置 关闭</td><td>图片、排序收起；2.1 状态＝关闭；前台没有这张卡，小精选、大精选也没有。</td></tr><tr><td>奖励页列表设置 开启，2.1 开小精选</td><td>前台有活动卡；小精选按奖励页排序排。</td></tr><tr data-view-of="v2b"><td>周卡活动 奖励页列表设置 开启</td><td>进奖励页，来源「周卡活动」＋小字「活动配置(新)」。</td></tr><tr><td>这页的排序改了</td><td>2.1 列表的奖励页排序跟着变，反过来也一样。</td></tr></tbody></table></div></div>
         </article>
 
         <!-- ============================================================
@@ -878,14 +879,14 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
         <article class="panel" id="p-f2">
           <div class="panel__head"><span class="panel__num">3.2</span><h2 class="panel__title">前台 · 大精选</h2></div>
-          <p class="intro">顶栏下方独立一块，一张大图；显示哪个活动照 2.6「大精选显示哪一个」。样式照设计稿。</p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">图</div><div class="rule__v">H5 大精选图整张填满，不轮播；尺寸照设计稿。</div></div><div class="rule__row"><div class="rule__k">点击</div><div class="rule__v">和活动卡一样，进既有 Event Details 弹窗。</div></div><div class="rule__row"><div class="rule__k">没有</div><div class="rule__v">0 个时整块不显示，下方往上补。</div></div><div class="rule__row"><div class="rule__k">和下方的关系</div><div class="rule__v">大精选和活动卡、小精选各自照自己的开关显示，互不影响；开了大精选的活动，下方照常出活动卡。</div></div><div class="rule__row"><div class="rule__k">外显内容</div><div class="rule__v">联名挑战活动的详情内容（关卡进度、领取）直接显示在大精选上，不用点进去；内容照既有联名挑战活动详情，样式照设计稿。除此之外图上不叠别的。</div></div></div></div>
+          <p class="intro">顶栏下方独立一块，一张大图；图、关联活动、显不显示都照 2.1「大精选设置」。样式照设计稿。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">图</div><div class="rule__v">H5 大精选图整张填满，不轮播；图在 2.1「大精选设置」传，尺寸照设计稿。</div></div><div class="rule__row"><div class="rule__k">点击</div><div class="rule__v">进关联活动的既有 Event Details 弹窗。</div></div><div class="rule__row"><div class="rule__k">没有</div><div class="rule__v">不符合 2.1「大精选显不显示」任一条件，整块不显示，下方往上补。</div></div><div class="rule__row"><div class="rule__k">和下方的关系</div><div class="rule__v">大精选和活动卡、小精选各自照自己的设定显示，互不影响；关联活动的活动卡下方照常出。</div></div><div class="rule__row"><div class="rule__k">外显内容</div><div class="rule__v">关联活动的详情内容（关卡进度、领取）直接显示在大精选上，不用点进去；内容照既有联名挑战活动详情，样式照设计稿。除此之外图上不叠别的。</div></div></div></div>
         </article>
 
         <article class="panel" id="p-f3">
           <div class="panel__head"><span class="panel__num">3.3</span><h2 class="panel__title">前台 · 小精选</h2></div>
           <p class="intro">大精选下方一排 4 格正方形，一格一个活动，图＝该活动的首页浮窗图：H5 用 H5 图、PC 用 PC 图。</p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">显示哪些</div><div class="rule__v">奖励页小精选开启，且照 3.6 第一条会显示的活动。素材只看 H5 那条。</div></div><div class="rule__row"><div class="rule__k">顺序</div><div class="rule__v">首页浮窗排序数字越大越前面。</div></div><div class="rule__row"><div class="rule__k">数量</div><div class="rule__v">取前 4 个；1～3 个靠左；0 个整排不显示。有一个掉了，第 5 个补上。</div></div><div class="rule__row"><div class="rule__k">点击</div><div class="rule__v">和活动卡一样，进既有 Event Details 弹窗。</div></div><div class="rule__row"><div class="rule__k">PC 版</div><div class="rule__v">图用 PC 首页浮窗图；图＋活动名称＋活动日期，各 1 行，超出「…」。</div></div></div></div>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">显示哪些</div><div class="rule__v">2.1 列表小精选开启，且照 3.6 第一条会显示的活动。素材只看 H5 那条。</div></div><div class="rule__row"><div class="rule__k">顺序</div><div class="rule__v">奖励页排序数字越大越前面。</div></div><div class="rule__row"><div class="rule__k">数量</div><div class="rule__v">后台最多开 4 个（2.1）；不在显示期的不显示，有几个显示几个。1～3 个靠左；0 个整排不显示。</div></div><div class="rule__row"><div class="rule__k">点击</div><div class="rule__v">和活动卡一样，进既有 Event Details 弹窗。</div></div><div class="rule__row"><div class="rule__k">PC 版</div><div class="rule__v">图用 PC 首页浮窗图；图＋活动名称＋活动日期，各 1 行，超出「…」。</div></div></div></div>
         </article>
 
         <article class="panel" id="p-f4">
@@ -928,7 +929,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="in" data-pv='{"proto":"pc","login":true,"anchor":".pc-hero"}'>已登录</button><button type="button" class="pv__btn" data-view="out" data-pv='{"proto":"pc","login":false,"anchor":".pc-top"}'>未登录</button></p>
           <div class="blk"><div class="blk__t">和 H5 的差别</div><div class="rule">
             <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v">不做 3.1 的顶栏，用站内既有顶部导航（已登录、未登录照站内既有）。既有 PC 奖励页的个人卡（头像、My points、My voucher、VIP Perks）、Hot Events、快捷入口整排（Points Mall、Task center、Daily Rebate 1.5%、Sign-In Rewards、Invite Your Friends）移除。</div></div>
-            <div class="rule__row"><div class="rule__k">大精选</div><div class="rule__v">图用 PC 大精选图（2.6，非必填）；没传 PC 图，PC 不显示大精选。联名挑战活动的详情内容同 H5 直接外显（3.2）。</div></div>
+            <div class="rule__row"><div class="rule__k">大精选</div><div class="rule__v">图用 PC 大精选图（2.1 大精选设置，非必填）；没传 PC 图，PC 不显示大精选。联名挑战活动的详情内容同 H5 直接外显（3.2）。</div></div>
             <div class="rule__row"><div class="rule__k">小精选</div><div class="rule__v">图用 PC 首页浮窗图；每格＝图＋活动名称＋活动日期（3.3）。</div></div>
             <div class="rule__row"><div class="rule__k">活动卡</div><div class="rule__v">两栏；图用 PC 奖励列表图；叠的标签、倒数、按钮同 3.5。</div></div>
             <div class="rule__row"><div class="rule__k">底部</div><div class="rule__v">没有底部导航，没有 Rewards 角标；底部 banner 入口样式等设计稿。</div></div>
@@ -941,7 +942,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
           <div class="blk"><div class="blk__t">一、照既有，不改</div><div class="rule"><div class="rule__row rule__row--plain"><div class="rule__v">可领数怎么算、活动详情（Event Details）内容、领取流程。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">各活动设定页既有栏位的校验和提示文案。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">活动类别管理的名称、排序、是否开启、国际化「＋」。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">素材的 PC、H5 是两条独立资料，语系要一样。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">底部 Rewards 红点位置不变；数字改成有礼物钮的卡片张数，不加任务中心。</div></div></div></div>
 
-          <div class="blk"><div class="blk__t">二、哪些活动有礼物钮</div><div class="rule"><div class="rule__row"><div class="rule__k">规则</div><div class="rule__v">可领数大于 0 → 这张卡按钮变礼物钮、排最前。可领数照线上既有算法，更新时机也照既有。</div></div><div class="rule__row"><div class="rule__k">线上算得出</div><div class="rule__v">负盈利活动（手动领取）、消费活动（手动领取）、游戏挑战赛、联名挑战活动、预约活动、挂了「每日特别返水」或「每日返水加码」关联的素材卡。</div></div><div class="rule__row"><div class="rule__k">线上算不出</div><div class="rule__v">自动派发的负盈利／消费活动、充值活动、每日首充活动、每日存款活动、新用户首充活动、没挂关联的素材卡。蓝底箭头。</div></div><div class="rule__row"><div class="rule__k">新进奖励页</div><div class="rule__v">Okbet排行榜、大奖池活动、vip返水加码活动、每日特别返水、周卡活动线上都还算不出。要不要补由开发评估；没补就蓝底箭头。</div></div></div></div>
+          <div class="blk"><div class="blk__t">二、哪些活动有礼物钮</div><div class="rule"><div class="rule__row"><div class="rule__k">规则</div><div class="rule__v">可领数大于 0 → 这张卡按钮变礼物钮、排最前。可领数照线上既有算法，更新时机也照既有。</div></div><div class="rule__row"><div class="rule__k">线上算得出</div><div class="rule__v">负盈利活动（手动领取）、消费活动（手动领取）、游戏挑战赛、联名挑战活动、预约活动、挂了「每日特别返水」或「每日返水加码」关联的素材卡。</div></div><div class="rule__row"><div class="rule__k">线上算不出</div><div class="rule__v">自动派发的负盈利／消费活动、充值活动、每日首充活动、每日存款活动、新用户首充活动、周卡活动、没挂关联的素材卡。蓝底箭头。</div></div><div class="rule__row"><div class="rule__k">新进奖励页</div><div class="rule__v">Okbet排行榜、大奖池活动、vip返水加码活动、每日特别返水线上都还算不出。要不要补由开发评估；没补就蓝底箭头。</div></div></div></div>
 
           <div class="blk"><div class="blk__t">三、线上既有限制（运营要知道）</div><div class="rule"><div class="rule__row rule__row--plain"><div class="rule__v">充值活动、消费活动、盈利活动、每日首充活动的「排序」同时管首页，改了首页一起变。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">每日返水加码本身不产生卡片，要另建素材卡并挂「待领取提示关联」。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">每日首充活动的「显示时间」没作用；新建活动最长要等 1 天才出现在前台。</div></div></div></div>
 
@@ -951,7 +952,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
         <article class="panel" id="p-todo">
           <div class="panel__head"><span class="panel__num">5</span><h2 class="panel__title">待确认事项</h2></div>
           <p class="intro">已定的：图片尺寸、夜间配色照设计稿；标签清单见 2.4；现有活动图重出；礼物钮见第 4 节；前台英文以规格书为准。还没定的三项。</p>
-          <div class="blk"><div class="blk__t">还没定</div><div class="rule"><div class="rule__row"><div class="rule__k">倒数周期（开发）</div><div class="rule__v">3.6「哪些算周期性」是推的，请逐一复核；大奖池活动、vip返水加码活动、周卡活动、联名挑战活动尤其要回。</div></div><div class="rule__row"><div class="rule__k">大精选样式（设计）</div><div class="rule__v">等设计稿。已定的：独立一块、一张大图、点图进详情、显示哪个照 2.6。</div></div><div class="rule__row"><div class="rule__k">PC 版（设计）</div><div class="rule__v">逻辑已定（3.7）；底部 banner 入口样式等设计稿。</div></div></div></div>
+          <div class="blk"><div class="blk__t">还没定</div><div class="rule"><div class="rule__row"><div class="rule__k">倒数周期（开发）</div><div class="rule__v">3.6「哪些算周期性」是推的，请逐一复核；大奖池活动、vip返水加码活动、周卡活动、联名挑战活动尤其要回。</div></div><div class="rule__row"><div class="rule__k">大精选样式（设计）</div><div class="rule__v">等设计稿。已定的：独立一块、一张大图、点图进详情、显不显示照 2.1 大精选设置。</div></div><div class="rule__row"><div class="rule__k">PC 版（设计）</div><div class="rule__v">逻辑已定（3.7）；底部 banner 入口样式等设计稿。</div></div></div></div>
         </article>
 
       </main>
@@ -1220,6 +1221,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
                 <div class="el-form-item el-form-item--small"><div class="el-form-item__content"><button type="button" class="el-button el-button--primary el-button--small" data-act="search"><span>搜索</span></button></div></div>
               </form>
               <div class="toolbar">
+                <span class="is-new--btn" data-mark="新增" style="margin-right:16px"><button type="button" class="el-button el-button--primary el-button--small is-plain" data-hero-open><span>大精选设置</span></button></span>
                 <span class="is-new--btn" data-mark="改名称：原「新增PC活动优惠素材图」"><button type="button" class="el-button el-button--primary el-button--small" data-mat-new="PC"><span>新增PC素材</span></button></span>
                 <span class="is-new--btn is-new--btn-r" data-mark="改名称：原「新增H5活动优惠素材图」" style="margin-left:250px"><button type="button" class="el-button el-button--primary el-button--small" data-mat-new="H5"><span>新增H5素材</span></button></span>
               </div>
@@ -1283,17 +1285,10 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
                 <p class="section-hint" style="margin-top:0">设置首页浮窗图片、活动列表图片及活动备注。</p>
                 <div class="section">
                   <div class="section-title">首页浮窗设置</div>
-                  <div class="sw-row" style="margin-bottom:14px"><span data-radios="v2Float"></span><span data-pick="v2Pick"></span></div>
+                  <div data-radios="v2Float" style="margin-bottom:14px"></div>
                   <div class="img-grid" data-uploads="PC 图片|H5 图片"></div>
                   <p class="section-hint">图片格式:png、bmp、jpg、gif、webp;大小建议 2MB 内</p>
                   <form class="el-form list-form" onsubmit="return false"><div class="el-form-item el-form-item--small"><label class="el-form-item__label">排序:</label><div class="el-form-item__content"><div class="el-input el-input--small" style="width:200px"><input class="el-input__inner" value="6011" id="v2Fsort"></div></div></div></form>
-                </div>
-                <!-- 奖励页大精选设置（11/04 她定：大精选＝联名挑战活动，在步骤 2 配；长相仿首页浮窗设置） -->
-                <div class="section is-new" data-mark="新增" data-v2-hero-block>
-                  <div class="section-title">奖励页大精选设置</div>
-                  <div data-radios="v2Hero" style="margin-bottom:14px"></div>
-                  <div class="img-grid" data-uploads="PC 大精选图|H5 大精选图"></div>
-                  <p class="section-hint">图片格式:png、bmp、jpg、gif、webp;大小建议 2MB 内</p>
                 </div>
                 <div class="section">
                   <div class="section-title">奖励页列表设置 <span class="th-new" style="font-weight:400">改名称：原「活动列表设置」</span></div>
@@ -1402,6 +1397,19 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
     </div>
   </div>
 </div>
+<!-- 大精选设置弹窗（11/09 她定：独立一组设定＝开关＋PC／H5 大精选图＋关联活动；列表上方「大精选设置」钮开） -->
+<div class="el-dialog__wrapper hidden" id="heroModal" style="z-index:2001;overflow:auto">
+  <div class="v-modal" style="z-index:2000;position:fixed"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="heroTitle" class="el-dialog" style="margin:12vh auto;width:720px;z-index:2001;position:relative">
+    <div class="el-dialog__header"><span class="el-dialog__title" id="heroTitle">大精选设置</span>
+      <button type="button" class="el-dialog__headerbtn" aria-label="Close" data-hero="close"><i class="el-dialog__close el-icon el-icon-close"></i></button></div>
+    <div class="el-dialog__body" id="heroBody" style="min-height:150px"></div>
+    <div class="el-dialog__footer">
+      <button type="button" class="el-button el-button--default el-button--small" data-hero="close"><span>取 消</span></button>
+      <button type="button" class="el-button el-button--primary el-button--small" data-hero="save"><span>确 定</span></button>
+    </div>
+  </div>
+</div>
 
 <!-- 活动类别编辑弹窗：照既有栏位，不改 -->
 <div class="el-dialog__wrapper hidden" id="catModal" style="z-index:2001">
@@ -1452,18 +1460,21 @@ var items = [
   {id:16, src:'素材', dev:'PC', lang:'英语', def:'否', title:'每日返水加码活动',     sub:'Daily Rebate',            end:'-',                  showEnd:'-',                  on:true,  sort:9999,  feat:false},
   {id:20, src:'大奖池',     lang:'-',    def:'-',  title:'Gold Draw dev',        sub:'',                        start:'2026-05-03 00:00:00', end:'2026-12-28 15:59:59', showEnd:'2026-12-28 15:59:59', on:true,  sort:9997,  feat:false, pick:true, fsort:3},
   {id:4,  src:'游戏挑战赛', lang:'-',    def:'-',  title:'Game Challenge',       sub:'',                        start:'2026-09-01 00:00:00', end:'2026-10-31 00:00:00', showEnd:'2026-10-31 00:00:00', on:true,  sort:999,   feat:true, pick:true, fsort:2},
-  {id:5,  src:'VIP返水加码', lang:'-',   def:'-',  title:'vip返水加码',          sub:'',                        end:'-',                  showEnd:'-',                  on:true,  sort:88,    feat:false},
+  {id:5,  src:'VIP返水加码', lang:'-',   def:'-',  title:'vip返水加码',          sub:'',                        end:'-',                  showEnd:'-',                  on:true,  sort:88,    feat:false, noFloatImg:true},   // 示范：有首页浮窗设置但还没传图 → 列表小精选开关反灰
   {id:6,  src:'充值活动',   lang:'-',    def:'-',  title:'Deposit Activity',     sub:'',                        start:'2025-10-17 00:00:00', end:'2028-01-01 00:00:00', showEnd:'-',                  on:true,  sort:8,     feat:false, auto:true},
   {id:7,  src:'负盈利活动', lang:'-',    def:'-',  title:'负盈利-手动领-自动到', sub:'负盈利活动-内容标题文字', start:'2026-10-01 00:00:00', end:'2027-10-30 23:59:59', showEnd:'-',                  on:true,  sort:1,     feat:false, pending:true},
   {id:8,  src:'每日存款',   lang:'-',    def:'-',  title:'will存款活动Test',     sub:'',                        start:'2026-10-01 00:00:00', end:'2026-11-30 00:00:00', showEnd:'-',                  on:true,  sort:0,     feat:false, pick:true, fsort:4},
   {id:10, src:'预约活动',   lang:'-',    def:'-',  title:'預約活動2',            sub:'',                        start:'2026-09-01 00:00:00', end:'2026-09-21 00:00:00', showEnd:'-',                  on:true,  sort:0,     feat:false},
   {id:19, src:'周卡',       lang:'-',    def:'-',  title:'Weekly Card',          sub:'',                        start:'2026-10-01 00:00:00', end:'2026-12-31 23:59:59', showEnd:'-',                  on:true,  sort:0,     feat:false},
-  {id:20, src:'联名挑战',   lang:'-',    def:'-',  title:'联名挑战活动', pending:true, pendingN:2,          sub:'',                        start:'2026-10-01 00:00:00', end:'2026-12-31 23:59:59', showEnd:'-',                  on:true,  sort:0,     feat:false, hero:true},   // 11/04 她定：这次的大精选＝联名挑战活动，在活动配置(新) 步骤 2 的「奖励页大精选设置」开
+  {id:21, src:'联名挑战',   lang:'-',    def:'-',  title:'联名挑战活动', pending:true, pendingN:2,          sub:'',                        start:'2026-10-01 00:00:00', end:'2026-12-31 23:59:59', showEnd:'-',                  on:true,  sort:0,     feat:false},   // 11/04 她定：这次的大精选＝联名挑战活动，在活动配置(新) 步骤 2 的「奖励页大精选设置」开
   {id:11, src:'消费活动',   lang:'-',    def:'-',  title:'消费活动-日返',        sub:'',                        start:'2026-07-01 00:00:00', end:'2027-06-30 23:59:59', showEnd:'-',                  on:true,  sort:0,     feat:false},
   {id:12, src:'每日首充',   lang:'-',    def:'-',  title:'每日首充活动',         sub:'',                        start:'2026-01-01 00:00:00', end:'2026-10-19 23:30:00', showEnd:'-',                  on:true,  sort:0,     feat:false, auto:true},
   {id:13, src:'新用户首充', lang:'-',    def:'-',  title:'新用户首充',           sub:'',                        end:'-',                  showEnd:'-',                  on:true,  sort:0,     feat:false},
   {id:14, src:'负盈利活动', lang:'-',    def:'-',  title:'JustinTest活動',       sub:'',                        start:'2026-10-01 00:00:00', end:'2026-10-31 00:00:00', showEnd:'-',                  on:false, sort:0,     feat:false}
 ];
+/* 大精选（11/09 她定：独立一组设定，不挂在活动上）：开关、PC／H5 大精选图、关联的联名挑战活动。前台只显示这一个 */
+var HERO = {on:true, pc:true, h5:true, actId:21};
+function heroAct(){ var a = HERO.on && HERO.h5 && HERO.actId ? byId(HERO.actId) : null; return a && a.src === '联名挑战' && visibleNow(a) ? a : null; }   // 关联活动关闭／过了显示期 → 不显示
 /* 精选（Featured）10/30 她定移除：前台 Featured 大图卡、后台「奖励页精选」页签都拿掉，特殊活动另开需求 */
 /* 奖励列表图：11/03 设计稿改整张卡＝一张图，各上传区红字标建议尺寸（11/06 她给：H5 1100×600、PC 1368×560；大精选 H5 1100×672、PC 2400×640；首页浮窗不标） */
 
@@ -1505,14 +1516,14 @@ var ITEM_TAGS = {1:['Leaderboard'], 3:['Rebate'], 4:['Leaderboard'], 6:['Auto Cl
 /* 某张表（PC／H5）列哪些：该端的素材＋全部其他来源 */
 function onDev(it, dev){ return it.src !== '素材' || it.dev === dev; }
 items.forEach(function(it){ it.tags = ITEM_TAGS[it.id] || []; });
-/* 奖励页精选区块（10/30 她定；11/03 她定改法：不集中配置，各活动自己的「首页浮窗设置」旁加一个「奖励页小精选」开关，图共用首页浮窗图）
+/* 奖励页精选区块（10/30 她定；11/09 她定：开关集中在 2.1 奖励页列表，各活动页不放开关，图共用首页浮窗图）
    可开的活动＝她 11/03 列的 8 种：排行榜、游戏挑战赛、大奖池、VIP 反水加码、每日存款、Daily Special、预约活动、联名挑战活动
    → 开关放在：素材弹窗、活动配置(新) 步骤 2 首页浮窗设置、游戏挑战赛 活动素材配置、每日存款活动页（每日存款原本没浮窗，一并加上浮窗栏位）
-   前台：个人栏下一排方块，取开了精选、在显示期内且状态开启的活动，照首页浮窗排序（数字小在前）取前 4 个；一个都没有整排不出
-   it.pick＝精选开关；it.fsort＝首页浮窗排序（各配置页的「首页浮窗排序／首页展示排序」栏位，保存写回；没设排最后；大的在前） */
-var PICK_OK = ['素材', '游戏挑战赛', '每日存款', '预约活动', '排行榜', '大奖池', 'VIP返水加码', '每日特别返水'];   // 有「奖励页小精选」开关的来源（她 11/03 列的 8 种活动；素材保留）
+   前台：个人栏下一排方块，取 2.1 列表开了小精选、在显示期内且状态开启的活动，照奖励页排序（大在前）；后台最多开 4 个（11/09 她定）；一个都没有整排不出
+   it.pick＝小精选开关（2.1 列表）；it.fsort＝首页浮窗排序（各配置页既有栏位，只管首页，跟小精选顺序无关） */
+var PICK_OK = ['素材', '游戏挑战赛', '每日存款', '预约活动', '周卡', '联名挑战', '排行榜', '大奖池', 'VIP返水加码', '每日特别返水'];   // 有首页浮窗图的来源才能开小精选（活动配置(新) 三个模板都有首页浮窗设置）   // 有「奖励页小精选」开关的来源（她 11/03 列的 8 种活动；素材保留）
 function fsortOf(it){ return it && it.fsort != null ? it.fsort : -1; }   // 首页浮窗排序：没设排最后（0 是合法值）；11/05 她定：跟首页浮窗一样，数字越大越前面
-function pickList(dev){ return items.filter(function(x){ return x.pick && onDev(x, dev) && visibleNow(x); }).sort(function(a,b){ return fsortOf(b) - fsortOf(a); }).slice(0, 4); }
+function pickList(dev){ return items.filter(function(x){ return x.pick && onDev(x, dev) && visibleNow(x); }).sort(function(a,b){ return b.sort - a.sort; }).slice(0, 4); }   // 11/09 她定：开关、顺序都在奖励页列表；顺序＝奖励页排序
 
 /* 每笔活动自己勾的类别（素材、专项活动＝既有「活动类型」；游戏挑战赛／Okbet排行榜／大奖池活动／vip返水加码活动／每日特别返水／活动配置(新)＝新增「活动类别」）
    前台活动类别 tab照这个筛选；没勾任何类别＝只在 All 出现（10/19 她定） */
@@ -1591,6 +1602,7 @@ var selects = {
   fSt:{val:'', opts:[['','全部'],['1','开启'],['0','关闭']]},
   fSrc:{val:'', opts:[['','全部']].concat(items.map(function(x){ return x.src; }).filter(function(v,i,a){ return a.indexOf(v) === i; }).map(function(s){ return [s,srcName(s)]; }))},
   i18nLang:{val:'英语', opts:LANGS.map(function(l){ return [l,l]; })},
+  heroAct:{val:'', opts:[]},   // 大精选设置弹窗：关联活动，只列联名挑战活动
   itemTag:{val:'', opts:[]}   // 设定标签弹窗：单选，选项＝「无」＋标签管理里的全部标签
 };
 
@@ -1615,8 +1627,6 @@ function elRadios(key, opts, val){
     return '<label class="el-radio'+(on?' is-checked':'')+dis+'" data-radio="'+key+'|'+o[0]+'"><span class="el-radio__input'+(on?' is-checked':'')+dis+'"><span class="el-radio__inner"></span><input type="radio" class="el-radio__original"></span><span class="el-radio__label">'+o[1]+'</span></label>';
   }).join('')+'</div>';
 }
-/* 奖励页小精选开关（11/03 她定：跟浮窗开关排同一行、共用首页浮窗图）；inline 红框＋名称＋单选 */
-function pickSwitch(key, val){ return '<span class="is-new is-new--sw"><span>奖励页小精选</span>'+elRadios(key, [['1','开启'],['0','关闭']], val)+'</span>'; }
 function elChecks(key, chosen){
   return '<div class="check-grid">'+cats.map(function(c){
     var on = chosen.indexOf(c.name) > -1;
@@ -1642,7 +1652,7 @@ function colFrame(cols, j, pos){   // pos: 'th' | 'td' | 'last'；相邻同色�
 }
 function elTable(cols, rows, rowCls){
   var colgroup = '<colgroup>'+cols.map(function(c){ return '<col'+(c.w?' width="'+c.w+'"':'')+'>'; }).join('')+'</colgroup>';
-  var th = cols.map(function(c, j){ return '<th class="el-table__cell is-leaf is-center"'+colFrame(cols, j, 'th')+'><div class="cell">'+c.t+(c.isNew?'<span class="th-new">'+(c.was?'改名称':'新增')+'</span>'+(c.was?'<div style="font-size:11px;color:var(--c-danger);font-weight:400">原：'+c.was+'</div>':''):'')+(c.isMod?'<span class="th-mod">修改</span>':'')+'</div></th>'; }).join('');
+  var th = cols.map(function(c, j){ var sd = c.sortable ? matSortDir : ''; return '<th class="el-table__cell is-leaf is-center'+(c.sortable?' is-sortable '+(sd==='asc'?'ascending':'descending'):'')+'"'+colFrame(cols, j, 'th')+(c.sortable?' data-sort-col="1"':'')+'><div class="cell">'+c.t+(c.sortable?'<span class="caret-wrapper"><i class="sort-caret ascending"></i><i class="sort-caret descending"></i></span>':'')+(c.isNew?(c.sortable?'<br>':'')+'<span class="th-new">'+(c.was?'改名称':'新增')+'</span>'+(c.was?'<div style="font-size:11px;color:var(--c-danger);font-weight:400">原：'+c.was+'</div>':''):'')+(c.isMod?'<span class="th-mod">修改</span>':'')+'</div></th>'; }).join('');
   var body = rows.map(function(r, i){
     return '<tr class="el-table__row'+(rowCls?' '+rowCls(i):'')+'">'+r.map(function(td, j){ return '<td class="el-table__cell is-center"'+colFrame(cols, j, i === rows.length-1 ? 'last' : 'td')+'><div class="cell">'+td+'</div></td>'; }).join('')+'</tr>';
   }).join('');
@@ -1671,15 +1681,19 @@ function catsOfKey(key){
 /* ==========================================================================
    画面一：汇总页
    ========================================================================== */
+var matSortDir = 'desc';   // 奖励页列表照奖励页排序的方向：desc 降序（预设，跟前台一样大的在前）／asc 升序
 var MAT_COLS = [
-  {t:'来源',w:116,isNew:true},{t:'语系',w:50},{t:'默认显示',w:60},{t:'奖励页排序',w:92,isNew:true,was:'排序'},
+  {t:'来源',w:116,isNew:true},{t:'语系',w:50},{t:'默认显示',w:60},{t:'奖励页排序',w:120,isNew:true,was:'排序',sortable:true},
   {t:'标题文字'},{t:'奖励列表图',w:96,isNew:true,was:'标题图片'},{t:'弹窗图片',w:80},{t:'首页图片(移动端用)',w:80},{t:'内容标题文字',w:100},{t:'内容文字',w:80},{t:'内容图片',w:80},{t:'结束时间',w:90},{t:'显示结束时间',w:90},
-  {t:'标签',w:124,isNew:true},{t:'小精选',w:70,isNew:true},{t:'状态',w:60,isMod:true},{t:'操作',w:118,isMod:true}   // 既有栏位照线上顺序不动；新增的 来源 放最前，标签／小精选 跟 状态 一起放最后（都是显示控制）
+  {t:'标签',w:124,isNew:true},{t:'小精选',w:104,isNew:true},{t:'状态',w:60,isMod:true},{t:'操作',w:118,isMod:true}   // 既有栏位照线上顺序不动；新增的 来源 放最前，标签／小精选 跟 状态 一起放最后（都是显示控制）
 ];
-/* 小精选栏（11/03 她定做法 2）：只显示开启／关闭（她定：不放排序、不放提示字，后台画面＝规格示意图，多画开发就会做） */
-function pickCell(it){
+/* 小精选栏（11/09 她定：开关集中在列表、各活动页的开关拔除）：开关＋该端首页浮窗图预览（只能看，换图到活动页）；
+   没有首页浮窗设置的来源「-」；素材只看 H5，PC 表的素材列「-」；有浮窗设置但还没传图（noFloatImg）→ 开关反灰开不了 */
+function pickCell(it, dev){
   if (PICK_OK.indexOf(it.src) < 0) return '-';
-  return it.pick ? elTag('开启','success') : elTag('关闭','info');
+  if (it.src === '素材' && dev === 'PC') return '-';
+  if (it.noFloatImg) return '<div class="pickcell" title="先在活动设定页上传首页浮窗图">'+elSwitch(false, 'data-pick-sw="'+it.id+'"', true)+'</div>';
+  return '<div class="pickcell">'+elSwitch(!!it.pick, 'data-pick-sw="'+it.id+'"')+'<span class="thumb" title="首页浮窗图"></span></div>';
 }
 function tagChips(tags){ return tags.length ? '<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center">'+tags.map(function(t){ return elTag(esc(t),'info'); }).join('')+'</div>' : '-'; }
 function renderFilter(){
@@ -1692,21 +1706,21 @@ function renderMat(){
 }
 function matTable(dev){
   var st = selects.fSt.val, src = selects.fSrc.val;
-  // 顺序照前台：排序数字大的在前
+  // 11/09 她定：奖励页排序栏表头可切升序／降序，预设降序＝跟前台一样（只影响列表看的顺序，不影响前台）
   var list = items.filter(function(it){
     return onDev(it, dev) && (st === '' || String(+it.on) === st) && (!src || it.src === src);
-  }).sort(function(a,b){ return b.sort - a.sort; });
+  }).sort(function(a,b){ return matSortDir === 'asc' ? a.sort - b.sort : b.sort - a.sort; });
   var rows = list.map(function(it){
     var mine = it.src === '素材';
     return [
       mine ? elTag('素材','') : elTag(srcName(it.src),'info')+(isV2(it.src) ? '<div style="color:var(--c-text-3);font-size:11px;margin-top:2px">活动配置(新)</div>' : ''),
       it.lang, it.def,
-      (mine ? '<div class="el-input el-input--mini sort-input"><input type="number" min="0" class="el-input__inner" value="'+it.sort+'" data-sort="'+it.id+'"></div>' : '<span title="到「前往设定」改">'+it.sort+'</span>'),   // 11/05 她定：只有素材能在列表改；其他来源只显示数值，要改按「前往设定」
+      '<div class="el-input el-input--mini sort-input"><input type="number" min="0" class="el-input__inner" value="'+it.sort+'" data-sort="'+it.id+'"></div>',   // 11/09 她定：全部来源都能在列表改，保存写回该活动设定页的「排序」（同一个值）
       esc(it.title),
       '<span class="thumb thumb--wide"></span>',
       mine ? '<span class="thumb"></span>' : '-', mine ? '<span class="thumb"></span>' : '-', it.sub ? esc(it.sub) : '-', mine ? '<span class="thumb"></span>' : '-', mine ? '<span class="thumb"></span>' : '-',   // 素材既有栏位照线上保留；其他来源没有＝--
       fmtTime(it.end), fmtTime(it.showEnd),
-      tagChips(it.tags), pickCell(it),
+      tagChips(it.tags), pickCell(it, dev),
       elSwitch(it.on, mine ? 'data-on="'+it.id+'"' : '', !mine),
       (mine ? elTextBtn('编辑','data-mat-edit="'+it.id+'"')+elTextBtn('删除','data-mat-del="'+it.id+'"') : elTextBtn('前往设定','data-goto="'+it.id+'"'))+elTextBtn('标签','data-item-tag="'+it.id+'"')
     ];
@@ -1721,9 +1735,9 @@ var matDevice = 'H5', matEditing = null;   // matEditing＝正在编辑的素材
 function openMat(device, it){
   matDevice = device; matEditing = it || null; open.select = open.multi = null;
   // 单选目前值：新增照线上预设；编辑带入假资料
-  ['mFloat','mPick','mPend','mHome','mSt','mDef','mJump','mText','mImg','mImgJump','mDaily'].forEach(function(k){ delete radioVals[k]; });
+  ['mFloat','mPend','mHome','mSt','mDef','mJump','mText','mImg','mImgJump','mDaily'].forEach(function(k){ delete radioVals[k]; });
   matNew = {cats:[]};   // 新增＝空白；编辑直接用该笔的 cats
-  if (it) { radioVals.mSt = it.on ? '1' : '0'; radioVals.mPick = it.pick ? '1' : '0'; radioVals.mDef = it.def === '是' ? '1' : '0'; radioVals.mPend = it.title.indexOf('返水') > -1 ? '2' : '0'; }
+  if (it) { radioVals.mSt = it.on ? '1' : '0'; radioVals.mDef = it.def === '是' ? '1' : '0'; radioVals.mPend = it.title.indexOf('返水') > -1 ? '2' : '0'; }
   document.getElementById('matModalTitle').innerHTML = esc((it ? '修改' : '新增')+device+'素材')+'<span class="th-new" style="font-weight:400">改名称：原「'+(it ? '修改' : '新增')+device+'活动优惠素材图」</span>';   // 11/05 她定名称统一：活动优惠素材图 → 素材
   renderMatModal();
   document.getElementById('matModal').classList.remove('hidden');
@@ -1769,9 +1783,9 @@ function renderMatModal(){
     '<div class="is-mod" data-mark="修改：原在标题上方">'+formItem('排序:', true, inp(it.id ? it.sort : '', undefined).replace('<input ', '<input id="mSort" '), lw-16)+'</div>'+   // 11/05 她定：只挪位置到奖励列表图下方（跟活动配置(新) 图在上、排序在下一样），逻辑、校验照既有（＝奖励页排序）
     formItem('弹窗图片:', false, up+'<div class="el-form-item__tip el-form-item__tip--red">PC: 800*600 H5: 640*118</div>', lw)+
     formItem('首页图片(移动端用):', false, up, lw)+
-    formItem('首页浮窗设置', false, '<div class="sw-row">'+elRadios('mFloat', [['1','开启'],['0','关闭']], radioOf('mFloat','0'))+pickSwitch('mPick', radioOf('mPick','0'))+'</div>', lw)+   // 奖励页小精选跟浮窗开关同一行，图共用下面的浮窗图片
+    formItem('首页浮窗设置', false, elRadios('mFloat', [['1','开启'],['0','关闭']], radioOf('mFloat','0')), lw)+   // 既有；小精选开关 11/09 搬到列表
     formItem('浮窗图片:', false, up, lw)+
-    formItem('首页浮窗排序:', true, inp(it.fsort != null ? it.fsort : '').replace('<input ', '<input id="mFsort" '), lw)+   // 绑 it.fsort：前台小精选照这个排
+    formItem('首页浮窗排序:', true, inp(it.fsort != null ? it.fsort : '').replace('<input ', '<input id="mFsort" '), lw)+   // 绑 it.fsort：首页浮窗排序，只管首页
     formItem('活动类型:', false, elChecks('matCats', catsOfKey('matCats')), lw)+
     formItem('待领取提示关联:', false, elRadios('mPend', [['0','无'],['1','每日特别返水'],['2','每日返水加码']], radioOf('mPend','0')), lw)+
     formItem('推荐游戏:', false, '<button type="button" class="el-button el-button--primary el-button--small"><span>选择游戏</span></button>', lw)+
@@ -1857,6 +1871,21 @@ function saveTagEdit(){
 
 /* 设定标签（汇总页 › 列表操作「标签」钮）：每个活动从 TAGS 挑 1 个；按确定才存回 items[].tags */
 var tagSet = null;   // {id, tags}＝正在编辑的活动与工作副本
+/* 大精选设置弹窗：开关、PC 大精选图（非必填）、H5 大精选图（开启时必填）、关联活动（只列联名挑战活动）；「确定」一次保存 */
+var heroDraft = {pc:false, h5:false};
+function openHero(){
+  heroDraft = {pc:HERO.pc, h5:HERO.h5}; radioVals['src_大精选'] = HERO.on ? '1' : '0'; selects.heroAct.val = HERO.actId ? String(HERO.actId) : ''; open.select = open.multi = null;
+  renderHero(); document.getElementById('heroModal').classList.remove('hidden');
+}
+function renderHero(){
+  selects.heroAct.opts = [['','请选择']].concat(items.filter(function(x){ return x.src === '联名挑战'; }).map(function(x){ return [String(x.id), x.title]; }));
+  var card = function(t, req, tip, has){ return '<div class="upload-card" data-hero-up="'+t.toLowerCase()+'"><div class="upload-card-header">'+(req ? '<span class="req">*</span>' : '')+t+' 大精选图<span class="el-form-item__tip el-form-item__tip--red" style="margin:0 0 0 10px;display:inline">'+tip+'</span></div><div class="upload-card-body"><div class="img-uploader">'+(has ? '<span class="thumb thumb--wide" style="width:120px;height:70px"></span>' : '点击上传图片')+'</div><div class="upload-actions"><button type="button" class="el-button el-button--text el-button--mini" data-card-del><i class="el-icon-delete"></i><span>删除</span></button></div></div></div>'; };
+  document.getElementById('heroBody').innerHTML = '<form class="el-form el-form--label-right" onsubmit="return false">'+
+    formItem('开关:', false, elRadios('src_大精选', [['1','开启'],['0','关闭']], radioOf('src_大精选','0')), 100)+
+    '<div class="img-grid" style="margin:0 0 12px 100px">'+card('PC', false, '建议尺寸 2400×640', heroDraft.pc)+card('H5', true, '建议尺寸 1100×672', heroDraft.h5)+'</div>'+
+    formItem('关联活动:', true, elSelect('heroAct', '320px')+'<div class="el-form-item__tip">只列联名挑战活动；大精选上外显的关卡进度、领取和点图进的详情都吃这个活动</div>', 100)+
+  '</form>';
+}
 function openTagSet(id){
   var it = byId(id); tagSet = {id:id}; selects.itemTag.val = it.tags[0] || ''; open.select = open.multi = null;
   renderTagSet(); document.getElementById('tagSetModal').classList.remove('hidden');
@@ -1916,22 +1945,18 @@ function openCat(i){
 var radioVals = {v2Float:'1', v2List:'1', gcStatus:'1', gcFloat:'0'};
 function renderV2(){
   if (!v2Item) v2Item = items.find(function(x){ return x.src === '预约活动'; }) || null;   // 11/05 她定：X-BOMB 预览移除，步骤 2 预设看预约活动
-  radioVals.v2Pick = v2Item && v2Item.pick ? '1' : '0';   // 奖励页小精选开关＝该笔活动的 pick
   radioVals.v2List = !v2Item || v2Item.on !== false ? '1' : '0';   // 活动列表设置开关＝这笔进不进奖励页（10/21 她定：开启的都进）
-  radioVals.v2Hero = v2Item && v2Item.hero ? '1' : '0';   // 奖励页大精选开关＝该笔的 hero（前台大图）
-  document.querySelectorAll('[data-v2-hero-block]').forEach(function(el){ el.classList.toggle('hidden', !(v2Item && v2Item.src === '联名挑战')); });
-  document.querySelectorAll('[data-v2-list-body]').forEach(function(el){ el.classList.toggle('hidden', radioVals.v2List !== '1'); });   // 11/05 查线上：奖励页列表设置 关闭时图片／排序栏位不显示，开启才出现   // 11/05 她定：只有联名挑战活动模板才有这组
+  document.querySelectorAll('[data-v2-list-body]').forEach(function(el){ el.classList.toggle('hidden', radioVals.v2List !== '1'); });   // 11/05 查线上：奖励页列表设置 关闭时图片／排序栏位不显示，开启才出现
   document.querySelectorAll('[data-radios]').forEach(function(el){ el.innerHTML = elRadios('page_'+el.dataset.radios, [['1','开启'],['0','关闭']], radioVals[el.dataset.radios]); });
-  document.querySelectorAll('[data-pick]').forEach(function(el){ el.innerHTML = pickSwitch('page_'+el.dataset.pick, radioVals[el.dataset.pick]); });
   document.querySelectorAll('[data-uploads]').forEach(function(el){
     el.innerHTML = el.dataset.uploads.split('|').map(function(t){
-      return '<div class="upload-card"><div class="upload-card-header">'+(t === 'PC 大精选图' ? '' : '<span class="req">*</span>')+t+'<span class="el-form-item__tip el-form-item__tip--red" style="margin:0 0 0 10px;display:inline">'+({'PC':'建议尺寸 1368×560','H5':'建议尺寸 1100×600','PC 大精选图':'建议尺寸 2400×640','H5 大精选图':'建议尺寸 1100×672'}[t] || '')+'</span>'+'</div><div class="upload-card-body"><div class="img-uploader">点击上传图片</div>'+
+      return '<div class="upload-card"><div class="upload-card-header">'+'<span class="req">*</span>'+t+'<span class="el-form-item__tip el-form-item__tip--red" style="margin:0 0 0 10px;display:inline">'+({'PC':'建议尺寸 1368×560','H5':'建议尺寸 1100×600'}[t] || '')+'</span>'+'</div><div class="upload-card-body"><div class="img-uploader">点击上传图片</div>'+
              '<div class="upload-actions"><button type="button" class="el-button el-button--text el-button--mini" data-card-del><i class="el-icon-delete"></i><span>删除</span></button></div></div></div>';
     }).join('');
   });
   document.querySelector('[data-reward="v2"]').innerHTML = rewardFields('v2', {labelWidth:132, colon:':'}, catsOfKey('v2'));
   document.getElementById('v2Sort').value = v2Item ? v2Item.sort : 0;
-  document.getElementById('v2Fsort').value = v2Item && v2Item.fsort != null ? v2Item.fsort : 6011;   // 首页浮窗排序＝该笔的 fsort（前台小精选顺序）
+  document.getElementById('v2Fsort').value = v2Item && v2Item.fsort != null ? v2Item.fsort : 6011;   // 首页浮窗排序＝该笔的 fsort（只管首页）
   document.querySelector('.wizard__bar-title').textContent = '活动配置步骤'+(v2Item ? '：'+v2Item.title : '');
 }
 function renderGc(){
@@ -1956,12 +1981,12 @@ function renderGc(){
           '<span class="el-form-item__tip gc-row__tip">仅支持图片文件：.PNG .JPG .WEBP 图片大小不超过2MB</span>'+
         '</div>'+
       '</div>'+
-      formItem('浮窗开关', true, '<div class="sw-row">'+elRadios('page_gcFloat', [['1','开启'],['0','关闭']], radioVals.gcFloat)+pickSwitch('page_gcPick', it.pick ? '1' : '0')+'</div>', lw)+
+      formItem('浮窗开关', true, '<div class="sw-row">'+elRadios('page_gcFloat', [['1','开启'],['0','关闭']], radioVals.gcFloat)+'</div>', lw)+
       '<div class="gc-row gc-row--wide">'+
         '<div class="gc-up"><span class="gc-up__lb"><span class="req">*</span>PC端图片</span>'+fileBtn()+'<div class="gc-box"><span class="gc-box__img"></span></div></div>'+
         '<div class="gc-up"><span class="gc-up__lb"><span class="req">*</span>H5端图片</span>'+fileBtn()+'<div class="gc-box"><span class="gc-box__img"></span></div></div>'+
       '</div>'+
-      formItem('首页展示排序', true, inp(it.fsort != null ? it.fsort : 9999998,'240px','id="gcFsort"'), lw)+   // 绑 it.fsort：前台小精选照这个排
+      formItem('首页展示排序', true, inp(it.fsort != null ? it.fsort : 9999998,'240px','id="gcFsort"'), lw)+   // 绑 it.fsort：首页浮窗排序，只管首页
       '<div class="el-form-item__tip" style="margin:0 0 4px">建议上传 png/jpg/gif 格式图片，大小不超过 5MB</div>'+
     '</div>'+
     '<div style="padding:14px 0 0 '+lw+'px"><button type="button" class="el-button el-button--primary el-button--small" data-act="gcSave"><span>保存</span></button></div>';
@@ -2007,18 +2032,16 @@ function srcField(label){
   if (label === '首页展示排序') return formItem(label+':', false, sInp('150px'), lw);
   return formItem(label+':', false, sSel('240px'), lw);
 }
-/* 首页浮窗设置＋奖励页小精选（11/03 她定：小精选开关跟浮窗开关同一行、共用浮窗图）
-   floatNew＝线上没有浮窗（排行榜）→ 整组红框新增；float={sw,pc,h5,sort}＝线上既有栏位名（大奖池／vip返水加码／每日特别返水），只有小精选是新增；sw 为空（每日特别返水没有开关）→ 小精选自己一行红框 */
+/* 首页浮窗设置（既有栏位照各页；小精选开关 11/09 搬到 2.1 列表，这里不放）
+   floatNew＝线上没有浮窗（排行榜）→ 整组红框新增；float={sw,pc,h5,sort}＝线上既有栏位名（大奖池／vip返水加码／每日特别返水） */
 function floatBlock(pg, lw){
   var up = function(){ return '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'+upThumb(); };
-  var pickVal = radioOf('src_奖励页精选', srcItem && srcItem.pick ? '1' : '0');
   if (pg.floatNew) return '<div class="is-new" data-mark="新增">'+
-    formItem('首页浮窗设置:', false, '<div class="sw-row">'+elRadios('src_浮窗开关', [['1','开启'],['0','关闭']], radioOf('src_浮窗开关','0'))+pickSwitch('src_奖励页精选', pickVal)+'</div>', lw-16)+
+    formItem('首页浮窗设置:', false, '<div class="sw-row">'+elRadios('src_浮窗开关', [['1','开启'],['0','关闭']], radioOf('src_浮窗开关','0'))+'</div>', lw-16)+
     formItem('PC浮窗图片:', false, up(), lw-16)+formItem('H5浮窗图片:', false, up(), lw-16)+
-    formItem('首页浮窗排序:', true, sInp('320px', srcItem && srcItem.fsort != null ? srcItem.fsort : '', 'data-src-fsort'), lw-16)+'</div>';   // 绑 it.fsort：前台小精选照这个排（大在前）
+    formItem('首页浮窗排序:', true, sInp('320px', srcItem && srcItem.fsort != null ? srcItem.fsort : '', 'data-src-fsort'), lw-16)+'</div>';   // 绑 it.fsort：首页浮窗排序，只管首页
   var f = pg.float, h = '';
-  if (f.sw) h += formItem(f.sw+':', true, '<div class="sw-row">'+elRadios('src_浮窗开关', [['1','开启'],['0','关闭']], radioOf('src_浮窗开关','1'))+pickSwitch('src_奖励页精选', pickVal)+'</div>', lw);
-  else h += '<div class="is-new" data-mark="新增">'+formItem('奖励页小精选:', false, elRadios('src_奖励页精选', [['1','开启'],['0','关闭']], pickVal), lw-16)+'</div>';
+  if (f.sw) h += formItem(f.sw+':', true, elRadios('src_浮窗开关', [['1','开启'],['0','关闭']], radioOf('src_浮窗开关','1')), lw);
   h += formItem(f.pc+':', true, up(), lw)+formItem(f.h5+':', true, up(), lw)+formItem(f.sort+':', true, sInp('150px', srcItem && srcItem.fsort != null ? srcItem.fsort : '', 'data-src-fsort'), lw);   // 线上既有的首页展示排序＝it.fsort，前台小精选照它排
   return h;
 }
@@ -2092,7 +2115,7 @@ function renderSrc(){
   }).join('');
   // 首页浮窗设置（11/03 她定：每日存款要进奖励页精选区块、共用首页浮窗设置）：栏位照素材的「首页浮窗设置／浮窗图片／首页浮窗排序」，浮窗图片跟上面一样由 PC／手机端页签决定，栏位名不冠端别（11/05 她定）
   if (pg.float) { var flw = (dev === '手机端' ? 180 : lw) - 16; h += '<div class="is-new" data-mark="新增">'+
-    formItem('首页浮窗设置:', false, '<div class="sw-row">'+elRadios('src_浮窗开关', [['1','开启'],['0','关闭']], radioOf('src_浮窗开关','0'))+pickSwitch('src_奖励页精选', radioOf('src_奖励页精选', srcItem && srcItem.pick ? '1' : '0'))+'</div>', flw)+
+    formItem('首页浮窗设置:', false, '<div class="sw-row">'+elRadios('src_浮窗开关', [['1','开启'],['0','关闭']], radioOf('src_浮窗开关','0'))+'</div>', flw)+
     formItem('首页浮窗图片:', false, '<div class="upload-line">'+fileBtn()+'<span class="el-form-item__tip" style="margin:0">仅支持图片文件：.PNG .JPG，图片大小不超过 2MB。</span></div>'+upThumb(), flw)+
     formItem('首页浮窗排序:', true, sInp('320px', srcItem && srcItem.fsort != null ? srcItem.fsort : '', 'data-src-fsort'), flw)+'</div>'; }   // 绑 it.fsort
   h += pg.content.map(srcField).join('') + (pg.extra || []).map(srcField).join('');
@@ -2204,10 +2227,10 @@ function renderFront(){
       '<div><i class="h5-coin h5-coin--p"></i>1,999,784,008.00 <span class="h5-refresh">⟳</span></div><div><i class="h5-coin h5-coin--pt"></i>1,999,784,238 <span class="h5-refresh">⟳</span></div></div>'+
       '<button type="button" class="h5-deposit"><span class="h5-deposit__tag">BONUS</span>Deposit</button><i class="h5-search"></i></div>'
     : '<div class="h5-top">'+logo+'<button type="button" class="h5-login">Register / Login</button><i class="h5-search"></i></div>';
-  // 大精选（Hero 大图）＝活动配置(新) 步骤 2 开了「奖励页大精选设置」且在显示期内的活动，图用它的 H5 大精选图；开了多个取奖励页排序最大的一个；一个都没有整块不显示（11/04 她定）
-  var hero = items.filter(function(x){ return x.hero && x.src === '联名挑战' && visibleNow(x); }).sort(function(a,b){ return b.sort - a.sort; })[0];
+  // 大精选（Hero 大图）＝2.1「大精选设置」：开关开、有 H5 图、关联的联名挑战活动在显示期内才显示（11/09 她定）
+  var hero = heroAct();
   if (hero) h += '<div class="h5-hero" data-front-hero data-front-open="'+hero.id+'" title="'+esc(hero.title)+'">'+[[22,40],[58,120],[300,60],[318,150],[200,30],[140,70]].map(function(c){ return '<i class="h5-hero__coin" style="left:'+c[0]+'px;top:'+c[1]+'px"></i>'; }).join('')+'<div class="h5-hero__panel"><span class="h5-hero__lv"></span><span class="h5-hero__bar"><i></i></span><span class="h5-hero__btn"></span></div></div>';
-  // 奖励页小精选：各活动开了「奖励页小精选」的，一格一个、显示其首页浮窗图（H5 图片），照首页浮窗排序取前 4 个；一个都没有整排不出
+  // 奖励页小精选：2.1 列表开了「小精选」的（最多 4 个），一格一个、显示其首页浮窗图（H5 图片），照奖励页排序；一个都没有整排不出
   var picks = pickList('H5');
   if (picks.length) h += '<div class="h5-picks">'+picks.map(function(it, i){ return '<div class="h5-pick h5-pick--'+(i%4)+'" data-front-open="'+it.id+'" title="'+esc(it.title)+'">'+ICO.pick[i%4]+'</div>'; }).join('')+'</div>';
   // 活动类别 tab：药丸按钮，All 在最前（固定格子图示），其余＝后台开启的类别：有上传「图示」用上传的，没有吃预设日历图示
@@ -2230,7 +2253,7 @@ function renderPC(){
   var h = frontLogin
     ? '<div class="pc-top"><span class="pc-top__me"><i class="h5-avatar"></i><i class="h5-coin h5-coin--p"></i>999.00 <span class="h5-refresh">⟳</span></span><span>Home</span><span>Sports</span><span>Tourney</span><b>Rewards</b><div class="pc-top__r"><span class="pc-top__invite">Invite</span><span class="pc-top__dep">Deposit<i>BONUS</i></span><i class="pc-top__ico"></i><i class="pc-top__ico pc-top__ico--sq"></i><i class="pc-top__ico"></i></div></div>'
     : '<div class="pc-top"><span class="pc-top__menu">☰</span><span class="h5-logo">OK<em>·</em>BET</span><span class="pc-top__gap"></span><span>Home</span><span>Sports</span><span>Tourney</span><b>Rewards</b><div class="pc-top__r"><span class="pc-top__login">Login</span><span class="pc-top__dep">Top-Up 20,000<i>BONUS</i></span><i class="pc-top__ico"></i><i class="pc-top__ico pc-top__ico--sq"></i><i class="pc-top__ico"></i></div></div>';
-  var hero = items.filter(function(x){ return x.hero && x.src === '联名挑战' && visibleNow(x); }).sort(function(a,b){ return b.sort - a.sort; })[0];   // PC 大精选图非必填：示意当作有传
+  var hero = HERO.pc ? heroAct() : null;   // PC 大精选图没传，PC 不显示大精选
   if (hero) h += '<div class="pc-hero" data-front-open="'+hero.id+'" title="'+esc(hero.title)+'">'+[[60,50],[180,120],[520,70],[900,100],[1050,60],[700,160]].map(function(c){ return '<i class="h5-hero__coin" style="left:'+c[0]+'px;top:'+c[1]+'px"></i>'; }).join('')+
     '<div class="pc-hero__row"><div class="h5-hero__panel"><span class="h5-hero__lv"></span><span class="h5-hero__bar"><i></i></span><span class="h5-hero__btn"></span></div><div class="h5-hero__panel"><span class="h5-hero__lv"></span><span class="h5-hero__bar"><i style="width:70%"></i></span></div></div></div>';   // 11/06 她定：PC 跟 H5 统一，联名挑战详情内容（关卡进度、领取）直接外显
   var picks = pickList('PC');
@@ -2313,7 +2336,7 @@ function show(view){
   }
   if (view === 'gc') { var gcCur = items.find(function(x){ return x.src === '游戏挑战赛'; }); radioVals.gcStatus = gcCur && gcCur.on === false ? '0' : '1'; renderGc(); }   // 进页时重画：活动状态带该笔目前值；类别改名／新增后勾选清单才会是最新的
   if (view === 'v2') renderV2();
-  if (view === 'mat') renderMat();   // 回列表时重画：各活动页开的小精选、排序才会是最新的
+  if (view === 'mat') renderMat();   // 回列表时重画：各活动页改的排序才会是最新的
   Object.keys(VIEWS).forEach(function(k){ document.getElementById(VIEWS[k][0]).classList.toggle('hidden', k !== view); });
   document.getElementById('viewSrc').classList.toggle('hidden', !isSrc);
   document.getElementById('bcCur').textContent = isSrc ? (SRC_PAGES[view].crumb || SRC_PAGES[view].title) : VIEWS[view][1];
@@ -2324,6 +2347,7 @@ function redrawAll(){
   renderFilter(); renderFront();
   if (!document.getElementById('matModal').classList.contains('hidden')) renderMatModal();
   if (!document.getElementById('tagSetModal').classList.contains('hidden')) renderTagSet();
+  if (!document.getElementById('heroModal').classList.contains('hidden')) renderHero();
   if (!document.getElementById('i18nEditModal').classList.contains('hidden')) renderI18nEdit();
   renderV2(); renderGc();
   if (!document.getElementById('viewSrc').classList.contains('hidden')) renderSrc();
@@ -2358,11 +2382,8 @@ document.addEventListener('click', function(e){
   if ((q = t.closest('[data-radio]'))) {
     e.preventDefault(); if (q.classList.contains('is-disabled')) return; var rv = q.dataset.radio.split('|');
     if (rv[0].indexOf('page_') === 0) radioVals[rv[0].slice(5)] = rv[1];
-    if (rv[0] === 'page_v2Pick' && v2Item) v2Item.pick = rv[1] === '1';   // 奖励页小精选开关直接存回该笔（前台切页签就看得到）
-    if (rv[0] === 'page_v2Hero' && v2Item) v2Item.hero = rv[1] === '1';   // 奖励页大精选开关：开启＝这笔当前台大图
     if (rv[0] === 'page_v2List' && v2Item) { v2Item.on = rv[1] === '1'; radioVals.v2List = rv[1]; document.querySelectorAll('[data-v2-list-body]').forEach(function(el){ el.classList.toggle('hidden', rv[1] !== '1'); }); renderMat(); }   // 活动列表设置 关闭＝这笔不进奖励页（列表状态、前台卡片都跟着）
-    if (rv[0] === 'page_gcPick') { var gcIt = items.find(function(x){ return x.src === '游戏挑战赛'; }); if (gcIt) gcIt.pick = rv[1] === '1'; }
-    else radioVals[rv[0]] = rv[1];   // 素材弹窗的单选（含跳转方式切换）
+    radioVals[rv[0]] = rv[1];   // 素材弹窗的单选（含跳转方式切换）
     if (rv[0].indexOf('src_') === 0 || rv[0] === 'catOn') {   // 专项活动设定页／类别弹窗：只切这组单选，不重画整张表单（不然打到一半的字会被清掉）
       q.closest('.el-radio-group').querySelectorAll('.el-radio').forEach(function(r){ var on = r.dataset.radio === q.dataset.radio; r.classList.toggle('is-checked', on); r.querySelector('.el-radio__input').classList.toggle('is-checked', on); });
       return;
@@ -2376,6 +2397,8 @@ document.addEventListener('click', function(e){
     renderFront(); return;
   }
   // 上传（示范：点了就当已上传，显示缩图）
+  if ((q = t.closest('[data-hero-up] .img-uploader'))) { heroDraft[q.closest('[data-hero-up]').dataset.heroUp] = true; q.innerHTML = '<span class="thumb thumb--wide" style="width:120px;height:70px"></span>'; return; }
+  if ((q = t.closest('[data-hero-up] [data-card-del]'))) { heroDraft[q.closest('[data-hero-up]').dataset.heroUp] = false; q.closest('.upload-card-body').querySelector('.img-uploader').innerHTML = '点击上传图片'; return; }
   if ((q = t.closest('.img-uploader'))) { q.innerHTML = '<span class="thumb thumb--wide" style="width:120px;height:70px"></span>'; return; }
   if ((q = t.closest('[data-card-del]'))) { q.closest('.upload-card-body').querySelector('.img-uploader').innerHTML = '点击上传图片'; return; }
   if ((q = t.closest('[data-cat-upload]'))) { var md = q.dataset.catUpload; catIconTmp[md] = true; if (!q.nextElementSibling.classList.contains('thumb')) q.insertAdjacentHTML('afterend', catIconThumb(true, md)); return; }   // 类别图示：示意选了档案就当上传完成（要放在下面共用的「选择文件」处理之前）
@@ -2394,13 +2417,12 @@ document.addEventListener('click', function(e){
       if (st2 && st2.value.trim()) srcItem.title = st2.value.trim();
       if (radioVals['src_活动状态']) srcItem.on = radioVals['src_活动状态'] === '1';
       if (radioVals['src_活动开关']) srcItem.on = radioVals['src_活动开关'] === '1';   // 大奖池的叫活动开关
-      if (radioVals['src_奖励页精选']) srcItem.pick = radioVals['src_奖励页精选'] === '1';
       if (radioVals['src_发放方式']) srcItem.auto = radioVals['src_发放方式'] === '1';
       var tOf = function(sel){ var el = document.querySelector(sel); return el ? (el.value.trim() || '-') : undefined; };
       ['start','end'].forEach(function(k){ var v = tOf('[data-src-'+k+']'); if (v !== undefined) srcItem[k] = v === '-' ? undefined : v; });
       var se = tOf('[data-src-show-end]'); if (se !== undefined) srcItem.showEnd = se;   // 显示时间只管卡片出不出现；倒数照活动时间
       var ss = tOf('[data-src-show-start]'); if (ss !== undefined) srcItem.showStart = ss === '-' ? undefined : ss;
-      var fo = document.querySelector('[data-src-fsort]'); if (fo) srcItem.fsort = Math.max(0, Math.floor(Number(fo.value) || 0));   // 首页浮窗排序 → 前台小精选顺序
+      var fo = document.querySelector('[data-src-fsort]'); if (fo) srcItem.fsort = Math.max(0, Math.floor(Number(fo.value) || 0));   // 首页浮窗排序，只管首页
       renderMat();
     }
     message('保存成功'); return;
@@ -2430,6 +2452,21 @@ document.addEventListener('click', function(e){
   // 汇总页
   if ((q = t.closest('[data-act="search"]'))) { renderMat(); return; }
   if ((q = t.closest('[data-on]'))) { var o = byId(q.dataset.on); o.on = !o.on; renderMat(); message('保存成功'); return; }
+  // 列表 小精选 开关（11/09 她定：集中在奖励页列表，最多开 4 个）
+  if ((q = t.closest('[data-sort-col]'))) { matSortDir = matSortDir === 'asc' ? 'desc' : 'asc'; renderMat(); return; }
+  if ((q = t.closest('[data-pick-sw]'))) { var pk = byId(q.dataset.pickSw); if (pk.noFloatImg) return; if (!pk.pick && items.filter(function(x){ return x.pick; }).length >= 4) { message('小精选最多开 4 个，请先关一个', 'error'); return; } pk.pick = !pk.pick; renderMat(); message('保存成功'); return; }   // 11/09 她定：防呆，最多开 4 个
+  // 大精选设置（11/09 她定：独立一组设定，不挂在活动上）：开关＋PC／H5 大精选图＋关联的联名挑战活动
+  if ((q = t.closest('[data-hero-open]'))) { openHero(); return; }
+  if ((q = t.closest('[data-hero]'))) {
+    if (q.dataset.hero === 'save') {
+      var on = radioOf('src_大精选','0') === '1';
+      if (on && !heroDraft.h5) { message('请上传 H5 大精选图', 'error'); return; }
+      if (on && !selects.heroAct.val) { message('请选择关联活动', 'error'); return; }
+      HERO.on = on; HERO.pc = heroDraft.pc; HERO.h5 = heroDraft.h5; HERO.actId = selects.heroAct.val ? Number(selects.heroAct.val) : null;
+      renderFront(); message('保存成功');
+    }
+    document.getElementById('heroModal').classList.add('hidden'); return;
+  }
   if ((q = t.closest('[data-goto]'))) {
     var gi = byId(q.dataset.goto), gs = gi.src;
     if (isV2(gs)) { v2Item = gi; renderV2(); show('v2'); return; }
@@ -2488,10 +2525,10 @@ document.addEventListener('click', function(e){
       var mT = function(id){ var v = document.getElementById(id).value.trim(); return v || undefined; };   // 时间：空＝没设
       if (matEditing) {   // 编辑：存回那笔 → 汇总页、前台同步
         matEditing.sort = mSort; if (mTitle) matEditing.title = mTitle; matEditing.fsort = mFsort;
-        matEditing.on = radioOf('mSt','1') === '1'; matEditing.pick = radioOf('mPick','0') === '1'; matEditing.def = radioOf('mDef','0') === '1' ? '是' : '否';
+        matEditing.on = radioOf('mSt','1') === '1'; matEditing.def = radioOf('mDef','0') === '1' ? '是' : '否';
         matEditing.start = mT('mStart'); matEditing.end = mT('mEnd') || '-'; matEditing.showStart = mT('mShowStart'); matEditing.showEnd = mT('mShowEnd') || '-';
       } else {            // 新增：示意存进该端的表
-        items.push({id:Date.now(), src:'素材', dev:matDevice, lang:'英语', def:radioOf('mDef','0') === '1' ? '是' : '否', title:mTitle || '新素材', sub:'', start:mT('mStart'), end:mT('mEnd') || '-', showStart:mT('mShowStart'), showEnd:mT('mShowEnd') || '-', on:radioOf('mSt','1') === '1', pick:radioOf('mPick','0') === '1', sort:mSort, fsort:mFsort, tags:[], cats:matNew.cats.slice()});
+        items.push({id:Date.now(), src:'素材', dev:matDevice, lang:'英语', def:radioOf('mDef','0') === '1' ? '是' : '否', title:mTitle || '新素材', sub:'', start:mT('mStart'), end:mT('mEnd') || '-', showStart:mT('mShowStart'), showEnd:mT('mShowEnd') || '-', on:radioOf('mSt','1') === '1', sort:mSort, fsort:mFsort, tags:[], cats:matNew.cats.slice()});
       }
       renderMat(); message('保存成功');
     }
@@ -2505,7 +2542,7 @@ document.addEventListener('click', function(e){
       gci.on = radioVals.gcStatus === '1';
       gci.start = document.getElementById('gcStart').value.trim() || undefined; gci.end = document.getElementById('gcEnd').value.trim() || undefined;
       gci.showEnd = document.getElementById('gcShowEnd').value.trim() || '-'; gci.showStart = document.getElementById('gcShowStart').value.trim() || undefined;
-      gci.fsort = Math.max(0, Math.floor(Number(document.getElementById('gcFsort').value) || 0));   // 首页展示排序 → 前台小精选顺序
+      gci.fsort = Math.max(0, Math.floor(Number(document.getElementById('gcFsort').value) || 0));   // 首页展示排序，只管首页
       renderMat();
     }
     message('保存成功'); return;
@@ -2535,7 +2572,7 @@ document.addEventListener('keydown', function(e){ if (e.target.id === 'tagName' 
 // 汇总页排序：改完离开输入框就保存，列表照新排序重排
 document.addEventListener('change', function(e){
   if (e.target.id === 'v2Sort' && v2Item) { v2Item.sort = Math.max(0, Math.floor(Number(e.target.value) || 0)); renderMat(); message('保存成功'); return; }
-  if (e.target.id === 'v2Fsort' && v2Item) { v2Item.fsort = Math.max(0, Math.floor(Number(e.target.value) || 0)); renderFront(); message('保存成功'); return; }   // 首页浮窗排序 → 前台小精选顺序
+  if (e.target.id === 'v2Fsort' && v2Item) { v2Item.fsort = Math.max(0, Math.floor(Number(e.target.value) || 0)); renderFront(); message('保存成功'); return; }   // 首页浮窗排序，只管首页
   var id = e.target.dataset && e.target.dataset.sort;
   if (!id) return;
   byId(id).sort = Math.max(0, Math.floor(Number(e.target.value) || 0));
@@ -2596,6 +2633,7 @@ fitAdmin();
     if (d.cattab) { catTab = d.cattab; renderCats(); }
     if (d.pop === 'mat') { var m = items.find(function(x){ return x.src === '素材' && x.dev === 'H5'; }); if (m) openMat('H5', m); }
     if (d.pop === 'tagset') { var t = items.find(function(x){ return x.tags.length; }) || items[0]; openTagSet(t.id); }
+    if (d.pop === 'hero') openHero();
     if (d.pop === 'tagedit') openTagEdit(0);
     if (d.pop === 'cat') openCat(0);
     window.scrollTo(0, 0);
