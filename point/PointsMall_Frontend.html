@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>积分商城改版 — 前台原型 (H5)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.15.14/lib/theme-chalk/index.css">
 <style>
 /* =========================================================
    Design Tokens — 沿用任务中心前台原型的同一套变数，
@@ -59,22 +60,28 @@ button{font-family:inherit;cursor:pointer;border:none;}
    Header（顶栏）：钱包 ₱ 跟 积分 ★ 并排
    ========================================================= */
 .topbar{
-  display:flex;align-items:center;gap:4px;
-  padding:12px 10px 10px;position:sticky;top:0;z-index:5;
+  padding:10px 12px 6px;position:sticky;top:0;z-index:5;
   background:linear-gradient(180deg,#eaf2ff,rgba(234,242,255,.9));
   backdrop-filter:blur(6px);
 }
-.topbar__menu{font-size:1.1rem;color:var(--c-primary);font-weight:800;}
-.avatar{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffb066,#c9701f);border:2px solid #ffd089;flex:0 0 auto;}
-.wallet{display:flex;align-items:center;gap:3px;background:#fff;box-shadow:0 1px 4px rgba(27,42,68,.08);border-radius:16px;padding:3px 6px 3px 4px;font-size:.7rem;font-weight:700;white-space:nowrap;}
-.wallet .rf{color:var(--c-primary);font-weight:400;font-size:.7rem;}
-.coin{width:15px;height:15px;border-radius:50%;display:inline-grid;place-items:center;color:#fff;font-size:.56rem;font-weight:900;flex:0 0 auto;}
+/* 顶栏白色圆角卡：已登录／未登录两种内容，同一个位置 */
+.tb{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.72);border:1.5px solid #fff;border-radius:20px;padding:6px 10px 6px 6px;box-shadow:0 2px 10px rgba(47,107,255,.10);min-height:56px;}
+.avatar{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffb066,#c9701f);border:2px solid #ffd089;flex:0 0 auto;}
+.wallets{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0;}
+.wallet{display:flex;align-items:center;gap:4px;font-size:.82rem;font-weight:800;white-space:nowrap;letter-spacing:-.01em;}
+.wallet .rf{color:var(--c-primary);font-weight:400;font-size:.78rem;}
+.coin{width:16px;height:16px;border-radius:50%;display:inline-grid;place-items:center;color:#fff;font-size:.58rem;font-weight:900;flex:0 0 auto;}
 .coin--peso{background:radial-gradient(circle at 30% 30%,#ffd76b,#f0912a);}
 .coin--pt{background:radial-gradient(circle at 35% 30%,#ff8b8b,#e0342f);}
 .topbar__spacer{flex:1;}
-.btn-invite{background:linear-gradient(90deg,#ff5b5b,#ff7a3d);color:#fff;font-weight:700;padding:5px 8px;border-radius:16px;font-size:.7rem;white-space:nowrap;}
-.btn-topup{background:var(--c-primary);color:#fff;font-weight:700;padding:5px 9px;border-radius:16px;font-size:.72rem;white-space:nowrap;}
-.icon-btn{width:24px;height:24px;flex:0 0 auto;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(27,42,68,.08);display:grid;place-items:center;color:var(--c-text-2);font-size:.8rem;}
+/* Deposit 钮：上面一条黄色 BONUS 标 */
+.btn-topup{position:relative;background:linear-gradient(180deg,#4d86ff,#2f6bff);color:#fff;font-weight:800;padding:7px 14px;border-radius:12px;font-size:.86rem;white-space:nowrap;margin-top:8px;box-shadow:0 3px 0 #1f4fc4;}
+.btn-topup__bonus{position:absolute;left:-2px;right:-2px;top:-11px;background:linear-gradient(180deg,#ffe36b,#ffc83d);color:#e0342f;font-size:.56rem;font-weight:900;line-height:14px;border-radius:7px 7px 2px 2px;text-align:center;letter-spacing:.02em;}
+.icon-btn{width:30px;height:30px;flex:0 0 auto;border-radius:50%;background:none;display:grid;place-items:center;color:var(--c-primary);font-size:1.1rem;}
+/* 未登录：站台 logo＋Register / Login */
+.logo{font-weight:900;font-style:italic;font-size:1.1rem;color:var(--c-primary);letter-spacing:-.02em;padding-left:6px;}
+.logo i{color:#e0342f;font-style:normal;}
+.btn-login{background:#fff;color:var(--c-primary);font-weight:800;padding:8px 14px;border-radius:14px;font-size:.84rem;white-space:nowrap;box-shadow:0 2px 8px rgba(47,107,255,.18);}
 
 /* 子页面顶栏（Ichiban / 盲盒）：左返回、中标题 */
 .subbar{display:flex;align-items:center;padding:12px 14px;position:sticky;top:0;z-index:5;background:rgba(234,242,255,.92);backdrop-filter:blur(6px);}
@@ -88,18 +95,35 @@ button{font-family:inherit;cursor:pointer;border:none;}
   margin:4px 12px 10px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.10);
   display:grid;grid-template-columns:1fr 1fr 1fr;padding:10px 4px;
 }
-.quick__item{display:flex;align-items:center;gap:6px;padding:0 6px;cursor:pointer;background:none;text-align:left;}
+.quick__item{display:flex;align-items:center;justify-content:center;gap:5px;padding:2px 4px;cursor:pointer;background:none;}
 .quick__item + .quick__item{border-left:1px solid var(--c-line);}
-.quick__ico{font-size:1.5rem;line-height:1;flex:0 0 auto;}
-.quick__t{font-weight:800;font-size:.82rem;line-height:1.2;}
-.quick__s{font-size:.66rem;color:var(--c-text-2);margin-top:2px;white-space:nowrap;}
+.quick__ico{font-size:1.3rem;line-height:1;flex:0 0 auto;}
+.quick__t{font-weight:800;font-size:.8rem;line-height:1.2;white-space:nowrap;}
 
 /* =========================================================
    赚积分任务：深色底 ＋ 任务卡（沿用任务中心卡片规则）
    ========================================================= */
-.earn{margin:0 0 12px;background:var(--c-navy);padding:10px 12px;display:flex;flex-direction:column;gap:8px;}
-.earn__head{display:flex;align-items:center;color:#fff;font-weight:800;font-size:.9rem;padding:0 2px 2px;}
-.earn__head .more{margin-left:auto;font-size:.72rem;font-weight:400;color:#b8c6e6;background:none;}
+/* 任务中心入口（11/10 设计图）：白卡＋「Task List／More ›」抬头，任务卡横向滑动、露出下一张一角；卡＝浅蓝渐层 */
+.earn{margin:0 12px 12px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.10);padding:10px 10px 10px;display:flex;flex-direction:column;gap:8px;}
+.earn__head{display:flex;align-items:center;color:var(--c-text);font-weight:800;font-size:1rem;padding:0 2px;}
+.earn__head .ico{font-size:1.1rem;margin-right:6px;}
+.earn__head .more{margin-left:auto;font-size:.8rem;font-weight:500;color:var(--c-text-2);background:none;}
+.earn__row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -10px;padding:0 10px;}
+.earn__row::-webkit-scrollbar{display:none;}
+.earn__row .tk{flex:0 0 90%;scroll-snap-align:start;background:linear-gradient(180deg,#8db5ff 0%,#dbe8ff 60%,#f3f7ff 100%);border-radius:14px;}
+.earn__row .tk__name{color:var(--c-primary);}
+.earn__row .tk__name .info{color:var(--c-text-2);}
+.earn__row .tk__prog{display:grid;grid-template-columns:1fr;gap:6px;color:var(--c-text-2);}
+.earn__row .tk__bar{flex:none;width:100%;background:#aab4c6;}
+.earn__row .tk__bar i{background:#ff8a4d;}
+.earn__row .tk__reward{background:rgba(255,255,255,.75);}
+/* 横滑列里的任务组（11/12）：只放子任务卡，样式同 Task List 页里的子任务卡（白卡） */
+.earn__row{align-items:stretch;}
+.earn__row .tk--sub{background:#f6f7fa;}
+.earn__row .tk--sub .tk__name{color:var(--c-text);}
+.earn__row .tk--sub .tk__prog{display:flex;min-width:0;}
+.earn__row .tk--sub .tk__bar{flex:1 1 40px;min-width:32px;width:auto;background:#e6e9f0;}
+.earn__row .tk--sub .tk__reward{background:#fff1e3;}
 /* =========================================================
    Playground 横幅（轮播）
    ========================================================= */
@@ -118,7 +142,7 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .banner__dots{display:flex;gap:4px;justify-content:center;margin:6px 0 10px;}
 .banner__dots i{width:5px;height:5px;border-radius:50%;background:#c9d4e6;} .banner__dots i:first-child{width:14px;border-radius:3px;background:var(--c-primary);}
 
-/* 首页：游乐场入口卡（横幅＋脚注），整卡可点 */
+/* 积分商城页：游乐场入口卡（横幅＋脚注），整卡可点 */
 .pgcard{background:#fff;border:1px solid var(--c-line);border-radius:12px;overflow:hidden;cursor:pointer;}
 .pgcard:active{background:var(--c-card-2);}
 .pgcard__foot{display:flex;align-items:center;gap:6px;padding:8px 12px;font-size:.78rem;color:var(--c-text-2);}
@@ -161,7 +185,7 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .park__isle--soon .park__sign{background:linear-gradient(#7f8a9c,#56627a);border-color:#3d475a;color:#e6ebf3;}
 .park__isle--soon .park__sign small{display:block;font-weight:700;font-size:.58rem;color:#c9d2e0;}
 .park__fog{position:absolute;width:190px;height:120px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.75),rgba(255,255,255,0) 70%);pointer-events:none;}
-/* 首页入口卡：同一张地图的缩图 */
+/* 积分商城页入口卡：同一张地图的缩图 */
 .minimap{position:relative;height:150px;overflow:hidden;background:linear-gradient(180deg,#7cc6ff 0%,#c4e7ff 30%,#4f9fe8 31%,#2f7fd6 100%);}
 .minimap .park__isle{width:84px;}
 .minimap .park__land{width:62px;height:34px;box-shadow:0 5px 0 #efd394,0 9px 0 rgba(0,40,90,.28);}
@@ -176,25 +200,82 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .pg-my{margin:0 12px 12px;background:#fff;border-radius:var(--radius);padding:10px 12px;box-shadow:0 2px 10px rgba(47,107,255,.08);}
 
 /* 游戏列表页：一座岛＝一种游戏；后台配了几套就列几张卡，点卡进那一套 */
-.glist__head{display:flex;align-items:center;gap:10px;padding:12px 12px 10px;color:#1b2a44;}
-.glist__head .park__ico{position:static;transform:none;flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:radial-gradient(circle at 40% 30%,#fff5c9,#ffb84d);border:2px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.15);filter:none;}
-.glist__t{font-weight:900;font-size:1.05rem;}
-.glist__s{font-size:.74rem;color:var(--c-text-2);margin-top:2px;}
+/* 游戏列表页（11/10 运营参考图「一番赏岛」）：整页是一座岛，上方主馆＋招财猫，广场一层层阶地，每层 3 个商品亭；套数多就往下多几层 */
+.isl{position:relative;background:linear-gradient(180deg,#8ec7ff 0%,#cfe6ff 45%,#e9f3ff 100%);overflow:hidden;padding-bottom:16px;}
+.isl__cloud{position:absolute;font-size:2.2rem;opacity:.9;}
+.isl__far{position:absolute;width:56px;height:22px;border-radius:50%;background:radial-gradient(ellipse at 50% 30%,#bfe3a0,#6fae5c 70%);box-shadow:0 7px 0 #a9b6c6,0 12px 0 rgba(0,40,90,.25);opacity:.85;}
+.isl__far::before{content:"🏠";position:absolute;left:50%;top:-14px;transform:translateX(-50%);font-size:.9rem;}
+/* 主馆：三层圆台＋菱形招牌＋招财猫 */
+.hall{position:relative;height:200px;margin-top:30px;}
+.hall__tier{position:absolute;left:50%;transform:translateX(-50%);border-radius:50% 50% 14px 14px/40% 40% 14px 14px;background:linear-gradient(#fff8ee,#ead9c0);border:2px solid #d8bf9a;box-shadow:0 6px 0 #c9ab82;}
+.hall__tier--1{width:150px;height:60px;top:52px;}
+.hall__tier--2{width:230px;height:74px;top:92px;}
+.hall__tier--3{width:330px;height:90px;top:132px;background:linear-gradient(#ffeef1,#f6cfd8);border-color:#e9b4c0;box-shadow:0 6px 0 #d79fae;}
+.hall__awn{position:absolute;height:14px;border-radius:0 0 8px 8px;background:repeating-linear-gradient(90deg,var(--a) 0 9px,#fff 9px 18px);box-shadow:0 2px 0 rgba(0,0,0,.1);}
+.hall__logo{position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(45deg);width:62px;height:62px;background:#fff;border:4px solid #1b1b1b;border-radius:8px;box-shadow:0 6px 10px rgba(0,0,0,.25);z-index:2;}
+.hall__logo span{position:absolute;inset:0;display:grid;place-items:center;transform:rotate(-45deg);font-weight:900;font-size:.9rem;color:#1b1b1b;line-height:1;text-align:center;}
+.hall__logo span small{display:block;font-size:.42rem;color:#e0342f;letter-spacing:.04em;}
+.hall__cat{position:absolute;left:50%;top:-2px;margin-left:48px;font-size:3.2rem;line-height:1;filter:drop-shadow(0 6px 6px rgba(0,0,0,.25));z-index:2;}
+.hall__tree{position:absolute;font-size:1.6rem;z-index:1;}
+.isl__sub{position:absolute;left:0;right:0;top:8px;text-align:center;font-size:.72rem;color:#2f5f93;font-weight:700;z-index:3;}
+/* 广场（不规则摆法）：一块粉色石板广场，亭子东一个西一个、前大后小，蜿蜒小路串起来；每 5 套一段，套数多就往下接一段 */
+.plaza{position:relative;margin:0 8px;background:linear-gradient(#f9dbe4,#f2bfcd);border:2px solid #e39fb3;border-top:0;border-radius:0 0 48px 48px/0 0 26px 26px;box-shadow:0 7px 0 #c98d9f,0 12px 0 #8d6e78;overflow:hidden;}
+.plaza__sec{position:relative;height:560px;}
+.plaza__path{position:absolute;inset:0;width:100%;height:100%;}
+.plaza__deco{position:absolute;font-size:1.4rem;line-height:1;filter:drop-shadow(0 3px 3px rgba(0,0,0,.2));pointer-events:none;}
+.plaza .kiosk{position:absolute;width:35%;transform-origin:50% 100%;}
+/* 商品亭：招牌（该套的图＋名称横幅）→ 遮雨棚 → 柜台（价格／库存）；屋顶小旗＝期数 */
+.kiosk{position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;min-width:0;--a:#4d6cff;}
+.kiosk--r{--a:#e0342f;}
+.kiosk--g{--a:#3aa655;}
+.kiosk--p{--a:#9b59e0;}
+.kiosk--o{--a:#f08a24;}
+.kiosk__sign{position:relative;width:100%;border:3px solid #f2c75c;border-radius:14px 14px 8px 8px;background:#fff;padding:3px;box-shadow:0 4px 8px rgba(0,0,0,.2);z-index:2;}
+.kiosk__img{width:100%;height:64px;border-radius:9px 9px 4px 4px;display:grid;place-items:center;color:#fff;font-weight:900;text-align:center;font-size:.58rem;line-height:1.1;text-shadow:0 1px 2px rgba(0,0,0,.4);overflow:hidden;}
+.kiosk__ttl{margin:-6px -8px 0;background:linear-gradient(var(--a),color-mix(in srgb,var(--a),#000 25%));color:#fff;font-size:.6rem;font-weight:900;text-align:center;padding:3px 4px;border-radius:6px;border:2px solid #fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;z-index:3;text-shadow:0 1px 1px rgba(0,0,0,.4);}
+.kiosk__flag{position:absolute;right:-6px;top:-12px;background:#e0342f;color:#fff;font-size:.56rem;font-weight:900;padding:2px 6px;border-radius:6px 6px 6px 0;box-shadow:0 2px 4px rgba(0,0,0,.25);z-index:4;}
+.kiosk__awn{width:calc(100% + 8px);height:12px;margin-top:-2px;border-radius:0 0 6px 6px;background:repeating-linear-gradient(90deg,var(--a) 0 8px,#fff 8px 16px);box-shadow:0 2px 0 rgba(0,0,0,.12);z-index:1;}
+.kiosk__booth{position:relative;width:calc(100% - 8px);background:linear-gradient(#fff,#eef2f8);border:2px solid #d5dce8;border-top:0;border-radius:0 0 8px 8px;padding:4px 3px 5px;text-align:center;overflow:hidden;}
+.kiosk__goods{font-size:.8rem;line-height:1;letter-spacing:-2px;}
+.kiosk__price{margin-top:2px;font-weight:900;font-size:.72rem;color:#e0342f;white-space:nowrap;}
+.kiosk__price .coin{width:11px;height:11px;font-size:.42rem;vertical-align:-1px;}
+.kiosk__price small{font-weight:600;font-size:.56rem;color:var(--c-text-2);}
+.kiosk__stock{font-size:.52rem;color:var(--c-text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kiosk:active{filter:brightness(.95);}
+/* 抢完：柜台拉铁卷门＋挂牌，招牌退色 */
+.kiosk--off{cursor:default;}
+.kiosk--off .kiosk__sign{filter:saturate(.2);opacity:.8;}
+.kiosk--off .kiosk__booth::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,#9aa3b2 0 6px,#7d8797 6px 8px);z-index:1;}
+.kiosk--off .kiosk__booth::after{content:"已抢光";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-6deg);background:#fff;color:#4a5568;font-size:.6rem;font-weight:900;padding:2px 7px;border-radius:5px;border:2px solid #4a5568;z-index:2;}
+/* 岛的脚：栏杆、主角、路牌 */
+.isl__foot{position:relative;height:96px;margin:0 10px;}
+.isl__rail{position:absolute;left:30px;right:30px;top:0;height:10px;background:repeating-linear-gradient(90deg,#f4e7c8 0 4px,transparent 4px 14px);border-bottom:3px solid #e7d3a4;border-radius:0 0 50% 50%/0 0 100% 100%;}
+.isl__hero{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);font-size:2.6rem;line-height:1;filter:drop-shadow(0 4px 4px rgba(0,0,0,.3));}
+.isl__post{position:absolute;right:14px;bottom:10px;background:linear-gradient(#a8703a,#7d4f23);color:#fff3d0;font-size:.62rem;font-weight:900;padding:5px 9px;border-radius:6px;border:2px solid #5a3615;box-shadow:0 3px 6px rgba(0,0,0,.3);line-height:1.2;text-align:center;}
+.isl__post::after{content:"";position:absolute;left:50%;bottom:-12px;width:5px;height:12px;margin-left:-2px;background:#6a4019;}
+.isl--blind .plaza{background:linear-gradient(#dfe7ff,#c3d2ff);border-color:#9fb4f0;box-shadow:0 7px 0 #8ea3df,0 12px 0 #5c6f9e;}
+.isl--blind .hall__tier--3{background:linear-gradient(#eaeeff,#cdd8ff);border-color:#aab9ee;box-shadow:0 6px 0 #97a9e3;}
 .gs--off{opacity:.55;}
 /* 分类页签（带图示） */
-.cats{display:flex;gap:8px;padding:0 12px 10px;overflow-x:auto;scrollbar-width:none;}
+/* 商品页页签（11/10 设计图）：胶囊，选中＝蓝底白字；ALL／I Can Buy／各商品分类 */
+.cats{display:flex;gap:8px;padding:4px 12px 12px;overflow-x:auto;scrollbar-width:none;}
 .cats::-webkit-scrollbar{display:none;}
 .cats::after{content:"";flex:0 0 4px;}   /* 滑到底时最后一颗不贴边 */
-.cat{flex:0 0 auto;display:flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--c-line);border-radius:18px;padding:5px 12px 5px 8px;font-size:.8rem;color:var(--c-text);white-space:nowrap;}
-.cat__ico{font-size:1rem;line-height:1;}
-.cat--on{background:#e3edff;border-color:#bcd2ff;color:var(--c-primary);font-weight:800;}
-.cat--all .cat__ico{font-size:.6rem;font-weight:900;color:var(--c-primary);background:#fff;border:1px solid #bcd2ff;border-radius:8px 8px 8px 2px;padding:2px 4px;}
+.cat{flex:0 0 auto;background:#e4ebf7;border-radius:18px;padding:7px 16px;font-size:.84rem;font-weight:600;color:#6b7a99;white-space:nowrap;}
+.cat--on{background:var(--c-primary);color:#fff;font-weight:800;}
 
-/* 筛选列：我能兑换的 ／ 星币排序 */
-.filters{display:flex;gap:8px;padding:2px 12px 10px;}
-.flt{background:#fff;border:1px solid var(--c-line);border-radius:18px;padding:6px 14px;font-size:.8rem;color:var(--c-text-2);display:flex;align-items:center;gap:5px;}
-.flt--on{background:#fff1e3;border-color:#ffd3a6;color:#e2651a;font-weight:700;}
-.flt .coin{width:14px;height:14px;}
+#admin .opt.dis{color:#c0c4cc;cursor:not-allowed;}
+#admin .opt.dis i{border-color:#e4e7ed;background:#f5f7fa;}
+/* 页签列（11/12 设计图）：页签横滑，最右边固定既有「价格 ⇕」排序钮；只在单一分类／I Can Buy 显示 */
+.catrow{display:flex;align-items:flex-start;}
+/* 商品页往下滑：顶栏钉在最上面，页签列（含价格钮）钉在顶栏下面；中间「‹ Points Mall」列会滑走（11/12 她定） */
+#scr-shop .subbar,#scr-rec .subbar{position:static;}
+#scr-bag .subbar,#scr-tasks .subbar,#scr-play .subbar,#scr-glist .subbar,#scr-ichiban .subbar,#scr-blind .subbar{position:relative;}   /* 11/13 她定：除 VIP 页外每一页都有同一条顶栏，往下滑顶栏钉住、返回列滑走；VIP 页照线上既有画面不加 */
+#scr-shop .catrow{position:sticky;top:72px;z-index:5;background:rgba(234,242,255,.92);backdrop-filter:blur(6px);}
+.catrow .cats{flex:1 1 auto;min-width:0;}
+.sortbtn{flex:0 0 auto;margin:4px 12px 0 0;width:36px;height:34px;border-radius:17px;background:#e4ebf7;color:#6b7a99;font-size:1rem;font-weight:800;display:inline-flex;align-items:center;justify-content:center;}
+.sortbtn--on{background:var(--c-primary);color:#fff;}
+
 
 /* =========================================================
    Flash Sales 区块：标题 ＋ 倒数 ＋ 横向滑动卡
@@ -202,30 +283,35 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .fs{margin:0 12px 12px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.08);padding:12px 0 12px 12px;}
 .fs__head{padding-right:12px;}
 .fs__head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.fs__ico{width:34px;height:34px;border-radius:10px;background:#ffe7d6;display:grid;place-items:center;color:var(--c-orange);font-size:1.1rem;}
-.fs__t{font-weight:900;font-size:1rem;line-height:1.1;}
-.fs__s{font-size:.7rem;color:var(--c-text-2);}
+.fs__ico{font-size:1.6rem;line-height:1;}
+.fs__t{font-weight:800;font-size:1.05rem;line-height:1.1;}
 /* 张数：照既有「限时抢购 1/1」灰胶囊，滑动时跟着变（左边那张是第几张／共几张） */
-.fs__n{display:inline-block;margin-left:6px;background:#eef1f6;color:#6b7a99;font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:8px;vertical-align:2px;}
+.fs__n{display:inline-block;margin-left:8px;background:#eef1f6;color:#6b7a99;font-size:.8rem;font-weight:600;padding:2px 10px;border-radius:12px;vertical-align:1px;}
+.fs__n b{color:var(--c-primary);font-weight:600;}
 .cd{margin-left:auto;display:flex;align-items:center;gap:2px;font-weight:800;font-size:.78rem;color:var(--c-red);}
 .cd b{background:var(--c-red);color:#fff;border-radius:5px;padding:2px 5px;min-width:24px;text-align:center;}
 .hrow{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:2px 12px 4px 0;}
 .hrow::-webkit-scrollbar{display:none;}
 
-/* 商品卡（横向大卡） */
-/* Flash Sales 卡：直向小卡（比商品卡小一号），一次露两张多一点，多的往右滑；细节照参考图（黄底红字折扣胶囊、紫进度条、紫圆角钮） */
-.g{flex:0 0 44%;border:1px solid var(--c-line);border-radius:12px;padding:6px 6px 8px;display:flex;flex-direction:column;background:#fff;box-shadow:0 2px 8px rgba(27,42,68,.05);scroll-snap-align:start;}
-.g > .g__img{width:100%;height:84px;border-radius:8px;font-size:.68rem;}
-.g .g__off{left:5px;top:5px;background:#ffe14d;color:#e0342f;font-size:.6rem;font-weight:900;padding:2px 7px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.15);}
-.g .g__name{margin-top:6px;font-size:.8rem;}
-.g .g__sub{margin-top:0;font-size:.66rem;}
-.g .price{margin-top:3px;gap:4px;}
-.g .price__now{font-size:.95rem;}
-.g .price__old{font-size:.7rem;}
-.g .bar{margin-top:5px;height:5px;}
-.g .g__left{margin-top:3px;font-size:.64rem;}
-.g .btn-redeem{margin-top:6px;border-radius:9px;padding:6px 0;font-size:.76rem;}
+/* Flash sale 卡（11/10 设计图）：横式大卡一次露一张＋下一张一角；左图右资讯，每张自己的倒数；抢完＝图变灰＋「已抢光」 */
 .hrow{scroll-snap-type:x mandatory;}
+.fsc{flex:0 0 90%;scroll-snap-align:start;position:relative;background:linear-gradient(180deg,#e4edff,#f7f9ff);border-radius:14px;padding:12px 10px 10px;display:flex;gap:10px;box-shadow:0 2px 8px rgba(47,107,255,.08);}
+.fsc__off{position:absolute;left:0;top:0;background:#6b47d8;color:#fff;font-size:.68rem;font-weight:800;padding:3px 9px;border-radius:14px 0 10px 0;z-index:1;}
+.fsc__img{width:120px;height:124px;border-radius:10px;background:#fff;flex:0 0 auto;display:grid;place-items:center;color:#fff;font-weight:900;text-align:center;font-size:.74rem;line-height:1.15;text-shadow:0 1px 2px rgba(0,0,0,.4);position:relative;overflow:hidden;margin-top:8px;}
+.fsc__img > span.txt{display:grid;place-items:center;width:100%;height:100%;}
+.fsc__body{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
+.fsc .cd{margin-left:0;justify-content:flex-end;font-size:.74rem;}
+.fsc .cd b{padding:1px 4px;min-width:22px;}
+.fsc__name{font-weight:900;font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fsc__stock{align-self:flex-start;background:#fff;color:var(--c-text-2);font-size:.72rem;padding:2px 8px;border-radius:7px;}
+.fsc .price{margin-top:0;gap:4px;}
+.fsc .price__now{color:var(--c-red);font-size:1.15rem;}
+.fsc .price__old{font-size:.74rem;}
+.fsc .coin--old{background:radial-gradient(circle at 35% 30%,#c7ccd6,#8e95a3);}
+.fsc .btn-redeem{margin-top:auto;background:var(--c-primary);border-radius:10px;padding:8px 0;font-size:.84rem;}
+.fsc--off .fsc__img{filter:grayscale(1);opacity:.6;}
+.fsc__sold{position:absolute;right:0;top:50%;transform:translateY(-50%);background:rgba(40,46,60,.78);color:#fff;font-size:.78rem;font-weight:700;padding:5px 12px;border-radius:14px 0 0 14px;z-index:1;}
+.fsc--off .btn-redeem{background:#c9cfdd;cursor:not-allowed;}
 .g__img{width:132px;height:132px;border-radius:10px;flex:0 0 auto;position:relative;display:grid;place-items:center;color:#fff;font-weight:900;text-align:center;font-size:.8rem;line-height:1.15;text-shadow:0 1px 2px rgba(0,0,0,.4);overflow:hidden;}
 .g__off{position:absolute;left:6px;top:6px;background:#ff5b5b;color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:10px;}
 .g__body{flex:1;min-width:0;display:flex;flex-direction:column;}
@@ -240,11 +326,29 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .btn-redeem{margin-top:auto;background:var(--c-purple);color:#fff;font-weight:800;font-size:.84rem;padding:8px 0;border-radius:10px;width:100%;}
 .btn-redeem--dis{background:#c9cfdd;cursor:not-allowed;}
 
-/* 分类区块（首页）：标题 ＋ More ＋ 先露 4 个 */
-.csec{padding:0 12px;}
-.csec__t{display:flex;align-items:center;font-weight:900;font-size:1rem;padding:6px 2px 8px;margin:0;}
-.csec__more{margin-left:auto;color:var(--c-primary);font-size:.78rem;font-weight:600;background:none;}
-.csec .grid{padding:0 0 10px;}
+/* 分类区块（积分商城页）：标题 ＋ More ＋ 先露 4 个 */
+/* 分类区块（11/10 设计图）：白卡＋「分类名／More ›」，商品卡横向滑动；积分商城页 Recommend 同一种卡但 2 栏格 */
+.csec{margin:0 12px 12px;background:#fff;border-radius:var(--radius);box-shadow:0 2px 10px rgba(47,107,255,.10);padding:10px 10px 10px;}
+.csec__t{display:flex;align-items:center;font-weight:800;font-size:1rem;padding:0 2px 8px;margin:0;}
+.csec__more{margin-left:auto;color:var(--c-text-2);font-size:.8rem;font-weight:500;background:none;}
+.csec .hrow{margin:0 -10px;padding:0 10px 2px;}
+.csec .hrow .pc{flex:0 0 48%;scroll-snap-align:start;}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+/* 商品卡（11/10 设计图）：浅蓝渐层、紫折扣角标、白底图、名称、in stock 胶囊、红★现价＋灰★划旧价；整张可点；抢完＝图灰＋已抢光 */
+.pc{position:relative;background:linear-gradient(180deg,#e4edff,#f7f9ff);border-radius:12px;padding:6px 6px 8px;display:flex;flex-direction:column;cursor:pointer;min-width:0;}
+.pc:active{filter:brightness(.97);}
+.pc__off{position:absolute;left:0;top:0;background:#6b47d8;color:#fff;font-size:.64rem;font-weight:800;padding:2px 8px;border-radius:12px 0 10px 0;z-index:1;}
+.pc__img{width:100%;height:132px;border-radius:10px;background:#fff;display:grid;place-items:center;color:#fff;font-weight:900;text-align:center;font-size:.74rem;line-height:1.15;text-shadow:0 1px 2px rgba(0,0,0,.4);position:relative;overflow:hidden;}
+.pc__img > span.txt{display:grid;place-items:center;width:100%;height:100%;}
+.pc__name{font-weight:800;font-size:.9rem;margin:8px 4px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pc__stock{align-self:flex-start;background:#fff;color:var(--c-text-2);font-size:.7rem;padding:2px 7px;border-radius:7px;margin:5px 4px 0;}
+.pc .price{margin:5px 4px 0;gap:3px;}
+.pc .price__now{color:var(--c-red);font-size:1.05rem;}
+.pc .price__old{font-size:.7rem;}
+.pc .coin--old{background:radial-gradient(circle at 35% 30%,#c7ccd6,#8e95a3);}
+.pc--off .pc__img{filter:grayscale(1);opacity:.6;}
+.pc--off .pc__name{color:var(--c-text-2);}
+.pc__sold{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(40,46,60,.78);color:#fff;font-size:.76rem;font-weight:700;padding:4px 12px;border-radius:14px;z-index:1;}
 
 /* 商品卡（直向小卡，两栏） */
 .grid{padding:0 12px 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -452,7 +556,7 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .tkt--off .tkt__btn{background:#c9d4e6;}
 
 /* =========================================================
-   任务中心（新样式）：首页「赚积分」区 ＋ Task List 页共用
+   任务中心（新样式）：积分商城页「赚积分」区 ＋ Task List 页共用
    ========================================================= */
 .tk{background:#f6f7fa;border-radius:12px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:5px 10px;align-items:start;}
 .tk__name{font-weight:800;font-size:.95rem;}
@@ -473,26 +577,26 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .tk__btn--pending{background:#7fb0ff;}
 .tk__btn--done{background:#c9cfdd;cursor:default;}
 
-/* 任务组卡：橘色渐层外框 ＋ Extra Rewards 里程碑 ＋ View All 展开子任务 */
-.tg{border:2px solid #e8c89a;border-radius:16px;background:linear-gradient(135deg,#fbe4cc,#f9f1e6 60%,#fdebd6);padding:12px 12px 0;position:relative;overflow:hidden;}
+/* 任务组卡（11/12 照线上前台样式）：浅蓝渐层 ＋ Extra Rewards 里程碑 ＋ View All 展开子任务 */
+.tg{border:1.5px solid #d6e3ff;border-radius:16px;background:linear-gradient(180deg,#cfe0ff 0%,#e6eeff 45%,#f2f5fb 100%);padding:12px 12px 0;position:relative;overflow:hidden;}
 .tg__head{display:flex;align-items:flex-start;}
-.tg__name{font-weight:900;font-size:1.1rem;color:#7a3e8a;}
+.tg__name{font-weight:900;font-size:1.1rem;color:var(--c-primary);}
 .tg__name .info{color:var(--c-text-3);font-weight:400;font-size:.78rem;margin-left:4px;}
 .tg__head .tk__timer{margin-left:auto;padding-top:2px;}
 .tg__done{font-size:.8rem;color:var(--c-text-2);margin-top:2px;}
 .tg__done b{color:var(--c-primary);margin-left:6px;}
-.extra{background:rgba(255,255,255,.55);border-radius:12px;padding:10px 12px 12px;margin-top:10px;}
+.extra{background:rgba(255,255,255,.85);border-radius:12px;padding:10px 12px 12px;margin-top:10px;}
 .extra__t{font-weight:700;font-size:.82rem;}
 .ms{position:relative;display:flex;justify-content:space-between;margin:16px 10px 8px;}
-.ms::before{content:"";position:absolute;left:0;right:0;top:50%;height:5px;background:#dfe3ea;border-radius:3px;}
-.ms::after{content:"";position:absolute;left:0;width:var(--done,50%);top:50%;height:5px;background:#ff8a4d;border-radius:3px;}
+.ms::before{content:"";position:absolute;left:0;right:0;top:50%;height:5px;background:#cddcf7;border-radius:3px;}
+.ms::after{content:"";position:absolute;left:0;width:var(--done,50%);top:50%;height:5px;background:var(--c-primary);border-radius:3px;}
 .ms__node{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:1rem;position:relative;z-index:1;box-shadow:0 2px 6px rgba(27,42,68,.15);}
 .ms__node--done{background:#4cc26b;color:#fff;font-weight:900;}
 .ms__node--next{background:radial-gradient(circle at 40% 35%,#ffc46b,#f08a1e);}
 .ms__node--lock{background:#c6cddc;filter:grayscale(1);}
 .ms__labels{display:flex;justify-content:space-between;font-weight:800;color:#e0342f;font-size:.8rem;}
 .ms__labels span{display:flex;align-items:center;gap:3px;}
-.tg__more{display:block;width:100%;text-align:center;color:var(--c-primary);font-weight:700;font-size:.9rem;padding:10px 0;border-top:1px solid rgba(255,255,255,.9);margin-top:10px;background:rgba(255,255,255,.25);}
+.tg__more{display:block;width:100%;text-align:center;color:var(--c-primary);font-weight:700;font-size:.9rem;padding:10px 0;border-top:1px solid #e3ebfb;margin-top:10px;background:#eef3ff;}
 .tg__subs{display:flex;flex-direction:column;gap:8px;padding:0 0 10px;}
 .tg__subs[hidden]{display:none;}
 .tg__subs .tk__bar{flex-basis:56px;}
@@ -524,31 +628,1031 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .pop__btns{display:flex;gap:8px;margin-top:16px;}
 .pop__btns button{flex:1;padding:9px 0;border-radius:10px;font-weight:700;font-size:.86rem;}
 .btn-ghost{background:#eef2f9;color:var(--c-text-2);}
+/* 购买弹窗（照线上既有：底部弹出，名称ⓘ、大图、数量、适用厂商／适用游戏、红字备注、蓝「购买 ★价格」）。兑换流程不变 */
+.smask{position:absolute;inset:0;background:rgba(27,42,68,.45);display:none;align-items:flex-end;z-index:21;}
+.smask.is-open{display:flex;}
+.sheet{background:#fff;border-radius:18px 18px 0 0;padding:14px 16px 18px;width:100%;}
+.sheet__hd{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:1rem;}
+.sheet__hd .i{font-size:.8rem;color:var(--c-text-2);margin-left:6px;font-weight:400;}
+.sheet__x{color:var(--c-text-2);font-size:1.1rem;padding:0 4px;background:none;}
+.sheet__img{height:150px;border-radius:12px;margin:12px 0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;text-align:center;font-size:1rem;line-height:1.2;}
+.sheet__row{display:flex;justify-content:space-between;align-items:center;font-size:.84rem;padding:8px 0;border-top:1px solid #f0f3f8;}
+.sheet__row .k{color:var(--c-text-2);}
+.qty{display:inline-flex;align-items:center;border:1px solid #d9e0ec;border-radius:8px;overflow:hidden;}
+.qty button{width:30px;height:28px;background:#f3f6fb;color:var(--c-text);font-weight:700;}
+.qty span{width:36px;text-align:center;font-weight:700;}
+.sheet__note{font-size:.76rem;color:var(--c-red);line-height:1.5;margin:6px 0 10px;}
+.sheet__buy{width:100%;padding:12px 0;border-radius:12px;background:#2f6bff;color:#fff;font-weight:800;font-size:.95rem;margin-top:6px;}
+
 .btn-main{background:var(--c-primary);color:#fff;}
 .btn-main--purple{background:var(--c-purple);}
 
 /* demo 控制列（原型用，不是正式画面） */
-.demo-bar{max-width:430px;margin:0 auto 12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+.demo-bar{max-width:430px;margin:0 auto 12px;display:flex;flex-direction:column;gap:6px;}
+.demo-grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 10px;border:1px dashed #9fb3d8;border-radius:10px;background:rgba(255,255,255,.45);}
+.demo-grp__t{font-size:.74rem;font-weight:800;color:#2f6bff;margin-right:2px;}
+.demo-grp--bk{border-color:#f5222d;}
+.demo-grp--bk .demo-grp__t{color:#c41d1d;}
+.demo-grp--bk button{border-color:#f5b5b5;color:#c41d1d;}
+.demo-grp--bk button.on{background:#c41d1d;border-color:#c41d1d;color:#fff;}
+.demo-tog{border-style:dashed!important;color:#5b6a85!important;}
 .demo-bar button{background:#fff;color:#2f6bff;border:1px solid #c9d8f2;border-radius:8px;padding:6px 10px;font-size:.74rem;}
 .demo-bar button.on{background:#2f6bff;color:#fff;}
 .demo-hint{color:#5b6a85;font-size:.72rem;text-align:center;margin:0 auto 6px;max-width:430px;}
+
+/* =========================================================
+   后台原型（商品管理）：只在 #admin 内生效
+   ========================================================= */
+#admin{width:100%}
+#admin .bk-title{margin:0 0 10px;font-size:.9rem;color:#4b5a73}
+#wrap{width:100%;max-width:430px}
+#wrap.is-admin{max-width:1240px}
+#wrap.is-admin .demo-bar{max-width:none}
+
+#admin .page{font-size:13px;color:#606266;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:1180px;margin:0 auto;padding:16px}
+#admin .crumb{background:#fff;border-radius:4px;padding:10px 16px;margin-bottom:12px;color:#909399}
+#admin .crumb b{color:#303133;font-weight:500}
+#admin .card{background:#fff;border-radius:4px;padding:16px}
+#admin .filters{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-bottom:12px}
+#admin .filters label{color:#606266;white-space:nowrap}
+#admin .fake-sel{display:inline-flex;align-items:center;justify-content:space-between;width:130px;height:32px;padding:0 10px;border:1px solid #dcdfe6;border-radius:4px;background:#fff;color:#c0c4cc;box-sizing:border-box}
+#admin .fake-sel.on{color:#606266}
+#admin .fake-sel i{color:#c0c4cc;font-size:12px}
+#admin .fake-inp{display:inline-flex;align-items:center;width:140px;height:32px;padding:0 10px;border:1px solid #dcdfe6;border-radius:4px;background:#fff;color:#c0c4cc;box-sizing:border-box}
+#admin .fake-date{width:260px}
+#admin .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#admin .warn{color:#f56c6c}
+#admin table.bk-tb{width:100%;border-collapse:collapse;font-size:12px}
+#admin table.bk-tb th, #admin table.bk-tb td{border:1px solid #ebeef5;padding:8px 6px;text-align:center;vertical-align:middle}
+#admin table.bk-tb th{background:#fafafa;color:#909399;font-weight:500}
+#admin table.bk-tb td img{width:56px;height:56px;object-fit:cover;border-radius:3px;background:#dfe6ef}
+#admin .sw{display:inline-block;width:40px;height:20px;border-radius:10px;background:#409eff;position:relative;vertical-align:middle}
+#admin .sw:after{content:"";position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff}
+#admin .lnk{color:#409eff;cursor:pointer}
+#admin .lnk+.lnk{margin-left:8px}
+#admin .pager{margin-top:12px;text-align:right;color:#606266}
+#admin .pager b{display:inline-block;min-width:24px;height:24px;line-height:24px;background:#409eff;color:#fff;border-radius:2px;font-weight:500;text-align:center;margin:0 2px}
+/* 新增标记：红框＋「新增」小标 */
+#admin .new{position:relative;outline:2px solid #f5222d;outline-offset:3px;border-radius:2px}
+#admin .new:before{content:"新增";white-space:nowrap;position:absolute;right:-4px;top:-20px;background:#f5222d;color:#fff;font-size:11px;line-height:16px;padding:0 5px;border-radius:2px}
+#admin .sel{display:inline-flex;align-items:center;justify-content:space-between;width:130px}
+#admin .frow.new{outline-offset:6px;margin-left:-6px;padding-left:6px}
+#admin .frow.new:before{top:-16px;right:-4px}
+/* 弹窗 */
+.bk-mask{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 0;z-index:10}
+.bk-mask.open{display:flex}
+#admin .dlg{background:#fff;border-radius:4px;width:900px;max-width:94vw;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+#admin .dlg__hd{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;font-size:18px;color:#303133}
+#admin .dlg__hd .x{color:#909399;cursor:pointer;font-size:18px}
+#admin .dlg__bd{padding:4px 30px 10px}
+#admin .frow{display:flex;align-items:flex-start;margin-bottom:18px;line-height:32px}
+#admin .frow label{width:140px;text-align:right;padding-right:12px;color:#606266;flex:0 0 140px}
+#admin .frow label.req:before{content:"* ";color:#f56c6c}
+#admin .frow .val{flex:1}
+#admin .opt{display:inline-block;margin-right:28px;color:#606266}
+#admin .opt i{display:inline-block;width:12px;height:12px;border:1px solid #dcdfe6;border-radius:50%;vertical-align:-1px;margin-right:6px;background:#fff;box-sizing:border-box}
+#admin .opt i.cb{border-radius:2px}
+#admin .opt.on i{border-color:#409eff;background:#409eff;box-shadow:inset 0 0 0 3px #fff}
+#admin .opt.on i.cb{box-shadow:none;background:#409eff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6l2.5 2.5 4.5-5' stroke='%23fff' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") center/10px no-repeat}
+#admin .opt.dis{color:#c0c4cc}
+#admin .inp{display:inline-block;height:32px;line-height:30px;padding:0 10px;border:1px solid #dcdfe6;border-radius:4px;color:#606266;box-sizing:border-box;background:#fff}
+#admin .inp--w{width:100%}.inp--s{width:130px}
+#admin .inp .unit{float:right;color:#909399;border-left:1px solid #dcdfe6;margin-right:-10px;padding:0 10px;background:#f5f7fa;border-radius:0 4px 4px 0}
+#admin .vipgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 20px}
+#admin .vipgrid .inp{width:100%}
+#admin .vipgrid .inp .pre{color:#909399;border-right:1px solid #dcdfe6;margin-left:-10px;padding:0 10px;background:#f5f7fa;border-radius:4px 0 0 4px;margin-right:10px}
+#admin .hint{color:#909399;font-size:12px;line-height:20px}
+#admin .hint.red{color:#f56c6c}
+#admin .imgbox{width:100px;height:100px;background:#dfe6ef;border-radius:4px;margin-top:8px}
+#admin .dlg__ft{text-align:center;padding:10px 20px 24px}
+#admin .bk-demo-unused{position:fixed;left:0;right:0;bottom:0;background:#303133;color:#fff;padding:8px 16px;font-size:12px;display:flex;gap:8px;align-items:center;z-index:5}
+#admin .demo button{font-size:12px;padding:4px 10px;border:1px solid #777;background:#444;color:#fff;border-radius:3px;cursor:pointer}
+#admin .demo button.on{background:#409eff;border-color:#409eff}
 </style>
+<style>
+/* ==========================================================================
+   规格书样式（全部挂在 html.spec-mode／#specShell 底下，不影响原型）。样式沿用 reward/reward_spec.html
+   ========================================================================== */
+/* ==========================================================================
+   规格书样式（全部挂在 html.spec-mode／#specShell 底下，不影响原型）
+   ========================================================================== */
+/* ==========================================================================
+   Design Token
+   ========================================================================== */
+html.spec-mode{
+  --c-primary:      #3b7cf6;
+  --c-primary-dark: #2f6ae0;
+  --c-primary-soft: #ecf3ff;
+  --c-bg:           #f2f4f7;
+  --c-surface:      #ffffff;
+  --c-border:       #dcdfe6;
+  --c-border-light: #ebeef5;
+  --c-text:         #303133;
+  --c-text-2:       #606266;
+  --c-text-3:       #909399;
+  --c-danger:       #d84b4b;
+  --c-warning:      #b3730c;
+  --c-warning-bg:   #fdf6ec;
+  --c-success:      #3e8e41;
+  --c-success-bg:   #f0f9eb;
+
+  --tag-new-bg:    #e7f6ec;  --tag-new-text:    #256b34;
+  --tag-change-bg: #fdf2e3;  --tag-change-text: #8a5a08;
+  --tag-same-bg:   #eef0f3;  --tag-same-text:   #5c6068;
+  --tag-diff-bg:   #eaf1fe;  --tag-diff-text:   #2f5bb7;
+  --tag-none-bg:   #f4eef0;  --tag-none-text:   #8a4a58;
+
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
+  --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+
+  --radius: 4px;  --radius-lg: 8px;
+
+  /* 以 root 18px 换算。这份文件会被长时间阅读，字不能小 */
+  --fs-xs:   0.889rem;   /* 16px —— 标签、补充说明（11/04 她说整份字要再大，注记不小于 16） */
+  --fs-sm:   0.944rem;   /* 17px —— 表格内文 */
+  --fs-base: 1rem;       /* 18px —— 正文 */
+  --fs-md:   1.111rem;   /* 20px —— 小节标题 */
+  --fs-lg:   1.278rem;   /* 23px */
+  --fs-xl:   1.5rem;     /* 27px —— 章标题 */
+}
+
+/* ==========================================================================
+   Reset & Base
+   ========================================================================== */
+html.spec-mode{ font-size: 18px; height: 100%; }
+#specShell *{ box-sizing: border-box; }
+html.spec-mode body{
+  margin: 0; height: 100%;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: var(--fs-base);
+  line-height: 1.7;
+  color: var(--c-text);
+  background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+}
+#specShell h1, #specShell h2, #specShell h3, #specShell h4{ margin: 0; font-weight: 600; }
+#specShell :focus-visible{ outline: 2px solid var(--c-primary); outline-offset: 2px; }
+#specShell code{
+  background: #eef1f5; padding: 1px 5px; border-radius: 3px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em;
+}
+#specShell pre{
+  background: #f6f8fa; padding: var(--sp-3); border-radius: var(--radius-lg);
+  overflow-x: auto; font-size: var(--fs-sm); margin: 0 0 var(--sp-4);
+}
+
+/* ==========================================================================
+   两栏版面
+   ========================================================================== */
+#specShell{ display: flex; height: 100vh; overflow: hidden; }
+#specShell .pane{ display: flex; flex-direction: column; min-width: 0; }
+#specShell{ --proto-w: 58%; }   /* 左栏宽：拖分隔条会改这个值 */
+#specShell .pane--proto{ flex: 0 0 var(--proto-w); min-width: 360px; max-width: calc(100% - 420px); background: var(--c-bg); }
+#specShell .pane--spec{ flex: 1 1 auto; min-width: 420px; background: var(--c-surface); }
+#specShell .splitter{ flex: 0 0 7px; cursor: col-resize; background: var(--c-border); position: relative; z-index: 2; }
+#specShell .splitter::after{ content:''; position:absolute; left:2px; top:50%; width:3px; height:36px; margin-top:-18px; border-radius:2px; background:#b8bfca; }
+#specShell .splitter:hover, #specShell.is-dragging .splitter{ background: var(--c-primary); }
+#specShell.is-dragging{ cursor: col-resize; user-select: none; }
+#specShell.is-dragging iframe{ pointer-events: none; }   /* 拖的时候滑鼠进 iframe 事件会被吃掉 */
+#specShell .spec-rail{ display:none; flex: 0 0 44px; background:#2b2f38; align-items:flex-start; justify-content:center; padding-top: var(--sp-3); }
+#specShell .spec-rail__btn{ writing-mode: vertical-rl; padding: var(--sp-3) 4px; background:#3a3f4a; border:0; border-radius: var(--radius); color:#e8eaed; font: inherit; font-size: var(--fs-sm); letter-spacing: .1em; cursor:pointer; }
+#specShell .spec-rail__btn:hover{ background:#474d5a; }
+#specShell.is-wide .pane--proto{ flex: 1 1 auto; max-width:none; }
+#specShell.is-wide .pane--spec, #specShell.is-wide .splitter{ display:none; }
+#specShell.is-wide .spec-rail{ display:flex; }
+#specShell .pane-bar__btn--wide{ background: var(--c-primary); }
+#specShell .pane-bar__btn--wide:hover{ background: #2a66d8; }
+
+#specShell .pane-bar{
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background: #2b2f38; color: #e8eaed;
+  font-size: var(--fs-sm);
+  flex: 0 0 auto;
+}
+#specShell .pane-bar__title{ font-weight: 600; white-space: nowrap; }
+#specShell .pane-bar__hint{ color: #a9aeb8; font-size: var(--fs-xs); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#specShell .pane-bar__spacer{ flex: 1 1 auto; }
+#specShell .pane-bar__btn{
+  padding: 2px var(--sp-3);
+  background: #3a3f4a; border: 1px solid transparent; border-radius: var(--radius);
+  color: #e8eaed; font: inherit; font-size: var(--fs-xs);
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+}
+#specShell .pane-bar__btn:hover{ background: #474d5a; }
+#specShell .pane-bar__check{ display: inline-flex; align-items: center; gap: var(--sp-1); font-size: var(--fs-xs); cursor: pointer; white-space: nowrap; }
+
+/* 后台／前台切换：两颗并排的小钮，选中的那颗填主色 */
+#specShell .side-switch{ display: inline-flex; border: 1px solid #4a505c; border-radius: var(--radius); overflow: hidden; flex: none; }
+#specShell .side-switch__btn{
+  padding: 2px var(--sp-3); border: 0; background: #3a3f4a;
+  color: #c7ccd4; font: inherit; font-size: var(--fs-xs); cursor: pointer; white-space: nowrap;
+}
+#specShell .side-switch__btn + .side-switch__btn{ border-left: 1px solid #4a505c; }
+#specShell .side-switch__btn:hover{ background: #474d5a; }
+#specShell .side-switch__btn[aria-pressed="true"]{ background: var(--c-primary); color: #fff; font-weight: 600; }
+#specShell .pane-bar__check input{ margin: 0; accent-color: var(--c-primary); }
+
+#specShell .proto-box{ position: relative; flex: 1 1 auto; min-height: 0; }
+#specShell .proto-box iframe{ width: 100%; height: 100%; border: 0; display: block; background: var(--c-bg); }
+#specShell .proto-fallback{
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-3);
+  padding: var(--sp-5); background: var(--c-surface); text-align: center;
+  color: var(--c-text-2); font-size: var(--fs-base);
+}
+#specShell .proto-fallback.hidden{ display: none; }
+
+/* ==========================================================================
+   规格栏：导览 + 内文
+   ========================================================================== */
+#specShell .spec-inner{ display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+
+/* 目录放在内文上方（11/04 她：分类放上方，规格书宽一点）
+   第一列＝大章页签（蓝字＋底线），第二列＝该章的小节圆片；点大章跳该章第一节。 */
+#specShell .spec-nav{
+  flex: 0 0 auto; padding: 0 var(--sp-5);
+  background: #fff; border-bottom: 1px solid var(--c-border-light);
+}
+#specShell .spec-nav__chs{ display: flex; gap: var(--sp-4); overflow-x: auto; scrollbar-width: none; }
+#specShell .spec-nav__ch{
+  display: inline-flex; align-items: baseline; gap: 6px;
+  padding: var(--sp-3) 2px var(--sp-2);
+  background: none; border: 0; border-bottom: 3px solid transparent;
+  font: inherit; font-size: var(--fs-base); font-weight: 600; color: var(--c-text-2);
+  cursor: pointer; white-space: nowrap;
+}
+#specShell .spec-nav__ch:hover{ color: var(--c-primary); }
+#specShell .spec-nav__ch[aria-current="true"]{ color: var(--c-primary); border-bottom-color: var(--c-primary); }
+#specShell .spec-nav__subs{ display: none; flex-wrap: wrap; gap: var(--sp-2); padding: var(--sp-2) 0 var(--sp-3); }
+#specShell .spec-nav__subs.is-on{ display: flex; }
+#specShell .spec-nav__item{
+  display: inline-flex; align-items: baseline; gap: 6px;
+  padding: 3px 12px; border: 1px solid var(--c-border-light); border-radius: 999px;
+  background: #f6f8fb; font: inherit; font-size: var(--fs-sm); color: var(--c-text-2);
+  cursor: pointer; white-space: nowrap;
+}
+#specShell .spec-nav__item:hover{ border-color: var(--c-primary); color: var(--c-primary); }
+#specShell .spec-nav__item[aria-current="true"]{ background: var(--c-primary); border-color: var(--c-primary); color: #fff; font-weight: 600; }
+#specShell .spec-nav__n{ font-weight: 600; font-variant-numeric: tabular-nums; opacity: .75; }
+#specShell .spec-nav__item[aria-current="true"] .spec-nav__n{ opacity: .9; }
+
+#specShell .spec-scroll{
+  flex: 1 1 auto; overflow-y: auto; padding: var(--sp-5); min-width: 0;
+}
+
+#specShell .panel{ display: none; }
+#specShell .panel.is-on{ display: block; }
+#specShell .panel__head{
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2);
+  padding-bottom: var(--sp-3); margin-bottom: var(--sp-4);
+  border-bottom: 2px solid var(--c-primary);
+}
+#specShell .panel__num{ color: var(--c-primary); font-size: var(--fs-xl); font-weight: 700; }
+#specShell .panel__title{ font-size: var(--fs-xl); }
+
+#specShell h3.sub{ margin: var(--sp-5) 0 var(--sp-2); font-size: var(--fs-md); color: var(--c-text); }
+/* 每章开头一句话讲完这一区在干嘛 */
+#specShell .lede{
+  margin: calc(var(--sp-2) * -1) 0 var(--sp-4);
+  padding-left: var(--sp-3);
+  border-left: 3px solid var(--c-primary);
+  color: var(--c-text-2); line-height: 1.8;
+}
+/* 子章节底下再分一层（例如某一节里的「配置范例」），比 h3 小半级、灰一点 */
+#specShell h4.sub{ margin: var(--sp-4) 0 var(--sp-2); font-size: var(--fs-base); color: var(--c-text-2); }
+#specShell h3.sub:first-of-type{ margin-top: 0; }
+#specShell p{ margin: 0 0 var(--sp-4); line-height: 1.85; }
+#specShell ul, #specShell ol{ margin: 0 0 var(--sp-4); padding-left: 1.5em; line-height: 1.85; }
+#specShell li{ margin-bottom: var(--sp-2); }
+
+/* ==========================================================================
+   表格
+   ========================================================================== */
+#specShell .tbl-scroll{ overflow-x: auto; margin-bottom: var(--sp-4); }
+#specShell table.t{ width: 100%; border-collapse: collapse; font-size: var(--fs-sm); line-height: 1.75; }
+#specShell table.t th, #specShell table.t td{
+  padding: var(--sp-3);
+  border: 1px solid var(--c-border-light);
+  text-align: left; vertical-align: top;
+}
+/* 表头不再一律「不换行」——长标题被迫撑宽会把说明栏挤成一条 */
+#specShell table.t th{ background: #fafbfc; color: var(--c-text-2); font-weight: 600; }
+#specShell table.t tbody tr:hover{ background: #fafcff; }
+/* .nw 只给「真的很短」的标签用；内容一长就不该加，否则会挤爆隔壁栏 */
+#specShell table.t .nw{ white-space: nowrap; }
+/* 说明栏（每张表的最后一栏）优先吃掉剩下的宽度 */
+#specShell table.t th:last-child, #specShell table.t td:last-child{ width: auto; }
+
+/* ==========================================================================
+   标注
+   ========================================================================== */
+#specShell .tag{
+  display: inline-block; padding: 1px var(--sp-2); border-radius: 10px;
+  font-size: var(--fs-xs); font-weight: 600; line-height: 1.6; white-space: nowrap;
+}
+#specShell .tag--new{ background: var(--tag-new-bg);    color: var(--tag-new-text); }
+#specShell .tag--change{ background: var(--tag-change-bg); color: var(--tag-change-text); }
+#specShell .tag--same{ background: var(--tag-same-bg);   color: var(--tag-same-text); }
+#specShell .tag--diff{ background: var(--tag-diff-bg);   color: var(--tag-diff-text); }
+#specShell .tag--none{ background: var(--tag-none-bg);   color: var(--tag-none-text); }
+#specShell .tag--del{ background: #fef0f0;              color: #b33; }
+#specShell .tag--tbd{ background: #f3effa;              color: #6b4fbb; }
+/* 核心规则＝强调用，不是「本次新增」，所以不会被摘要算进异动 */
+#specShell .tag--key{ background: var(--c-primary-soft); color: var(--c-primary); }
+
+/* ── 本次异动摘要（自动生成，资料来自各章标签）───────────── */
+#specShell .sum{ border: 1px solid var(--c-border-light); border-radius: var(--radius-lg); padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-5); }
+#specShell .sum__h{ display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2); margin-bottom: var(--sp-2); }
+#specShell .sum__t{ font-weight: 700; }
+#specShell .sum__note{ color: var(--c-text-3); font-size: var(--fs-xs); }
+#specShell .sum__list{ display: grid; gap: 2px; }
+#specShell .sum__row{
+  display: flex; align-items: baseline; gap: var(--sp-2); width: 100%;
+  padding: var(--sp-1) var(--sp-2); border: 0; border-radius: var(--radius);
+  background: none; font: inherit; font-size: var(--fs-sm); color: var(--c-text-2);
+  text-align: left; cursor: pointer;
+}
+#specShell .sum__row:hover{ background: var(--c-primary-soft); color: var(--c-primary); }
+#specShell .sum__n{ flex: 0 0 34px; font-weight: 600; color: var(--c-text-3); font-variant-numeric: tabular-nums; }
+#specShell .sum__row:hover .sum__n{ color: var(--c-primary); }
+#specShell .sum__x{ flex: 0 0 auto; }
+#specShell .sum__same{ margin-top: var(--sp-2); padding-top: var(--sp-2); border-top: 1px dashed var(--c-border-light);
+             font-size: var(--fs-sm); color: var(--c-text-3); line-height: 1.7; }
+
+#specShell .box{
+  padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-lg);
+  margin-bottom: var(--sp-4); font-size: var(--fs-sm); line-height: 1.7;
+}
+#specShell .box--info{ background: #f4f4f5; border-left: 4px solid var(--c-text-3); }
+#specShell .box--warn{ background: var(--c-warning-bg); border-left: 4px solid var(--c-warning); color: var(--c-warning); }
+#specShell .box--ok{ background: var(--c-success-bg); border-left: 4px solid var(--c-success); color: var(--c-success); }
+#specShell .box--stop{ background: #fef0f0; border-left: 4px solid var(--c-danger); color: var(--c-danger); }
+#specShell .box__t{ display: block; font-weight: 700; margin-bottom: var(--sp-1); }
+/* 总览最上方的重点提醒（按钮行为照既有） */
+#specShell .box--key{ background: var(--c-primary-soft); border-left: 4px solid var(--c-primary); color: var(--c-text); font-size: var(--fs-base); }
+#specShell .box--key .box__t{ color: var(--c-primary); }
+
+/* 懒人包：第 1 章最上面的重点整理，一格一个主题 */
+#specShell .lazy{ border: 1px solid var(--c-border-light); border-radius: var(--radius-lg); padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-5); }
+#specShell .lazy__h{ font-weight: 700; margin-bottom: var(--sp-1); }
+#specShell .lazy__one{ font-size: var(--fs-sm); color: var(--c-text-2); margin: 0 0 var(--sp-3); line-height: 1.7; }
+#specShell .lazy__grid{ display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-3); }
+#specShell .lazy__card{ background: #f7f8fa; border-radius: var(--radius); padding: var(--sp-2) var(--sp-3); font-size: var(--fs-sm); line-height: 1.7; }
+#specShell .lazy__card b.lazy__t{ display: block; color: var(--c-text); margin-bottom: 2px; }
+#specShell .lazy__card--todo{ background: #f3effa; }
+#specShell .lazy__card b.lazy__t{ font-size: var(--fs-base); padding-bottom: var(--sp-2); margin-bottom: var(--sp-2); border-bottom: 1px solid var(--c-border-light); }
+#specShell .lazy__list{ list-style: none; margin: 0; padding: 0; line-height: 1.6; }
+#specShell .lazy__list li{ display: grid; grid-template-columns: 6.5em 1fr auto; gap: var(--sp-3); margin: 0; padding: 6px 0; border-top: 1px dashed var(--c-border-light); }
+#specShell .lazy__list li:first-child{ border-top: 0; }
+#specShell .lazy__list li b{ color: var(--c-text); }
+#specShell .lazy__sub{ display: block; font-size: var(--fs-xs); font-weight: 700; color: var(--c-primary); margin: var(--sp-2) 0 2px; }
+#specShell .lazy__sub:first-of-type{ margin-top: 0; }
+#specShell .lazy__ref{ white-space: nowrap; font-size: var(--fs-xs); color: var(--c-text-3); }
+
+/* 本次修订表：放在懒人包下面 */
+#specShell .revlog{ border: 1px solid var(--c-border-light); border-radius: var(--radius-lg); padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-5); }
+#specShell .revlog .tbl-scroll{ margin-bottom: 0; }
+#specShell .revlog__note{ font-weight: 400; font-size: var(--fs-xs); color: var(--c-text-3); margin-left: var(--sp-2); }
+
+/* 10/1 修订：红字只标这次变动的句子 */
+#specShell .rev{ color: var(--c-danger); }
+#specShell .rev b, #specShell .rev code{ color: inherit; }
+#specShell .sub.rev, #specShell [id^="p-f"] h4.sub.rev{ color: var(--c-danger); }
+
+/* 表格底下的补充说明。灰字、比内文小一号，但仍在规范的 12px 底限之上。 */
+#specShell .hint{
+  margin: calc(var(--sp-2) * -1) 0 var(--sp-4);
+  font-size: var(--fs-sm); color: var(--c-text-2); line-height: 1.7;
+}
+
+/* ==========================================================================
+   第 4 章（前台规则）专用：放宽的阅读版面
+   --------------------------------------------------------------------------
+   这一章的「长什么样」看左栏的前台原型（daily_front.html）就好，
+   规格这一栏只放文字与表格，整栏宽度都留给内容。
+   ========================================================================== */
+/* 这一章只调间距，字级一律沿用全站 token，不要自己长一号 */
+#specShell [id^="p-f"] h3.sub{ margin-top: var(--sp-6); }
+#specShell [id^="p-f"] h4.sub{ color: var(--c-text); margin-top: var(--sp-5); }
+
+/* ==========================================================================
+   响应式：窄屏幕改成上下堆叠
+   ========================================================================== */
+@media (max-width: 1024px){
+  #specShell { flex-direction: column; height: auto; overflow: visible; }
+  #specShell .pane--proto { flex: none; height: 70vh; border-right: 0; border-bottom: 1px solid var(--c-border); }
+  #specShell .pane--spec  { flex: none; }
+  #specShell .spec-scroll { overflow: visible; }
+}
+@media (max-width: 768px) {
+  html.spec-mode{ font-size: 17px; }
+  #specShell .spec-scroll{ padding: var(--sp-4); }
+}
+
+/* ==========================================================================
+   本文件补充
+   ========================================================================== */
+/* 色卡小方块 */
+#specShell .sw{ display: inline-block; width: 26px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: var(--sp-2); }
+/* 表格格子里的参考小字 */
+#specShell .pv{ margin: calc(var(--sp-2) * -1) 0 var(--sp-4); font-size: var(--fs-sm); color: var(--c-text-3); }
+#specShell .pv__btn{ margin-left: var(--sp-2); padding: 2px var(--sp-3); border: 1px solid var(--c-primary); border-radius: var(--radius); background: var(--c-surface); color: var(--c-primary); font: inherit; cursor: pointer; }
+#specShell .pv__btn:hover{ background: var(--c-primary-soft); }
+#specShell .hint-in{ display: inline-block; margin-top: var(--sp-1); font-size: var(--fs-xs); color: var(--c-text-3); line-height: 1.6; }
+
+
+/* 模式切换：直接开档＝规格书（左示意右规格）；网址带 ?proto 或在 iframe 里＝只显示原型 */
+html.spec-mode #protoRoot{display:none!important;}
+/* 右栏表格：栏位多时在框里横向卷，不要每格一个字地折行 */
+
+/* ---------- 11/04 右栏重排：区块化、两栏规则、标签色片 ---------- */
+#specShell .spec-scroll{ padding: var(--sp-5) var(--sp-6) 80px; }
+#specShell .panel__head{ display:flex; align-items:center; gap: var(--sp-3); margin-bottom: var(--sp-4); padding-bottom: var(--sp-3); border-bottom: 2px solid var(--c-primary); }
+#specShell .panel__num{ display:inline-flex; align-items:center; justify-content:center; min-width: 2.6em; height: 1.7em; padding: 0 .5em; border-radius: 999px; background: var(--c-primary); color:#fff; font-size: var(--fs-md); font-weight:700; }
+#specShell .panel__title{ font-size: var(--fs-lg); font-weight:700; margin:0; }
+#specShell .intro{ margin: 0 0 var(--sp-4); padding: var(--sp-3) var(--sp-4); background: var(--c-primary-soft); border-radius: var(--radius-lg); color: var(--c-text); line-height:1.75; }
+#specShell .intro--list{ display:grid; gap: var(--sp-2); }
+#specShell .intro__row{ display:flex; gap: var(--sp-3); align-items:flex-start; }
+#specShell .intro__row b{ flex:0 0 3em; color: var(--c-primary); font-weight:800; white-space:nowrap; }
+#specShell .intro__row span{ flex:1; }
+#specShell .pv{ margin: 0 0 var(--sp-4); display:flex; flex-wrap:wrap; align-items:center; gap: var(--sp-2); }
+#specShell .pv__btn{ margin:0; }
+#specShell .pv__btn[aria-pressed="true"]{ background: var(--c-primary); color: #fff; }
+#specShell [data-view-of]:not(.is-on){ display:none !important; }
+#specShell .pg-tabs{ display:flex; flex-wrap:wrap; gap: var(--sp-2); margin: 0 0 var(--sp-3); }
+#specShell .pg-tab{ padding: 2px var(--sp-3); border: 1px solid var(--c-primary); border-radius: var(--radius); background: var(--c-surface); color: var(--c-primary); font: inherit; cursor: pointer; }
+#specShell .pg-tab:hover{ background: var(--c-primary-soft); }
+#specShell .pg-tab[aria-pressed="true"]{ background: var(--c-primary); color: #fff; }
+#specShell .pg-pane{ display:none; padding: var(--sp-3) var(--sp-4); border: 1px solid var(--c-border); border-radius: var(--radius); background: var(--c-surface); }
+#specShell .pg-pane.is-on{ display:block; }
+#specShell .pg-pane__t{ font-weight:700; margin: 0 0 var(--sp-2); }
+#specShell .blk{ margin: 0 0 var(--sp-5); }
+#specShell .blk__t{ display:flex; align-items:baseline; gap: var(--sp-3); margin: 0 0 var(--sp-2); padding-left: var(--sp-3); border-left: 4px solid var(--c-primary); font-size: var(--fs-md); font-weight:700; color: var(--c-text); line-height:1.3; }
+#specShell .blk__hint{ font-size: var(--fs-xs); font-weight:400; color: var(--c-text-3); }
+#specShell .rule{ border: 1px solid var(--c-border-light); border-radius: var(--radius-lg); overflow:hidden; }
+#specShell .rule__row{ display:grid; grid-template-columns: 9em 1fr; border-top: 1px solid var(--c-border-light); }
+#specShell .rule__row:first-child{ border-top:0; }
+#specShell .rule__row:nth-child(even){ background:#fafbfc; }
+#specShell .rule__k{ padding: var(--sp-2) var(--sp-3); font-weight:700; color: var(--c-text); background:#f3f6fb; border-right: 1px solid var(--c-border-light); line-height:1.7; }
+#specShell .rule__v{ padding: var(--sp-2) var(--sp-3); color: var(--c-text); line-height:1.8; }
+#specShell .rule__row.rule__row--plain{ grid-template-columns: 1fr; }
+#specShell .rule__row--plain .rule__v{ color: var(--c-text-2); }
+#specShell ol.steps{ margin:0; padding: 0 0 0 1.6em; line-height:1.9; }
+#specShell ol.steps li{ margin: 2px 0; }
+#specShell table.t{ min-width:0; table-layout:auto; }
+#specShell table.t th{ background:#f3f6fb; color: var(--c-text); }
+#specShell table.t td{ line-height:1.75; }
+#specShell table.t .nw{ white-space:nowrap; }
+#specShell .chip{ display:inline-block; min-width: 3.6em; text-align:center; padding: 0 .5em; border-radius: 4px; font-size: var(--fs-xs); font-weight:700; line-height:1.7; white-space:nowrap; }
+#specShell .chip--new{ background:#fde8e8; color:#c62828; }
+#specShell .chip--rename{ background:#fff3d6; color:#a15c00; }
+#specShell .chip--mod{ background:#fff3d6; color:#a15c00; }
+#specShell .chip--same{ background:#eef0f3; color:#5c6068; }
+/* 1.1 对照图：前台一块 ← 后台哪里设 */
+#specShell .map{ display:flex; flex-direction:column; gap: var(--sp-3); }
+#specShell .map__row{ display:grid; grid-template-columns: 9.5em 1.6em 1fr; gap: var(--sp-2); align-items:stretch; }
+#specShell .map__f{ background: var(--c-primary); color:#fff; border-radius: var(--radius-lg); padding: var(--sp-2) var(--sp-3); font-weight:700; display:flex; flex-direction:column; justify-content:center; }
+#specShell .map__f small{ display:block; font-weight:400; opacity:.85; font-size: var(--fs-xs); margin-top:2px; }
+#specShell .map__arr{ display:flex; align-items:center; justify-content:center; color: var(--c-primary); font-weight:700; font-size: 1.2em; }
+#specShell .map__b{ border:1px solid var(--c-border-light); border-radius: var(--radius-lg); background:#fff; padding: var(--sp-2) var(--sp-3); display:flex; flex-direction:column; gap:4px; }
+#specShell .map__src{ font-weight:700; }
+#specShell .map__src em{ font-style:normal; color: var(--c-primary); font-weight:600; margin-left:.4em; font-size: var(--fs-sm); }
+#specShell .map__note{ color: var(--c-text-2); font-size: var(--fs-sm); line-height:1.7; }
+#specShell .steps3{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: var(--sp-3); }
+#specShell .step3{ border:1px solid var(--c-border-light); border-radius: var(--radius-lg); background:#fff; padding: var(--sp-3); }
+#specShell .step3__n{ display:inline-flex; width:1.8em; height:1.8em; border-radius:50%; background: var(--c-primary); color:#fff; align-items:center; justify-content:center; font-weight:700; margin-right:.5em; }
+#specShell .step3__t{ font-weight:700; margin-bottom: var(--sp-1); }
+#specShell .step3 ul{ margin:0; padding-left:1.2em; line-height:1.8; color: var(--c-text-2); font-size: var(--fs-sm); }
+@media (max-width:1440px){ #specShell .map__row{ grid-template-columns: 8em 1.4em 1fr; } }
+#specShell .scope{ display:grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: var(--sp-3); }
+#specShell .scope__card{ border: 1px solid var(--c-border-light); border-radius: var(--radius-lg); padding: var(--sp-2) var(--sp-3) var(--sp-3); background:#fff; }
+#specShell .scope__h{ display:flex; align-items:center; gap: var(--sp-2); font-weight:700; margin-bottom: var(--sp-2); padding-bottom: var(--sp-1); border-bottom: 1px solid var(--c-border-light); }
+#specShell .scope__n{ color: var(--c-primary); }
+#specShell .scope__row{ display:grid; grid-template-columns: auto 1fr; gap: var(--sp-2); align-items:start; margin: 4px 0; font-size: var(--fs-sm); line-height:1.7; }
+#specShell .scope__row .chip{ margin-top: .25em; }
+#specShell .t--pages td:last-child{ padding-top: 6px; padding-bottom: 6px; }
+#specShell .t--pages td:first-child, #specShell .t--pages th:first-child{ white-space:nowrap; width:1%; }
+#specShell .lazy{ border:0; padding:0; margin-bottom: var(--sp-5); }
+#specShell .lazy__grid{ grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+#specShell .lazy__card{ background:#fff; border: 1px solid var(--c-border-light); }
+#specShell .lazy__list li{ grid-template-columns: 7em 1fr auto; }
+#specShell .lazy__one{ margin-top: var(--sp-3); }
+#specShell .t--lazy td:first-child{ font-weight:700; color: var(--c-text); }
+#specShell .t--lazy td:last-child{ color: var(--c-text-3); font-size: var(--fs-xs); text-align:right; }
+#specShell .t--lazy thead th:last-child{ text-align:right; }
+#specShell .t__grp th{ background: var(--c-primary-soft); color: var(--c-primary); font-weight:700; text-align:left; }
+#specShell .box--key{ border-radius: var(--radius-lg); }
+
+#specShell .tbl-scroll{overflow-x:auto;}
+/* 笔电（1680 以下）：示意左栏要放整张后台表，分多一点给它；目录窄一点、字级略降；卡片改单栏不挤 */
+@media (max-width:1680px){
+  html.spec-mode{ font-size: 17px; }
+  #specShell{ --proto-w: 60%; }
+  #specShell .spec-scroll{ padding: var(--sp-4) var(--sp-5) 80px; }
+  #specShell .scope, #specShell .lazy__grid{ grid-template-columns: 1fr; }
+}
+@media (max-width:1440px){
+  html.spec-mode{ font-size: 16px; }
+  #specShell .spec-nav{ padding: 0 var(--sp-4); }
+  #specShell .rule__row{ grid-template-columns: 7.5em 1fr; }
+  #specShell .lazy__list li{ grid-template-columns: 6em 1fr auto; }
+  #specShell .pane-bar__hint{ display:none; }
+}
+html:not(.spec-mode) #specShell{display:none!important;}
+
+#specShell .chip--tbd{ background:#f3effa; color:#6b4fbb; }
+html.spec-mode body{ display:block; padding:0; min-height:0; }
+html.spec-mode #wrap{ display:none!important; }
+</style>
+<script>
+/* 直接开档＝规格书模式；在 iframe 里或网址带 ?proto＝原型模式（规格书左栏就是这样载入自己的） */
+document.documentElement.classList.toggle('spec-mode', window.parent === window && location.search.indexOf('proto') < 0);
+</script>
 </head>
 <body>
-<div style="width:100%;max-width:430px;">
+
+<!-- ===================================================================
+     规格书（直接开档＝左示意右规格；网址带 ?proto=1 或在 iframe 里＝只显示原型）
+     =================================================================== -->
+<div class="wrap" id="specShell">
+
+  <section class="pane pane--proto" aria-label="示意画面">
+    <div class="pane-bar">
+      <span class="pane-bar__title">示意</span>
+      <div class="side-switch" role="group" aria-label="切换后台或前台画面">
+        <button type="button" class="side-switch__btn" data-side="h5" aria-pressed="true">前台 H5</button>
+        <button type="button" class="side-switch__btn" data-side="admin" aria-pressed="false">后台</button>
+      </div>
+      <span class="pane-bar__hint" id="protoMode">载入中…</span>
+      <span class="pane-bar__spacer"></span>
+      <label class="pane-bar__check"><input type="checkbox" id="linkToggle" checked>两边连动</label>
+      <a class="pane-bar__btn" id="btnOpenProto" href="?proto=1" target="_blank" rel="noopener">另开分页 ↗</a>
+      <button type="button" class="pane-bar__btn pane-bar__btn--wide" id="btnWide" title="把规格书收到右边，示意放到整个画面宽">放大示意 ▶</button>
+    </div>
+    <div class="proto-box">
+      <iframe id="protoFrame" title="原型"></iframe>
+      <div class="proto-fallback hidden" id="protoFallback"><p>左栏示意载入不起来。<br>请重新整理页面；若仍失败，请用 Chrome 直接开启本档。</p></div>
+    </div>
+  </section>
+
+  <div class="splitter" id="splitter" title="拖拉调整左右宽度，双击回预设"></div>
+  <aside class="spec-rail" id="specRail"><button type="button" class="spec-rail__btn" id="btnUnwide">◀ 展开规格书</button></aside>
+
+  <section class="pane pane--spec" aria-label="规格文件">
+    <div class="pane-bar">
+      <span class="pane-bar__title">规格书</span>
+      <span class="pane-bar__hint">积分商城改版 · v1</span>
+      <span class="pane-bar__spacer"></span>
+      <button class="pane-bar__btn" id="btnGoto" hidden>◀ 左侧跳到这一节</button>
+    </div>
+    <div class="spec-inner">
+      <nav class="spec-nav" id="specNav" aria-label="规格章节"></nav>
+      <main class="spec-scroll" id="specScroll">
+
+        <!-- ============ 1 总览 ============ -->
+        <article class="panel" id="p-map">
+          <div class="panel__head"><span class="panel__num">1</span><h2 class="panel__title">总览</h2></div>
+          <div class="intro intro--list">
+            <div class="intro__row"><b>前台</b><span>积分商城页重排成六块：顶栏、快捷入口、Task List、Playground 入口、Flash sale、Recommend。商品搬到新的「Points Mall 商品页」；一番赏、盲盒改从游乐场地图进。</span></div>
+            <div class="intro__row"><b>后台</b><span>加一个「是否推荐」开关；排序值统一数字越大越前面。</span></div>
+            <div class="intro__row"><b>不改</b><span>购买弹窗、兑换流程、排序逻辑、任务中心、记录、背包、VIP 都沿用既有，不重做。</span></div>
+          </div>
+
+          <div class="lazy"><div class="lazy__h">这次改什么</div>
+            <div class="lazy__grid">
+              <div class="lazy__card"><b class="lazy__t">前台</b><ul class="lazy__list">
+                <li><b>积分商城页</b><span>整页重排；商品区只剩 Flash sale 和 Recommend</span><span class="lazy__ref">3.1</span></li>
+                <li><b>Points Mall 商品页</b><span>新页面：ALL／I Can Buy／各分类页签</span><span class="lazy__ref">3.2</span></li>
+                <li><b>Playground</b><span>一座岛一种游戏，点岛进一番赏、盲盒</span><span class="lazy__ref">3.4</span></li>
+                <li><b>一番赏／盲盒</b><span>列表页改地图风格，等设计稿</span><span class="lazy__ref">3.5</span></li>
+                <li><b>积分记录页</b><span>积分历史、兑换记录合成一页两页签，英文 Points Records</span><span class="lazy__ref">3.7</span></li>
+                <li><b>我的背包</b><span>线上「我的优惠券」改名，内容不变</span><span class="lazy__ref">3.8</span></li>
+              </ul></div>
+              <div class="lazy__card"><b class="lazy__t">后台</b><ul class="lazy__list">
+                <li><b>商品管理</b><span>表单加「是否推荐」开关（推荐排序、推荐时间），列表加「推荐」栏和筛选；列表改成排序数字大的在上面</span><span class="lazy__ref">2.1</span></li>
+                <li><b>商品类别管理</b><span>栏位不改；列表改成排序数字大的在上面</span><span class="lazy__ref">2.2</span></li>
+              </ul></div>
+              <div class="lazy__card"><b class="lazy__t">不改的</b><ul class="lazy__list">
+                <li><b>兑换</b><span>购买弹窗、积分不足、兑换成功、扣点发放</span><span class="lazy__ref">3.3 ／ 4</span></li>
+                <li><b>排序</b><span>8/25 定的排序逻辑全部沿用；排序值统一数字越大越前面（类别、商品、推荐都一样）</span><span class="lazy__ref">4</span></li>
+                <li><b>任务、VIP</b><span>Task List 页、VIP 页照既有</span><span class="lazy__ref">3.6 ／ 3.9</span></li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="blk"><div class="blk__t">前台每块在后台哪里设</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">顶栏 3.1</div><div class="rule__v">不用设，照个人中心既有资料。</div></div>
+            <div class="rule__row"><div class="rule__k">快捷入口 3.1</div><div class="rule__v">不用设，三格固定。</div></div>
+            <div class="rule__row"><div class="rule__k">Task List 3.1、3.6</div><div class="rule__v">任务中心管理（既有）。</div></div>
+            <div class="rule__row"><div class="rule__k">Flash sale 3.1</div><div class="rule__v">商品管理「是否限时抢购」＋时间（既有）。</div></div>
+            <div class="rule__row"><div class="rule__k">Recommend 3.1</div><div class="rule__v">商品管理「是否推荐」（2.1，<span class="chip chip--new">新增</span>）。</div></div>
+            <div class="rule__row"><div class="rule__k">商品页页签 3.2</div><div class="rule__v">商品类别管理（既有，2.2）＋商品勾的类别。</div></div>
+            <div class="rule__row"><div class="rule__k">商品卡 3.2</div><div class="rule__v">商品管理既有栏位：图、名称、价格、积分折扣比例、库存、排序。</div></div>
+            <div class="rule__row"><div class="rule__k">Playground 3.4</div><div class="rule__v">不用设，三座岛固定。</div></div>
+            <div class="rule__row"><div class="rule__k">一番赏、盲盒 3.5</div><div class="rule__v">既有的一番赏、盲盒商品设定，一套一笔。</div></div>
+          </div></div>
+
+          <div class="blk"><div class="blk__t">标记</div><div class="rule"><div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--new">新增</span>新加的栏位或功能 ／ <span class="chip chip--mod">修改</span>既有功能有调整 ／ <span class="chip chip--same">既有</span>照旧，不动。左栏示意点哪个画面，右边只讲那个画面。示意只是版面和流程的参考，实际样式、颜色、图以设计稿为准；本文件只讲规则。</div></div></div></div>
+        </article>
+
+        <!-- ============ 2 后台 ============ -->
+        <article class="panel" id="p-b1">
+          <div class="panel__head"><span class="panel__num">2.1</span><h2 class="panel__title">后台 · 商品管理</h2></div>
+          <p class="intro">位置：积分商城 › 商品管理。只加一件事：商品可以勾「推荐」，勾了才进前台积分商城页的 Recommend 区。做法跟既有「是否限时抢购」一样，一个商品一个开关。其他栏位全部照旧。</p>
+          <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="list" data-pv='{"proto":"admin","go":"admin"}'>列表</button><button type="button" class="pv__btn" data-view="form" data-pv='{"proto":"admin","go":"admin","pop":"edit"}'>编辑商品</button><button type="button" class="pv__btn" data-view="form" data-pv='{"proto":"admin","go":"admin","pop":"add"}'>新增商品</button></p>
+
+          <div class="blk" data-view-of="list"><div class="blk__t">列表</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">推荐栏</div><div class="rule__v"><span class="chip chip--new">新增</span>「限时抢购」栏旁边加「推荐」栏，只显示「是」或「否」，跟既有「限时抢购」栏同样做法；推荐排序、推荐时间进编辑表单才看。</div></div>
+            <div class="rule__row"><div class="rule__k">筛选</div><div class="rule__v"><span class="chip chip--new">新增</span>「是否限时抢购」旁加「是否推荐」下拉，三个选项：全部（预设）／否／是，顺序和做法都跟既有「是否限时抢购」下拉一样，按「搜索」套用。「是」＝开关勾了是的商品，不管推荐时间到没到都列出来。</div></div>
+            <div class="rule__row"><div class="rule__k">其他</div><div class="rule__v"><span class="chip chip--same">既有</span>排序、类型、名、商品简介、封面图、购买价格、限购、库存、已售、限时抢购、状态、发布时间、发布者、编辑／删除，全部不动。</div></div>
+            <div class="rule__row"><div class="rule__k">排序方向</div><div class="rule__v"><span class="chip chip--mod">修改</span>「排序」栏位统一：数字越大越前面。列表显示顺序也一样：排序数字大的在上面。商品类别管理（2.2）的「排序」也是同一个方向（排序改完，类别列表会照新顺序重新排，这是既有逻辑，保留）。</div></div>
+          </div></div>
+
+          <div class="blk" data-view-of="form"><div class="blk__t">新增／编辑商品表单</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">是否推荐</div><div class="rule__v"><span class="chip chip--new">新增</span>单选 否／是，预设「否」。放在「是否限时抢购」下方，新增和编辑表单都有。</div></div>
+            <div class="rule__row"><div class="rule__k">防呆</div><div class="rule__v"><span class="chip chip--new">新增</span>「是否限时抢购」选「是」时，「是否推荐」自动变「否」并灰掉不能点，旁边提示「限时抢购商品不进 Recommend，不能勾推荐」；改回「否」才能再勾。已经勾推荐的商品再改成限时抢购，也一样被改成「否」。</div></div>
+            <div class="rule__row"><div class="rule__k">选「是」展开</div><div class="rule__v">两个栏位：<b>推荐排序</b>（必填，正整数，预设 1；数字越大越前面，同数字照发布时间新的在前，跟「排序」栏位同方向）、<b>推荐时间</b>（开始～结束，非必填；留空＝不限时间，直到改回「否」）。</div></div>
+            <div class="rule__row"><div class="rule__k">改回「否」</div><div class="rule__v">两个栏位收起并清空；前台 Recommend 下次载入就不再显示这个商品（生效时机同第 4 节）。</div></div>
+            <div class="rule__row"><div class="rule__k">推荐时间到期</div><div class="rule__v">前台 Recommend 不再显示；商品本身照常在 Points Mall 商品页卖，开关值保留「是」，运营不用处理。</div></div>
+            <div class="rule__row"><div class="rule__k">前台怎么用</div><div class="rule__v">积分商城页 Recommend 区（3.1）＝推荐＝是、状态开启、在推荐时间内的商品，照推荐排序；售完的照常显示（灰＋已抢光）但排最后；不限数量。下架或删除自动消失。</div></div>
+            <div class="rule__row"><div class="rule__k">其他栏位</div><div class="rule__v"><span class="chip chip--same">既有</span>币种、商品类别、商品名称、商品简介、商品类型、商品图片、购买价格、积分折扣比例、排序、单个会员限购数、库存、是否限时抢购、审核模式，校验和提示照既有。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-b2">
+          <div class="panel__head"><span class="panel__num">2.2</span><h2 class="panel__title">后台 · 商品类别管理</h2></div>
+          <p class="intro">位置：积分商城 › 商品类别管理。既有页面，栏位都不改，只有列表显示顺序改成排序数字大的在上面；放进来是因为前台 Points Mall 商品页的分类页签顺序就是吃这里的「排序」。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">栏位</div><div class="rule__v"><span class="chip chip--same">既有</span>排序、名、备注、更新时间、操作人名称、状态、编辑／删除、新增，全部照线上不动。</div></div>
+            <div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span>数字越大越前面（跟商品管理「排序」、「推荐排序」同方向，第 4 节）。列表显示顺序也一样：排序数字大的在上面。改完排序，列表立刻照新顺序重新排（既有逻辑，保留）。</div></div>
+            <div class="rule__row"><div class="rule__k">前台怎么用</div><div class="rule__v">Points Mall 商品页（3.2）的页签：ALL、I Can Buy 固定在前，后面的分类页签照这里的排序。「一番赏」「盲盒」两个类别不进页签，走 Playground（3.4）。</div></div>
+          </div></div>
+        </article>
+
+        <!-- ============ 3 前台 ============ -->
+        <article class="panel" id="p-f1">
+          <div class="panel__head"><span class="panel__num">3.1</span><h2 class="panel__title">前台 · 积分商城页</h2></div>
+          <p class="intro">从底部「Points Mall」进来的那一页。由上到下：顶栏、三个快捷入口、Task List、Playground 入口、Flash sale、Recommend。未登录也看得到整页，只有顶栏换样子，点到要登录的地方才去登录页（3.10）。</p>
+          <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="in" data-pv='{"proto":"h5","go":"mall","login":true}'>已登录</button><button type="button" class="pv__btn" data-view="out" data-pv='{"proto":"h5","go":"mall","login":false}'>未登录</button></p>
+
+          <div class="blk"><div class="blk__t">顶栏</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">已登录</div><div class="rule__v"><span class="chip chip--mod">修改</span>头像、₱ 余额＋↻、★ 积分＋↻、「Deposit」钮（带 BONUS 角标）、🔍 搜索。拿掉原本的 ☰ 和 Invite。各钮行为照既有：Deposit 去存款页、🔍 搜索、↻ 刷新余额／积分。</div></div>
+            <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v">OKBET logo、「Register / Login」钮（去既有登录页）、🔍 搜索。</div></div>
+          </div></div>
+
+          <div class="blk"><div class="blk__t">快捷入口</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">三格</div><div class="rule__v"><span class="chip chip--new">新增</span>VIP Perks → VIP 页（3.9）；Points Records → 积分记录页（3.7）；My Bag → 我的背包（3.8）。</div></div>
+            <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v">点任一格直接去既有登录页。</div></div>
+          </div></div>
+
+          <div class="blk"><div class="blk__t">Task List</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">区块</div><div class="rule__v"><span class="chip chip--new">新增</span>标题「📋 Task List」＋「More ›」→ Task List 页（3.6）。</div></div>
+            <div class="rule__row"><div class="rule__k">卡片</div><div class="rule__v">横向滑动，一次滑一张。所有卡同高同宽，区块高度就是一张卡的高度。一张＝任务名、倒数（限时任务才有）、进度条（目前／目标）、奖励、已领人数、按钮。按钮文案和点击逻辑照任务中心既有，本次不改。</div></div>
+            <div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v">以 Task List 页「All」页签实际会显示的任务为准（已套用既有的等级／标签／未登录规则），照 Task List 页<b>当下显示的顺序</b>由前往后取 <b>3 个</b>：基础任务算 1 个、任务组算 1 个。第 4 个起不显示，要看全部按「More ›」。没任务整块不显示。</div></div>
+            <div class="rule__row"><div class="rule__k">顺序</div><div class="rule__v"><span class="chip chip--same">既有</span>照任务中心的顺序，不另定：<br>1. 先照后台排序值。<br>2. 已完成的任务（含整组完成的任务组）排最后。<br>3. 组内已完成的子任务排该组最下面。</div></div>
+            <div class="rule__row"><div class="rule__k">任务组</div><div class="rule__v">不放组抬头、不放 Extra Rewards，直接列出该组<b>全部</b>子任务卡（顺序照组内）。<br>卡的样式同 Task List 页的子任务卡，可直接操作。</div></div>
+            <div class="rule__row"><div class="rule__k">例子</div><div class="rule__v">Task List 页的顺序：任务组 A（3 个子任务）、基础任务 B、任务组 C（2 个子任务）、基础任务 D。<br><b>取前 3 个</b>＝A、B、C，D 不显示。<br><b>横滑列</b>＝A 的 3 张子任务卡 ＋ B 一张 ＋ C 的 2 张子任务卡，共 7 张。<br><b>若 B 已完成</b>：B 排到最后，顺序变成 A、C、D、B，取前 3 个＝A、C、D。</div></div>
+          </div></div>
+
+          <div class="blk"><div class="blk__t">Playground 入口</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">卡片</div><div class="rule__v"><span class="chip chip--new">新增</span>一张大卡：地图缩图＋「N games · 游戏名」＋「Play ›」。整张卡可点 → Playground（3.4）。</div></div>
+          </div></div>
+
+          <div class="blk"><div class="blk__t">Flash sale</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">标题</div><div class="rule__v"><span class="chip chip--mod">修改</span>「⏰ Flash sale」＋「目前第几张／共几张」。拿掉原本整区一个倒数，改成每张卡自己倒数。</div></div>
+            <div class="rule__row"><div class="rule__k">卡片</div><div class="rule__v">横向滑动，一次一张。一张＝折扣角标「⚡ −N%」（N＝后台积分折扣比例）、倒数（天／时／分／秒，剩 1 天以上才显示天）、图、名称、「in stock N」、★ 现价＋划线原价、「Buy Now」钮（<span class="chip chip--same">既有</span>文案）→ 购买弹窗（3.3）。</div></div>
+            <div class="rule__row"><div class="rule__k">售完</div><div class="rule__v">图灰、盖「已抢光」、Buy Now 不可点。</div></div>
+            <div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v"><span class="chip chip--same">既有</span>后台「是否限时抢购＝是」、状态开启、在抢购时间内的商品，照后台排序值。过期自动隐藏（后台既有：3:00 自动下架）。一个都没有：整块不显示。</div></div>
+          </div></div>
+
+          <div class="blk"><div class="blk__t">Recommend</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">区块</div><div class="rule__v"><span class="chip chip--new">新增</span>标题「👍 Recommend」（前面有图标，同 Task List、Playground、Flash sale 的写法，图标由设计出）＋「More ›」→ Points Mall 商品页 ALL（3.2）。两栏商品卡，卡的样式同 3.2。</div></div>
+            <div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v">后台「是否推荐＝是」、状态开启、在推荐时间内的商品（2.1），不限数量；照推荐排序，售完排最后。限时抢购商品不进这里（后台防呆，勾不了推荐，见 2.1）。一个都没有：整块不显示。</div></div>
+          </div></div>
+
+          <div class="blk"><div class="blk__t">这一页拿掉的</div><div class="rule">
+            <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>分类页签、「推荐／我能购买／价格」排序列、各分类商品区块：都搬到 Points Mall 商品页（3.2）。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>线上的跑马灯（用户 xxx 成功兑换）、「积分将于 xx 过期」提示：拿掉，不显示。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>线上的 Ichiban Draw 横幅、盲盒弹窗入口：拿掉，改走 Playground 入口卡（3.4）。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f2">
+          <div class="panel__head"><span class="panel__num">3.2</span><h2 class="panel__title">前台 · Points Mall 商品页</h2></div>
+          <p class="intro">新页面。积分商城页 Recommend 的「More ›」进来，上方同一条顶栏，再接「‹ Points Mall」返回列和一排页签。ALL 一个分类露两个，点分类看全部。</p>
+          <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="all" data-pv='{"proto":"h5","go":"shop","cat":null,"login":true}'>ALL</button><button type="button" class="pv__btn" data-view="can" data-pv='{"proto":"h5","go":"shop","cat":"can","login":true}'>I Can Buy</button><button type="button" class="pv__btn" data-view="cat" data-pv='{"proto":"h5","go":"shop","cat":"free","login":true}'>单一分类</button></p>
+
+          <div class="blk"><div class="blk__t">页面</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">进来、返回</div><div class="rule__v">积分商城页 Recommend「More ›」进来；返回键回进来前那一页（即积分商城页，3.10）。</div></div>
+            <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v">同 3.1，已登录／未登录两种。</div></div>
+            <div class="rule__row"><div class="rule__k">置顶</div><div class="rule__v">往下滑时顶栏钉在最上面，页签列（含价格钮）钉在顶栏下面；中间的「‹ Points Mall」返回列跟着内容滑走。</div></div>
+            <div class="rule__row"><div class="rule__k">页签</div><div class="rule__v">ALL、I Can Buy 两个固定在最前面、顺序不变；后面接后台「商品类别管理」（2.2）的类别，照类别排序（数字越大越前面）；多了可左右滑。限时抢购不另成页签；「一番赏」「盲盒」两个类别不在这里，改走 Playground（3.4）。</div></div>
+            <div class="rule__row"><div class="rule__k">限时抢购商品</div><div class="rule__v"><span class="chip chip--same">既有</span>逻辑全部不变：它在不在所属分类页签里、怎么排，都照线上既有，本次不重新定义。</div></div>
+            <div class="rule__row"><div class="rule__k">排序钮</div><div class="rule__v"><span class="chip chip--same">既有</span>线上「价格 ⇕」钮保留，照设计图放页签同一列的最右边，固定不跟着页签滑。只在单一分类、I Can Buy 页签显示，ALL 不显示。点一下升序 ↑、再点降序 ↓、再点回预设 ⇕；换页签回预设。排序规则照第 4 节。</div></div>
+          </div></div>
+
+          <div class="blk" data-view-of="all"><div class="blk__t">ALL</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">版面</div><div class="rule__v">一个类别一张卡：类别名＋「More ›」，底下两栏露 <b>2 个</b>商品。</div></div>
+            <div class="rule__row"><div class="rule__k">露哪 2 个</div><div class="rule__v">该类别照后台排序值的前 2 个（售完排最后，见第 4 节）。</div></div>
+            <div class="rule__row"><div class="rule__k">More ›</div><div class="rule__v">切到该类别页签。</div></div>
+            <div class="rule__row"><div class="rule__k">没商品</div><div class="rule__v">该类别整张卡不显示。</div></div>
+          </div></div>
+
+          <div class="blk" data-view-of="can"><div class="blk__t">I Can Buy</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">需登录</div><div class="rule__v">未登录点这个页签直接去既有登录页。</div></div>
+            <div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v"><span class="chip chip--same">既有</span>这个会员买得起、且未售完的商品，不分类别，两栏格。筛选和排序沿用既有「我能购买」逻辑（含 8/25 调整的积分／余额判断），本次不重新定义，请后端对照代码。</div></div>
+            <div class="rule__row"><div class="rule__k">价格排序</div><div class="rule__v"><span class="chip chip--same">既有</span>按「Price」钮：这些商品照价格升／降序，价格相同照后台排序值（买得起的本来就没售完）。</div></div>
+          </div></div>
+
+          <div class="blk" data-view-of="cat"><div class="blk__t">单一分类</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v"><span class="chip chip--same">既有</span>该类别全部上架商品，两栏格，照后台排序值，售完排最后（第 4 节）。</div></div>
+            <div class="rule__row"><div class="rule__k">价格排序</div><div class="rule__v"><span class="chip chip--same">既有</span>按「Price」钮：未售完照价格升／降序，价格相同照后台排序值，售完一律最后。</div></div>
+          </div></div>
+
+          <div class="blk"><div class="blk__t">商品卡（积分商城页 Recommend、本页共用）</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--mod">修改</span>图、名称（一行，超出省略号）、「in stock N」、★ 价格。有折扣才显示：「⚡ −N%」折扣角标＋划线原价，N＝后台积分折扣比例。</div></div>
+            <div class="rule__row"><div class="rule__k">售完</div><div class="rule__v">图灰、盖「已抢光」、不能点。</div></div>
+            <div class="rule__row"><div class="rule__k">点卡</div><div class="rule__v">整张卡可点 → 购买弹窗（3.3）；未登录 → 登录页。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f3">
+          <div class="panel__head"><span class="panel__num">3.3</span><h2 class="panel__title">前台 · 购买弹窗与兑换</h2></div>
+          <p class="intro">全部沿用既有，本次不改。写在这里只是让开发知道入口变了，后面的事没变。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">Flash sale 的「Buy Now」、Recommend 和 Points Mall 商品页的商品卡。</div></div>
+            <div class="rule__row"><div class="rule__k">购买弹窗</div><div class="rule__v"><span class="chip chip--same">既有</span>底部弹出：名称ⓘ、大图、数量 −／＋、适用厂商、适用游戏、备注、「购买 ★价格」。</div></div>
+            <div class="rule__row"><div class="rule__k">之后</div><div class="rule__v"><span class="chip chip--same">既有</span>积分不足提示、兑换成功提示、扣积分、发放、写入兑换记录、限购、审核模式，全部照既有。</div></div>
+            <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v">点商品或 Buy Now 直接去既有登录页。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f4">
+          <div class="panel__head"><span class="panel__num">3.4</span><h2 class="panel__title">前台 · Playground</h2></div>
+          <p class="intro">积分商城页 Playground 入口卡进来。一张地图，一座岛＝一种游戏；岛不随套数增减，套数在岛进去之后的列表页（3.5）。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v">同 3.1，已登录／未登录两种；往下滑钉在最上面，返回列滑走。</div></div>
+            <div class="rule__row"><div class="rule__k">岛</div><div class="rule__v"><span class="chip chip--new">新增</span>Slot Kingdom（盲盒）、Ichiban Luck Draw（一番赏），第三座「Coming Soon」不能点。岛的图由设计出。</div></div>
+            <div class="rule__row"><div class="rule__k">点岛</div><div class="rule__v">后台有多套 → 该游戏列表页（3.5）；只有一套 → 直接进那一套的抽奖页。</div></div>
+            <div class="rule__row"><div class="rule__k">底部</div><div class="rule__v">「My Points ★N」＋「Get More Points ›」→ Task List 页（3.6）。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页（即积分商城页，3.10）。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f5">
+          <div class="panel__head"><span class="panel__num">3.5</span><h2 class="panel__title">前台 · 一番赏、盲盒列表</h2></div>
+          <p class="intro">列表页改成跟 Playground 一样的地图风格，一套商品一个摊位。设计稿还在设计中、未定案，左栏目前只是占位；玩法、抽奖、发奖全部照既有。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v">同 3.1，已登录／未登录两种；往下滑钉在最上面，返回列滑走（列表页、抽奖页都有）。</div></div>
+            <div class="rule__row"><div class="rule__k">一套的资料</div><div class="rule__v"><span class="chip chip--same">既有</span>图、名称、期数（#5／#Unlimited）、每抽价格、库存。售完：灰掉＋「已抢光」，不能点。</div></div>
+            <div class="rule__row"><div class="rule__k">点一套</div><div class="rule__v">进该套抽奖页，标题换成该套名称；抽奖页内容、抽 1／5／10／全部、积分不足、中奖发放，照既有。</div></div>
+            <div class="rule__row"><div class="rule__k">抽奖页顶部</div><div class="rule__v">小地图可直接切到另一个游戏，规则同 3.4 点岛：多套进列表页、只有一套直接进抽奖页。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">照 3.10，回进来前那一页：从 Playground 进来的列表页回 Playground；从列表页进的抽奖页回列表页（只有一套、直接进抽奖页的，回 Playground）；用小地图切过来的，回切之前那一页。</div></div>
+            <div class="rule__row"><div class="rule__k">版面</div><div class="rule__v"><span class="chip chip--tbd">待确认</span>等设计稿（第 5 节）。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f6">
+          <div class="panel__head"><span class="panel__num">3.6</span><h2 class="panel__title">前台 · Task List 页</h2></div>
+          <p class="intro">任务中心页面搬进积分商城，上面多一条「‹ Task List」返回列（标题＝该页名称，返回键回进来前那一页）。内容、页签、按钮逻辑照任务中心规格，本次不改。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页 Task List「More ›」、Playground「Get More Points ›」。</div></div>
+            <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v">同 3.1，已登录／未登录两种；往下滑钉在最上面，「‹ Task List」返回列滑走。</div></div>
+            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>Reward Retrieval、All／Basic／Daily／Weekly／Limited-Time 页签、任务卡、任务组，照任务中心既有。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f7">
+          <div class="panel__head"><span class="panel__num">3.7</span><h2 class="panel__title">前台 · 积分记录页</h2></div>
+          <p class="intro">线上的「积分历史」「兑换记录」两页合成一页两页签，内容各自照线上。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「Points Records」，进来预设在「积分历史」页签。需登录。</div></div>
+            <div class="rule__row"><div class="rule__k">名称</div><div class="rule__v"><span class="chip chip--mod">修改</span>这页叫「积分记录」，英文「Points Records」；快捷入口、返回列标题都用这个名字。两个页签文案照线上原文不改：「积分历史」「兑换记录」，英文 Points history、Exchange record。</div></div>
+            <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v">同 3.1 的顶栏，已登录样式（这页需登录）；往下滑钉在最上面，「‹ Points Records」返回列滑走。</div></div>
+            <div class="rule__row"><div class="rule__k">页签</div><div class="rule__v"><span class="chip chip--mod">修改</span>「积分历史｜兑换记录」两页签，原本是两个独立页面。</div></div>
+            <div class="rule__row"><div class="rule__k">积分历史</div><div class="rule__v"><span class="chip chip--same">既有</span>「仅展示近30日数据」、全部／收入／支出、收入绿字＋、支出红字−。</div></div>
+            <div class="rule__row"><div class="rule__k">兑换记录</div><div class="rule__v"><span class="chip chip--same">既有</span>分类胶囊（全部＋商品分类）、列表（图、名称、时间、★−积分）、红字延迟提示。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f8">
+          <div class="panel__head"><span class="panel__num">3.8</span><h2 class="panel__title">前台 · 我的背包</h2></div>
+          <p class="intro">就是线上「我的优惠券」页，换个名字放进积分商城。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「My Bag」。需登录。</div></div>
+            <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v">同 3.1 的顶栏，已登录样式（这页需登录）；往下滑钉在最上面，返回列滑走。</div></div>
+            <div class="rule__row"><div class="rule__k">名称</div><div class="rule__v"><span class="chip chip--mod">修改</span>页面标题「我的背包」（英文由运营定）。</div></div>
+            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>未使用／待结算／已使用／已过期四页签、票卡（图、名称、获得日期、失效日期、立即使用）、右上规则钮。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f9">
+          <div class="panel__head"><span class="panel__num">3.9</span><h2 class="panel__title">前台 · VIP 页</h2></div>
+          <p class="intro">线上 VIP 俱乐部页的 H5 版，内容不改，只是从积分商城多一个入口进来。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「VIP Perks」。需登录。</div></div>
+            <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v"><span class="chip chip--same">既有</span>这页不加积分商城的顶栏，照线上 VIP 页既有画面（‹、VIP、Rules）。</div></div>
+            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>当前等级、升级进度、各等级条件、返水、VIP 权益，照线上。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f10">
+          <div class="panel__head"><span class="panel__num">3.10</span><h2 class="panel__title">前台 · 登录状态与返回</h2></div>
+          <p class="intro">哪些不登录也能看、哪些要登录；返回键一律回进来前那一页。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">不登录能看</div><div class="rule__v">积分商城页整页（顶栏换 logo＋Register / Login）、Points Mall 商品页的 ALL 和各分类、Playground、一番赏／盲盒的列表页和抽奖页（按抽奖才要登录）、Task List 页（列哪些照任务中心未登录既有规则）。</div></div>
+            <div class="rule__row"><div class="rule__k">要登录</div><div class="rule__v">VIP Perks、Points Records、My Bag、I Can Buy 页签、点商品或 Buy Now、抽奖。未登录点到就直接去既有登录页，不另做提示弹窗。</div></div>
+            <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v">除 VIP 页（照线上既有画面）外，每一页上方都是 3.1 那条顶栏，已登录／未登录两种，往下滑钉在最上面。</div></div>
+            <div class="rule__row"><div class="rule__k">返回列标题</div><div class="rule__v">顶栏下面那条「‹ 标题」列，标题＝该页自己的名称（商品页 Points Mall、积分记录页 Points Records、Task List 页 Task List、Playground、各游戏页＝游戏名、我的背包），不是来源页的名称。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">所有二级页的返回键回「进来前那一页」，并停在原本卷到的位置。例：从 Playground 进 Task List，返回回 Playground。</div></div>
+          </div></div>
+        </article>
+
+        <!-- ============ 4 不改 ============ -->
+        <article class="panel" id="p-same">
+          <div class="panel__head"><span class="panel__num">4</span><h2 class="panel__title">不改的既有规则</h2></div>
+          <p class="intro">提醒用：这些照旧，开发不用重做，测试照线上验。</p>
+          <div class="blk"><div class="blk__t">一、商品排序（8/25 定，全部沿用；排序值方向统一）</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">适用</div><div class="rule__v">不分页签，全部套同一套规则。</div></div>
+            <div class="rule__row"><div class="rule__k">排序值方向</div><div class="rule__v">统一「数字越大越前面」：商品类别管理的类别排序、商品管理的「排序」、「推荐排序」三个都一样；后台两个列表的显示顺序也改成数字大的在上面（2.1、2.2）。类别排序改完，商品类别管理列表会照新顺序重新排（既有，保留）。</div></div>
+            <div class="rule__row"><div class="rule__k">「售完」</div><div class="rule__v">库存＝0 且画面出现「已抢光」标签，两个同时成立才算售完。</div></div>
+            <div class="rule__row"><div class="rule__k">预设排序</div><div class="rule__v">照后台配置的排序值；已售完移到最后，彼此之间维持后台排序值。</div></div>
+            <div class="rule__row"><div class="rule__k">我能购买</div><div class="rule__v">筛选非售完商品，用户积分／余额照既有逻辑；排序照后台排序值，不用再处理售完。</div></div>
+            <div class="rule__row"><div class="rule__k">价格升／降序</div><div class="rule__v">未售完照价格排，价格相同照后台排序值；售完一律排最后，彼此之间维持后台排序值。钮在 Points Mall 商品页（3.2）。</div></div>
+            <div class="rule__row"><div class="rule__k">生效</div><div class="rule__v">排序（含售完排最后）在重新载入时才更新：进页面、换页签、按价格排序钮、下拉刷新都算一次重新载入。停在页面上不即时变动，例如一个商品刚卖完，要等下一次重新载入才会排到最后。</div></div>
+          </div></div>
+          <div class="blk"><div class="blk__t">二、照既有，不改</div><div class="rule">
+            <div class="rule__row rule__row--plain"><div class="rule__v">购买弹窗、积分不足、兑换成功、扣积分、发放、限购、审核模式。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v">一番赏、盲盒的抽奖页、抽奖逻辑、奖品发放、Recent Winners／My Rewards。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v">任务中心的任务、按钮、领取逻辑、排序（后台排序值，已完成移到最后，子任务已完成移到该组最下面）；VIP 页；我的优惠券页内容；积分历史、兑换记录的资料。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v">后台商品管理、商品类别管理的既有栏位；限时抢购整套逻辑（条件、时间、过期自动下架、在分类里怎么出现）全部照既有。</div></div>
+          </div></div>
+        </article>
+
+        <!-- ============ 5 待确认 ============ -->
+        <article class="panel" id="p-todo">
+          <div class="panel__head"><span class="panel__num">5</span><h2 class="panel__title">待确认事项</h2></div>
+          <p class="intro">已定的都写在前面；这几项还没定。</p>
+          <div class="blk"><div class="blk__t">还没定</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">一番赏／盲盒列表（设计）</div><div class="rule__v">设计稿还在设计中、未定案（11/12）。定案后补 3.5 和左栏示意。已定的：地图风格、一套一个摊位、摊位上要放图、名称、期数、价格、库存。</div></div>
+            <div class="rule__row"><div class="rule__k">英文文案（运营）</div><div class="rule__v">各按钮、标题英文由运营定，规格书以中文为准。</div></div>
+            <div class="rule__row"><div class="rule__k">PC 版</div><div class="rule__v">H5 定案后再做。</div></div>
+          </div></div>
+        </article>
+
+      </main>
+    </div>
+  </section>
+</div>
+
+<script>
+/* 规格书控制程序：左栏 iframe 载入本档自己（?proto=1）；右栏目录；两边连动。只在规格书模式跑 */
+(function () {
+  'use strict';
+  if (!document.documentElement.classList.contains('spec-mode')) return;
+
+  var CHAPTERS = [
+    { num: '1', title: '总览' },
+    { num: '2', title: '后台：怎么配' },
+    { num: '3', title: '前台：看到什么' },
+    { num: '4', title: '不异动' },
+    { num: '5', title: '待确认' }
+  ];
+  var PANELS = [
+    { id: 'p-map',  chap: '1', nav: '总览' },
+    { id: 'p-b1',   chap: '2', num: '2.1',  nav: '商品管理',        proto: 'admin', go: 'admin' },
+    { id: 'p-b2',   chap: '2', num: '2.2',  nav: '商品类别管理',    proto: 'admin', go: 'admincat' },
+    { id: 'p-f1',   chap: '3', num: '3.1',  nav: '积分商城页',      proto: 'h5', go: 'mall', login: true },
+    { id: 'p-f2',   chap: '3', num: '3.2',  nav: 'Points Mall 商品页', proto: 'h5', go: 'shop', cat: null, login: true },
+    { id: 'p-f3',   chap: '3', num: '3.3',  nav: '购买与兑换',      proto: 'h5', go: 'shop', cat: null, login: true, pop: 'sheet' },
+    { id: 'p-f4',   chap: '3', num: '3.4',  nav: 'Playground',      proto: 'h5', go: 'play' },
+    { id: 'p-f5',   chap: '3', num: '3.5',  nav: '一番赏／盲盒',    proto: 'h5', go: 'ichiban' },
+    { id: 'p-f6',   chap: '3', num: '3.6',  nav: 'Task List 页',    proto: 'h5', go: 'tasks' },
+    { id: 'p-f7',   chap: '3', num: '3.7',  nav: '积分记录页',      proto: 'h5', go: 'rec', login: true },
+    { id: 'p-f8',   chap: '3', num: '3.8',  nav: '我的背包',        proto: 'h5', go: 'bag', login: true },
+    { id: 'p-f9',   chap: '3', num: '3.9',  nav: 'VIP 页',          proto: 'h5', go: 'vip', login: true },
+    { id: 'p-f10',  chap: '3', num: '3.10', nav: '登录与返回',      proto: 'h5', go: 'mall', login: false },
+    { id: 'p-same', chap: '4', nav: '不改的既有' },
+    { id: 'p-todo', chap: '5', nav: '待确认' }
+  ];
+  var GO_PANEL = { mall: 'p-f1', shop: 'p-f2', play: 'p-f4', ichiban: 'p-f5', blind: 'p-f5', tasks: 'p-f6', rec: 'p-f7', bag: 'p-f8', vip: 'p-f9', admin: 'p-b1', admincat: 'p-b2' };
+
+  var side = 'h5';
+  var lastPanel = { admin: 'p-b1', h5: 'p-f1' };
+  var byId = {}; PANELS.forEach(function (p) { byId[p.id] = p; });
+  var frame = document.getElementById('protoFrame'), fallback = document.getElementById('protoFallback'), modeLabel = document.getElementById('protoMode');
+  var linkToggle = document.getElementById('linkToggle'), nav = document.getElementById('specNav'), specScroll = document.getElementById('specScroll'), btnGoto = document.getElementById('btnGoto');
+  var current = PANELS[0].id, pending = null, protoReady = false, giveUpTimer;
+  function hasProto(p) { return !!(p && p.proto); }
+  function setSide(next) { if (!next || next === side) return; side = next; document.querySelectorAll('.side-switch__btn').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.side === side)); }); }
+  document.querySelectorAll('.side-switch__btn').forEach(function (b) { b.addEventListener('click', function () { setSide(b.dataset.side); if (linkToggle.checked) showPanel(lastPanel[side], true); send(byId[lastPanel[side]]); }); });
+
+  function navRow(cls, num, text, targetId, extra, box) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = cls + (extra ? ' ' + extra : '');
+    b.innerHTML = '<span class="spec-nav__n"></span><span class="spec-nav__t"></span>';
+    b.firstChild.textContent = num; b.lastChild.textContent = text; b.dataset.target = targetId;
+    b.addEventListener('click', function () { showPanel(targetId, false); }); box.appendChild(b); return b;
+  }
+  var chRow = document.createElement('div'); chRow.className = 'spec-nav__chs'; nav.appendChild(chRow);
+  CHAPTERS.forEach(function (c) {
+    var kids = PANELS.filter(function (p) { return p.chap === c.num; }), subs = kids.filter(function (p) { return p.num; });
+    var row = navRow('spec-nav__ch', c.num, c.title, kids[0].id, subs.length ? '' : 'is-leaf', chRow); row.dataset.chap = c.num;
+    if (!subs.length) return;
+    var subRow = document.createElement('div'); subRow.className = 'spec-nav__subs'; subRow.dataset.chap = c.num; nav.appendChild(subRow);
+    subs.forEach(function (p) { navRow('spec-nav__item', p.num, p.nav, p.id, '', subRow); });
+  });
+
+  function showPanel(id, fromProto) {
+    var p = byId[id]; if (!p) return;
+    current = id;
+    document.querySelectorAll('.panel').forEach(function (el) { el.classList.toggle('is-on', el.id === id); });
+    nav.querySelectorAll('.spec-nav__item').forEach(function (b) { b.setAttribute('aria-current', String(b.dataset.target === id)); });
+    nav.querySelectorAll('.spec-nav__ch').forEach(function (b) { b.setAttribute('aria-current', String(b.dataset.chap === p.chap)); });
+    nav.querySelectorAll('.spec-nav__subs').forEach(function (r) { r.classList.toggle('is-on', r.dataset.chap === p.chap); });
+    if (p.proto) lastPanel[p.proto] = id;
+    btnGoto.hidden = !hasProto(p);
+    specScroll.scrollTop = 0;
+    if (fromProto || !linkToggle.checked || !hasProto(p)) return;
+    setSide(p.proto); send(p);
+  }
+  function send(p) {
+    if (!p) return;
+    if (!protoReady) { pending = p; return; }
+    var d = { src: 'spec' }; for (var k in p) if (k !== 'id' && k !== 'chap' && k !== 'num' && k !== 'nav') d[k] = p[k];
+    frame.contentWindow.postMessage(d, '*');
+  }
+  btnGoto.addEventListener('click', function () { send(byId[current]); });
+
+  var shell = document.getElementById('specShell'), splitter = document.getElementById('splitter');
+  try { var savedW = localStorage.getItem('pmSpec.protoW'); if (savedW) shell.style.setProperty('--proto-w', savedW); } catch (e) {}
+  splitter.addEventListener('mousedown', function (e) {
+    e.preventDefault(); shell.classList.add('is-dragging');
+    function move(ev) { var w = Math.round(ev.clientX - shell.getBoundingClientRect().left); shell.style.setProperty('--proto-w', w + 'px'); }
+    function up() { shell.classList.remove('is-dragging'); document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); try { localStorage.setItem('pmSpec.protoW', shell.style.getPropertyValue('--proto-w')); } catch (e) {} }
+    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+  });
+  splitter.addEventListener('dblclick', function () { shell.style.removeProperty('--proto-w'); try { localStorage.removeItem('pmSpec.protoW'); } catch (e) {} });
+  function setWide(on) { shell.classList.toggle('is-wide', on); try { localStorage.setItem('pmSpec.wide', on ? '1' : ''); } catch (e) {} }
+  document.getElementById('btnWide').addEventListener('click', function () { setWide(true); });
+  document.getElementById('btnUnwide').addEventListener('click', function () { setWide(false); });
+  try { if (localStorage.getItem('pmSpec.wide') === '1') setWide(true); } catch (e) {}
+
+  /* 同一节里多个画面：按钮当分页，data-view-of 的区块只在选中时显示 */
+  function selectView(b) {
+    var panel = b.closest('.panel'), v = b.dataset.view; if (!panel || !v) return;
+    b.closest('.pv').querySelectorAll('.pv__btn[data-view]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    panel.querySelectorAll('[data-view-of]').forEach(function (el) { el.classList.toggle('is-on', el.dataset.viewOf.split(' ').indexOf(v) > -1); });
+  }
+  document.querySelectorAll('.pv').forEach(function (pv) { var first = pv.querySelector('.pv__btn[data-view]'); if (first) selectView(first); });
+  document.querySelectorAll('.pv__btn').forEach(function (b) { b.addEventListener('click', function () { selectView(b); var q = JSON.parse(b.dataset.pv); setSide(q.proto); send(q); }); });
+
+  window.addEventListener('message', function (e) {
+    var d = e.data || {}; if (d.src !== 'proto') return;
+    if (d.type === 'ready') {
+      protoReady = true; clearTimeout(giveUpTimer); fallback.classList.add('hidden');
+      modeLabel.textContent = '示意＝本档的原型 · 改原型规格书自动同步';
+      if (pending) { var q = pending; pending = null; send(q); }
+      return;
+    }
+    if (!linkToggle.checked) return;
+    if (d.type === 'go' && GO_PANEL[d.go]) { setSide((d.go === 'admin' || d.go === 'admincat') ? 'admin' : 'h5'); if (GO_PANEL[d.go] !== current) showPanel(GO_PANEL[d.go], true); }
+  });
+
+  function load() {
+    protoReady = false; fallback.classList.add('hidden'); modeLabel.textContent = '载入中…';
+    frame.src = location.href.split(/[?#]/)[0] + '?proto=1';
+    giveUpTimer = setTimeout(function () { if (!protoReady) { fallback.classList.remove('hidden'); modeLabel.textContent = '原型载入失败'; } }, 4000);
+  }
+  load();
+  showPanel(PANELS[0].id, true);
+})();
+</script>
+
+<!-- ============ 原型（前台 H5＋后台）。规格书模式下隐藏，由左栏 iframe 以 ?proto=1 载入 ============ -->
+<div id="wrap">
   <p class="demo-hint">点下方按钮切换画面；分类页签、筛选、商品卡、Playground 游戏卡都可点。</p>
   <div class="demo-bar">
-    <button class="on" onclick="go('mall',this)">商城首页</button>
-    <button onclick="go('tasks',this)">任务中心 Task List</button>
-    <button onclick="go('play',this)">游乐场 Playground</button>
-    <button onclick="openRec('hist')">记录（积分历史/兑换记录）</button>
-    <button onclick="go('bag',this)">我的背包</button>
-    <button onclick="go('vip',this)">VIP 俱乐部</button>
-    <button onclick="openGame('ichiban')">一番赏列表（多套）</button>
-    <button onclick="openGame('blind')">Slot Kingdom 盲盒列表（多套）</button>
-    <button onclick="showPop('ok')">兑换成功弹窗</button>
-    <button onclick="showPop('lack')">积分不足弹窗</button>
-    <button onclick="togglePoints(this)">切换积分：目前 100（不足）</button>
+    <div class="demo-grp"><span class="demo-grp__t">前台</span>
+      <button class="on" data-scr="mall" onclick="go('mall')">积分商城页</button>
+      <button data-scr="shop" onclick="openCat(null)">Points Mall 商品页</button>
+      <button data-scr="tasks" onclick="go('tasks')">任务中心 Task List</button>
+      <button data-scr="play" onclick="go('play')">游乐场 Playground</button>
+      <button data-scr="ichiban" onclick="openGame('ichiban')">一番赏列表（多套）</button>
+      <button data-scr="blind" onclick="openGame('blind')">Slot Kingdom 盲盒列表（多套）</button>
+      <button data-scr="rec" onclick="openRec('hist')">积分记录（积分历史/兑换记录）</button>
+      <button data-scr="bag" onclick="go('bag')">我的背包</button>
+      <button data-scr="vip" onclick="go('vip')">VIP 俱乐部</button>
+      <button class="demo-tog" onclick="toggleLogin(this)">切换登录状态：已登录</button>
+    </div>
+    <div class="demo-grp demo-grp--bk"><span class="demo-grp__t">后台</span>
+      <button data-scr="admin" onclick="go('admin')">商品管理（推荐开关）</button>
+      <button data-scr="admincat" onclick="go('admincat')">商品类别管理（既有）</button>
+    </div>
   </div>
 
   <!-- ============ Phone ============ -->
@@ -556,39 +1660,61 @@ button{font-family:inherit;cursor:pointer;border:none;}
     <div class="scroll" id="scroll">
 
       <!-- ===================================================
-           画面 1：商城首页
+           画面 1：积分商城页
            =================================================== -->
       <section class="screen is-active" id="scr-mall">
+        <!-- 顶栏（11/10 设计图）：已登录＝头像＋₱／★ 两个钱包上下排＋Deposit(BONUS)＋搜索；未登录＝logo＋Register / Login＋搜索。demo 列可切换 -->
         <header class="topbar">
-          <span class="topbar__menu">☰</span>
-          <div class="avatar" aria-label="头像"></div>
-          <span class="wallet"><i class="coin coin--peso">₱</i>232 <span class="rf">↻</span></span>
-          <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
-          <span class="topbar__spacer"></span>
-          <button class="btn-invite">🎁Invite</button>
-          <button class="btn-topup">Deposit</button>
-          <button class="icon-btn" aria-label="搜索">🔍</button>
+          <div class="tb" data-tb="in">
+            <div class="avatar" aria-label="头像"></div>
+            <div class="wallets">
+              <span class="wallet"><i class="coin coin--peso">₱</i>232.00 <span class="rf">↻</span></span>
+              <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
+            </div>
+            <button class="btn-topup"><span class="btn-topup__bonus">🎁 BONUS</span>Deposit</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+          <div class="tb" data-tb="out" hidden>
+            <span class="logo">OK<i>★</i>BET</span>
+            <span class="topbar__spacer"></span>
+            <button class="btn-login" onclick="needLogin()">Register / Login</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
         </header>
 
-        <!-- 快捷入口 -->
+        <!-- 快捷入口：VIP Perks／Points Records／My Bag（英文照设计图）；未登录点了先弹「请先登录」 -->
         <nav class="quick" aria-label="快捷入口">
-          <button class="quick__item" onclick="go('vip')"><span class="quick__ico">👑</span><span><div class="quick__t">VIP 会员</div><div class="quick__s">查看等级福利 ›</div></span></button>
-          <button class="quick__item" onclick="openRec('hist')"><span class="quick__ico">🪙</span><span><div class="quick__t"><span class="my-pts">100</span></div><div class="quick__s">明细/兑换记录 ›</div></span></button>
-          <button class="quick__item" onclick="go('bag')"><span class="quick__ico">🎁</span><span><div class="quick__t">我的背包</div><div class="quick__s">票券/道具 ›</div></span></button>
+          <button class="quick__item" onclick="auth(function(){ go('vip'); })"><span class="quick__ico">🏅</span><span class="quick__t">VIP Perks</span></button>
+          <button class="quick__item" onclick="auth(function(){ openRec('hist'); })"><span class="quick__ico">📖</span><span class="quick__t">Points Records</span></button>
+          <button class="quick__item" onclick="auth(function(){ go('bag'); })"><span class="quick__ico">🎒</span><span class="quick__t">My Bag</span></button>
         </nav>
 
-        <!-- 赚积分任务（深色区）：任务中心搬来这里，首页先露 2 张，全部任务 › 进 Task List 页 -->
+        <!-- Task List 区（11/12 她定）：照任务中心后台排序取前 3 个（基础任务算 1、任务组算 1）；任务组＝列出该组全部子任务卡，不放组抬头、不放 Extra Rewards。示范：任务组(3 子任务)＋2 个基础任务 -->
         <section class="earn" aria-label="赚积分任务">
-          <div class="earn__head">TASK LIST <button class="more" onclick="go('tasks')">全部任务 ›</button></div>
-          <article class="tk">
-            <div class="tk__name">Top up ₱50<span class="info">ⓘ</span></div>
-            <div class="tk__timer">⏱ <span class="t-task">01:39:59</span></div>
-            <div class="tk__prog">Completed <span class="tk__bar"><i style="width:0"></i></span><b>₱0</b>/ ₱50</div>
-            <div class="tk__reward">🎰 ₱100</div>
-            <div class="tk__quota">Rewarded<b>0/100</b>User</div>
-            <button class="tk__btn tk__btn--receive">Receive</button>
-          </article>
-          <!-- 首页只露 1 张任务卡（她 10/30 定），照任务中心既有排序取第一张；其余按「全部任务」 -->
+          <div class="earn__head"><span class="ico">📋</span>Task List <button class="more" onclick="go('tasks')">More ›</button></div>
+          <!-- 任务卡横向滑动（11/10 设计图：露出下一张一角），照任务中心既有排序；More › 进 Task List 页 -->
+          <div class="earn__row">
+            <!-- 任务组（11/12 她定）：只放它的子任务，每个子任务一张卡，样式同 Task List 页里的子任务卡；不放组抬头、不放 Extra Rewards -->
+            <article class="tk tk--sub"><div class="tk__name">Login 3 days<span class="info">ⓘ</span></div><div class="tk__timer"></div><div class="tk__prog">Completed <span class="tk__bar"><i style="width:66%"></i></span><b>2</b>/ 3</div><div class="tk__reward"><i class="coin coin--pt">★</i>500</div><div class="tk__quota">Rewarded<b>1/100</b>User</div><button class="tk__btn tk__btn--pending">In progress</button></article>
+            <article class="tk tk--sub"><div class="tk__name">Top up ₱50<span class="info">ⓘ</span></div><div class="tk__timer"></div><div class="tk__prog">Completed <span class="tk__bar"><i style="width:100%"></i></span><b>₱50</b>/ ₱50</div><div class="tk__reward">🎰 ₱100</div><div class="tk__quota">Rewarded<b>3/100</b>User</div><button class="tk__btn tk__btn--done">Completed</button></article>
+            <article class="tk tk--sub"><div class="tk__name">Bet ₱500<span class="info">ⓘ</span></div><div class="tk__timer"></div><div class="tk__prog">Completed <span class="tk__bar"><i style="width:100%"></i></span><b>₱500</b>/ ₱500</div><div class="tk__reward">🎫 x1</div><div class="tk__quota">Rewarded<b>3/100</b>User</div><button class="tk__btn tk__btn--done">Completed</button></article>
+            <article class="tk">
+              <div class="tk__name">Top Up ₱50<span class="info">ⓘ</span></div>
+              <div class="tk__timer">⏱ <span class="t-task">01:39:59</span></div>
+              <div class="tk__prog"><span><b>₱0</b>/₱50</span><span class="tk__bar"><i style="width:0"></i></span></div>
+              <div class="tk__reward">🎰 ₱100</div>
+              <div class="tk__quota">Rewarded<b>0/100</b>User</div>
+              <button class="tk__btn tk__btn--receive">Receive</button>
+            </article>
+            <article class="tk">
+              <div class="tk__name">Bet ₱500<span class="info">ⓘ</span></div>
+              <div class="tk__timer"></div>
+              <div class="tk__prog"><span><b>₱120</b>/₱500</span><span class="tk__bar"><i style="width:24%"></i></span></div>
+              <div class="tk__reward">🎫 x1</div>
+              <div class="tk__quota">Rewarded<b>3/100</b>User</div>
+              <button class="tk__btn tk__btn--bet">Bet Now</button>
+            </article>
+          </div>
         </section>
 
         <!-- Playground：一张入口卡（横幅＋底下列出有哪些游乐设施），点进游乐场专页 -->
@@ -612,37 +1738,80 @@ button{font-family:inherit;cursor:pointer;border:none;}
           </article>
         </section>
 
-        <!-- 分类页签：来源＝后台「商品分类」，图示由后台上传。照线上：点页签＝同一页直接换下面的商品，不跳页。
-             All＝筛选＋各分类区块（每类一排＋More）；选某分类＝筛选＋该分类全部商品。Flash Sales、Playground 都不在页签里，是上面的固定区块 -->
         <!-- Flash Sales：照线上限时抢购，钉在页签上方的固定区块，横向滑动看全部；不是分类、没有页签，也不受筛选影响 -->
         <section class="fs" id="fsBlock" aria-label="Flash Sales">
           <div class="fs__head">
-            <div class="fs__ico">⚡</div>
-            <div><div class="fs__t">Flash Sales<span class="fs__n" id="fsN">1/1</span></div><div class="fs__s">Ends in</div></div>
-            <div class="cd"><b class="js-cdD" hidden>155D</b><span class="js-cdDsep" hidden>:</span><b class="js-cdH">11</b>:<b class="js-cdM">44</b>:<b class="js-cdS">31</b></div>
+            <div class="fs__ico">⏰</div>
+            <div class="fs__t">Flash sale<span class="fs__n" id="fsN">1/1</span></div>
           </div>
           <div class="hrow" id="fsRow"></div>
         </section>
 
-        <nav class="cats js-cats" aria-label="商品分类"></nav>
-
-        <!-- 筛选：照线上放页签正下方；All 时管各分类区块，选分类时管该分类商品 -->
-        <div class="filters">
-          <button class="flt js-can" onclick="toggleCan()">我能兑换的</button>
-          <button class="flt js-sort" onclick="toggleSort()"><i class="coin coin--pt">★</i>星币 <span class="js-arrow">↕</span></button>
-        </div>
-
-        <!-- All：各分类区块，每类只露一排 2 个 ＋ More（More＝切到该页签），由程序照商品资料产生 -->
-        <div id="homeSecs"></div>
-        <!-- 选某分类：该分类全部商品两栏格 -->
-        <section class="grid" id="catGrid" hidden aria-label="分类商品"></section>
+        <!-- Recommend（11/10 设计图）：积分商城页放推荐商品 2 栏格；More › 进 Points Mall 商品页。推荐哪些由后台勾选 -->
+        <section class="csec" id="recBlock" aria-label="Recommend">
+          <h3 class="csec__t">👍 Recommend<button class="csec__more" onclick="openCat(null)">More ›</button></h3>
+          <div class="pgrid" id="recGrid"></div>
+        </section>
       </section>
 
       <!-- ===================================================
-           画面 4b：游乐场专页（首页 All、分类页签 Playground 进来）
+           画面：Points Mall 商品页（积分商城页 Recommend 的 More › 进来）。页签 ALL／I Can Buy／各商品分类；
+           ALL＝每个分类一张白卡横向滑动＋More ›；选分类或 I Can Buy＝该范围全部商品 2 栏格
+           =================================================== -->
+      <!-- 既有登录页（占位，不在本次范围） -->
+      <section class="screen" id="scr-login">
+        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">Register / Login</span></header>
+        <div style="height:600px;display:flex;align-items:center;justify-content:center;color:#8a97ad;font-size:.9rem">既有登录页</div>
+      </section>
+      <section class="screen" id="scr-shop">
+        <!-- 顶栏：照设计图，商品页上方也有同一条顶栏（登录状态跟积分商城页同步） -->
+        <header class="topbar">
+          <div class="tb" data-tb="in">
+            <div class="avatar" aria-label="头像"></div>
+            <div class="wallets">
+              <span class="wallet"><i class="coin coin--peso">₱</i>232.00 <span class="rf">↻</span></span>
+              <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
+            </div>
+            <button class="btn-topup"><span class="btn-topup__bonus">🎁 BONUS</span>Deposit</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+          <div class="tb" data-tb="out" hidden>
+            <span class="logo">OK<i>★</i>BET</span>
+            <span class="topbar__spacer"></span>
+            <button class="btn-login" onclick="needLogin()">Register / Login</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+        </header>
+        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">Points Mall</span></header>
+        <!-- 页签列：左边页签可横滑，最右边固定一颗既有「价格 ⇕」排序钮（11/12 设计图）：ALL 不显示；点一下升序、再点降序、再点回预设 -->
+        <div class="catrow"><nav class="cats js-cats" aria-label="商品分类"></nav><button class="sortbtn" id="sortBtn" onclick="togglePriceSort()" aria-label="价格排序" hidden><span id="sortArr">⇕</span></button></div>
+        <div id="shopSecs"></div>
+        <section class="csec" id="shopCat" hidden aria-label="分类商品"><div class="pgrid" id="catGrid"></div></section>
+      </section>
+
+      <!-- ===================================================
+           画面 4b：游乐场专页（积分商城页 All、分类页签 Playground 进来）
            =================================================== -->
       <section class="screen" id="scr-play">
-        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Playground</span></header>
+        <!-- 顶栏：照设计图，Playground上方也有同一条顶栏（11/13 她定：除 VIP 页外全部页面都有），往下滑钉在最上面 -->
+        <header class="topbar">
+          <div class="tb" data-tb="in">
+            <div class="avatar" aria-label="头像"></div>
+            <div class="wallets">
+              <span class="wallet"><i class="coin coin--peso">₱</i>232.00 <span class="rf">↻</span></span>
+              <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
+            </div>
+            <button class="btn-topup"><span class="btn-topup__bonus">🎁 BONUS</span>Deposit</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+          <div class="tb" data-tb="out" hidden>
+            <span class="logo">OK<i>★</i>BET</span>
+            <span class="topbar__spacer"></span>
+            <button class="btn-login" onclick="needLogin()">Register / Login</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+        </header>
+        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">Playground</span></header>
         <div class="sky">
           <!-- 乐园地图：放大版的岛屿地图（参考图一番赏页顶部那块），点岛进该设施；灰岛＝预告未来有新游戏 -->
           <div class="park">
@@ -676,10 +1845,29 @@ button{font-family:inherit;cursor:pointer;border:none;}
            画面 4c：游戏列表页（乐园地图点岛进来；后台配了几套一番赏／盲盒就列几张卡。只配一套时跳过此页直接进游戏）
            =================================================== -->
       <section class="screen" id="scr-glist">
+        <!-- 顶栏：照设计图，一番赏／盲盒列表页上方也有同一条顶栏（11/13 她定：除 VIP 页外全部页面都有），往下滑钉在最上面 -->
+        <header class="topbar">
+          <div class="tb" data-tb="in">
+            <div class="avatar" aria-label="头像"></div>
+            <div class="wallets">
+              <span class="wallet"><i class="coin coin--peso">₱</i>232.00 <span class="rf">↻</span></span>
+              <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
+            </div>
+            <button class="btn-topup"><span class="btn-topup__bonus">🎁 BONUS</span>Deposit</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+          <div class="tb" data-tb="out" hidden>
+            <span class="logo">OK<i>★</i>BET</span>
+            <span class="topbar__spacer"></span>
+            <button class="btn-login" onclick="needLogin()">Register / Login</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+        </header>
         <header class="subbar"><button class="subbar__back" onclick="go('play')">‹</button><span class="subbar__title" id="glistTitle">Ichiban Luck Draw</span></header>
-        <div class="sky" style="min-height:100%">
+        <div class="isl" id="glistScene" style="min-height:100%">
           <div class="glist__head" id="glistHead"></div>
-          <section class="grid" id="glistGrid" aria-label="游戏列表"></section>
+          <div id="glistGrid" aria-label="游戏列表"></div>
+          <div class="isl__foot"><div class="isl__rail"></div><span class="isl__hero">🧒</span><div class="isl__post" id="glistPost">📍 Ichiban Kuji<br>Island</div></div>
         </div>
       </section>
 
@@ -691,7 +1879,25 @@ button{font-family:inherit;cursor:pointer;border:none;}
            两边内容照线上：积分历史＝全部/收入/支出 ＋「仅展示近30日数据」；兑换记录＝分类胶囊 ＋ 延迟提示
            =================================================== -->
       <section class="screen" id="scr-rec">
-        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Points Mall</span></header>
+        <!-- 顶栏：照设计图，记录页上方也有同一条顶栏（11/12 她定），往下滑钉在最上面 -->
+        <header class="topbar">
+          <div class="tb" data-tb="in">
+            <div class="avatar" aria-label="头像"></div>
+            <div class="wallets">
+              <span class="wallet"><i class="coin coin--peso">₱</i>232.00 <span class="rf">↻</span></span>
+              <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
+            </div>
+            <button class="btn-topup"><span class="btn-topup__bonus">🎁 BONUS</span>Deposit</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+          <div class="tb" data-tb="out" hidden>
+            <span class="logo">OK<i>★</i>BET</span>
+            <span class="topbar__spacer"></span>
+            <button class="btn-login" onclick="needLogin()">Register / Login</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+        </header>
+        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">Points Records</span></header>
         <nav class="rec-tabs" aria-label="记录页签">
           <button class="rec-tab" data-rec="hist" onclick="openRec('hist')">积分历史</button>
           <button class="rec-tab" data-rec="ex" onclick="openRec('ex')">兑换记录</button>
@@ -717,10 +1923,10 @@ button{font-family:inherit;cursor:pointer;border:none;}
       </section>
 
       <!-- ===================================================
-           画面：VIP 俱乐部 ＝ 线上既有页（/user/vip-club）的 H5 版。首页「VIP 会员」入口点进来；内容区块照线上，不新增
+           画面：VIP 俱乐部 ＝ 线上既有页（/user/vip-club）的 H5 版。积分商城页「VIP 会员」入口点进来；内容区块照线上，不新增
            =================================================== -->
       <section class="screen" id="scr-vip">
-        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">VIP</span><button class="tl-head__rules" style="position:absolute;right:14px" aria-label="规则">📄</button></header>
+        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">VIP</span><button class="tl-head__rules" style="position:absolute;right:14px" aria-label="规则">📄</button></header>
         <div class="vip-me">
           <span class="avatar"></span>
           <div><div class="vip-me__name">vivian01…</div><span class="vip-badge">VIP4</span></div>
@@ -759,7 +1965,25 @@ button{font-family:inherit;cursor:pointer;border:none;}
            画面：我的背包（前身＝线上「我的票券」：未使用/待结算/已使用/已过期，票卡＝图＋名称＋获得/失效日期＋立即使用）
            =================================================== -->
       <section class="screen" id="scr-bag">
-        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">我的背包</span><button class="tl-head__rules" style="position:absolute;right:14px" aria-label="规则">📄</button></header>
+        <!-- 顶栏：照设计图，我的背包上方也有同一条顶栏（11/13 她定），往下滑钉在最上面 -->
+        <header class="topbar">
+          <div class="tb" data-tb="in">
+            <div class="avatar" aria-label="头像"></div>
+            <div class="wallets">
+              <span class="wallet"><i class="coin coin--peso">₱</i>232.00 <span class="rf">↻</span></span>
+              <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
+            </div>
+            <button class="btn-topup"><span class="btn-topup__bonus">🎁 BONUS</span>Deposit</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+          <div class="tb" data-tb="out" hidden>
+            <span class="logo">OK<i>★</i>BET</span>
+            <span class="topbar__spacer"></span>
+            <button class="btn-login" onclick="needLogin()">Register / Login</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+        </header>
+        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">我的背包</span><button class="tl-head__rules" style="position:absolute;right:14px" aria-label="规则">📄</button></header>
         <nav class="bag-tabs" aria-label="背包页签">
           <button class="bag-tab bag-tab--on" onclick="setBag('new',this)">未使用(2)</button>
           <button class="bag-tab" onclick="setBag('wait',this)">待结算(0)</button>
@@ -770,7 +1994,25 @@ button{font-family:inherit;cursor:pointer;border:none;}
       </section>
 
       <section class="screen" id="scr-tasks">
-        <header class="subbar"><button class="subbar__back" onclick="go('mall')">‹</button><span class="subbar__title">Points Mall</span></header>
+        <!-- 顶栏：照设计图，Task List 页上方也有同一条顶栏（11/13 她定：除 VIP 页外全部页面都有），往下滑钉在最上面 -->
+        <header class="topbar">
+          <div class="tb" data-tb="in">
+            <div class="avatar" aria-label="头像"></div>
+            <div class="wallets">
+              <span class="wallet"><i class="coin coin--peso">₱</i>232.00 <span class="rf">↻</span></span>
+              <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
+            </div>
+            <button class="btn-topup"><span class="btn-topup__bonus">🎁 BONUS</span>Deposit</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+          <div class="tb" data-tb="out" hidden>
+            <span class="logo">OK<i>★</i>BET</span>
+            <span class="topbar__spacer"></span>
+            <button class="btn-login" onclick="needLogin()">Register / Login</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+        </header>
+        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">Task List</span></header>
         <div class="tl-head"><span class="tl-head__ico">📋</span>Task List<button class="tl-head__rules" aria-label="任务规则">📄</button></div>
         <div class="tl-body">
           <button class="recall">Reward Retrieval <span class="n">20</span> ›</button>
@@ -835,13 +2077,31 @@ button{font-family:inherit;cursor:pointer;border:none;}
            画面 2：Ichiban Luck Draw（Playground 子页）
            =================================================== -->
       <section class="screen" id="scr-ichiban">
+        <!-- 顶栏：照设计图，抽奖页上方也有同一条顶栏（11/13 她定：除 VIP 页外全部页面都有），往下滑钉在最上面 -->
+        <header class="topbar">
+          <div class="tb" data-tb="in">
+            <div class="avatar" aria-label="头像"></div>
+            <div class="wallets">
+              <span class="wallet"><i class="coin coin--peso">₱</i>232.00 <span class="rf">↻</span></span>
+              <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
+            </div>
+            <button class="btn-topup"><span class="btn-topup__bonus">🎁 BONUS</span>Deposit</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+          <div class="tb" data-tb="out" hidden>
+            <span class="logo">OK<i>★</i>BET</span>
+            <span class="topbar__spacer"></span>
+            <button class="btn-login" onclick="needLogin()">Register / Login</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+        </header>
         <header class="subbar"><button class="subbar__back" onclick="backFromSet('ichiban')">‹</button><span class="subbar__title js-set-title" data-game="ichiban">Ichiban Luck Draw</span></header>
         <div class="sky">
-          <!-- 地图：各游乐场入口，等级不够显示锁 -->
+          <!-- 地图：各游乐场入口，灰岛＝预告新游戏（同游乐场专页） -->
           <div class="map">
             <button class="isle" onclick="openGame('blind')"><span class="isle__ico">🎰</span>Slot Kingdom</button>
             <button class="isle isle--on"><span class="isle__ico">🎁</span>Ichiban Luck Draw</button>
-            <button class="isle isle--lock"><span class="isle__ico">🔒</span>Unlock at Lv.5</button>
+            <button class="isle isle--lock"><span class="isle__ico">🔒</span>Coming Soon</button>
           </div>
           <div class="hero">
             <div class="hero__t">ICHIBAN<br>LUCK DRAW</div>
@@ -891,12 +2151,30 @@ button{font-family:inherit;cursor:pointer;border:none;}
            画面 3：Mystery Blind Box（Playground 子页）
            =================================================== -->
       <section class="screen" id="scr-blind">
+        <!-- 顶栏：照设计图，抽奖页上方也有同一条顶栏（11/13 她定：除 VIP 页外全部页面都有），往下滑钉在最上面 -->
+        <header class="topbar">
+          <div class="tb" data-tb="in">
+            <div class="avatar" aria-label="头像"></div>
+            <div class="wallets">
+              <span class="wallet"><i class="coin coin--peso">₱</i>232.00 <span class="rf">↻</span></span>
+              <span class="wallet"><i class="coin coin--pt">★</i><span class="my-pts">100</span> <span class="rf">↻</span></span>
+            </div>
+            <button class="btn-topup"><span class="btn-topup__bonus">🎁 BONUS</span>Deposit</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+          <div class="tb" data-tb="out" hidden>
+            <span class="logo">OK<i>★</i>BET</span>
+            <span class="topbar__spacer"></span>
+            <button class="btn-login" onclick="needLogin()">Register / Login</button>
+            <button class="icon-btn" aria-label="搜索">🔍</button>
+          </div>
+        </header>
         <header class="subbar"><button class="subbar__back" onclick="backFromSet('blind')">‹</button><span class="subbar__title js-set-title" data-game="blind">Slot Kingdom</span></header>
         <div class="sky">
           <div class="map">
             <button class="isle isle--on"><span class="isle__ico">🎰</span>Slot Kingdom</button>
             <button class="isle" onclick="openGame('ichiban')"><span class="isle__ico">🎁</span>Ichiban Luck Draw</button>
-            <button class="isle isle--lock"><span class="isle__ico">🔒</span>Unlock at Lv.5</button>
+            <button class="isle isle--lock"><span class="isle__ico">🔒</span>Coming Soon</button>
           </div>
           <div class="machine">
             <div class="machine__t">MYSTERY BLIND BOX</div>
@@ -945,6 +2223,124 @@ button{font-family:inherit;cursor:pointer;border:none;}
     <div class="mask" id="mask" onclick="if(event.target===this)closePop()">
       <div class="pop" id="pop"></div>
     </div>
+    <div class="smask" id="smask" onclick="if(event.target===this)closeSheet()">
+      <div class="sheet" id="sheet"></div>
+    </div>
+  </div>
+
+  <!-- ============ 后台：商品管理（推荐开关）。demo 条「后台」按钮切换；跟 H5 放同一档，之后出规格书 ============ -->
+  <div id="admin" hidden>
+<div class="page" id="admPage-prod"><p class="bk-title">后台 · 积分商城 › 商品管理（红框＝新增，其余照线上）</p>
+  <div class="crumb">位置 &rsaquo; <b>商品管理</b></div>
+  <div class="card">
+    <div class="filters">
+      <span class="fake-sel">选择币别 <i class="el-icon-arrow-down"></i></span>
+    </div>
+    <div class="filters">
+      <span class="fake-sel on" style="width:90px">全部类别 <i class="el-icon-arrow-down"></i></span>
+      <span class="fake-sel on" style="width:90px">全部 <i class="el-icon-arrow-down"></i></span>
+      <label>是否限时抢购:</label><span class="fake-sel on">全部 <i class="el-icon-arrow-down"></i></span>
+      <label class="new">是否推荐:</label><span class="fake-sel on new">全部 <i class="el-icon-arrow-down"></i></span>
+      <span class="fake-inp">名</span>
+      <label>发布时间：</label><span class="fake-inp fake-date"><i class="el-icon-time" style="margin-right:8px"></i>开始时间 &nbsp;&nbsp;~&nbsp;&nbsp; 结束时间</span>
+    </div>
+    <div class="toolbar">
+      <button class="el-button el-button--primary el-button--small"><i class="el-icon-search"></i> 搜索</button>
+      <button class="el-button el-button--primary el-button--small" onclick="openDlg('add')"><i class="el-icon-plus"></i> 新增商品</button>
+    </div>
+    <p class="warn" style="margin:0 0 8px">限时抢购商品过期自动前台隐藏，后台将于3:00自动下架</p>
+    <table class="bk-tb">
+      <thead><tr>
+        <th>排序</th><th>类型</th><th>名</th><th>商品简介</th><th>封面图</th><th>购买价格</th><th>限购</th><th>库存</th><th>已售</th><th>限时抢购</th><th style="white-space:nowrap;min-width:52px"><span class="new">推荐</span></th><th>状态</th><th>发布时间</th><th>发布者</th><th>操作</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>3</td><td>实物</td><td>Wireless Headset</td><td></td><td><img alt=""></td><td>8000</td><td>1</td><td>6</td><td>2</td><td>否</td><td>否</td><td><span class="sw"></span></td><td>2026-10-27 11:02</td><td>jasmine_tw</td><td><span class="lnk" onclick="openDlg()">编辑</span><span class="lnk">删除</span></td></tr>
+        <tr><td>2</td><td>彩金</td><td>Cash ₱100</td><td></td><td><img alt=""></td><td>1000</td><td>0</td><td>2100</td><td>58</td><td>否</td><td>是</td><td><span class="sw"></span></td><td>2026-10-28 15:20</td><td>mars_tw</td><td><span class="lnk" onclick="openDlg()">编辑</span><span class="lnk">删除</span></td></tr>
+        <tr><td>1</td><td>免费旋转</td><td>test Free spin acwin</td><td></td><td><img alt=""></td><td>100</td><td>0</td><td>200</td><td>4</td><td>否</td><td>是</td><td><span class="sw"></span></td><td>2026-11-10 17:08</td><td>jasmine_tw</td><td><span class="lnk" onclick="openDlg()">编辑</span><span class="lnk">删除</span></td></tr>
+        <tr><td>1</td><td>优惠券</td><td>测试用的体育投注券</td><td></td><td><img alt=""></td><td>500</td><td>0</td><td>999</td><td>16</td><td>是</td><td>否</td><td><span class="sw"></span></td><td>2026-10-29 19:55</td><td>mars_tw</td><td><span class="lnk" onclick="openDlg()">编辑</span><span class="lnk">删除</span></td></tr>
+        <tr><td>1</td><td>优惠券</td><td>体育投注券</td><td></td><td><img alt=""></td><td>100</td><td>0</td><td>9999</td><td>31</td><td>否</td><td>是</td><td><span class="sw"></span></td><td>2026-10-29 18:50</td><td>wadeyu</td><td><span class="lnk" onclick="openDlg()">编辑</span><span class="lnk">删除</span></td></tr>
+      </tbody>
+    </table>
+    <div class="pager">共 63 条 &nbsp; <b>1</b> 2 3 4 5 6 7 &rsaquo; &nbsp; 10条/页</div>
+  </div>
+</div>
+
+<!-- 商品类别管理（既有，照线上 11/13 截图，不改）：前台 Points Mall 商品页的分类页签顺序就是吃这里的「排序」 -->
+<div class="page" id="admPage-cat" hidden><p class="bk-title">后台 · 积分商城 › 商品类别管理（栏位照线上；列表改成排序数字大的在上面）</p>
+  <div class="crumb">位置 &rsaquo; <b>商品类别管理</b></div>
+  <div class="card">
+    <div class="filters" style="justify-content:space-between">
+      <div class="filters" style="margin:0">
+        <span class="fake-inp" style="width:300px">名</span>
+        <span class="fake-sel on" style="width:200px">全部 <i class="el-icon-arrow-down"></i></span>
+        <button class="el-button el-button--primary el-button--small" style="margin-left:120px"><i class="el-icon-search"></i> 搜索</button>
+      </div>
+      <button class="el-button el-button--primary el-button--small">新增</button>
+    </div>
+    <table class="bk-tb">
+      <thead><tr><th>排序</th><th>名</th><th>备注</th><th>更新时间</th><th>操作人名称</th><th>状态</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr><td>190</td><td>流量 <i class="el-icon-plus" style="color:#409eff"></i></td><td>商品类型【流量】</td><td>2026-08-21 17:47</td><td>olivia</td><td>启用</td><td><button class="el-button el-button--primary el-button--small">编辑</button> <button class="el-button el-button--danger el-button--small">删除</button></td></tr>
+        <tr><td>185</td><td>话费 <i class="el-icon-plus" style="color:#409eff"></i></td><td>商品类型【话费】</td><td>2026-08-21 17:47</td><td>olivia</td><td>启用</td><td><button class="el-button el-button--primary el-button--small">编辑</button> <button class="el-button el-button--danger el-button--small">删除</button></td></tr>
+        <tr><td>170</td><td>实物 <i class="el-icon-plus" style="color:#409eff"></i></td><td>商品类型【实物】</td><td>2026-08-21 17:52</td><td>olivia</td><td>启用</td><td><button class="el-button el-button--primary el-button--small">编辑</button> <button class="el-button el-button--danger el-button--small">删除</button></td></tr>
+        <tr><td>165</td><td>优惠券 <i class="el-icon-plus" style="color:#409eff"></i></td><td>商品类型【优惠券】</td><td>2026-08-21 17:46</td><td>olivia</td><td>启用</td><td><button class="el-button el-button--primary el-button--small">编辑</button> <button class="el-button el-button--danger el-button--small">删除</button></td></tr>
+        <tr><td>160</td><td>彩金 <i class="el-icon-plus" style="color:#409eff"></i></td><td>商品类型【彩金】</td><td>2026-08-21 17:46</td><td>olivia</td><td>启用</td><td><button class="el-button el-button--primary el-button--small">编辑</button> <button class="el-button el-button--danger el-button--small">删除</button></td></tr>
+        <tr><td>135</td><td>盲盒 <i class="el-icon-plus" style="color:#409eff"></i></td><td>商品类型【盲盒】</td><td>2026-08-21 17:45</td><td>olivia</td><td>启用</td><td><button class="el-button el-button--primary el-button--small">编辑</button> <button class="el-button el-button--danger el-button--small">删除</button></td></tr>
+        <tr><td>125</td><td>道具卡 <i class="el-icon-plus" style="color:#409eff"></i></td><td>商品类型【道具卡】</td><td>2026-08-21 17:45</td><td>olivia</td><td>启用</td><td><button class="el-button el-button--primary el-button--small">编辑</button> <button class="el-button el-button--danger el-button--small">删除</button></td></tr>
+        <tr><td>120</td><td>Golden Draw Ticket <i class="el-icon-plus" style="color:#409eff"></i></td><td>商品类型【大奖池】</td><td>2026-08-24 15:12</td><td>nancy_qa</td><td>启用</td><td><button class="el-button el-button--primary el-button--small">编辑</button> <button class="el-button el-button--danger el-button--small">删除</button></td></tr>
+        <tr><td>115</td><td>Share TreatS <i class="el-icon-plus" style="color:#409eff"></i></td><td>商品类型【Share Treats】</td><td>2026-08-21 17:44</td><td>olivia</td><td>启用</td><td><button class="el-button el-button--primary el-button--small">编辑</button> <button class="el-button el-button--danger el-button--small">删除</button></td></tr>
+        <tr><td>110</td><td>Ichiban Kuji（一番赏） <i class="el-icon-plus" style="color:#409eff"></i></td><td>商品类型【一番赏】</td><td>2026-11-13 10:28</td><td>vivianadmin</td><td>启用</td><td><button class="el-button el-button--primary el-button--small">编辑</button> <button class="el-button el-button--danger el-button--small">删除</button></td></tr>
+      </tbody>
+    </table>
+    <div class="pager">Total 16 &nbsp;&nbsp; <span style="color:#c0c4cc">&lsaquo;</span> &nbsp;<b>1</b>&nbsp; 2 &nbsp;&rsaquo;</div>
+  </div>
+</div>
+
+<!-- 编辑商品弹窗：照线上表单，只在「是否限时抢购」下面加一行 -->
+<div class="bk-mask" id="bkMask" onclick="if(event.target===this)closeDlg()">
+  <div class="dlg">
+    <div class="dlg__hd"><span id="dlgTitle">编辑商品</span> <span class="x" onclick="closeDlg()">✕</span></div>
+    <div class="dlg__bd">
+      <div class="frow"><label class="req">币种:</label><div class="val"><span class="inp sel">菲律宾比索 <i class="el-icon-arrow-down" style="color:#c0c4cc"></i></span></div></div>
+      <div class="frow"><label>商品类别:</label><div class="val">
+        <span class="opt"><i class="cb"></i>票券</span><span class="opt"><i class="cb"></i>实物</span><span class="opt"><i class="cb"></i>彩金</span><span class="opt"><i class="cb"></i>优惠券</span><span class="opt on"><i class="cb"></i>免费旋转</span><span class="opt"><i class="cb"></i>话费</span><span class="opt"><i class="cb"></i>流量</span><span class="opt"><i class="cb"></i>pisoluck</span><span class="opt"><i class="cb"></i>免费投注</span><br>
+        <span class="opt"><i class="cb"></i>盲盒</span><span class="opt"><i class="cb"></i>道具卡</span><span class="opt"><i class="cb"></i>Golden Draw Ticket</span><span class="opt"><i class="cb"></i>Ichiban Kuji（一番赏）</span><span class="opt"><i class="cb"></i>Share TreatS</span>
+      </div></div>
+      <div class="frow"><label class="req">商品名称:</label><div class="val"><span class="inp inp--w" id="dlgName">test Free spin acwin</span></div></div>
+      <div class="frow" id="dlgIntro" hidden><label>商品简介:</label><div class="val"><span class="inp inp--w" style="height:70px;color:#c0c4cc">请输入商品简介</span></div></div>
+      <div class="frow"><label class="req">商品类型:</label><div class="val">
+        <span class="opt"><i></i>实物</span><span class="opt"><i></i>彩金</span><span class="opt"><i></i>优惠券</span><span class="opt on"><i></i>免费旋转</span><span class="opt"><i></i>话费</span><span class="opt"><i></i>流量</span><span class="opt"><i></i>pisoluck</span><br>
+        <span class="opt"><i></i>票券</span><span class="opt"><i></i>盲盒</span><span class="opt"><i></i>免费投注</span><span class="opt"><i></i>道具卡</span><span class="opt"><i></i>Golden Draw Ticket</span><span class="opt"><i></i>Share Treats</span><span class="opt"><i></i>Ichiban Kuji</span>
+      </div></div>
+      <div class="frow"><label>选择免费旋转:</label><div class="val"><span class="inp sel">acewinSpinBtest1 <i class="el-icon-arrow-down" style="color:#c0c4cc"></i></span></div></div>
+      <div class="frow"><label class="req">商品图片:</label><div class="val"><button class="el-button el-button--primary el-button--small is-plain"><i class="el-icon-document"></i> 选择文件</button><div class="hint red">尺寸750*750，最多可上传6张图，默认第一张图为封面图</div><div class="imgbox"></div></div></div>
+      <div class="frow"><label class="req">购买价格:</label><div class="val"><div style="line-height:24px"><span class="opt on" style="color:#409eff"><i></i>积分</span></div><span class="inp inp--w" id="dlgPrice">100<span class="unit">积分</span></span></div></div>
+      <div class="frow"><label>积分折扣比例:</label><div class="val"><span class="inp inp--w">0<span class="unit">%</span></span></div></div>
+      <div class="frow"><label class="req">排序:</label><div class="val"><span class="inp inp--s" style="text-align:center">1</span></div></div>
+      <div class="frow"><label>单个会员限购数:</label><div class="val"><div class="vipgrid">
+        <span class="inp"><span class="pre">VIP0</span>0</span><span class="inp"><span class="pre">VIP1</span>0</span><span class="inp"><span class="pre">VIP2</span>0</span>
+        <span class="inp"><span class="pre">VIP3</span>0</span><span class="inp"><span class="pre">VIP4</span>0</span><span class="inp"><span class="pre">VIP5</span>0</span>
+        <span class="inp"><span class="pre">VIP6</span>0</span><span class="inp"><span class="pre">VIP7</span>0</span><span class="inp"><span class="pre">VIP8</span>0</span>
+        <span class="inp"><span class="pre">VIP9</span>0</span><span class="inp"><span class="pre">VIP10</span>0</span><span class="opt" style="line-height:32px;color:#409eff"><i class="cb"></i>限购</span>
+      </div></div></div>
+      <div class="frow"><label class="req">库存:</label><div class="val"><span class="inp inp--s" style="text-align:center">−&nbsp;&nbsp;&nbsp;&nbsp;<span id="dlgStock">200</span>&nbsp;&nbsp;&nbsp;&nbsp;+</span><div class="hint">前台显示库存数：<span id="dlgStockHint">196</span> 件</div></div></div>
+      <div class="frow" id="flashRow"><label class="req">是否限时抢购:</label><div class="val">
+        <div><span class="opt on" onclick="setFlash(false)"><i></i>否</span><span class="opt" onclick="setFlash(true)"><i></i>是</span></div>
+        <div id="flashMore" hidden style="margin-top:8px;display:flex;align-items:center;gap:10px;line-height:32px"><span class="inp" style="width:380px;color:#c0c4cc"><i class="el-icon-time" style="margin-right:8px"></i>开始时间 &nbsp;&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;&nbsp; 结束时间</span></div>
+      </div></div>
+      <div class="frow new" id="recRow"><label class="req">是否推荐:</label><div class="val">
+        <div><span class="opt" onclick="setRec(false)"><i></i>否</span><span class="opt on" onclick="setRec(true)"><i></i>是</span><span class="hint" id="recDisHint" hidden style="margin-left:12px">限时抢购商品不进 Recommend，不能勾推荐</span></div>
+        <div id="recMore" style="margin-top:8px">
+          <div style="display:flex;align-items:center;gap:10px;line-height:32px"><span style="color:#606266">推荐排序：</span><span class="inp inp--s" style="text-align:center">1</span><span class="hint">数字越大越前面；同数字照发布时间新的在前</span></div>
+          <div style="display:flex;align-items:center;gap:10px;line-height:32px"><span style="color:#606266">推荐时间：</span><span class="inp" style="width:380px;color:#c0c4cc"><i class="el-icon-time" style="margin-right:8px"></i>开始时间 &nbsp;&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;&nbsp; 结束时间</span><span class="hint">可留空＝不限时间，手动关掉为止</span></div>
+        </div>
+      </div></div>
+      <div class="frow"><label>审核模式:</label><div class="val"><span class="opt on"><i></i>自动审核</span><span class="opt"><i></i>手动审核</span></div></div>
+    </div>
+    <div class="dlg__ft"><button class="el-button el-button--primary el-button--small" id="dlgOk">确 定</button> <button class="el-button el-button--warning el-button--small" onclick="closeDlg()">取 消</button></div>
+  </div>
+</div>
+
   </div>
 </div>
 
@@ -953,11 +2349,32 @@ button{font-family:inherit;cursor:pointer;border:none;}
 var MY_POINTS = 100;   /* 参考图里会员只有 100 积分，用来示范「我能兑换的」与「积分不足」 */
 document.querySelectorAll('.my-pts').forEach(function(e){ e.textContent = MY_POINTS.toLocaleString(); });
 
-/* ---------- 画面切换：商城首页 / Ichiban / 盲盒 ---------- */
+/* ---------- 画面切换：积分商城页 / Ichiban / 盲盒 ---------- */
+/* 浏览历史：任务中心、记录、背包、VIP 都可能从不同画面进来（积分商城页、游乐场、一番赏、盲盒、积分不足弹窗），
+   返回键要回「进来前那一页」并停在原本卷动位置，不是一律回积分商城页 */
+var NAV = [], _back = false;
+function curScr(){ var s = document.querySelector('.screen.is-active'); return s ? s.id.slice(4) : 'mall'; }
 function go(name, btn){
+  var wrap = document.getElementById('wrap'), adminOn = (name==='admin' || name==='admincat');   /* admincat＝后台「商品类别管理」页（既有示意） */
+  wrap.classList.toggle('is-admin', adminOn);
+  document.getElementById('admin').hidden = !adminOn;
+  document.querySelector('.phone').hidden = adminOn;
+  if(adminOn){
+    document.getElementById('admPage-prod').hidden = name!=='admin';
+    document.getElementById('admPage-cat').hidden = name!=='admincat';
+    document.querySelectorAll('.demo-bar button').forEach(function(b){ b.classList.toggle('on', b.dataset.scr===name); }); return; }
+  var sc = document.getElementById('scroll'), from = curScr();
+  if(!_back && from!==name){ NAV.push({scr:from, top:sc.scrollTop}); if(NAV.length>20) NAV.shift(); }
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('is-active', s.id==='scr-'+name); });
-  document.querySelectorAll('.demo-bar button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('onclick').indexOf("'"+name+"'")>-1); });
-  document.getElementById('scroll').scrollTop = 0;
+  document.querySelectorAll('.demo-bar button').forEach(function(b){ b.classList.toggle('on', b.dataset.scr===name); });
+  sc.scrollTop = 0;
+}
+/* 返回：有上一页就回上一页；没有（例如直接落在这页）就回 fallback */
+function back(fallback){
+  var h = NAV.pop();
+  if(!h){ go(fallback || 'mall'); return; }
+  _back = true; go(h.scr); _back = false;
+  document.getElementById('scroll').scrollTop = h.top;
 }
 
 /* ---------- 商品资料（原型假资料；正式版来自后台商品分类＋商品） ---------- */
@@ -965,53 +2382,54 @@ var CATS = [
   {key:'free', name:'Free Spin', ico:'🎡'},
   {key:'cash', name:'Cash', ico:'💵'}, {key:'coupon', name:'Coupon', ico:'🎫'}, {key:'item', name:'Item', ico:'📦'}
 ];
-/* 分类页签（首页、分类页各一排，同一份资料）：目前所在的亮起；分类页会把亮起的那颗滑到看得见的位置 */
+/* 分类页签（积分商城页、分类页各一排，同一份资料）：目前所在的亮起；分类页会把亮起的那颗滑到看得见的位置 */
 function renderCats(){
   var cur = curCat || 'all';
-  var html = '<button class="cat cat--all'+(cur==='all'?' cat--on':'')+'" data-cat="all"><span class="cat__ico">ALL</span>All</button>'
-    + CATS.map(function(c){ return '<button class="cat'+(cur===c.key?' cat--on':'')+'" data-cat="'+c.key+'"><span class="cat__ico">'+c.ico+'</span>'+c.name+'</button>'; }).join('');
+  var html = '<button class="cat'+(cur==='all'?' cat--on':'')+'" data-cat="all">ALL</button>'
+    + '<button class="cat'+(cur==='can'?' cat--on':'')+'" data-cat="can">I Can Buy</button>'
+    + CATS.map(function(c){ return '<button class="cat'+(cur===c.key?' cat--on':'')+'" data-cat="'+c.key+'">'+c.name+'</button>'; }).join('');
   document.querySelectorAll('.js-cats').forEach(function(nav){ nav.innerHTML = html; });
   scrollCatIntoView();
 }
 /* 分类页：把亮起的页签滑到中间（画面显示出来之后才量得到位置） */
 function scrollCatIntoView(){
-  var on = document.querySelector('#scr-mall .cat--on'); if(!on || !on.offsetWidth) return;
+  var on = document.querySelector('#scr-shop .cat--on'); if(!on || !on.offsetWidth) return;
   var nav = on.parentNode; nav.scrollLeft = Math.max(0, on.offsetLeft - (nav.clientWidth - on.offsetWidth)/2);
 }
 var PRODUCTS = [
   /* Flash Sales：有折扣、有剩余数 */
-  {cat:'flash', name:'Gems Bonanza', sub:'Free Spins Reward', price:450, old:1300, left:'2,980 remaining', pct:60, img:'img-gems', txt:'GEMS<br>BONANZA<br><small>FREE SPINS</small>', off:'65% OFF'},
-  {cat:'flash', name:'Gates of Olympus', sub:'Free Spins Reward', price:650, old:1300, left:'620 remaining', pct:25, img:'img-zeus', txt:'GATES OF<br>OLYMPUS<br><small>FREE SPINS</small>', off:'50% OFF'},
-  {cat:'flash', name:'Deposit Coupon ₱50', sub:'Coupon', price:80, old:100, left:'150 remaining', pct:85, img:'img-coupon', txt:'₱50<br>COUPON', off:'20% OFF'},
-  {cat:'flash', name:'Cash ₱200', sub:'E-Credit', price:1500, old:2000, left:'40 remaining', pct:10, img:'img-cash', txt:'₱200<br>CASH', off:'25% OFF'},
-  {cat:'flash', name:'Sweet Bonanza', sub:'20 Free Spins', price:400, old:600, left:'900 remaining', pct:45, img:'img-free', txt:'SWEET<br>BONANZA<br><small>FREE SPINS</small>', off:'33% OFF'},
+  {cat:'flash', name:'Sony PS5 Pro 1TB Console', sub:'Item', price:59000, old:70000, stock:599, end:7*86400+12*3600+34*60+59, img:'img-item', txt:'PS5<br>PRO', off:'−10%'},
+  {cat:'flash', name:'Gems Bonanza', sub:'Free Spins Reward', price:450, old:1300, stock:2980, end:2*86400+6*3600+29*60+32, img:'img-gems', txt:'GEMS<br>BONANZA<br><small>FREE SPINS</small>', off:'−65%'},
+  {cat:'flash', name:'Gates of Olympus', sub:'Free Spins Reward', price:650, old:1300, stock:0, end:11*3600+44*60+31, img:'img-zeus', txt:'GATES OF<br>OLYMPUS<br><small>FREE SPINS</small>', off:'−50%'},
+  {cat:'flash', name:'Deposit Coupon ₱50', sub:'Coupon', price:80, old:100, stock:150, end:5*86400+1*3600+5*60+9, img:'img-coupon', txt:'₱50<br>COUPON', off:'−20%'},
+  {cat:'flash', name:'Cash ₱200', sub:'E-Credit', price:1500, old:2000, stock:40, end:3600*20+15*60, img:'img-cash', txt:'₱200<br>CASH', off:'−25%'},
+  {cat:'flash', name:'Sweet Bonanza', sub:'20 Free Spins', price:400, old:600, stock:900, end:1*86400+2*3600, img:'img-free', txt:'SWEET<br>BONANZA<br><small>FREE SPINS</small>', off:'−33%'},
   /* Free Spin */
-  {cat:'free', name:'Sweet Bonanza', sub:'10 Free Spins', price:300, left:'In stock 1,200', img:'img-free', txt:'SWEET<br>BONANZA<br><small>FREE SPINS</small>'},
-  {cat:'free', name:'Wild West Gold', sub:'5 Free Spins', price:100, left:'In stock 860', img:'img-free', txt:'WILD<br>WEST<br><small>FREE SPINS</small>'},
-  {cat:'free', name:'Starlight Princess', sub:'10 Free Spins', price:350, left:'In stock 500', img:'img-free', txt:'STARLIGHT<br>PRINCESS<br><small>FREE SPINS</small>'},
-  {cat:'free', name:'Big Bass Bonanza', sub:'15 Free Spins', price:480, left:'In stock 320', img:'img-free', txt:'BIG BASS<br>BONANZA<br><small>FREE SPINS</small>'},
-  {cat:'free', name:'Fruit Party', sub:'5 Free Spins', price:90, left:'In stock 2,000', img:'img-free', txt:'FRUIT<br>PARTY<br><small>FREE SPINS</small>'},
-  {cat:'free', name:'Wolf Gold', sub:'20 Free Spins', price:700, left:'In stock 150', img:'img-free', txt:'WOLF<br>GOLD<br><small>FREE SPINS</small>'},
+  {cat:'free', rec:true, name:'Sweet Bonanza', sub:'10 Free Spins', price:300, old:400, off:'−25%', stock:1200, img:'img-free', txt:'SWEET<br>BONANZA<br><small>FREE SPINS</small>'},
+  {cat:'free', rec:true, name:'Wild West Gold', sub:'5 Free Spins', price:100, stock:0, img:'img-free', txt:'WILD<br>WEST<br><small>FREE SPINS</small>'},
+  {cat:'free', name:'Starlight Princess', sub:'10 Free Spins', price:350, stock:500, img:'img-free', txt:'STARLIGHT<br>PRINCESS<br><small>FREE SPINS</small>'},
+  {cat:'free', rec:true, name:'Big Bass Bonanza', sub:'15 Free Spins', price:480, stock:320, img:'img-free', txt:'BIG BASS<br>BONANZA<br><small>FREE SPINS</small>'},
+  {cat:'free', name:'Fruit Party', sub:'5 Free Spins', price:90, stock:2000, img:'img-free', txt:'FRUIT<br>PARTY<br><small>FREE SPINS</small>'},
+  {cat:'free', name:'Wolf Gold', sub:'20 Free Spins', price:700, stock:150, img:'img-free', txt:'WOLF<br>GOLD<br><small>FREE SPINS</small>'},
   /* Cash */
-  {cat:'cash', name:'Cash ₱100', sub:'E-Credit', price:1000, left:'In stock 2,100', img:'img-cash', txt:'₱100<br>CASH'},
-  {cat:'cash', name:'Cash ₱500', sub:'E-Credit', price:4000, left:'In stock 300', img:'img-cash', txt:'₱500<br>CASH'},
-  {cat:'cash', name:'Cash ₱1,000', sub:'E-Credit', price:8000, left:'In stock 120', img:'img-cash', txt:'₱1,000<br>CASH'},
-  {cat:'cash', name:'Cash ₱50', sub:'E-Credit', price:500, left:'In stock 5,000', img:'img-cash', txt:'₱50<br>CASH'},
-  {cat:'cash', name:'Cash ₱10', sub:'E-Credit', price:100, left:'In stock 9,999', img:'img-cash', txt:'₱10<br>CASH'},
+  {cat:'cash', rec:true, name:'Cash ₱100', sub:'E-Credit', price:1000, old:1200, off:'−17%', stock:2100, img:'img-cash', txt:'₱100<br>CASH'},
+  {cat:'cash', rec:true, name:'Cash ₱500', sub:'E-Credit', price:4000, stock:300, img:'img-cash', txt:'₱500<br>CASH'},
+  {cat:'cash', name:'Cash ₱1,000', sub:'E-Credit', price:8000, stock:120, img:'img-cash', txt:'₱1,000<br>CASH'},
+  {cat:'cash', name:'Cash ₱50', sub:'E-Credit', price:500, stock:5000, img:'img-cash', txt:'₱50<br>CASH'},
+  {cat:'cash', name:'Cash ₱10', sub:'E-Credit', price:100, stock:9999, img:'img-cash', txt:'₱10<br>CASH'},
   /* Coupon */
-  {cat:'coupon', name:'Deposit Coupon ₱20', sub:'Coupon', price:60, left:'In stock 5,000', img:'img-coupon', txt:'₱20<br>COUPON'},
-  {cat:'coupon', name:'Deposit Coupon ₱100', sub:'Coupon', price:300, left:'In stock 1,000', img:'img-coupon', txt:'₱100<br>COUPON'},
-  {cat:'coupon', name:'Rebate Coupon 1%', sub:'Coupon', price:200, left:'In stock 800', img:'img-coupon', txt:'1%<br>REBATE'},
-  {cat:'coupon', name:'Free Bet ₱50', sub:'Coupon', price:250, left:'In stock 600', img:'img-coupon', txt:'₱50<br>FREE BET'},
-  {cat:'coupon', name:'Free Bet ₱100', sub:'Coupon', price:480, left:'In stock 200', img:'img-coupon', txt:'₱100<br>FREE BET'},
+  {cat:'coupon', name:'Deposit Coupon ₱20', sub:'Coupon', price:60, stock:5000, img:'img-coupon', txt:'₱20<br>COUPON'},
+  {cat:'coupon', name:'Deposit Coupon ₱100', sub:'Coupon', price:300, stock:1000, img:'img-coupon', txt:'₱100<br>COUPON'},
+  {cat:'coupon', name:'Rebate Coupon 1%', sub:'Coupon', price:200, stock:800, img:'img-coupon', txt:'1%<br>REBATE'},
+  {cat:'coupon', rec:true, name:'Free Bet ₱50', sub:'Coupon', price:250, stock:600, img:'img-coupon', txt:'₱50<br>FREE BET'},
+  {cat:'coupon', name:'Free Bet ₱100', sub:'Coupon', price:480, stock:200, img:'img-coupon', txt:'₱100<br>FREE BET'},
   /* Item：实物 */
-  {cat:'item', name:'Wireless Headset', sub:'Physical item', price:8000, left:'In stock 6', img:'img-item', txt:'🎧<br>HEADSET'},
-  {cat:'item', name:'OKBet Cap', sub:'Physical item', price:1500, left:'In stock 60', img:'img-item', txt:'🧢<br>CAP'},
-  {cat:'item', name:'OKBet T-Shirt', sub:'Physical item', price:2500, left:'In stock 40', img:'img-item', txt:'👕<br>T-SHIRT'},
-  {cat:'item', name:'Power Bank', sub:'Physical item', price:5000, left:'In stock 12', img:'img-item', txt:'🔋<br>POWER BANK'},
-  {cat:'item', name:'Smart Watch', sub:'Physical item', price:20000, left:'In stock 3', img:'img-item', txt:'⌚<br>WATCH'}
+  {cat:'item', rec:true, name:'Wireless Headset', sub:'Physical item', price:8000, stock:6, img:'img-item', txt:'🎧<br>HEADSET'},
+  {cat:'item', name:'OKBet Cap', sub:'Physical item', price:1500, stock:0, img:'img-item', txt:'🧢<br>CAP'},
+  {cat:'item', name:'OKBet T-Shirt', sub:'Physical item', price:2500, stock:40, img:'img-item', txt:'👕<br>T-SHIRT'},
+  {cat:'item', name:'Power Bank', sub:'Physical item', price:5000, stock:12, img:'img-item', txt:'🔋<br>POWER BANK'},
+  {cat:'item', name:'Smart Watch', sub:'Physical item', price:20000, stock:3, img:'img-item', txt:'⌚<br>WATCH'}
 ];
-var HOME_SHOW = 2;   /* 首页每个分类只露一排 2 个（她 10/30 定）；超过的按 More 看 */
 
 /* ---------- 游乐场游戏（原型假资料；正式版由后台「游乐场」配置：名称、图、每次花费、是否上架、解锁等级） ---------- */
 var GAMES = [
@@ -1024,6 +2442,11 @@ var GAMES = [
 var SETS = [
   {game:'ichiban', id:5, no:'#5', name:'Ichiban Luck Draw · Vol.5', sub:'🔥 Final Prize ₱200,000', price:500, unit:'/ Ticket', left:'88,438 / 129,999 Draws left', rem:88438, total:129999, img:'img-ichi', txt:'ICHIBAN<br>VOL.5'},
   {game:'ichiban', id:6, no:'#6', name:'Gold Rush Draw', sub:'🔥 Final Prize ₱100,000', price:120, unit:'/ Ticket', left:'190 / 190 Draws left', rem:190, total:190, img:'img-ichi', txt:'GOLD<br>RUSH'},
+  {game:'ichiban', id:7, no:'#7', name:'One Piece', sub:'🔥 Final Prize ₱80,000', price:200, unit:'/ Ticket', left:'1,200 / 5,000 Draws left', rem:1200, total:5000, img:'img-zeus', txt:'ONE<br>PIECE'},
+  {game:'ichiban', id:8, no:'#8', name:'Dragon Ball', sub:'🔥 Final Prize ₱60,000', price:150, unit:'/ Ticket', left:'3,300 / 9,999 Draws left', rem:3300, total:9999, img:'img-gems', txt:'DRAGON<br>BALL'},
+  {game:'ichiban', id:9, no:'#9', name:'Spy × Family', sub:'🔥 Final Prize ₱40,000', price:100, unit:'/ Ticket', left:'800 / 3,000 Draws left', rem:800, total:3000, img:'img-free', txt:'SPY×<br>FAMILY'},
+  {game:'ichiban', id:10, no:'#10', name:'Pokémon Center', sub:'🔥 Final Prize ₱30,000', price:80, unit:'/ Ticket', left:'2,000 / 2,000 Draws left', rem:2000, total:2000, img:'img-item', txt:'POKÉ<br>MON'},
+  {game:'ichiban', id:11, no:'#Unlimited', name:'Lucky Cat Festival', sub:'🔥 Final Prize ₱20,000', price:50, unit:'/ Ticket', left:'Unlimited', rem:99999, total:99999, img:'img-cash', txt:'LUCKY<br>CAT'},
   {game:'ichiban', id:4, no:'#4', name:'Ichiban Luck Draw · Vol.4', sub:'🔥 Final Prize ₱50,000', price:300, unit:'/ Ticket', left:'0 / 9,999 Draws left', rem:0, total:9999, img:'img-ichi', txt:'ICHIBAN<br>VOL.4', soldout:true},
   {game:'blind',   id:1, no:'#1', name:'Lucky Star', sub:'💸 Top Prize ₱3,000', price:2000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'LUCKY<br>STAR'},
   {game:'blind',   id:2, no:'#2', name:'Golden Night', sub:'💸 Top Prize ₱10,000', price:5000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'GOLDEN<br>NIGHT'}
@@ -1032,7 +2455,7 @@ function setsOf(key){ return SETS.filter(function(x){ return x.game===key; }); }
 function gameOf(key){ return GAMES.filter(function(g){ return g.key===key; })[0]; }
 function renderGames(){
   var live = GAMES.filter(function(g){ return !g.lock; });
-  /* 首页入口卡脚注：有几个游乐设施、叫什么 */
+  /* 积分商城页入口卡脚注：有几个游乐设施、叫什么 */
   document.getElementById('pgFoot').innerHTML = '<b>'+live.length+' games</b> · '+live.map(function(g){ return g.name; }).join(' · ')+'<span class="pgcard__go">Play ›</span>';
 }
 /* 点岛：这种游戏只配一套 → 直接进；多套 → 先到列表页挑 */
@@ -1041,15 +2464,42 @@ function openGame(key){
   if(arr.length===1){ openSet(key, arr[0].id); return; }
   var g = gameOf(key);
   document.getElementById('glistTitle').textContent = g.name;
-  document.getElementById('glistHead').innerHTML = '<span class="park__ico">'+(key==='ichiban'?'🎁':'🎰')+'</span><div><div class="glist__t">'+g.name+'</div><div class="glist__s">'+g.sub+'</div></div>';
-  /* 一套一张卡（卡片样式沿用商品小卡；角标＝期数，抽完的灰掉＝沿用线上「已抢光」） */
-  document.getElementById('glistGrid').innerHTML = arr.map(function(x){
-    return '<article class="gs'+(x.soldout?' gs--off':'')+'" role="button" onclick="openSet(\''+key+'\','+x.id+')">'
-      + '<div class="g__img '+x.img+'"><span class="g__off">'+x.no+'</span>'+x.txt+'</div>'
-      + '<div class="g__name">'+x.name+'</div><div class="g__sub">'+x.sub+'</div>'
-      + '<div class="g__left">'+(x.soldout?'已抢光':x.left)+'</div>'
-      + '<div class="price"><i class="coin coin--pt">★</i><span class="price__now">'+fmt(x.price)+'</span><span class="g__sub" style="margin-left:2px">'+x.unit+'</span></div></article>';
-  }).join('');
+  /* 场景上半：天空＋远处小岛＋主馆（圆台、遮雨棚、菱形招牌、招财猫／盲盒改宝箱） */
+  document.getElementById('glistScene').className = 'isl isl--'+key;
+  document.getElementById('glistHead').innerHTML = '<div class="isl__sub">'+g.sub+'</div>'
+    + '<span class="isl__cloud" style="left:8px;top:40px">☁️</span><span class="isl__cloud" style="right:10px;top:26px">☁️</span>'
+    + '<span class="isl__far" style="left:22px;top:96px"></span><span class="isl__far" style="right:26px;top:120px"></span>'
+    + '<div class="hall">'
+    +   '<div class="hall__tier hall__tier--3"></div><div class="hall__tier hall__tier--2"></div><div class="hall__tier hall__tier--1"></div>'
+    +   '<div class="hall__awn" style="--a:#e86a8a;left:50%;margin-left:-112px;width:60px;top:132px"></div><div class="hall__awn" style="--a:#4d6cff;left:50%;margin-left:-30px;width:60px;top:132px"></div><div class="hall__awn" style="--a:#3aa655;left:50%;margin-left:52px;width:60px;top:132px"></div>'
+    +   '<span class="hall__tree" style="left:40px;top:118px">🌳</span><span class="hall__tree" style="right:44px;top:112px">🌸</span>'
+    +   '<div class="hall__logo"><span>'+(key==='ichiban'?'一番<br>くじ<small>ichibankuji</small>':'盲盒<small>MYSTERY BOX</small>')+'</span></div>'
+    +   '<span class="hall__cat">'+(key==='ichiban'?'🐱':'🎁')+'</span>'
+    + '</div>';
+  document.getElementById('glistPost').innerHTML = '📍 '+g.name+'<br>Island';
+  /* 广场：亭子不排整齐——每 5 套一段，一段里 5 个固定的不规则位置（左右错开、前大后小），套数多就往下再接一段；
+     一亭＝一套（招牌＝该套的图＋名称、小旗＝期数、柜台＝价格／库存）；抢完＝铁卷门＋已抢光 */
+  var SLOTS = [
+    {l:'4%',  t:10,  sc:.9,  c:'kiosk--r'},
+    {l:'58%', t:60,  sc:.95, c:''},
+    {l:'30%', t:205, sc:1.06, c:'kiosk--g'},
+    {l:'2%',  t:365, sc:.95, c:'kiosk--p'},
+    {l:'60%', t:395, sc:1,   c:'kiosk--o'}
+  ];
+  var DECO = '<svg class="plaza__path" viewBox="0 0 410 560" preserveAspectRatio="none" aria-hidden="true"><path d="M80 150 C 150 170, 190 120, 230 190 S 330 300, 230 360 S 120 420, 150 470 S 300 520, 330 550" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="8 8" stroke-linecap="round" opacity=".75"/></svg>'
+    + '<span class="plaza__deco" style="left:46%;top:24px">🏮</span><span class="plaza__deco" style="right:10px;top:230px">🌳</span><span class="plaza__deco" style="left:8px;top:300px">🌸</span><span class="plaza__deco" style="left:44%;top:395px">🏮</span><span class="plaza__deco" style="right:12px;bottom:6px">🌳</span>';
+  var secs = [];
+  for(var i=0;i<arr.length;i+=5) secs.push(arr.slice(i,i+5));
+  document.getElementById('glistGrid').innerHTML = '<div class="plaza">' + secs.map(function(sec){
+    var h = SLOTS[sec.length-1].t + 180;   /* 最后一段只摆几个就只留几个的高度，不留一大片空地 */
+    return '<div class="plaza__sec" style="height:'+h+'px">' + DECO + sec.map(function(x, j){
+      var sl = SLOTS[j];
+      return '<article class="kiosk '+sl.c+(x.soldout?' kiosk--off':'')+'" style="left:'+sl.l+';top:'+sl.t+'px;transform:scale('+sl.sc+');z-index:'+(j+1)+'" role="button"'+(x.soldout?'':' onclick="openSet(\''+key+'\','+x.id+')"')+'>'
+        + '<div class="kiosk__sign"><span class="kiosk__flag">'+x.no+'</span><div class="kiosk__img '+x.img+'">'+x.txt+'</div><div class="kiosk__ttl">'+x.name+'</div></div>'
+        + '<div class="kiosk__awn"></div>'
+        + '<div class="kiosk__booth"><div class="kiosk__goods">🎁🧸🎁</div><div class="kiosk__price"><i class="coin coin--pt">★</i>'+fmt(x.price)+'<small>'+x.unit+'</small></div><div class="kiosk__stock">'+x.left+'</div></div></article>';
+    }).join('') + '</div>';
+  }).join('') + '</div>';
   go('glist');
 }
 /* 进某一套：子页标题换成这一套的名称（页面长相不变，内容依那一套的后台配置） */
@@ -1091,12 +2541,25 @@ function renderSet(key){
 function pickDraw(n){ var x = curSet.ichiban; if(!x) return; var cost = n==='all' ? x.price : n*x.price; if(cost > MY_POINTS || x.rem===0) return; drawN = n; renderSet('ichiban'); }
 /* 一番赏抽：积分不够→积分不足弹窗；够→确认后成功 */
 function ichibanDraw(){
+  if(!LOGGED){ needLogin(); return; }
   var x = curSet.ichiban; if(x.rem===0) return;
   var n = drawN==='all' ? Math.min(x.rem, Math.floor(MY_POINTS/x.price)) : drawN, cost = n*x.price;
   if(cost > MY_POINTS){ showPop('lack'); return; }
   showPop({ico:'🎟️', t:'确认抽奖', d:'将扣除 <b>★ '+fmt(cost)+'</b> 积分，抽 '+n+' 次「'+x.name+'」', btns:[['取消','btn-ghost'],['确认','btn-main--purple','ok']]});
 }
 /* demo：切换会员积分 100 ⇄ 10,000，看积分不足／足够两种状态 */
+/* 登录状态（原型用）：未登录顶栏换成 logo＋Register / Login；点快捷入口、兑换、抽奖都先弹「请先登录」 */
+var LOGGED = true;
+function toggleLogin(b){
+  LOGGED = !LOGGED;
+  document.querySelectorAll('[data-tb="in"]').forEach(function(e){ e.hidden = !LOGGED; });
+  document.querySelectorAll('[data-tb="out"]').forEach(function(e){ e.hidden = LOGGED; });
+  b.textContent = '切换登录状态：'+(LOGGED ? '已登录' : '未登录');
+  if(!LOGGED) go('mall');
+}
+/* 未登录点需登录的功能（VIP、Points Records、My Bag、I Can Buy、商品）＝直接去既有登录页，跟点 Register / Login 一样；不另做弹窗 */
+function needLogin(){ go('login'); }
+function auth(fn){ if(!LOGGED){ needLogin(); return; } fn(); }
 function togglePoints(b){
   MY_POINTS = MY_POINTS===100 ? 10000 : 100;
   document.querySelectorAll('.my-pts').forEach(function(e){ e.textContent = fmt(MY_POINTS); });
@@ -1107,82 +2570,106 @@ function togglePoints(b){
 /* 子页返回：这种游戏有多套就回列表，只一套就回乐园地图 */
 function backFromSet(key){ if(setsOf(key).length>1) openGame(key); else go('play'); }
 
-/* ---------- 筛选状态（首页跟分类页共用） ---------- */
-var onlyCan = false, sortDir = 0, curCat = null; /* sortDir 0=不排序 1=低到高 2=高到低 */
-function toggleCan(){ onlyCan = !onlyCan; renderAll(); }
-function toggleSort(){ sortDir = (sortDir+1)%3; renderAll(); }
-function syncFilterBtns(){
-  document.querySelectorAll('.js-can').forEach(function(b){ b.classList.toggle('flt--on', onlyCan); });
-  document.querySelectorAll('.js-sort').forEach(function(b){ b.classList.toggle('flt--on', sortDir>0); });
-  document.querySelectorAll('.js-arrow').forEach(function(e){ e.textContent = sortDir===1?'↑':sortDir===2?'↓':'↕'; });
+/* ---------- 筛选状态（积分商城页跟分类页共用） ---------- */
+var curCat = null;   /* 商品页目前页签：null＝ALL、'can'＝I Can Buy、其余＝商品分类 key */
+/* 某分类的商品（照后台排序）；I Can Buy＝所有分类里我积分买得起、还有库存的 */
+/* 既有排序逻辑（8/25 定）：资料本身已照后台「排序」值排；已售完（库存 0＝已抢光）一律移到最后，彼此之间维持后台排序 */
+function sortEx(arr){
+  return arr.filter(function(p){ return p.stock!==0; }).concat(arr.filter(function(p){ return p.stock===0; }));
 }
-/* 依筛选／排序取出某分类的商品 */
+/* 既有价格排序（8/25）：0＝预设（后台排序值）、1＝升序、2＝降序；未售完照价格排、价格相同维持后台排序值、售完一律最后 */
+var priceSort = 0;
+function sortPrice(arr){
+  if(!priceSort) return arr;
+  var live = arr.filter(function(p){ return p.stock!==0; }).map(function(p,i){ return {p:p,i:i}; });
+  live.sort(function(a,b){ return (priceSort===1 ? a.p.price-b.p.price : b.p.price-a.p.price) || a.i-b.i; });
+  return live.map(function(x){ return x.p; }).concat(arr.filter(function(p){ return p.stock===0; }));
+}
+function togglePriceSort(){ priceSort = (priceSort+1)%3; renderShop(); }
 function listOf(cat){
-  var arr = PRODUCTS.filter(function(p){ return p.cat===cat && !(onlyCan && p.price > MY_POINTS); });
-  if(sortDir) arr = arr.slice().sort(function(a,b){ return sortDir===1 ? a.price-b.price : b.price-a.price; });
-  return arr;
+  /* I Can Buy：会员买得起（积分／余额照既有逻辑）且未售完；排序照后台排序值，不用再处理售完 */
+  if(cat==='can') return PRODUCTS.filter(function(p){ return p.cat!=='flash' && p.price <= MY_POINTS && p.stock!==0; });
+  return sortEx(PRODUCTS.filter(function(p){ return p.cat===cat; }));
 }
 function fmt(n){ return n.toLocaleString(); }
 function esc(t){ return t.replace(/'/g,"\\'"); }
 
-/* 卡片 HTML：直向小卡（首页分类区／分类页） */
-/* 照既有：卡片没有按钮，整张卡可点（点了进兑换／进游乐场） */
+/* 商品卡 HTML（积分商城页 Recommend、商品页分类区块、分类格共用）。照既有：卡片没有按钮，整张卡可点进兑换；抢完不能点 */
 function cardSmall(p){
-  var btn = '';
-  var click = p.go ? 'openGame(\''+p.go+'\')' : 'redeem(\''+esc(p.name)+'\','+p.price+')';
-  return '<article class="gs" role="button" onclick="'+click+'">'
-    + '<div class="g__img '+p.img+'">'+(p.off?'<span class="g__off">'+p.off+'</span>':'')+p.txt+'</div>'
-    + '<div class="g__name">'+p.name+'</div><div class="g__sub">'+p.sub+'</div>'
-    + (p.left?'<div class="g__left">'+p.left+'</div>':'')
+  var off = p.stock===0;
+  return '<article class="pc'+(off?' pc--off':'')+'" role="button"'+(off?'':' onclick="redeem(\''+esc(p.name)+'\','+p.price+')"')+'>'
+    + (p.off?'<span class="pc__off">⚡ '+p.off+'</span>':'')
+    + '<div class="pc__img '+p.img+'"><span class="txt">'+p.txt+'</span>'+(off?'<span class="pc__sold">已抢光</span>':'')+'</div>'
+    + '<div class="pc__name">'+p.name+'</div><div class="pc__stock">in stock '+fmt(p.stock)+'</div>'
     + '<div class="price"><i class="coin coin--pt">★</i><span class="price__now">'+fmt(p.price)+'</span>'
-    + (p.old?'<span class="price__old">'+fmt(p.old)+'</span>':'') + (p.unit?'<span class="g__sub" style="margin-left:2px">'+p.unit+'</span>':'') + '</div>'
-    + btn + '</article>';
+    + (p.old?'<i class="coin coin--old">★</i><span class="price__old">'+fmt(p.old)+'</span>':'') + '</div></article>';
 }
 /* 卡片 HTML：Flash Sales 横向大卡 */
-function cardFlash(p){
-  return '<article class="g"><div class="g__img '+p.img+'"><span class="g__off">'+p.off+'</span>'+p.txt+'</div><div class="g__body">'
-    + '<div class="g__name">'+p.name+'</div><div class="g__sub">'+p.sub+'</div>'
-    + '<div class="price"><i class="coin coin--pt">★</i><span class="price__now">'+fmt(p.price)+'</span><span class="price__old">'+fmt(p.old)+'</span></div>'
-    + '<div class="bar"><i style="width:'+p.pct+'%"></i></div><div class="g__left">'+p.left+'</div>'
-    + '<button class="btn-redeem" onclick="redeem(\''+esc(p.name)+'\','+p.price+')">Redeem now</button></div></article>';
+function cardFlash(p, i){
+  var off = p.stock===0;
+  return '<article class="fsc'+(off?' fsc--off':'')+'"><span class="fsc__off">⚡ '+p.off+'</span>'
+    + '<div class="fsc__img '+p.img+'"><span class="txt">'+p.txt+'</span>'+(off?'<span class="fsc__sold">已抢光</span>':'')+'</div><div class="fsc__body">'
+    + '<div class="cd js-fcd" data-i="'+i+'"><b class="d" hidden></b><span class="ds" hidden>:</span><b class="h"></b>:<b class="m"></b>:<b class="s"></b></div>'
+    + '<div class="fsc__name">'+p.name+'</div><div class="fsc__stock">in stock '+fmt(p.stock)+'</div>'
+    + '<div class="price"><i class="coin coin--pt">★</i><span class="price__now">'+fmt(p.price)+'</span><i class="coin coin--old">★</i><span class="price__old">'+fmt(p.old)+'</span></div>'
+    + '<button class="btn-redeem" '+(off?'disabled':'onclick="redeem(\''+esc(p.name)+'\','+p.price+')"')+'>Buy Now</button></div></article>';
+}
+/* 每张 Flash sale 卡自己的倒数（照设计图，倒数在卡上不在抬头；超过一天显示「7D」） */
+var FS_TICK = 0;
+function fsTick(){
+  var fl = PRODUCTS.filter(function(p){ return p.cat==='flash'; });
+  document.querySelectorAll('.js-fcd').forEach(function(el){
+    var left = Math.max(0, fl[+el.dataset.i].end - FS_TICK), d = Math.floor(left/86400);
+    el.querySelector('.d').hidden = d<1; el.querySelector('.ds').hidden = d<1; el.querySelector('.d').textContent = d+'D';
+    el.querySelector('.h').textContent = two(Math.floor(left%86400/3600));
+    el.querySelector('.m').textContent = two(Math.floor(left%3600/60));
+    el.querySelector('.s').textContent = two(left%60);
+  });
 }
 
 /* Flash Sales 张数「1/5」：左边那张是第几张；往右滑会跟着变 */
 function fsCount(){
   var row = document.getElementById('fsRow'), cards = row.children; if(!cards.length){ document.getElementById('fsN').textContent = '0/0'; return; }
   var step = cards[0].offsetWidth + 10, i = Math.min(cards.length, Math.round(row.scrollLeft/step)+1);
-  document.getElementById('fsN').textContent = i+'/'+cards.length;
+  document.getElementById('fsN').innerHTML = '<b>'+i+'</b>/'+cards.length;
 }
 document.getElementById('fsRow').addEventListener('scroll', fsCount);
-/* 首页：Flash Sales 横向区 ＋ 各分类区块（先露 HOME_SHOW 个，多的看 More） */
+/* 积分商城页：Flash sale 横向区 ＋ Recommend 推荐商品（后台勾选 rec 的） */
 function renderHome(){
-  var fl = PRODUCTS.filter(function(p){ return p.cat==='flash'; });   /* 首页 Flash Sales 在筛选列上方，不套筛选 */
+  var fl = PRODUCTS.filter(function(p){ return p.cat==='flash'; });
   document.getElementById('fsRow').innerHTML = fl.map(cardFlash).join('');
-  fsCount();
+  fsCount(); fsTick();
   document.getElementById('fsBlock').hidden = fl.length===0;
-  document.getElementById('homeSecs').hidden = !!curCat;
-  var html = '';
-  CATS.forEach(function(c){
-    var arr = listOf(c.key); if(!arr.length) return;
-    html += '<section class="csec"><h3 class="csec__t">'+c.name
-         + (arr.length>HOME_SHOW ? '<button class="csec__more" onclick="openCat(\''+c.key+'\')">More ›</button>' : '')
-         + '</h3><div class="grid">'+arr.slice(0,HOME_SHOW).map(cardSmall).join('')+'</div></section>';
-  });
-  document.getElementById('homeSecs').innerHTML = html || '<div class="grid__empty">没有可兑换的商品</div>';
+  var rec = sortEx(PRODUCTS.filter(function(p){ return p.rec; }));   /* 后台「是否推荐＝是」才进来；顺序照后台推荐排序 */
+  document.getElementById('recGrid').innerHTML = rec.map(cardSmall).join('');
+  document.getElementById('recBlock').hidden = rec.length===0;
 }
-/* 选了某分类：同一页换成该分类全部商品 */
-function renderCat(){
-  var grid = document.getElementById('catGrid');
-  if(!curCat){ grid.hidden = true; return; }
-  var arr = listOf(curCat); grid.hidden = false;
-  grid.innerHTML = arr.length ? arr.map(cardSmall).join('') : '<div class="grid__empty">没有可兑换的商品</div>';
+/* 商品页：ALL＝每个分类一张白卡（横向滑动＋More ›）；选分类／I Can Buy＝该范围全部商品 2 栏格 */
+function renderShop(){
+  var secs = document.getElementById('shopSecs'), cat = document.getElementById('shopCat');
+  secs.hidden = !!curCat; cat.hidden = !curCat;
+  document.getElementById('sortBtn').hidden = !curCat;
+  document.getElementById('sortArr').textContent = ['⇕','↑','↓'][priceSort];
+  document.getElementById('sortBtn').classList.toggle('sortbtn--on', priceSort>0);
+  if(!curCat){
+    var html = '';
+    CATS.forEach(function(c){
+      var arr = listOf(c.key); if(!arr.length) return;
+      html += '<section class="csec"><h3 class="csec__t">'+c.name+'<button class="csec__more" onclick="openCat(\''+c.key+'\')">More ›</button></h3>'
+           + '<div class="pgrid">'+arr.slice(0,2).map(cardSmall).join('')+'</div></section>';
+    });
+    secs.innerHTML = html || '<div class="grid__empty">没有可兑换的商品</div>';
+  }else{
+    var arr = sortPrice(listOf(curCat));
+    document.getElementById('catGrid').innerHTML = arr.length ? arr.map(cardSmall).join('') : '<div class="grid__empty">没有可兑换的商品</div>';
+  }
 }
-function renderAll(){ syncFilterBtns(); renderCats(); renderHome(); renderCat(); }
-/* 切页签（页签、More › 都走这里）：换完把页签列顶到画面最上面，商品从页签下方开始 */
+function renderAll(){ renderCats(); renderHome(); renderShop(); }
+/* 切页签（页签、More › 都走这里）：不在商品页就先进商品页，商品从页签下方开始 */
 function openCat(key){
-  curCat = key; renderAll();
-  var sc = document.getElementById('scroll'), nav = document.querySelector('#scr-mall .js-cats'), top = document.querySelector('#scr-mall .topbar');
-  sc.scrollTop = nav.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop - top.offsetHeight - 6;   /* 顶栏是钉住的，要扣掉它的高度 */
+  curCat = key; priceSort = 0; renderAll();   /* 换页签回预设排序 */
+  if(curScr()!=='shop') go('shop'); else document.getElementById('scroll').scrollTop = 0;
+  scrollCatIntoView();
 }
 
 /* 分类页签：照线上同一页切换。All＝各分类区块；其他＝该分类全部商品。已经在这个分类就不动 */
@@ -1191,6 +2678,7 @@ document.addEventListener('click', function(ev){
   var k = b.dataset.cat;
   if(k==='all') k = null;
   if(k===curCat) return;
+  if(k==='can' && !LOGGED){ needLogin(); return; }   /* 设计图：I Can Buy 需登录 */
   openCat(k);
 });
 renderAll(); renderGames();
@@ -1227,7 +2715,7 @@ function renderHist(){
     : '<div class="rec-empty"><i>📄</i>暂无任何内容</div>';
 }
 function renderEx(){
-  /* 分类胶囊：全部 ＋ 后台商品分类（跟首页页签同一份） */
+  /* 分类胶囊：全部 ＋ 后台商品分类（跟积分商城页页签同一份） */
   document.getElementById('exCats').innerHTML = '<button class="cat'+(exCat==='all'?' cat--on':'')+'" onclick="setEx(\'all\')">全部</button>'
     + CATS.map(function(c){ return '<button class="cat'+(exCat===c.key?' cat--on':'')+'" onclick="setEx(\''+c.key+'\')">'+c.name+'</button>'; }).join('');
   var arr = EXREC.filter(function(r){ return exCat==='all' || r.cat===exCat; });
@@ -1261,13 +2749,31 @@ renderHist(); renderEx(); renderBag();
 
 /* ---------- 兑换：先确认 → 积分够就成功，不够就提示 ---------- */
 var POPS = {
-  ok:   {ico:'🎉', t:'兑换成功', d:'奖励已发放，可在「背包中心」或「兑换记录」查看。', btns:[['知道了','btn-main--purple']]},
+  ok:   {ico:'🎉', t:'兑换成功', d:'奖励已发放，可在「我的背包」或「兑换记录」查看。', btns:[['知道了','btn-main--purple']]},
   lack: {ico:'😢', t:'积分不足', d:'目前积分 <b>'+MY_POINTS+'</b>，还差一点点。完成任务可赚更多积分。', btns:[['稍后再说','btn-ghost'],['去赚积分','btn-main','tasks']]}
 };
+/* 点商品＝开线上既有的购买弹窗（底部弹出）。兑换流程沿用既有，不重新定义 */
+var SHEET_QTY = 1, SHEET_P = null;
 function redeem(name, price){
-  if(price > MY_POINTS){ showPop('lack'); return; }
-  showPop({ico:'🛍️', t:'确认兑换', d:'将扣除 <b>★ '+price.toLocaleString()+'</b> 积分兑换「'+name+'」', btns:[['取消','btn-ghost'],['确认兑换','btn-main--purple','ok']]});
+  if(!LOGGED){ needLogin(); return; }
+  var p = PRODUCTS.filter(function(x){ return x.name===name && x.price===price; })[0] || {name:name, price:price, img:'img-item', txt:name};
+  SHEET_P = p; SHEET_QTY = 1; renderSheet();
+  document.getElementById('smask').classList.add('is-open');
 }
+function renderSheet(){
+  var p = SHEET_P;
+  document.getElementById('sheet').innerHTML =
+      '<div class="sheet__hd"><span>'+p.name+'<span class="i">ⓘ</span></span><button class="sheet__x" onclick="closeSheet()">✕</button></div>'
+    + '<div class="sheet__img '+p.img+'">'+p.txt+'</div>'
+    + '<div class="sheet__row"><span class="k">数量</span><span class="qty"><button onclick="sheetQty(-1)">−</button><span>'+SHEET_QTY+'</span><button onclick="sheetQty(1)">+</button></span></div>'
+    + '<div class="sheet__row"><span class="k">适用厂商</span><span>'+(p.sub||'—')+'</span></div>'
+    + '<div class="sheet__row"><span class="k">适用游戏</span><span>'+p.name+'</span></div>'
+    + '<div class="sheet__note">兑换后奖励将于 24 小时内发放，请至「我的背包」或「兑换记录」查看。</div>'
+    + '<button class="sheet__buy" onclick="sheetBuy()">购买 ★'+fmt(p.price*SHEET_QTY)+'</button>';
+}
+function sheetQty(d){ SHEET_QTY = Math.max(1, SHEET_QTY+d); renderSheet(); }
+function closeSheet(){ document.getElementById('smask').classList.remove('is-open'); }
+function sheetBuy(){ closeSheet(); }   /* 购买之后（积分不足、兑换成功）都是既有流程，原型不展示 */
 function showPop(p){
   if(typeof p==='string') p = POPS[p];
   var html = '<div class="pop__ico">'+p.ico+'</div><div class="pop__t">'+p.t+'</div><div class="pop__d">'+p.d+'</div><div class="pop__btns">';
@@ -1275,35 +2781,100 @@ function showPop(p){
   document.getElementById('pop').innerHTML = html + '</div>';
   document.getElementById('mask').classList.add('is-open');
 }
+/* 防呆（11/12 她定）：是否限时抢购＝是 → 是否推荐灰掉、固定「否」 */
+function setFlash(on){
+  var o=document.querySelectorAll('#flashRow .opt'); o[0].classList.toggle('on',!on); o[1].classList.toggle('on',on);
+  document.getElementById('flashMore').hidden=!on;
+  if(on) setRec(false);
+  document.querySelectorAll('#recRow .opt').forEach(function(x){ x.classList.toggle('dis',on); });
+  document.getElementById('recDisHint').hidden=!on;
+}
+function setRec(on){ var r=document.getElementById('recRow'); if(r.querySelector('.opt.dis')) return; var o=r.querySelectorAll('.opt'); o[0].classList.toggle('on',!on); o[1].classList.toggle('on',on); document.getElementById('recMore').hidden=!on; }
+function openDlg(mode){
+  var add = mode==='add';
+  document.getElementById('dlgTitle').textContent = add ? '新增商品' : '编辑商品';
+  document.getElementById('dlgIntro').hidden = !add;
+  var nm = document.getElementById('dlgName'); nm.textContent = add ? '请输入商品名称' : 'test Free spin acwin'; nm.style.color = add ? '#c0c4cc' : '';
+  document.getElementById('dlgPrice').firstChild.textContent = add ? '' : '100';
+  document.getElementById('dlgStock').textContent = add ? '0' : '200';
+  document.getElementById('dlgStockHint').textContent = add ? '0' : '196';
+  setFlash(false); setRec(!add);
+  document.getElementById('bkMask').classList.add('open');
+  document.getElementById('bkMask').scrollTop = 0;
+}
+function closeDlg(){ document.getElementById('bkMask').classList.remove('open'); }
 function closePop(){ document.getElementById('mask').classList.remove('is-open'); }
 
 /* ---------- 盲盒：Demo 抽一次 → 积分不够就提示 ---------- */
 function blindDraw(){
+  if(!LOGGED){ needLogin(); return; }
   if(curSet.blind.price > MY_POINTS){ showPop('lack'); return; }
   var cells = document.querySelectorAll('#bgrid .bcell'); var i = Math.floor(Math.random()*cells.length);
   cells.forEach(function(c){ c.classList.remove('bcell--hit'); }); cells[i].classList.add('bcell--hit');
 }
-function toggleSubs(b){ var el=document.getElementById('tgSubs'); el.hidden=!el.hidden; b.textContent = el.hidden ? 'View All(3) ⌄' : 'Collapse ⌃'; }
+function toggleSubs(b){ var el=b.parentNode.querySelector('.tg__subs'); el.hidden=!el.hidden; b.textContent = el.hidden ? 'View All(3) ⌄' : 'Collapse ⌃'; }
 function wtab(b, i){
   document.querySelectorAll('.wtab').forEach(function(x){ x.classList.toggle('wtab--on', x===b); });
   document.getElementById('wlist0').hidden = i!==0; document.getElementById('wlist1').hidden = i!==1;
 }
 
 /* ---------- 倒数：Flash Sales 跟任务倒数每秒跳 ---------- */
-var fsLeft = 155*86400+6*3600+29*60+32, taskLeft = 1*3600+39*60+59;   /* 限时抢购可以跨好几天：照既有前台，超过一天多显示「155D」 */
+var taskLeft = 1*3600+39*60+59;
 function two(n){ return (n<10?'0':'')+n; }
 setInterval(function(){
-  fsLeft--; taskLeft--;
-  var d = Math.floor(fsLeft/86400);
+  taskLeft--;
+  FS_TICK++; fsTick();
   function setAll(cls, fn){ document.querySelectorAll('.'+cls).forEach(fn); }
-  setAll('js-cdD', function(e){ e.hidden = d<1; e.textContent = d+'D'; });
-  setAll('js-cdDsep', function(e){ e.hidden = d<1; });
-  setAll('js-cdH', function(e){ e.textContent = two(Math.floor(fsLeft%86400/3600)); });
-  setAll('js-cdM', function(e){ e.textContent = two(Math.floor(fsLeft%3600/60)); });
-  setAll('js-cdS', function(e){ e.textContent = two(fsLeft%60); });
   var t = two(Math.floor(taskLeft/3600))+':'+two(Math.floor(taskLeft%3600/60))+':'+two(taskLeft%60);
   document.querySelectorAll('.t-task').forEach(function(e){ e.textContent = t; });
 }, 1000);
+</script>
+<script>
+/* ===== 桥接程序（规格书左栏连动用）=====
+   单独开启原型时（window.parent === window）完全不作用。⚠ 请勿删除，删了规格书就不会连动。 */
+(function(){
+  if (window.parent === window) return;
+  var css = document.createElement('style');
+  css.textContent = '.spec-hl{outline:3px solid #3b7cf6!important;outline-offset:4px;border-radius:6px;}'
+    + '.demo-hint,.demo-bar{display:none!important;}body{padding:12px!important;}';   /* 规格书左栏不放 demo 条：画面由右栏章节带（11/11 她） */
+  document.head.appendChild(css);
+  function tell(d){ d.src = 'proto'; window.parent.postMessage(d, '*'); }
+  function closeAll(){ closeSheet(); closePop(); closeDlg(); }
+  function flash(sel){
+    document.querySelectorAll('.spec-hl').forEach(function(x){ x.classList.remove('spec-hl'); });
+    var el = sel && document.querySelector(sel); if (!el) return;
+    var sc = document.getElementById('scroll'); if (sc && sc.contains(el)) sc.scrollTop = Math.max(0, el.offsetTop - 8);
+    el.classList.add('spec-hl');
+  }
+  window.addEventListener('message', function(e){
+    var d = e.data || {}; if (d.src !== 'spec') return;
+    closeAll();
+    document.querySelectorAll('.spec-hl').forEach(function(x){ x.classList.remove('spec-hl'); });
+    if (d.proto === 'admin') {
+      go(d.go === 'admincat' ? 'admincat' : 'admin');
+      if (d.pop === 'edit') openDlg(); else if (d.pop === 'add') openDlg('add');
+      window.scrollTo(0, 0); return;
+    }
+    if (d.login !== undefined && d.login !== LOGGED) toggleLogin(document.querySelector('.demo-tog'));
+    switch (d.go) {
+      case 'shop':    openCat(d.cat === undefined ? null : d.cat); break;
+      case 'ichiban': openGame('ichiban'); break;
+      case 'blind':   openGame('blind'); break;
+      case 'rec':     openRec('hist'); break;
+      case 'admin':   break;
+      default:        go(d.go || 'mall');
+    }
+    if (d.pop === 'sheet') { var p = PRODUCTS.filter(function(x){ return x.cat!=='flash' && x.stock!==0; })[0]; if (p) redeem(p.name, p.price); }
+    window.scrollTo(0, 0);
+    if (d.anchor) setTimeout(function(){ flash(d.anchor); }, 60);
+  });
+  /* 左栏自己点 demo 条 → 告诉规格书跳章节 */
+  document.addEventListener('click', function(e){
+    if (!e.isTrusted) return;
+    var b = e.target.closest('.demo-bar button[data-scr]'); if (b) tell({type:'go', go:b.dataset.scr});
+  });
+  tell({type:'ready'});
+})();
 </script>
 </body>
 </html>
