@@ -208,14 +208,29 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .front__bar span.is-on{background:#fff;color:#1f2329;font-weight:600;}
 .front{position:relative;}
 /* Hero 大图（＝奖励页大精选，后台栏位她说之后另加；前台先照设计稿留整块图位） */
-.h5-hero{margin:0 10px 12px;height:304px;border-radius:16px;overflow:hidden;position:relative;cursor:pointer;
+.h5-hero{margin:0 10px 12px;border-radius:16px;overflow:hidden;position:relative;}
+.h5-hero__bn{height:150px;position:relative;cursor:pointer;
   background:radial-gradient(60% 45% at 50% 38%,rgba(255,120,220,.55) 0%,rgba(255,120,220,0) 70%),radial-gradient(40% 30% at 18% 22%,rgba(255,200,80,.45) 0%,rgba(255,200,80,0) 70%),radial-gradient(40% 30% at 85% 25%,rgba(80,180,255,.4) 0%,rgba(80,180,255,0) 70%),linear-gradient(180deg,#5A1F9E 0%,#3B1A7A 55%,#1B0A3F 100%);}
 .h5-hero__coin{position:absolute;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FFE89A,#E8A600);box-shadow:0 2px 4px rgba(0,0,0,.35);}
-.h5-hero__panel{position:absolute;left:10px;right:10px;bottom:10px;height:78px;border-radius:12px;background:rgba(40,8,70,.75);border:1px solid rgba(255,255,255,.18);padding:12px 12px 0;}
-.h5-hero__lv{display:inline-block;width:44px;height:16px;border-radius:4px;background:linear-gradient(90deg,#C84BFF,#7A2BD9);}
+.h5-hero__cards{display:flex;gap:8px;padding:10px;overflow-x:auto;scrollbar-width:none;background:#2A0F5E;}
+.h5-hero__cards::-webkit-scrollbar{display:none;}
+.h5-hero__panel{flex:0 0 250px;position:relative;height:104px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);padding:12px 12px 0;color:#fff;font-size:12px;}
+.h5-hero__panel--all{flex-basis:270px;background:linear-gradient(180deg,#7A1F2A,#4A0F18);border-color:#F5C56B;display:flex;flex-direction:column;}
+.h5-hero__panel--all .h5-hero__t{font-weight:700;color:#FFE08A;}
+.h5-hero__amt{margin-top:4px;font-weight:700;font-size:15px;color:#FFD86B;}
+.h5-hero__cd{margin-top:auto;padding-bottom:8px;font-size:11px;color:#FFE08A;}
+.h5-hero__panel--done{opacity:.55;}
+.h5-hero__top{display:flex;justify-content:space-between;align-items:center;}
+.h5-hero__num{font-size:11px;opacity:.85;}
+.h5-hero__rw{position:absolute;left:12px;bottom:12px;font-size:12px;color:#FFD86B;}
+.h5-hero__lv{display:inline-block;padding:0 8px;height:18px;line-height:18px;border-radius:4px;font-weight:700;font-size:11px;background:linear-gradient(90deg,#C84BFF,#7A2BD9);}
 .h5-hero__bar{display:block;margin-top:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.18);overflow:hidden;}
 .h5-hero__bar i{display:block;width:100%;height:100%;background:linear-gradient(90deg,#FFD86B,#F5A623);}
-.h5-hero__btn{position:absolute;right:12px;bottom:12px;width:92px;height:36px;border-radius:8px;background:linear-gradient(180deg,#FF6A5C,#D8262A);box-shadow:0 3px 8px rgba(0,0,0,.35);}
+.h5-hero__btn{position:absolute;right:12px;bottom:10px;min-width:84px;height:30px;line-height:30px;padding:0 12px;text-align:center;border-radius:15px;font-weight:700;font-size:12px;color:#fff;background:linear-gradient(180deg,#FF6A5C,#D8262A);box-shadow:0 3px 8px rgba(0,0,0,.35);}
+.h5-hero__btn--go{background:linear-gradient(180deg,#5BD36B,#1E9A3A);}
+.h5-hero__btn--bet{background:linear-gradient(180deg,#FFD86B,#E8A600);color:#7A2A00;}
+.h5-hero__btn--off{background:linear-gradient(180deg,#D8D8D8,#9A9A9A);color:#555;box-shadow:none;}
+.h5-hero__btn--all{position:absolute;right:12px;top:34px;bottom:auto;background:linear-gradient(180deg,#FFD86B,#E8A600);color:#5A2A00;}
 
 /* ===== 前台 PC：1200 宽框，逻辑同 H5 ===== */
 .front--pc{align-items:flex-start;}
@@ -236,14 +251,12 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .pc-top__gap{flex:0 0 140px;}
 .pc-top{white-space:nowrap;}
 .pc-top__login{border:1px solid #1F5BFF;color:#1F5BFF;border-radius:14px;padding:3px 14px;font-size:13px;font-weight:600;}
-.pc-hero{margin:24px 48px 16px;height:320px;border-radius:14px;overflow:hidden;position:relative;cursor:pointer;
+.pc-hero{margin:24px 48px 16px;border-radius:14px;overflow:hidden;position:relative;}
+.pc-hero .h5-hero__bn{height:220px;
   background:radial-gradient(60% 45% at 50% 38%,rgba(255,120,220,.55) 0%,rgba(255,120,220,0) 70%),radial-gradient(40% 30% at 18% 22%,rgba(255,200,80,.45) 0%,rgba(255,200,80,0) 70%),linear-gradient(120deg,#2A0F5E 0%,#5B2BB5 55%,#8E5CE8 100%);}
 .pc-hero .h5-hero__coin{width:20px;height:20px;}
-.pc-hero__row{position:absolute;left:16px;right:16px;bottom:16px;display:flex;gap:16px;}
-.pc-hero__row .h5-hero__panel{position:relative;left:auto;right:auto;bottom:auto;flex:1 1 0;height:96px;padding:16px 16px 0;}
-.pc-hero__row .h5-hero__lv{width:56px;height:20px;}
-.pc-hero__row .h5-hero__bar{margin-top:14px;width:calc(100% - 130px);}
-.pc-hero__row .h5-hero__btn{right:16px;bottom:16px;width:110px;height:40px;}
+.pc-hero .h5-hero__cards{gap:16px;padding:16px;}
+.pc-hero .h5-hero__panel{flex:0 0 300px;height:110px;}
 .pc-picks{display:flex;gap:16px;margin:0 48px 16px;}
 .pc-pick{flex:1 1 0;background:#EAF1FF;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:0 2px 8px rgba(13,34,69,.06);}
 .pc-pick__img{width:64px;height:64px;border-radius:10px;background:radial-gradient(70% 70% at 50% 60%,var(--pk,#9CC3FF) 0%,#fff 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -880,8 +893,8 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
         <article class="panel" id="p-f2">
           <div class="panel__head"><span class="panel__num">3.2</span><h2 class="panel__title">前台 · 大精选</h2></div>
-          <p class="intro">顶栏下方独立一块，一张大图；图、关联活动、显不显示都照 2.1「大精选设置」。样式照设计稿。</p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">图</div><div class="rule__v">H5 大精选图整张填满，不轮播；图在 2.1「大精选设置」传，尺寸照设计稿。</div></div><div class="rule__row"><div class="rule__k">点击</div><div class="rule__v">进关联活动的既有 Event Details 弹窗。</div></div><div class="rule__row"><div class="rule__k">没有</div><div class="rule__v">不符合 2.1「大精选显不显示」任一条件，整块不显示，下方往上补。</div></div><div class="rule__row"><div class="rule__k">和下方的关系</div><div class="rule__v">大精选和活动卡、小精选各自照自己的设定显示，互不影响；关联活动的活动卡下方照常出。</div></div><div class="rule__row"><div class="rule__k">外显内容</div><div class="rule__v">关联活动的详情内容（关卡进度、领取）直接显示在大精选上，不用点进去；内容照既有联名挑战活动详情，样式照设计稿。除此之外图上不叠别的。</div></div></div></div>
+          <p class="intro">顶栏下方独立一块：上面一张 banner 图，下面一排可左右滑的关卡卡片。图、关联活动、显不显示都照 2.1「大精选设置」。左边示意只画结构和顺序，样式（卡片、按钮、颜色、字）一律以实际设计稿为主。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">banner 图</div><div class="rule__v">H5 大精选图整张填满，不轮播；图在 2.1「大精选设置」传，尺寸照设计稿。图上的「RULES」钮照联名挑战活动既有。</div></div><div class="rule__row"><div class="rule__k">点击</div><div class="rule__v">进关联活动的既有 Event Details 弹窗。</div></div><div class="rule__row"><div class="rule__k">没有</div><div class="rule__v">不符合 2.1「大精选显不显示」任一条件，整块不显示，下方往上补。</div></div><div class="rule__row"><div class="rule__k">和下方的关系</div><div class="rule__v">大精选和活动卡、小精选各自照自己的设定显示，互不影响；关联活动的活动卡下方照常出。</div></div><div class="rule__row"><div class="rule__k">关卡卡片</div><div class="rule__v">banner 下一排卡片，一张＝关联活动的一个关卡（Lv.1、Lv.2…），可左右滑动。卡片内容（进度、奖励、按钮）都照联名挑战活动既有，这里不另定。按钮只有 5 种样式：Claim（红）、Top-Up（绿）、Bet（金）、Claim All（金）、Claimed（灰）；灰色只有 Claimed，没有置灰的 Claim。</div></div><div class="rule__row"><div class="rule__k">卡片顺序</div><div class="rule__v">① 有可领的关卡时，第一张是「Claim All」卡：未领总额、Claim All 钮、每日任务重置倒数。② 接着是还没领的关卡，顺序照后台联名挑战活动的配置。③ 已领取（Claimed）的关卡排最后。</div></div><div class="rule__row"><div class="rule__k">当前任务</div><div class="rule__v">照后台配置顺序，第一张「还没达标、也还没领」的关卡。它之后的关卡（Bet 等）照配置顺序往后排。</div></div><div class="rule__row"><div class="rule__k">进页停在哪张</div><div class="rule__v">停在第一张：有可领就是 Claim All 卡，没有可领就是当前任务卡。都可以滑去看其他张。</div></div><div class="rule__row"><div class="rule__k">每日重置</div><div class="rule__v">关卡重置后卡片怎么回到未达标、Claimed 消失，照联名挑战活动既有。</div></div><div class="rule__row"><div class="rule__k">Claim All</div><div class="rule__v">点了把可领的关卡全部领取：那些卡变 Claimed 排到最后，Claim All 卡消失。领取结果、金额照既有。</div></div><div class="rule__row"><div class="rule__k">全部领完</div><div class="rule__v">没有 Claim All 卡，第一张是当前任务卡；全部关卡都领完就只剩 Claimed 卡。</div></div></div></div>
         </article>
 
         <article class="panel" id="p-f3">
@@ -930,7 +943,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="in" data-pv='{"proto":"pc","login":true,"anchor":".pc-hero"}'>已登录</button><button type="button" class="pv__btn" data-view="out" data-pv='{"proto":"pc","login":false,"anchor":".pc-top"}'>未登录</button></p>
           <div class="blk"><div class="blk__t">和 H5 的差别</div><div class="rule">
             <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v">不做 3.1 的顶栏，用站内既有顶部导航（已登录、未登录照站内既有）。既有 PC 奖励页的个人卡（头像、My points、My voucher、VIP Perks）、Hot Events、快捷入口整排（Points Mall、Task center、Daily Rebate 1.5%、Sign-In Rewards、Invite Your Friends）移除。</div></div>
-            <div class="rule__row"><div class="rule__k">大精选</div><div class="rule__v">图用 PC 大精选图（2.1 大精选设置，非必填）；没传 PC 图，PC 不显示大精选。联名挑战活动的详情内容同 H5 直接外显（3.2）。</div></div>
+            <div class="rule__row"><div class="rule__k">大精选</div><div class="rule__v">图用 PC 大精选图（2.1 大精选设置，非必填）；没传 PC 图，PC 不显示大精选。关卡卡片、顺序、Claim All 同 H5（3.2）。</div></div>
             <div class="rule__row"><div class="rule__k">小精选</div><div class="rule__v">图用 PC 首页浮窗图；每格＝图＋活动名称＋活动日期（3.3）。</div></div>
             <div class="rule__row"><div class="rule__k">活动卡</div><div class="rule__v">两栏；图用 PC 奖励列表图；叠的标签、倒数、按钮同 3.5。</div></div>
             <div class="rule__row"><div class="rule__k">底部</div><div class="rule__v">没有底部导航，没有 Rewards 角标；底部 banner 入口样式等设计稿。</div></div>
@@ -953,7 +966,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
         <article class="panel" id="p-todo">
           <div class="panel__head"><span class="panel__num">5</span><h2 class="panel__title">待确认事项</h2></div>
           <p class="intro">已定的：图片尺寸、夜间配色照设计稿；标签清单见 2.4；现有活动图重出；礼物钮见第 4 节；前台英文以规格书为准。还没定的四项。</p>
-          <div class="blk"><div class="blk__t">还没定</div><div class="rule"><div class="rule__row"><div class="rule__k">倒数周期（开发）</div><div class="rule__v">3.6「哪些算周期性」是推的，请逐一复核；大奖池活动、vip返水加码活动、周卡活动、联名挑战活动尤其要回。</div></div><div class="rule__row"><div class="rule__k">大精选样式（设计）</div><div class="rule__v">等设计稿。已定的：独立一块、一张大图、点图进详情、显不显示照 2.1 大精选设置。</div></div><div class="rule__row"><div class="rule__k">PC 版（设计）</div><div class="rule__v">逻辑已定（3.7）；底部 banner 入口样式等设计稿。</div></div><div class="rule__row"><div class="rule__k">素材和新旧包（开发）</div><div class="rule__v">总览写的「素材是既有功能，不受新旧包影响」请确认。</div></div></div></div>
+          <div class="blk"><div class="blk__t">还没定</div><div class="rule"><div class="rule__row"><div class="rule__k">倒数周期（开发）</div><div class="rule__v">3.6「哪些算周期性」是推的，请逐一复核；大奖池活动、vip返水加码活动、周卡活动、联名挑战活动尤其要回。</div></div><div class="rule__row"><div class="rule__k">大精选样式（设计）</div><div class="rule__v">等设计稿。已定的：独立一块、banner 图＋一排关卡卡片、点图进详情、显不显示照 2.1 大精选设置。</div></div><div class="rule__row"><div class="rule__k">PC 版（设计）</div><div class="rule__v">逻辑已定（3.7）；底部 banner 入口样式等设计稿。</div></div><div class="rule__row"><div class="rule__k">素材和新旧包（开发）</div><div class="rule__v">总览写的「素材是既有功能，不受新旧包影响」请确认。</div></div></div></div>
         </article>
 
       </main>
@@ -2214,6 +2227,20 @@ function cardTags(it){   // 图左上角金色角标＝后台选的那一个标�
   var t = (it.tags || [])[0]; if (!t) return '';
   var tg = tagByName(t); return '<span class="h5-tag">'+esc(tg ? langName(tg) : t)+'</span>';
 }
+/* 大精选关卡卡片（11/18 她定）：有可领 → 第一张 Claim All；接着未领的关卡照后台配置顺序；Claimed 排最后。
+   卡片内容、按钮状态照联名挑战活动既有，这里只示意；点 Claim All → 可领的变 Claimed 排最后、Claim All 消失 */
+var heroClaimed = false;   // 示意：按过 Claim All
+function heroCards(act){
+  var canClaim = frontLogin && act.pending && !heroClaimed;
+  var lv = function(n, tag, pct, btn, cls){ return '<div class="h5-hero__panel'+(cls==='off'?' h5-hero__panel--done':'')+'"><div class="h5-hero__top"><span><span class="h5-hero__lv">Lv.'+n+'</span>'+(tag?' <span class="h5-hero__num">'+tag+'</span>':'')+'</span><span class="h5-hero__num">3,650/5,000</span></div><span class="h5-hero__bar"><i style="width:'+pct+'%"></i></span><span class="h5-hero__rw">₱20</span><span class="h5-hero__btn'+(cls?' h5-hero__btn--'+cls:'')+'">'+btn+'</span></div>'; };
+  var cards = [];
+  if (canClaim) cards.push('<div class="h5-hero__panel h5-hero__panel--all" data-front-claimall><div class="h5-hero__t">Unclaimed Mission Rewards</div><div class="h5-hero__amt">283,923,893.99</div><span class="h5-hero__btn h5-hero__btn--all">Claim All</span><div class="h5-hero__cd">Daily Missions reset in: 10:09:23</div></div>');
+  if (canClaim) cards.push(lv(2, 'TOP-UP MISSION', 100, 'Claim', ''), lv(3, 'BONUS +20%', 100, 'Claim', ''));
+  cards.push(lv(4, '', 73, 'Bet', 'bet'), lv(5, 'TOP-UP MISSION', 30, 'Top-Up', 'go'), lv(6, '', 0, 'Bet', 'bet'));
+  cards.push(lv(1, '', 100, 'Claimed', 'off'));
+  if (frontLogin && act.pending && heroClaimed) cards.push(lv(2, 'TOP-UP MISSION', 100, 'Claimed', 'off'), lv(3, 'BONUS +20%', 100, 'Claimed', 'off'));
+  return '<div class="h5-hero__cards">'+cards.join('')+'</div>';
+}
 function renderFront(){
   var box = document.getElementById('h5'); if (!box) return;
   var vis = items.filter(function(x){ return onDev(x, 'H5'); }).filter(visibleNow).sort(function(a,b){ return ((frontLogin&&b.pending)?1:0) - ((frontLogin&&a.pending)?1:0) || b.sort - a.sort; });   // 照既有：可领最前，其余照奖励页排序；已结束的不特别往后排
@@ -2230,7 +2257,7 @@ function renderFront(){
     : '<div class="h5-top">'+logo+'<button type="button" class="h5-login">Register / Login</button><i class="h5-search"></i></div>';
   // 大精选（Hero 大图）＝2.1「大精选设置」：开关开、有 H5 图、关联的联名挑战活动在显示期内才显示（11/09 她定）
   var hero = heroAct();
-  if (hero) h += '<div class="h5-hero" data-front-hero data-front-open="'+hero.id+'" title="'+esc(hero.title)+'">'+[[22,40],[58,120],[300,60],[318,150],[200,30],[140,70]].map(function(c){ return '<i class="h5-hero__coin" style="left:'+c[0]+'px;top:'+c[1]+'px"></i>'; }).join('')+'<div class="h5-hero__panel"><span class="h5-hero__lv"></span><span class="h5-hero__bar"><i></i></span><span class="h5-hero__btn"></span></div></div>';
+  if (hero) h += '<div class="h5-hero" data-front-hero><div class="h5-hero__bn" data-front-open="'+hero.id+'" title="'+esc(hero.title)+'">'+[[22,40],[58,120],[300,60],[318,120],[200,30],[140,70]].map(function(c){ return '<i class="h5-hero__coin" style="left:'+c[0]+'px;top:'+c[1]+'px"></i>'; }).join('')+'</div>'+heroCards(hero)+'</div>';
   // 奖励页小精选：2.1 列表开了「小精选」的（最多 4 个），一格一个、显示其首页浮窗图（H5 图片），照奖励页排序；一个都没有整排不出
   var picks = pickList('H5');
   if (picks.length) h += '<div class="h5-picks">'+picks.map(function(it, i){ return '<div class="h5-pick h5-pick--'+(i%4)+'" data-front-open="'+it.id+'" title="'+esc(it.title)+'">'+ICO.pick[i%4]+'</div>'; }).join('')+'</div>';
@@ -2255,8 +2282,8 @@ function renderPC(){
     ? '<div class="pc-top"><span class="pc-top__me"><i class="h5-avatar"></i><i class="h5-coin h5-coin--p"></i>999.00 <span class="h5-refresh">⟳</span></span><span>Home</span><span>Sports</span><span>Tourney</span><b>Rewards</b><div class="pc-top__r"><span class="pc-top__invite">Invite</span><span class="pc-top__dep">Deposit<i>BONUS</i></span><i class="pc-top__ico"></i><i class="pc-top__ico pc-top__ico--sq"></i><i class="pc-top__ico"></i></div></div>'
     : '<div class="pc-top"><span class="pc-top__menu">☰</span><span class="h5-logo">OK<em>·</em>BET</span><span class="pc-top__gap"></span><span>Home</span><span>Sports</span><span>Tourney</span><b>Rewards</b><div class="pc-top__r"><span class="pc-top__login">Login</span><span class="pc-top__dep">Top-Up 20,000<i>BONUS</i></span><i class="pc-top__ico"></i><i class="pc-top__ico pc-top__ico--sq"></i><i class="pc-top__ico"></i></div></div>';
   var hero = HERO.pc ? heroAct() : null;   // PC 大精选图没传，PC 不显示大精选
-  if (hero) h += '<div class="pc-hero" data-front-open="'+hero.id+'" title="'+esc(hero.title)+'">'+[[60,50],[180,120],[520,70],[900,100],[1050,60],[700,160]].map(function(c){ return '<i class="h5-hero__coin" style="left:'+c[0]+'px;top:'+c[1]+'px"></i>'; }).join('')+
-    '<div class="pc-hero__row"><div class="h5-hero__panel"><span class="h5-hero__lv"></span><span class="h5-hero__bar"><i></i></span><span class="h5-hero__btn"></span></div><div class="h5-hero__panel"><span class="h5-hero__lv"></span><span class="h5-hero__bar"><i style="width:70%"></i></span></div></div></div>';   // 11/06 她定：PC 跟 H5 统一，联名挑战详情内容（关卡进度、领取）直接外显
+  if (hero) h += '<div class="pc-hero"><div class="h5-hero__bn" data-front-open="'+hero.id+'" title="'+esc(hero.title)+'">'+[[60,50],[180,120],[520,70],[900,100],[1050,60],[700,160]].map(function(c){ return '<i class="h5-hero__coin" style="left:'+c[0]+'px;top:'+c[1]+'px"></i>'; }).join('')+
+    '</div>'+heroCards(hero)+'</div>';   // 11/06 她定：PC 跟 H5 统一，关卡卡片直接外显
   var picks = pickList('PC');
   if (picks.length) h += '<div class="pc-picks">'+picks.map(function(it, i){ return '<div class="pc-pick pc-pick--'+(i%4)+'" data-front-open="'+it.id+'"><div class="pc-pick__img">'+ICO.pick[i%4]+'</div><div class="pc-pick__t"><div class="pc-pick__name">'+esc(it.title)+'</div><div class="pc-pick__date">'+esc(pcDate(it))+'</div></div></div>'; }).join('')+'</div>';
   h += '<div class="pc-body">';
@@ -2445,6 +2472,7 @@ document.addEventListener('click', function(e){
   // 活动类别 tab：点类别筛选列表，再点 All 取消
   if ((q = t.closest('[data-front-cat]'))) { frontCat = q.dataset.frontCat; renderFront(); return; }
   // 卡片、按钮都走现行路径：打开 Event Details 弹窗（内容照各活动既有），领取在弹窗里做；列表这层不直接领
+  if ((q = t.closest('[data-front-claimall]'))) { heroClaimed = true; renderFront(); message('Claim All（示意）'); return; }
   if ((q = t.closest('[data-front-btn]'))) { message('打开「'+byId(q.dataset.frontBtn).title+'」Event Details（示意）'); return; }
   if ((q = t.closest('[data-front-open]'))) { message('打开「'+byId(q.dataset.frontOpen).title+'」Event Details（示意）'); return; }
   // 画面切换

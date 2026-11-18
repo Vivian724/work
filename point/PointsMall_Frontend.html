@@ -108,6 +108,10 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .earn__head{display:flex;align-items:center;color:var(--c-text);font-weight:800;font-size:1rem;padding:0 2px;}
 .earn__head .ico{font-size:1.1rem;margin-right:6px;}
 .earn__head .more{margin-left:auto;font-size:.8rem;font-weight:500;color:var(--c-text-2);background:none;}
+/* 红点（11/17）：有奖励可领就亮，跟 Task List 页既有红点同一个条件；未登录不显示 */
+.earn__head .ico{position:relative;}
+.earn__head .dot{position:absolute;top:-1px;right:-3px;width:8px;height:8px;border-radius:50%;background:#ff3b30;}
+.earn__head .dot[hidden]{display:none;}
 .earn__row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -10px;padding:0 10px;}
 .earn__row::-webkit-scrollbar{display:none;}
 .earn__row .tk{flex:0 0 90%;scroll-snap-align:start;background:linear-gradient(180deg,#8db5ff 0%,#dbe8ff 60%,#f3f7ff 100%);border-radius:14px;}
@@ -1150,6 +1154,11 @@ html.spec-mode #protoRoot{display:none!important;}
 #specShell table.t th{ background:#f3f6fb; color: var(--c-text); }
 #specShell table.t td{ line-height:1.75; }
 #specShell table.t .nw{ white-space:nowrap; }
+#p-i18n table.t{ font-size:.78rem; line-height:1.5; }
+#p-i18n table.t td, #p-i18n table.t th{ padding:6px 8px; vertical-align:top; }
+#p-i18n table.t td:first-child{ min-width:7em; }
+#p-i18n table.t td small{ display:block; color:var(--c-text-3); font-size:.68rem; line-height:1.4; margin-top:2px; }
+#specShell .rule__note{ margin: var(--sp-2) 0 0; color: var(--c-text-2); font-size: var(--fs-sm); }
 #specShell .chip{ display:inline-block; min-width: 3.6em; text-align:center; padding: 0 .5em; border-radius: 4px; font-size: var(--fs-xs); font-weight:700; line-height:1.7; white-space:nowrap; }
 #specShell .chip--new{ background:#fde8e8; color:#c62828; }
 #specShell .chip--rename{ background:#fff3d6; color:#a15c00; }
@@ -1272,8 +1281,8 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
                 <li><b>Points Mall 商品页</b><span>新页面：ALL／I Can Buy／各分类页签</span><span class="lazy__ref">3.2</span></li>
                 <li><b>Playground</b><span>一座岛一种游戏，点岛进一番赏、盲盒</span><span class="lazy__ref">3.4</span></li>
                 <li><b>一番赏／盲盒</b><span>列表页改地图风格，等设计稿</span><span class="lazy__ref">3.5</span></li>
-                <li><b>积分记录页</b><span>积分历史、兑换记录合成一页两页签，英文 Points Records</span><span class="lazy__ref">3.7</span></li>
-                <li><b>我的背包</b><span>线上「My Voucher」改名 My Bag（「我的」页入口一起改），内容不变</span><span class="lazy__ref">3.8</span></li>
+                <li><b>积分历史页</b><span>线上积分历史、兑换记录合成一页两页签（积分记录｜兑换记录），页名照线上 Points History</span><span class="lazy__ref">3.7</span></li>
+                <li><b>我的背包</b><span>就是线上「My Voucher」，名称、内容都不变，只加一个快捷入口</span><span class="lazy__ref">3.8</span></li>
               </ul></div>
               <div class="lazy__card"><b class="lazy__t">后台</b><ul class="lazy__list">
                 <li><b>商品管理</b><span>表单加「是否推荐」开关（推荐排序、推荐时间），列表加「推荐」栏和筛选；列表改成排序数字大的在上面</span><span class="lazy__ref">2.1</span></li>
@@ -1348,12 +1357,13 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           </div></div>
 
           <div class="blk"><div class="blk__t">快捷入口</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">三格</div><div class="rule__v"><span class="chip chip--new">新增</span>VIP Perks → VIP 页（3.9）；Points Records → 积分记录页（3.7）；My Bag → 我的背包（3.8）。</div></div>
+            <div class="rule__row"><div class="rule__k">三格</div><div class="rule__v"><span class="chip chip--new">新增</span>VIP Perks → VIP 页（3.9）；Points History → 积分历史页（3.7）；My Voucher → 我的背包（3.8）。</div></div>
             <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v">点任一格直接去既有登录页。</div></div>
           </div></div>
 
           <div class="blk"><div class="blk__t">Task List</div><div class="rule">
             <div class="rule__row"><div class="rule__k">区块</div><div class="rule__v"><span class="chip chip--new">新增</span>标题「📋 Task List」＋「More ›」→ Task List 页（3.6）。</div></div>
+            <div class="rule__row"><div class="rule__k">红点</div><div class="rule__v"><span class="chip chip--new">新增</span>「📋」图示右上角一颗红点，提醒会员有奖励可领取。<br>1. 显示：任务中心的「我的」页入口有红点时，这里同步显示；任务中心红点消失，这里一起消失。条件、时机全照任务中心既有红点，不另定。<br>2. 样式：纯红点，不带数量。<br>3. 未登录：不显示。<br>4. 只在区块标题上，任务卡片不另加红点。</div></div>
             <div class="rule__row"><div class="rule__k">卡片</div><div class="rule__v">横向滑动，一次一张，同高同宽。卡＝任务名、倒数（限时才有）、进度条、奖励、已领人数、按钮。样式同 Task List 页，按钮照任务中心既有。</div></div>
             <div class="rule__row"><div class="rule__k">怎么取</div><div class="rule__v">1. 照 Task List 页「All」页签当下的顺序，取前 <b>3 项</b>：基础任务＝1 项，任务组＝1 项。<br>2. 基础任务＝1 张卡；任务组＝<b>每个子任务 1 张卡</b>，不放组抬头、不放 Extra Rewards。<br>3. 第 4 项起不显示，看全部按「More ›」。一项都没有：整块不显示。</div></div>
             <div class="rule__row"><div class="rule__k">张数</div><div class="rule__v">不设上限：取的是 3 项，不是 3 张卡。3 个任务组各 10 个子任务＝30 张（要不要设上限见第 5 节）。</div></div>
@@ -1476,15 +1486,15 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
         </article>
 
         <article class="panel" id="p-f7">
-          <div class="panel__head"><span class="panel__num">3.7</span><h2 class="panel__title">前台 · 积分记录页</h2></div>
-          <p class="intro">线上的「积分历史」「兑换记录」两页合成一页两页签，内容各自照线上。</p>
+          <div class="panel__head"><span class="panel__num">3.7</span><h2 class="panel__title">前台 · 积分历史页</h2></div>
+          <p class="intro">线上的「积分历史」「兑换记录」两页合成一页两页签（页签叫「积分记录」「兑换记录」），内容各自照线上。</p>
           <div class="blk"><div class="blk__t">规则</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「Points Records」，进来预设在「积分历史」页签。需登录。</div></div>
-            <div class="rule__row"><div class="rule__k">名称</div><div class="rule__v"><span class="chip chip--mod">修改</span>这页叫「积分记录」，英文「Points Records」；快捷入口、返回列标题都用这个名字。<br>两个页签英文照设计稿：「Points History」「Exchange Record」。</div></div>
-            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Points Records」返回列（3.10），往下滑钉在最上面。</div></div>
-            <div class="rule__row"><div class="rule__k">页签</div><div class="rule__v"><span class="chip chip--mod">修改</span>「Points History｜Exchange Record」两页签放同一张白卡，原本是两个独立页面。</div></div>
-            <div class="rule__row"><div class="rule__k">积分历史</div><div class="rule__v"><span class="chip chip--same">既有</span>内容照线上：ALL／Income／Expenses 筛选、「仅展示近 30 日」提示、每笔＝名称（含数量）、时间、收入绿字＋、支出红字−。排版照设计稿：筛选做成一排胶囊，每笔一张卡。</div></div>
-            <div class="rule__row"><div class="rule__k">兑换记录</div><div class="rule__v"><span class="chip chip--same">既有</span>内容照线上：分类胶囊（ALL＋商品分类）、红字延迟提示、每笔＝图、时间、名称、★ 积分、订单状态。排版照设计稿：每笔一张卡，状态做成右下角的钮（如 Completed、Delivering，状态值沿用既有）。</div></div>
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「Points History」，进来预设在「积分记录」页签。需登录。</div></div>
+            <div class="rule__row"><div class="rule__k">名称</div><div class="rule__v">页名照线上既有「积分历史 Points History」（翻译编号 A055）；快捷入口、返回列标题都用这个名字。<br>两个页签：「积分记录 Points Details」（A151）、「兑换记录 Redemption」（A152）。各语言见第 6 节。</div></div>
+            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Points History」返回列（3.10），往下滑钉在最上面。</div></div>
+            <div class="rule__row"><div class="rule__k">页签</div><div class="rule__v"><span class="chip chip--mod">修改</span>「Points Details｜Redemption」两页签放同一张白卡，原本是两个独立页面。</div></div>
+            <div class="rule__row"><div class="rule__k">「积分记录」页签</div><div class="rule__v"><span class="chip chip--same">既有</span>内容照线上：ALL／Income／Expenses 筛选、「仅展示近 30 日」提示、每笔＝名称（含数量）、时间、收入绿字＋、支出红字−。排版照设计稿：筛选做成一排胶囊，每笔一张卡。</div></div>
+            <div class="rule__row"><div class="rule__k">「兑换记录」页签</div><div class="rule__v"><span class="chip chip--same">既有</span>内容照线上：分类胶囊（ALL＋商品分类）、红字延迟提示、每笔＝图、时间、名称、★ 积分、订单状态。排版照设计稿：每笔一张卡，状态做成右下角的钮（如 Completed、Delivering，状态值沿用既有）。</div></div>
             <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
           </div></div>
         </article>
@@ -1493,11 +1503,10 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="panel__head"><span class="panel__num">3.8</span><h2 class="panel__title">前台 · 我的背包</h2></div>
           <p class="intro">前身＝线上「我的」页 Services 里的「My Voucher」（我的优惠券）。同一页换个名字，从积分商城也能进。</p>
           <div class="blk"><div class="blk__t">规则</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「My Bag」。需登录。</div></div>
-            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ My Bag」返回列（3.10），往下滑钉在最上面。</div></div>
-            <div class="rule__row"><div class="rule__k">名称</div><div class="rule__v"><span class="chip chip--mod">修改</span>页面标题「我的背包」，英文「My Bag」。</div></div>
-            <div class="rule__row"><div class="rule__k">「我的」页入口</div><div class="rule__v"><span class="chip chip--mod">修改</span>前台「我的」› Services 的「My Voucher」一起改名「My Bag」，图标不变，点进来还是同一页。</div></div>
-            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>未使用／待结算／已使用／已过期四页签、票卡（图、名称、获得日期、失效日期、立即使用）、右上规则钮。</div></div>
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「My Voucher」。需登录。</div></div>
+            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ My Voucher」返回列（3.10），往下滑钉在最上面。</div></div>
+            <div class="rule__row"><div class="rule__k">名称</div><div class="rule__v"><span class="chip chip--same">既有</span>名称照线上「My Voucher」，不改。</div></div>
+                        <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>未使用／待结算／已使用／已过期四页签、票卡（图、名称、获得日期、失效日期、立即使用）、右上规则钮。</div></div>
             <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
           </div></div>
         </article>
@@ -1518,9 +1527,9 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <p class="intro">哪些不登录也能看、哪些要登录；返回键一律回进来前那一页。</p>
           <div class="blk"><div class="blk__t">规则</div><div class="rule">
             <div class="rule__row"><div class="rule__k">不登录能看</div><div class="rule__v">积分商城页整页（顶栏换 logo＋Register / Login）、Points Mall 商品页的 ALL 和各分类、Playground、一番赏／盲盒的列表页和抽奖页（按抽奖才要登录）、Task List 页（列哪些照任务中心未登录既有规则）。</div></div>
-            <div class="rule__row"><div class="rule__k">要登录</div><div class="rule__v">VIP Perks、Points Records、My Bag、I Can Buy 页签、点商品或 Redeem Now、抽奖。未登录点到就直接去既有登录页，不另做提示弹窗。</div></div>
+            <div class="rule__row"><div class="rule__k">要登录</div><div class="rule__v">VIP Perks、Points History、My Voucher、I Can Buy 页签、点商品或 Redeem Now、抽奖。未登录点到就直接去既有登录页，不另做提示弹窗。</div></div>
             <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">钱包顶栏（头像、₱、★、Deposit、搜索）只有积分商城页（3.1）有。其他每一页最上面都是「‹ 标题」列：左边返回键、标题置中，往下滑钉在最上面。</div></div>
-            <div class="rule__row"><div class="rule__k">返回列标题</div><div class="rule__v">那条「‹ 标题」列的标题＝该页自己的名称（商品页 Points Mall、积分记录页 Points Records、Task List 页 Task List、Playground、各游戏页＝游戏名、我的背包 My Bag），不是来源页的名称。</div></div>
+            <div class="rule__row"><div class="rule__k">返回列标题</div><div class="rule__v">那条「‹ 标题」列的标题＝该页自己的名称（商品页 Points Mall、积分历史页 Points History、Task List 页 Task List、Playground、各游戏页＝游戏名、我的背包 My Voucher），不是来源页的名称。</div></div>
             <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">所有二级页的返回键回「进来前那一页」，并停在原本卷到的位置。例：从 Playground 进 Task List，返回回 Playground。</div></div>
           </div></div>
         </article>
@@ -1541,7 +1550,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="blk"><div class="blk__t">二、照既有，不改</div><div class="rule">
             <div class="rule__row rule__row--plain"><div class="rule__v">购买弹窗、积分不足、兑换成功、扣积分、发放、限购、审核模式。</div></div>
             <div class="rule__row rule__row--plain"><div class="rule__v">一番赏、盲盒的抽奖页、抽奖逻辑、奖品发放、Recent Winners／My Rewards。</div></div>
-            <div class="rule__row rule__row--plain"><div class="rule__v">任务中心的任务、按钮、领取逻辑、排序（后台排序值，已完成移到最后，子任务已完成移到该组最下面）；VIP 页；我的背包（原 My Voucher）页内容；积分历史、兑换记录的资料。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v">任务中心的任务、按钮、领取逻辑、排序（后台排序值，已完成移到最后，子任务已完成移到该组最下面）；VIP 页；我的背包（My Voucher）页内容；积分记录、兑换记录两个页签的资料。</div></div>
             <div class="rule__row rule__row--plain"><div class="rule__v">后台商品管理、商品类别管理的既有栏位；限时抢购整套逻辑（条件、时间、过期自动下架、在分类里怎么出现）全部照既有。</div></div>
           </div></div>
         </article>
@@ -1553,8 +1562,28 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="blk"><div class="blk__t">还没定</div><div class="rule">
             <div class="rule__row"><div class="rule__k">一番赏／盲盒列表（设计）</div><div class="rule__v">设计稿还在设计中、未定案（11/12）。定案后补 3.5 和左栏示意。已定的：地图风格、一套一个摊位、摊位上要放图、名称、期数、价格、库存。</div></div>
             <div class="rule__row"><div class="rule__k">Task List 卡片上限</div><div class="rule__v">积分商城页 Task List 取前 3 项，卡片张数没有上限（3 项都是任务组、每组 10 个子任务＝30 张卡）。要确认：接受这个结果，还是另设卡片张数上限（3.1）。</div></div>
-            <div class="rule__row"><div class="rule__k">英文文案（运营）</div><div class="rule__v">已定的：Points Mall、Points Records、My Bag、VIP Perks、Task List。其余按钮、标题英文由运营定，规格书以中文为准。</div></div>
+            <div class="rule__row"><div class="rule__k">英文文案（运营）</div><div class="rule__v">已定的：Points Mall、Points History（A055 既有）、Points Details、Redemption、VIP Perks（P424 既有）、Task List；我的背包照线上 My Voucher。各语言见第 6 节。照设计稿的：Redeem Now、ALL／Income／Expenses。其余按钮、标题英文由运营定，规格书以中文为准。</div></div>
             <div class="rule__row"><div class="rule__k">PC 版</div><div class="rule__v">H5 定案后再做。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-i18n">
+          <div class="panel__head"><span class="panel__num">6</span><h2 class="panel__title">翻译</h2></div>
+          <p class="intro">前端文案一律吃线上翻译表的 key。本次变动 8 句：P424、A055、A065 既有，仅英文改大小写；A151～A155 新增。</p>
+          <div class="blk"><div class="blk__t">本次变动的 8 句</div>
+            <table class="t"><thead><tr><th class="nw">编号</th><th class="nw">简中／位置</th><th class="nw">英文</th><th>菲律宾</th><th>越南</th><th>宿雾</th></tr></thead><tbody>
+              <tr><td class="nw">P424</td><td>VIP 特权<small>主页快捷入口（既有，英文改大写）</small></td><td>VIP Perks</td><td>VIP Perks</td><td>Ưu đãi VIP</td><td>VIP Perks</td></tr>
+              <tr><td class="nw">A055</td><td>积分历史<small>主页快捷入口、记录页返回列（既有，英文改大写）</small></td><td>Points History</td><td>History ng puntos</td><td>Lịch sử điểm</td><td>Kasaysayan sa puntos</td></tr>
+              <tr><td class="nw">A065</td><td>我能购买<small>商品页页签（既有，英文改大写）</small></td><td>I Can Buy</td><td>Kaya kong bumili</td><td>Tôi có thể mua</td><td>Mahimo kong mapalit</td></tr>
+              <tr><td class="nw">A151</td><td>积分记录<small>记录页页签 1（新增）</small></td><td>Points Details</td><td>Detalye ng Puntos</td><td>Chi tiết điểm</td><td>Detalye sa Puntos</td></tr>
+              <tr><td class="nw">A152</td><td>兑换记录<small>记录页页签 2（新增）</small></td><td>Redemption</td><td>Pag-redeem</td><td>Đổi thưởng</td><td>Pag-redeem</td></tr>
+              <tr><td class="nw">A153</td><td>更多<small>主页 Task List、Recommend 右上；商品页各分类右上（新增）</small></td><td>More</td><td>Higit pa</td><td>Thêm</td><td>Dugang pa</td></tr>
+              <tr><td class="nw">A154</td><td>游乐场<small>主页区块标题、游乐场页返回列（新增）</small></td><td>Playground</td><td>Palaruan</td><td>Sân chơi</td><td>Dulaanan</td></tr>
+              <tr><td class="nw">A155</td><td>去玩<small>主页游乐场区块右上（新增）</small></td><td>Play</td><td>Laro</td><td>Chơi</td><td>Dula</td></tr>
+            </tbody></table>
+          </div>
+          <div class="blk"><div class="blk__t">不翻的</div><div class="rule">
+            <div class="rule__row rule__row--plain"><div class="rule__v">游戏名、商品名、币别符号 ₱、积分 ★，各语言照抄英文。</div></div>
           </div></div>
         </article>
 
@@ -1574,7 +1603,8 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
     { num: '2', title: '后台：怎么配' },
     { num: '3', title: '前台：看到什么' },
     { num: '4', title: '不异动' },
-    { num: '5', title: '待确认' }
+    { num: '5', title: '待确认' },
+    { num: '6', title: '翻译' }
   ];
   var PANELS = [
     { id: 'p-map',  chap: '1', nav: '总览' },
@@ -1586,12 +1616,13 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
     { id: 'p-f4',   chap: '3', num: '3.4',  nav: 'Playground',      proto: 'h5', go: 'play' },
     { id: 'p-f5',   chap: '3', num: '3.5',  nav: '一番赏／盲盒',    proto: 'h5', go: 'ichiban' },
     { id: 'p-f6',   chap: '3', num: '3.6',  nav: 'Task List 页',    proto: 'h5', go: 'tasks' },
-    { id: 'p-f7',   chap: '3', num: '3.7',  nav: '积分记录页',      proto: 'h5', go: 'rec', login: true },
+    { id: 'p-f7',   chap: '3', num: '3.7',  nav: '积分历史页',      proto: 'h5', go: 'rec', login: true },
     { id: 'p-f8',   chap: '3', num: '3.8',  nav: '我的背包',        proto: 'h5', go: 'bag', login: true },
     { id: 'p-f9',   chap: '3', num: '3.9',  nav: 'VIP 页',          proto: 'h5', go: 'vip', login: true },
     { id: 'p-f10',  chap: '3', num: '3.10', nav: '登录与返回',      proto: 'h5', go: 'mall', login: false },
     { id: 'p-same', chap: '4', nav: '不改的既有' },
-    { id: 'p-todo', chap: '5', nav: '待确认' }
+    { id: 'p-todo', chap: '5', nav: '待确认' },
+    { id: 'p-i18n', chap: '6', nav: '翻译' }
   ];
   var GO_PANEL = { mall: 'p-f1', shop: 'p-f2', play: 'p-f4', ichiban: 'p-f5', blind: 'p-f5', tasks: 'p-f6', rec: 'p-f7', bag: 'p-f8', vip: 'p-f9', admin: 'p-b1', admincat: 'p-b2' };
 
@@ -1697,7 +1728,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
       <button data-scr="play" onclick="go('play')">游乐场 Playground</button>
       <button data-scr="ichiban" onclick="openGame('ichiban')">一番赏列表（多套）</button>
       <button data-scr="blind" onclick="openGame('blind')">Slot Kingdom 盲盒列表（多套）</button>
-      <button data-scr="rec" onclick="openRec('hist')">积分记录（积分历史/兑换记录）</button>
+      <button data-scr="rec" onclick="openRec('hist')">积分历史（积分记录/兑换记录）</button>
       <button data-scr="bag" onclick="go('bag')">我的背包</button>
       <button data-scr="vip" onclick="go('vip')">VIP 俱乐部</button>
       <button class="demo-tog" onclick="toggleLogin(this)">切换登录状态：已登录</button>
@@ -1735,16 +1766,16 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           </div>
         </header>
 
-        <!-- 快捷入口：VIP Perks／Points Records／My Bag（英文照设计图）；未登录点了先弹「请先登录」 -->
+        <!-- 快捷入口：VIP Perks／Points History／My Voucher（我的背包照线上既有名称）；未登录点了先弹「请先登录」 -->
         <nav class="quick" aria-label="快捷入口">
           <button class="quick__item" onclick="auth(function(){ go('vip'); })"><span class="quick__ico">🏅</span><span class="quick__t">VIP Perks</span></button>
-          <button class="quick__item" onclick="auth(function(){ openRec('hist'); })"><span class="quick__ico">📖</span><span class="quick__t">Points Records</span></button>
-          <button class="quick__item" onclick="auth(function(){ go('bag'); })"><span class="quick__ico">🎒</span><span class="quick__t">My Bag</span></button>
+          <button class="quick__item" onclick="auth(function(){ openRec('hist'); })"><span class="quick__ico">📖</span><span class="quick__t">Points History</span></button>
+          <button class="quick__item" onclick="auth(function(){ go('bag'); })"><span class="quick__ico">🎒</span><span class="quick__t">My Voucher</span></button>
         </nav>
 
         <!-- Task List 区（11/12 她定）：照任务中心后台排序取前 3 个（基础任务算 1、任务组算 1）；任务组＝列出该组全部子任务卡，不放组抬头、不放 Extra Rewards。示范：任务组(3 子任务)＋2 个基础任务 -->
         <section class="earn" aria-label="赚积分任务">
-          <div class="earn__head"><span class="ico">📋</span>Task List <button class="more" onclick="go('tasks')">More ›</button></div>
+          <div class="earn__head"><span class="ico">📋<i class="dot" id="earnDot" data-tb="in"></i></span>Task List <button class="more" onclick="go('tasks')">More ›</button></div>
           <!-- 任务卡横向滑动（11/10 设计图：露出下一张一角），照任务中心既有排序；More › 进 Task List 页 -->
           <div class="earn__row">
             <!-- 任务组（11/12 她定）：只放它的子任务，每个子任务一张卡，样式同 Task List 页里的子任务卡；不放组抬头、不放 Extra Rewards -->
@@ -1870,11 +1901,11 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
            两边内容照线上：积分历史＝全部/收入/支出 ＋「仅展示近30日数据」；兑换记录＝分类胶囊 ＋ 延迟提示
            =================================================== -->
       <section class="screen" id="scr-rec">
-        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">Points Records</span></header>
+        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">Points History</span></header>
         <!-- 11/13 设计图：白卡＝两个页签＋筛选胶囊列；红字提示；每笔记录一张卡。文案照设计图 -->
         <nav class="rec-tabs" aria-label="记录页签">
-          <button class="rec-tab" data-rec="hist" onclick="openRec('hist')">Points History</button>
-          <button class="rec-tab" data-rec="ex" onclick="openRec('ex')">Exchange Record</button>
+          <button class="rec-tab" data-rec="hist" onclick="openRec('hist')">Points Details</button>
+          <button class="rec-tab" data-rec="ex" onclick="openRec('ex')">Redemption</button>
         </nav>
         <div class="rec-body">
           <!-- 积分历史 -->
@@ -1939,7 +1970,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
            画面：我的背包（前身＝线上「我的票券」：未使用/待结算/已使用/已过期，票卡＝图＋名称＋获得/失效日期＋立即使用）
            =================================================== -->
       <section class="screen" id="scr-bag">
-        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">我的背包</span><button class="tl-head__rules" style="position:absolute;right:14px" aria-label="规则">📄</button></header>
+        <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">My Voucher</span><button class="tl-head__rules" style="position:absolute;right:14px" aria-label="规则">📄</button></header>
         <nav class="bag-tabs" aria-label="背包页签">
           <button class="bag-tab bag-tab--on" onclick="setBag('new',this)">未使用(2)</button>
           <button class="bag-tab" onclick="setBag('wait',this)">待结算(0)</button>
@@ -2457,7 +2488,7 @@ function toggleLogin(b){
   b.textContent = '切换登录状态：'+(LOGGED ? '已登录' : '未登录');
   if(!LOGGED) go('mall');
 }
-/* 未登录点需登录的功能（VIP、Points Records、My Bag、I Can Buy、商品）＝直接去既有登录页，跟点 Register / Login 一样；不另做弹窗 */
+/* 未登录点需登录的功能（VIP、Points History、My Voucher、I Can Buy、商品）＝直接去既有登录页，跟点 Register / Login 一样；不另做弹窗 */
 function needLogin(){ go('login'); }
 function auth(fn){ if(!LOGGED){ needLogin(); return; } fn(); }
 function togglePoints(b){
