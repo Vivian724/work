@@ -236,35 +236,64 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino San
 .front--pc{align-items:flex-start;}
 .pcwrap{width:1200px;background:#F5F7FB;border-radius:8px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35);}
 .pc{font-family:inherit;color:#0D2245;padding-bottom:40px;}
+/* 左侧边栏：照站内既有（11/20 她给截图，英文版）；☰ 收合只剩 icon */
+.pc-main{display:flex;align-items:stretch;}
+.pc-content{flex:1 1 0;min-width:0;}
+.pc-side{flex:0 0 240px;background:#fff;border-right:1px solid #E6ECF5;padding:14px 10px 24px;font-size:13px;color:#4A5B78;box-sizing:border-box;}
+.pc-side__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:0 4px;}
+.pc-side__lang{display:inline-flex;align-items:center;gap:6px;background:#F3F6FB;border-radius:14px;padding:4px 10px;font-size:12px;font-weight:600;color:#0D2245;}
+.pc-side__lang i{width:16px;height:16px;border-radius:50%;background:linear-gradient(#B22234 0 50%,#3C3B6E 50%);}
+.pc-side__sw{width:38px;height:20px;border-radius:10px;background:#1F5BFF;position:relative;} .pc-side__sw::after{content:"";position:absolute;right:3px;top:3px;width:14px;height:14px;border-radius:50%;background:#fff;}
+.pc-side__pay{display:flex;gap:8px;margin-bottom:10px;padding:0 4px;} .pc-side__pay span{flex:1;height:34px;line-height:34px;border-radius:8px;text-align:center;font-weight:600;font-size:12px;color:#0D2245;}
+.pc-side__pay .dep{background:#FFF3DC;} .pc-side__pay .wd{background:#E7EEFF;}
+.pc-side__sec{display:flex;align-items:center;justify-content:space-between;padding:12px 8px 6px;font-weight:700;color:#0D2245;font-size:14px;} .pc-side__sec i{font-style:normal;color:#7F8DA6;font-size:11px;}
+.pc-side__it{display:flex;align-items:center;gap:10px;padding:0 8px;height:36px;border-radius:8px;cursor:pointer;white-space:nowrap;}
+.pc-side__ico{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;position:relative;flex-shrink:0;}
+.pc-side__dot{position:absolute;top:-3px;right:-4px;width:8px;height:8px;border-radius:50%;background:#F53F3F;border:1.5px solid #fff;box-sizing:content-box;}
+.pc-side__it.is-on{background:#1F5BFF;color:#fff;font-weight:700;}
+.pc-side__n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+.pc-side__bd{font-size:11px;padding:1px 7px;border-radius:9px;background:#EEF2F8;color:#5B6B85;}
+.pc-side__bd--hot{background:#FF8A1E;color:#fff;font-style:italic;font-weight:700;} .pc-side__bd--ok{background:#36B37E;color:#fff;}
+.pc-side.is-mini{flex-basis:56px;padding:14px 8px;}
+.pc-side.is-mini .pc-side__top,.pc-side.is-mini .pc-side__pay,.pc-side.is-mini .pc-side__sec,.pc-side.is-mini .pc-side__n,.pc-side.is-mini .pc-side__bd{display:none;}
+.pc-side.is-mini .pc-side__it{justify-content:center;padding:0;width:40px;height:40px;margin:2px auto;}
 .pc-top{height:52px;background:#fff;display:flex;align-items:center;gap:34px;padding:0 48px;box-shadow:0 1px 0 #E6ECF5;font-size:15px;color:#4A5B78;}
 .pc-top b{color:#1F5BFF;position:relative;font-weight:600;} .pc-top b::after{content:"";position:absolute;left:0;right:0;bottom:-17px;height:3px;background:#1F5BFF;border-radius:2px;}
-.pc-top__r{margin-left:auto;display:flex;align-items:center;gap:14px;}
-.pc-top__invite{background:#FFE9E3;color:#E0342D;border-radius:14px;padding:3px 10px;font-size:13px;font-weight:600;}
+.pc-top__nav{position:absolute;left:0;right:0;top:0;height:52px;display:flex;justify-content:center;align-items:center;gap:52px;pointer-events:none;}
+.pc-top{position:relative;}
+.pc-top__nav b{position:relative;} .pc-top__badge{position:absolute;top:-10px;right:-18px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#F53F3F;color:#fff;font-size:11px;line-height:18px;font-weight:700;text-align:center;font-style:normal;}
+.pc-top__r{margin-left:auto;display:flex;align-items:center;gap:16px;}
+.pc-top__icon{width:22px;height:22px;position:relative;display:inline-block;}
+.pc-top__icon svg{width:22px;height:22px;display:block;fill:none;stroke:#5B6B85;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.pc-top__icon--mail svg{stroke:#1F5BFF;fill:#1F5BFF;} .pc-top__icon--mail svg path{stroke:#fff;} .pc-top__icon--mail i{position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:#F53F3F;border:1.5px solid #fff;}
+.pc-top__icon--me svg{fill:#5B6B85;stroke:none;}
+.pc-top__invite{background:linear-gradient(180deg,#FF8A5B,#E8453C);color:#fff;border-radius:14px;padding:4px 12px 4px 10px;font-size:13px;font-weight:700;}
 .pc-top__dep{background:#1F5BFF;color:#fff;border-radius:14px;padding:3px 14px;font-size:13px;font-weight:600;position:relative;}
-.pc-top__dep i{position:absolute;right:-8px;top:-9px;background:#F5B800;color:#1A0E1E;font-size:9px;font-weight:800;padding:1px 5px;border-radius:6px;font-style:normal;transform:rotate(12deg);}
+.pc-top__dep--gold{background:linear-gradient(180deg,#FFD86B,#E8A600);color:#7A2A00;padding:9px 14px 3px;font-size:12px;} .pc-top__dep--gold i{right:auto;left:50%;transform:translateX(-50%);top:-4px;}
+.pc-top__dep i{position:absolute;right:-6px;top:-9px;background:#E8453C;color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:6px;font-style:normal;}
 .pc-top__ico{width:18px;height:18px;border-radius:50%;border:2px solid #4A5B78;}
 .pc-top__ico--sq{border-radius:3px;}
 .pc-top__me{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#0D2245;margin-right:12px;}
 .pc-top__me .h5-avatar{width:28px;height:28px;}
 .pc-top .h5-logo{flex:0 0 auto;margin-right:0;}
-.pc-top__menu{color:#1F5BFF;font-size:18px;margin-right:-22px;}
+.pc-top__menu{color:#1F5BFF;font-size:18px;margin-right:-22px;cursor:pointer;}
 .pc-top__gap{flex:0 0 140px;}
 .pc-top{white-space:nowrap;}
-.pc-top__login{border:1px solid #1F5BFF;color:#1F5BFF;border-radius:14px;padding:3px 14px;font-size:13px;font-weight:600;}
-.pc-hero{margin:24px 48px 16px;border-radius:14px;overflow:hidden;position:relative;}
+.pc-top__login{border:1.5px solid #1F5BFF;color:#1F5BFF;border-radius:14px;padding:3px 14px;font-size:13px;font-weight:600;}
+.pc-hero{margin:24px 24px 16px;border-radius:14px;overflow:hidden;position:relative;}
 .pc-hero .h5-hero__bn{height:220px;
   background:radial-gradient(60% 45% at 50% 38%,rgba(255,120,220,.55) 0%,rgba(255,120,220,0) 70%),radial-gradient(40% 30% at 18% 22%,rgba(255,200,80,.45) 0%,rgba(255,200,80,0) 70%),linear-gradient(120deg,#2A0F5E 0%,#5B2BB5 55%,#8E5CE8 100%);}
 .pc-hero .h5-hero__coin{width:20px;height:20px;}
 .pc-hero .h5-hero__cards{gap:16px;padding:16px;}
 .pc-hero .h5-hero__panel{flex:0 0 300px;height:110px;}
-.pc-picks{display:flex;gap:16px;margin:0 48px 16px;}
-.pc-pick{flex:1 1 0;background:#EAF1FF;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:0 2px 8px rgba(13,34,69,.06);}
-.pc-pick__img{width:64px;height:64px;border-radius:10px;background:radial-gradient(70% 70% at 50% 60%,var(--pk,#9CC3FF) 0%,#fff 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.pc-pick__img svg{width:36px;height:36px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25));}
+.pc-picks{display:flex;gap:16px;margin:0 24px 16px;}
+.pc-pick{flex:1 1 0;min-width:0;background:#EAF1FF;border-radius:12px;padding:10px 10px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 2px 8px rgba(13,34,69,.06);}
+.pc-pick__img{width:56px;height:56px;border-radius:10px;background:radial-gradient(70% 70% at 50% 60%,var(--pk,#9CC3FF) 0%,#fff 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pc-pick__img svg{width:32px;height:32px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25));}
 .pc-pick--0{--pk:#7FA8FF;} .pc-pick--1{--pk:#FF9ED1;} .pc-pick--2{--pk:#FF8A8A;} .pc-pick--3{--pk:#FFD36B;}
 .pc-pick__t{min-width:0;} .pc-pick__name{font-size:16px;font-weight:700;color:#1F5BFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pc-pick__date{font-size:12px;color:#5B6B85;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pc-body{margin:0 48px;background:#fff;border-radius:14px;padding:14px 16px 16px;}
+.pc-pick__date{font-size:12px;color:#5B6B85;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px;}
+.pc-body{margin:0 24px;background:#fff;border-radius:14px;padding:14px 16px 16px;}
 .pc-cats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
 .pc-list{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .pc-list .h5-thumb{height:242px;}
@@ -416,6 +445,7 @@ html.spec-mode body{
 }
 #specShell .pane-bar__title{ font-weight: 600; white-space: nowrap; }
 #specShell .pane-bar__hint{ color: #a9aeb8; font-size: var(--fs-xs); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#specShell .pane-bar__hint:empty{ display: none; }
 #specShell .pane-bar__spacer{ flex: 1 1 auto; }
 #specShell .pane-bar__btn{
   padding: 2px var(--sp-3);
@@ -915,7 +945,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="panel__head"><span class="panel__num">3.5</span><h2 class="panel__title">前台 · 活动卡</h2></div>
           <p class="intro">整张卡＝后台上传的奖励列表图；前台只叠标签、倒数、按钮。</p>
           <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="in" data-pv='{"proto":"h5","login":true,"anchor":".h5-list"}'>已登录</button><button type="button" class="pv__btn" data-view="out" data-pv='{"proto":"h5","login":false,"anchor":".h5-list"}'>未登录</button></p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">图</div><div class="rule__v">整张填满，不裁切；尺寸照设计稿。</div></div><div class="rule__row"><div class="rule__k">标签</div><div class="rule__v">左上角金色角标＝「设定标签」选的那个，按语系翻译；没选不显示；1 行最长 20 字。</div></div><div class="rule__row"><div class="rule__k">倒数</div><div class="rule__v"><span class="chip chip--mod">修改</span>右下、按钮上方。只有周期性活动显示，倒数到下次重置；哪些算周期性见 3.6。</div></div><div class="rule__row" data-view-of="in"><div class="rule__k">按钮</div><div class="rule__v">右下角，见下表。礼物钮带呼吸动效（放大缩小循环）。</div></div><div class="rule__row" data-view-of="out"><div class="rule__k">按钮</div><div class="rule__v">右下角，蓝底箭头。</div></div><div class="rule__row" data-view-of="in"><div class="rule__k">点击</div><div class="rule__v">点卡片或按钮 → 既有 Event Details 弹窗；领取在弹窗里做。</div></div><div class="rule__row" data-view-of="out"><div class="rule__k">点击</div><div class="rule__v">照既有：进详情或要求登录。</div></div><div class="rule__row"><div class="rule__k">没有活动</div><div class="rule__v">「No promotions」。</div></div></div></div>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule"><div class="rule__row"><div class="rule__k">图</div><div class="rule__v">整张填满，不裁切；尺寸照设计稿。</div></div><div class="rule__row"><div class="rule__k">标签</div><div class="rule__v">左上角金色角标＝「设定标签」选的那个，按语系翻译；没选不显示；1 行最长 20 字。</div></div><div class="rule__row"><div class="rule__k">倒数</div><div class="rule__v"><span class="chip chip--mod">修改</span>右下、按钮上方。只有周期性活动显示，倒数到下次重置；哪些算周期性见 3.6。</div></div><div class="rule__row" data-view-of="in"><div class="rule__k">按钮</div><div class="rule__v">右下角，见下表。礼物钮带呼吸动效（放大缩小循环）。</div></div><div class="rule__row" data-view-of="out"><div class="rule__k">按钮</div><div class="rule__v">右下角，蓝底箭头。</div></div><div class="rule__row" data-view-of="in"><div class="rule__k">点击</div><div class="rule__v">点卡片或按钮 → 既有 Event Details 弹窗；领取在弹窗里做。</div></div><div class="rule__row" data-view-of="out"><div class="rule__k">点击</div><div class="rule__v">照既有：进详情或要求登录。</div></div><div class="rule__row"><div class="rule__k">没有活动</div><div class="rule__v">「No promotions」。</div></div><div class="rule__row" data-view-of="in"><div class="rule__k">底部 Rewards 角标</div><div class="rule__v"><span class="chip chip--mod">修改</span>位置照既有。数字改成有礼物钮的卡片张数，一张算 1，3 张就是 3；原本是活动可领数加任务中心未领数，任务中心已不在此页，不再加。没有礼物钮的卡片就没有角标。</div></div><div class="rule__row" data-view-of="out"><div class="rule__k">底部 Rewards 角标</div><div class="rule__v">未登录没有角标。</div></div></div></div>
           <div class="blk" data-view-of="in"><div class="blk__t">按钮判断表</div><div class="tbl-scroll"><table class="t"><thead><tr><th class="nw">登录</th><th class="nw">可领数</th><th>按钮</th></tr></thead><tbody><tr><td class="nw">已登录</td><td class="nw">大于 0</td><td>金底礼物钮，呼吸动效（取代原本的红色数字）；底部 Rewards 角标这张算 1</td></tr><tr><td class="nw">已登录</td><td class="nw">0 或算不出</td><td>蓝底箭头</td></tr></tbody></table></div></div>
           <p class="lazy__one" data-view-of="in">哪些活动算得出可领，见第 4 节；算不出的显示箭头。</p>
         </article>
@@ -943,10 +973,12 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="in" data-pv='{"proto":"pc","login":true,"anchor":".pc-hero"}'>已登录</button><button type="button" class="pv__btn" data-view="out" data-pv='{"proto":"pc","login":false,"anchor":".pc-top"}'>未登录</button></p>
           <div class="blk"><div class="blk__t">和 H5 的差别</div><div class="rule">
             <div class="rule__row"><div class="rule__k">顶栏</div><div class="rule__v">不做 3.1 的顶栏，用站内既有顶部导航（已登录、未登录照站内既有）。既有 PC 奖励页的个人卡（头像、My points、My voucher、VIP Perks）、Hot Events、快捷入口整排（Points Mall、Task center、Daily Rebate 1.5%、Sign-In Rewards、Invite Your Friends）移除。</div></div>
+            <div class="rule__row"><div class="rule__k">顶部导航角标</div><div class="rule__v">顶部导航「Rewards」右上角数字角标＝有礼物钮的卡片张数，一张算 1（同 3.5 底部 Rewards 角标的算法）；0 张不显示，未登录不显示。</div></div>
+            <div class="rule__row"><div class="rule__k">左侧边栏</div><div class="rule__v">照站内既有（英文版），可收合。Rewards 这一项的 icon 右上加红点（只有红点、没数字）：数字角标大于 0 就显示，没有就不显示，未登录不显示。收合后只剩 icon，红点照样显示在 icon 右上。</div></div>
             <div class="rule__row"><div class="rule__k">大精选</div><div class="rule__v">图用 PC 大精选图（2.1 大精选设置，非必填）；没传 PC 图，PC 不显示大精选。关卡卡片、顺序、Claim All 同 H5（3.2）。</div></div>
             <div class="rule__row"><div class="rule__k">小精选</div><div class="rule__v">图用 PC 首页浮窗图；每格＝图＋活动名称＋活动日期（3.3）。</div></div>
             <div class="rule__row"><div class="rule__k">活动卡</div><div class="rule__v">两栏；图用 PC 奖励列表图；叠的标签、倒数、按钮同 3.5。</div></div>
-            <div class="rule__row"><div class="rule__k">底部</div><div class="rule__v">没有底部导航，没有 Rewards 角标；底部 banner 入口样式等设计稿。</div></div>
+            <div class="rule__row"><div class="rule__k">底部</div><div class="rule__v">没有底部导航；可领提示改在顶部导航「Rewards」的数字角标和左侧边栏 Rewards 的 icon 红点。</div></div>
             <div class="rule__row"><div class="rule__k">其余</div><div class="rule__v">活动类别 tab、出不出现、排序、倒数、未登录差别都同 3.4～3.6。</div></div>
           </div></div>
         </article>
@@ -954,7 +986,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="panel__head"><span class="panel__num">4</span><h2 class="panel__title">不改的既有规则</h2></div>
           <p class="intro">提醒用：哪些照旧、哪些线上本来就这样、哪些明确不做。</p>
 
-          <div class="blk"><div class="blk__t">一、照既有，不改</div><div class="rule"><div class="rule__row rule__row--plain"><div class="rule__v">可领数怎么算、活动详情（Event Details）内容、领取流程。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">各活动设定页既有栏位的校验和提示文案。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">活动类别管理的名称、排序、是否开启、国际化「＋」。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">素材的 PC、H5 是两条独立资料，语系要一样。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">底部 Rewards 红点位置不变；数字改成有礼物钮的卡片张数，不加任务中心。</div></div></div></div>
+          <div class="blk"><div class="blk__t">一、照既有，不改</div><div class="rule"><div class="rule__row rule__row--plain"><div class="rule__v">可领数怎么算、活动详情（Event Details）内容、领取流程。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">各活动设定页既有栏位的校验和提示文案。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">活动类别管理的名称、排序、是否开启、国际化「＋」。</div></div><div class="rule__row rule__row--plain"><div class="rule__v">素材的 PC、H5 是两条独立资料，语系要一样。</div></div></div></div>
 
           <div class="blk"><div class="blk__t">二、哪些活动有礼物钮</div><div class="rule"><div class="rule__row"><div class="rule__k">规则</div><div class="rule__v">可领数大于 0 → 这张卡按钮变礼物钮、排最前。可领数照线上既有算法，更新时机也照既有。</div></div><div class="rule__row"><div class="rule__k">线上算得出</div><div class="rule__v">负盈利活动（手动领取）、消费活动（手动领取）、游戏挑战赛、联名挑战活动、预约活动、挂了「每日特别返水」或「每日返水加码」关联的素材卡。</div></div><div class="rule__row"><div class="rule__k">线上算不出</div><div class="rule__v">自动派发的负盈利／消费活动、充值活动、每日首充活动、每日存款活动、新用户首充活动、周卡活动、没挂关联的素材卡。蓝底箭头。</div></div><div class="rule__row"><div class="rule__k">新进奖励页</div><div class="rule__v">Okbet排行榜、大奖池活动、vip返水加码活动、每日特别返水线上都还算不出。要不要补由开发评估；没补就蓝底箭头。</div></div></div></div>
 
@@ -966,7 +998,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
         <article class="panel" id="p-todo">
           <div class="panel__head"><span class="panel__num">5</span><h2 class="panel__title">待确认事项</h2></div>
           <p class="intro">已定的：图片尺寸、夜间配色照设计稿；标签清单见 2.4；现有活动图重出；礼物钮见第 4 节；前台英文以规格书为准。还没定的四项。</p>
-          <div class="blk"><div class="blk__t">还没定</div><div class="rule"><div class="rule__row"><div class="rule__k">倒数周期（开发）</div><div class="rule__v">3.6「哪些算周期性」是推的，请逐一复核；大奖池活动、vip返水加码活动、周卡活动、联名挑战活动尤其要回。</div></div><div class="rule__row"><div class="rule__k">大精选样式（设计）</div><div class="rule__v">等设计稿。已定的：独立一块、banner 图＋一排关卡卡片、点图进详情、显不显示照 2.1 大精选设置。</div></div><div class="rule__row"><div class="rule__k">PC 版（设计）</div><div class="rule__v">逻辑已定（3.7）；底部 banner 入口样式等设计稿。</div></div><div class="rule__row"><div class="rule__k">素材和新旧包（开发）</div><div class="rule__v">总览写的「素材是既有功能，不受新旧包影响」请确认。</div></div></div></div>
+          <div class="blk"><div class="blk__t">还没定</div><div class="rule"><div class="rule__row"><div class="rule__k">倒数周期（开发）</div><div class="rule__v">3.6「哪些算周期性」是推的，请逐一复核；大奖池活动、vip返水加码活动、周卡活动、联名挑战活动尤其要回。</div></div><div class="rule__row"><div class="rule__k">大精选样式（设计）</div><div class="rule__v">等设计稿。已定的：独立一块、banner 图＋一排关卡卡片、点图进详情、显不显示照 2.1 大精选设置。</div></div><div class="rule__row"><div class="rule__k">素材和新旧包（开发）</div><div class="rule__v">总览写的「素材是既有功能，不受新旧包影响」请确认。</div></div></div></div>
         </article>
 
       </main>
@@ -1123,7 +1155,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
     var d = e.data || {}; if (d.src !== 'proto') return;
     if (d.type === 'ready') {
       protoReady = true; clearTimeout(giveUpTimer); fallback.classList.add('hidden');
-      modeLabel.textContent = '示意＝本档的原型 · 改原型规格书自动同步';
+      modeLabel.textContent = '';   // 载好就清掉，不占顶栏空间（11/20 她定）；只在载入中、载入失败时显示字
       sendFont();
       if (pending) { var q = pending; pending = null; send(q); }
       return;
@@ -2272,15 +2304,22 @@ function renderFront(){
   renderPC();
 }
 /* 前台 PC：逻辑同 H5，只换 PC 端的图；不做顶栏（用站内既有顶部导航）、不做底部导航与角标（11/06 她定） */
+/* 顶栏右侧三个 icon：搜索、信件（有未读红点）、个人；照 11/20 她截的线上已登录顶栏 */
+function pcTopIcons(mailDot){ return '<span class="pc-top__icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg></span>'+
+  '<span class="pc-top__icon pc-top__icon--mail"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>'+(mailDot?'<i></i>':'')+'</span>'+
+  '<span class="pc-top__icon pc-top__icon--me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4.5"/><path d="M4 21c0-4.4 3.6-7.5 8-7.5s8 3.1 8 7.5z"/></svg></span>'; }
 function renderPC(){
   var box = document.getElementById('pc'); if (!box) return;
   var vis = items.filter(function(x){ return onDev(x, 'PC'); }).filter(visibleNow).sort(function(a,b){ return ((frontLogin&&b.pending)?1:0) - ((frontLogin&&a.pending)?1:0) || b.sort - a.sort; });
   var catsOn = cats.filter(function(c){ return c.on; }).sort(function(a,b){ return b.sort - a.sort; });
   var list = vis.filter(function(x){ return !frontCat || itemCats(x).indexOf(frontCat) > -1; });
   // 顶部导航＝站内既有（11/06 她给设计稿）：已登录＝头像＋余额、Home／Sports／Tourney／Rewards、Invite、Deposit(BONUS)、搜索、信件、个人；未登录＝选单钮＋Logo、Home／Sports／Tourney／Rewards、Login、Top-up(BONUS)、搜索、信件、个人（11/06 她截的线上未登录顶部）
+  var giftCount = frontLogin ? vis.filter(function(x){ return x.pending; }).length : 0;   // 同 H5 底部角标的算法：有礼物钮的卡片张数；顶部导航 Rewards 数字角标、侧边栏红点都用它
+  var rwNav = '<b>Rewards'+(giftCount?'<span class="pc-top__badge">'+giftCount+'</span>':'')+'</b>';
   var h = frontLogin
-    ? '<div class="pc-top"><span class="pc-top__me"><i class="h5-avatar"></i><i class="h5-coin h5-coin--p"></i>999.00 <span class="h5-refresh">⟳</span></span><span>Home</span><span>Sports</span><span>Tourney</span><b>Rewards</b><div class="pc-top__r"><span class="pc-top__invite">Invite</span><span class="pc-top__dep">Deposit<i>BONUS</i></span><i class="pc-top__ico"></i><i class="pc-top__ico pc-top__ico--sq"></i><i class="pc-top__ico"></i></div></div>'
-    : '<div class="pc-top"><span class="pc-top__menu">☰</span><span class="h5-logo">OK<em>·</em>BET</span><span class="pc-top__gap"></span><span>Home</span><span>Sports</span><span>Tourney</span><b>Rewards</b><div class="pc-top__r"><span class="pc-top__login">Login</span><span class="pc-top__dep">Top-Up 20,000<i>BONUS</i></span><i class="pc-top__ico"></i><i class="pc-top__ico pc-top__ico--sq"></i><i class="pc-top__ico"></i></div></div>';
+    ? '<div class="pc-top"><span class="pc-top__menu" data-pc-side>☰</span><span class="pc-top__me"><i class="h5-avatar"></i><i class="h5-coin h5-coin--p"></i>104,914 <span class="h5-refresh">⟳</span></span><div class="pc-top__nav"><span>Home</span><span>Sports</span><span>Tourney</span>'+rwNav+'</div><div class="pc-top__r"><span class="pc-top__invite">🎁 Invite</span><span class="pc-top__dep pc-top__dep--gold">Deposit<i>BONUS</i></span>'+pcTopIcons(true)+'</div></div>'
+    : '<div class="pc-top"><span class="pc-top__menu" data-pc-side>☰</span><span class="h5-logo">OK<em>·</em>BET</span><div class="pc-top__nav"><span>Home</span><span>Sports</span><span>Tourney</span>'+rwNav+'</div><div class="pc-top__r"><span class="pc-top__login">Login</span><span class="pc-top__dep">Top-Up 20,000<i>BONUS</i></span>'+pcTopIcons(false)+'</div></div>';
+  h += '<div class="pc-main">'+pcSide(giftCount > 0)+'<div class="pc-content">';   // 11/20 她定：左侧边栏照站内既有，Rewards 的 icon 右上红点＝有可领
   var hero = HERO.pc ? heroAct() : null;   // PC 大精选图没传，PC 不显示大精选
   if (hero) h += '<div class="pc-hero"><div class="h5-hero__bn" data-front-open="'+hero.id+'" title="'+esc(hero.title)+'">'+[[60,50],[180,120],[520,70],[900,100],[1050,60],[700,160]].map(function(c){ return '<i class="h5-hero__coin" style="left:'+c[0]+'px;top:'+c[1]+'px"></i>'; }).join('')+
     '</div>'+heroCards(hero)+'</div>';   // 11/06 她定：PC 跟 H5 统一，关卡卡片直接外显
@@ -2291,9 +2330,30 @@ function renderPC(){
   h += '<div class="pc-list">'+(list.length ? list.map(function(it, i){
     return '<div class="h5-card" data-front-open="'+it.id+'"><div class="h5-thumb h5-thumb--'+(i%3)+'">'+cardTags(it)+badgeHtml(badgeOf(it))+cardBtn(it)+'</div></div>';
   }).join('') : '<div class="h5-empty">No promotions</div>')+'</div></div>';
+  h += '</div></div>';   // 关 pc-content、pc-main
   box.innerHTML = h;
 }
-function pcDate(it){ var s = (it.start || '').slice(0, 10), e = it.end && it.end !== '-' ? it.end.slice(0, 10) : ''; return s || e ? (s || '…') + ' ~ ' + (e || '…') : ''; }
+/* 左侧边栏：照站内既有（11/20 她给截图，英文版），只画结构；☰ 收合后只剩 icon，有红点照样显示 */
+var pcSideMini = false;
+var PC_SIDE = [
+  ['Casino', [['🔖','Favorite','128'],['🔥','Popular',''],['🕘','Recently Play','128'],['🎡','Perya',''],['🎱','Ebingo',''],['🃏','Casino',''],['♠️','Poker',''],['🎣','Fishing','']]],
+  ['Sports', [['📡','In-Play','128'],['🏈','Popular Sports','85'],['🎮','E-Sports','47'],['⚽','SABA Sports','hot:Hot'],['🏁','Ending Game',''],['🌐','Odds Setting','EU ˅'],['📋','Result',''],['📊','Sports Result',''],['📄','Sports Rules','']]],
+  ['Personal Center', [['📄','Profile',''],['💱','Transactions',''],['🗂️','Betting History',''],['🛡️','Account Security',''],['🚫','Self-Limitation',''],['🎁','Points Mall','']]],
+  ['Other', [['🔖','My Preferences','Slot ›'],['🏅','Wins',''],['🎁','Rewards','hot:Hot'],['🌟','Brand Ambassador',''],['🤝','Agent',''],['💎','VIP Club',''],['📖','KYC Status','ok:Verified ›'],['🎧','Customer Service',''],['ℹ️','About Us',''],['📱','App Download','']]]
+];
+function pcSide(dot){
+  var h = '<div class="pc-side'+(pcSideMini?' is-mini':'')+'"><div class="pc-side__top"><span class="pc-side__lang"><i></i>English</span><span class="pc-side__sw"></span></div><div class="pc-side__pay"><span class="dep">Deposit</span><span class="wd">Withdraw</span></div>';
+  PC_SIDE.forEach(function(sec){
+    h += '<div class="pc-side__sec">'+sec[0]+'<i>˅</i></div>';
+    sec[1].forEach(function(it){
+      var isRw = it[1] === 'Rewards', bd = it[2], cls = '';
+      if (bd.indexOf('hot:') === 0) { cls = ' pc-side__bd--hot'; bd = bd.slice(4); } else if (bd.indexOf('ok:') === 0) { cls = ' pc-side__bd--ok'; bd = bd.slice(3); }
+      h += '<div class="pc-side__it'+(isRw?' is-on':'')+'"><span class="pc-side__ico">'+it[0]+(isRw && dot ? '<i class="pc-side__dot"></i>' : '')+'</span><span class="pc-side__n">'+it[1]+'</span>'+(bd?'<span class="pc-side__bd'+cls+'">'+bd+'</span>':'')+'</div>';
+    });
+  });
+  return h+'</div>';
+}
+function pcDate(it){ var s = (it.start || '').slice(0, 10), e = it.end && it.end !== '-' ? it.end.slice(0, 10) : ''; return s || e ? (s || '…') + '~' + (e || '…') : ''; }   // 照线上 PC：日期中间「~」不加空格
 /* 倒数每秒跳：只改有倒数的角标，不重画整页 */
 setInterval(function(){
   document.querySelectorAll('[data-cd]').forEach(function(el){
@@ -2466,6 +2526,7 @@ document.addEventListener('click', function(e){
     return;
   }
   // 前台 H5
+  if ((q = t.closest('[data-pc-side]'))) { pcSideMini = !pcSideMini; renderPC(); return; }   // PC 侧边栏收合／展开
   if ((q = t.closest('[data-front-login]'))) { frontLogin = q.dataset.frontLogin === '1'; document.querySelectorAll('[data-front-login]').forEach(function(x){ x.classList.toggle('is-on', x === q); }); renderFront(); return; }
   if ((q = t.closest('[data-front-theme]'))) { frontDark = q.dataset.frontTheme === 'night'; document.querySelectorAll('[data-front-theme]').forEach(function(x){ x.classList.toggle('is-on', x === q); }); renderFront(); return; }
   if ((q = t.closest('.h5-login'))) { message('前往登录（示意）'); return; }
