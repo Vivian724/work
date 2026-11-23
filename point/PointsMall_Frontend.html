@@ -827,6 +827,11 @@ html:not(.spec-mode) body:has(#wrap.is-admin),html:not(.spec-mode) body:has(#wra
 #admin .sel{display:inline-flex;align-items:center;justify-content:space-between;width:130px}
 #admin .frow.new{outline-offset:6px;margin-left:-6px;padding-left:6px}
 #admin .frow.new:before{top:-16px;right:-4px}
+/* 修改标记：橘框＋「修改」小标 */
+#admin .mod{position:relative;outline:2px solid #e6a23c;outline-offset:3px;border-radius:2px}
+#admin .mod:before{content:"修改";white-space:nowrap;position:absolute;right:-4px;top:-20px;background:#e6a23c;color:#fff;font-size:11px;line-height:16px;padding:0 5px;border-radius:2px}
+#admin .frow.mod{outline-offset:6px;margin-left:-6px;padding-left:6px}
+#admin .frow.mod:before{top:-16px;right:-4px}
 /* 弹窗 */
 .bk-mask{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 0;z-index:10}
 .bk-mask.open{display:flex}
@@ -1361,7 +1366,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="panel__head"><span class="panel__num">1</span><h2 class="panel__title">总览</h2></div>
           <div class="intro intro--list">
             <div class="intro__row"><b>前台</b><span>积分商城页重排成六块：顶栏、快捷入口、Task List、Playground 入口、Flash Sale、Recommend。商品搬到新的「Points Mall 商品页」；一番赏、盲盒改从游乐场地图进。</span></div>
-            <div class="intro__row"><b>后台</b><span>加一个「是否推荐」开关；排序值统一数字越大越前面。</span></div>
+            <div class="intro__row"><b>后台</b><span>加一个「是否推荐」开关（预设是）；排序值统一数字越大越前面；<span class="rev">状态开启的商品也能改排序。</span></span></div>
             <div class="intro__row"><b>不改</b><span>购买弹窗、兑换流程、排序逻辑、任务中心、记录、背包、VIP 都沿用既有，不重做。</span></div>
           </div>
 
@@ -1377,12 +1382,12 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
                 <li><b>PC 版</b><span>积分商城页、积分历史页照 PC 设计稿；商品区并在积分商城页里，不另开商品页；其余页照既有 PC 页</span><span class="lazy__ref">3.11</span></li>
               </ul></div>
               <div class="lazy__card"><b class="lazy__t">后台</b><ul class="lazy__list">
-                <li><b>商品管理</b><span>表单加「是否推荐」开关（推荐排序、推荐时间），列表加「推荐」栏和筛选；列表改成排序数字大的在上面</span><span class="lazy__ref">2.1</span></li>
+                <li><b>商品管理</b><span>表单加「是否推荐」开关（预设是），列表加「推荐」栏和筛选；列表改成排序数字大的在上面；<span class="rev">状态开启的商品也能改排序</span></span><span class="lazy__ref">2.1</span></li>
                 <li><b>商品类别管理</b><span>栏位不改；列表改成排序数字大的在上面</span><span class="lazy__ref">2.2</span></li>
               </ul></div>
               <div class="lazy__card"><b class="lazy__t">不改的</b><ul class="lazy__list">
                 <li><b>兑换</b><span>购买弹窗、积分不足、兑换成功、扣点发放</span><span class="lazy__ref">3.3 ／ 4</span></li>
-                <li><b>排序</b><span>既有排序逻辑全部沿用；排序值统一数字越大越前面（类别、商品、推荐都一样）</span><span class="lazy__ref">4</span></li>
+                <li><b>排序</b><span>既有排序逻辑全部沿用；排序值统一数字越大越前面（类别、商品都一样）</span><span class="lazy__ref">4</span></li>
                 <li><b>任务、VIP</b><span>Task List 页、VIP 页照既有</span><span class="lazy__ref">3.6 ／ 3.9</span></li>
               </ul></div>
             </div>
@@ -1405,25 +1410,26 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
         <!-- ============ 2 后台 ============ -->
         <article class="panel" id="p-b1">
-          <div class="panel__head"><span class="panel__num">2.1</span><h2 class="panel__title">后台 · 商品管理</h2></div>
-          <p class="intro">位置：积分商城 › 商品管理。改两件事：一、商品可以勾「推荐」，勾了才进前台积分商城页的 Recommend 区，做法跟既有「是否限时抢购」一样，一个商品一个开关；二、列表显示顺序改成排序数字大的在上面（第 4 节）。其他栏位全部照旧。</p>
+          <div class="panel__head"><span class="panel__num">2.1</span><h2 class="panel__title">后台 · 商品管理<span class="rev">（11/23 调整）</span></h2></div>
+          <p class="intro">位置：积分商城 › 商品管理。改三件事：一、商品可以勾「推荐」，勾了才进前台积分商城页的 Recommend 区，做法跟既有「是否限时抢购」一样，一个商品一个开关；二、列表显示顺序改成排序数字大的在上面（第 4 节）；<span class="rev">三、商品状态开启时也能改「排序」。</span>其他栏位全部照旧。</p>
           <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="list" data-pv='{"proto":"admin","go":"admin"}'>列表</button><button type="button" class="pv__btn" data-view="form" data-pv='{"proto":"admin","go":"admin","pop":"edit"}'>编辑商品</button><button type="button" class="pv__btn" data-view="form" data-pv='{"proto":"admin","go":"admin","pop":"add"}'>新增商品</button></p>
 
           <div class="blk" data-view-of="list"><div class="blk__t">列表</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">推荐栏</div><div class="rule__v"><span class="chip chip--new">新增</span>「限时抢购」栏旁边加「推荐」栏，只显示「是」或「否」，跟既有「限时抢购」栏同样做法；推荐排序、推荐时间进编辑表单才看。</div></div>
-            <div class="rule__row"><div class="rule__k">筛选</div><div class="rule__v"><span class="chip chip--new">新增</span>「是否限时抢购」旁加「是否推荐」下拉，三个选项：全部（预设）／否／是，顺序和做法都跟既有「是否限时抢购」下拉一样，按「搜索」套用。「是」＝开关勾了是的商品，不管推荐时间到没到都列出来。</div></div>
+            <div class="rule__row"><div class="rule__k">推荐栏</div><div class="rule__v"><span class="chip chip--new">新增</span>「限时抢购」栏旁边加「推荐」栏，只显示「是」或「否」，跟既有「限时抢购」栏同样做法。</div></div>
+            <div class="rule__row"><div class="rule__k">筛选</div><div class="rule__v"><span class="chip chip--new">新增</span>「是否限时抢购」旁加「是否推荐」下拉，三个选项：全部（预设）／否／是，顺序和做法都跟既有「是否限时抢购」下拉一样，按「搜索」套用。</div></div>
             <div class="rule__row"><div class="rule__k">其他</div><div class="rule__v"><span class="chip chip--same">既有</span>排序、类型、名、商品简介、封面图、购买价格、限购、库存、已售、限时抢购、状态、发布时间、发布者、编辑／删除，全部不动。</div></div>
             <div class="rule__row"><div class="rule__k">排序方向</div><div class="rule__v"><span class="chip chip--mod">修改</span>「排序」栏位统一数字越大越前面，列表也照这个顺序显示；商品类别管理（2.2）同方向（第 4 节）。</div></div>
           </div></div>
 
           <div class="blk" data-view-of="form"><div class="blk__t">新增／编辑商品表单</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">是否推荐</div><div class="rule__v"><span class="chip chip--new">新增</span>单选 否／是，预设「是」（上线后运营自行后台调整）。放在「是否限时抢购」下方，新增和编辑表单都有。</div></div>
-            <div class="rule__row"><div class="rule__k">防呆</div><div class="rule__v"><span class="chip chip--new">新增</span>「是否限时抢购」选「是」时：<br>1. 「是否推荐」自动变「否」并灰掉不能点，旁边提示「限时抢购商品不进 Recommend，不能勾推荐」。<br>2. 改回「否」才能再勾推荐。<br>3. 已经勾推荐的商品再改成限时抢购，也一样被改成「否」。</div></div>
-            <div class="rule__row"><div class="rule__k">选「是」展开</div><div class="rule__v">两个栏位：<b>推荐排序</b>（必填，正整数，预设 1；数字越大越前面，同数字照发布时间新的在前，跟「排序」栏位同方向）、<b>推荐时间</b>（开始～结束，非必填；留空＝不限时间，直到改回「否」）。</div></div>
-            <div class="rule__row"><div class="rule__k">改回「否」</div><div class="rule__v">两个栏位收起并清空；前台 Recommend 下次载入就不再显示这个商品（生效时机同第 4 节）。</div></div>
-            <div class="rule__row"><div class="rule__k">推荐时间到期</div><div class="rule__v">前台 Recommend 不再显示；商品本身照常在 Points Mall 商品页卖，开关值保留「是」，运营不用处理。</div></div>
-            <div class="rule__row"><div class="rule__k">前台怎么用</div><div class="rule__v">积分商城页 Recommend 区（3.1）列的就是推荐＝是、状态开启、在推荐时间内的商品；下架或删除自动消失。排序、售完见 3.1。</div></div>
-            <div class="rule__row"><div class="rule__k">其他栏位</div><div class="rule__v"><span class="chip chip--same">既有</span>币种、商品类别、商品名称、商品简介、商品类型、商品图片、购买价格、积分折扣比例、排序、单个会员限购数、库存、是否限时抢购、审核模式，校验和提示照既有。</div></div>
+            <div class="rule__row"><div class="rule__k">是否推荐</div><div class="rule__v"><span class="chip chip--new">新增</span>单选 否／是，预设「是」（上线后运营自行后台调整）。放在「是否限时抢购」下方，新增和编辑表单都有。<span class="rev">只有这一个开关，不另设推荐排序、推荐时间；Recommend 顺序照「排序」栏位。</span></div></div>
+            <div class="rule__row"><div class="rule__k">二选一</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">一个商品只能是「限时抢购」或「推荐」其中一种，不能两个都是：</span><br>1. 「是否限时抢购」选「是」，「是否推荐」自动变「否」并灰掉不能点。<br>2. 「是否限时抢购」改回「否」，才能再勾推荐。<br>3. 已经勾推荐的商品再改成限时抢购，推荐也一样被改成「否」。</div></div>
+            <div class="rule__row"><div class="rule__k">提示文字</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">文案：<b>限时抢购商品不进 Recommend</b><br>位置：「是否推荐」选项右边，灰色小字。<br>1. 「是否限时抢购」＝是 → 「是否推荐」灰掉，小字出现。<br>2. 「是否限时抢购」＝否 → 小字消失。</span></div></div>
+            <div class="rule__row"><div class="rule__k">上线时既有商品</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">上线时线上既有商品怎么带：<br>1. 一般商品：「是否推荐」带「是」。<br>2. 限时抢购商品：带「否」，不动它。</span></div></div>
+            <div class="rule__row"><div class="rule__k">推荐改回「否」</div><div class="rule__v">「是否推荐」改回「否」，前台 Recommend 下次载入就不再显示这个商品（生效时机同第 4 节）。</div></div>
+            <div class="rule__row"><div class="rule__k">前台怎么用</div><div class="rule__v">积分商城页 Recommend 区（3.1）列的就是推荐＝是、状态开启的商品；下架或删除自动消失。排序、售完见 3.1。</div></div>
+            <div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span><span class="rev">商品状态开启时也能改「排序」，不用先关闭状态（既有：状态开启就不能改）。</span>数字越大越前面、列表顺序照数字，见「列表」区块的「排序方向」。</div></div>
+            <div class="rule__row"><div class="rule__k">其他栏位</div><div class="rule__v"><span class="chip chip--same">既有</span>币种、商品类别、商品名称、商品简介、商品类型、商品图片、购买价格、积分折扣比例、单个会员限购数、库存、是否限时抢购、审核模式，校验和提示照既有。</div></div>
           </div></div>
         </article>
 
@@ -1432,14 +1438,14 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <p class="intro">位置：积分商城 › 商品类别管理。既有页面，栏位都不改，只有列表显示顺序改成排序数字大的在上面；放进来是因为前台 Points Mall 商品页的分类页签顺序就是吃这里的「排序」。</p>
           <div class="blk"><div class="blk__t">规则</div><div class="rule">
             <div class="rule__row"><div class="rule__k">栏位</div><div class="rule__v"><span class="chip chip--same">既有</span>排序、名、备注、更新时间、操作人名称、状态、编辑／删除、新增，全部照线上不动。</div></div>
-            <div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span>数字越大越前面（跟商品管理「排序」、「推荐排序」同方向，第 4 节）。列表显示顺序也一样：排序数字大的在上面。改完排序，列表立刻照新顺序重新排（既有逻辑，保留）。</div></div>
+            <div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span>数字越大越前面（跟商品管理「排序」同方向，第 4 节）。列表显示顺序也一样：排序数字大的在上面。改完排序，列表立刻照新顺序重新排（既有逻辑，保留）。</div></div>
             <div class="rule__row"><div class="rule__k">前台怎么用</div><div class="rule__v">Points Mall 商品页（3.2）的页签：ALL、I Can Buy 固定在前，后面的分类页签照这里的排序。「一番赏」「盲盒」两个类别不进页签，走 Playground（3.4）。</div></div>
           </div></div>
         </article>
 
         <!-- ============ 3 前台 ============ -->
         <article class="panel" id="p-f1">
-          <div class="panel__head"><span class="panel__num">3.1</span><h2 class="panel__title">前台 · 积分商城页</h2></div>
+          <div class="panel__head"><span class="panel__num">3.1</span><h2 class="panel__title">前台 · 积分商城页<span class="rev">（11/23 调整）</span></h2></div>
           <p class="intro">从底部「Points Mall」进来的那一页。由上到下：顶栏、三个快捷入口、Task List、Playground 入口、Flash Sale、Recommend。未登录也看得到整页，只有顶栏换样子，点到要登录的地方才去登录页（3.10）。</p>
           <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="in" data-pv='{"proto":"h5","go":"mall","login":true}'>已登录</button><button type="button" class="pv__btn" data-view="out" data-pv='{"proto":"h5","go":"mall","login":false}'>未登录</button></p>
 
@@ -1483,11 +1489,11 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
           <div class="blk"><div class="blk__t">Recommend</div><div class="rule">
             <div class="rule__row"><div class="rule__k">区块</div><div class="rule__v"><span class="chip chip--new">新增</span>标题「👍 Recommend」＋「More ›」→ Points Mall 商品页 ALL（3.2）。两栏商品卡，样式同 3.2。</div></div>
-            <div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v">后台「是否推荐＝是」、状态开启、在推荐时间内的商品（2.1），不限数量；照推荐排序，售完排最后。限时抢购商品不进这里（后台防呆，勾不了推荐，见 2.1）。一个都没有：整块不显示。</div></div>
+            <div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v">后台「是否推荐＝是」、状态开启的商品（2.1），不限数量；<span class="rev">照后台排序值</span>，售完排最后。限时抢购商品不进这里（后台二选一，勾不了推荐，见 2.1）。一个都没有：整块不显示。</div></div>
           </div></div>
 
           <div class="blk"><div class="blk__t">这一页拿掉的</div><div class="rule">
-            <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>分类页签、各分类商品区块：搬到 Points Mall 商品页（3.2）。原「推荐／我能购买／价格」排序列：推荐＝3.2 的预设排序（后台排序值）、我能购买＝3.2 的 I Can Buy 页签、价格＝3.2 的「Price ⇕」钮。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>分类页签、各分类商品区块：搬到 Points Mall 商品页（3.2）。线上原本商品区上方的「推荐／我能购买／价格」三个排序钮拿掉，功能对应到：推荐＝3.2 每个页签的预设顺序（后台排序值）、我能购买＝3.2 的 I Can Buy 页签、价格＝3.2 的「Price ⇕」钮。</div></div>
             <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>线上的跑马灯（用户 xxx 成功兑换）、「积分将于 xx 过期」提示：拿掉，不显示。</div></div>
             <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>线上的 Ichiban Draw 横幅、盲盒弹窗入口：拿掉，改走本页的 Playground 入口卡 → Playground（3.4）。</div></div>
           </div></div>
@@ -1503,7 +1509,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
             <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Points Mall」返回列（3.10），不放积分商城页的钱包顶栏。</div></div>
             <div class="rule__row"><div class="rule__k">置顶</div><div class="rule__v">往下滑时两层依序钉在最上面：返回列 → 页签列（含 Price 钮）。商品跟着滑走。</div></div>
             <div class="rule__row"><div class="rule__k">页签</div><div class="rule__v">1. ALL、I Can Buy 两个固定在最前面、顺序不变。<br>2. 后面接后台「商品类别管理」（2.2）的类别，照类别排序（数字越大越前面）；多了可左右滑。<br>3. 「一番赏」「盲盒」两个类别不进页签，走 Playground（3.4）。<br>4. 每次切换页签都重新照后台排序值排列，Price 排序回预设。</div></div>
-            <div class="rule__row"><div class="rule__k">限时抢购商品</div><div class="rule__v"><span class="chip chip--same">既有</span>不另成页签；在不在所属分类里、怎么排，都照线上既有。</div></div>
+            <div class="rule__row"><div class="rule__k">限时抢购商品</div><div class="rule__v"><span class="chip chip--same">既有</span>不另成页签；会不会出现在所属分类页签里、排在哪，都照线上既有。</div></div>
             <div class="rule__row"><div class="rule__k">排序钮</div><div class="rule__v"><span class="chip chip--mod">修改</span>线上「Price ⇕」钮保留，照设计稿放页签同一列的最右边，固定不跟着页签滑；钮上写「Price」＋上下箭头。<br>1. 显示：所有页签都显示，含 ALL。<br>2. 点法：预设 ⇕ → 升序 ↑（便宜在前）→ 降序 ↓（贵在前）→ 回预设 ⇕。<br>3. 范围：每个页签预设都照后台排序值，按了 Price 才照价格重排。单一分类、I Can Buy＝该页签全部商品一起排；ALL＝每个分类白卡各自排。<br>4. 排序规则照第 4 节：未售完照价格、同价照后台排序值、售完一律最后。</div></div>
           </div></div>
 
@@ -1543,7 +1549,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
         <article class="panel" id="p-f4">
           <div class="panel__head"><span class="panel__num">3.4</span><h2 class="panel__title">前台 · Playground</h2></div>
-          <p class="intro">积分商城页 Playground 入口卡进来。一张地图，一座岛＝一种游戏；岛不随套数增减，套数在岛进去之后的列表页（3.5）。</p>
+          <p class="intro">积分商城页 Playground 入口卡进来。一张地图，一座岛＝一种游戏。岛的数量固定，后台一种游戏有几套商品都只有一座岛；几套要进岛之后的列表页（3.5）才看得到。</p>
           <div class="blk"><div class="blk__t">规则</div><div class="rule">
             <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Playground」返回列（3.10），往下滑钉在最上面。</div></div>
             <div class="rule__row"><div class="rule__k">岛</div><div class="rule__v"><span class="chip chip--new">新增</span>四座岛：Mystery Box（盲盒）、OKIchiban Draw（一番赏），两座「Coming Soon」不能点。岛的图由设计出。</div></div>
@@ -1584,7 +1590,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
             <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「Points History」，进来预设在「积分记录」页签。需登录。</div></div>
             <div class="rule__row"><div class="rule__k">名称</div><div class="rule__v">页名照线上既有「积分历史 Points History」（翻译编号 A055）；快捷入口、返回列标题都用这个名字。<br>两个页签：「积分记录 Points Details」（A151）、「兑换记录 Redemption」（A152）。各语言见第 6 节。</div></div>
             <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Points History」返回列（3.10）。</div></div>
-            <div class="rule__row"><div class="rule__k">置顶</div><div class="rule__v">往下滑时三层依序钉在最上面：返回列 → 页签列 → 筛选列（「积分记录」＝ALL／Income／Expenses；「兑换记录」＝分类胶囊＋☰）。红字提示不钉，跟着清单滑走。两个页签同一套。</div></div>
+            <div class="rule__row"><div class="rule__k">置顶</div><div class="rule__v">往下滑时三层依序钉在最上面：返回列 → 页签列 → 筛选列（「积分记录」＝ALL／Income／Expenses；「兑换记录」＝分类胶囊＋☰）。红字提示不钉，跟着清单滑走。两个页签都一样。</div></div>
             <div class="rule__row"><div class="rule__k">「积分记录」页签</div><div class="rule__v"><span class="chip chip--same">既有</span>内容照线上：ALL／Income／Expenses 筛选、「仅展示近 30 日」提示、每笔＝名称（含数量）、时间、收入绿字＋、支出红字−。排版照设计稿：筛选做成一排胶囊，每笔一张卡。</div></div>
             <div class="rule__row"><div class="rule__k">「兑换记录」页签</div><div class="rule__v"><span class="chip chip--same">既有</span>内容照线上：分类胶囊（ALL＋商品分类）＋右边 ☰ 列表图示、红字延迟提示、每笔＝图、时间、名称、★ 积分、订单状态。排版照设计稿：每笔一张卡，状态做成右下角的钮（如 Completed、Delivering，状态值沿用既有）。</div></div>
             <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
@@ -1639,7 +1645,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
             <div class="rule__row"><div class="rule__k">左侧菜单红点</div><div class="rule__v"><span class="chip chip--new">新增</span>左侧菜单「Points Mall」项的图标右上角放一颗红点，样式照菜单既有红点（如 Rewards 那颗）。菜单展开、收合（只剩图标）都要显示；显示、消失的条件同 3.1 红点，未登录不显示。</div></div>
             <div class="rule__row"><div class="rule__k">Playground</div><div class="rule__v"><span class="chip chip--new">新增</span>白卡：标题「Playground」＋「Play ›」，底下横幅四座岛（图同 3.4）。点「Play ›」或横幅都进 Playground 地图，不直接进游戏。</div></div>
             <div class="rule__row"><div class="rule__k">Flash Sale</div><div class="rule__v"><span class="chip chip--mod">修改</span>只有样式变：卡片变小张、背景微调，照设计稿。列哪些、倒数、售完、「Buy now」钮照既有；轮播照既有（5 秒一张、可手滑），不显示「1/6」，没有「More ›」。</div></div>
-            <div class="rule__row"><div class="rule__k">商品区</div><div class="rule__v"><span class="chip chip--mod">修改</span>PC 不另开商品页，商品区在本页最下面：页签列＋商品格。<br>1. 页签：ALL、Recommend、I Can Buy 固定在前，后接商品类别（2.2）；每次切换页签都重新照后台排序值排列，Price 排序回预设。<br>2. ALL＝全部商品一个格子；Recommend＝后台勾推荐的商品（同 3.1 Recommend 区）；I Can Buy、单一分类同 3.2。<br>3. 排序逻辑同 H5：预设照后台排序值（Recommend 照推荐排序），售完排最后；「Price ⇕」钮点法同 3.2，每个页签全部商品一起排。<br>4. 商品卡同 3.2；点卡 → PC 既有购买弹窗（3.3）。</div></div>
+            <div class="rule__row"><div class="rule__k">商品区</div><div class="rule__v"><span class="chip chip--mod">修改</span>PC 不另开商品页，商品区在本页最下面：页签列＋商品格。<br>1. 页签：ALL、Recommend、I Can Buy 固定在前，后接商品类别（2.2）；每次切换页签都重新照后台排序值排列，Price 排序回预设。<br>2. ALL＝全部商品一个格子；Recommend＝后台勾推荐的商品（同 3.1 Recommend 区）；I Can Buy、单一分类同 3.2。<br>3. 排序逻辑同 H5：预设照后台排序值，售完排最后；「Price ⇕」钮点法同 3.2，每个页签全部商品一起排。<br>4. 商品卡同 3.2；点卡 → PC 既有购买弹窗（3.3）。</div></div>
             <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v">整页看得到；哪些要登录同 3.10。</div></div>
           </div></div>
           <div class="blk"><div class="blk__t">积分历史页</div><div class="rule">
@@ -1659,10 +1665,10 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
         <!-- ============ 4 不改 ============ -->
         <article class="panel" id="p-same">
           <div class="panel__head"><span class="panel__num">4</span><h2 class="panel__title">不改的既有规则</h2></div>
-          <p class="intro">提醒用：这些照旧，开发不用重做，测试照线上验。</p>
+          <p class="intro">提醒用：这些照旧，不用重做。</p>
           <div class="blk"><div class="blk__t">一、商品排序（8/25 定，全部沿用；排序值方向统一）</div><div class="rule">
             <div class="rule__row"><div class="rule__k">适用</div><div class="rule__v">不分页签，全部套同一套规则。</div></div>
-            <div class="rule__row"><div class="rule__k">排序值方向</div><div class="rule__v">统一「数字越大越前面」：<br>1. 商品类别管理的类别排序、商品管理的「排序」、「推荐排序」三个都一样。<br>2. 后台两个列表的显示顺序也改成数字大的在上面（2.1、2.2）。<br>3. 类别排序改完，商品类别管理列表会照新顺序重新排（既有，保留）。</div></div>
+            <div class="rule__row"><div class="rule__k">排序值方向</div><div class="rule__v">统一「数字越大越前面」：<br>1. 商品类别管理的类别排序、商品管理的「排序」两个都一样。<br>2. 后台两个列表的显示顺序也改成数字大的在上面（2.1、2.2）。<br>3. 类别排序改完，商品类别管理列表会照新顺序重新排（既有，保留）。</div></div>
             <div class="rule__row"><div class="rule__k">「售完」</div><div class="rule__v">库存＝0 且画面出现「已抢光」标签，两个同时成立才算售完。</div></div>
             <div class="rule__row"><div class="rule__k">预设排序</div><div class="rule__v">照后台配置的排序值；已售完移到最后，彼此之间维持后台排序值。</div></div>
             <div class="rule__row"><div class="rule__k">我能购买</div><div class="rule__v">筛选非售完商品，用户积分／余额照既有逻辑；排序照后台排序值，不用再处理售完。</div></div>
@@ -2508,7 +2514,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
       <div class="frow"><label class="req">商品图片:</label><div class="val"><button class="el-button el-button--primary el-button--small is-plain"><i class="el-icon-document"></i> 选择文件</button><div class="hint red">尺寸750*750，最多可上传6张图，默认第一张图为封面图</div><div class="imgbox"></div></div></div>
       <div class="frow"><label class="req">购买价格:</label><div class="val"><div style="line-height:24px"><span class="opt on" style="color:#409eff"><i></i>积分</span></div><span class="inp inp--w" id="dlgPrice">100<span class="unit">积分</span></span></div></div>
       <div class="frow"><label>积分折扣比例:</label><div class="val"><span class="inp inp--w">0<span class="unit">%</span></span></div></div>
-      <div class="frow"><label class="req">排序:</label><div class="val"><span class="inp inp--s" style="text-align:center">1</span></div></div>
+      <div class="frow mod"><label class="req">排序:</label><div class="val"><span class="inp inp--s" style="text-align:center">1</span></div></div><!-- 11/23 她定：状态开启也能改排序 -->
       <div class="frow"><label>单个会员限购数:</label><div class="val"><div class="vipgrid">
         <span class="inp"><span class="pre">VIP0</span>0</span><span class="inp"><span class="pre">VIP1</span>0</span><span class="inp"><span class="pre">VIP2</span>0</span>
         <span class="inp"><span class="pre">VIP3</span>0</span><span class="inp"><span class="pre">VIP4</span>0</span><span class="inp"><span class="pre">VIP5</span>0</span>
@@ -2521,11 +2527,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
         <div id="flashMore" hidden style="margin-top:8px;display:flex;align-items:center;gap:10px;line-height:32px"><span class="inp" style="width:380px;color:#c0c4cc"><i class="el-icon-time" style="margin-right:8px"></i>开始时间 &nbsp;&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;&nbsp; 结束时间</span></div>
       </div></div>
       <div class="frow new" id="recRow"><label class="req">是否推荐:</label><div class="val">
-        <div><span class="opt" onclick="setRec(false)"><i></i>否</span><span class="opt on" onclick="setRec(true)"><i></i>是</span><span class="hint" id="recDisHint" hidden style="margin-left:12px">限时抢购商品不进 Recommend，不能勾推荐</span></div>
-        <div id="recMore" style="margin-top:8px">
-          <div style="display:flex;align-items:center;gap:10px;line-height:32px"><span style="color:#606266">推荐排序：</span><span class="inp inp--s" style="text-align:center">1</span><span class="hint">数字越大越前面；同数字照发布时间新的在前</span></div>
-          <div style="display:flex;align-items:center;gap:10px;line-height:32px"><span style="color:#606266">推荐时间：</span><span class="inp" style="width:380px;color:#c0c4cc"><i class="el-icon-time" style="margin-right:8px"></i>开始时间 &nbsp;&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;&nbsp; 结束时间</span><span class="hint">可留空＝不限时间，手动关掉为止</span></div>
-        </div>
+        <div><span class="opt" onclick="setRec(false)"><i></i>否</span><span class="opt on" onclick="setRec(true)"><i></i>是</span><span class="hint" id="recDisHint" hidden style="margin-left:12px">限时抢购商品不进 Recommend</span></div>
       </div></div>
       <div class="frow"><label>审核模式:</label><div class="val"><span class="opt on"><i></i>自动审核</span><span class="opt"><i></i>手动审核</span></div></div>
     </div>
@@ -2851,7 +2853,7 @@ function renderHome(){
   document.getElementById('fsRow').innerHTML = fl.map(cardFlash).join('');
   fsCount(); fsTick();
   document.getElementById('fsBlock').hidden = fl.length===0;
-  var rec = sortEx(PRODUCTS.filter(function(p){ return p.rec; }));   /* 后台「是否推荐＝是」才进来；顺序照后台推荐排序 */
+  var rec = sortEx(PRODUCTS.filter(function(p){ return p.rec; }));   /* 后台「是否推荐＝是」才进来；顺序照后台排序值（11/23 她定：没有推荐排序、推荐时间） */
   document.getElementById('recGrid').innerHTML = rec.map(cardSmall).join('');
   document.getElementById('recBlock').hidden = rec.length===0;
 }
@@ -3071,7 +3073,7 @@ function setFlash(on){
   document.querySelectorAll('#recRow .opt').forEach(function(x){ x.classList.toggle('dis',on); });
   document.getElementById('recDisHint').hidden=!on;
 }
-function setRec(on){ var r=document.getElementById('recRow'); if(r.querySelector('.opt.dis')) return; var o=r.querySelectorAll('.opt'); o[0].classList.toggle('on',!on); o[1].classList.toggle('on',on); document.getElementById('recMore').hidden=!on; }
+function setRec(on){ var r=document.getElementById('recRow'); if(r.querySelector('.opt.dis')) return; var o=r.querySelectorAll('.opt'); o[0].classList.toggle('on',!on); o[1].classList.toggle('on',on); }
 function openDlg(mode){
   var add = mode==='add';
   document.getElementById('dlgTitle').textContent = add ? '新增商品' : '编辑商品';
