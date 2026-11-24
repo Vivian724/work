@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>积分商城改版 · 埋点文档</title>
+<style>
+  body { margin: 0; background: #f5f6f8; color: #1f2329; font: 18px/1.8 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .page { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
+  h1 { font-size: 32px; margin: 0 0 8px; }
+  h2 { font-size: 24px; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #1f2329; }
+  h3 { font-size: 20px; margin: 32px 0 12px; }
+  .sub { color: #646a73; font-size: 16px; }
+  .card { background: #fff; border: 1px solid #dee0e3; border-radius: 8px; padding: 20px 24px; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; background: #fff; font-size: 18px; }
+  th, td { border: 1px solid #dee0e3; padding: 10px 14px; text-align: left; vertical-align: top; }
+  th { background: #eff0f1; white-space: nowrap; }
+  code { background: #eff0f1; border-radius: 4px; padding: 2px 6px; font: 16px/1.6 Menlo, Consolas, monospace; word-break: break-all; }
+  .shot { display: block; max-width: 100%; border: 1px solid #dee0e3; border-radius: 8px; margin: 12px 0; }
+  .empty { color: #8f959e; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>积分商城改版 · 埋点文档</h1>
+  <div class="sub">格式沿用《埋点4.0参考文档》</div>
+
+  <h2>一、验证方式</h2>
+  <div class="card">
+    触发接口：<code>/api/events/track</code><br>
+    测试环境可查看控制台 console，过滤词 <code>okTrack</code><br>
+    或者查看 network 接口，过滤词 <code>track</code>
+  </div>
+
+  <h2>二、命名规则</h2>
+  <table>
+    <tr><th>字段</th><th>规则</th><th>例子</th></tr>
+    <tr>
+      <td>上报事件</td>
+      <td><code>new_homepage_pointmall_位置_click</code><br>全部小写英文，单词之间用底线连接</td>
+      <td><code>new_homepage_pointmall_tab_click</code></td>
+    </tr>
+    <tr>
+      <td>eventName</td>
+      <td>中文名称：积分商城＋位置＋点击</td>
+      <td>积分商城分类tab点击</td>
+    </tr>
+    <tr>
+      <td>pageName</td>
+      <td>所在页面。积分商城首页与首页上的弹窗都是 <code>pointmall_page</code></td>
+      <td><code>pointmall_page</code></td>
+    </tr>
+    <tr>
+      <td>buttonName</td>
+      <td>固定按钮：写固定的英文小写名称<br>内容会变的（页签、商品）：上报被点击的名称</td>
+      <td><code>point record</code><br>点击的商品名称</td>
+    </tr>
+  </table>
+  <p>既有的 6 个埋点（积分记录、兑换记录、盲盒 draw、分类 tab、商品、确认订单）名称不变，本文档只列改版新增的埋点。</p>
+
+  <h2>三、埋点清单</h2>
+  <!-- 每个埋点一段，照下面的样板新增 -->
+  <p class="empty">待补：确认埋点位置后逐个写入。</p>
+
+  <!-- 样板（新增埋点时复制这一段）
+  <h3>1. new_homepage_pointmall_xxx_click</h3>
+  <img class="shot" src="img/tracking_01.png" alt="">
+  <table>
+    <tr><th>触发方式</th><td>点击红色框内按钮即可触发</td></tr>
+    <tr><th>上报事件</th><td><code>new_homepage_pointmall_xxx_click</code></td></tr>
+    <tr><th>上报字段</th><td>
+      eventName: "积分商城xxx点击"<br>
+      pageName: "pointmall_page"<br>
+      buttonName: "xxx"
+    </td></tr>
+  </table>
+  -->
+
+</div>
+</body>
+</html>

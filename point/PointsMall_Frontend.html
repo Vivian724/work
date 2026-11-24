@@ -1343,15 +1343,15 @@ html.spec-mode #wrap{ display:none!important; }
 .fxd-off-float .fxd-isle{animation:none}
 
 /* ===== Mystery Box 页：四颗方块左右摇晃（以底部为支点），四颗各差一点时间 ===== */
-.fxd-mbox{position:relative;width:430px;max-width:100%;aspect-ratio:867/1782;overflow:hidden;border-radius:18px;box-shadow:0 12px 40px rgba(20,40,80,.25);flex:none;background:url(img/mysterybox_bg.jpg) center/100% 100% no-repeat}
-.fxd-cube{position:absolute;display:block;transform-origin:50% 86%;animation:fxd-cubewobble 2.4s ease-in-out infinite;will-change:transform}
-.fxd-cube--c1{left:43.022%;top:38.272%;width:14.072%;height:7.015%;animation-delay:0s}
-.fxd-cube--c2{left:14.648%;top:56.902%;width:11.765%;height:5.948%;animation-delay:-1.6s}
-.fxd-cube--c3{left:73.587%;top:56.902%;width:11.534%;height:6.004%;animation-delay:-0.8s}
-.fxd-cube--c4{left:16.148%;top:90.180%;width:12.226%;height:5.836%;animation-delay:0s}
-/* 左右各 9 度、约 0.28 秒歪到另一边（她要快一点），摇四下后停约 1.3 秒 */
-@keyframes fxd-cubewobble{0%{transform:rotate(0)}4%{transform:rotate(-9deg)}15.5%{transform:rotate(9deg)}27%{transform:rotate(-9deg)}38.5%{transform:rotate(9deg)}44%,100%{transform:rotate(0)}}
-/* 50,000 那颗：先左右抖几下，再往上跳一下落回台面 */
+.fxd-mbox{position:relative;width:430px;max-width:100%;aspect-ratio:867/1784;overflow:hidden;border-radius:18px;box-shadow:0 12px 40px rgba(20,40,80,.25);flex:none;background:url(img/mysterybox_bg.jpg) center/100% 100% no-repeat}
+.fxd-cube{position:absolute;display:block;transform-origin:50% 86%;animation:fxd-cubewobble 1.9s linear infinite;will-change:transform}
+.fxd-cube--c1{left:40.600%;top:43.330%;width:20.300%;height:8.857%;animation-delay:0s}
+.fxd-cube--c2{left:7.843%;top:65.527%;width:13.841%;height:7.399%;animation-delay:-1.267s}
+.fxd-cube--c3{left:43.599%;top:65.527%;width:14.533%;height:7.567%;animation-delay:-0.633s}
+.fxd-cube--c4{left:77.970%;top:65.415%;width:14.072%;height:7.679%;animation-delay:0s}
+/* 四颗左右摇的速度一样（照 50,000 那颗：约 0.13 秒歪到另一边，摇四下约 0.7 秒）；其余三颗摇完停约 1.2 秒 */
+@keyframes fxd-cubewobble{0%{transform:rotate(0)}7%{transform:rotate(-9deg)}14%{transform:rotate(9deg)}21%{transform:rotate(-9deg)}28%{transform:rotate(9deg)}35%,100%{transform:rotate(0)}}
+/* 50,000 那颗：先左右抖四下，再往上跳一下落回原位 */
 .fxd-cube--c1{animation:fxd-cubejump 1.9s linear infinite}
 @keyframes fxd-cubejump{
   0%{transform:translateY(0) rotate(0)}
@@ -1368,23 +1368,23 @@ html.spec-mode #wrap{ display:none!important; }
 .fxd-off-cube .fxd-cube{animation:none}
 
 /* ===== OKIchiban Draw 页：五块价值牌子扫光；1,000,000 那块改成金黄光一明一暗＋星光 ===== */
-.fxd-ichi{position:relative;width:430px;max-width:100%;aspect-ratio:870/1787;overflow:hidden;border-radius:18px;box-shadow:0 12px 40px rgba(20,40,80,.25);flex:none;background:url(img/ichiban_bg.jpg) center/100% 100% no-repeat}
+.fxd-ichi{position:relative;width:430px;max-width:100%;aspect-ratio:969/1995;overflow:hidden;border-radius:18px;box-shadow:0 12px 40px rgba(20,40,80,.25);flex:none;background:url(img/ichiban_bg.jpg) center/100% 100% no-repeat}
 .fxd-sgn{border-radius:6px}
 /* 扫光统一：光扫过去都是 1 秒（跟标题一样），只有休息时间不同。牌子一轮 3.2 秒，1 秒＝31% */
 .fxd-sgn::before{animation-name:fxd-sweep-sgn;animation-duration:3.2s}
 @keyframes fxd-sweep-sgn{0%{transform:translateX(-160%) skewX(-22deg)}31%,100%{transform:translateX(330%) skewX(-22deg)}}
-.fxd-sgn--2{left:52.529%;top:31.226%;width:35.402%;height:4.085%}
+.fxd-sgn--2{left:60.268%;top:30.326%;width:20.846%;height:2.556%}
 .fxd-sgn--2::before{animation-delay:0.00s}
-.fxd-sgn--3{left:4.138%;top:43.705%;width:30.805%;height:3.973%}
+.fxd-sgn--3{left:13.106%;top:42.506%;width:20.021%;height:2.456%}
 .fxd-sgn--3::before{animation-delay:0.35s}
-.fxd-sgn--4{left:64.368%;top:56.240%;width:27.356%;height:3.973%}
+.fxd-sgn--4{left:69.143%;top:56.040%;width:17.441%;height:2.155%}
 .fxd-sgn--4::before{animation-delay:0.70s}
-.fxd-sgn--5{left:3.793%;top:72.636%;width:30.460%;height:3.805%}
+.fxd-sgn--5{left:12.590%;top:69.724%;width:20.124%;height:2.556%}
 .fxd-sgn--5::before{animation-delay:1.05s}
-.fxd-sgn--6{left:57.816%;top:85.339%;width:30.460%;height:3.805%}
+.fxd-sgn--6{left:63.261%;top:80.852%;width:18.989%;height:2.556%}
 .fxd-sgn--6::before{animation-delay:1.40s}
 /* 1,000,000：牌子四周金黄光一明一暗 */
-.fxd-glow{left:13.793%;top:6.603%;width:33.103%;height:3.637%;border-radius:6px;box-shadow:0 0 6px 2px rgba(255,236,140,1),0 0 14px 5px rgba(255,208,60,.75),0 0 26px 9px rgba(255,190,40,.35),inset 0 0 10px 2px rgba(255,214,80,.8);animation:fxd-glow 1.8s ease-in-out infinite}
+.fxd-glow{left:20.330%;top:5.313%;width:24.665%;height:2.657%;border-radius:6px;box-shadow:0 0 6px 2px rgba(255,236,140,1),0 0 14px 5px rgba(255,208,60,.75),0 0 26px 9px rgba(255,190,40,.35),inset 0 0 10px 2px rgba(255,214,80,.8);animation:fxd-glow 1.8s ease-in-out infinite}
 @keyframes fxd-glow{0%,100%{opacity:.15}50%{opacity:1}}
 /* 1,000,000：四角星一闪一闪 */
 .fxd-spark{position:absolute;aspect-ratio:1;pointer-events:none;transform:translate(-50%,-50%) scale(0);
@@ -1847,10 +1847,10 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
               <div class="fxd-txt">
                 <label class="fxd-sw"><input type="checkbox" data-fxd="cube" data-fxd-on="fxd-mbox" checked>播放动画（取消打勾＝看不动的样子）</label>
                 <div class="rule">
-                  <div class="rule__row"><div class="rule__k">哪里动</div><div class="rule__v">四间店里的问号方块（50,000、3,000、1,000、50）。店、人、台面都不动。</div></div>
-                  <div class="rule__row"><div class="rule__k">50,000 那颗</div><div class="rule__v">先快速左右抖四下，再往上跳一下落回台面，落地小弹一下，停一会儿再重复。一轮 1.9 秒。</div></div>
-                  <div class="rule__row"><div class="rule__k">其余三颗</div><div class="rule__v">站在台面上快速左右摇四下（以底部为支点、左右各歪 9 度，约 1 秒摇完），停约 1.3 秒，再摇。一轮 2.4 秒。</div></div>
-                  <div class="rule__row"><div class="rule__k">错开</div><div class="rule__v">三颗轮流摇，每颗晚 0.8 秒，不会一起摇、一起停。</div></div>
+                  <div class="rule__row"><div class="rule__k">哪里动</div><div class="rule__v">四间店里的问号方块（50,000、3,000、1,000、50）。店、角色、背景都不动。</div></div>
+                  <div class="rule__row"><div class="rule__k">50,000 那颗</div><div class="rule__v">先快速左右抖四下（约 0.7 秒抖完），再往上跳一下落回原位，落地小弹一下，停一会儿再重复。一轮 1.9 秒。</div></div>
+                  <div class="rule__row"><div class="rule__k">其余三颗</div><div class="rule__v">在原位快速左右摇四下，速度跟 50,000 那颗一样（以底部为支点、左右各歪 9 度，约 0.7 秒摇完），停约 1.2 秒，再摇。一轮 1.9 秒。</div></div>
+                  <div class="rule__row"><div class="rule__k">错开</div><div class="rule__v">三颗轮流摇，每颗晚约 0.6 秒，不会一起摇、一起停。</div></div>
                 </div>
               </div>
             </div>
@@ -1864,11 +1864,11 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
     <i class="fxd-fx fxd-sweep fxd-sgn fxd-sgn--4"></i>
     <i class="fxd-fx fxd-sweep fxd-sgn fxd-sgn--5"></i>
     <i class="fxd-fx fxd-sweep fxd-sgn fxd-sgn--6"></i>
-    <i class="fxd-spark" style="left:14.48%;top:6.83%;width:7%;animation-delay:0s"></i>
-    <i class="fxd-spark" style="left:46.21%;top:10.07%;width:6%;animation-delay:0.8s"></i>
-    <i class="fxd-spark" style="left:45.52%;top:6.72%;width:5%;animation-delay:1.5s"></i>
-    <i class="fxd-spark" style="left:14.94%;top:9.96%;width:4.5%;animation-delay:2.0s"></i>
-    <i class="fxd-spark" style="left:30.57%;top:6.38%;width:4%;animation-delay:1.1s"></i>
+    <i class="fxd-spark" style="left:21.03%;top:5.54%;width:7%;animation-delay:0s"></i>
+    <i class="fxd-spark" style="left:44.30%;top:7.80%;width:6%;animation-delay:0.8s"></i>
+    <i class="fxd-spark" style="left:43.61%;top:5.43%;width:5%;animation-delay:1.5s"></i>
+    <i class="fxd-spark" style="left:21.48%;top:7.69%;width:4.5%;animation-delay:2.0s"></i>
+    <i class="fxd-spark" style="left:32.88%;top:5.09%;width:4%;animation-delay:1.1s"></i>
               </div>
               <div class="fxd-txt">
                 <label class="fxd-sw"><input type="checkbox" data-fxd="sign" data-fxd-on="fxd-ichi" checked>播放动画（取消打勾＝看不动的样子）</label>
