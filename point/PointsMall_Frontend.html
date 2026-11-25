@@ -359,8 +359,6 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .gmap>img{width:100%;height:auto;display:block;}
 .gmap__hit{position:absolute;background:transparent;border:0;padding:0;cursor:pointer;border-radius:12px;}
 .gmap__hit:active{background:rgba(255,255,255,.18);}
-.gmap__hit--off{background:rgba(40,40,60,.55);cursor:default;color:#fff;font-weight:900;font-size:.9rem;line-height:1;display:grid;place-items:center;}
-.gmap__hit--off:active{background:rgba(40,40,60,.55);}
 .gmap__hit--soon{cursor:default;}
 .pgtile{width:44%;height:112px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#fff;font-weight:900;font-size:.92rem;text-align:center;line-height:1.1;text-shadow:0 1px 3px rgba(0,0,0,.4);box-shadow:0 6px 14px rgba(0,40,90,.25);position:relative;z-index:1;}
 .pgtile__ico{font-size:2rem;line-height:1;}
@@ -1541,7 +1539,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
           <div class="blk" data-view-of="form"><div class="blk__t">一番赏、盲盒商品</div><div class="rule">
             <div class="rule__row"><div class="rule__k">后台怎么配</div><div class="rule__v"><span class="chip chip--same">既有</span>跟其他商品一样在这里配，一套一笔：商品图片、商品名称、购买价格（扣除积分）、排序都照既有填，不做特殊处理。App 旧包还在用这些资料。</div></div>
-            <div class="rule__row"><div class="rule__k">新版前台取什么</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">新版前台（新包）不取这里的商品图片、商品名称，摊位的图、名称照设计稿固定；只取「排序」决定哪一套摆哪个位置。购买价格（扣除积分）、库存照既有取，在游戏页用。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">新版前台取什么</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">新版前台（新包）不取这里的商品图片、商品名称，摊位的图、名称照设计稿固定；只取「排序」决定哪一套摆哪个位置。购买价格（扣除积分）照既有取，在游戏页用。一番赏、盲盒是无限抽，没有库存、没有售完。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">排序怎么对</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">前台一番赏固定 6 个摊位、盲盒固定 4 个，价值高→低的位置照设计稿。前台在状态开启的商品里，取后台「排序」数字最大的前 6 笔（盲盒前 4 笔）：第 1 笔摆价值最高的摊位，第 2 笔第二高，依此类推；第 7 笔（盲盒第 5 笔）起不显示。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">最少配几笔</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">一番赏至少 6 笔、盲盒至少 4 笔，运营已确认会配满；前台不做「没配置」的画面。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">旧包</div><div class="rule__v"><span class="chip chip--same">既有</span>App 旧包照既有取图片、名称，不受影响。</div></div>
@@ -1679,7 +1677,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <p class="intro">列表页改成跟 Playground 一样的地图风格，一套商品一个摊位，<span class="rev">整页照设计稿</span><i class="revd">11/25</i>；玩法、抽奖、发奖全部照既有。</p>
           <div class="blk"><div class="blk__t">规则</div><div class="rule">
             <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ 标题」返回列（3.10），往下滑钉在最上面。列表页标题＝游戏名；游戏页标题＝该套名称。</div></div>
-            <div class="rule__row"><div class="rule__k">一套的资料</div><div class="rule__v"><span class="chip chip--mod">修改</span><span class="rev">摊位上的图、名称、价值标全部照设计稿固定，不显示后台的商品图片、商品名称、期数、价格、库存；后台的每抽价格、库存点进游戏页才用（照既有）。</span><i class="revd">11/25</i>售完：摊位灰掉＋「已抢光」，不能点（售完判断照既有，第 4 节）。</div></div>
+            <div class="rule__row"><div class="rule__k">一套的资料</div><div class="rule__v"><span class="chip chip--mod">修改</span><span class="rev">摊位上的图、名称、价值标全部照设计稿固定，不显示后台的商品图片、商品名称、价格；后台的每抽价格点进游戏页才用（照既有）。一番赏、盲盒是无限抽，没有库存、没有售完状态，摊位永远可以点。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">顺序</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">摊位数固定：一番赏 6 个、盲盒 4 个，各摊位价值照设计稿，高→低排位置。哪一套摆哪个摊位照后台「排序」：状态开启的商品里，取数字最大的前 6 笔（盲盒前 4 笔），第 1 笔＝价值最高的摊位，依此类推（2.1）。后台一定配满，不会有空摊位。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">点一套</div><div class="rule__v">进该套游戏页（＝线上既有的抽奖画面，一番赏按 Draw、盲盒开盒那页），标题换成该套名称；游戏页内容、抽 1／5／10／全部、积分不足、中奖发放，照既有。</div></div>
             <div class="rule__row"><div class="rule__k">游戏页顶部</div><div class="rule__v">游戏页最上面有一排小岛：Mystery Box、OKIchiban Draw、Coming Soon，目前所在的游戏亮着。点另一个游戏的岛，直接跳到那个游戏的列表页，不用先回 Playground。</div></div>
@@ -2810,7 +2808,7 @@ var SETS = [
   {game:'ichiban', id:9, no:'#9', name:'Spy × Family', sub:'🔥 Final Prize ₱40,000', price:100, unit:'/ Ticket', left:'800 / 3,000 Draws left', rem:800, total:3000, img:'img-free', txt:'SPY×<br>FAMILY'},
   {game:'ichiban', id:10, no:'#10', name:'Pokémon Center', sub:'🔥 Final Prize ₱30,000', price:80, unit:'/ Ticket', left:'2,000 / 2,000 Draws left', rem:2000, total:2000, img:'img-item', txt:'POKÉ<br>MON'},
   {game:'ichiban', id:11, no:'#Unlimited', name:'Lucky Cat Festival', sub:'🔥 Final Prize ₱20,000', price:50, unit:'/ Ticket', left:'Unlimited', rem:99999, total:99999, img:'img-cash', txt:'LUCKY<br>CAT'},
-  {game:'ichiban', id:4, no:'#4', name:'OKIchiban Draw · Vol.4', sub:'🔥 Final Prize ₱50,000', price:300, unit:'/ Ticket', left:'0 / 9,999 Draws left', rem:0, total:9999, img:'img-ichi', txt:'ICHIBAN<br>VOL.4', soldout:true},
+  {game:'ichiban', id:4, no:'#4', name:'OKIchiban Draw · Vol.4', sub:'🔥 Final Prize ₱50,000', price:300, unit:'/ Ticket', left:'Unlimited', rem:99999, total:99999, img:'img-ichi', txt:'ICHIBAN<br>VOL.4'},
   {game:'blind',   id:1, no:'#1', name:'Lucky Star', sub:'💸 Top Prize ₱3,000', price:2000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'LUCKY<br>STAR'},
   {game:'blind',   id:2, no:'#2', name:'Golden Night', sub:'💸 Top Prize ₱10,000', price:5000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'GOLDEN<br>NIGHT'},
   {game:'blind',   id:3, no:'#3', name:'Neon Rush', sub:'💸 Top Prize ₱1,000', price:1000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'NEON<br>RUSH'},
@@ -2823,7 +2821,7 @@ function renderGames(){
 }
 /* 点岛 → 该游戏列表页（11/25 她定：后台一定配满，一番赏至少 6 套、盲盒至少 4 套，不再有「只有一套直接进」）。
    列表页＝整张设计稿底图，摊位位置固定；取后台排序最大的前 6（盲盒前 4）套，第 1 套摆价值最高的摊位，依此类推。
-   摊位热区透明，点了进该套；售完＝盖灰＋「已抢光」不能点。 */
+   摊位热区透明，点了进该套；一番赏、盲盒无限抽，没有售完。 */
 var STALLS = {
   ichiban: { img:'img/ichiban_bg.jpg', hits:[
     {l:10, t:4.5,  w:45, h:16},   /* 1,000,000 */
@@ -2847,9 +2845,7 @@ function openGame(key){
   document.getElementById('glistMap').innerHTML = '<img src="'+st.img+'" alt="'+g.name+'">' + st.hits.map(function(h, i){
     var x = arr[i]; if(!x) return '';
     var sty = 'left:'+h.l+'%;top:'+h.t+'%;width:'+h.w+'%;height:'+h.h+'%';
-    return x.soldout
-      ? '<span class="gmap__hit gmap__hit--off" style="'+sty+'">已抢光</span>'
-      : '<button class="gmap__hit" style="'+sty+'" onclick="openSet(\''+key+'\','+x.id+')" aria-label="'+x.name+'"></button>';
+    return '<button class="gmap__hit" style="'+sty+'" onclick="openSet(\''+key+'\','+x.id+')" aria-label="'+x.name+'"></button>';   /* 11/25 她定：一番赏、盲盒无限抽，没有售完 */
   }).join('');
   go('glist');
 }
