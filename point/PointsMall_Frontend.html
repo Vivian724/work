@@ -350,6 +350,18 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .csec__more--go{color:var(--c-primary);font-weight:600;}
 .pgtiles{position:relative;height:150px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#7cc6ff,#dff0ff);display:flex;align-items:center;justify-content:space-around;gap:10px;padding:0 10px;cursor:pointer;}
 .pgtiles .park__cloud{font-size:1.5rem;position:absolute;}
+/* 11/25 设计稿：入口卡＝天空底图＋两座岛；地图／一番赏／盲盒＝整张设计稿底图，摊位用透明热区可点 */
+.pgbanner{position:relative;width:100%;aspect-ratio:884/408;border-radius:12px;overflow:hidden;background:url(img/playground_banner_bg.png) center/100% 100% no-repeat;cursor:pointer;}
+.pgbanner img{position:absolute;display:block;}
+.pgbanner__box{left:0;top:8.824%;width:47.511%;height:80.882%;}
+.pgbanner__oki{left:53.507%;top:0.980%;width:46.493%;height:94.853%;}
+.gmap{position:relative;width:100%;line-height:0;}
+.gmap>img{width:100%;height:auto;display:block;}
+.gmap__hit{position:absolute;background:transparent;border:0;padding:0;cursor:pointer;border-radius:12px;}
+.gmap__hit:active{background:rgba(255,255,255,.18);}
+.gmap__hit--off{background:rgba(40,40,60,.55);cursor:default;color:#fff;font-weight:900;font-size:.9rem;line-height:1;display:grid;place-items:center;}
+.gmap__hit--off:active{background:rgba(40,40,60,.55);}
+.gmap__hit--soon{cursor:default;}
 .pgtile{width:44%;height:112px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#fff;font-weight:900;font-size:.92rem;text-align:center;line-height:1.1;text-shadow:0 1px 3px rgba(0,0,0,.4);box-shadow:0 6px 14px rgba(0,40,90,.25);position:relative;z-index:1;}
 .pgtile__ico{font-size:2rem;line-height:1;}
 /* 商品卡（11/10 设计图）：浅蓝渐层、紫折扣角标、白底图、名称、in stock 胶囊、红★现价＋灰★划旧价；整张可点；抢完＝图灰＋已抢光 */
@@ -769,6 +781,11 @@ html:not(.spec-mode) body:has(#wrap.is-admin),html:not(.spec-mode) body:has(#wra
 #pcui .pcpg .park__cloud{font-size:1.8rem;position:absolute;}
 #pcui .pcpg .pgtile{width:170px;height:170px;font-size:1.05rem;cursor:pointer;}
 #pcui .pcpg--page{display:block;height:760px;border-radius:12px;padding:40px 60px;}
+#pcui .pgbanner--pc{height:auto;aspect-ratio:1608/324;max-width:none;margin:0;background:none;}
+#pcui .pgbanner--pc .pgbanner__pc{position:static;width:100%;height:100%;object-fit:cover;}
+#pcui .pgbanner__hit{position:absolute;top:0;height:100%;padding:0;border:0;background:none;cursor:pointer;}
+#pcui .pcpg--map{display:block;height:auto;padding:0;background:none;border-radius:0;}
+#pcui .pcpg--map .gmap{max-width:560px;margin:0 auto;border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(20,40,80,.2);}
 #pcui .pcpg__title{text-align:center;font-size:2.6rem;font-weight:900;color:#fff;text-shadow:0 3px 0 #2f6bff,0 6px 14px rgba(0,0,0,.25);margin-bottom:60px;letter-spacing:.02em;}
 #pcui .pcpg__isles{display:grid;grid-template-columns:1fr 1fr;gap:70px 160px;justify-items:center;}
 #pcui .pcpg--page .pgtile{width:220px;height:220px;font-size:1.3rem;}
@@ -1151,6 +1168,7 @@ html.spec-mode body{
 
 /* 10/1 修订：红字只标这次变动的句子 */
 #specShell .rev{ color: var(--c-danger); }
+#specShell .revd{font-style:normal;font-size:.75em;color:var(--c-text-3);margin-left:4px;white-space:nowrap;vertical-align:1px;}
 #specShell .rev b, #specShell .rev code{ color: inherit; }
 #specShell .sub.rev, #specShell [id^="p-f"] h4.sub.rev{ color: var(--c-danger); }
 
@@ -1312,6 +1330,7 @@ html.spec-mode #protoRoot{display:none!important;}
 html:not(.spec-mode) #specShell{display:none!important;}
 
 #specShell .chip--tbd{ background:#f3effa; color:#6b4fbb; }
+#specShell .chip--style{ background:#e6f7f1; color:#0f7b5f; }
 html.spec-mode body{ display:block; padding:0; min-height:0; }
 html.spec-mode #wrap{ display:none!important; }
 
@@ -1451,10 +1470,10 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
         <!-- ============ 1 总览 ============ -->
         <article class="panel" id="p-map">
-          <div class="panel__head"><span class="panel__num">1</span><h2 class="panel__title">总览</h2></div>
+          <div class="panel__head"><span class="panel__num">1</span><h2 class="panel__title">总览<span class="rev">（11/23、11/25 调整）</span></h2></div>
           <div class="intro intro--list">
-            <div class="intro__row"><b>前台</b><span>积分商城页重排成六块：顶栏、快捷入口、Task List、Playground 入口、Flash Sale、Recommend。商品搬到新的「Points Mall 商品页」；一番赏、盲盒改从游乐场地图进。</span></div>
-            <div class="intro__row"><b>后台</b><span>加一个「是否推荐」开关（预设是）；排序值统一数字越大越前面；<span class="rev">状态开启的商品也能改排序。</span></span></div>
+            <div class="intro__row"><b>前台</b><span>积分商城页重排成六块：顶栏、快捷入口、Task List、Playground 入口、Flash Sale、Recommend。商品搬到新的「Points Mall 商品页」；一番赏、盲盒改从 Playground 进，首页横幅上的岛也能直接进列表页。</span></div>
+            <div class="intro__row"><b>后台</b><span>加一个「是否推荐」开关（预设是）；排序值统一数字越大越前面；<span class="rev">状态开启的商品也能改排序。</span><i class="revd">11/23</i></span></div>
             <div class="intro__row"><b>不改</b><span>购买弹窗、兑换流程、排序逻辑、任务中心、记录、背包、VIP 都沿用既有，不重做。</span></div>
           </div>
 
@@ -1462,21 +1481,21 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
             <div class="lazy__grid">
               <div class="lazy__card"><b class="lazy__t">前台</b><ul class="lazy__list">
                 <li><b>积分商城页</b><span>整页重排；商品区只剩 Flash Sale 和 Recommend</span><span class="lazy__ref">3.1</span></li>
-                <li><b>Points Mall 商品页</b><span>新页面：ALL／I Can Buy／各分类页签</span><span class="lazy__ref">3.2</span></li>
-                <li><b>Playground</b><span>一座岛一种游戏，点岛进一番赏、盲盒</span><span class="lazy__ref">3.4</span></li>
-                <li><b>一番赏／盲盒</b><span>列表页改地图风格，等设计稿</span><span class="lazy__ref">3.5</span></li>
-                <li><b>积分历史页</b><span>线上积分历史、兑换记录合成一页两页签（积分记录｜兑换记录），页名照线上 Points History</span><span class="lazy__ref">3.7</span></li>
-                <li><b>我的背包</b><span>就是线上「My Voucher」，名称、内容都不变，只加一个快捷入口</span><span class="lazy__ref">3.8</span></li>
-                <li><b>PC 版</b><span>积分商城页、积分历史页照 PC 设计稿；商品区并在积分商城页里，不另开商品页；其余页照既有 PC 页</span><span class="lazy__ref">3.11</span></li>
+                <li><b>积分历史页</b><span>线上积分历史、兑换记录合成一页两页签（积分记录｜兑换记录），页名照线上 Points History</span><span class="lazy__ref">3.3</span></li>
+                <li><b>我的背包</b><span>就是线上「My Voucher」，名称、内容都不变，只加一个快捷入口</span><span class="lazy__ref">3.4</span></li>
+                <li><b>Playground</b><span>一座岛一种游戏，点岛进一番赏、盲盒</span><span class="lazy__ref">3.6</span></li>
+                <li><b>一番赏／盲盒</b><span>列表页改地图风格，固定 6 个／4 个摊位，照后台排序对应</span><span class="lazy__ref">3.7</span></li>
+                <li><b>Points Mall 商品页</b><span>新页面：ALL／I Can Buy／各分类页签</span><span class="lazy__ref">3.8</span></li>
+                <li><b>PC 版</b><span>积分商城页、积分历史页、Playground、一番赏／盲盒照 PC 设计稿；商品区并在积分商城页里，不另开商品页；其余页照既有 PC 页</span><span class="lazy__ref">3.11</span></li>
               </ul></div>
               <div class="lazy__card"><b class="lazy__t">后台</b><ul class="lazy__list">
-                <li><b>商品管理</b><span>表单加「是否推荐」开关（预设是），列表加「推荐」栏和筛选；列表改成排序数字大的在上面；<span class="rev">状态开启的商品也能改排序</span></span><span class="lazy__ref">2.1</span></li>
+                <li><b>商品管理</b><span>表单加「是否推荐」开关（预设是），列表加「推荐」栏和筛选；列表改成排序数字大的在上面；<span class="rev">状态开启的商品也能改排序；一番赏、盲盒商品照既有配，新版前台只取「排序」</span><i class="revd">11/23、11/25</i></span><span class="lazy__ref">2.1</span></li>
                 <li><b>商品类别管理</b><span>栏位不改；列表改成排序数字大的在上面</span><span class="lazy__ref">2.2</span></li>
               </ul></div>
               <div class="lazy__card"><b class="lazy__t">不改的</b><ul class="lazy__list">
-                <li><b>兑换</b><span>购买弹窗、积分不足、兑换成功、扣点发放</span><span class="lazy__ref">3.3 ／ 4</span></li>
+                <li><b>兑换</b><span>购买弹窗、积分不足、兑换成功、扣点发放</span><span class="lazy__ref">3.9 ／ 4</span></li>
                 <li><b>排序</b><span>既有排序逻辑全部沿用；排序值统一数字越大越前面（类别、商品都一样）</span><span class="lazy__ref">4</span></li>
-                <li><b>任务、VIP</b><span>Task List 页、VIP 页照既有</span><span class="lazy__ref">3.6 ／ 3.9</span></li>
+                <li><b>任务、VIP</b><span>Task List 页、VIP 页照既有</span><span class="lazy__ref">3.5 ／ 3.2</span></li>
               </ul></div>
             </div>
           </div>
@@ -1484,22 +1503,22 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="blk"><div class="blk__t">前台每块在后台哪里设</div><div class="rule">
             <div class="rule__row"><div class="rule__k">顶栏 3.1</div><div class="rule__v">不用设，照个人中心既有资料。</div></div>
             <div class="rule__row"><div class="rule__k">快捷入口 3.1</div><div class="rule__v">不用设，三格固定。</div></div>
-            <div class="rule__row"><div class="rule__k">Task List 3.1、3.6</div><div class="rule__v">任务中心管理（既有）。</div></div>
+            <div class="rule__row"><div class="rule__k">Task List 3.1、3.5</div><div class="rule__v">任务中心管理（既有）。</div></div>
             <div class="rule__row"><div class="rule__k">Flash Sale 3.1</div><div class="rule__v">商品管理「是否限时抢购」＋时间（既有）。</div></div>
             <div class="rule__row"><div class="rule__k">Recommend 3.1</div><div class="rule__v">商品管理「是否推荐」（2.1，<span class="chip chip--new">新增</span>）。</div></div>
-            <div class="rule__row"><div class="rule__k">商品页页签 3.2</div><div class="rule__v">商品类别管理（既有，2.2）＋商品勾的类别。</div></div>
-            <div class="rule__row"><div class="rule__k">商品卡 3.2</div><div class="rule__v">商品管理既有栏位：图、名称、价格、积分折扣比例、库存、排序。</div></div>
-            <div class="rule__row"><div class="rule__k">Playground 3.4、3.11</div><div class="rule__v">不用设，四座岛固定。</div></div>
-            <div class="rule__row"><div class="rule__k">一番赏、盲盒 3.5</div><div class="rule__v">既有的一番赏、盲盒商品设定，一套一笔。</div></div>
+            <div class="rule__row"><div class="rule__k">商品页页签 3.8</div><div class="rule__v">商品类别管理（既有，2.2）＋商品勾的类别。</div></div>
+            <div class="rule__row"><div class="rule__k">商品卡 3.8</div><div class="rule__v">商品管理既有栏位：图、名称、价格、积分折扣比例、库存、排序。</div></div>
+            <div class="rule__row"><div class="rule__k">Playground 3.6、3.11</div><div class="rule__v">不用设，四座岛固定。</div></div>
+            <div class="rule__row"><div class="rule__k">一番赏、盲盒 3.7</div><div class="rule__v">既有的一番赏、盲盒商品设定，一套一笔。<span class="rev">新版前台只取「排序」最大的前 6 笔（盲盒前 4 笔）对应摊位，图、名称不取（2.1）。</span><i class="revd">11/25</i></div></div>
           </div></div>
 
-          <div class="blk"><div class="blk__t">标记</div><div class="rule"><div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--new">新增</span>新加的栏位或功能 ／ <span class="chip chip--mod">修改</span>既有功能有调整 ／ <span class="chip chip--same">既有</span>照旧，不动。左栏示意点哪个画面，右边只讲那个画面。示意只是版面和流程的参考，实际样式、颜色、图以设计稿为准；本文件只讲规则。</div></div></div></div>
+          <div class="blk"><div class="blk__t">标记</div><div class="rule"><div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--new">新增</span>新加的栏位或功能。<br><span class="chip chip--mod">修改</span>既有功能，逻辑有调整。<br><span class="chip chip--style">样式</span>既有功能，逻辑完全不动，只有样式、版面照设计稿换。<br><span class="chip chip--same">既有</span>逻辑、样式都不动，照线上。<br>左栏示意点哪个画面，右边只讲那个画面。示意只是版面和流程的参考，实际样式、颜色、图以设计稿为准；本文件只讲规则。</div></div></div></div>
         </article>
 
         <!-- ============ 2 后台 ============ -->
         <article class="panel" id="p-b1">
-          <div class="panel__head"><span class="panel__num">2.1</span><h2 class="panel__title">后台 · 商品管理<span class="rev">（11/23 调整）</span></h2></div>
-          <p class="intro">位置：积分商城 › 商品管理。改三件事：一、商品可以勾「推荐」，勾了才进前台积分商城页的 Recommend 区，做法跟既有「是否限时抢购」一样，一个商品一个开关；二、列表显示顺序改成排序数字大的在上面（第 4 节）；<span class="rev">三、商品状态开启时也能改「排序」。</span>其他栏位全部照旧。</p>
+          <div class="panel__head"><span class="panel__num">2.1</span><h2 class="panel__title">后台 · 商品管理<span class="rev">（11/23、11/25 调整）</span></h2></div>
+          <p class="intro">位置：积分商城 › 商品管理。改三件事：一、商品可以勾「推荐」，勾了才进前台积分商城页的 Recommend 区，做法跟既有「是否限时抢购」一样，一个商品一个开关；二、列表显示顺序改成排序数字大的在上面（第 4 节）；<span class="rev">三、商品状态开启时也能改「排序」。</span><i class="revd">11/23</i>其他栏位全部照旧。</p>
           <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="list" data-pv='{"proto":"admin","go":"admin"}'>列表</button><button type="button" class="pv__btn" data-view="form" data-pv='{"proto":"admin","go":"admin","pop":"edit"}'>编辑商品</button><button type="button" class="pv__btn" data-view="form" data-pv='{"proto":"admin","go":"admin","pop":"add"}'>新增商品</button></p>
 
           <div class="blk" data-view-of="list"><div class="blk__t">列表</div><div class="rule">
@@ -1510,14 +1529,22 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           </div></div>
 
           <div class="blk" data-view-of="form"><div class="blk__t">新增／编辑商品表单</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">是否推荐</div><div class="rule__v"><span class="chip chip--new">新增</span>单选 否／是，预设「是」（上线后运营自行后台调整）。放在「是否限时抢购」下方，新增和编辑表单都有。<span class="rev">只有这一个开关，不另设推荐排序、推荐时间；Recommend 顺序照「排序」栏位。</span></div></div>
-            <div class="rule__row"><div class="rule__k">二选一</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">一个商品只能是「限时抢购」或「推荐」其中一种，不能两个都是：</span><br>1. 「是否限时抢购」选「是」，「是否推荐」自动变「否」并灰掉不能点。<br>2. 「是否限时抢购」改回「否」，才能再勾推荐。<br>3. 已经勾推荐的商品再改成限时抢购，推荐也一样被改成「否」。</div></div>
-            <div class="rule__row"><div class="rule__k">提示文字</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">文案：<b>限时抢购商品不进 Recommend</b><br>位置：「是否推荐」选项右边，灰色小字。<br>1. 「是否限时抢购」＝是 → 「是否推荐」灰掉，小字出现。<br>2. 「是否限时抢购」＝否 → 小字消失。</span></div></div>
-            <div class="rule__row"><div class="rule__k">上线时既有商品</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">上线时线上既有商品怎么带：<br>1. 一般商品：「是否推荐」带「是」。<br>2. 限时抢购商品：带「否」，不动它。</span></div></div>
+            <div class="rule__row"><div class="rule__k">是否推荐</div><div class="rule__v"><span class="chip chip--new">新增</span>单选 否／是，预设「是」（上线后运营自行后台调整）。放在「是否限时抢购」下方，新增和编辑表单都有。<span class="rev">只有这一个开关，不另设推荐排序、推荐时间；Recommend 顺序照「排序」栏位。</span><i class="revd">11/23</i></div></div>
+            <div class="rule__row"><div class="rule__k">二选一</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">一个商品只能是「限时抢购」或「推荐」其中一种，不能两个都是：</span><i class="revd">11/23</i><br>1. 「是否限时抢购」选「是」，「是否推荐」自动变「否」并灰掉不能点。<br>2. 「是否限时抢购」改回「否」，才能再勾推荐。<br>3. 已经勾推荐的商品再改成限时抢购，推荐也一样被改成「否」。</div></div>
+            <div class="rule__row"><div class="rule__k">提示文字</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">文案：<b>限时抢购商品不进 Recommend</b><br>位置：「是否推荐」选项右边，灰色小字。<br>1. 「是否限时抢购」＝是 → 「是否推荐」灰掉，小字出现。<br>2. 「是否限时抢购」＝否 → 小字消失。</span><i class="revd">11/23</i></div></div>
+            <div class="rule__row"><div class="rule__k">上线时既有商品</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">上线时线上既有商品怎么带：<br>1. 一般商品：「是否推荐」带「是」。<br>2. 限时抢购商品：带「否」，不动它。</span><i class="revd">11/23</i></div></div>
             <div class="rule__row"><div class="rule__k">推荐改回「否」</div><div class="rule__v">「是否推荐」改回「否」，前台 Recommend 下次载入就不再显示这个商品（生效时机同第 4 节）。</div></div>
             <div class="rule__row"><div class="rule__k">前台怎么用</div><div class="rule__v">积分商城页 Recommend 区（3.1）列的就是推荐＝是、状态开启的商品；下架或删除自动消失。排序、售完见 3.1。</div></div>
-            <div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span><span class="rev">商品状态开启时也能改「排序」，不用先关闭状态（既有：状态开启就不能改）。</span>数字越大越前面、列表顺序照数字，见「列表」区块的「排序方向」。</div></div>
+            <div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span><span class="rev">商品状态开启时也能改「排序」，不用先关闭状态（既有：状态开启就不能改）。</span><i class="revd">11/23</i>数字越大越前面、列表顺序照数字，见「列表」区块的「排序方向」。</div></div>
             <div class="rule__row"><div class="rule__k">其他栏位</div><div class="rule__v"><span class="chip chip--same">既有</span>币种、商品类别、商品名称、商品简介、商品类型、商品图片、购买价格、积分折扣比例、单个会员限购数、库存、是否限时抢购、审核模式，校验和提示照既有。</div></div>
+          </div></div>
+
+          <div class="blk" data-view-of="form"><div class="blk__t">一番赏、盲盒商品</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">后台怎么配</div><div class="rule__v"><span class="chip chip--same">既有</span>跟其他商品一样在这里配，一套一笔：商品图片、商品名称、购买价格（扣除积分）、排序都照既有填，不做特殊处理。App 旧包还在用这些资料。</div></div>
+            <div class="rule__row"><div class="rule__k">新版前台取什么</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">新版前台（新包）不取这里的商品图片、商品名称，摊位的图、名称照设计稿固定；只取「排序」决定哪一套摆哪个位置。购买价格（扣除积分）、库存照既有取，在游戏页用。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">排序怎么对</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">前台一番赏固定 6 个摊位、盲盒固定 4 个，价值高→低的位置照设计稿。前台在状态开启的商品里，取后台「排序」数字最大的前 6 笔（盲盒前 4 笔）：第 1 笔摆价值最高的摊位，第 2 笔第二高，依此类推；第 7 笔（盲盒第 5 笔）起不显示。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">最少配几笔</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">一番赏至少 6 笔、盲盒至少 4 笔，运营已确认会配满；前台不做「没配置」的画面。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">旧包</div><div class="rule__v"><span class="chip chip--same">既有</span>App 旧包照既有取图片、名称，不受影响。</div></div>
           </div></div>
         </article>
 
@@ -1527,32 +1554,32 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="blk"><div class="blk__t">规则</div><div class="rule">
             <div class="rule__row"><div class="rule__k">栏位</div><div class="rule__v"><span class="chip chip--same">既有</span>排序、名、备注、更新时间、操作人名称、状态、编辑／删除、新增，全部照线上不动。</div></div>
             <div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span>数字越大越前面（跟商品管理「排序」同方向，第 4 节）。列表显示顺序也一样：排序数字大的在上面。改完排序，列表立刻照新顺序重新排（既有逻辑，保留）。</div></div>
-            <div class="rule__row"><div class="rule__k">前台怎么用</div><div class="rule__v">Points Mall 商品页（3.2）的页签：ALL、I Can Buy 固定在前，后面的分类页签照这里的排序。「一番赏」「盲盒」两个类别不进页签，走 Playground（3.4）。</div></div>
+            <div class="rule__row"><div class="rule__k">前台怎么用</div><div class="rule__v">Points Mall 商品页（3.8）的页签：ALL、I Can Buy 固定在前，后面的分类页签照这里的排序。「一番赏」「盲盒」两个类别不进页签，走 Playground（3.6）。</div></div>
           </div></div>
         </article>
 
         <!-- ============ 3 前台 ============ -->
         <article class="panel" id="p-f1">
-          <div class="panel__head"><span class="panel__num">3.1</span><h2 class="panel__title">前台 · 积分商城页<span class="rev">（11/23 调整）</span></h2></div>
-          <p class="intro">从底部「Points Mall」进来的那一页。由上到下：顶栏、三个快捷入口、Task List、Playground 入口、Flash Sale、Recommend。未登录也看得到整页，只有顶栏换样子，点到要登录的地方才去登录页（3.10）。</p>
+          <div class="panel__head"><span class="panel__num">3.1</span><h2 class="panel__title">前台 · 积分商城页<span class="rev">（11/23、11/25 调整）</span></h2></div>
+          <p class="intro">从底部「Points Mall」进来的那一页。由上到下：顶栏、三个快捷入口、Task List、Playground 入口、Flash Sale、Recommend。未登录也看得到整页，只有顶栏换样子；<span class="rev">点页上任何入口都直接去登录页，只有 Flash Sale 照既有，按「Buy now」才去（3.10）。</span><i class="revd">11/25</i></p>
           <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="in" data-pv='{"proto":"h5","go":"mall","login":true}'>已登录</button><button type="button" class="pv__btn" data-view="out" data-pv='{"proto":"h5","go":"mall","login":false}'>未登录</button></p>
 
           <div class="blk"><div class="blk__t">顶栏</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">已登录</div><div class="rule__v"><span class="chip chip--mod">修改</span>头像、₱ 余额＋↻、★ 积分＋↻、「Deposit」钮（带 BONUS 角标）、🔍 搜索。<br>拿掉原本的 ☰ 和 Invite。<br>各钮行为照既有：Deposit 去存款页、🔍 搜索、↻ 刷新余额／积分。</div></div>
+            <div class="rule__row"><div class="rule__k">已登录</div><div class="rule__v"><span class="chip chip--style">样式</span>照设计稿：头像、₱ 余额＋↻、★ 积分＋↻、「Deposit」钮（带 BONUS 角标）、🔍 搜索。<br>拿掉原本的 ☰ 和 Invite。<br>各钮行为照既有：Deposit 去存款页、🔍 搜索、↻ 刷新余额／积分。</div></div>
             <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v">OKBET logo、「Register / Login」钮（去既有登录页）、🔍 搜索。</div></div>
           </div></div>
 
           <div class="blk"><div class="blk__t">快捷入口</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">三格</div><div class="rule__v"><span class="chip chip--new">新增</span>VIP Perks → VIP 页（3.9）；Points History → 积分历史页（3.7）；My Voucher → 我的背包（3.8）。</div></div>
+            <div class="rule__row"><div class="rule__k">三格</div><div class="rule__v"><span class="chip chip--new">新增</span>VIP Perks → VIP 页（3.2）；Points History → 积分历史页（3.3）；My Voucher → 我的背包（3.4）。</div></div>
             <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v">点任一格直接去既有登录页。</div></div>
           </div></div>
 
           <div class="blk"><div class="blk__t">Task List</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">区块</div><div class="rule__v"><span class="chip chip--new">新增</span>标题「📋 Task List」＋「More ›」→ Task List 页（3.6）。</div></div>
+            <div class="rule__row"><div class="rule__k">区块</div><div class="rule__v"><span class="chip chip--new">新增</span>标题「📋 Task List」＋「More ›」→ Task List 页（3.5）。<span class="rev">未登录点「More ›」直接去既有登录页。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">红点</div><div class="rule__v"><span class="chip chip--new">新增</span>Task List 白卡右上角一颗红点，提醒会员有奖励可领取。<br>1. 显示：任务中心的「我的」页入口有红点时，这里同步显示；任务中心红点消失，这里一起消失。条件、时机全照任务中心既有红点，不另定。<br>2. 样式：纯红点，不带数量。<br>3. 未登录：不显示。<br>4. 只在白卡右上角，任务卡片不另加红点。</div></div>
             <div class="rule__row"><div class="rule__k">卡片</div><div class="rule__v">横向滑动，一次一张，同高同宽。卡＝任务名、倒数（限时才有）、进度条、奖励、已领人数、按钮。样式同 Task List 页，按钮照任务中心既有。</div></div>
-            <div class="rule__row"><div class="rule__k">第 1 步 取哪些</div><div class="rule__v">打开 Task List 页「All」页签，照它当下从上到下的顺序，取<b>前 3 项</b>：基础任务算 1 项、任务组算 1 项（不管里面几个子任务）；第 4 项起不要。<br><span class="chip chip--same">既有</span>这个顺序是 Task List 页既有规则，这里不另排：任务照后台排序值；已完成、额满的排最后；有可领取的不往上排。</div></div>
-            <div class="rule__row"><div class="rule__k">第 2 步 摊成卡</div><div class="rule__v">基础任务＝1 张卡。<br>任务组＝不放组抬头、不放 Extra Rewards，它的<b>每个子任务 1 张卡</b>；子任务顺序照任务组内既有：可领取 → 进行中（进度快的在前）→ 已完成、额满。</div></div>
+            <div class="rule__row"><div class="rule__k">第 1 步 取哪些</div><div class="rule__v">打开 Task List 页「All」页签，照它当下从上到下的顺序，取<b>前 3 项</b>：基础任务算 1 项、任务组算 1 项（不管里面几个子任务）；第 4 项起不要。<br><span class="chip chip--same">既有</span>这个顺序是 Task List 页既有规则，这里不另排：可领取的往上排在最前 → 进行中的照后台排序值 → 已完成、额满的排最后。</div></div>
+            <div class="rule__row"><div class="rule__k">第 2 步 摊成卡</div><div class="rule__v">基础任务＝1 张卡。<br>任务组＝不放组抬头、不放 Extra Rewards，它的<b>每个子任务 1 张卡</b>；子任务在自己的组里排，照任务组内既有：可领取的往上排在最前 → 进行中（进度快的在前）→ 已完成、额满。</div></div>
             <div class="rule__row"><div class="rule__k">第 3 步 排横滑列</div><div class="rule__v">照第 1 步的项目顺序，从左到右接起来；同一个任务组的卡连在一起，不跟别的任务穿插。</div></div>
             <div class="rule__row"><div class="rule__k">张数</div><div class="rule__v">不设上限：取的是 3 项，不是 3 张卡。3 个任务组各 10 个子任务＝30 张，也照放。</div></div>
             <div class="rule__row"><div class="rule__k">什么时候变</div><div class="rule__v">跟 Task List 页一样，下次载入才重排，停在页面上不即时变。一项都没有：整块不显示。要看全部任务按「More ›」进 Task List 页。</div></div>
@@ -1566,37 +1593,111 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           </div></div>
 
           <div class="blk"><div class="blk__t">Playground 入口</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">卡片</div><div class="rule__v"><span class="chip chip--new">新增</span>一张白卡：标题「🎮 Playground」＋「Play ›」，底下两张游戏图（盲盒、一番赏，图由设计出）。点「Play ›」进 Playground 地图（3.4）；点游戏图、卡片其他地方也一样进地图，不直接进游戏。</div></div>
+            <div class="rule__row"><div class="rule__k">卡片</div><div class="rule__v"><span class="chip chip--new">新增</span>一张白卡：标题「🎮 Playground」＋「Play ›」，<span class="rev">底下一张横幅（盲盒、一番赏两座岛，照设计稿）。</span><i class="revd">11/25</i>点「Play ›」进 Playground 地图（3.6）；<span class="rev">点横幅上的盲盒、一番赏岛直接进该游戏列表页（3.7），不经过地图；点卡片其他地方进地图。</span><i class="revd">11/25</i><span class="rev">未登录：点「Play ›」、横幅、卡片任何地方都直接去既有登录页。</span><i class="revd">11/25</i></div></div>
           </div></div>
 
           <div class="blk"><div class="blk__t">Flash Sale</div><div class="rule">
             <div class="rule__row"><div class="rule__k">一句话</div><div class="rule__v">只是排版变了，逻辑全部照线上。</div></div>
-            <div class="rule__row"><div class="rule__k">排版</div><div class="rule__v"><span class="chip chip--mod">修改</span>1. 卡片缩小，一次露一张＋下一张一角，横向滑动。<br>2. 倒数从标题列搬到卡片右上。<br>3. 轮播照既有：5 秒一张、可手滑。标题旁「1/6」＝目前第几张／共几张，跟着换（2/6、3/6…）。<br>其他照线上：标题「⏰ Flash Sale」、「Buy now」钮、折扣角标「⚡ −N%」、图、名称、「in stock N」、★ 现价＋划线原价。</div></div>
-            <div class="rule__row"><div class="rule__k">逻辑</div><div class="rule__v"><span class="chip chip--same">既有</span>倒数一个商品一个；列哪些（「是否限时抢购＝是」、状态开启、在抢购时间内，照后台排序值）；过期自动隐藏；售完＝图灰、盖「已抢光」、按钮不可点；按钮 → 购买弹窗（3.3）。一个都没有：整块不显示。</div></div>
+            <div class="rule__row"><div class="rule__k">排版</div><div class="rule__v"><span class="chip chip--style">样式</span>照设计稿：1. 卡片缩小，一次露一张＋下一张一角，横向滑动。<br>2. 倒数从标题列搬到卡片右上。<br>3. 轮播照既有：5 秒一张、可手滑。标题旁「1/6」＝目前第几张／共几张，跟着换（2/6、3/6…）。<br>其他照线上：标题「⏰ Flash Sale」、「Buy now」钮、折扣角标「⚡ −N%」、图、名称、「in stock N」、★ 现价＋划线原价。</div></div>
+            <div class="rule__row"><div class="rule__k">逻辑</div><div class="rule__v"><span class="chip chip--same">既有</span>倒数一个商品一个；列哪些（「是否限时抢购＝是」、状态开启、在抢购时间内，照后台排序值）；过期自动隐藏；售完＝图灰、盖「已抢光」、按钮不可点；按钮 → 购买弹窗（3.9）。一个都没有：整块不显示。未登录照既有：看得到，按「Buy now」才去登录页。</div></div>
           </div></div>
 
           <div class="blk"><div class="blk__t">Recommend</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">区块</div><div class="rule__v"><span class="chip chip--new">新增</span>标题「👍 Recommend」＋「More ›」→ Points Mall 商品页 ALL（3.2）。两栏商品卡，样式同 3.2。</div></div>
-            <div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v">后台「是否推荐＝是」、状态开启的商品（2.1），不限数量；<span class="rev">照后台排序值</span>，售完排最后。限时抢购商品不进这里（后台二选一，勾不了推荐，见 2.1）。一个都没有：整块不显示。</div></div>
+            <div class="rule__row"><div class="rule__k">区块</div><div class="rule__v"><span class="chip chip--new">新增</span>标题「👍 Recommend」＋「More ›」→ Points Mall 商品页 ALL（3.8）。两栏商品卡，样式同 3.8。<span class="rev">未登录：点「More ›」或商品卡直接去既有登录页。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v">后台「是否推荐＝是」、状态开启的商品（2.1），不限数量；<span class="rev">照后台排序值</span><i class="revd">11/23</i>，售完排最后。限时抢购商品不进这里（后台二选一，勾不了推荐，见 2.1）。<span class="rev">一番赏、盲盒类别的商品也不进这里，只在 Playground 出现（3.7）。</span><i class="revd">11/25</i><span class="rev">一个都没有：标题列、「More ›」照常显示，只有底下商品格不显示。</span><i class="revd">11/25</i></div></div>
           </div></div>
 
           <div class="blk"><div class="blk__t">这一页拿掉的</div><div class="rule">
-            <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>分类页签、各分类商品区块：搬到 Points Mall 商品页（3.2）。线上原本商品区上方的「推荐／我能购买／价格」三个排序钮拿掉，功能对应到：推荐＝3.2 每个页签的预设顺序（后台排序值）、我能购买＝3.2 的 I Can Buy 页签、价格＝3.2 的「Price ⇕」钮。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>分类页签、各分类商品区块：搬到 Points Mall 商品页（3.8）。线上原本商品区上方的「推荐／我能购买／价格」三个排序钮拿掉，功能对应到：推荐＝3.8 每个页签的预设顺序（后台排序值）、我能购买＝3.8 的 I Can Buy 页签、价格＝3.8 的「Price ⇕」钮。</div></div>
             <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>线上的跑马灯（用户 xxx 成功兑换）、「积分将于 xx 过期」提示：拿掉，不显示。</div></div>
-            <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>线上的 Ichiban Draw 横幅、盲盒弹窗入口：拿掉，改走本页的 Playground 入口卡 → Playground（3.4）。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v"><span class="chip chip--mod">修改</span>线上的 Ichiban Draw 横幅、盲盒弹窗入口：拿掉，改走本页的 Playground 入口卡（3.6；横幅上的岛可直接进列表页 3.7）。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f9">
+          <div class="panel__head"><span class="panel__num">3.2</span><h2 class="panel__title">前台 · VIP 页</h2></div>
+          <p class="intro">线上 VIP 俱乐部页的 H5 版，内容不改，只是从积分商城多一个入口进来。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「VIP Perks」。需登录。</div></div>
+            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v"><span class="chip chip--same">既有</span>照线上 VIP 页既有画面（‹、VIP、Rules），跟其他次级页一样是「‹ 标题」列。</div></div>
+            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>当前等级、升级进度、各等级条件、返水、VIP 权益，照线上。</div></div>
+            <div class="rule__row"><div class="rule__k">页内跳转</div><div class="rule__v"><span class="chip chip--same">既有</span>点「VIP Perks」进来之后，页里所有点击、跳转都照线上既有，本次不动。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f7">
+          <div class="panel__head"><span class="panel__num">3.3</span><h2 class="panel__title">前台 · 积分历史页</h2></div>
+          <p class="intro">线上的「积分历史」「兑换记录」两页合成一页两页签（页签叫「积分记录」「兑换记录」），内容各自照线上。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「Points History」，进来预设在「积分记录」页签。需登录。</div></div>
+            <div class="rule__row"><div class="rule__k">名称</div><div class="rule__v">页名照线上既有「积分历史 Points History」（翻译编号 A055）；快捷入口、返回列标题都用这个名字。<br>两个页签：「积分记录 Points Details」（A151）、「兑换记录 Redemption」（A152）。各语言见第 6 节。</div></div>
+            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Points History」返回列（3.10）。</div></div>
+            <div class="rule__row"><div class="rule__k">置顶</div><div class="rule__v">往下滑时三层依序钉在最上面：返回列 → 页签列 → 筛选列（「积分记录」＝ALL／Income／Expenses；「兑换记录」＝分类胶囊＋☰）。红字提示不钉，跟着清单滑走。两个页签都一样。</div></div>
+            <div class="rule__row"><div class="rule__k">「积分记录」页签</div><div class="rule__v"><span class="chip chip--style">样式</span>内容照线上：ALL／Income／Expenses 筛选、「仅展示近 30 日」提示、每笔＝名称（含数量）、时间、收入绿字＋、支出红字−。排版照设计稿：筛选做成一排胶囊，每笔一张卡。</div></div>
+            <div class="rule__row"><div class="rule__k">「兑换记录」页签</div><div class="rule__v"><span class="chip chip--style">样式</span>内容照线上：分类胶囊（ALL＋商品分类）＋右边 ☰ 列表图示、红字延迟提示、每笔＝图、时间、名称、★ 积分、订单状态。排版照设计稿：每笔一张卡，状态做成右下角的钮（如 Completed、Delivering，状态值沿用既有）。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f8">
+          <div class="panel__head"><span class="panel__num">3.4</span><h2 class="panel__title">前台 · 我的背包</h2></div>
+          <p class="intro">就是线上「我的」页 Services 里的「My Voucher」，名称、内容都不变，只是从积分商城多一个入口进来。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「My Voucher」。需登录。</div></div>
+            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ My Voucher」返回列（3.10），往下滑钉在最上面。</div></div>
+                        <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>未使用／待结算／已使用／已过期四页签、票卡（图、名称、获得日期、失效日期、立即使用）、右上规则钮。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f6">
+          <div class="panel__head"><span class="panel__num">3.5</span><h2 class="panel__title">前台 · Task List 页<span class="rev">（11/25 调整）</span></h2></div>
+          <p class="intro">任务中心页面搬进积分商城，最上面是「‹ Task List」返回列，不另做页内抬头。内容、页签、按钮逻辑照任务中心规格，不改。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页 Task List「More ›」。<span class="rev">需登录（3.10）。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Task List」返回列（3.10），右边放既有的规则图示。</div></div>
+            <div class="rule__row"><div class="rule__k">置顶</div><div class="rule__v">往下滑时两层依序钉在最上面：返回列 → 白卡头（Reward Retrieval 列＋All／Basic／Daily／Weekly／Limited-Time 页签列）。任务卡跟着滑走。</div></div>
+            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>Reward Retrieval、All／Basic／Daily／Weekly／Limited-Time 页签、任务卡、任务组，照任务中心既有。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f4">
+          <div class="panel__head"><span class="panel__num">3.6</span><h2 class="panel__title">前台 · Playground<span class="rev">（11/25 调整）</span></h2></div>
+          <p class="intro">积分商城页 Playground 入口卡点「Play ›」或卡片其他地方进来，<span class="rev">需登录（3.10）。</span><i class="revd">11/25</i>一张地图，一座岛＝一种游戏。岛的数量固定，后台一种游戏有几套商品都只有一座岛；几套要进岛之后的列表页（3.7）才看得到。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Playground」返回列（3.10），往下滑钉在最上面。</div></div>
+            <div class="rule__row"><div class="rule__k">岛</div><div class="rule__v"><span class="chip chip--new">新增</span>四座岛：Mystery Box（盲盒）、OKIchiban Draw（一番赏），两座「Coming Soon」不能点。<span class="rev">整张地图照设计稿。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">点岛</div><div class="rule__v">进该游戏列表页（3.7）。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页（即积分商城页，3.10）。</div></div>
+          </div></div>
+        </article>
+
+        <article class="panel" id="p-f5">
+          <div class="panel__head"><span class="panel__num">3.7</span><h2 class="panel__title">前台 · 一番赏、盲盒列表<span class="rev">（11/25 调整）</span></h2></div>
+          <p class="intro">列表页改成跟 Playground 一样的地图风格，一套商品一个摊位，<span class="rev">整页照设计稿</span><i class="revd">11/25</i>；玩法、抽奖、发奖全部照既有。</p>
+          <div class="blk"><div class="blk__t">规则</div><div class="rule">
+            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ 标题」返回列（3.10），往下滑钉在最上面。列表页标题＝游戏名；游戏页标题＝该套名称。</div></div>
+            <div class="rule__row"><div class="rule__k">一套的资料</div><div class="rule__v"><span class="chip chip--mod">修改</span><span class="rev">摊位上的图、名称、价值标全部照设计稿固定，不显示后台的商品图片、商品名称、期数、价格、库存；后台的每抽价格、库存点进游戏页才用（照既有）。</span><i class="revd">11/25</i>售完：摊位灰掉＋「已抢光」，不能点（售完判断照既有，第 4 节）。</div></div>
+            <div class="rule__row"><div class="rule__k">顺序</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">摊位数固定：一番赏 6 个、盲盒 4 个，各摊位价值照设计稿，高→低排位置。哪一套摆哪个摊位照后台「排序」：状态开启的商品里，取数字最大的前 6 笔（盲盒前 4 笔），第 1 笔＝价值最高的摊位，依此类推（2.1）。后台一定配满，不会有空摊位。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">点一套</div><div class="rule__v">进该套游戏页（＝线上既有的抽奖画面，一番赏按 Draw、盲盒开盒那页），标题换成该套名称；游戏页内容、抽 1／5／10／全部、积分不足、中奖发放，照既有。</div></div>
+            <div class="rule__row"><div class="rule__k">游戏页顶部</div><div class="rule__v">游戏页最上面有一排小岛：Mystery Box、OKIchiban Draw、Coming Soon，目前所在的游戏亮着。点另一个游戏的岛，直接跳到那个游戏的列表页，不用先回 Playground。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">照 3.10，怎么来就怎么回：<br>1. 从 Playground 进来的列表页 → 回 Playground。<br><span class="rev">2. 从积分商城页横幅的岛直接进来的列表页 → 回积分商城页，不经过 Playground。</span><i class="revd">11/25</i><br>3. 从列表页进的游戏页 → 回列表页。<br>4. 点顶部小岛切过来的 → 回切之前那一页。</div></div>
+            <div class="rule__row"><div class="rule__k">版面</div><div class="rule__v"><span class="chip chip--style">样式</span><span class="rev">H5、PC 各照自己的设计稿；规则两边一样（PC 见 3.11）。</span><i class="revd">11/25</i></div></div>
           </div></div>
         </article>
 
         <article class="panel" id="p-f2">
-          <div class="panel__head"><span class="panel__num">3.2</span><h2 class="panel__title">前台 · Points Mall 商品页</h2></div>
+          <div class="panel__head"><span class="panel__num">3.8</span><h2 class="panel__title">前台 · Points Mall 商品页<span class="rev">（11/25 调整）</span></h2></div>
           <p class="intro">新页面。积分商城页 Recommend 的「More ›」进来，最上面是「‹ Points Mall」返回列，再接一排页签。ALL 一个分类一张卡、横向滑动看该分类全部商品；点分类看两栏格。</p>
           <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="all" data-pv='{"proto":"h5","go":"shop","cat":null,"login":true}'>ALL</button><button type="button" class="pv__btn" data-view="can" data-pv='{"proto":"h5","go":"shop","cat":"can","login":true}'>I Can Buy</button><button type="button" class="pv__btn" data-view="cat" data-pv='{"proto":"h5","go":"shop","cat":"free","login":true}'>单一分类</button></p>
 
           <div class="blk"><div class="blk__t">页面</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">进来、返回</div><div class="rule__v">积分商城页 Recommend「More ›」进来；返回键回进来前那一页（即积分商城页，3.10）。</div></div>
+            <div class="rule__row"><div class="rule__k">进来、返回</div><div class="rule__v">积分商城页 Recommend「More ›」进来，<span class="rev">需登录（3.10）</span><i class="revd">11/25</i>；返回键回进来前那一页（即积分商城页，3.10）。</div></div>
             <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Points Mall」返回列（3.10），不放积分商城页的钱包顶栏。</div></div>
             <div class="rule__row"><div class="rule__k">置顶</div><div class="rule__v">往下滑时两层依序钉在最上面：返回列 → 页签列（含 Price 钮）。商品跟着滑走。</div></div>
-            <div class="rule__row"><div class="rule__k">页签</div><div class="rule__v">1. ALL、I Can Buy 两个固定在最前面、顺序不变。<br>2. 后面接后台「商品类别管理」（2.2）的类别，照类别排序（数字越大越前面）；多了可左右滑。<br>3. 「一番赏」「盲盒」两个类别不进页签，走 Playground（3.4）。<br>4. 每次切换页签都重新照后台排序值排列，Price 排序回预设。</div></div>
+            <div class="rule__row"><div class="rule__k">页签</div><div class="rule__v">1. ALL、I Can Buy 两个固定在最前面、顺序不变。<br>2. 后面接后台「商品类别管理」（2.2）的类别，照类别排序（数字越大越前面）；多了可左右滑。<br>3. <span class="rev">「一番赏」「盲盒」两个类别不进页签，它们的商品在 ALL、I Can Buy 里也不出现，只走 Playground（3.6）。</span><i class="revd">11/25</i><br>4. 每次切换页签都重新照后台排序值排列，Price 排序回预设。</div></div>
             <div class="rule__row"><div class="rule__k">限时抢购商品</div><div class="rule__v"><span class="chip chip--same">既有</span>不另成页签；会不会出现在所属分类页签里、排在哪，都照线上既有。</div></div>
             <div class="rule__row"><div class="rule__k">排序钮</div><div class="rule__v"><span class="chip chip--mod">修改</span>线上「Price ⇕」钮保留，照设计稿放页签同一列的最右边，固定不跟着页签滑；钮上写「Price」＋上下箭头。<br>1. 显示：所有页签都显示，含 ALL。<br>2. 点法：预设 ⇕ → 升序 ↑（便宜在前）→ 降序 ↓（贵在前）→ 回预设 ⇕。<br>3. 范围：每个页签预设都照后台排序值，按了 Price 才照价格重排。单一分类、I Can Buy＝该页签全部商品一起排；ALL＝每个分类白卡各自排。<br>4. 排序规则照第 4 节：未售完照价格、同价照后台排序值、售完一律最后。</div></div>
           </div></div>
@@ -1609,7 +1710,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           </div></div>
 
           <div class="blk" data-view-of="can"><div class="blk__t">I Can Buy</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">需登录</div><div class="rule__v">未登录点这个页签直接去既有登录页。</div></div>
+            <div class="rule__row"><div class="rule__k">需登录</div><div class="rule__v"><span class="rev">整页都要登录才进得来（3.10），这个页签不另处理。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">列哪些</div><div class="rule__v"><span class="chip chip--same">既有</span>这个会员买得起、且未售完的商品，不分类别，两栏格。筛选和排序照既有「我能购买」逻辑（第 4 节）。</div></div>
           </div></div>
 
@@ -1618,110 +1719,37 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           </div></div>
 
           <div class="blk"><div class="blk__t">商品卡（积分商城页 Recommend、本页共用）</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--mod">修改</span>排版照设计稿：图、名称（一行，超出省略号）、「in stock N」、★ 价格。折扣角标、划线原价照既有。</div></div>
+            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--style">样式</span>排版照设计稿：图、名称（一行，超出省略号）、「in stock N」、★ 价格。折扣角标、划线原价照既有。</div></div>
             <div class="rule__row"><div class="rule__k">售完</div><div class="rule__v"><span class="chip chip--same">既有</span>图灰、盖「已抢光」、不能点。</div></div>
-            <div class="rule__row"><div class="rule__k">点卡</div><div class="rule__v"><span class="chip chip--same">既有</span>整张卡可点 → 购买弹窗（3.3）；未登录 → 登录页。</div></div>
+            <div class="rule__row"><div class="rule__k">点卡</div><div class="rule__v"><span class="chip chip--same">既有</span>整张卡可点 → 购买弹窗（3.9）。</div></div>
           </div></div>
         </article>
 
         <article class="panel" id="p-f3">
-          <div class="panel__head"><span class="panel__num">3.3</span><h2 class="panel__title">前台 · 购买弹窗与兑换</h2></div>
+          <div class="panel__head"><span class="panel__num">3.9</span><h2 class="panel__title">前台 · 购买弹窗与兑换<span class="rev">（11/25 调整）</span></h2></div>
           <p class="intro">全部沿用既有，本次不改。写在这里只是让开发知道入口变了，后面的事没变。</p>
           <div class="blk"><div class="blk__t">规则</div><div class="rule">
             <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">Flash Sale 的「Buy now」、Recommend 和 Points Mall 商品页的商品卡。</div></div>
             <div class="rule__row"><div class="rule__k">购买弹窗</div><div class="rule__v"><span class="chip chip--same">既有</span>底部弹出：名称ⓘ、大图、数量 −／＋、适用厂商、适用游戏、备注、「购买 ★价格」。</div></div>
             <div class="rule__row"><div class="rule__k">之后</div><div class="rule__v"><span class="chip chip--same">既有</span>积分不足提示、兑换成功提示、扣积分、发放、写入兑换记录、限购、审核模式，全部照既有。</div></div>
-            <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v">点商品或 Buy now 直接去既有登录页。</div></div>
-          </div></div>
-        </article>
-
-        <article class="panel" id="p-f4">
-          <div class="panel__head"><span class="panel__num">3.4</span><h2 class="panel__title">前台 · Playground</h2></div>
-          <p class="intro">积分商城页 Playground 入口卡进来。一张地图，一座岛＝一种游戏。岛的数量固定，后台一种游戏有几套商品都只有一座岛；几套要进岛之后的列表页（3.5）才看得到。</p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Playground」返回列（3.10），往下滑钉在最上面。</div></div>
-            <div class="rule__row"><div class="rule__k">岛</div><div class="rule__v"><span class="chip chip--new">新增</span>四座岛：Mystery Box（盲盒）、OKIchiban Draw（一番赏），两座「Coming Soon」不能点。岛的图由设计出。</div></div>
-            <div class="rule__row"><div class="rule__k">点岛</div><div class="rule__v">后台有多套 → 该游戏列表页（3.5）；只有一套 → 直接进那一套的抽奖页。</div></div>
-            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页（即积分商城页，3.10）。</div></div>
-          </div></div>
-        </article>
-
-        <article class="panel" id="p-f5">
-          <div class="panel__head"><span class="panel__num">3.5</span><h2 class="panel__title">前台 · 一番赏、盲盒列表</h2></div>
-          <p class="intro">列表页改成跟 Playground 一样的地图风格，一套商品一个摊位。设计稿还在设计中、未定案，左栏目前只是占位；玩法、抽奖、发奖全部照既有。</p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ 标题」返回列（3.10），往下滑钉在最上面。列表页标题＝游戏名；抽奖页标题＝该套名称。</div></div>
-            <div class="rule__row"><div class="rule__k">一套的资料</div><div class="rule__v"><span class="chip chip--same">既有</span>图、名称、期数（#5／#Unlimited）、每抽价格、库存。售完：灰掉＋「已抢光」，不能点。</div></div>
-            <div class="rule__row"><div class="rule__k">点一套</div><div class="rule__v">进该套抽奖页，标题换成该套名称；抽奖页内容、抽 1／5／10／全部、积分不足、中奖发放，照既有。</div></div>
-            <div class="rule__row"><div class="rule__k">抽奖页顶部</div><div class="rule__v">小地图可直接切到另一个游戏，规则同 3.4 点岛：多套进列表页、只有一套直接进抽奖页。</div></div>
-            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">照 3.10，回进来前那一页：<br>1. 从 Playground 进来的列表页 → 回 Playground。<br>2. 从列表页进的抽奖页 → 回列表页（只有一套、直接进抽奖页的，回 Playground）。<br>3. 用小地图切过来的 → 回切之前那一页。</div></div>
-            <div class="rule__row"><div class="rule__k">版面</div><div class="rule__v"><span class="chip chip--tbd">待确认</span>等设计稿（第 5 节）。</div></div>
-          </div></div>
-        </article>
-
-        <article class="panel" id="p-f6">
-          <div class="panel__head"><span class="panel__num">3.6</span><h2 class="panel__title">前台 · Task List 页</h2></div>
-          <p class="intro">任务中心页面搬进积分商城，最上面是「‹ Task List」返回列，不另做页内抬头。内容、页签、按钮逻辑照任务中心规格，不改。</p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页 Task List「More ›」。</div></div>
-            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Task List」返回列（3.10），右边放既有的规则图示。</div></div>
-            <div class="rule__row"><div class="rule__k">置顶</div><div class="rule__v">往下滑时两层依序钉在最上面：返回列 → 白卡头（Reward Retrieval 列＋All／Basic／Daily／Weekly／Limited-Time 页签列）。任务卡跟着滑走。</div></div>
-            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>Reward Retrieval、All／Basic／Daily／Weekly／Limited-Time 页签、任务卡、任务组，照任务中心既有。</div></div>
-            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
-          </div></div>
-        </article>
-
-        <article class="panel" id="p-f7">
-          <div class="panel__head"><span class="panel__num">3.7</span><h2 class="panel__title">前台 · 积分历史页</h2></div>
-          <p class="intro">线上的「积分历史」「兑换记录」两页合成一页两页签（页签叫「积分记录」「兑换记录」），内容各自照线上。</p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「Points History」，进来预设在「积分记录」页签。需登录。</div></div>
-            <div class="rule__row"><div class="rule__k">名称</div><div class="rule__v">页名照线上既有「积分历史 Points History」（翻译编号 A055）；快捷入口、返回列标题都用这个名字。<br>两个页签：「积分记录 Points Details」（A151）、「兑换记录 Redemption」（A152）。各语言见第 6 节。</div></div>
-            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ Points History」返回列（3.10）。</div></div>
-            <div class="rule__row"><div class="rule__k">置顶</div><div class="rule__v">往下滑时三层依序钉在最上面：返回列 → 页签列 → 筛选列（「积分记录」＝ALL／Income／Expenses；「兑换记录」＝分类胶囊＋☰）。红字提示不钉，跟着清单滑走。两个页签都一样。</div></div>
-            <div class="rule__row"><div class="rule__k">「积分记录」页签</div><div class="rule__v"><span class="chip chip--same">既有</span>内容照线上：ALL／Income／Expenses 筛选、「仅展示近 30 日」提示、每笔＝名称（含数量）、时间、收入绿字＋、支出红字−。排版照设计稿：筛选做成一排胶囊，每笔一张卡。</div></div>
-            <div class="rule__row"><div class="rule__k">「兑换记录」页签</div><div class="rule__v"><span class="chip chip--same">既有</span>内容照线上：分类胶囊（ALL＋商品分类）＋右边 ☰ 列表图示、红字延迟提示、每笔＝图、时间、名称、★ 积分、订单状态。排版照设计稿：每笔一张卡，状态做成右下角的钮（如 Completed、Delivering，状态值沿用既有）。</div></div>
-            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
-          </div></div>
-        </article>
-
-        <article class="panel" id="p-f8">
-          <div class="panel__head"><span class="panel__num">3.8</span><h2 class="panel__title">前台 · 我的背包</h2></div>
-          <p class="intro">就是线上「我的」页 Services 里的「My Voucher」，名称、内容都不变，只是从积分商城多一个入口进来。</p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「My Voucher」。需登录。</div></div>
-            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">「‹ My Voucher」返回列（3.10），往下滑钉在最上面。</div></div>
-                        <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>未使用／待结算／已使用／已过期四页签、票卡（图、名称、获得日期、失效日期、立即使用）、右上规则钮。</div></div>
-            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
-          </div></div>
-        </article>
-
-        <article class="panel" id="p-f9">
-          <div class="panel__head"><span class="panel__num">3.9</span><h2 class="panel__title">前台 · VIP 页</h2></div>
-          <p class="intro">线上 VIP 俱乐部页的 H5 版，内容不改，只是从积分商城多一个入口进来。</p>
-          <div class="blk"><div class="blk__t">规则</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">入口</div><div class="rule__v">积分商城页快捷「VIP Perks」。需登录。</div></div>
-            <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v"><span class="chip chip--same">既有</span>照线上 VIP 页既有画面（‹、VIP、Rules），跟其他次级页一样是「‹ 标题」列。</div></div>
-            <div class="rule__row"><div class="rule__k">内容</div><div class="rule__v"><span class="chip chip--same">既有</span>当前等级、升级进度、各等级条件、返水、VIP 权益，照线上。</div></div>
-            <div class="rule__row"><div class="rule__k">页内跳转</div><div class="rule__v"><span class="chip chip--same">既有</span>点「VIP Perks」进来之后，页里所有点击、跳转都照线上既有，本次不动。</div></div>
-            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">回进来前那一页。</div></div>
+            <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v"><span class="rev">未登录能点到的只有积分商城页 Flash Sale 的「Buy now」，点了直接去既有登录页（照既有）；Recommend 商品卡、Points Mall 商品页未登录进不来（3.10）。</span><i class="revd">11/25</i></div></div>
           </div></div>
         </article>
 
         <article class="panel" id="p-f10">
-          <div class="panel__head"><span class="panel__num">3.10</span><h2 class="panel__title">前台 · 登录状态与返回</h2></div>
+          <div class="panel__head"><span class="panel__num">3.10</span><h2 class="panel__title">前台 · 登录状态与返回<span class="rev">（11/25 调整）</span></h2></div>
           <p class="intro">哪些不登录也能看、哪些要登录；返回键一律回进来前那一页。</p>
           <div class="blk"><div class="blk__t">规则</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">不登录能看</div><div class="rule__v">积分商城页整页（顶栏换 logo＋Register / Login）、Points Mall 商品页的 ALL 和各分类、Playground、一番赏／盲盒的列表页和抽奖页（按抽奖才要登录）、Task List 页（列哪些照任务中心未登录既有规则）。</div></div>
-            <div class="rule__row"><div class="rule__k">要登录</div><div class="rule__v">VIP Perks、Points History、My Voucher、I Can Buy 页签、点商品或 Buy now、抽奖。未登录点到就直接去既有登录页，不另做提示弹窗。</div></div>
+            <div class="rule__row"><div class="rule__k">不登录能看</div><div class="rule__v"><span class="rev">只有积分商城页整页（顶栏换 logo＋Register / Login）；Task List 卡片列哪些照任务中心未登录既有规则，Flash Sale 照既有看得到。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">要登录</div><div class="rule__v"><span class="rev">积分商城页上的每个入口：快捷入口三格、Task List「More ›」、Playground（「Play ›」、横幅、卡片）、Recommend「More ›」和商品卡，未登录点到就直接去既有登录页，不另做提示弹窗。所以 Points Mall 商品页、Playground、一番赏／盲盒、Task List 页、VIP 页、积分历史页、我的背包都要登录才进得去。</span><i class="revd">11/25</i><br>例外：Flash Sale 照既有，看得到，按「Buy now」才去登录页。</div></div>
             <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">钱包顶栏（头像、₱、★、Deposit、搜索）只有积分商城页（3.1）有。其他每一页最上面都是「‹ 标题」列：左边返回键、标题置中，往下滑钉在最上面。以上是 H5；PC 没有这两种顶栏，照网站既有导航（3.11）。</div></div>
-            <div class="rule__row"><div class="rule__k">返回列标题</div><div class="rule__v">那条「‹ 标题」列的标题＝该页自己的名称（商品页 Points Mall、积分历史页 Points History、Task List 页 Task List、Playground、游戏列表页＝游戏名、抽奖页＝该套名称、我的背包 My Voucher、VIP 页 VIP），不是来源页的名称。</div></div>
+            <div class="rule__row"><div class="rule__k">返回列标题</div><div class="rule__v">那条「‹ 标题」列的标题＝该页自己的名称（商品页 Points Mall、积分历史页 Points History、Task List 页 Task List、Playground、游戏列表页＝游戏名、游戏页＝该套名称、我的背包 My Voucher、VIP 页 VIP），不是来源页的名称。</div></div>
             <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">所有二级页的返回键回「进来前那一页」，并停在原本卷到的位置。例：从 Playground 进一番赏列表页，返回回 Playground，不是回积分商城页。</div></div>
           </div></div>
         </article>
 
         <article class="panel" id="p-pc1">
-          <div class="panel__head"><span class="panel__num">3.11</span><h2 class="panel__title">前台 · PC 版</h2></div>
+          <div class="panel__head"><span class="panel__num">3.11</span><h2 class="panel__title">前台 · PC 版<span class="rev">（11/25 调整）</span></h2></div>
           <p class="intro">PC 版放在网站既有版面里（上方导航、左侧菜单照旧）。这里只写跟 H5 不一样的地方；没写到的（列哪些、怎么排、售完、红点、登录）全跟 3.1～3.10 同一套。</p>
           <p class="pv">积分商城页：<button type="button" class="pv__btn" data-view="in" data-pv='{"proto":"pc","go":"pcmall","login":true}'>已登录</button><button type="button" class="pv__btn" data-view="out" data-pv='{"proto":"pc","go":"pcmall","login":false}'>未登录</button></p>
           <p class="pv">积分历史页：<button type="button" class="pv__btn" data-view="hist" data-pv='{"proto":"pc","go":"pcrec","tab":"hist","login":true}'>Points Details</button><button type="button" class="pv__btn" data-view="ex" data-pv='{"proto":"pc","go":"pcrec","tab":"ex","login":true}'>Redemption</button></p>
@@ -1731,22 +1759,22 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
             <div class="rule__row"><div class="rule__k">快捷入口</div><div class="rule__v"><span class="chip chip--new">新增</span>左边一张直排白卡：VIP Perks、Points History、My Voucher，去处同 3.1；未登录点了去既有登录。</div></div>
             <div class="rule__row"><div class="rule__k">Task List</div><div class="rule__v"><span class="chip chip--new">新增</span>右边白卡：标题「Task List」＋「More ›」→ PC 既有任务中心页。卡片横向一排、放不下可左右滑；取法、顺序、卡片内容、红点（白卡右上角）全同 3.1。</div></div>
             <div class="rule__row"><div class="rule__k">左侧菜单红点</div><div class="rule__v"><span class="chip chip--new">新增</span>左侧菜单「Points Mall」项的图标右上角放一颗红点，样式照菜单既有红点（如 Rewards 那颗）。菜单展开、收合（只剩图标）都要显示；显示、消失的条件同 3.1 红点，未登录不显示。</div></div>
-            <div class="rule__row"><div class="rule__k">Playground</div><div class="rule__v"><span class="chip chip--new">新增</span>白卡：标题「Playground」＋「Play ›」，底下横幅四座岛（图同 3.4）。点「Play ›」或横幅都进 Playground 地图，不直接进游戏。</div></div>
-            <div class="rule__row"><div class="rule__k">Flash Sale</div><div class="rule__v"><span class="chip chip--mod">修改</span>只有样式变：卡片变小张、背景微调，照设计稿。列哪些、倒数、售完、「Buy now」钮照既有；轮播照既有（5 秒一张、可手滑），不显示「1/6」，没有「More ›」。</div></div>
-            <div class="rule__row"><div class="rule__k">商品区</div><div class="rule__v"><span class="chip chip--mod">修改</span>PC 不另开商品页，商品区在本页最下面：页签列＋商品格。<br>1. 页签：ALL、Recommend、I Can Buy 固定在前，后接商品类别（2.2）；每次切换页签都重新照后台排序值排列，Price 排序回预设。<br>2. ALL＝全部商品一个格子；Recommend＝后台勾推荐的商品（同 3.1 Recommend 区）；I Can Buy、单一分类同 3.2。<br>3. 排序逻辑同 H5：预设照后台排序值，售完排最后；「Price ⇕」钮点法同 3.2，每个页签全部商品一起排。<br>4. 商品卡同 3.2；点卡 → PC 既有购买弹窗（3.3）。</div></div>
-            <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v">整页看得到；哪些要登录同 3.10。</div></div>
+            <div class="rule__row"><div class="rule__k">Playground</div><div class="rule__v"><span class="chip chip--new">新增</span>白卡：标题「Playground」＋「Play ›」，<span class="rev">底下一张横幅四座岛：Mystery Box、OKIchiban Draw、两座 Coming Soon，照 PC 设计稿。</span><i class="revd">11/25</i>点「Play ›」进 Playground 地图；<span class="rev">点横幅上的 Mystery Box、OKIchiban Draw 岛直接进该游戏列表页，跟 H5 一样（3.1）；PC 没有返回列，照网站既有导航。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">Flash Sale</div><div class="rule__v"><span class="chip chip--style">样式</span>卡片变小张、背景微调，照设计稿。列哪些、倒数、售完、「Buy now」钮照既有；轮播照既有（5 秒一张、可手滑），不显示「1/6」，没有「More ›」。</div></div>
+            <div class="rule__row"><div class="rule__k">商品区</div><div class="rule__v"><span class="chip chip--mod">修改</span>PC 不另开商品页，商品区在本页最下面：页签列＋商品格。<br>1. 页签：ALL、Recommend、I Can Buy 固定在前，后接商品类别（2.2）；每次切换页签都重新照后台排序值排列，Price 排序回预设。<br>2. ALL＝全部商品一个格子<span class="rev">（不含一番赏、盲盒）</span><i class="revd">11/25</i>；Recommend＝后台勾推荐的商品（同 3.1 Recommend 区）；I Can Buy、单一分类同 3.8。<br>3. 排序逻辑同 H5：预设照后台排序值，售完排最后；「Price ⇕」钮点法同 3.8，每个页签全部商品一起排。<br>4. 商品卡同 3.8；点卡 → PC 既有购买弹窗（3.9）。</div></div>
+            <div class="rule__row"><div class="rule__k">未登录</div><div class="rule__v"><span class="rev">整页看得到；点快捷入口、Task List「More ›」、Playground、商品区的商品卡、I Can Buy 页签都直接去既有登录；Flash Sale 照既有，按「Buy now」才去（3.10）。</span><i class="revd">11/25</i></div></div>
           </div></div>
           <div class="blk"><div class="blk__t">积分历史页</div><div class="rule">
-            <div class="rule__row rule__row--plain"><div class="rule__v">内容、页签、筛选、每笔资料全同 3.7，只是 PC 画面大、排版不同。</div></div>
-            <div class="rule__row"><div class="rule__k">版面</div><div class="rule__v"><span class="chip chip--mod">修改</span>一张白卡照设计稿：标题「Points History」、红字提示放标题右边；底下页签、筛选胶囊、清单两栏。没有返回列，照网站既有导航。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v">内容、页签、筛选、每笔资料全同 3.3，只是 PC 画面大、排版不同。</div></div>
+            <div class="rule__row"><div class="rule__k">版面</div><div class="rule__v"><span class="chip chip--style">样式</span>一张白卡照设计稿：标题「Points History」、红字提示放标题右边；底下页签、筛选胶囊、清单两栏。没有返回列，照网站既有导航。</div></div>
           </div></div>
           <div class="blk"><div class="blk__t">其他页面</div><div class="rule">
-            <div class="rule__row rule__row--plain"><div class="rule__v">积分商城页、积分历史页、Playground 页有 PC 设计稿，其余页面如下。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v">积分商城页、积分历史页写在上面；其他页面如下。</div></div>
             <div class="rule__row"><div class="rule__k">Task List 页</div><div class="rule__v"><span class="chip chip--same">既有</span>PC 既有任务中心页，不改；入口＝积分商城页 Task List「More ›」。</div></div>
             <div class="rule__row"><div class="rule__k">VIP 页、My Voucher</div><div class="rule__v"><span class="chip chip--same">既有</span>PC 既有页，不改；入口＝快捷入口。</div></div>
-            <div class="rule__row"><div class="rule__k">购买弹窗</div><div class="rule__v"><span class="chip chip--same">既有</span>PC 既有购买弹窗与兑换流程，不改；入口同 3.3。</div></div>
-            <div class="rule__row"><div class="rule__k">Playground 页</div><div class="rule__v"><span class="chip chip--new">新增</span>跟 H5 同一张地图（3.4），放在网站版面里；岛、点岛规则同 3.4。</div></div>
-            <div class="rule__row"><div class="rule__k">一番赏／盲盒</div><div class="rule__v"><span class="chip chip--tbd">待确认</span>PC 设计稿未出（第 5 节）。</div></div>
+            <div class="rule__row"><div class="rule__k">购买弹窗</div><div class="rule__v"><span class="chip chip--same">既有</span>PC 既有购买弹窗与兑换流程，不改；入口同 3.9。</div></div>
+            <div class="rule__row"><div class="rule__k">Playground 页</div><div class="rule__v"><span class="chip chip--new">新增</span>跟 H5 同一张地图（3.6），放在网站版面里；岛、点岛规则同 3.6。</div></div>
+            <div class="rule__row"><div class="rule__k">一番赏／盲盒</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">样式照 PC 设计稿；列表页、游戏页的规则全部跟 H5 一样（3.7），只有返回不同：PC 没有返回列，照网站既有导航。</span><i class="revd">11/25</i></div></div>
           </div></div>
         </article>
 
@@ -1765,21 +1793,13 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           </div></div>
           <div class="blk"><div class="blk__t">二、照既有，不改</div><div class="rule">
             <div class="rule__row rule__row--plain"><div class="rule__v">购买弹窗、积分不足、兑换成功、扣积分、发放、限购、审核模式。</div></div>
-            <div class="rule__row rule__row--plain"><div class="rule__v">一番赏、盲盒的抽奖页、抽奖逻辑、奖品发放、Recent Winners／My Rewards。</div></div>
-            <div class="rule__row rule__row--plain"><div class="rule__v">任务中心的任务、按钮、领取逻辑、排序（任务照后台排序值、已完成／额满排最后、可领取不往上排；任务组内子任务＝可领取 → 进行中照进度 → 已完成／额满，同 3.1）；VIP 页；我的背包（My Voucher）页内容；积分记录、兑换记录两个页签的资料。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v">一番赏、盲盒的游戏页、抽奖逻辑、奖品发放、Recent Winners／My Rewards。</div></div>
+            <div class="rule__row rule__row--plain"><div class="rule__v">任务中心的任务、按钮、领取逻辑、排序（可领取往上排最前、进行中照后台排序值、已完成／额满排最后；任务组内子任务在自己的组里排＝可领取最前 → 进行中照进度 → 已完成／额满，同 3.1）；VIP 页；我的背包（My Voucher）页内容；积分记录、兑换记录两个页签的资料。</div></div>
             <div class="rule__row rule__row--plain"><div class="rule__v">后台商品管理、商品类别管理的既有栏位；限时抢购整套逻辑（条件、时间、过期自动下架、在分类里怎么出现）全部照既有。<br>PC 既有的任务中心页、VIP 页、My Voucher 页、购买弹窗、网站顶栏与左侧菜单（3.11）。</div></div>
           </div></div>
         </article>
 
-        <!-- ============ 7 待确认 ============ -->
-        <article class="panel" id="p-todo">
-          <div class="panel__head"><span class="panel__num">7</span><h2 class="panel__title">待确认事项</h2></div>
-          <p class="intro">已定的都写在前面；这几项还没定。</p>
-          <div class="blk"><div class="blk__t">还没定</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">一番赏／盲盒列表（设计）</div><div class="rule__v">设计稿未定案。定案后补 3.5 和左栏示意。已定的：地图风格、一套一个摊位、摊位上要放图、名称、期数、价格、库存。</div></div>
-            <div class="rule__row"><div class="rule__k">PC 版</div><div class="rule__v">积分商城页、积分历史页、Playground 页设计稿已出，见 3.11。还没定：一番赏／盲盒的 PC 设计稿。</div></div>
-          </div></div>
-        </article>
+        
 
         <article class="panel" id="p-i18n">
           <div class="panel__head"><span class="panel__num">6</span><h2 class="panel__title">翻译</h2></div>
@@ -1899,28 +1919,26 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
     { num: '3', title: '前台：看到什么' },
     { num: '4', title: '不异动' },
     { num: '5', title: '动画演示' },
-    { num: '6', title: '翻译' },
-    { num: '7', title: '待确认' }
+    { num: '6', title: '翻译' }
   ];
   var PANELS = [
     { id: 'p-map',  chap: '1', nav: '总览' },
     { id: 'p-b1',   chap: '2', num: '2.1',  nav: '商品管理',        proto: 'admin', go: 'admin' },
     { id: 'p-b2',   chap: '2', num: '2.2',  nav: '商品类别管理',    proto: 'admin', go: 'admincat' },
     { id: 'p-f1',   chap: '3', num: '3.1',  nav: '积分商城页',      proto: 'h5', go: 'mall', login: true },
-    { id: 'p-f2',   chap: '3', num: '3.2',  nav: 'Points Mall 商品页', proto: 'h5', go: 'shop', cat: null, login: true },
-    { id: 'p-f3',   chap: '3', num: '3.3',  nav: '购买与兑换',      proto: 'h5', go: 'shop', cat: null, login: true, pop: 'sheet' },
-    { id: 'p-f4',   chap: '3', num: '3.4',  nav: 'Playground',      proto: 'h5', go: 'play' },
-    { id: 'p-f5',   chap: '3', num: '3.5',  nav: '一番赏／盲盒',    proto: 'h5', go: 'ichiban' },
-    { id: 'p-f6',   chap: '3', num: '3.6',  nav: 'Task List 页',    proto: 'h5', go: 'tasks' },
-    { id: 'p-f7',   chap: '3', num: '3.7',  nav: '积分历史页',      proto: 'h5', go: 'rec', login: true },
-    { id: 'p-f8',   chap: '3', num: '3.8',  nav: '我的背包',        proto: 'h5', go: 'bag', login: true },
-    { id: 'p-f9',   chap: '3', num: '3.9',  nav: 'VIP 页',          proto: 'h5', go: 'vip', login: true },
+    { id: 'p-f9',   chap: '3', num: '3.2',  nav: 'VIP 页',          proto: 'h5', go: 'vip', login: true },
+    { id: 'p-f7',   chap: '3', num: '3.3',  nav: '积分历史页',      proto: 'h5', go: 'rec', login: true },
+    { id: 'p-f8',   chap: '3', num: '3.4',  nav: '我的背包',        proto: 'h5', go: 'bag', login: true },
+    { id: 'p-f6',   chap: '3', num: '3.5',  nav: 'Task List 页',    proto: 'h5', go: 'tasks' },
+    { id: 'p-f4',   chap: '3', num: '3.6',  nav: 'Playground',      proto: 'h5', go: 'play' },
+    { id: 'p-f5',   chap: '3', num: '3.7',  nav: '一番赏／盲盒',    proto: 'h5', go: 'ichiban' },
+    { id: 'p-f2',   chap: '3', num: '3.8',  nav: 'Points Mall 商品页', proto: 'h5', go: 'shop', cat: null, login: true },
+    { id: 'p-f3',   chap: '3', num: '3.9',  nav: '购买与兑换',      proto: 'h5', go: 'shop', cat: null, login: true, pop: 'sheet' },
     { id: 'p-f10',  chap: '3', num: '3.10', nav: '登录与返回',      proto: 'h5', go: 'mall', login: false },
+    { id: 'p-pc1',  chap: '3', num: '3.11', nav: 'PC 版', proto: 'pc', go: 'pcmall', login: true },
     { id: 'p-same', chap: '4', nav: '不改的既有' },
-    { id: 'p-todo', chap: '7', nav: '待确认' },
     { id: 'p-i18n', chap: '6', nav: '翻译' },
     { id: 'p-fx',   chap: '5', nav: '动画演示' },
-    { id: 'p-pc1',  chap: '3', num: '3.11', nav: 'PC 版', proto: 'pc', go: 'pcmall', login: true }
   ];
   var GO_PANEL = { mall: 'p-f1', shop: 'p-f2', play: 'p-f4', ichiban: 'p-f5', blind: 'p-f5', tasks: 'p-f6', rec: 'p-f7', bag: 'p-f8', vip: 'p-f9', admin: 'p-b1', admincat: 'p-b2', pcmall: 'p-pc1', pcrec: 'p-pc1', pcplay: 'p-pc1' };
 
@@ -2084,7 +2102,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
         <!-- Task List 区（11/12 她定）：照任务中心后台排序取前 3 个（基础任务算 1、任务组算 1）；任务组＝列出该组全部子任务卡，不放组抬头、不放 Extra Rewards。示范：任务组(3 子任务)＋2 个基础任务 -->
         <section class="earn" aria-label="赚积分任务">
           <i class="dot" id="earnDot" data-tb="in"></i>
-          <div class="earn__head"><span class="ico">📋</span>Task List <button class="more" onclick="go('tasks')">More ›</button></div>
+          <div class="earn__head"><span class="ico">📋</span>Task List <button class="more" onclick="auth(function(){ go('tasks'); })">More ›</button></div>
           <!-- 任务卡横向滑动（11/10 设计图：露出下一张一角），照任务中心既有排序；More › 进 Task List 页 -->
           <div class="earn__row">
             <!-- 任务组（11/12 她定）：只放它的子任务，每个子任务一张卡，样式同 Task List 页里的子任务卡；不放组抬头、不放 Extra Rewards -->
@@ -2112,14 +2130,12 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           </div>
         </section>
 
-        <!-- Playground（11/13 设计图）：白卡＝标题「🎮 Playground」＋「Play ›」，底下两张游戏图（盲盒、一番赏）；整块可点进游乐场专页。图由设计出，这里只是占位 -->
-        <section class="csec" aria-label="Playground">
-          <h3 class="csec__t">🎮 Playground<button class="csec__more csec__more--go" onclick="go('play')">Play ›</button></h3>
-          <div class="pgtiles" role="button" onclick="go('play')">
-            <span class="park__cloud" style="left:14px;top:8px">☁️</span>
-            <span class="park__cloud" style="right:20px;bottom:10px">☁️</span>
-            <div class="pgtile img-blind"><span class="pgtile__ico">🎰</span><b>MYSTERY<br>BOX</b></div>
-            <div class="pgtile img-ichi"><span class="pgtile__ico">⛩️</span><b>OKIchiban<br>Draw</b></div>
+        <!-- Playground（11/25 设计稿）：白卡＝标题「🎮 Playground」＋「Play ›」，底下横幅两座岛；点岛直接进该游戏列表页，点 Play ›／卡片其他地方进 Playground 地图 -->
+        <section class="csec" aria-label="Playground" onclick="auth(function(){ go('play'); })" style="cursor:pointer">
+          <h3 class="csec__t">🎮 Playground<button class="csec__more csec__more--go" onclick="auth(function(){ go('play'); })">Play ›</button></h3>
+          <div class="pgbanner" role="button" onclick="auth(function(){ go('play'); })" aria-label="Playground">
+            <img class="pgbanner__box" src="img/playground_banner_box.png" alt="Mystery Box" onclick="event.stopPropagation(); auth(function(){ openGame('blind'); })">
+            <img class="pgbanner__oki" src="img/playground_banner_oki.png" alt="OKIchiban Draw" onclick="event.stopPropagation(); auth(function(){ openGame('ichiban'); })">
           </div>
         </section>
 
@@ -2134,7 +2150,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
         <!-- Recommend（11/10 设计图）：积分商城页放推荐商品 2 栏格；More › 进 Points Mall 商品页。推荐哪些由后台勾选 -->
         <section class="csec" id="recBlock" aria-label="Recommend">
-          <h3 class="csec__t">👍 Recommend<button class="csec__more" onclick="openCat(null)">More ›</button></h3>
+          <h3 class="csec__t">👍 Recommend<button class="csec__more" onclick="auth(function(){ openCat(null); })">More ›</button></h3>
           <div class="pgrid" id="recGrid"></div>
         </section>
       </section>
@@ -2162,42 +2178,21 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
       <section class="screen" id="scr-play">
         <header class="subbar"><button class="subbar__back" onclick="back('mall')">‹</button><span class="subbar__title">Playground</span></header>
         <div class="sky">
-          <!-- 乐园地图：放大版的岛屿地图（参考图一番赏页顶部那块），点岛进该设施；灰岛＝预告未来有新游戏 -->
-          <div class="park">
-            <div class="park__title">PlayGround</div>
-            <span class="park__sun"></span>
-            <span class="park__cloud" style="left:10px;top:44px">☁️</span>
-            <span class="park__cloud" style="left:150px;top:36px">☁️</span>
-            <span class="park__cloud" style="right:90px;top:60px">☁️</span>
-            <!-- 航线：从码头出发，串起四座岛 -->
-            <svg class="park__path" viewBox="0 0 430 430" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M70 372 C 100 330, 110 290, 130 250 C 170 200, 240 190, 300 200" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="9 9" stroke-linecap="round" opacity=".85"/>
-              <!-- 往待解锁岛的航线：灰色，表示还没开 -->
-              <path d="M355 215 C 380 260, 380 300, 360 340 M330 400 C 290 430, 250 450, 220 470" fill="none" stroke="#cfe0f2" stroke-width="4" stroke-dasharray="6 10" stroke-linecap="round" opacity=".55"/>
-            </svg>
-            <button class="park__isle" style="left:60px;top:170px" onclick="openGame('blind')"><span class="park__land"><span class="park__ico">🎰</span></span><span class="park__sign">Mystery Box</span></button>
-            <button class="park__isle" style="right:36px;top:140px" onclick="openGame('ichiban')"><span class="park__land"><span class="park__ico">🎁</span></span><span class="park__sign">OKIchiban Draw</span></button>
-            <!-- 两座待解锁岛（她 10/29 说有两个待解锁）：暗色岛＋大锁＋铁链，雾里，不可点；文案待运营定 -->
-            <span class="park__fog" style="right:-30px;top:320px"></span>
-            <span class="park__fog" style="left:120px;top:450px"></span>
-            <button class="park__isle park__isle--soon" style="right:16px;top:340px"><span class="park__land"><span class="park__ico">🔒</span></span><span class="park__sign">Coming Soon<small>New game</small></span></button>
-            <button class="park__isle park__isle--soon" style="left:160px;top:470px"><span class="park__land"><span class="park__ico">🔒</span></span><span class="park__sign">Coming Soon<small>New game</small></span></button>
-            <span class="park__dock" style="left:34px;top:376px"></span>
-            <span class="park__mascot" style="left:48px;top:336px">🐯</span>
+          <!-- 11/25 设计稿：整张地图底图；两座岛透明热区可点，两座 Coming Soon 不能点 -->
+          <div class="gmap" id="playMap">
+            <img src="img/playground_map.png" alt="PlayGround">
+            <button class="gmap__hit" style="left:4%;top:25%;width:44%;height:23%" onclick="openGame('blind')" aria-label="Mystery Box"></button>
+            <button class="gmap__hit" style="left:54%;top:25%;width:42%;height:24%" onclick="openGame('ichiban')" aria-label="OKIchiban Draw"></button>
           </div>
         </div>
       </section>
 
       <!-- ===================================================
-           画面 4c：游戏列表页（乐园地图点岛进来；后台配了几套一番赏／盲盒就列几张卡。只配一套时跳过此页直接进游戏）
+           画面 4c：游戏列表页（乐园地图点岛进来；11/25 设计稿：一番赏 6 个摊位、盲盒 4 个，摊位固定，后台排序最大的排价值最高的摊位）
            =================================================== -->
       <section class="screen" id="scr-glist">
-        <header class="subbar"><button class="subbar__back" onclick="go('play')">‹</button><span class="subbar__title" id="glistTitle">OKIchiban Draw</span></header>
-        <div class="isl" id="glistScene" style="min-height:100%">
-          <div class="glist__head" id="glistHead"></div>
-          <div id="glistGrid" aria-label="游戏列表"></div>
-          <div class="isl__foot"><div class="isl__rail"></div><span class="isl__hero">🧒</span><div class="isl__post" id="glistPost">📍 Ichiban Kuji<br>Island</div></div>
-        </div>
+        <header class="subbar"><button class="subbar__back" onclick="back('play')">‹</button><span class="subbar__title" id="glistTitle">OKIchiban Draw</span></header>
+        <div class="gmap" id="glistMap" aria-label="游戏列表"></div>
       </section>
 
       <!-- ===================================================
@@ -2542,21 +2537,14 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
               </nav>
               <section class="earn" aria-label="赚积分任务">
                 <i class="dot" data-tb="in"></i>
-                <div class="earn__head"><span class="ico">📋</span>Task List <button class="more" onclick="pcStub('任务中心')">More ›</button></div>
+                <div class="earn__head"><span class="ico">📋</span>Task List <button class="more" onclick="auth(function(){ pcStub('任务中心'); })">More ›</button></div>
                 <div class="earn__row" id="pcTaskRow"></div>
               </section>
             </div>
 
             <section class="csec" aria-label="Playground">
-              <h3 class="csec__t">🎮 Playground<button class="csec__more csec__more--go" onclick="go('pcplay')">Play ›</button></h3>
-              <div class="pcpg" role="button" onclick="go('pcplay')" style="cursor:pointer">
-                <span class="park__cloud" style="left:30px;top:14px">☁️</span>
-                <span class="park__cloud" style="right:60px;bottom:18px">☁️</span>
-                <div class="pgtile img-blind"><span class="pgtile__ico">🎰</span><b>MYSTERY<br>BOX</b></div>
-                <div class="pgtile img-ichi"><span class="pgtile__ico">⛩️</span><b>OKIchiban<br>Draw</b></div>
-                <div class="pgtile pgtile--soon"><span class="pgtile__ico">🔒</span><b>Coming Soon</b></div>
-                <div class="pgtile pgtile--soon"><span class="pgtile__ico">🔒</span><b>Coming Soon</b></div>
-              </div>
+              <h3 class="csec__t">🎮 Playground<button class="csec__more csec__more--go" onclick="auth(function(){ go('pcplay'); })">Play ›</button></h3>
+              <div class="pgbanner pgbanner--pc" role="button" onclick="auth(function(){ go('pcplay'); })" aria-label="Playground"><img class="pgbanner__pc" src="img/playground_banner_pc.png" alt="Playground"><button class="pgbanner__hit" style="left:1.5%;width:19.5%" onclick="event.stopPropagation(); auth(function(){ pcStub('Mystery Box 盲盒'); })" aria-label="Mystery Box"></button><button class="pgbanner__hit" style="left:28.5%;width:18.5%" onclick="event.stopPropagation(); auth(function(){ pcStub('一番赏 OKIchiban Draw'); })" aria-label="OKIchiban Draw"></button></div>
             </section>
 
             <section class="csec" id="pcFsBlock" aria-label="Flash Sale">
@@ -2572,15 +2560,11 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
           <!-- PC Playground 页（11/20 设计稿）：跟 H5 同一张地图，四座岛 -->
           <div class="pcpage" id="pcPage-play" hidden>
-            <section class="pcpg pcpg--page">
-              <span class="park__cloud" style="left:40px;top:30px">☁️</span>
-              <span class="park__cloud" style="right:80px;top:70px">☁️</span>
-              <div class="pcpg__title">PlayGround</div>
-              <div class="pcpg__isles">
-                <div class="pgtile img-blind" role="button" onclick="pcStub('Mystery Box 盲盒')"><span class="pgtile__ico">🎰</span><b>MYSTERY<br>BOX</b></div>
-                <div class="pgtile img-ichi" role="button" onclick="pcStub('一番赏 OKIchiban Draw')"><span class="pgtile__ico">⛩️</span><b>OKIchiban<br>Draw</b></div>
-                <div class="pgtile pgtile--soon"><span class="pgtile__ico">🔒</span><b>Coming Soon</b></div>
-                <div class="pgtile pgtile--soon"><span class="pgtile__ico">🔒</span><b>Coming Soon</b></div>
+            <section class="pcpg pcpg--map">
+              <div class="gmap">
+                <img src="img/playground_map.png" alt="PlayGround">
+                <button class="gmap__hit" style="left:4%;top:25%;width:44%;height:23%" onclick="pcStub('Mystery Box 盲盒')" aria-label="Mystery Box"></button>
+                <button class="gmap__hit" style="left:54%;top:25%;width:42%;height:24%" onclick="pcStub('一番赏 OKIchiban Draw')" aria-label="OKIchiban Draw"></button>
               </div>
             </section>
           </div>
@@ -2828,55 +2812,45 @@ var SETS = [
   {game:'ichiban', id:11, no:'#Unlimited', name:'Lucky Cat Festival', sub:'🔥 Final Prize ₱20,000', price:50, unit:'/ Ticket', left:'Unlimited', rem:99999, total:99999, img:'img-cash', txt:'LUCKY<br>CAT'},
   {game:'ichiban', id:4, no:'#4', name:'OKIchiban Draw · Vol.4', sub:'🔥 Final Prize ₱50,000', price:300, unit:'/ Ticket', left:'0 / 9,999 Draws left', rem:0, total:9999, img:'img-ichi', txt:'ICHIBAN<br>VOL.4', soldout:true},
   {game:'blind',   id:1, no:'#1', name:'Lucky Star', sub:'💸 Top Prize ₱3,000', price:2000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'LUCKY<br>STAR'},
-  {game:'blind',   id:2, no:'#2', name:'Golden Night', sub:'💸 Top Prize ₱10,000', price:5000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'GOLDEN<br>NIGHT'}
+  {game:'blind',   id:2, no:'#2', name:'Golden Night', sub:'💸 Top Prize ₱10,000', price:5000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'GOLDEN<br>NIGHT'},
+  {game:'blind',   id:3, no:'#3', name:'Neon Rush', sub:'💸 Top Prize ₱1,000', price:1000, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'NEON<br>RUSH'},
+  {game:'blind',   id:4, no:'#4', name:'Mini Box', sub:'💸 Top Prize ₱100', price:50, unit:'/ Draw', left:'9 prizes · Every draw wins', img:'img-blind', txt:'MINI<br>BOX'}
 ];
 function setsOf(key){ return SETS.filter(function(x){ return x.game===key; }); }
 function gameOf(key){ return GAMES.filter(function(g){ return g.key===key; })[0]; }
 function renderGames(){
   /* 积分商城页 Playground 入口（11/13 设计图）改成固定两张游戏图，不再列游戏数 */
 }
-/* 点岛：这种游戏只配一套 → 直接进；多套 → 先到列表页挑 */
+/* 点岛 → 该游戏列表页（11/25 她定：后台一定配满，一番赏至少 6 套、盲盒至少 4 套，不再有「只有一套直接进」）。
+   列表页＝整张设计稿底图，摊位位置固定；取后台排序最大的前 6（盲盒前 4）套，第 1 套摆价值最高的摊位，依此类推。
+   摊位热区透明，点了进该套；售完＝盖灰＋「已抢光」不能点。 */
+var STALLS = {
+  ichiban: { img:'img/ichiban_bg.jpg', hits:[
+    {l:10, t:4.5,  w:45, h:16},   /* 1,000,000 */
+    {l:53, t:26.5, w:37, h:14},   /* 200,000 */
+    {l:7,  t:39.5, w:35, h:12},   /* 100,000 */
+    {l:64, t:53.5, w:28, h:10},   /* 50,000 */
+    {l:11, t:66,   w:28, h:12},   /* EXPRESS 100 */
+    {l:57, t:78.5, w:29, h:11}    /* EXPRESS 50 */
+  ]},
+  blind: { img:'img/mysterybox_bg.jpg', hits:[
+    {l:20, t:21, w:60, h:32},     /* 50,000 */
+    {l:1,  t:53, w:32, h:22},     /* 3,000 */
+    {l:33, t:53, w:33, h:22},     /* 1,000 */
+    {l:69, t:53, w:30, h:22}      /* 50 */
+  ]}
+};
 function openGame(key){
-  var arr = setsOf(key);
-  if(arr.length===1){ openSet(key, arr[0].id); return; }
-  var g = gameOf(key);
+  var g = gameOf(key), st = STALLS[key];
   document.getElementById('glistTitle').textContent = g.name;
-  /* 场景上半：天空＋远处小岛＋主馆（圆台、遮雨棚、菱形招牌、招财猫／盲盒改宝箱） */
-  document.getElementById('glistScene').className = 'isl isl--'+key;
-  document.getElementById('glistHead').innerHTML = '<div class="isl__sub">'+g.sub+'</div>'
-    + '<span class="isl__cloud" style="left:8px;top:40px">☁️</span><span class="isl__cloud" style="right:10px;top:26px">☁️</span>'
-    + '<span class="isl__far" style="left:22px;top:96px"></span><span class="isl__far" style="right:26px;top:120px"></span>'
-    + '<div class="hall">'
-    +   '<div class="hall__tier hall__tier--3"></div><div class="hall__tier hall__tier--2"></div><div class="hall__tier hall__tier--1"></div>'
-    +   '<div class="hall__awn" style="--a:#e86a8a;left:50%;margin-left:-112px;width:60px;top:132px"></div><div class="hall__awn" style="--a:#4d6cff;left:50%;margin-left:-30px;width:60px;top:132px"></div><div class="hall__awn" style="--a:#3aa655;left:50%;margin-left:52px;width:60px;top:132px"></div>'
-    +   '<span class="hall__tree" style="left:40px;top:118px">🌳</span><span class="hall__tree" style="right:44px;top:112px">🌸</span>'
-    +   '<div class="hall__logo"><span>'+(key==='ichiban'?'一番<br>くじ<small>ichibankuji</small>':'盲盒<small>MYSTERY BOX</small>')+'</span></div>'
-    +   '<span class="hall__cat">'+(key==='ichiban'?'🐱':'🎁')+'</span>'
-    + '</div>';
-  document.getElementById('glistPost').innerHTML = '📍 '+g.name+'<br>Island';
-  /* 广场：亭子不排整齐——每 5 套一段，一段里 5 个固定的不规则位置（左右错开、前大后小），套数多就往下再接一段；
-     一亭＝一套（招牌＝该套的图＋名称、小旗＝期数、柜台＝价格／库存）；抢完＝铁卷门＋已抢光 */
-  var SLOTS = [
-    {l:'4%',  t:10,  sc:.9,  c:'kiosk--r'},
-    {l:'58%', t:60,  sc:.95, c:''},
-    {l:'30%', t:205, sc:1.06, c:'kiosk--g'},
-    {l:'2%',  t:365, sc:.95, c:'kiosk--p'},
-    {l:'60%', t:395, sc:1,   c:'kiosk--o'}
-  ];
-  var DECO = '<svg class="plaza__path" viewBox="0 0 410 560" preserveAspectRatio="none" aria-hidden="true"><path d="M80 150 C 150 170, 190 120, 230 190 S 330 300, 230 360 S 120 420, 150 470 S 300 520, 330 550" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="8 8" stroke-linecap="round" opacity=".75"/></svg>'
-    + '<span class="plaza__deco" style="left:46%;top:24px">🏮</span><span class="plaza__deco" style="right:10px;top:230px">🌳</span><span class="plaza__deco" style="left:8px;top:300px">🌸</span><span class="plaza__deco" style="left:44%;top:395px">🏮</span><span class="plaza__deco" style="right:12px;bottom:6px">🌳</span>';
-  var secs = [];
-  for(var i=0;i<arr.length;i+=5) secs.push(arr.slice(i,i+5));
-  document.getElementById('glistGrid').innerHTML = '<div class="plaza">' + secs.map(function(sec){
-    var h = SLOTS[sec.length-1].t + 180;   /* 最后一段只摆几个就只留几个的高度，不留一大片空地 */
-    return '<div class="plaza__sec" style="height:'+h+'px">' + DECO + sec.map(function(x, j){
-      var sl = SLOTS[j];
-      return '<article class="kiosk '+sl.c+(x.soldout?' kiosk--off':'')+'" style="left:'+sl.l+';top:'+sl.t+'px;transform:scale('+sl.sc+');z-index:'+(j+1)+'" role="button"'+(x.soldout?'':' onclick="openSet(\''+key+'\','+x.id+')"')+'>'
-        + '<div class="kiosk__sign"><span class="kiosk__flag">'+x.no+'</span><div class="kiosk__img '+x.img+'">'+x.txt+'</div><div class="kiosk__ttl">'+x.name+'</div></div>'
-        + '<div class="kiosk__awn"></div>'
-        + '<div class="kiosk__booth"><div class="kiosk__goods">🎁🧸🎁</div><div class="kiosk__price"><i class="coin coin--pt">★</i>'+fmt(x.price)+'<small>'+x.unit+'</small></div><div class="kiosk__stock">'+x.left+'</div></div></article>';
-    }).join('') + '</div>';
-  }).join('') + '</div>';
+  var arr = setsOf(key).slice(0, st.hits.length);   /* 后台排序最大的前 N 套 */
+  document.getElementById('glistMap').innerHTML = '<img src="'+st.img+'" alt="'+g.name+'">' + st.hits.map(function(h, i){
+    var x = arr[i]; if(!x) return '';
+    var sty = 'left:'+h.l+'%;top:'+h.t+'%;width:'+h.w+'%;height:'+h.h+'%';
+    return x.soldout
+      ? '<span class="gmap__hit gmap__hit--off" style="'+sty+'">已抢光</span>'
+      : '<button class="gmap__hit" style="'+sty+'" onclick="openSet(\''+key+'\','+x.id+')" aria-label="'+x.name+'"></button>';
+  }).join('');
   go('glist');
 }
 /* 进某一套：子页标题换成这一套的名称（页面长相不变，内容依那一套的后台配置） */
@@ -2945,7 +2919,7 @@ function togglePoints(b){
   renderAll(); renderSet('ichiban'); renderSet('blind');
 }
 /* 子页返回：这种游戏有多套就回列表，只一套就回乐园地图 */
-function backFromSet(key){ if(setsOf(key).length>1) openGame(key); else go('play'); }
+function backFromSet(key){ openGame(key); }   /* 游戏页返回一律回列表页（11/25：后台一定配满，没有只有一套的情况） */
 
 /* ---------- 筛选状态（积分商城页跟分类页共用） ---------- */
 var curCat = null;   /* 商品页目前页签：null＝ALL、'can'＝I Can Buy、其余＝商品分类 key */
@@ -3034,7 +3008,7 @@ function renderHome(){
   document.getElementById('fsBlock').hidden = fl.length===0;
   var rec = sortEx(PRODUCTS.filter(function(p){ return p.rec; }));   /* 后台「是否推荐＝是」才进来；顺序照后台排序值（11/23 她定：没有推荐排序、推荐时间） */
   document.getElementById('recGrid').innerHTML = rec.map(cardSmall).join('');
-  document.getElementById('recBlock').hidden = rec.length===0;
+  document.getElementById('recGrid').hidden = rec.length===0;   /* 11/25 她定：标题列、More › 永远显示，只有商品格没东西时不显示 */
 }
 /* 商品页：ALL＝每个分类一张白卡（横向滑动＋More ›）；选分类／I Can Buy＝该范围全部商品 2 栏格 */
 function renderShop(){
@@ -3205,7 +3179,7 @@ function setPcHist(k){ pcHistKind = k; renderPcRec(); }
 function setPcEx(k){ pcExCat = k; renderPcRec(); }
 /* PC 上点到本次没画的页（既有 PC 页、或 PC 设计稿未出）：弹一句说明，不切画面 */
 function pcPop(t, d){ document.getElementById('pcPop').innerHTML = '<div class="pop__ico">🖥️</div><div class="pop__t">'+t+'</div><div class="pop__d">'+d+'</div><div class="pop__btns"><button class="btn-main" onclick="closePcPop()">知道了</button></div>'; document.getElementById('pcPopMask').classList.add('is-open'); }
-function pcStub(name){ pcPop(name, 'PC 版这页本次不画示意：既有页照线上、新页等设计稿（见 3.11）。'); }
+function pcStub(name){ pcPop(name, 'PC 版这页本次不画示意：照 PC 设计稿，规则跟 H5 一样（见 3.11）。'); }
 function closePcPop(){ document.getElementById('pcPopMask').classList.remove('is-open'); }
 renderPc(); renderPcRec();
 
