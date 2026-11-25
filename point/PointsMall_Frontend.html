@@ -168,48 +168,14 @@ button{font-family:inherit;cursor:pointer;border:none;}
 #scr-play .sky{display:flex;flex-direction:column;flex:1;padding-bottom:0;}
 #scr-play .park{flex:1;min-height:430px;margin:0;}
 #scr-play .pg-my{margin:12px;}
-.park{position:relative;height:430px;margin:0 0 4px;overflow:hidden;
   background:linear-gradient(180deg,#7cc6ff 0,#c4e7ff 146px,#4f9fe8 150px,#2f7fd6 430px,#2a74c8 100%);}   /* 海平线固定在 150px，地图拉长时不跑位 */
-.park::before{content:"";position:absolute;left:0;right:0;top:150px;bottom:0;opacity:.35;
   background:radial-gradient(ellipse 60px 10px at 50% 50%,rgba(255,255,255,.9),transparent 70%);background-size:140px 36px;}
-.park__sun{position:absolute;right:28px;top:26px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle,#fff6b5,#ffd34d 60%,rgba(255,211,77,0) 72%);box-shadow:0 0 30px 10px rgba(255,220,100,.45);}
-.park__cloud{position:absolute;font-size:2.4rem;opacity:.9;}
-.park__path{position:absolute;inset:0;width:100%;height:100%;}
-#scr-play .park__path{height:430px;bottom:auto;}
-.park__title{position:absolute;left:0;right:0;top:12px;text-align:center;font-size:1.35rem;font-weight:900;color:#ffb300;letter-spacing:.5px;text-shadow:0 2px 0 #b35f00,0 4px 10px rgba(0,0,0,.2);}
-.park__mascot{position:absolute;font-size:2.4rem;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25));}
 /* 码头：吉祥物站的小木板 */
-.park__dock{position:absolute;width:70px;height:16px;background:repeating-linear-gradient(90deg,#b8783c 0 10px,#9c6230 10px 12px);border-radius:4px;box-shadow:0 6px 0 rgba(0,40,90,.25);}
 /* 岛 */
-.park__isle{position:absolute;display:flex;flex-direction:column;align-items:center;cursor:pointer;background:none;width:130px;padding:0;}
-.park__land{position:relative;width:112px;height:62px;border-radius:50%;
   background:radial-gradient(ellipse at 50% 35%,#a8ea8a,#5fb84a 72%);
   box-shadow:0 9px 0 #efd394,0 15px 0 rgba(0,40,90,.28),inset 0 -6px 0 rgba(0,0,0,.08);}
-.park__land::after{content:"";position:absolute;left:14px;right:14px;bottom:-34px;height:16px;border-radius:50%;background:rgba(255,255,255,.28);filter:blur(2px);}
-.park__ico{position:absolute;left:50%;top:-30px;transform:translateX(-50%);font-size:2.6rem;line-height:1;filter:drop-shadow(0 5px 5px rgba(0,0,0,.3));}
-.park__sign{position:relative;margin-top:16px;background:linear-gradient(#a8703a,#7d4f23);color:#fff3d0;font-size:.7rem;font-weight:900;padding:4px 10px;border-radius:6px;border:2px solid #5a3615;box-shadow:0 3px 6px rgba(0,0,0,.3);white-space:nowrap;text-shadow:0 1px 0 rgba(0,0,0,.4);}
-.park__sign::before{content:"";position:absolute;left:50%;top:-10px;width:6px;height:10px;margin-left:-3px;background:#6a4019;}
-.park__isle:active .park__land{transform:translateY(2px);}
 /* 待解锁岛：暗色岛＋大锁＋铁链，木牌灰的；不可点。之后新游戏上架就换成正常岛 */
-.park__isle--soon{cursor:default;}
-.park__isle--soon .park__land{background:radial-gradient(ellipse at 50% 35%,#8da2b8,#4e6480 72%);box-shadow:0 9px 0 #b9c3d0,0 15px 0 rgba(0,40,90,.3);}
-.park__isle--soon .park__land::before{content:"⛓️⛓️";position:absolute;left:50%;top:18px;transform:translateX(-50%) rotate(-10deg);font-size:1.25rem;letter-spacing:-6px;white-space:nowrap;opacity:.95;}
-.park__isle--soon .park__ico{top:-34px;font-size:2.4rem;filter:drop-shadow(0 5px 5px rgba(0,0,0,.35));}
-.park__isle--soon .park__sign{background:linear-gradient(#7f8a9c,#56627a);border-color:#3d475a;color:#e6ebf3;}
-.park__isle--soon .park__sign small{display:block;font-weight:700;font-size:.58rem;color:#c9d2e0;}
-.park__fog{position:absolute;width:190px;height:120px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.75),rgba(255,255,255,0) 70%);pointer-events:none;}
 /* 积分商城页入口卡：同一张地图的缩图 */
-.minimap{position:relative;height:150px;overflow:hidden;background:linear-gradient(180deg,#7cc6ff 0%,#c4e7ff 30%,#4f9fe8 31%,#2f7fd6 100%);}
-.minimap .park__isle{width:84px;}
-.minimap .park__land{width:62px;height:34px;box-shadow:0 5px 0 #efd394,0 9px 0 rgba(0,40,90,.28);}
-.minimap .park__land::after{bottom:-20px;height:9px;}
-.minimap .park__ico{font-size:1.4rem;top:-16px;}
-.minimap .park__sign{font-size:.56rem;padding:2px 6px;margin-top:9px;border-width:1px;}
-.minimap .park__sign::before{top:-6px;height:6px;width:4px;margin-left:-2px;}
-.minimap .park__cloud{font-size:1.5rem;}
-.minimap .park__mascot{font-size:1.5rem;}
-.minimap .park__sun{width:30px;height:30px;right:12px;top:8px;box-shadow:0 0 16px 6px rgba(255,220,100,.45);}
-.minimap .park__dock{width:44px;height:10px;}
 .pg-my{margin:0 12px 12px;background:#fff;border-radius:var(--radius);padding:10px 12px;box-shadow:0 2px 10px rgba(47,107,255,.08);}
 
 /* 游戏列表页：一座岛＝一种游戏；后台配了几套就列几张卡，点卡进那一套 */
@@ -348,8 +314,6 @@ button{font-family:inherit;cursor:pointer;border:none;}
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 /* Playground 入口（11/13 设计图）：天空底＋两张游戏图并排 */
 .csec__more--go{color:var(--c-primary);font-weight:600;}
-.pgtiles{position:relative;height:150px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#7cc6ff,#dff0ff);display:flex;align-items:center;justify-content:space-around;gap:10px;padding:0 10px;cursor:pointer;}
-.pgtiles .park__cloud{font-size:1.5rem;position:absolute;}
 /* 11/25 设计稿：入口卡＝天空底图＋两座岛；地图／一番赏／盲盒＝整张设计稿底图，摊位用透明热区可点 */
 .pgbanner{position:relative;width:100%;aspect-ratio:884/408;border-radius:12px;overflow:hidden;background:url(img/playground_banner_bg.png) center/100% 100% no-repeat;cursor:pointer;}
 .pgbanner img{position:absolute;display:block;}
@@ -411,12 +375,6 @@ button{font-family:inherit;cursor:pointer;border:none;}
    Playground 子页：OKIchiban Draw
    ========================================================= */
 .sky{background:linear-gradient(180deg,#9fd0ff,#dff0ff 70%,#f6f8fc);padding-bottom:12px;}
-.map{position:relative;height:170px;display:flex;align-items:flex-end;justify-content:space-around;padding:0 8px 8px;}
-.isle{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.6rem;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);cursor:pointer;background:none;}
-.isle__ico{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:radial-gradient(circle at 40% 30%,#fff5c9,#ffb84d);box-shadow:0 4px 10px rgba(0,0,0,.18);}
-.isle--on .isle__ico{outline:3px solid #fff;transform:scale(1.12);}
-.isle--lock .isle__ico{background:radial-gradient(circle at 40% 30%,#9aa5b8,#5f6b80);filter:grayscale(1);}
-.isle--lock{color:#e4e9f2;}
 .hero{margin:0 12px;background:#fff8e6;border:2px solid #ffd27a;border-radius:var(--radius);padding:12px 14px;position:relative;text-align:center;}
 .hero__t{font-size:1.35rem;font-weight:900;color:#d8323c;line-height:1.05;}
 .hero__s{font-size:.74rem;color:#9a6b00;margin-top:4px;}
@@ -776,7 +734,6 @@ html:not(.spec-mode) body:has(#wrap.is-admin),html:not(.spec-mode) body:has(#wra
 #pcui .earn{margin:0;min-width:0;}
 #pcui .earn__row .tk{flex:0 0 268px;}
 #pcui .pcpg{position:relative;height:250px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#7cc6ff,#dff0ff);display:grid;grid-template-columns:repeat(4,1fr);align-items:center;justify-items:center;padding:0 20px;}
-#pcui .pcpg .park__cloud{font-size:1.8rem;position:absolute;}
 #pcui .pcpg .pgtile{width:170px;height:170px;font-size:1.05rem;cursor:pointer;}
 #pcui .pcpg--page{display:block;height:760px;border-radius:12px;padding:40px 60px;}
 #pcui .pgbanner--pc{height:auto;aspect-ratio:1608/324;max-width:none;margin:0;background:none;}
@@ -1575,7 +1532,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="blk"><div class="blk__t">Task List</div><div class="rule">
             <div class="rule__row"><div class="rule__k">区块</div><div class="rule__v"><span class="chip chip--new">新增</span>标题「📋 Task List」＋「More ›」→ Task List 页（3.5）。<span class="rev">未登录点「More ›」直接去既有登录页。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">红点</div><div class="rule__v"><span class="chip chip--new">新增</span>Task List 白卡右上角一颗红点，提醒会员有奖励可领取。<br>1. 显示：任务中心的「我的」页入口有红点时，这里同步显示；任务中心红点消失，这里一起消失。条件、时机全照任务中心既有红点，不另定。<br>2. 样式：纯红点，不带数量。<br>3. 未登录：不显示。<br>4. 只在白卡右上角，任务卡片不另加红点。</div></div>
-            <div class="rule__row"><div class="rule__k">卡片</div><div class="rule__v">横向滑动，一次一张，同高同宽。卡＝任务名、倒数（限时才有）、进度条、奖励、已领人数、按钮。样式同 Task List 页，按钮照任务中心既有。</div></div>
+            <div class="rule__row"><div class="rule__k">卡片</div><div class="rule__v">横向滑动，一次一张，同高同宽。卡＝任务名、倒数（限时才有）、进度条、奖励、已领人数、按钮。样式同 Task List 页，按钮照任务中心既有。<span class="rev">未登录：卡片照样显示、可以左右滑，只是不能进 Task List 页；点卡片上的按钮照任务中心未登录既有。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">第 1 步 取哪些</div><div class="rule__v">打开 Task List 页「All」页签，照它当下从上到下的顺序，取<b>前 3 项</b>：基础任务算 1 项、任务组算 1 项（不管里面几个子任务）；第 4 项起不要。<br><span class="chip chip--same">既有</span>这个顺序是 Task List 页既有规则，这里不另排：可领取的往上排在最前 → 进行中的照后台排序值 → 已完成、额满的排最后。</div></div>
             <div class="rule__row"><div class="rule__k">第 2 步 摊成卡</div><div class="rule__v">基础任务＝1 张卡。<br>任务组＝不放组抬头、不放 Extra Rewards，它的<b>每个子任务 1 张卡</b>；子任务在自己的组里排，照任务组内既有：可领取的往上排在最前 → 进行中（进度快的在前）→ 已完成、额满。</div></div>
             <div class="rule__row"><div class="rule__k">第 3 步 排横滑列</div><div class="rule__v">照第 1 步的项目顺序，从左到右接起来；同一个任务组的卡连在一起，不跟别的任务穿插。</div></div>
@@ -1680,8 +1637,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
             <div class="rule__row"><div class="rule__k">一套的资料</div><div class="rule__v"><span class="chip chip--mod">修改</span><span class="rev">摊位上的图、名称、价值标全部照设计稿固定，不显示后台的商品图片、商品名称、价格；后台的每抽价格点进游戏页才用（照既有）。一番赏、盲盒是无限抽，没有库存、没有售完状态，摊位永远可以点。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">顺序</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">摊位数固定：一番赏 6 个、盲盒 4 个，各摊位价值照设计稿，高→低排位置。哪一套摆哪个摊位照后台「排序」：状态开启的商品里，取数字最大的前 6 笔（盲盒前 4 笔），第 1 笔＝价值最高的摊位，依此类推（2.1）。后台一定配满，不会有空摊位。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">点一套</div><div class="rule__v">进该套游戏页（＝线上既有的抽奖画面，一番赏按 Draw、盲盒开盒那页），标题换成该套名称；游戏页内容、抽 1／5／10／全部、积分不足、中奖发放，照既有。</div></div>
-            <div class="rule__row"><div class="rule__k">游戏页顶部</div><div class="rule__v">游戏页最上面有一排小岛：Mystery Box、OKIchiban Draw、Coming Soon，目前所在的游戏亮着。点另一个游戏的岛，直接跳到那个游戏的列表页，不用先回 Playground。</div></div>
-            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">照 3.10，怎么来就怎么回：<br>1. 从 Playground 进来的列表页 → 回 Playground。<br><span class="rev">2. 从积分商城页横幅的岛直接进来的列表页 → 回积分商城页，不经过 Playground。</span><i class="revd">11/25</i><br>3. 从列表页进的游戏页 → 回列表页。<br>4. 点顶部小岛切过来的 → 回切之前那一页。</div></div>
+            <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">照 3.10，怎么来就怎么回：<br>1. 从 Playground 进来的列表页 → 回 Playground。<br><span class="rev">2. 从积分商城页横幅的岛直接进来的列表页 → 回积分商城页，不经过 Playground。</span><i class="revd">11/25</i><br>3. 从列表页进的游戏页 → 回列表页。</div></div>
             <div class="rule__row"><div class="rule__k">版面</div><div class="rule__v"><span class="chip chip--style">样式</span><span class="rev">H5、PC 各照自己的设计稿；规则两边一样（PC 见 3.11）。</span><i class="revd">11/25</i></div></div>
           </div></div>
         </article>
@@ -1738,8 +1694,8 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="panel__head"><span class="panel__num">3.10</span><h2 class="panel__title">前台 · 登录状态与返回<span class="rev">（11/25 调整）</span></h2></div>
           <p class="intro">哪些不登录也能看、哪些要登录；返回键一律回进来前那一页。</p>
           <div class="blk"><div class="blk__t">规则</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">不登录能看</div><div class="rule__v"><span class="rev">只有积分商城页整页（顶栏换 logo＋Register / Login）；Task List 卡片列哪些照任务中心未登录既有规则，Flash Sale 照既有看得到。</span><i class="revd">11/25</i></div></div>
-            <div class="rule__row"><div class="rule__k">要登录</div><div class="rule__v"><span class="rev">积分商城页上的每个入口：快捷入口三格、Task List「More ›」、Playground（「Play ›」、横幅、卡片）、Recommend「More ›」和商品卡，未登录点到就直接去既有登录页，不另做提示弹窗。所以 Points Mall 商品页、Playground、一番赏／盲盒、Task List 页、VIP 页、积分历史页、我的背包都要登录才进得去。</span><i class="revd">11/25</i><br>例外：Flash Sale 照既有，看得到，按「Buy now」才去登录页。</div></div>
+            <div class="rule__row"><div class="rule__k">不登录能看</div><div class="rule__v"><span class="rev">只有积分商城页整页（顶栏换 logo＋Register / Login）；Task List 卡片照样显示、可以滑，列哪些照任务中心未登录既有规则；Flash Sale 照既有看得到。</span><i class="revd">11/25</i></div></div>
+            <div class="rule__row"><div class="rule__k">要登录</div><div class="rule__v"><span class="rev">原则：积分商城页是 A 级页，从它进任何 B 级页，未登录一律先去既有登录页。积分商城页上的每个入口：快捷入口三格、Task List「More ›」、Playground（「Play ›」、横幅、卡片）、Recommend「More ›」和商品卡，未登录点到就直接去既有登录页，不另做提示弹窗。所以 Points Mall 商品页、Playground、一番赏／盲盒、Task List 页、VIP 页、积分历史页、我的背包都要登录才进得去。</span><i class="revd">11/25</i><br>例外：Flash Sale 照既有，看得到，按「Buy now」才去登录页。</div></div>
             <div class="rule__row"><div class="rule__k">顶部</div><div class="rule__v">钱包顶栏（头像、₱、★、Deposit、搜索）只有积分商城页（3.1）有。其他每一页最上面都是「‹ 标题」列：左边返回键、标题置中，往下滑钉在最上面。以上是 H5；PC 没有这两种顶栏，照网站既有导航（3.11）。</div></div>
             <div class="rule__row"><div class="rule__k">返回列标题</div><div class="rule__v">那条「‹ 标题」列的标题＝该页自己的名称（商品页 Points Mall、积分历史页 Points History、Task List 页 Task List、Playground、游戏列表页＝游戏名、游戏页＝该套名称、我的背包 My Voucher、VIP 页 VIP），不是来源页的名称。</div></div>
             <div class="rule__row"><div class="rule__k">返回</div><div class="rule__v">所有二级页的返回键回「进来前那一页」，并停在原本卷到的位置。例：从 Playground 进一番赏列表页，返回回 Playground，不是回积分商城页。</div></div>
@@ -2384,12 +2340,6 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
       <section class="screen" id="scr-ichiban">
         <header class="subbar"><button class="subbar__back" onclick="backFromSet('ichiban')">‹</button><span class="subbar__title js-set-title" data-game="ichiban">OKIchiban Draw</span></header>
         <div class="sky">
-          <!-- 地图：各游乐场入口，灰岛＝预告新游戏（同游乐场专页） -->
-          <div class="map">
-            <button class="isle" onclick="openGame('blind')"><span class="isle__ico">🎰</span>Mystery Box</button>
-            <button class="isle isle--on"><span class="isle__ico">🎁</span>OKIchiban Draw</button>
-            <button class="isle isle--lock"><span class="isle__ico">🔒</span>Coming Soon</button>
-          </div>
           <div class="hero">
             <div class="hero__t">ICHIBAN<br>LUCK DRAW</div>
             <div class="hero__s">Big Prizes · Every Draw Wins</div>
@@ -2440,11 +2390,6 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
       <section class="screen" id="scr-blind">
         <header class="subbar"><button class="subbar__back" onclick="backFromSet('blind')">‹</button><span class="subbar__title js-set-title" data-game="blind">Mystery Box</span></header>
         <div class="sky">
-          <div class="map">
-            <button class="isle isle--on"><span class="isle__ico">🎰</span>Mystery Box</button>
-            <button class="isle" onclick="openGame('ichiban')"><span class="isle__ico">🎁</span>OKIchiban Draw</button>
-            <button class="isle isle--lock"><span class="isle__ico">🔒</span>Coming Soon</button>
-          </div>
           <div class="machine">
             <div class="machine__t">MYSTERY BLIND BOX</div>
             <div class="machine__s" id="blindSub">· LUCKY STAR ·</div>
