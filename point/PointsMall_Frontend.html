@@ -1433,7 +1433,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
         <!-- ============ 1 总览 ============ -->
         <article class="panel" id="p-map">
-          <div class="panel__head"><span class="panel__num">1</span><h2 class="panel__title">总览<span class="rev">（11/23、11/25 调整）</span></h2></div>
+          <div class="panel__head"><span class="panel__num">1</span><h2 class="panel__title">总览<span class="rev">（11/23、11/25、11/26 调整）</span></h2></div>
           <div class="intro intro--list">
             <div class="intro__row"><b>前台</b><span>积分商城页重排成六块：顶栏、快捷入口、Task List、Playground 入口、Flash Sale、Recommend。商品搬到新的「Points Mall 商品页」；一番赏、盲盒改从 Playground 进，首页横幅上的岛也能直接进列表页。</span></div>
             <div class="intro__row"><b>后台</b><span>加一个「是否推荐」开关（预设是）；排序值统一数字越大越前面；<span class="rev">状态开启的商品也能改排序。</span><i class="revd">11/23</i></span></div>
@@ -1452,7 +1452,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
                 <li><b>PC 版</b><span>积分商城页、积分历史页、Playground、一番赏／盲盒照 PC 设计稿；商品区并在积分商城页里，不另开商品页；其余页照既有 PC 页</span><span class="lazy__ref">3.11</span></li>
               </ul></div>
               <div class="lazy__card"><b class="lazy__t">后台</b><ul class="lazy__list">
-                <li><b>商品管理</b><span>表单加「是否推荐」开关（预设是），列表加「推荐」栏和筛选；列表改成排序数字大的在上面；<span class="rev">状态开启的商品也能改排序；一番赏、盲盒商品照既有配，新版前台只取「排序」</span><i class="revd">11/23、11/25</i></span><span class="lazy__ref">2.1</span></li>
+                <li><b>商品管理</b><span>表单加「是否推荐」开关（预设是），列表加「推荐」栏和筛选；列表改成排序数字大的在上面；<span class="rev">状态开启的商品也能改排序；一番赏、盲盒商品照既有配，新版前台只取「排序」</span><i class="revd">11/23、11/25</i>；<span class="rev">一番赏、盲盒类型的「是否推荐」灰掉固定「否」</span><i class="revd">11/26</i></span><span class="lazy__ref">2.1</span></li>
                 <li><b>商品类别管理</b><span>栏位不改；列表改成排序数字大的在上面</span><span class="lazy__ref">2.2</span></li>
               </ul></div>
               <div class="lazy__card"><b class="lazy__t">不改的</b><ul class="lazy__list">
@@ -1473,6 +1473,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
             <tr><td>11/25</td><td>3.1</td><td>Recommend 标题列、「More ›」永远显示，没商品只藏商品格；一番赏、盲盒类别不进 Recommend。</td></tr>
             <tr><td>11/25</td><td>3.7、3.11</td><td>PC 的 Playground、一番赏／盲盒规则跟 H5 一样；PC 没有返回列，照网站既有导航。</td></tr>
             <tr><td>11/25</td><td>3.8、3.11</td><td>「一番赏」「盲盒」类别不进页签，ALL、I Can Buy 也不出现。</td></tr>
+            <tr><td>11/26</td><td>2.1</td><td>「商品类型」＝一番赏、盲盒时，「是否推荐」固定「否」并灰掉不能配；上线时这两类商品带「否」。</td></tr>
             <tr><td>11/26</td><td>3.7、3.10、3.11</td><td>一番赏、盲盒游戏页写清楚：点一套之后照线上既有，画面、样式、逻辑都不改，返回列标题规则不套用游戏页。</td></tr>
             <tr><td>11/26</td><td>3.11</td><td>PC Playground 卡片：除了横幅上的盲盒、一番赏两座岛，点卡片任何地方都进 Playground 地图。</td></tr>
             <tr><td>11/26</td><td>3.1、3.9、3.10、3.11</td><td>未登录改回既有逻辑：Task List 卡片可滑、点卡片任何地方去登录；商品卡、「Buy now」照样开购买弹窗，弹窗里按「购买」才去登录；Points Mall 商品页整页要登录；快捷入口、Task List「More ›」、Recommend「More ›」、Playground 仍去登录。PC 一样，只差商品列表全展示在积分商城页。</td></tr>
@@ -1515,7 +1516,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
 
         <!-- ============ 2 后台 ============ -->
         <article class="panel" id="p-b1">
-          <div class="panel__head"><span class="panel__num">2.1</span><h2 class="panel__title">后台 · 商品管理<span class="rev">（11/23、11/25 调整）</span></h2></div>
+          <div class="panel__head"><span class="panel__num">2.1</span><h2 class="panel__title">后台 · 商品管理<span class="rev">（11/23、11/25、11/26 调整）</span></h2></div>
           <p class="intro">位置：积分商城 › 商品管理。<br>改三件事：一、商品可以勾「推荐」，勾了才进前台积分商城页的 Recommend 区，一个商品一个开关，做法同既有「是否限时抢购」；<br>二、列表显示顺序改成排序数字大的在上面（第 4 节）；<br><span class="rev">三、商品状态开启时也能改「排序」。</span><i class="revd">11/23</i><br>其他栏位全部照旧。</p>
           <p class="pv">点一个看：<button type="button" class="pv__btn" data-view="list" data-pv='{"proto":"admin","go":"admin"}'>列表</button><button type="button" class="pv__btn" data-view="form" data-pv='{"proto":"admin","go":"admin","pop":"edit"}'>编辑商品</button><button type="button" class="pv__btn" data-view="form" data-pv='{"proto":"admin","go":"admin","pop":"add"}'>新增商品</button></p>
 
@@ -1529,8 +1530,9 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           <div class="blk" data-view-of="form"><div class="blk__t">新增／编辑商品表单</div><div class="rule">
             <div class="rule__row"><div class="rule__k">是否推荐</div><div class="rule__v"><span class="chip chip--new">新增</span>单选 否／是，预设「是」（上线后运营自行后台调整）。<br>放在「是否限时抢购」下方，新增和编辑表单都有。<br><span class="rev">只有这一个开关，不另设推荐排序、推荐时间；<br>Recommend 顺序照「排序」栏位。</span><i class="revd">11/23</i></div></div>
             <div class="rule__row"><div class="rule__k">二选一</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">一个商品只能是「限时抢购」或「推荐」其中一种，不能两个都是：</span><i class="revd">11/23</i><br>1. 「是否限时抢购」选「是」，「是否推荐」自动变「否」并灰掉不能点。<br>2. 「是否限时抢购」改回「否」，才能再勾推荐。<br>3. 已经勾推荐的商品再改成限时抢购，推荐也一样被改成「否」。</div></div>
+            <div class="rule__row"><div class="rule__k">一番赏、盲盒类型</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">「商品类型」选「一番赏」或「盲盒」时，「是否推荐」固定「否」并灰掉不能点，不显示提示小字。<br>改回其他类型才能再勾。</span><i class="revd">11/26</i></div></div>
             <div class="rule__row"><div class="rule__k">提示文字</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">文案：<b>限时抢购商品不进 Recommend</b><br>位置：「是否推荐」选项右边，灰色小字。<br>1. 「是否限时抢购」＝是 → 「是否推荐」灰掉，小字出现。<br>2. 「是否限时抢购」＝否 → 小字消失。</span><i class="revd">11/23</i></div></div>
-            <div class="rule__row"><div class="rule__k">上线时既有商品</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">上线时线上既有商品怎么带：<br>1. 一般商品：「是否推荐」带「是」。<br>2. 限时抢购商品：带「否」，不动它。</span><i class="revd">11/23</i></div></div>
+            <div class="rule__row"><div class="rule__k">上线时既有商品</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">上线时线上既有商品怎么带：<br>1. 一般商品：「是否推荐」带「是」。<br>2. 限时抢购商品：带「否」，不动它。<br>3. 一番赏、盲盒商品：带「否」。</span><i class="revd">11/23、11/26</i></div></div>
             <div class="rule__row"><div class="rule__k">推荐改回「否」</div><div class="rule__v">「是否推荐」改回「否」，前台 Recommend 下次载入就不再显示这个商品（生效时机同第 4 节）。</div></div>
             <div class="rule__row"><div class="rule__k">前台怎么用</div><div class="rule__v">积分商城页 Recommend 区（3.1）列的就是推荐＝是、状态开启的商品；<br>下架或删除自动消失。<br>排序、售完见 3.1。</div></div>
             <div class="rule__row"><div class="rule__k">排序</div><div class="rule__v"><span class="chip chip--mod">修改</span><span class="rev">商品状态开启时也能改「排序」（既有：要先关闭状态才能改）。</span><i class="revd">11/23</i><br>数字越大越前面、列表顺序照数字，见「列表」区块的「排序方向」。</div></div>
@@ -1538,7 +1540,7 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
           </div></div>
 
           <div class="blk" data-view-of="form"><div class="blk__t">一番赏、盲盒商品</div><div class="rule">
-            <div class="rule__row"><div class="rule__k">后台怎么配</div><div class="rule__v"><span class="chip chip--same">既有</span>跟其他商品一样在这里配，一套一笔：商品图片、商品名称、购买价格（扣除积分）、排序都照既有填，不做特殊处理。<br>App 旧包还在用这些资料。</div></div>
+            <div class="rule__row"><div class="rule__k">后台怎么配</div><div class="rule__v"><span class="chip chip--same">既有</span>跟其他商品一样在这里配，一套一笔：商品图片、商品名称、购买价格（扣除积分）、排序都照既有填，不做特殊处理。<br>App 旧包还在用这些资料。<br><span class="rev">「是否推荐」固定「否」、灰掉不能配（见上面「一番赏、盲盒类型」）。</span><i class="revd">11/26</i></div></div>
             <div class="rule__row"><div class="rule__k">新版前台取什么</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">新版前台（新包）不取这里的商品图片、商品名称，摊位的图、名称照设计稿固定；<br>只取「排序」决定哪一套摆哪个位置。<br>购买价格（扣除积分）照既有取，在游戏页用。<br>一番赏、盲盒是无限抽，没有库存、没有售完。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">排序怎么对</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">前台一番赏固定 6 个摊位、盲盒固定 4 个，价值高→低的位置照设计稿。<br>前台在状态开启的商品里，取后台「排序」数字最大的前 6 笔（盲盒前 4 笔）：第 1 笔摆价值最高的摊位，第 2 笔第二高，依此类推；<br>第 7 笔（盲盒第 5 笔）起不显示。</span><i class="revd">11/25</i></div></div>
             <div class="rule__row"><div class="rule__k">最少配几笔</div><div class="rule__v"><span class="chip chip--new">新增</span><span class="rev">一番赏至少 6 笔、盲盒至少 4 笔，运营已确认会配满；<br>前台不做「没配置」的画面。</span><i class="revd">11/25</i></div></div>
@@ -2657,9 +2659,9 @@ document.documentElement.classList.toggle('spec-mode', window.parent === window 
       </div></div>
       <div class="frow"><label class="req">商品名称:</label><div class="val"><span class="inp inp--w" id="dlgName">test Free spin acwin</span></div></div>
       <div class="frow" id="dlgIntro" hidden><label>商品简介:</label><div class="val"><span class="inp inp--w" style="height:70px;color:#c0c4cc">请输入商品简介</span></div></div>
-      <div class="frow"><label class="req">商品类型:</label><div class="val">
-        <span class="opt"><i></i>实物</span><span class="opt"><i></i>彩金</span><span class="opt"><i></i>优惠券</span><span class="opt on"><i></i>免费旋转</span><span class="opt"><i></i>话费</span><span class="opt"><i></i>流量</span><span class="opt"><i></i>pisoluck</span><br>
-        <span class="opt"><i></i>票券</span><span class="opt"><i></i>盲盒</span><span class="opt"><i></i>免费投注</span><span class="opt"><i></i>道具卡</span><span class="opt"><i></i>Golden Draw Ticket</span><span class="opt"><i></i>Share Treats</span><span class="opt"><i></i>Ichiban Kuji</span>
+      <div class="frow" id="typeRow"><label class="req">商品类型:</label><div class="val">
+        <span class="opt" onclick="setType(this)"><i></i>实物</span><span class="opt" onclick="setType(this)"><i></i>彩金</span><span class="opt" onclick="setType(this)"><i></i>优惠券</span><span class="opt on" onclick="setType(this)"><i></i>免费旋转</span><span class="opt" onclick="setType(this)"><i></i>话费</span><span class="opt" onclick="setType(this)"><i></i>流量</span><span class="opt" onclick="setType(this)"><i></i>pisoluck</span><br>
+        <span class="opt" onclick="setType(this)"><i></i>票券</span><span class="opt" onclick="setType(this)"><i></i>盲盒</span><span class="opt" onclick="setType(this)"><i></i>免费投注</span><span class="opt" onclick="setType(this)"><i></i>道具卡</span><span class="opt" onclick="setType(this)"><i></i>Golden Draw Ticket</span><span class="opt" onclick="setType(this)"><i></i>Share Treats</span><span class="opt" onclick="setType(this)"><i></i>Ichiban Kuji</span>
       </div></div>
       <div class="frow"><label>选择免费旋转:</label><div class="val"><span class="inp sel">acewinSpinBtest1 <i class="el-icon-arrow-down" style="color:#c0c4cc"></i></span></div></div>
       <div class="frow"><label class="req">商品图片:</label><div class="val"><button class="el-button el-button--primary el-button--small is-plain"><i class="el-icon-document"></i> 选择文件</button><div class="hint red">尺寸750*750，最多可上传6张图，默认第一张图为封面图</div><div class="imgbox"></div></div></div>
@@ -3202,13 +3204,22 @@ function showPop(p){
   document.getElementById('pop').innerHTML = html + '</div>';
   document.getElementById('mask').classList.add('is-open');
 }
-/* 防呆（11/12 她定）：是否限时抢购＝是 → 是否推荐灰掉、固定「否」 */
+/* 防呆（11/12 她定）：是否限时抢购＝是 → 是否推荐灰掉、固定「否」＋小字；11/26 她定：商品类型＝一番赏、盲盒 → 也灰掉固定「否」，不显示小字 */
+var FLASH_ON=false;
+function recLock(){
+  var t=document.querySelector('#typeRow .opt.on'), game=!!(t && /盲盒|Ichiban/.test(t.textContent));
+  var lock=FLASH_ON || game;
+  var o=document.querySelectorAll('#recRow .opt');
+  if(lock){ o[0].classList.add('on'); o[1].classList.remove('on'); }
+  o.forEach(function(x){ x.classList.toggle('dis',lock); });
+  document.getElementById('recDisHint').hidden=!FLASH_ON;
+}
+function setType(el){ document.querySelectorAll('#typeRow .opt').forEach(function(x){ x.classList.toggle('on',x===el); }); recLock(); }
 function setFlash(on){
+  FLASH_ON=on;
   var o=document.querySelectorAll('#flashRow .opt'); o[0].classList.toggle('on',!on); o[1].classList.toggle('on',on);
   document.getElementById('flashMore').hidden=!on;
-  if(on) setRec(false);
-  document.querySelectorAll('#recRow .opt').forEach(function(x){ x.classList.toggle('dis',on); });
-  document.getElementById('recDisHint').hidden=!on;
+  recLock();
 }
 function setRec(on){ var r=document.getElementById('recRow'); if(r.querySelector('.opt.dis')) return; var o=r.querySelectorAll('.opt'); o[0].classList.toggle('on',!on); o[1].classList.toggle('on',on); }
 function openDlg(mode){
